@@ -13,8 +13,8 @@ public final class TCCreativeTabOrder {
     }
 
     public static void addThaumcraftItems(CreativeModeTab.Output output) {
-        output.accept(TCItems.AMBER.get());
-        output.accept(TCItems.QUICKSILVER.get());
-        output.accept(TCItems.FABRIC.get());
+        output.accept(TCItems.ORE_AMBER.get());
+        output.accept(TCItems.ORE_CINNABAR.get());
+        output.accept(TCItems.ORE_QUARTZ.get());
     }
 }

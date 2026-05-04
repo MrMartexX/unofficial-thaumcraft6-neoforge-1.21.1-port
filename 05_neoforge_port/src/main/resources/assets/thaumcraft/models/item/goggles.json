@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "thaumcraft:items/fabric"
+    "layer0": "thaumcraft:item/goggles"
   }
 }

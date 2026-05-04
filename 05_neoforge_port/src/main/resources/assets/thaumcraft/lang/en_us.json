@@ -1,5 +1,9 @@
 {
   "itemGroup.thaumcraft": "Thaumcraft",
+  "block.thaumcraft.ore_amber": "Amber Ore",
+  "block.thaumcraft.ore_cinnabar": "Cinnabar Ore",
+  "block.thaumcraft.ore_quartz": "Quartz Ore",
+  "item.thaumcraft.goggles": "Goggles of Revealing",
   "item.thaumcraft.amber": "Amber",
   "item.thaumcraft.quicksilver": "Quicksilver",
   "item.thaumcraft.fabric": "Enchanted Fabric"

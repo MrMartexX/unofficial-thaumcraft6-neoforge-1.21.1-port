@@ -15,7 +15,7 @@ public final class TCCreativeTabs {
     public static final Supplier<CreativeModeTab> THAUMCRAFT = CREATIVE_MODE_TABS.register("thaumcraft", () ->
             CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.thaumcraft"))
-                    .icon(() -> new ItemStack(TCItems.AMBER.get()))
+                    .icon(() -> new ItemStack(TCItems.GOGGLES.get()))
                     .displayItems((parameters, output) -> TCCreativeTabOrder.addThaumcraftItems(output))
                     .build()
     );
