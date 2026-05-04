@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "type=bottom,waterlogged=false": { "model": "thaumcraft:block/slab_ancient" },
+    "type=bottom,waterlogged=true": { "model": "thaumcraft:block/slab_ancient" },
+    "type=top,waterlogged=false": { "model": "thaumcraft:block/slab_ancient_top" },
+    "type=top,waterlogged=true": { "model": "thaumcraft:block/slab_ancient_top" },
+    "type=double,waterlogged=false": { "model": "thaumcraft:block/slab_ancient_double" },
+    "type=double,waterlogged=true": { "model": "thaumcraft:block/slab_ancient_double" }
+  }
+}

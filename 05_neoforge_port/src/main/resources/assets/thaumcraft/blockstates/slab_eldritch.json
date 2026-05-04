@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "type=bottom,waterlogged=false": { "model": "thaumcraft:block/slab_eldritch" },
+    "type=bottom,waterlogged=true": { "model": "thaumcraft:block/slab_eldritch" },
+    "type=top,waterlogged=false": { "model": "thaumcraft:block/slab_eldritch_top" },
+    "type=top,waterlogged=true": { "model": "thaumcraft:block/slab_eldritch_top" },
+    "type=double,waterlogged=false": { "model": "thaumcraft:block/stone_eldritch_tile" },
+    "type=double,waterlogged=true": { "model": "thaumcraft:block/stone_eldritch_tile" }
+  }
+}

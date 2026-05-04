@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "type=bottom,waterlogged=false": { "model": "thaumcraft:block/slab_arcane_stone" },
+    "type=bottom,waterlogged=true": { "model": "thaumcraft:block/slab_arcane_stone" },
+    "type=top,waterlogged=false": { "model": "thaumcraft:block/slab_arcane_stone_top" },
+    "type=top,waterlogged=true": { "model": "thaumcraft:block/slab_arcane_stone_top" },
+    "type=double,waterlogged=false": { "model": "thaumcraft:block/stone_arcane" },
+    "type=double,waterlogged=true": { "model": "thaumcraft:block/stone_arcane" }
+  }
+}

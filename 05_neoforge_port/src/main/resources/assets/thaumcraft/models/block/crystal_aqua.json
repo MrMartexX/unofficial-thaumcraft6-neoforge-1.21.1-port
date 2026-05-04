@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "minecraft:block/tinted_cross",
   "render_type": "minecraft:cutout",
   "textures": {
-    "cross": "thaumcraft:block/crystal_aqua"
+    "cross": "thaumcraft:item/crystal_planter"
   }
 }

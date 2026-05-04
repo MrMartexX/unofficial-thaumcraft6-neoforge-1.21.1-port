@@ -34,5 +34,33 @@ public final class TCCreativeTabOrder {
         output.accept(TCItems.STONE_ANCIENT_DOORWAY.get());
         output.accept(TCItems.STONE_ELDRITCH_TILE.get());
         output.accept(TCItems.STONE_POROUS.get());
+
+        output.accept(TCItems.STAIRS_ARCANE.get());
+        output.accept(TCItems.STAIRS_ARCANE_BRICK.get());
+        output.accept(TCItems.STAIRS_ANCIENT.get());
+
+        output.accept(TCItems.SLAB_ARCANE_STONE.get());
+        output.accept(TCItems.SLAB_ARCANE_BRICK.get());
+        output.accept(TCItems.SLAB_ANCIENT.get());
+        output.accept(TCItems.SLAB_ELDRITCH.get());
+
+        output.accept(TCItems.LOG_GREATWOOD.get());
+        output.accept(TCItems.LOG_SILVERWOOD.get());
+        output.accept(TCItems.LEAVES_GREATWOOD.get());
+        output.accept(TCItems.LEAVES_SILVERWOOD.get());
+        output.accept(TCItems.SAPLING_GREATWOOD.get());
+        output.accept(TCItems.SAPLING_SILVERWOOD.get());
+        output.accept(TCItems.SHIMMERLEAF.get());
+        output.accept(TCItems.CINDERPEARL.get());
+        output.accept(TCItems.VISHROOM.get());
+        output.accept(TCItems.PLANK_GREATWOOD.get());
+        output.accept(TCItems.PLANK_SILVERWOOD.get());
+        output.accept(TCItems.STAIRS_GREATWOOD.get());
+        output.accept(TCItems.STAIRS_SILVERWOOD.get());
+        output.accept(TCItems.SLAB_GREATWOOD.get());
+        output.accept(TCItems.SLAB_SILVERWOOD.get());
+
+        output.accept(TCItems.AMBER_BLOCK.get());
+        output.accept(TCItems.AMBER_BRICK.get());
     }
 }
