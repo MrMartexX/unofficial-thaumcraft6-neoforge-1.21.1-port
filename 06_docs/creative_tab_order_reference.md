@@ -2,6 +2,8 @@
 
 This document defines how the NeoForge port preserves the visible Thaumcraft 6 creative tab order from Minecraft 1.12.2.
 
+For the current list of implemented registry entries, use `06_docs/current_port_status.md`. This file defines ordering policy and review rules, not the live implementation inventory.
+
 ## Scope
 
 | Area | Location |
@@ -10,6 +12,7 @@ This document defines how the NeoForge port preserves the visible Thaumcraft 6 c
 | Legacy source reference | `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master` |
 | Visual reference | `07_Test_Instance_and_Comparisons/02_Thaumcraft 1.12.2 Inventory Screenshots` |
 | Related migration matrix | `06_docs/migration_matrix.md` |
+| Current status | `06_docs/current_port_status.md` |
 
 ## Creative order policy
 
@@ -33,6 +36,7 @@ The NeoForge port should preserve the visible 1.12.2 order as closely as practic
 | `ConfigItems.initItems(...)` | Technical skeleton for item order |
 | `ItemTCBase#getSubItems(...)` | Variant order for legacy subtype items |
 | 1.12.2 creative screenshots | Final visual review reference |
+| `current_port_status.md` | Current implemented entry inventory |
 
 The code-derived order is the implementation skeleton. The screenshot set remains the final visual review source.
 
@@ -46,7 +50,7 @@ Thaumcraft 6 1.12.2 creative order is affected by:
 4. hidden, dynamic and config-gated entries;
 5. item behavior that exposes multiple visible stacks from one registry item.
 
-In NeoForge 1.21.1, registration order should not be used as the display order. A dedicated creative tab order class is required.
+In NeoForge 1.21.1, registration order must not be used as the display order. A dedicated creative tab order class is required.
 
 ## Implementation contract
 
@@ -54,8 +58,8 @@ In NeoForge 1.21.1, registration order should not be used as the display order. 
 |---|---|
 | `TCCreativeTabs` | Registers the Thaumcraft creative tab. |
 | `TCCreativeTabOrder` | Adds visible entries in the 1.12.2 visual order. |
-| `TCItems` | Registers item objects only. It should not define creative display order. |
-| `TCBlocks` | Registers block objects and block items only. It should not define creative display order. |
+| `TCItems` | Registers item objects only. It must not define creative display order. |
+| `TCBlocks` | Registers block objects only. It must not define creative display order. |
 | Variant helper classes | Create special visible variant stacks when a legacy item maps to multiple modern stacks. |
 | This document | Human-maintained reference for order preservation and review. |
 
@@ -77,7 +81,7 @@ public final class TCCreativeTabOrder {
 
 During early gates, not every old entry exists yet. In that case:
 
-1. keep the full order manifest in this document;
+1. keep the full order manifest in this document or a dedicated manifest file;
 2. add only implemented entries to the NeoForge tab;
 3. preserve relative order among implemented entries;
 4. do not move an implemented entry earlier only because previous legacy entries are not ported yet;
@@ -110,15 +114,11 @@ A later debug-only placeholder mode may be useful for visual page comparison. It
 | Dynamic variants such as seals | Generate display entries after the underlying registry is stable | Blank seal first, then registered seals in legacy order |
 | Config-gated variants | Preserve the same config behavior | Keep cheat and debug entries gated |
 
-## First implemented Gate 1 entries
+## Implementation inventory note
 
-| Order | Entry | Registry id | Status | Notes |
-|---:|---|---|---|---|
-| 1 | Amber | `amber` | Implemented | Plain item, temporary creative tab icon |
-| 2 | Quicksilver | `quicksilver` | Implemented | Plain item |
-| 3 | Enchanted Fabric | `fabric` | Implemented | Plain item |
+The old first-slice list of `amber`, `quicksilver`, and `fabric` is no longer a complete description of implemented content. The port now includes additional block items and simple block identity entries. Do not use this document as the live registry inventory.
 
-These entries are not the beginning of the final full creative tab. They are the first implemented simple item slice. Their relative order must remain stable while earlier unimplemented legacy entries are left as gaps.
+Current implemented entries are tracked in `06_docs/current_port_status.md`.
 
 ## Future order manifest
 
