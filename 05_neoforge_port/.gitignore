@@ -1,0 +1,12 @@
+/.gradle/
+/build/
+/out/
+/run/
+/.idea/
+/.vscode/
+*.iml
+
+!/gradle/wrapper/gradle-wrapper.jar
+!/src/**/build/
+!/src/**/out/
+!/src/**/run/

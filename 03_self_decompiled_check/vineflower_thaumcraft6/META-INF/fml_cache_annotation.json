@@ -1,0 +1,3669 @@
+{
+  "com/sasmaster/glelwjgl/java/CoreGLE": {
+    "name": "com/sasmaster/glelwjgl/java/CoreGLE",
+    "interfaces": [
+      "com/sasmaster/glelwjgl/java/GLE"
+    ]
+  },
+  "com/sasmaster/glelwjgl/java/CoreGLE$tessellCallBack": {
+    "name": "com/sasmaster/glelwjgl/java/CoreGLE$tessellCallBack",
+    "interfaces": [
+      "org/lwjgl/util/glu/GLUtessellatorCallback"
+    ]
+  },
+  "thaumcraft/Registrar": {
+    "name": "thaumcraft/Registrar",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/Registrar"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "registerBlocks(Lnet/minecraftforge/event/RegistryEvent$Register;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "registerBlocksClient(Lnet/minecraftforge/event/RegistryEvent$Register;)V",
+        "values": {
+          "priority": {
+            "type": "ENUM",
+            "value": "Lnet/minecraftforge/fml/common/eventhandler/EventPriority;/LOWEST"
+          }
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "registerItems(Lnet/minecraftforge/event/RegistryEvent$Register;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "registerItemsClient(Lnet/minecraftforge/event/RegistryEvent$Register;)V",
+        "values": {
+          "priority": {
+            "type": "ENUM",
+            "value": "Lnet/minecraftforge/fml/common/eventhandler/EventPriority;/LOWEST"
+          }
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "registerEntities(Lnet/minecraftforge/event/RegistryEvent$Register;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "registerVanillaRecipes(Lnet/minecraftforge/event/RegistryEvent$Register;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "registerPotions(Lnet/minecraftforge/event/RegistryEvent$Register;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "registerBiomes(Lnet/minecraftforge/event/RegistryEvent$Register;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "registerSounds(Lnet/minecraftforge/event/RegistryEvent$Register;)V"
+      }
+    ]
+  },
+  "thaumcraft/Thaumcraft": {
+    "name": "thaumcraft/Thaumcraft",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod;",
+        "target": "thaumcraft/Thaumcraft",
+        "values": {
+          "acceptedMinecraftVersions": {
+            "value": "[1.12.2]"
+          },
+          "dependencies": {
+            "value": "required-after:forge@[14.23.5.2768,);required-after:baubles@[1.5.2,)"
+          },
+          "modid": {
+            "value": "thaumcraft"
+          },
+          "name": {
+            "value": "Thaumcraft"
+          },
+          "version": {
+            "value": "6.1.BETA26"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/fml/common/SidedProxy;",
+        "target": "proxy",
+        "values": {
+          "clientSide": {
+            "value": "thaumcraft.proxies.ClientProxy"
+          },
+          "serverSide": {
+            "value": "thaumcraft.proxies.ServerProxy"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$Instance;",
+        "target": "instance",
+        "value": {
+          "value": "thaumcraft"
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "preInit(Lnet/minecraftforge/fml/common/event/FMLPreInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "init(Lnet/minecraftforge/fml/common/event/FMLInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "postInit(Lnet/minecraftforge/fml/common/event/FMLPostInitializationEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "serverLoad(Lnet/minecraftforge/fml/common/event/FMLServerStartingEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventHandler;",
+        "target": "interModComs(Lnet/minecraftforge/fml/common/event/FMLInterModComms$IMCEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onConfigChangedEvent(Lnet/minecraftforge/fml/client/event/ConfigChangedEvent$OnConfigChangedEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/api/ThaumcraftApi$BluePrint": {
+    "name": "thaumcraft/api/ThaumcraftApi$BluePrint",
+    "interfaces": [
+      "thaumcraft/api/crafting/IThaumcraftRecipe"
+    ]
+  },
+  "thaumcraft/api/aspects/AspectList": {
+    "name": "thaumcraft/api/aspects/AspectList",
+    "interfaces": [
+      "java/io/Serializable"
+    ]
+  },
+  "thaumcraft/api/aspects/IAspectSource": {
+    "name": "thaumcraft/api/aspects/IAspectSource",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectContainer"
+    ]
+  },
+  "thaumcraft/api/capabilities/IPlayerKnowledge": {
+    "name": "thaumcraft/api/capabilities/IPlayerKnowledge",
+    "interfaces": [
+      "net/minecraftforge/common/util/INBTSerializable"
+    ]
+  },
+  "thaumcraft/api/capabilities/IPlayerWarp": {
+    "name": "thaumcraft/api/capabilities/IPlayerWarp",
+    "interfaces": [
+      "net/minecraftforge/common/util/INBTSerializable"
+    ]
+  },
+  "thaumcraft/api/capabilities/ThaumcraftCapabilities": {
+    "name": "thaumcraft/api/capabilities/ThaumcraftCapabilities",
+    "annotations": [
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/capabilities/CapabilityInject;",
+        "target": "KNOWLEDGE",
+        "value": {
+          "type": "CLASS",
+          "value": "Lthaumcraft/api/capabilities/IPlayerKnowledge;"
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/capabilities/CapabilityInject;",
+        "target": "WARP",
+        "value": {
+          "type": "CLASS",
+          "value": "Lthaumcraft/api/capabilities/IPlayerWarp;"
+        }
+      }
+    ]
+  },
+  "thaumcraft/api/casters/FocusNode": {
+    "name": "thaumcraft/api/casters/FocusNode",
+    "interfaces": [
+      "thaumcraft/api/casters/IFocusElement"
+    ]
+  },
+  "thaumcraft/api/casters/FocusPackage": {
+    "name": "thaumcraft/api/casters/FocusPackage",
+    "interfaces": [
+      "thaumcraft/api/casters/IFocusElement"
+    ]
+  },
+  "thaumcraft/api/casters/NodeSetting$NodeSettingIntList": {
+    "name": "thaumcraft/api/casters/NodeSetting$NodeSettingIntList",
+    "interfaces": [
+      "thaumcraft/api/casters/NodeSetting$INodeSettingType"
+    ]
+  },
+  "thaumcraft/api/casters/NodeSetting$NodeSettingIntRange": {
+    "name": "thaumcraft/api/casters/NodeSetting$NodeSettingIntRange",
+    "interfaces": [
+      "thaumcraft/api/casters/NodeSetting$INodeSettingType"
+    ]
+  },
+  "thaumcraft/api/crafting/CrucibleRecipe": {
+    "name": "thaumcraft/api/crafting/CrucibleRecipe",
+    "interfaces": [
+      "thaumcraft/api/crafting/IThaumcraftRecipe"
+    ]
+  },
+  "thaumcraft/api/crafting/IArcaneRecipe": {
+    "name": "thaumcraft/api/crafting/IArcaneRecipe",
+    "interfaces": [
+      "net/minecraft/item/crafting/IRecipe"
+    ]
+  },
+  "thaumcraft/api/crafting/IInfusionStabiliserExt": {
+    "name": "thaumcraft/api/crafting/IInfusionStabiliserExt",
+    "interfaces": [
+      "thaumcraft/api/crafting/IInfusionStabiliser"
+    ]
+  },
+  "thaumcraft/api/crafting/InfusionRecipe": {
+    "name": "thaumcraft/api/crafting/InfusionRecipe",
+    "interfaces": [
+      "thaumcraft/api/crafting/IThaumcraftRecipe"
+    ]
+  },
+  "thaumcraft/api/crafting/ShapedArcaneRecipe": {
+    "name": "thaumcraft/api/crafting/ShapedArcaneRecipe",
+    "interfaces": [
+      "thaumcraft/api/crafting/IArcaneRecipe"
+    ]
+  },
+  "thaumcraft/api/crafting/ShapelessArcaneRecipe": {
+    "name": "thaumcraft/api/crafting/ShapelessArcaneRecipe",
+    "interfaces": [
+      "thaumcraft/api/crafting/IArcaneRecipe"
+    ]
+  },
+  "thaumcraft/api/golems/parts/GolemAddon$IAddonFunction": {
+    "name": "thaumcraft/api/golems/parts/GolemAddon$IAddonFunction",
+    "interfaces": [
+      "thaumcraft/api/golems/parts/IGenericFunction"
+    ]
+  },
+  "thaumcraft/api/golems/parts/GolemArm$IArmFunction": {
+    "name": "thaumcraft/api/golems/parts/GolemArm$IArmFunction",
+    "interfaces": [
+      "thaumcraft/api/golems/parts/IGenericFunction"
+    ]
+  },
+  "thaumcraft/api/golems/parts/GolemHead$IHeadFunction": {
+    "name": "thaumcraft/api/golems/parts/GolemHead$IHeadFunction",
+    "interfaces": [
+      "thaumcraft/api/golems/parts/IGenericFunction"
+    ]
+  },
+  "thaumcraft/api/golems/parts/GolemLeg$ILegFunction": {
+    "name": "thaumcraft/api/golems/parts/GolemLeg$ILegFunction",
+    "interfaces": [
+      "thaumcraft/api/golems/parts/IGenericFunction"
+    ]
+  },
+  "thaumcraft/api/internal/DummyInternalMethodHandler": {
+    "name": "thaumcraft/api/internal/DummyInternalMethodHandler",
+    "interfaces": [
+      "thaumcraft/api/internal/IInternalMethodHandler"
+    ]
+  },
+  "thaumcraft/api/internal/WorldCoordinates": {
+    "name": "thaumcraft/api/internal/WorldCoordinates",
+    "interfaces": [
+      "java/lang/Comparable"
+    ]
+  },
+  "thaumcraft/api/items/ItemGenericEssentiaContainer": {
+    "name": "thaumcraft/api/items/ItemGenericEssentiaContainer",
+    "interfaces": [
+      "thaumcraft/api/aspects/IEssentiaContainerItem"
+    ]
+  },
+  "thaumcraft/api/package-info": {
+    "name": "thaumcraft/api/package-info",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/API;",
+        "target": "thaumcraft/api/package-info",
+        "values": {
+          "apiVersion": {
+            "value": "6.0.2"
+          },
+          "owner": {
+            "value": "Thaumcraft"
+          },
+          "provides": {
+            "value": "Thaumcraft|API"
+          }
+        }
+      }
+    ]
+  },
+  "thaumcraft/api/research/ScanAspect": {
+    "name": "thaumcraft/api/research/ScanAspect",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/api/research/ScanBlock": {
+    "name": "thaumcraft/api/research/ScanBlock",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/api/research/ScanBlockState": {
+    "name": "thaumcraft/api/research/ScanBlockState",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/api/research/ScanEntity": {
+    "name": "thaumcraft/api/research/ScanEntity",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/api/research/ScanItem": {
+    "name": "thaumcraft/api/research/ScanItem",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/api/research/ScanMaterial": {
+    "name": "thaumcraft/api/research/ScanMaterial",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/api/research/ScanOreDictionary": {
+    "name": "thaumcraft/api/research/ScanOreDictionary",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/api/research/theorycraft/AidBookshelf": {
+    "name": "thaumcraft/api/research/theorycraft/AidBookshelf",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/client/fx/ParticleEngine": {
+    "name": "thaumcraft/client/fx/ParticleEngine",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/client/fx/ParticleEngine",
+        "value": {
+          "type": "ENUM",
+          "values": [
+            "Lnet/minecraftforge/fml/relauncher/Side;/CLIENT"
+          ]
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "renderTick(Lnet/minecraftforge/fml/common/gameevent/TickEvent$RenderTickEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onRenderWorldLast(Lnet/minecraftforge/client/event/RenderWorldLastEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "updateParticles(Lnet/minecraftforge/fml/common/gameevent/TickEvent$ClientTickEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/client/fx/ParticleEngine$1": {
+    "name": "thaumcraft/client/fx/ParticleEngine$1",
+    "interfaces": [
+      "net/minecraft/crash/ICrashReportDetail"
+    ]
+  },
+  "thaumcraft/client/fx/ParticleEngine$2": {
+    "name": "thaumcraft/client/fx/ParticleEngine$2",
+    "interfaces": [
+      "net/minecraft/crash/ICrashReportDetail"
+    ]
+  },
+  "thaumcraft/client/fx/ParticleEngine$3": {
+    "name": "thaumcraft/client/fx/ParticleEngine$3",
+    "interfaces": [
+      "net/minecraft/crash/ICrashReportDetail"
+    ]
+  },
+  "thaumcraft/client/fx/ParticleEngine$4": {
+    "name": "thaumcraft/client/fx/ParticleEngine$4",
+    "interfaces": [
+      "net/minecraft/crash/ICrashReportDetail"
+    ]
+  },
+  "thaumcraft/client/fx/ParticleEngine$5": {
+    "name": "thaumcraft/client/fx/ParticleEngine$5",
+    "interfaces": [
+      "java/util/concurrent/Callable"
+    ]
+  },
+  "thaumcraft/client/fx/ParticleEngine$6": {
+    "name": "thaumcraft/client/fx/ParticleEngine$6",
+    "interfaces": [
+      "java/util/concurrent/Callable"
+    ]
+  },
+  "thaumcraft/client/gui/GuiResearchBrowser$SearchResult": {
+    "name": "thaumcraft/client/gui/GuiResearchBrowser$SearchResult",
+    "interfaces": [
+      "java/lang/Comparable"
+    ]
+  },
+  "thaumcraft/client/gui/GuiResearchPage$BlueprintBlockAccess": {
+    "name": "thaumcraft/client/gui/GuiResearchPage$BlueprintBlockAccess",
+    "interfaces": [
+      "net/minecraft/world/IBlockAccess"
+    ]
+  },
+  "thaumcraft/client/gui/GuiTurretAdvanced$1": {
+    "name": "thaumcraft/client/gui/GuiTurretAdvanced$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/client/gui/GuiTurretAdvanced$2": {
+    "name": "thaumcraft/client/gui/GuiTurretAdvanced$2",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/client/gui/GuiTurretAdvanced$3": {
+    "name": "thaumcraft/client/gui/GuiTurretAdvanced$3",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/client/gui/GuiTurretAdvanced$4": {
+    "name": "thaumcraft/client/gui/GuiTurretAdvanced$4",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/client/gui/ResearchToast": {
+    "name": "thaumcraft/client/gui/ResearchToast",
+    "interfaces": [
+      "net/minecraft/client/gui/toasts/IToast"
+    ]
+  },
+  "thaumcraft/client/lib/events/RenderEventHandler": {
+    "name": "thaumcraft/client/lib/events/RenderEventHandler",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/client/lib/events/RenderEventHandler",
+        "value": {
+          "type": "ENUM",
+          "values": [
+            "Lnet/minecraftforge/fml/relauncher/Side;/CLIENT"
+          ]
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "playerTick(Lnet/minecraftforge/fml/common/gameevent/TickEvent$PlayerTickEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "clientWorldTick(Lnet/minecraftforge/fml/common/gameevent/TickEvent$ClientTickEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "renderTick(Lnet/minecraftforge/fml/common/gameevent/TickEvent$RenderTickEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "tooltipEvent(Lnet/minecraftforge/event/entity/player/ItemTooltipEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "tooltipEvent(Lnet/minecraftforge/client/event/RenderTooltipEvent$PostBackground;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "renderOverlay(Lnet/minecraftforge/client/event/RenderGameOverlayEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "renderShaders(Lnet/minecraftforge/client/event/RenderGameOverlayEvent$Pre;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "blockHighlight(Lnet/minecraftforge/client/event/DrawBlockHighlightEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "renderLast(Lnet/minecraftforge/client/event/RenderWorldLastEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "fogDensityEvent(Lnet/minecraftforge/client/event/EntityViewRenderEvent$RenderFogEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "livingTick(Lnet/minecraftforge/event/entity/living/LivingEvent$LivingUpdateEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "renderLivingPre(Lnet/minecraftforge/client/event/RenderLivingEvent$Pre;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "textureStitchEventPre(Lnet/minecraftforge/client/event/TextureStitchEvent$Pre;)V"
+      }
+    ]
+  },
+  "thaumcraft/client/lib/obj/ObjModelLoader": {
+    "name": "thaumcraft/client/lib/obj/ObjModelLoader",
+    "interfaces": [
+      "thaumcraft/client/lib/obj/IModelCustomLoader"
+    ]
+  },
+  "thaumcraft/client/lib/obj/WavefrontObject": {
+    "name": "thaumcraft/client/lib/obj/WavefrontObject",
+    "interfaces": [
+      "thaumcraft/client/lib/obj/IModelCustom"
+    ]
+  },
+  "thaumcraft/client/renderers/block/CrystalModel": {
+    "name": "thaumcraft/client/renderers/block/CrystalModel",
+    "interfaces": [
+      "net/minecraft/client/renderer/block/model/IBakedModel"
+    ]
+  },
+  "thaumcraft/client/renderers/entity/mob/LayerTainted": {
+    "name": "thaumcraft/client/renderers/entity/mob/LayerTainted",
+    "interfaces": [
+      "net/minecraft/client/renderer/entity/layers/LayerRenderer"
+    ]
+  },
+  "thaumcraft/codechicken/lib/colour/Colour": {
+    "name": "thaumcraft/codechicken/lib/colour/Colour",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/lighting/LC": {
+    "name": "thaumcraft/codechicken/lib/lighting/LC",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/lighting/LightMatrix": {
+    "name": "thaumcraft/codechicken/lib/lighting/LightMatrix",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/render/CCRenderState$IVertexOperation"
+    ]
+  },
+  "thaumcraft/codechicken/lib/lighting/LightModel": {
+    "name": "thaumcraft/codechicken/lib/lighting/LightModel",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/render/CCRenderState$IVertexOperation"
+    ]
+  },
+  "thaumcraft/codechicken/lib/lighting/PlanarLightModel": {
+    "name": "thaumcraft/codechicken/lib/lighting/PlanarLightModel",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/render/CCRenderState$IVertexOperation"
+    ]
+  },
+  "thaumcraft/codechicken/lib/raytracer/ExtendedMOP": {
+    "name": "thaumcraft/codechicken/lib/raytracer/ExtendedMOP",
+    "interfaces": [
+      "java/lang/Comparable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/render/CCModel": {
+    "name": "thaumcraft/codechicken/lib/render/CCModel",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/render/CCRenderState$IVertexSource",
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/render/CCRenderState$VertexAttribute": {
+    "name": "thaumcraft/codechicken/lib/render/CCRenderState$VertexAttribute",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/render/CCRenderState$IVertexOperation"
+    ]
+  },
+  "thaumcraft/codechicken/lib/render/Vertex5": {
+    "name": "thaumcraft/codechicken/lib/render/Vertex5",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/render/uv/UV": {
+    "name": "thaumcraft/codechicken/lib/render/uv/UV",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/render/uv/UVTransformation": {
+    "name": "thaumcraft/codechicken/lib/render/uv/UVTransformation",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/render/CCRenderState$IVertexOperation"
+    ]
+  },
+  "thaumcraft/codechicken/lib/vec/BlockCoord": {
+    "name": "thaumcraft/codechicken/lib/vec/BlockCoord",
+    "interfaces": [
+      "java/lang/Comparable",
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/vec/Cuboid6": {
+    "name": "thaumcraft/codechicken/lib/vec/Cuboid6",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/vec/CuboidCoord": {
+    "name": "thaumcraft/codechicken/lib/vec/CuboidCoord",
+    "interfaces": [
+      "java/lang/Iterable",
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/vec/CuboidCoord$1": {
+    "name": "thaumcraft/codechicken/lib/vec/CuboidCoord$1",
+    "interfaces": [
+      "java/util/Iterator"
+    ]
+  },
+  "thaumcraft/codechicken/lib/vec/Matrix4": {
+    "name": "thaumcraft/codechicken/lib/vec/Matrix4",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/vec/Quat": {
+    "name": "thaumcraft/codechicken/lib/vec/Quat",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/codechicken/lib/vec/Transformation": {
+    "name": "thaumcraft/codechicken/lib/vec/Transformation",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/render/CCRenderState$IVertexOperation"
+    ]
+  },
+  "thaumcraft/codechicken/lib/vec/Vector3": {
+    "name": "thaumcraft/codechicken/lib/vec/Vector3",
+    "interfaces": [
+      "thaumcraft/codechicken/lib/util/Copyable"
+    ]
+  },
+  "thaumcraft/common/blocks/BlockTCTile": {
+    "name": "thaumcraft/common/blocks/BlockTCTile",
+    "interfaces": [
+      "net/minecraft/block/ITileEntityProvider"
+    ]
+  },
+  "thaumcraft/common/blocks/IBlockFacing$1": {
+    "name": "thaumcraft/common/blocks/IBlockFacing$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "thaumcraft/common/blocks/IBlockFacingHorizontal$1": {
+    "name": "thaumcraft/common/blocks/IBlockFacingHorizontal$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "thaumcraft/common/blocks/basic/BlockBannerTC": {
+    "name": "thaumcraft/common/blocks/basic/BlockBannerTC",
+    "interfaces": [
+      "net/minecraft/block/ITileEntityProvider"
+    ]
+  },
+  "thaumcraft/common/blocks/basic/BlockCandle": {
+    "name": "thaumcraft/common/blocks/basic/BlockCandle",
+    "interfaces": [
+      "thaumcraft/api/crafting/IInfusionStabiliserExt"
+    ]
+  },
+  "thaumcraft/common/blocks/basic/BlockSlabTC$Variant": {
+    "name": "thaumcraft/common/blocks/basic/BlockSlabTC$Variant",
+    "interfaces": [
+      "net/minecraft/util/IStringSerializable"
+    ]
+  },
+  "thaumcraft/common/blocks/crafting/BlockGolemBuilder": {
+    "name": "thaumcraft/common/blocks/crafting/BlockGolemBuilder",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacingHorizontal"
+    ]
+  },
+  "thaumcraft/common/blocks/crafting/BlockPatternCrafter": {
+    "name": "thaumcraft/common/blocks/crafting/BlockPatternCrafter",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacingHorizontal",
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/blocks/crafting/BlockPatternCrafter",
+        "value": {
+          "type": "ENUM",
+          "values": [
+            "Lnet/minecraftforge/fml/relauncher/Side;/CLIENT"
+          ]
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onBlockHighlight(Lnet/minecraftforge/client/event/DrawBlockHighlightEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/blocks/crafting/BlockResearchTable": {
+    "name": "thaumcraft/common/blocks/crafting/BlockResearchTable",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacingHorizontal"
+    ]
+  },
+  "thaumcraft/common/blocks/crafting/BlockThaumatorium": {
+    "name": "thaumcraft/common/blocks/crafting/BlockThaumatorium",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacingHorizontal"
+    ]
+  },
+  "thaumcraft/common/blocks/crafting/BlockVoidSiphon": {
+    "name": "thaumcraft/common/blocks/crafting/BlockVoidSiphon",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/blocks/crafting/BlockVoidSiphon",
+        "value": {
+          "type": "ENUM",
+          "values": [
+            "Lnet/minecraftforge/fml/relauncher/Side;/CLIENT"
+          ]
+        }
+      }
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockArcaneEar": {
+    "name": "thaumcraft/common/blocks/devices/BlockArcaneEar",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacing",
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockBellows": {
+    "name": "thaumcraft/common/blocks/devices/BlockBellows",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacing",
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockBrainBox": {
+    "name": "thaumcraft/common/blocks/devices/BlockBrainBox",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacingHorizontal",
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockCondenser": {
+    "name": "thaumcraft/common/blocks/devices/BlockCondenser",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockDioptra": {
+    "name": "thaumcraft/common/blocks/devices/BlockDioptra",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockInfernalFurnace": {
+    "name": "thaumcraft/common/blocks/devices/BlockInfernalFurnace",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacingHorizontal"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockInlay": {
+    "name": "thaumcraft/common/blocks/devices/BlockInlay",
+    "interfaces": [
+      "thaumcraft/api/crafting/IInfusionStabiliserExt"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockInlay$EnumAttachPosition": {
+    "name": "thaumcraft/common/blocks/devices/BlockInlay$EnumAttachPosition",
+    "interfaces": [
+      "net/minecraft/util/IStringSerializable"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockLamp": {
+    "name": "thaumcraft/common/blocks/devices/BlockLamp",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacing",
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockLevitator": {
+    "name": "thaumcraft/common/blocks/devices/BlockLevitator",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacing",
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/blocks/devices/BlockLevitator",
+        "value": {
+          "type": "ENUM",
+          "values": [
+            "Lnet/minecraftforge/fml/relauncher/Side;/CLIENT"
+          ]
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onBlockHighlight(Lnet/minecraftforge/client/event/DrawBlockHighlightEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockMirror": {
+    "name": "thaumcraft/common/blocks/devices/BlockMirror",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacing"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockPedestal": {
+    "name": "thaumcraft/common/blocks/devices/BlockPedestal",
+    "interfaces": [
+      "thaumcraft/api/crafting/IInfusionStabiliserExt"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockPotionSprayer": {
+    "name": "thaumcraft/common/blocks/devices/BlockPotionSprayer",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacing",
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockRedstoneRelay": {
+    "name": "thaumcraft/common/blocks/devices/BlockRedstoneRelay",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacingHorizontal",
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/blocks/devices/BlockRedstoneRelay",
+        "value": {
+          "type": "ENUM",
+          "values": [
+            "Lnet/minecraftforge/fml/relauncher/Side;/CLIENT"
+          ]
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onBlockHighlight(Lnet/minecraftforge/client/event/DrawBlockHighlightEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockStabilizer": {
+    "name": "thaumcraft/common/blocks/devices/BlockStabilizer",
+    "interfaces": [
+      "thaumcraft/api/crafting/IInfusionStabiliserExt"
+    ]
+  },
+  "thaumcraft/common/blocks/devices/BlockVisGenerator": {
+    "name": "thaumcraft/common/blocks/devices/BlockVisGenerator",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacing",
+      "thaumcraft/common/blocks/IBlockEnabled"
+    ]
+  },
+  "thaumcraft/common/blocks/essentia/BlockAlembic": {
+    "name": "thaumcraft/common/blocks/essentia/BlockAlembic",
+    "interfaces": [
+      "thaumcraft/api/blocks/ILabelable"
+    ]
+  },
+  "thaumcraft/common/blocks/essentia/BlockEssentiaTransport": {
+    "name": "thaumcraft/common/blocks/essentia/BlockEssentiaTransport",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacing"
+    ]
+  },
+  "thaumcraft/common/blocks/essentia/BlockJar": {
+    "name": "thaumcraft/common/blocks/essentia/BlockJar",
+    "interfaces": [
+      "thaumcraft/api/blocks/ILabelable"
+    ]
+  },
+  "thaumcraft/common/blocks/essentia/BlockJarItem": {
+    "name": "thaumcraft/common/blocks/essentia/BlockJarItem",
+    "interfaces": [
+      "thaumcraft/api/aspects/IEssentiaContainerItem"
+    ]
+  },
+  "thaumcraft/common/blocks/essentia/BlockJarItem$1": {
+    "name": "thaumcraft/common/blocks/essentia/BlockJarItem$1",
+    "interfaces": [
+      "net/minecraft/item/IItemPropertyGetter"
+    ]
+  },
+  "thaumcraft/common/blocks/essentia/BlockSmelter": {
+    "name": "thaumcraft/common/blocks/essentia/BlockSmelter",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockEnabled",
+      "thaumcraft/common/blocks/IBlockFacingHorizontal"
+    ]
+  },
+  "thaumcraft/common/blocks/essentia/BlockSmelterAux": {
+    "name": "thaumcraft/common/blocks/essentia/BlockSmelterAux",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacingHorizontal"
+    ]
+  },
+  "thaumcraft/common/blocks/essentia/BlockSmelterVent": {
+    "name": "thaumcraft/common/blocks/essentia/BlockSmelterVent",
+    "interfaces": [
+      "thaumcraft/common/blocks/IBlockFacingHorizontal"
+    ]
+  },
+  "thaumcraft/common/blocks/essentia/BlockTube": {
+    "name": "thaumcraft/common/blocks/essentia/BlockTube",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/blocks/essentia/BlockTube",
+        "value": {
+          "type": "ENUM",
+          "values": [
+            "Lnet/minecraftforge/fml/relauncher/Side;/CLIENT"
+          ]
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onBlockHighlight(Lnet/minecraftforge/client/event/DrawBlockHighlightEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/blocks/misc/BlockEffect$1": {
+    "name": "thaumcraft/common/blocks/misc/BlockEffect$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/blocks/misc/BlockEffect$2": {
+    "name": "thaumcraft/common/blocks/misc/BlockEffect$2",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/blocks/misc/BlockNitor": {
+    "name": "thaumcraft/common/blocks/misc/BlockNitor",
+    "interfaces": [
+      "net/minecraft/block/ITileEntityProvider"
+    ]
+  },
+  "thaumcraft/common/blocks/world/plants/BlockSaplingTC": {
+    "name": "thaumcraft/common/blocks/world/plants/BlockSaplingTC",
+    "interfaces": [
+      "net/minecraft/block/IGrowable"
+    ]
+  },
+  "thaumcraft/common/blocks/world/taint/BlockTaint": {
+    "name": "thaumcraft/common/blocks/world/taint/BlockTaint",
+    "interfaces": [
+      "thaumcraft/common/blocks/world/taint/ITaintBlock"
+    ]
+  },
+  "thaumcraft/common/blocks/world/taint/BlockTaintFeature": {
+    "name": "thaumcraft/common/blocks/world/taint/BlockTaintFeature",
+    "interfaces": [
+      "thaumcraft/common/blocks/world/taint/ITaintBlock"
+    ]
+  },
+  "thaumcraft/common/blocks/world/taint/BlockTaintFibre": {
+    "name": "thaumcraft/common/blocks/world/taint/BlockTaintFibre",
+    "interfaces": [
+      "thaumcraft/common/blocks/world/taint/ITaintBlock"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/blocks/world/taint/BlockTaintFibre",
+        "value": {
+          "type": "ENUM",
+          "values": [
+            "Lnet/minecraftforge/fml/relauncher/Side;/CLIENT"
+          ]
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onBlockHighlight(Lnet/minecraftforge/client/event/DrawBlockHighlightEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/blocks/world/taint/BlockTaintLog": {
+    "name": "thaumcraft/common/blocks/world/taint/BlockTaintLog",
+    "interfaces": [
+      "thaumcraft/common/blocks/world/taint/ITaintBlock"
+    ]
+  },
+  "thaumcraft/common/config/ModConfig$CONFIG_GRAPHICS": {
+    "name": "thaumcraft/common/config/ModConfig$CONFIG_GRAPHICS",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/common/config/Config$LangKey;",
+        "target": "thaumcraft/common/config/ModConfig$CONFIG_GRAPHICS",
+        "value": {
+          "value": "thaumcraft.config.graphics"
+        }
+      },
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/common/config/Config;",
+        "target": "thaumcraft/common/config/ModConfig$CONFIG_GRAPHICS",
+        "values": {
+          "modid": {
+            "value": "thaumcraft"
+          },
+          "name": {
+            "value": "thaumcraft_graphics"
+          },
+          "type": {
+            "type": "ENUM",
+            "value": "Lnet/minecraftforge/common/config/Config$Type;/INSTANCE"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "largeTagText",
+        "value": {
+          "values": [
+            "Setting this to true will make the amount text in aspect tags twice as large. Useful for certain resolutions and custom fonts."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "disableShaders",
+        "value": {
+          "values": [
+            "This setting will disable certain thaumcraft shaders for those who experience FPS drops."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "nostress",
+        "value": {
+          "values": [
+            "Set to true to disable anxiety triggers like the heartbeat sound."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "crooked",
+        "value": {
+          "values": [
+            "Hate crooked labels, kittens, puppies and all things awesome? If yes, set this to false."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "dialBottom",
+        "value": {
+          "values": [
+            "Set to true to have the wand dial display in the bottom left instead of the top left."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "showTags",
+        "value": {
+          "values": [
+            "Item aspects are hidden by default and pressing shift reveals them.",
+            "Changing this setting to \u0027true\u0027 will reverse this behaviour and always",
+            "display aspects unless shift is pressed."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "blueBiome",
+        "value": {
+          "values": [
+            "Set this to true to get the old blue magical forest back."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "showGolemEmotes",
+        "value": {
+          "values": [
+            "Will golems display emote particles if they recieve orders or encounter problems"
+          ]
+        }
+      }
+    ]
+  },
+  "thaumcraft/common/config/ModConfig$CONFIG_MISC": {
+    "name": "thaumcraft/common/config/ModConfig$CONFIG_MISC",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/common/config/Config$LangKey;",
+        "target": "thaumcraft/common/config/ModConfig$CONFIG_MISC",
+        "value": {
+          "value": "thaumcraft.config.misc"
+        }
+      },
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/common/config/Config;",
+        "target": "thaumcraft/common/config/ModConfig$CONFIG_MISC",
+        "values": {
+          "modid": {
+            "value": "thaumcraft"
+          },
+          "name": {
+            "value": "thaumcraft_misc"
+          },
+          "type": {
+            "type": "ENUM",
+            "value": "Lnet/minecraftforge/common/config/Config$Type;/INSTANCE"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "noSleep",
+        "value": {
+          "values": [
+            "Setting this to true will make you get the recipe book for salis mundus without having to sleep first."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "wussMode",
+        "value": {
+          "values": [
+            "Setting this to true disables Warp, Taint spread and similar mechanics. You wuss."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "allowCheatSheet",
+        "value": {
+          "values": [
+            "Enables a version of the Thauminomicon in creative mode that grants you all the research when you first use it."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "shieldRecharge",
+        "value": {
+          "values": [
+            "How many milliseconds passes between runic shielding recharge ticks.",
+            "Lower values equals faster recharge. Minimum of 500."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RangeInt;",
+        "target": "shieldRecharge",
+        "values": {
+          "max": {
+            "type": "INT",
+            "value": "500000"
+          },
+          "min": {
+            "type": "INT",
+            "value": "500"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "shieldWait",
+        "value": {
+          "values": [
+            "How many milliseconds passes after a shield has been reduced to zero",
+            "before it can start recharging again. Minimum of 0."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RangeInt;",
+        "target": "shieldWait",
+        "values": {
+          "max": {
+            "type": "INT",
+            "value": "50000"
+          },
+          "min": {
+            "type": "INT",
+            "value": "0"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "shieldCost",
+        "value": {
+          "values": [
+            "How much vis it costs to reacharge a single unit of shielding. Minimum of 0."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RangeInt;",
+        "target": "shieldCost",
+        "values": {
+          "max": {
+            "type": "INT",
+            "value": "500"
+          },
+          "min": {
+            "type": "INT",
+            "value": "0"
+          }
+        }
+      }
+    ]
+  },
+  "thaumcraft/common/config/ModConfig$CONFIG_WORLD": {
+    "name": "thaumcraft/common/config/ModConfig$CONFIG_WORLD",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/common/config/Config$LangKey;",
+        "target": "thaumcraft/common/config/ModConfig$CONFIG_WORLD",
+        "value": {
+          "value": "thaumcraft.config.world"
+        }
+      },
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/common/config/Config;",
+        "target": "thaumcraft/common/config/ModConfig$CONFIG_WORLD",
+        "values": {
+          "modid": {
+            "value": "thaumcraft"
+          },
+          "name": {
+            "value": "thaumcraft_world"
+          },
+          "type": {
+            "type": "ENUM",
+            "value": "Lnet/minecraftforge/common/config/Config$Type;/INSTANCE"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "overworldDim",
+        "value": {
+          "values": [
+            "The dimension considered to be your \u0027overworld\u0027. Certain TC structures will only spawn in this dim."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RequiresMcRestart;",
+        "target": "overworldDim"
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "dimensionOuterId",
+        "value": {
+          "values": [
+            "Outer lands dimension id"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RequiresMcRestart;",
+        "target": "dimensionOuterId"
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "oreDensity",
+        "value": {
+          "values": [
+            "The % of normal ore amounts that will be spawned. For example 50 will spawn half",
+            "the ores while 200 will spawn double. Default 100"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RangeInt;",
+        "target": "oreDensity",
+        "values": {
+          "max": {
+            "type": "INT",
+            "value": "500"
+          },
+          "min": {
+            "type": "INT",
+            "value": "1"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RequiresMcRestart;",
+        "target": "oreDensity"
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "biomeMagicalForestWeight",
+        "value": {
+          "values": [
+            "Higher values increases number of magical forest biomes. If you are using biome",
+            "addon mods you probably want to increase this weight quite a bit"
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RangeInt;",
+        "target": "biomeMagicalForestWeight",
+        "values": {
+          "max": {
+            "type": "INT",
+            "value": "100"
+          },
+          "min": {
+            "type": "INT",
+            "value": "0"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RequiresMcRestart;",
+        "target": "biomeMagicalForestWeight"
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "taintSpreadRate",
+        "value": {
+          "values": [
+            "The % chance of taint fibres spreading on a block tick.",
+            "Setting this to 0 will effectively stop taint fibre spread."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RangeInt;",
+        "target": "taintSpreadRate",
+        "values": {
+          "max": {
+            "type": "INT",
+            "value": "500"
+          },
+          "min": {
+            "type": "INT",
+            "value": "0"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "taintSpreadArea",
+        "value": {
+          "values": [
+            "The range at which taint can spread from a taint seed.",
+            "This value is only a base and will be modified by flux levels."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$RangeInt;",
+        "target": "taintSpreadArea",
+        "values": {
+          "max": {
+            "type": "INT",
+            "value": "256"
+          },
+          "min": {
+            "type": "INT",
+            "value": "8"
+          }
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "regenKey",
+        "value": {
+          "values": [
+            "This key is used to keep track of which chunk have been generated/regenerated.",
+            "Changing it will cause the regeneration code to run again, so only change it if you want it to happen.",
+            "Useful to regen only one world feature at a time."
+          ]
+        }
+      },
+      {
+        "type": "FIELD",
+        "name": "Lnet/minecraftforge/common/config/Config$Comment;",
+        "target": "allowChampionMobs",
+        "value": {
+          "values": [
+            "Setting this to false will disable spawning champion mobs. Even when false they will still",
+            "have a greatly reduced chance of spawning in certain dangerous places."
+          ]
+        }
+      }
+    ]
+  },
+  "thaumcraft/common/container/ContainerFocusPouch": {
+    "name": "thaumcraft/common/container/ContainerFocusPouch",
+    "interfaces": [
+      "net/minecraft/inventory/IInventoryChangedListener"
+    ]
+  },
+  "thaumcraft/common/container/ContainerHandMirror": {
+    "name": "thaumcraft/common/container/ContainerHandMirror",
+    "interfaces": [
+      "net/minecraft/inventory/IInventoryChangedListener"
+    ]
+  },
+  "thaumcraft/common/container/ContainerLogistics": {
+    "name": "thaumcraft/common/container/ContainerLogistics",
+    "interfaces": [
+      "net/minecraft/inventory/IInventoryChangedListener"
+    ]
+  },
+  "thaumcraft/common/container/ContainerPech": {
+    "name": "thaumcraft/common/container/ContainerPech",
+    "interfaces": [
+      "net/minecraft/inventory/IInventoryChangedListener"
+    ]
+  },
+  "thaumcraft/common/container/InventoryArcaneWorkbench": {
+    "name": "thaumcraft/common/container/InventoryArcaneWorkbench",
+    "interfaces": [
+      "thaumcraft/api/crafting/IArcaneWorkbench"
+    ]
+  },
+  "thaumcraft/common/entities/EntityFallingTaint": {
+    "name": "thaumcraft/common/entities/EntityFallingTaint",
+    "interfaces": [
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/entities/EntityFluxRift$FluxEventEntry": {
+    "name": "thaumcraft/common/entities/EntityFluxRift$FluxEventEntry",
+    "interfaces": [
+      "thaumcraft/common/lib/utils/RandomItemChooser$Item"
+    ]
+  },
+  "thaumcraft/common/entities/EntityFollowingItem": {
+    "name": "thaumcraft/common/entities/EntityFollowingItem",
+    "interfaces": [
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/entities/construct/EntityArcaneBore": {
+    "name": "thaumcraft/common/entities/construct/EntityArcaneBore",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/entities/construct/EntityArcaneBore"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "harvestBlockEvent(Lnet/minecraftforge/event/world/BlockEvent$HarvestDropsEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/entities/construct/EntityOwnedConstruct": {
+    "name": "thaumcraft/common/entities/construct/EntityOwnedConstruct",
+    "interfaces": [
+      "net/minecraft/entity/IEntityOwnable"
+    ]
+  },
+  "thaumcraft/common/entities/construct/EntityTurretCrossbow": {
+    "name": "thaumcraft/common/entities/construct/EntityTurretCrossbow",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob"
+    ]
+  },
+  "thaumcraft/common/entities/construct/EntityTurretCrossbow$EntityAINearestValidTarget$1": {
+    "name": "thaumcraft/common/entities/construct/EntityTurretCrossbow$EntityAINearestValidTarget$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "thaumcraft/common/entities/construct/EntityTurretCrossbow$EntityAINearestValidTarget$Sorter": {
+    "name": "thaumcraft/common/entities/construct/EntityTurretCrossbow$EntityAINearestValidTarget$Sorter",
+    "interfaces": [
+      "java/util/Comparator"
+    ]
+  },
+  "thaumcraft/common/entities/construct/EntityTurretCrossbowAdvanced$EntityAINearestValidTarget$1": {
+    "name": "thaumcraft/common/entities/construct/EntityTurretCrossbowAdvanced$EntityAINearestValidTarget$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "thaumcraft/common/entities/construct/EntityTurretCrossbowAdvanced$EntityAINearestValidTarget$Sorter": {
+    "name": "thaumcraft/common/entities/construct/EntityTurretCrossbowAdvanced$EntityAINearestValidTarget$Sorter",
+    "interfaces": [
+      "java/util/Comparator"
+    ]
+  },
+  "thaumcraft/common/entities/monster/EntityEldritchCrab": {
+    "name": "thaumcraft/common/entities/monster/EntityEldritchCrab",
+    "interfaces": [
+      "thaumcraft/api/entities/IEldritchMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/EntityEldritchGuardian": {
+    "name": "thaumcraft/common/entities/monster/EntityEldritchGuardian",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "thaumcraft/api/entities/IEldritchMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/EntityInhabitedZombie": {
+    "name": "thaumcraft/common/entities/monster/EntityInhabitedZombie",
+    "interfaces": [
+      "thaumcraft/api/entities/IEldritchMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/EntityMindSpider": {
+    "name": "thaumcraft/common/entities/monster/EntityMindSpider",
+    "interfaces": [
+      "thaumcraft/api/entities/IEldritchMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/EntityPech": {
+    "name": "thaumcraft/common/entities/monster/EntityPech",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/EntitySpellBat": {
+    "name": "thaumcraft/common/entities/monster/EntitySpellBat",
+    "interfaces": [
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/entities/monster/EntityThaumicSlime": {
+    "name": "thaumcraft/common/entities/monster/EntityThaumicSlime",
+    "interfaces": [
+      "thaumcraft/api/entities/ITaintedMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/EntityWisp": {
+    "name": "thaumcraft/common/entities/monster/EntityWisp",
+    "interfaces": [
+      "net/minecraft/entity/monster/IMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/boss/EntityCultistLeader": {
+    "name": "thaumcraft/common/entities/monster/boss/EntityCultistLeader",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/boss/EntityEldritchGolem": {
+    "name": "thaumcraft/common/entities/monster/boss/EntityEldritchGolem",
+    "interfaces": [
+      "thaumcraft/api/entities/IEldritchMob",
+      "net/minecraft/entity/IRangedAttackMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/boss/EntityEldritchWarden": {
+    "name": "thaumcraft/common/entities/monster/boss/EntityEldritchWarden",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "thaumcraft/api/entities/IEldritchMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/boss/EntityTaintacleGiant": {
+    "name": "thaumcraft/common/entities/monster/boss/EntityTaintacleGiant",
+    "interfaces": [
+      "thaumcraft/api/entities/ITaintedMob",
+      "thaumcraft/api/entities/IEldritchMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/cult/EntityCultistCleric": {
+    "name": "thaumcraft/common/entities/monster/cult/EntityCultistCleric",
+    "interfaces": [
+      "net/minecraft/entity/IRangedAttackMob",
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModArmored": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModArmored",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModBold": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModBold",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModDummy": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModDummy",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModFire": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModFire",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModGrim": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModGrim",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModInfested": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModInfested",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModMighty": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModMighty",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModPoison": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModPoison",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModSickly": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModSickly",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModSpined": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModSpined",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModTainted": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModTainted",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModUndying": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModUndying",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModVampire": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModVampire",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModWarded": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModWarded",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/mods/ChampionModWarp": {
+    "name": "thaumcraft/common/entities/monster/mods/ChampionModWarp",
+    "interfaces": [
+      "thaumcraft/common/entities/monster/mods/IChampionModifierEffect"
+    ]
+  },
+  "thaumcraft/common/entities/monster/tainted/EntityTaintCrawler": {
+    "name": "thaumcraft/common/entities/monster/tainted/EntityTaintCrawler",
+    "interfaces": [
+      "thaumcraft/api/entities/ITaintedMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/tainted/EntityTaintSeed": {
+    "name": "thaumcraft/common/entities/monster/tainted/EntityTaintSeed",
+    "interfaces": [
+      "thaumcraft/api/entities/ITaintedMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/tainted/EntityTaintSwarm": {
+    "name": "thaumcraft/common/entities/monster/tainted/EntityTaintSwarm",
+    "interfaces": [
+      "thaumcraft/api/entities/ITaintedMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/tainted/EntityTaintacle": {
+    "name": "thaumcraft/common/entities/monster/tainted/EntityTaintacle",
+    "interfaces": [
+      "thaumcraft/api/entities/ITaintedMob"
+    ]
+  },
+  "thaumcraft/common/entities/monster/tainted/EntityTaintacleSmall": {
+    "name": "thaumcraft/common/entities/monster/tainted/EntityTaintacleSmall",
+    "interfaces": [
+      "thaumcraft/api/entities/ITaintedMob"
+    ]
+  },
+  "thaumcraft/common/entities/projectile/EntityFocusCloud": {
+    "name": "thaumcraft/common/entities/projectile/EntityFocusCloud",
+    "interfaces": [
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/entities/projectile/EntityFocusCloud$1": {
+    "name": "thaumcraft/common/entities/projectile/EntityFocusCloud$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/entities/projectile/EntityFocusMine": {
+    "name": "thaumcraft/common/entities/projectile/EntityFocusMine",
+    "interfaces": [
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/entities/projectile/EntityFocusMine$1": {
+    "name": "thaumcraft/common/entities/projectile/EntityFocusMine$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/entities/projectile/EntityFocusProjectile": {
+    "name": "thaumcraft/common/entities/projectile/EntityFocusProjectile",
+    "interfaces": [
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/entities/projectile/EntityFocusProjectile$1": {
+    "name": "thaumcraft/common/entities/projectile/EntityFocusProjectile$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/entities/projectile/EntityGolemOrb": {
+    "name": "thaumcraft/common/entities/projectile/EntityGolemOrb",
+    "interfaces": [
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/entities/projectile/EntityGrapple": {
+    "name": "thaumcraft/common/entities/projectile/EntityGrapple",
+    "interfaces": [
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/entities/projectile/EntityHomingShard": {
+    "name": "thaumcraft/common/entities/projectile/EntityHomingShard",
+    "interfaces": [
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/entities/projectile/EntityRiftBlast": {
+    "name": "thaumcraft/common/entities/projectile/EntityRiftBlast",
+    "interfaces": [
+      "net/minecraftforge/fml/common/registry/IEntityAdditionalSpawnData"
+    ]
+  },
+  "thaumcraft/common/golems/EntityThaumcraftGolem": {
+    "name": "thaumcraft/common/golems/EntityThaumcraftGolem",
+    "interfaces": [
+      "thaumcraft/api/golems/IGolemAPI",
+      "net/minecraft/entity/IRangedAttackMob"
+    ]
+  },
+  "thaumcraft/common/golems/GolemProperties": {
+    "name": "thaumcraft/common/golems/GolemProperties",
+    "interfaces": [
+      "thaumcraft/api/golems/IGolemProperties"
+    ]
+  },
+  "thaumcraft/common/golems/ItemGolemBell": {
+    "name": "thaumcraft/common/golems/ItemGolemBell",
+    "interfaces": [
+      "thaumcraft/api/golems/ISealDisplayer"
+    ]
+  },
+  "thaumcraft/common/golems/ItemGolemPlacer": {
+    "name": "thaumcraft/common/golems/ItemGolemPlacer",
+    "interfaces": [
+      "thaumcraft/api/golems/ISealDisplayer"
+    ]
+  },
+  "thaumcraft/common/golems/ai/AINearestValidTarget$1": {
+    "name": "thaumcraft/common/golems/ai/AINearestValidTarget$1",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "thaumcraft/common/golems/ai/AINearestValidTarget$Sorter": {
+    "name": "thaumcraft/common/golems/ai/AINearestValidTarget$Sorter",
+    "interfaces": [
+      "java/util/Comparator"
+    ]
+  },
+  "thaumcraft/common/golems/parts/GolemArmDart": {
+    "name": "thaumcraft/common/golems/parts/GolemArmDart",
+    "interfaces": [
+      "thaumcraft/api/golems/parts/GolemArm$IArmFunction"
+    ]
+  },
+  "thaumcraft/common/golems/parts/GolemLegLevitator": {
+    "name": "thaumcraft/common/golems/parts/GolemLegLevitator",
+    "interfaces": [
+      "thaumcraft/api/golems/parts/GolemLeg$ILegFunction"
+    ]
+  },
+  "thaumcraft/common/golems/parts/GolemLegWheels": {
+    "name": "thaumcraft/common/golems/parts/GolemLegWheels",
+    "interfaces": [
+      "thaumcraft/api/golems/parts/GolemLeg$ILegFunction"
+    ]
+  },
+  "thaumcraft/common/golems/seals/ItemSealPlacer": {
+    "name": "thaumcraft/common/golems/seals/ItemSealPlacer",
+    "interfaces": [
+      "thaumcraft/api/golems/ISealDisplayer"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealBreaker": {
+    "name": "thaumcraft/common/golems/seals/SealBreaker",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISealConfigArea",
+      "thaumcraft/api/golems/seals/ISealConfigToggles"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealButcher": {
+    "name": "thaumcraft/common/golems/seals/SealButcher",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISeal",
+      "thaumcraft/api/golems/seals/ISealGui",
+      "thaumcraft/api/golems/seals/ISealConfigArea"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealEmptyAdvanced": {
+    "name": "thaumcraft/common/golems/seals/SealEmptyAdvanced",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISealConfigToggles"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealEntity": {
+    "name": "thaumcraft/common/golems/seals/SealEntity",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISealEntity"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealFillAdvanced": {
+    "name": "thaumcraft/common/golems/seals/SealFillAdvanced",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISealConfigToggles"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealFiltered": {
+    "name": "thaumcraft/common/golems/seals/SealFiltered",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISeal",
+      "thaumcraft/api/golems/seals/ISealGui",
+      "thaumcraft/api/golems/seals/ISealConfigFilter"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealGuard": {
+    "name": "thaumcraft/common/golems/seals/SealGuard",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISeal",
+      "thaumcraft/api/golems/seals/ISealGui",
+      "thaumcraft/api/golems/seals/ISealConfigArea"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealGuardAdvanced": {
+    "name": "thaumcraft/common/golems/seals/SealGuardAdvanced",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISealConfigToggles"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealHarvest": {
+    "name": "thaumcraft/common/golems/seals/SealHarvest",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISeal",
+      "thaumcraft/api/golems/seals/ISealGui",
+      "thaumcraft/api/golems/seals/ISealConfigArea",
+      "thaumcraft/api/golems/seals/ISealConfigToggles"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealLumber": {
+    "name": "thaumcraft/common/golems/seals/SealLumber",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISeal",
+      "thaumcraft/api/golems/seals/ISealGui",
+      "thaumcraft/api/golems/seals/ISealConfigArea"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealPickup": {
+    "name": "thaumcraft/common/golems/seals/SealPickup",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISealConfigArea"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealPickupAdvanced": {
+    "name": "thaumcraft/common/golems/seals/SealPickupAdvanced",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISealConfigToggles"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealProvide": {
+    "name": "thaumcraft/common/golems/seals/SealProvide",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISealConfigToggles"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealStock": {
+    "name": "thaumcraft/common/golems/seals/SealStock",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISealConfigToggles"
+    ]
+  },
+  "thaumcraft/common/golems/seals/SealUse": {
+    "name": "thaumcraft/common/golems/seals/SealUse",
+    "interfaces": [
+      "thaumcraft/api/golems/seals/ISealConfigToggles"
+    ]
+  },
+  "thaumcraft/common/items/ItemTCBase": {
+    "name": "thaumcraft/common/items/ItemTCBase",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/ItemTCEssentiaContainer": {
+    "name": "thaumcraft/common/items/ItemTCEssentiaContainer",
+    "interfaces": [
+      "thaumcraft/api/aspects/IEssentiaContainerItem",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemBootsTraveller": {
+    "name": "thaumcraft/common/items/armor/ItemBootsTraveller",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems",
+      "thaumcraft/api/items/IRechargable"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemCultistBoots": {
+    "name": "thaumcraft/common/items/armor/ItemCultistBoots",
+    "interfaces": [
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/api/items/IVisDiscountGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemCultistLeaderArmor": {
+    "name": "thaumcraft/common/items/armor/ItemCultistLeaderArmor",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemCultistPlateArmor": {
+    "name": "thaumcraft/common/items/armor/ItemCultistPlateArmor",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemCultistRobeArmor": {
+    "name": "thaumcraft/common/items/armor/ItemCultistRobeArmor",
+    "interfaces": [
+      "thaumcraft/api/items/IVisDiscountGear",
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemFortressArmor": {
+    "name": "thaumcraft/common/items/armor/ItemFortressArmor",
+    "interfaces": [
+      "net/minecraftforge/common/ISpecialArmor",
+      "thaumcraft/api/items/IGoggles",
+      "thaumcraft/api/items/IRevealer",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemGoggles": {
+    "name": "thaumcraft/common/items/armor/ItemGoggles",
+    "interfaces": [
+      "thaumcraft/api/items/IVisDiscountGear",
+      "thaumcraft/api/items/IRevealer",
+      "thaumcraft/api/items/IGoggles",
+      "thaumcraft/common/items/IThaumcraftItems",
+      "baubles/api/IBauble",
+      "baubles/api/render/IRenderBauble"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemRobeArmor": {
+    "name": "thaumcraft/common/items/armor/ItemRobeArmor",
+    "interfaces": [
+      "thaumcraft/api/items/IVisDiscountGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemThaumiumArmor": {
+    "name": "thaumcraft/common/items/armor/ItemThaumiumArmor",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemVoidArmor": {
+    "name": "thaumcraft/common/items/armor/ItemVoidArmor",
+    "interfaces": [
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/armor/ItemVoidRobeArmor": {
+    "name": "thaumcraft/common/items/armor/ItemVoidRobeArmor",
+    "interfaces": [
+      "thaumcraft/api/items/IVisDiscountGear",
+      "thaumcraft/api/items/IGoggles",
+      "thaumcraft/api/items/IRevealer",
+      "net/minecraftforge/common/ISpecialArmor",
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/baubles/ItemAmuletVis": {
+    "name": "thaumcraft/common/items/baubles/ItemAmuletVis",
+    "interfaces": [
+      "baubles/api/IBauble"
+    ]
+  },
+  "thaumcraft/common/items/baubles/ItemBaubles": {
+    "name": "thaumcraft/common/items/baubles/ItemBaubles",
+    "interfaces": [
+      "baubles/api/IBauble",
+      "thaumcraft/api/items/IVisDiscountGear"
+    ]
+  },
+  "thaumcraft/common/items/baubles/ItemCharmUndying": {
+    "name": "thaumcraft/common/items/baubles/ItemCharmUndying",
+    "interfaces": [
+      "baubles/api/IBauble"
+    ]
+  },
+  "thaumcraft/common/items/baubles/ItemCloudRing": {
+    "name": "thaumcraft/common/items/baubles/ItemCloudRing",
+    "interfaces": [
+      "baubles/api/IBauble"
+    ]
+  },
+  "thaumcraft/common/items/baubles/ItemCuriosityBand": {
+    "name": "thaumcraft/common/items/baubles/ItemCuriosityBand",
+    "interfaces": [
+      "baubles/api/IBauble",
+      "baubles/api/render/IRenderBauble"
+    ]
+  },
+  "thaumcraft/common/items/baubles/ItemVerdantCharm": {
+    "name": "thaumcraft/common/items/baubles/ItemVerdantCharm",
+    "interfaces": [
+      "baubles/api/IBauble",
+      "thaumcraft/api/items/IRechargable"
+    ]
+  },
+  "thaumcraft/common/items/baubles/ItemVerdantCharm$1": {
+    "name": "thaumcraft/common/items/baubles/ItemVerdantCharm$1",
+    "interfaces": [
+      "net/minecraft/item/IItemPropertyGetter"
+    ]
+  },
+  "thaumcraft/common/items/baubles/ItemVoidseerCharm": {
+    "name": "thaumcraft/common/items/baubles/ItemVoidseerCharm",
+    "interfaces": [
+      "baubles/api/IBauble",
+      "thaumcraft/api/items/IVisDiscountGear",
+      "thaumcraft/api/items/IWarpingGear"
+    ]
+  },
+  "thaumcraft/common/items/casters/ItemCaster": {
+    "name": "thaumcraft/common/items/casters/ItemCaster",
+    "interfaces": [
+      "thaumcraft/api/items/IArchitect",
+      "thaumcraft/api/casters/ICaster"
+    ]
+  },
+  "thaumcraft/common/items/casters/ItemCaster$1": {
+    "name": "thaumcraft/common/items/casters/ItemCaster$1",
+    "interfaces": [
+      "net/minecraft/item/IItemPropertyGetter"
+    ]
+  },
+  "thaumcraft/common/items/casters/ItemFocusPouch": {
+    "name": "thaumcraft/common/items/casters/ItemFocusPouch",
+    "interfaces": [
+      "baubles/api/IBauble"
+    ]
+  },
+  "thaumcraft/common/items/casters/foci/FocusEffectExchange": {
+    "name": "thaumcraft/common/items/casters/foci/FocusEffectExchange",
+    "interfaces": [
+      "thaumcraft/api/casters/IFocusBlockPicker"
+    ]
+  },
+  "thaumcraft/common/items/casters/foci/FocusMediumPlan": {
+    "name": "thaumcraft/common/items/casters/foci/FocusMediumPlan",
+    "interfaces": [
+      "thaumcraft/api/items/IArchitect"
+    ]
+  },
+  "thaumcraft/common/items/consumables/ItemChunksEdible": {
+    "name": "thaumcraft/common/items/consumables/ItemChunksEdible",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/consumables/ItemTripleMeatTreat": {
+    "name": "thaumcraft/common/items/consumables/ItemTripleMeatTreat",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/consumables/ItemZombieBrain": {
+    "name": "thaumcraft/common/items/consumables/ItemZombieBrain",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/curios/ItemPrimordialPearl$1": {
+    "name": "thaumcraft/common/items/curios/ItemPrimordialPearl$1",
+    "interfaces": [
+      "net/minecraft/item/IItemPropertyGetter"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemCrimsonBlade": {
+    "name": "thaumcraft/common/items/tools/ItemCrimsonBlade",
+    "interfaces": [
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemElementalAxe": {
+    "name": "thaumcraft/common/items/tools/ItemElementalAxe",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemElementalHoe": {
+    "name": "thaumcraft/common/items/tools/ItemElementalHoe",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemElementalPickaxe": {
+    "name": "thaumcraft/common/items/tools/ItemElementalPickaxe",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemElementalShovel": {
+    "name": "thaumcraft/common/items/tools/ItemElementalShovel",
+    "interfaces": [
+      "thaumcraft/api/items/IArchitect",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemElementalSword": {
+    "name": "thaumcraft/common/items/tools/ItemElementalSword",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemGrappleGun": {
+    "name": "thaumcraft/common/items/tools/ItemGrappleGun",
+    "interfaces": [
+      "thaumcraft/api/items/IRechargable"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemGrappleGun$1": {
+    "name": "thaumcraft/common/items/tools/ItemGrappleGun$1",
+    "interfaces": [
+      "net/minecraft/item/IItemPropertyGetter"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemPrimalCrusher": {
+    "name": "thaumcraft/common/items/tools/ItemPrimalCrusher",
+    "interfaces": [
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemScribingTools": {
+    "name": "thaumcraft/common/items/tools/ItemScribingTools",
+    "interfaces": [
+      "thaumcraft/api/items/IScribeTools"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemThaumiumAxe": {
+    "name": "thaumcraft/common/items/tools/ItemThaumiumAxe",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemThaumiumHoe": {
+    "name": "thaumcraft/common/items/tools/ItemThaumiumHoe",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemThaumiumPickaxe": {
+    "name": "thaumcraft/common/items/tools/ItemThaumiumPickaxe",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemThaumiumShovel": {
+    "name": "thaumcraft/common/items/tools/ItemThaumiumShovel",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemThaumiumSword": {
+    "name": "thaumcraft/common/items/tools/ItemThaumiumSword",
+    "interfaces": [
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemVoidAxe": {
+    "name": "thaumcraft/common/items/tools/ItemVoidAxe",
+    "interfaces": [
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemVoidHoe": {
+    "name": "thaumcraft/common/items/tools/ItemVoidHoe",
+    "interfaces": [
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemVoidPickaxe": {
+    "name": "thaumcraft/common/items/tools/ItemVoidPickaxe",
+    "interfaces": [
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemVoidShovel": {
+    "name": "thaumcraft/common/items/tools/ItemVoidShovel",
+    "interfaces": [
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/items/tools/ItemVoidSword": {
+    "name": "thaumcraft/common/items/tools/ItemVoidSword",
+    "interfaces": [
+      "thaumcraft/api/items/IWarpingGear",
+      "thaumcraft/common/items/IThaumcraftItems"
+    ]
+  },
+  "thaumcraft/common/lib/InternalMethodHandler": {
+    "name": "thaumcraft/common/lib/InternalMethodHandler",
+    "interfaces": [
+      "thaumcraft/api/internal/IInternalMethodHandler"
+    ]
+  },
+  "thaumcraft/common/lib/capabilities/PlayerKnowledge$1": {
+    "name": "thaumcraft/common/lib/capabilities/PlayerKnowledge$1",
+    "interfaces": [
+      "net/minecraftforge/common/capabilities/Capability$IStorage"
+    ]
+  },
+  "thaumcraft/common/lib/capabilities/PlayerKnowledge$DefaultImpl": {
+    "name": "thaumcraft/common/lib/capabilities/PlayerKnowledge$DefaultImpl",
+    "interfaces": [
+      "thaumcraft/api/capabilities/IPlayerKnowledge"
+    ]
+  },
+  "thaumcraft/common/lib/capabilities/PlayerKnowledge$Provider": {
+    "name": "thaumcraft/common/lib/capabilities/PlayerKnowledge$Provider",
+    "interfaces": [
+      "net/minecraftforge/common/capabilities/ICapabilitySerializable"
+    ]
+  },
+  "thaumcraft/common/lib/capabilities/PlayerWarp$1": {
+    "name": "thaumcraft/common/lib/capabilities/PlayerWarp$1",
+    "interfaces": [
+      "net/minecraftforge/common/capabilities/Capability$IStorage"
+    ]
+  },
+  "thaumcraft/common/lib/capabilities/PlayerWarp$DefaultImpl": {
+    "name": "thaumcraft/common/lib/capabilities/PlayerWarp$DefaultImpl",
+    "interfaces": [
+      "thaumcraft/api/capabilities/IPlayerWarp"
+    ]
+  },
+  "thaumcraft/common/lib/capabilities/PlayerWarp$Provider": {
+    "name": "thaumcraft/common/lib/capabilities/PlayerWarp$Provider",
+    "interfaces": [
+      "net/minecraftforge/common/capabilities/ICapabilitySerializable"
+    ]
+  },
+  "thaumcraft/common/lib/crafting/DustTriggerMultiblock": {
+    "name": "thaumcraft/common/lib/crafting/DustTriggerMultiblock",
+    "interfaces": [
+      "thaumcraft/api/crafting/IDustTrigger"
+    ]
+  },
+  "thaumcraft/common/lib/crafting/DustTriggerMultiblock$1": {
+    "name": "thaumcraft/common/lib/crafting/DustTriggerMultiblock$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/crafting/DustTriggerOre": {
+    "name": "thaumcraft/common/lib/crafting/DustTriggerOre",
+    "interfaces": [
+      "thaumcraft/api/crafting/IDustTrigger"
+    ]
+  },
+  "thaumcraft/common/lib/crafting/DustTriggerOre$1": {
+    "name": "thaumcraft/common/lib/crafting/DustTriggerOre$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/crafting/DustTriggerSimple": {
+    "name": "thaumcraft/common/lib/crafting/DustTriggerSimple",
+    "interfaces": [
+      "thaumcraft/api/crafting/IDustTrigger"
+    ]
+  },
+  "thaumcraft/common/lib/crafting/DustTriggerSimple$1": {
+    "name": "thaumcraft/common/lib/crafting/DustTriggerSimple$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/crafting/RecipeMagicDust": {
+    "name": "thaumcraft/common/lib/crafting/RecipeMagicDust",
+    "interfaces": [
+      "net/minecraft/item/crafting/IRecipe"
+    ]
+  },
+  "thaumcraft/common/lib/crafting/RecipeTripleMeatTreat": {
+    "name": "thaumcraft/common/lib/crafting/RecipeTripleMeatTreat",
+    "interfaces": [
+      "net/minecraft/item/crafting/IRecipe"
+    ]
+  },
+  "thaumcraft/common/lib/events/ChunkEvents": {
+    "name": "thaumcraft/common/lib/events/ChunkEvents",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/lib/events/ChunkEvents"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "chunkSave(Lnet/minecraftforge/event/world/ChunkDataEvent$Save;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "chunkLoad(Lnet/minecraftforge/event/world/ChunkDataEvent$Load;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "chunkWatch(Lnet/minecraftforge/event/world/ChunkWatchEvent$Watch;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/lib/events/CraftingEvents": {
+    "name": "thaumcraft/common/lib/events/CraftingEvents",
+    "interfaces": [
+      "net/minecraftforge/fml/common/IFuelHandler"
+    ],
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/lib/events/CraftingEvents"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onCrafting(Lnet/minecraftforge/fml/common/gameevent/PlayerEvent$ItemCraftedEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onAnvil(Lnet/minecraftforge/event/AnvilUpdateEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/lib/events/EntityEvents": {
+    "name": "thaumcraft/common/lib/events/EntityEvents",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/lib/events/EntityEvents"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "itemExpire(Lnet/minecraftforge/event/entity/item/ItemExpireEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "livingTick(Lnet/minecraftforge/event/entity/living/LivingEvent$LivingUpdateEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "entityHurt(Lnet/minecraftforge/event/entity/living/LivingHurtEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "itemPickup(Lnet/minecraftforge/event/entity/player/EntityItemPickupEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "entityConstuct(Lnet/minecraftforge/event/entity/EntityEvent$EntityConstructing;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "livingDrops(Lnet/minecraftforge/event/entity/living/LivingDropsEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "entitySpawns(Lnet/minecraftforge/event/entity/EntityJoinWorldEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/lib/events/KeyHandler": {
+    "name": "thaumcraft/common/lib/events/KeyHandler",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/lib/events/KeyHandler",
+        "value": {
+          "type": "ENUM",
+          "values": [
+            "Lnet/minecraftforge/fml/relauncher/Side;/CLIENT"
+          ]
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "playerTick(Lnet/minecraftforge/fml/common/gameevent/TickEvent$PlayerTickEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/lib/events/PlayerEvents": {
+    "name": "thaumcraft/common/lib/events/PlayerEvents",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/lib/events/PlayerEvents"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onFallDamage(Lnet/minecraftforge/event/entity/living/LivingHurtEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "livingTick(Lnet/minecraftforge/event/entity/living/LivingEvent$LivingUpdateEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "pickupItem(Lnet/minecraftforge/event/entity/player/EntityItemPickupEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "wakeUp(Lnet/minecraftforge/event/entity/player/PlayerWakeUpEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "tooltipEvent(Lnet/minecraftforge/event/entity/player/ItemTooltipEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "playerJumps(Lnet/minecraftforge/event/entity/living/LivingEvent$LivingJumpEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "droppedItem(Lnet/minecraftforge/event/entity/item/ItemTossEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "finishedUsingItem(Lnet/minecraftforge/event/entity/living/LivingEntityUseItemEvent$Finish;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "attachCapabilitiesPlayer(Lnet/minecraftforge/event/AttachCapabilitiesEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "playerJoin(Lnet/minecraftforge/event/entity/EntityJoinWorldEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "cloneCapabilitiesEvent(Lnet/minecraftforge/event/entity/player/PlayerEvent$Clone;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "pickupXP(Lnet/minecraftforge/event/entity/player/PlayerPickupXpEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onDeath(Lnet/minecraftforge/event/entity/living/LivingDeathEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/lib/events/ServerEvents": {
+    "name": "thaumcraft/common/lib/events/ServerEvents",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/lib/events/ServerEvents"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "clientWorldTick(Lnet/minecraftforge/fml/common/gameevent/TickEvent$ClientTickEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "worldTick(Lnet/minecraftforge/fml/common/gameevent/TickEvent$WorldTickEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/lib/events/ServerEvents$1": {
+    "name": "thaumcraft/common/lib/events/ServerEvents$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/events/ServerEvents$2": {
+    "name": "thaumcraft/common/lib/events/ServerEvents$2",
+    "interfaces": [
+      "com/google/common/base/Predicate"
+    ]
+  },
+  "thaumcraft/common/lib/events/ToolEvents": {
+    "name": "thaumcraft/common/lib/events/ToolEvents",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/lib/events/ToolEvents"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "playerAttack(Lnet/minecraftforge/event/entity/player/AttackEntityEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "playerRightClickBlock(Lnet/minecraftforge/event/entity/player/PlayerInteractEvent$RightClickBlock;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "playerInteract(Lnet/minecraftforge/event/entity/player/PlayerInteractEvent$LeftClickBlock;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "breakBlockEvent(Lnet/minecraftforge/event/world/BlockEvent$BreakEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "harvestBlockEvent(Lnet/minecraftforge/event/world/BlockEvent$HarvestDropsEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "livingDrops(Lnet/minecraftforge/event/entity/living/LivingDropsEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/lib/events/ToolEvents$1": {
+    "name": "thaumcraft/common/lib/events/ToolEvents$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/events/WorldEvents": {
+    "name": "thaumcraft/common/lib/events/WorldEvents",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/lib/events/WorldEvents"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "worldLoad(Lnet/minecraftforge/event/world/WorldEvent$Load;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "worldSave(Lnet/minecraftforge/event/world/WorldEvent$Save;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "worldUnload(Lnet/minecraftforge/event/world/WorldEvent$Unload;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "placeBlockEvent(Lnet/minecraftforge/event/world/BlockEvent$PlaceEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "placeBlockEvent(Lnet/minecraftforge/event/world/BlockEvent$MultiPlaceEvent;)V"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "noteEvent(Lnet/minecraftforge/event/world/NoteBlockEvent$Play;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/lib/network/EventHandlerNetwork": {
+    "name": "thaumcraft/common/lib/network/EventHandlerNetwork",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/common/lib/network/EventHandlerNetwork"
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "playerLoggedInEvent(Lnet/minecraftforge/fml/common/gameevent/PlayerEvent$PlayerLoggedInEvent;)V"
+      }
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXBlockArc": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXBlockArc",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXBlockBamf": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXBlockBamf",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXBlockBamf$1": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXBlockBamf$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXBlockMist": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXBlockMist",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXBoreDig": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXBoreDig",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXBoreDig$1": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXBoreDig$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXBoreDig$2": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXBoreDig$2",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXEssentiaSource": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXEssentiaSource",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXFocusEffect": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXFocusEffect",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXFocusEffect$1": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXFocusEffect$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXFocusPartImpact": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXFocusPartImpact",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXFocusPartImpact$1": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXFocusPartImpact$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXFocusPartImpactBurst": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXFocusPartImpactBurst",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXFocusPartImpactBurst$1": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXFocusPartImpactBurst$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXInfusionSource": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXInfusionSource",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXPollute": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXPollute",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXScanSource": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXScanSource",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXScanSource$1": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXScanSource$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXShield": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXShield",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXSlash": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXSlash",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXSonic": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXSonic",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXWispZap": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXWispZap",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/fx/PacketFXZap": {
+    "name": "thaumcraft/common/lib/network/fx/PacketFXZap",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketAuraToClient": {
+    "name": "thaumcraft/common/lib/network/misc/PacketAuraToClient",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketAuraToClient$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketAuraToClient$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketBiomeChange": {
+    "name": "thaumcraft/common/lib/network/misc/PacketBiomeChange",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketBiomeChange$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketBiomeChange$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketFocusChangeToServer": {
+    "name": "thaumcraft/common/lib/network/misc/PacketFocusChangeToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketFocusChangeToServer$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketFocusChangeToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketItemKeyToServer": {
+    "name": "thaumcraft/common/lib/network/misc/PacketItemKeyToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketItemKeyToServer$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketItemKeyToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketItemToClientContainer": {
+    "name": "thaumcraft/common/lib/network/misc/PacketItemToClientContainer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketItemToClientContainer$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketItemToClientContainer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketKnowledgeGain": {
+    "name": "thaumcraft/common/lib/network/misc/PacketKnowledgeGain",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketKnowledgeGain$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketKnowledgeGain$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketLogisticsRequestToServer": {
+    "name": "thaumcraft/common/lib/network/misc/PacketLogisticsRequestToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketLogisticsRequestToServer$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketLogisticsRequestToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketMiscEvent": {
+    "name": "thaumcraft/common/lib/network/misc/PacketMiscEvent",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketMiscEvent$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketMiscEvent$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketMiscStringToServer": {
+    "name": "thaumcraft/common/lib/network/misc/PacketMiscStringToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketMiscStringToServer$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketMiscStringToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketNote": {
+    "name": "thaumcraft/common/lib/network/misc/PacketNote",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketSealFilterToClient": {
+    "name": "thaumcraft/common/lib/network/misc/PacketSealFilterToClient",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketSealToClient": {
+    "name": "thaumcraft/common/lib/network/misc/PacketSealToClient",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer": {
+    "name": "thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketStartTheoryToServer": {
+    "name": "thaumcraft/common/lib/network/misc/PacketStartTheoryToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/misc/PacketStartTheoryToServer$1": {
+    "name": "thaumcraft/common/lib/network/misc/PacketStartTheoryToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketFocusNameToServer": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketFocusNameToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketFocusNameToServer$1": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketFocusNameToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketFocusNodesToServer": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketFocusNodesToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketFocusNodesToServer$1": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketFocusNodesToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketPlayerFlagToServer": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketPlayerFlagToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketPlayerFlagToServer$1": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketPlayerFlagToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketSyncKnowledge": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketSyncKnowledge",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketSyncKnowledge$1": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketSyncKnowledge$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketSyncProgressToServer": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketSyncProgressToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketSyncProgressToServer$1": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketSyncProgressToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketSyncResearchFlagsToServer": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketSyncResearchFlagsToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketSyncResearchFlagsToServer$1": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketSyncResearchFlagsToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketSyncWarp": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketSyncWarp",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketSyncWarp$1": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketSyncWarp$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketWarpMessage": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketWarpMessage",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/playerdata/PacketWarpMessage$1": {
+    "name": "thaumcraft/common/lib/network/playerdata/PacketWarpMessage$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/tiles/PacketTileToClient": {
+    "name": "thaumcraft/common/lib/network/tiles/PacketTileToClient",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/tiles/PacketTileToClient$1": {
+    "name": "thaumcraft/common/lib/network/tiles/PacketTileToClient$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/network/tiles/PacketTileToServer": {
+    "name": "thaumcraft/common/lib/network/tiles/PacketTileToServer",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessage",
+      "net/minecraftforge/fml/common/network/simpleimpl/IMessageHandler"
+    ]
+  },
+  "thaumcraft/common/lib/network/tiles/PacketTileToServer$1": {
+    "name": "thaumcraft/common/lib/network/tiles/PacketTileToServer$1",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/common/lib/research/ScanEnchantment": {
+    "name": "thaumcraft/common/lib/research/ScanEnchantment",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/common/lib/research/ScanGeneric": {
+    "name": "thaumcraft/common/lib/research/ScanGeneric",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/common/lib/research/ScanPotion": {
+    "name": "thaumcraft/common/lib/research/ScanPotion",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/common/lib/research/ScanSky": {
+    "name": "thaumcraft/common/lib/research/ScanSky",
+    "interfaces": [
+      "thaumcraft/api/research/IScanThing"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidBasicAlchemy": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidBasicAlchemy",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidBasicArtifice": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidBasicArtifice",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidBasicAuromancy": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidBasicAuromancy",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidBasicEldritch": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidBasicEldritch",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidBasicGolemancy": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidBasicGolemancy",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidBasicInfusion": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidBasicInfusion",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidBeacon": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidBeacon",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidBrainInAJar": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidBrainInAJar",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidDragonEgg": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidDragonEgg",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidEnchantmentTable": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidEnchantmentTable",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidGlyphedStone": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidGlyphedStone",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/research/theorycraft/AidPortal": {
+    "name": "thaumcraft/common/lib/research/theorycraft/AidPortal",
+    "interfaces": [
+      "thaumcraft/api/research/theorycraft/ITheorycraftAid"
+    ]
+  },
+  "thaumcraft/common/lib/utils/BlockUtils$BlockPosComparator": {
+    "name": "thaumcraft/common/lib/utils/BlockUtils$BlockPosComparator",
+    "interfaces": [
+      "java/util/Comparator"
+    ]
+  },
+  "thaumcraft/common/lib/utils/EntityUtils$EntityDistComparator": {
+    "name": "thaumcraft/common/lib/utils/EntityUtils$EntityDistComparator",
+    "interfaces": [
+      "java/util/Comparator"
+    ]
+  },
+  "thaumcraft/common/lib/utils/PosXY": {
+    "name": "thaumcraft/common/lib/utils/PosXY",
+    "interfaces": [
+      "java/lang/Comparable"
+    ]
+  },
+  "thaumcraft/common/tiles/TileThaumcraftInventory": {
+    "name": "thaumcraft/common/tiles/TileThaumcraftInventory",
+    "interfaces": [
+      "net/minecraft/inventory/ISidedInventory",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/crafting/TileCrucible": {
+    "name": "thaumcraft/common/tiles/crafting/TileCrucible",
+    "interfaces": [
+      "net/minecraft/util/ITickable",
+      "net/minecraftforge/fluids/capability/IFluidHandler",
+      "thaumcraft/api/aspects/IAspectContainer"
+    ]
+  },
+  "thaumcraft/common/tiles/crafting/TileGolemBuilder": {
+    "name": "thaumcraft/common/tiles/crafting/TileGolemBuilder",
+    "interfaces": [
+      "thaumcraft/api/aspects/IEssentiaTransport"
+    ]
+  },
+  "thaumcraft/common/tiles/crafting/TileInfusionMatrix": {
+    "name": "thaumcraft/common/tiles/crafting/TileInfusionMatrix",
+    "interfaces": [
+      "thaumcraft/api/casters/IInteractWithCaster",
+      "thaumcraft/api/aspects/IAspectContainer",
+      "net/minecraft/util/ITickable",
+      "thaumcraft/api/items/IGogglesDisplayExtended"
+    ]
+  },
+  "thaumcraft/common/tiles/crafting/TilePatternCrafter": {
+    "name": "thaumcraft/common/tiles/crafting/TilePatternCrafter",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/crafting/TileThaumatorium": {
+    "name": "thaumcraft/common/tiles/crafting/TileThaumatorium",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectContainer",
+      "thaumcraft/api/aspects/IEssentiaTransport",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/crafting/TileThaumatorium$RecipeOutputComparator": {
+    "name": "thaumcraft/common/tiles/crafting/TileThaumatorium$RecipeOutputComparator",
+    "interfaces": [
+      "java/util/Comparator"
+    ]
+  },
+  "thaumcraft/common/tiles/crafting/TileThaumatoriumTop": {
+    "name": "thaumcraft/common/tiles/crafting/TileThaumatoriumTop",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectContainer",
+      "thaumcraft/api/aspects/IEssentiaTransport",
+      "net/minecraft/inventory/ISidedInventory",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileArcaneEar": {
+    "name": "thaumcraft/common/tiles/devices/TileArcaneEar",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileBellows": {
+    "name": "thaumcraft/common/tiles/devices/TileBellows",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileCondenser": {
+    "name": "thaumcraft/common/tiles/devices/TileCondenser",
+    "interfaces": [
+      "net/minecraft/util/ITickable",
+      "thaumcraft/api/aspects/IEssentiaTransport"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileDioptra": {
+    "name": "thaumcraft/common/tiles/devices/TileDioptra",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileLampArcane": {
+    "name": "thaumcraft/common/tiles/devices/TileLampArcane",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileLampFertility": {
+    "name": "thaumcraft/common/tiles/devices/TileLampFertility",
+    "interfaces": [
+      "thaumcraft/api/aspects/IEssentiaTransport",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileLampGrowth": {
+    "name": "thaumcraft/common/tiles/devices/TileLampGrowth",
+    "interfaces": [
+      "thaumcraft/api/aspects/IEssentiaTransport",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileLevitator": {
+    "name": "thaumcraft/common/tiles/devices/TileLevitator",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileMirror": {
+    "name": "thaumcraft/common/tiles/devices/TileMirror",
+    "interfaces": [
+      "net/minecraft/inventory/IInventory",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileMirrorEssentia": {
+    "name": "thaumcraft/common/tiles/devices/TileMirrorEssentia",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectSource",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TilePotionSprayer": {
+    "name": "thaumcraft/common/tiles/devices/TilePotionSprayer",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectContainer",
+      "thaumcraft/api/aspects/IEssentiaTransport"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileRechargePedestal": {
+    "name": "thaumcraft/common/tiles/devices/TileRechargePedestal",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectContainer"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileSpa": {
+    "name": "thaumcraft/common/tiles/devices/TileSpa",
+    "interfaces": [
+      "net/minecraftforge/fluids/capability/IFluidHandler"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileStabilizer": {
+    "name": "thaumcraft/common/tiles/devices/TileStabilizer",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileVisGenerator": {
+    "name": "thaumcraft/common/tiles/devices/TileVisGenerator",
+    "interfaces": [
+      "net/minecraft/util/ITickable",
+      "net/minecraftforge/energy/IEnergyStorage"
+    ]
+  },
+  "thaumcraft/common/tiles/devices/TileWaterJug": {
+    "name": "thaumcraft/common/tiles/devices/TileWaterJug",
+    "interfaces": [
+      "net/minecraft/util/ITickable",
+      "net/minecraftforge/fluids/capability/IFluidHandler"
+    ]
+  },
+  "thaumcraft/common/tiles/essentia/TileAlembic": {
+    "name": "thaumcraft/common/tiles/essentia/TileAlembic",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectContainer",
+      "thaumcraft/api/aspects/IEssentiaTransport"
+    ]
+  },
+  "thaumcraft/common/tiles/essentia/TileCentrifuge": {
+    "name": "thaumcraft/common/tiles/essentia/TileCentrifuge",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectContainer",
+      "thaumcraft/api/aspects/IEssentiaTransport",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/essentia/TileEssentiaInput": {
+    "name": "thaumcraft/common/tiles/essentia/TileEssentiaInput",
+    "interfaces": [
+      "thaumcraft/api/aspects/IEssentiaTransport",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/essentia/TileEssentiaOutput": {
+    "name": "thaumcraft/common/tiles/essentia/TileEssentiaOutput",
+    "interfaces": [
+      "thaumcraft/api/aspects/IEssentiaTransport",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/essentia/TileJar": {
+    "name": "thaumcraft/common/tiles/essentia/TileJar",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/essentia/TileJarFillable": {
+    "name": "thaumcraft/common/tiles/essentia/TileJarFillable",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectSource",
+      "thaumcraft/api/aspects/IEssentiaTransport"
+    ]
+  },
+  "thaumcraft/common/tiles/essentia/TileTube": {
+    "name": "thaumcraft/common/tiles/essentia/TileTube",
+    "interfaces": [
+      "thaumcraft/api/aspects/IEssentiaTransport",
+      "thaumcraft/api/casters/IInteractWithCaster",
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/essentia/TileTubeBuffer": {
+    "name": "thaumcraft/common/tiles/essentia/TileTubeBuffer",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectContainer"
+    ]
+  },
+  "thaumcraft/common/tiles/essentia/TileTubeFilter": {
+    "name": "thaumcraft/common/tiles/essentia/TileTubeFilter",
+    "interfaces": [
+      "thaumcraft/api/aspects/IAspectContainer"
+    ]
+  },
+  "thaumcraft/common/tiles/misc/TileBarrierStone": {
+    "name": "thaumcraft/common/tiles/misc/TileBarrierStone",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/misc/TileHole": {
+    "name": "thaumcraft/common/tiles/misc/TileHole",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/tiles/misc/TileNitor": {
+    "name": "thaumcraft/common/tiles/misc/TileNitor",
+    "interfaces": [
+      "net/minecraft/util/ITickable"
+    ]
+  },
+  "thaumcraft/common/world/ThaumcraftWorldGenerator": {
+    "name": "thaumcraft/common/world/ThaumcraftWorldGenerator",
+    "interfaces": [
+      "net/minecraftforge/fml/common/IWorldGenerator"
+    ]
+  },
+  "thaumcraft/common/world/aura/AuraThread": {
+    "name": "thaumcraft/common/world/aura/AuraThread",
+    "interfaces": [
+      "java/lang/Runnable"
+    ]
+  },
+  "thaumcraft/proxies/CommonProxy": {
+    "name": "thaumcraft/proxies/CommonProxy",
+    "interfaces": [
+      "net/minecraftforge/fml/common/network/IGuiHandler",
+      "thaumcraft/proxies/IProxy"
+    ]
+  },
+  "thaumcraft/proxies/ProxyBlock$2": {
+    "name": "thaumcraft/proxies/ProxyBlock$2",
+    "interfaces": [
+      "net/minecraft/client/renderer/ItemMeshDefinition"
+    ]
+  },
+  "thaumcraft/proxies/ProxyBlock$4": {
+    "name": "thaumcraft/proxies/ProxyBlock$4",
+    "interfaces": [
+      "net/minecraft/client/renderer/ItemMeshDefinition"
+    ]
+  },
+  "thaumcraft/proxies/ProxyBlock$6": {
+    "name": "thaumcraft/proxies/ProxyBlock$6",
+    "interfaces": [
+      "net/minecraft/client/renderer/ItemMeshDefinition"
+    ]
+  },
+  "thaumcraft/proxies/ProxyBlock$BakeBlockEventHandler": {
+    "name": "thaumcraft/proxies/ProxyBlock$BakeBlockEventHandler",
+    "annotations": [
+      {
+        "type": "CLASS",
+        "name": "Lnet/minecraftforge/fml/common/Mod$EventBusSubscriber;",
+        "target": "thaumcraft/proxies/ProxyBlock$BakeBlockEventHandler",
+        "value": {
+          "type": "ENUM",
+          "values": [
+            "Lnet/minecraftforge/fml/relauncher/Side;/CLIENT"
+          ]
+        }
+      },
+      {
+        "type": "METHOD",
+        "name": "Lnet/minecraftforge/fml/common/eventhandler/SubscribeEvent;",
+        "target": "onModelBakeEvent(Lnet/minecraftforge/client/event/ModelBakeEvent;)V"
+      }
+    ]
+  }
+}
