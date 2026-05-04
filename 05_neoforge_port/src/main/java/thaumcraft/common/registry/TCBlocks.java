@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import thaumcraft.common.blocks.world.plants.TCPlantBlock;
-import thaumcraft.common.blocks.world.plants.TCPlantBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -110,7 +109,8 @@ public final class TCBlocks {
         BlockBehaviour.Properties properties = BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS)
                 .sound(SoundType.GRASS)
                 .noCollission()
-                .instabreak();
+                .instabreak()
+                .offsetType(BlockBehaviour.OffsetType.NONE);
 
         if (kind == TCPlantBlock.Kind.SHIMMERLEAF || kind == TCPlantBlock.Kind.CINDERPEARL) {
             properties = properties.offsetType(BlockBehaviour.OffsetType.XZ);

@@ -96,12 +96,13 @@ public class TCPlantBlock extends BushBlock {
                     || state.is(Blocks.TERRACOTTA)
                     || state.is(BlockTags.TERRACOTTA);
 
-            case VISHROOM -> state.is(Blocks.STONE)
-                    || state.is(Blocks.DEEPSLATE)
-                    || state.is(Blocks.TUFF)
+            case VISHROOM -> isLegacyGrassOrDirt(state)
+                    || state.is(Blocks.PODZOL)
                     || state.is(Blocks.MOSS_BLOCK)
                     || state.is(Blocks.MYCELIUM)
-                    || state.is(Blocks.PODZOL)
+                    || state.is(Blocks.STONE)
+                    || state.is(Blocks.DEEPSLATE)
+                    || state.is(Blocks.TUFF)
                     || state.is(BlockTags.BASE_STONE_OVERWORLD);
 
             case SAPLING -> isLegacyGrassOrDirt(state)
@@ -173,9 +174,9 @@ public class TCPlantBlock extends BushBlock {
             return;
         }
 
-        double x = pos.getX() + 0.5D + (random.nextFloat() - random.nextFloat()) * 0.4D;
+        double x = pos.getX() + 0.5D + (random.nextFloat() - random.nextFloat()) * 0.25D;
         double y = pos.getY() + 0.3D;
-        double z = pos.getZ() + 0.5D + (random.nextFloat() - random.nextFloat()) * 0.4D;
+        double z = pos.getZ() + 0.5D + (random.nextFloat() - random.nextFloat()) * 0.25D;
 
         level.addParticle(VISHROOM_MOTE, x, y, z, 0.0D, 0.0D, 0.0D);
     }
