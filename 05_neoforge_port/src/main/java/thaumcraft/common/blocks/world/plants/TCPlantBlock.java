@@ -2,7 +2,7 @@ package thaumcraft.common.blocks.world.plants;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3f;
 
 public class TCPlantBlock extends BushBlock {
     public static final MapCodec<TCPlantBlock> CODEC = simpleCodec(properties ->
@@ -43,6 +44,16 @@ public class TCPlantBlock extends BushBlock {
     private static final VoxelShape VISHROOM_SHAPE = Block.box(
             3.0D, 0.0D, 3.0D,
             13.0D, 10.0D, 13.0D
+    );
+
+    private static final DustParticleOptions SHIMMERLEAF_MOTE = new DustParticleOptions(
+            new Vector3f(0.45F, 0.95F, 0.95F),
+            0.65F
+    );
+
+    private static final DustParticleOptions VISHROOM_MOTE = new DustParticleOptions(
+            new Vector3f(0.50F, 0.30F, 0.80F),
+            0.75F
     );
 
     public enum Kind {
@@ -85,13 +96,13 @@ public class TCPlantBlock extends BushBlock {
                     || state.is(Blocks.TERRACOTTA)
                     || state.is(BlockTags.TERRACOTTA);
 
-            case VISHROOM -> state.is(Blocks.MYCELIUM)
-                    || state.is(Blocks.PODZOL)
-                    || state.is(Blocks.MOSS_BLOCK)
-                    || state.is(Blocks.STONE)
+            case VISHROOM -> state.is(Blocks.STONE)
                     || state.is(Blocks.DEEPSLATE)
                     || state.is(Blocks.TUFF)
-                    || state.isFaceSturdy(level, pos, Direction.UP);
+                    || state.is(Blocks.MOSS_BLOCK)
+                    || state.is(Blocks.MYCELIUM)
+                    || state.is(Blocks.PODZOL)
+                    || state.is(BlockTags.BASE_STONE_OVERWORLD);
 
             case SAPLING -> isLegacyGrassOrDirt(state)
                     || state.is(Blocks.PODZOL)
@@ -106,38 +117,67 @@ public class TCPlantBlock extends BushBlock {
     private static boolean isLegacyDirt(BlockState state) {
         return state.is(Blocks.DIRT)
                 || state.is(Blocks.COARSE_DIRT)
-                || state.is(Blocks.ROOTED_DIRT)
-                || state.is(Blocks.PODZOL);
+                || state.is(Blocks.ROOTED_DIRT);
     }
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         super.animateTick(state, level, pos, random);
 
-        if (kind == Kind.CINDERPEARL && random.nextBoolean()) {
-            double x = pos.getX() + 0.5D + (random.nextDouble() - random.nextDouble()) * 0.1D;
-            double y = pos.getY() + 0.6D + (random.nextDouble() - random.nextDouble()) * 0.1D;
-            double z = pos.getZ() + 0.5D + (random.nextDouble() - random.nextDouble()) * 0.1D;
-
-            level.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0D, 0.0D, 0.0D);
-            level.addParticle(ParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
+        if (kind == Kind.CINDERPEARL) {
+            spawnCinderpearlParticles(level, pos, random);
+            return;
         }
 
-        if (kind == Kind.SHIMMERLEAF && random.nextInt(3) == 0) {
-            double x = pos.getX() + 0.5D + random.nextGaussian() * 0.1D;
-            double y = pos.getY() + 0.4D + random.nextGaussian() * 0.1D;
-            double z = pos.getZ() + 0.5D + random.nextGaussian() * 0.1D;
-
-            level.addParticle(ParticleTypes.END_ROD, x, y, z, 0.0D, 0.01D, 0.0D);
+        if (kind == Kind.SHIMMERLEAF) {
+            spawnShimmerleafParticles(level, pos, random);
+            return;
         }
 
-        if (kind == Kind.VISHROOM && random.nextInt(3) == 0) {
-            double x = pos.getX() + 0.5D + (random.nextDouble() - random.nextDouble()) * 0.4D;
-            double y = pos.getY() + 0.3D;
-            double z = pos.getZ() + 0.5D + (random.nextDouble() - random.nextDouble()) * 0.4D;
-
-            level.addParticle(ParticleTypes.WITCH, x, y, z, 0.0D, 0.0D, 0.0D);
+        if (kind == Kind.VISHROOM) {
+            spawnVishroomParticles(level, pos, random);
         }
+    }
+
+    private static void spawnCinderpearlParticles(Level level, BlockPos pos, RandomSource random) {
+        if (!random.nextBoolean()) {
+            return;
+        }
+
+        double x = pos.getX() + 0.5D + (random.nextFloat() - random.nextFloat()) * 0.1D;
+        double y = pos.getY() + 0.6D + (random.nextFloat() - random.nextFloat()) * 0.1D;
+        double z = pos.getZ() + 0.5D + (random.nextFloat() - random.nextFloat()) * 0.1D;
+
+        level.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0D, 0.0D, 0.0D);
+        level.addParticle(ParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
+    }
+
+    private static void spawnShimmerleafParticles(Level level, BlockPos pos, RandomSource random) {
+        if (random.nextInt(3) != 0) {
+            return;
+        }
+
+        double x = pos.getX() + 0.5D + random.nextGaussian() * 0.1D;
+        double y = pos.getY() + 0.4D + random.nextGaussian() * 0.1D;
+        double z = pos.getZ() + 0.5D + random.nextGaussian() * 0.1D;
+
+        double dx = random.nextGaussian() * 0.01D;
+        double dy = random.nextGaussian() * 0.01D;
+        double dz = random.nextGaussian() * 0.01D;
+
+        level.addParticle(SHIMMERLEAF_MOTE, x, y, z, dx, dy, dz);
+    }
+
+    private static void spawnVishroomParticles(Level level, BlockPos pos, RandomSource random) {
+        if (random.nextInt(3) != 0) {
+            return;
+        }
+
+        double x = pos.getX() + 0.5D + (random.nextFloat() - random.nextFloat()) * 0.4D;
+        double y = pos.getY() + 0.3D;
+        double z = pos.getZ() + 0.5D + (random.nextFloat() - random.nextFloat()) * 0.4D;
+
+        level.addParticle(VISHROOM_MOTE, x, y, z, 0.0D, 0.0D, 0.0D);
     }
 
     @Override
