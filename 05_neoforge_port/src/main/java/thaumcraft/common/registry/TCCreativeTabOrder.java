@@ -16,5 +16,17 @@ public final class TCCreativeTabOrder {
         output.accept(TCItems.ORE_AMBER.get());
         output.accept(TCItems.ORE_CINNABAR.get());
         output.accept(TCItems.ORE_QUARTZ.get());
+
+        output.accept(TCItems.CRYSTAL_AER.get());
+        output.accept(TCItems.CRYSTAL_IGNIS.get());
+        output.accept(TCItems.CRYSTAL_AQUA.get());
+        output.accept(TCItems.CRYSTAL_TERRA.get());
+        output.accept(TCItems.CRYSTAL_ORDO.get());
+        output.accept(TCItems.CRYSTAL_PERDITIO.get());
+        output.accept(TCItems.CRYSTAL_VITIUM.get());
+
+        output.accept(TCItems.STONE_ARCANE.get());
+        output.accept(TCItems.STONE_ARCANE_BRICK.get());
+        output.accept(TCItems.STONE_ANCIENT.get());
     }
 }
