@@ -28,5 +28,11 @@ public final class TCCreativeTabOrder {
         output.accept(TCItems.STONE_ARCANE.get());
         output.accept(TCItems.STONE_ARCANE_BRICK.get());
         output.accept(TCItems.STONE_ANCIENT.get());
+        output.accept(TCItems.STONE_ANCIENT_TILE.get());
+        output.accept(TCItems.STONE_ANCIENT_ROCK.get());
+        output.accept(TCItems.STONE_ANCIENT_GLYPHED.get());
+        output.accept(TCItems.STONE_ANCIENT_DOORWAY.get());
+        output.accept(TCItems.STONE_ELDRITCH_TILE.get());
+        output.accept(TCItems.STONE_POROUS.get());
     }
 }

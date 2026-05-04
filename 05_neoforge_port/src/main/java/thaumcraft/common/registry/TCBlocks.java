@@ -58,22 +58,46 @@ public final class TCBlocks {
     );
 
     public static final Supplier<Block> STONE_ARCANE = BLOCKS.register("stone_arcane", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
-                    .strength(2.0F, 10.0F)
-                    .requiresCorrectToolForDrops())
+            stoneBlock(2.0F, 10.0F)
     );
 
     public static final Supplier<Block> STONE_ARCANE_BRICK = BLOCKS.register("stone_arcane_brick", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
-                    .strength(2.0F, 10.0F)
-                    .requiresCorrectToolForDrops())
+            stoneBlock(2.0F, 10.0F)
     );
 
     public static final Supplier<Block> STONE_ANCIENT = BLOCKS.register("stone_ancient", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
-                    .strength(2.0F, 10.0F)
-                    .requiresCorrectToolForDrops())
+            stoneBlock(2.0F, 10.0F)
     );
+
+    public static final Supplier<Block> STONE_ANCIENT_TILE = BLOCKS.register("stone_ancient_tile", () ->
+            stoneBlock(2.0F, 10.0F)
+    );
+
+    public static final Supplier<Block> STONE_ANCIENT_ROCK = BLOCKS.register("stone_ancient_rock", () ->
+            stoneBlock(50.0F, 1200.0F)
+    );
+
+    public static final Supplier<Block> STONE_ANCIENT_GLYPHED = BLOCKS.register("stone_ancient_glyphed", () ->
+            stoneBlock(2.0F, 10.0F)
+    );
+
+    public static final Supplier<Block> STONE_ANCIENT_DOORWAY = BLOCKS.register("stone_ancient_doorway", () ->
+            stoneBlock(50.0F, 1200.0F)
+    );
+
+    public static final Supplier<Block> STONE_ELDRITCH_TILE = BLOCKS.register("stone_eldritch_tile", () ->
+            stoneBlock(15.0F, 1000.0F)
+    );
+
+    public static final Supplier<Block> STONE_POROUS = BLOCKS.register("stone_porous", () ->
+            stoneBlock(1.5F, 6.0F)
+    );
+
+    private static Block stoneBlock(float strength, float resistance) {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(strength, resistance)
+                .requiresCorrectToolForDrops());
+    }
 
     private static Block crystalPlaceholder() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
