@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "thaumcraft:item/crystal_planter"
+    "layer0": "thaumcraft:item/crystal_aer"
   }
 }

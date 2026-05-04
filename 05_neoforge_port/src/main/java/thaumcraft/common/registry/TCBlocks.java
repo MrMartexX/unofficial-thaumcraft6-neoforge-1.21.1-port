@@ -30,45 +30,31 @@ public final class TCBlocks {
 
     // Temporary inert visual placeholders. Real BlockCrystal behavior will be rebuilt later.
     public static final Supplier<Block> CRYSTAL_AER = BLOCKS.register("crystal_aer", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
-                    .strength(0.25F, 0.25F)
-                    .noOcclusion())
+            crystalPlaceholder()
     );
 
     public static final Supplier<Block> CRYSTAL_IGNIS = BLOCKS.register("crystal_ignis", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
-                    .strength(0.25F, 0.25F)
-                    .noOcclusion())
+            crystalPlaceholder()
     );
 
     public static final Supplier<Block> CRYSTAL_AQUA = BLOCKS.register("crystal_aqua", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
-                    .strength(0.25F, 0.25F)
-                    .noOcclusion())
+            crystalPlaceholder()
     );
 
     public static final Supplier<Block> CRYSTAL_TERRA = BLOCKS.register("crystal_terra", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
-                    .strength(0.25F, 0.25F)
-                    .noOcclusion())
+            crystalPlaceholder()
     );
 
     public static final Supplier<Block> CRYSTAL_ORDO = BLOCKS.register("crystal_ordo", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
-                    .strength(0.25F, 0.25F)
-                    .noOcclusion())
+            crystalPlaceholder()
     );
 
     public static final Supplier<Block> CRYSTAL_PERDITIO = BLOCKS.register("crystal_perditio", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
-                    .strength(0.25F, 0.25F)
-                    .noOcclusion())
+            crystalPlaceholder()
     );
 
     public static final Supplier<Block> CRYSTAL_VITIUM = BLOCKS.register("crystal_vitium", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
-                    .strength(0.25F, 0.25F)
-                    .noOcclusion())
+            crystalPlaceholder()
     );
 
     public static final Supplier<Block> STONE_ARCANE = BLOCKS.register("stone_arcane", () ->
@@ -88,6 +74,14 @@ public final class TCBlocks {
                     .strength(2.0F, 10.0F)
                     .requiresCorrectToolForDrops())
     );
+
+    private static Block crystalPlaceholder() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                .strength(0.25F, 0.25F)
+                .noOcclusion()
+                .noCollission()
+                .lightLevel(state -> 1));
+    }
 
     private TCBlocks() {
     }
