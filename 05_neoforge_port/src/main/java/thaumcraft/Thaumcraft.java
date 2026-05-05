@@ -20,7 +20,6 @@ public final class Thaumcraft {
         TCBlocks.BLOCKS.register(modEventBus);
         TCItems.ITEMS.register(modEventBus);
         TCCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
-
         modContainer.registerConfig(ModConfig.Type.COMMON, TCConfig.SPEC);
 
         LOGGER.info("Thaumcraft NeoForge bootstrap initialized.");
