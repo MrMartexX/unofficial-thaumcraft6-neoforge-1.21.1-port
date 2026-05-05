@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import thaumcraft.common.blocks.world.plants.TCPlantBlock;
+import thaumcraft.common.blocks.world.plants.TCSaplingBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -56,8 +57,8 @@ public final class TCBlocks {
     public static final Supplier<Block> LEAVES_GREATWOOD = BLOCKS.register("leaves_greatwood", () -> leavesBlock());
     public static final Supplier<Block> LEAVES_SILVERWOOD = BLOCKS.register("leaves_silverwood", () -> leavesBlock());
 
-    public static final Supplier<Block> SAPLING_GREATWOOD = BLOCKS.register("sapling_greatwood", () -> plantBlock(TCPlantBlock.Kind.SAPLING, 0));
-    public static final Supplier<Block> SAPLING_SILVERWOOD = BLOCKS.register("sapling_silverwood", () -> plantBlock(TCPlantBlock.Kind.SAPLING, 0));
+    public static final Supplier<Block> SAPLING_GREATWOOD = BLOCKS.register("sapling_greatwood", () -> saplingBlock(TCSaplingBlock.Kind.GREATWOOD));
+    public static final Supplier<Block> SAPLING_SILVERWOOD = BLOCKS.register("sapling_silverwood", () -> saplingBlock(TCSaplingBlock.Kind.SILVERWOOD));
 
     public static final Supplier<Block> SHIMMERLEAF = BLOCKS.register("shimmerleaf", () -> plantBlock(TCPlantBlock.Kind.SHIMMERLEAF, 6));
     public static final Supplier<Block> CINDERPEARL = BLOCKS.register("cinderpearl", () -> plantBlock(TCPlantBlock.Kind.CINDERPEARL, 8));
@@ -105,6 +106,14 @@ public final class TCBlocks {
                 .noOcclusion());
     }
 
+    private static Block saplingBlock(TCSaplingBlock.Kind kind) {
+        return new TCSaplingBlock(kind, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SAPLING)
+                .sound(SoundType.GRASS)
+                .noCollission()
+                .instabreak()
+                .randomTicks()
+                .offsetType(BlockBehaviour.OffsetType.NONE));
+    }
     private static Block plantBlock(TCPlantBlock.Kind kind, int lightLevel) {
         BlockBehaviour.Properties properties = BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS)
                 .sound(SoundType.GRASS)
