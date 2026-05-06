@@ -27,7 +27,7 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 | NeoForge | `21.1.228` |
 | Java | `21` |
 | Mod id | `thaumcraft` |
-| Project state | Gate 0 complete enough to continue; Gate 1 and early Gate 2 identity work are in progress; original legacy asset corpus is imported as reference/base material |
+| Project state | Gate 0 complete enough to continue; Gate 1 and early Gate 2 identity work are in progress; active resources have been runtime-audited; original legacy asset corpus is imported as reference/base material |
 
 ## Purpose
 
@@ -56,9 +56,9 @@ The main rule from the migration guide is: port the role of each subsystem, not 
 | Gate | Name | Goal | Current status | Must not include yet |
 |---|---|---|---|---|
 | Gate 0 | Bootstrap | Empty NeoForge mod builds and loads | Complete enough to continue | Thaumcraft gameplay content |
-| Gate 1 | Item identity | Safe simple items and creative tab order scaffold | In progress, expanded beyond first slice | Research, aura, GUI, networking |
-| Gate 2 | Block identity | Simple blocks, block items, models and loot | Started early; active resources coexist with imported legacy assets | BlockEntity machines |
-| Gate 3 | Data layer | Aspects, tags, data loaders and registries | Not started | Gameplay-heavy crafting logic |
+| Gate 1 | Item identity | Safe simple items and creative tab order scaffold | In progress, expanded beyond first slice; active item models/lang covered | Research, aura, GUI, networking |
+| Gate 2 | Block identity | Simple blocks, block items, models and loot | Started early; active blockstates/models/loot/lang covered; imported legacy assets remain reference | BlockEntity machines |
+| Gate 3 | Data layer | Aspects, tags, data loaders and registries | Design-only started through `06_docs/aspects_design.md` | Gameplay-heavy crafting logic |
 | Gate 4 | Basic BlockEntities | Storage, ticking and save/load | Not started | Final GUI and full sync |
 | Gate 5 | Capabilities | Item, fluid, energy and essentia access patterns | Not started | Large machine networks |
 | Gate 6 | Recipes | Vanilla-like, arcane, crucible and infusion serializers | Not started | Final research UI |
@@ -80,15 +80,15 @@ The main rule from the migration guide is: port the role of each subsystem, not 
 | 2 | Mod metadata | `META-INF/neoforge.mods.toml`, current `pack.mcmeta`, generated metadata task | Low | Verify displayed mod metadata | Skeleton ready |
 | 3 | Access transformer audit | Avoid ATs where possible; add only for proven blockers | High | Create `access_transformer_audit.md` before any AT | Design required |
 | 4 | Creative tab and order | `CreativeModeTab.builder()` plus explicit display order class | High | Maintain `creative_tab_order_reference.md` | In progress |
-| 5 | Simple item registry | `DeferredRegister.Items`, item models, lang, textures, tags | Medium | Audit implemented item assets and convert useful legacy `.lang` entries into `en_us.json` as needed | In progress |
+| 5 | Simple item registry | `DeferredRegister.Items`, item models, lang, textures, tags | Medium | Keep active 1.21 `models/item`, `textures/item`, and `en_us.json` authoritative; port legacy entries only when their ids are registered | In progress; active resources covered |
 | 6 | Item metadata variants | Separate items, data components, or explicit variant mapping | High | Build variant decision table | Design required |
 | 7 | Caster and focus items | Data components, validated payloads, modern item callbacks, staged focus API | Very high | Add placeholder data model only after simple items | Port later |
 | 8 | Armor, baubles and wearables | Vanilla equipment first, optional accessory integration later | High | Port non-accessory armor identity first | Port later |
 | 9 | Item behavior marker API | Internal interfaces first; public API after stable behavior | Medium | Recreate minimal marker interfaces without behavior | Design required |
-| 10 | Basic blocks | `DeferredRegister.Blocks`, block items, blockstates, models, loot tables | Medium | Audit implemented simple blocks; keep current 1.21 blockstates/models authoritative over imported legacy variants | In progress |
+| 10 | Basic blocks | `DeferredRegister.Blocks`, block items, blockstates, models, loot tables | Medium | Keep current 1.21 blockstates/models/loot authoritative over imported legacy variants | In progress; active resources covered |
 | 11 | Block metadata variants | `BlockState` or separate blocks | High | Create block variant mapping table | Design required |
-| 12 | Aspects model | Modern aspect service, data-driven assignments, tags, reload support | High | Port core aspect definitions and value object | Design required |
-| 13 | Aspect assignment | JSON/datapack or generated mappings to items, blocks, tags, entities | High | Create data format and loader before content data | Design required |
+| 12 | Aspects model | Modern aspect service, data-driven assignments, tags, reload support | High | Implement immutable aspect definitions and id-keyed amount lists after `aspects_design.md` | Design complete; implementation not started |
+| 13 | Aspect assignment | JSON/datapack or generated mappings to items, blocks, tags, entities | High | Implement exact id/tag assignment loader after the aspect value model | Design complete; implementation not started |
 | 14 | Essentia transport API | BlockEntity capabilities or explicit service interfaces | Very high | Define modern essentia access interface | Port later |
 | 15 | Aura storage | Server-owned `SavedData` or chunk attachments, safe tick/update loop | Very high | Prototype server-side aura data without visuals | Port later |
 | 16 | Research model | Reloadable data loader/datapack format, validation, datagen | Very high | Create model classes and load a tiny test category | Design required |
@@ -118,6 +118,8 @@ All original asset files from `03_self_decompiled_check/vineflower_thaumcraft6/a
 | `assets/minecraft/shaders` | Imported but high risk | These old shader files are retained as reference assets. Do not wire them into rendering until the 1.21 shader pipeline is reviewed. |
 | Legacy blockstates/models for unported content | Deferred adaptation | Safe to keep as source material, but each registered block/item needs a modern resource audit before it is considered ported. |
 
+Active registered content cleanup note: `amber`, `quicksilver`, and `fabric` item models now point at modern `thaumcraft:item/*` textures, with active PNGs copied into `textures/item`. Do not mass-convert unregistered legacy `thaumcraft:items/*` or `thaumcraft:blocks/*` references until those ids are intentionally ported.
+
 ## Legacy API replacement matrix
 
 | Legacy API / pattern | NeoForge 1.21.1 target | Notes |
@@ -136,8 +138,8 @@ All original asset files from `03_self_decompiled_check/vineflower_thaumcraft6/a
 
 ## Immediate next work
 
-1. Read `06_docs/current_port_status.md`.
-2. Audit all implemented entries for models, lang, textures, blockstates, loot tables, and creative tab order.
-3. Run local build and client/server checks from `05_neoforge_port`.
-4. Update status before starting any high-risk subsystem.
-5. Do not begin aspects, aura, research, recipes, BlockEntities, networking, GUI, or worldgen without a design note.
+1. Read `06_docs/current_port_status.md`, `06_docs/runtime_asset_audit.md`, and `06_docs/aspects_design.md`.
+2. Re-run local build from `05_neoforge_port` after each change batch.
+3. Use the next client visual pass to confirm the fixed active item texture paths and review creative tab order.
+4. If starting aspects implementation, keep it limited to the data-layer checklist in `aspects_design.md`.
+5. Do not begin aura, research, recipes, BlockEntities, networking, GUI, or expanded worldgen without a design note.

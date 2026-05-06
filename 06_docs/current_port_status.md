@@ -1,9 +1,9 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
 Last reviewed branch: `main`
-Last reviewed base commit: `c25f03e11642bf23edb73c5136f38ffe587b4308`
+Last reviewed base commit: `70ec2f06ff06d53f7119f7db9adb83b792368874`
 Reviewed target module: `05_neoforge_port`
-Working tree note: legacy asset corpus imported after this commit; review and commit separately.
+Working tree note: runtime asset audit, Gate 1/2 cleanup notes, and aspects design are being finalized after the asset checkpoint.
 
 ## Purpose
 
@@ -28,10 +28,10 @@ This is the current implementation status document. Use it together with the mig
 | Item registry | Partially implemented | More than the original Gate 1 item slice exists. |
 | Block registry | Partially implemented | Simple blocks, ores, stones, wood blocks, and plants have started. |
 | Creative tab | Implemented, needs visual review | `TCCreativeTabOrder` owns visible order. Do not use registry order. |
-| Assets | Legacy corpus imported, needs audit | Missing original `assets` files were copied into the port without overwriting adapted 1.21 resources. Check models, lang, textures, blockstates, shaders, sounds, research assets, and missing-model behavior. |
-| Loot tables | Needs audit | Modern simple-block loot tables exist under `data/thaumcraft/loot_table`; legacy `assets/thaumcraft/loot_tables` is imported as reference material and is not the 1.21 data path. |
+| Assets | Runtime audited for active content | Missing original `assets` files were copied into the port without overwriting adapted 1.21 resources. Registered active content has model/lang/blockstate/loot coverage; `amber`, `quicksilver`, and `fabric` item model texture paths were fixed from legacy `items/` to modern `item/`, with active PNGs copied into `textures/item`. |
+| Loot tables | Active registered content covered | Modern simple-block loot tables exist under `data/thaumcraft/loot_table`; legacy `assets/thaumcraft/loot_tables` is imported as reference material and is not the 1.21 data path. |
 | Tags | Needs audit/design | Tags replace old `OreDictionary` patterns. |
-| Aspects | Not started | Wait until item/block ids and tag strategy are stable. |
+| Aspects | Design note created | `06_docs/aspects_design.md` defines the first data-layer target. No aspect code is implemented yet. |
 | Aura | Not started | Requires design note. |
 | Research | Not started | Requires data model, player storage, and sync design. |
 | Recipes | Not started | Requires custom recipe serializer design. |
@@ -60,13 +60,15 @@ Imported legacy resources include old `.lang` files, `research`, `shader`, `soun
 
 The copied-file manifest is `06_docs/asset_bulk_import_manifest.txt`.
 
+The runtime asset audit is `06_docs/runtime_asset_audit.md`.
+
 ## Last local validation
 
 | Check | Result | Notes |
 |---|---|---|
 | `.\gradlew.bat build --no-daemon` | Passed | Run from `05_neoforge_port` after the legacy asset import using the configured Java 21 runtime. |
-| `runClient` | Not run in this pass | Next visual/resource-warning check. |
-| `runServer` | Not run in this pass | Run after client/rendering checks. |
+| `.\gradlew.bat runClient --no-daemon` | Passed startup/resource smoke check | Client log from `2026-05-06-1.log.gz`; three active item texture warnings were found. A second short client resource smoke after the fixes no longer reported Thaumcraft missing texture warnings. |
+| `.\gradlew.bat runServer --no-daemon` | Started successfully | Dedicated server reached `Done (5.095s)!`; the Gradle/server Java processes were stopped manually after successful startup because piped `stop` was not consumed. |
 
 ## Implemented identity entries seen in `TCItems`
 
@@ -84,9 +86,9 @@ The copied-file manifest is `06_docs/asset_bulk_import_manifest.txt`.
 | Gate | Current interpretation |
 |---|---|
 | Gate 0 | Complete enough to continue, but still validate `runServer` after client/render changes. |
-| Gate 1 | In progress and expanded beyond the first simple item batch. Needs asset and creative order audit. |
-| Gate 2 | Started early through simple block and block item identity work. Needs loot/model/blockstate validation. |
-| Gate 3 | Not started. Do not begin aspects until ids, tags, and simple content are stabilized. |
+| Gate 1 | In progress and expanded beyond the first simple item batch. Active registered item resources are covered; creative order still needs visual review. |
+| Gate 2 | Started early through simple block and block item identity work. Active registered blockstates, models, loot tables, and translations are covered. |
+| Gate 3 | Design-only started. `aspects_design.md` exists; no aspect implementation yet. |
 | Gate 4+ | Not started. Requires design notes before implementation. |
 
 ## Partially stale documents
@@ -95,8 +97,8 @@ The copied-file manifest is `06_docs/asset_bulk_import_manifest.txt`.
 |---|---|---|
 | `gate1_items_plan.md` | Lists only `amber`, `quicksilver`, and `fabric` as the first implemented slice. | Keep as workflow guidance; use this file for actual inventory. |
 | `creative_tab_order_reference.md` | First implemented entries section no longer reflects all implemented entries. | Keep policy; status should point here. |
-| `migration_matrix.md` | Needs to distinguish imported legacy assets from adapted active resources. | Keep matrix for policy and gate sequencing; use this file for live implementation status. |
-| `block_parity_audit.md` | Some block rows predate sapling/tree and block property updates. | Refresh before using it as a parity checklist. |
+| `migration_matrix.md` | Matrix now distinguishes imported legacy assets from active adapted resources. | Keep matrix for policy and gate sequencing; use this file for live implementation status. |
+| `block_parity_audit.md` | Refreshed for sapling/tree and block property updates. | Still requires exact legacy parity checks before behavior tuning. |
 
 ## Do not start without a design note
 
@@ -104,13 +106,11 @@ Do not implement aspects, aura, research, arcane crafting, crucible, infusion, B
 
 ## Immediate next work
 
-1. Run `./gradlew build --no-daemon` from `05_neoforge_port` after the asset import.
-2. Run `./gradlew runClient --no-daemon` and inspect the Thaumcraft creative tab plus resource warnings.
-3. Run `./gradlew runServer --no-daemon` after client/rendering work.
-4. Audit implemented entries for lang, model, texture, blockstate, and loot table coverage.
-5. Separate active 1.21 assets from imported legacy reference assets where runtime warnings require it.
-6. Compare creative tab order with the 1.12.2 inventory screenshots.
-7. Decide whether the next safe step is asset cleanup or the next simple identity batch.
+1. Re-run `./gradlew build --no-daemon` after the runtime audit and design-document cleanup.
+2. Use the next full `./gradlew runClient --no-daemon` visual pass to inspect creative tab order and active item icons.
+3. Compare creative tab order with the 1.12.2 inventory screenshots.
+4. Before aspect implementation, use `06_docs/aspects_design.md` as the scope boundary.
+5. Do not expand aura, research, essentia, GUI, networking, or gameplay-heavy systems without their own design notes.
 
 ## Local validation commands
 
