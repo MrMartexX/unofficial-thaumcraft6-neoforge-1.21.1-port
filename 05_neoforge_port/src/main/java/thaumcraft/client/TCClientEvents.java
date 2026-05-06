@@ -13,14 +13,14 @@ import thaumcraft.common.lib.fx.TCFXDispatcher;
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class TCClientEvents {
     static {
-        TCFXDispatcher.setClientSink(TCLegacyParticleEngine::drawWispyMotes);
+        TCFXDispatcher.setClientSink(TCLegacyParticleEngine::addEffect);
     }
 
     private TCClientEvents() {
     }
 
     @SubscribeEvent
-    public static void onClientTick(ClientTickEvent.Post event) {
+    public static void onClientTick(ClientTickEvent.Pre event) {
         if (Minecraft.getInstance().level == null) {
             TCLegacyParticleEngine.clear();
             return;

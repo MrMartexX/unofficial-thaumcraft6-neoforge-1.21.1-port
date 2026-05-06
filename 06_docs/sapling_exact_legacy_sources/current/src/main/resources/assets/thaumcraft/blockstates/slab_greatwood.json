@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "type=bottom,waterlogged=false": { "model": "thaumcraft:block/slab_greatwood" },
+    "type=bottom,waterlogged=true": { "model": "thaumcraft:block/slab_greatwood" },
+    "type=top,waterlogged=false": { "model": "thaumcraft:block/slab_greatwood_top" },
+    "type=top,waterlogged=true": { "model": "thaumcraft:block/slab_greatwood_top" },
+    "type=double,waterlogged=false": { "model": "thaumcraft:block/plank_greatwood" },
+    "type=double,waterlogged=true": { "model": "thaumcraft:block/plank_greatwood" }
+  }
+}

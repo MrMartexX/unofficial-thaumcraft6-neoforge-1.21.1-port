@@ -1,0 +1,99 @@
+package thaumcraft.client;
+
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.world.level.FoliageColor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import thaumcraft.Thaumcraft;
+import thaumcraft.common.registry.TCBlocks;
+
+@EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
+public final class TCColorHandlers {
+    private static final int WHITE = 0xFFFFFF;
+
+    private static final int AIR = 0xFFFF7E;
+    private static final int FIRE = 0xFF5A01;
+    private static final int WATER = 0x3CD4FC;
+    private static final int EARTH = 0x56C000;
+    private static final int ORDER = 0xD5D4EC;
+    private static final int ENTROPY = 0x404040;
+    private static final int FLUX = 0x8A4DAE;
+
+    private TCColorHandlers() {
+    }
+
+    @SubscribeEvent
+    public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+        BlockColor leafColor = (state, level, pos, tintIndex) -> {
+            if (state.is(TCBlocks.LEAVES_SILVERWOOD.get())) {
+                return WHITE;
+            }
+
+            if (level != null && pos != null) {
+                return BiomeColors.getAverageFoliageColor(level, pos);
+            }
+
+            return FoliageColor.getDefaultColor();
+        };
+
+        event.register(leafColor,
+                TCBlocks.LEAVES_GREATWOOD.get(),
+                TCBlocks.LEAVES_SILVERWOOD.get());
+
+        event.register((state, level, pos, tintIndex) -> crystalColor(state.getBlock()),
+                TCBlocks.CRYSTAL_AER.get(),
+                TCBlocks.CRYSTAL_IGNIS.get(),
+                TCBlocks.CRYSTAL_AQUA.get(),
+                TCBlocks.CRYSTAL_TERRA.get(),
+                TCBlocks.CRYSTAL_ORDO.get(),
+                TCBlocks.CRYSTAL_PERDITIO.get(),
+                TCBlocks.CRYSTAL_VITIUM.get());
+    }
+
+    @SubscribeEvent
+    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        ItemColor greatwoodLeavesItem = (stack, tintIndex) -> FoliageColor.getDefaultColor();
+        ItemColor silverwoodLeavesItem = (stack, tintIndex) -> WHITE;
+
+        event.register(greatwoodLeavesItem, TCBlocks.LEAVES_GREATWOOD.get());
+        event.register(silverwoodLeavesItem, TCBlocks.LEAVES_SILVERWOOD.get());
+
+        event.register((stack, tintIndex) -> AIR, TCBlocks.CRYSTAL_AER.get());
+        event.register((stack, tintIndex) -> FIRE, TCBlocks.CRYSTAL_IGNIS.get());
+        event.register((stack, tintIndex) -> WATER, TCBlocks.CRYSTAL_AQUA.get());
+        event.register((stack, tintIndex) -> EARTH, TCBlocks.CRYSTAL_TERRA.get());
+        event.register((stack, tintIndex) -> ORDER, TCBlocks.CRYSTAL_ORDO.get());
+        event.register((stack, tintIndex) -> ENTROPY, TCBlocks.CRYSTAL_PERDITIO.get());
+        event.register((stack, tintIndex) -> FLUX, TCBlocks.CRYSTAL_VITIUM.get());
+    }
+
+    private static int crystalColor(net.minecraft.world.level.block.Block block) {
+        if (block == TCBlocks.CRYSTAL_AER.get()) {
+            return AIR;
+        }
+        if (block == TCBlocks.CRYSTAL_IGNIS.get()) {
+            return FIRE;
+        }
+        if (block == TCBlocks.CRYSTAL_AQUA.get()) {
+            return WATER;
+        }
+        if (block == TCBlocks.CRYSTAL_TERRA.get()) {
+            return EARTH;
+        }
+        if (block == TCBlocks.CRYSTAL_ORDO.get()) {
+            return ORDER;
+        }
+        if (block == TCBlocks.CRYSTAL_PERDITIO.get()) {
+            return ENTROPY;
+        }
+        if (block == TCBlocks.CRYSTAL_VITIUM.get()) {
+            return FLUX;
+        }
+
+        return WHITE;
+    }
+}

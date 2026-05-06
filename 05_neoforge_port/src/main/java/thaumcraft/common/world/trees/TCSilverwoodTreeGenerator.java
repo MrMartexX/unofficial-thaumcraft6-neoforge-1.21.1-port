@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.common.registry.TCBlocks;
+import thaumcraft.common.blocks.world.plants.TCLeavesBlock;
 
 public class TCSilverwoodTreeGenerator {
     private final int minTreeHeight;
@@ -177,6 +178,8 @@ public class TCSilverwoodTreeGenerator {
             placeShimmerleafPatch(level, random, pos);
         }
 
+        stabilizeGeneratedLeaves(level, pos, 10, y - 2, y + height + 8);
+
         return true;
     }
 
@@ -241,5 +244,56 @@ public class TCSilverwoodTreeGenerator {
         return TCBlocks.LOG_SILVERWOOD.get()
                 .defaultBlockState()
                 .setValue(RotatedPillarBlock.AXIS, axis);
+    }
+
+    private static void stabilizeGeneratedLeaves(ServerLevel level, BlockPos center, int horizontalRadius, int minY, int maxY) {
+        int clampedMinY = Math.max(level.getMinBuildHeight(), minY);
+        int clampedMaxY = Math.min(level.getMaxBuildHeight() - 1, maxY);
+
+        for (int pass = 0; pass < 7; pass++) {
+            boolean changed = false;
+
+            for (int y = clampedMinY; y <= clampedMaxY; y++) {
+                for (int x = center.getX() - horizontalRadius; x <= center.getX() + horizontalRadius; x++) {
+                    for (int z = center.getZ() - horizontalRadius; z <= center.getZ() + horizontalRadius; z++) {
+                        BlockPos pos = new BlockPos(x, y, z);
+                        BlockState state = level.getBlockState(pos);
+
+                        if (!state.hasProperty(LeavesBlock.DISTANCE)) {
+                            continue;
+                        }
+
+                        int distance = getUpdatedLeafDistance(level, pos);
+
+                        if (distance != state.getValue(LeavesBlock.DISTANCE)) {
+                            level.setBlock(pos, state.setValue(LeavesBlock.DISTANCE, distance), 3);
+                            changed = true;
+                        }
+                    }
+                }
+            }
+
+            if (!changed) {
+                return;
+            }
+        }
+    }
+
+    private static int getUpdatedLeafDistance(ServerLevel level, BlockPos pos) {
+        int distance = 7;
+
+        for (Direction direction : Direction.values()) {
+            BlockState neighbor = level.getBlockState(pos.relative(direction));
+
+            if (neighbor.is(net.minecraft.tags.BlockTags.LOGS)) {
+                return 1;
+            }
+
+            if (neighbor.hasProperty(LeavesBlock.DISTANCE)) {
+                distance = Math.min(distance, neighbor.getValue(LeavesBlock.DISTANCE) + 1);
+            }
+        }
+
+        return Math.min(distance, 7);
     }
 }

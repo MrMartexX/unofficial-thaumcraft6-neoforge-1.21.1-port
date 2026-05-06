@@ -9,6 +9,8 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
 import thaumcraft.common.blocks.world.plants.TCPlantBlock;
 import thaumcraft.common.blocks.world.plants.TCSaplingBlock;
+import thaumcraft.common.blocks.world.plants.TCLeavesBlock;
+import thaumcraft.common.blocks.world.plants.TCLogBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -33,11 +35,11 @@ public final class TCBlocks {
     public static final Supplier<Block> STONE_ARCANE_BRICK = BLOCKS.register("stone_arcane_brick", () -> stoneBlock(2.0F, 10.0F));
     public static final Supplier<Block> STONE_ANCIENT = BLOCKS.register("stone_ancient", () -> stoneBlock(2.0F, 10.0F));
     public static final Supplier<Block> STONE_ANCIENT_TILE = BLOCKS.register("stone_ancient_tile", () -> stoneBlock(2.0F, 10.0F));
-    public static final Supplier<Block> STONE_ANCIENT_ROCK = BLOCKS.register("stone_ancient_rock", () -> stoneBlock(50.0F, 1200.0F));
+    public static final Supplier<Block> STONE_ANCIENT_ROCK = BLOCKS.register("stone_ancient_rock", () -> unbreakableStoneBlock(1200.0F));
     public static final Supplier<Block> STONE_ANCIENT_GLYPHED = BLOCKS.register("stone_ancient_glyphed", () -> stoneBlock(2.0F, 10.0F));
-    public static final Supplier<Block> STONE_ANCIENT_DOORWAY = BLOCKS.register("stone_ancient_doorway", () -> stoneBlock(50.0F, 1200.0F));
+    public static final Supplier<Block> STONE_ANCIENT_DOORWAY = BLOCKS.register("stone_ancient_doorway", () -> unbreakableStoneBlock(1200.0F));
     public static final Supplier<Block> STONE_ELDRITCH_TILE = BLOCKS.register("stone_eldritch_tile", () -> stoneBlock(15.0F, 1000.0F));
-    public static final Supplier<Block> STONE_POROUS = BLOCKS.register("stone_porous", () -> stoneBlock(1.5F, 6.0F));
+    public static final Supplier<Block> STONE_POROUS = BLOCKS.register("stone_porous", () -> stoneBlock(1.0F, 5.0F));
 
     public static final Supplier<Block> STAIRS_ARCANE = BLOCKS.register("stairs_arcane", () -> stoneStairBlock(STONE_ARCANE.get().defaultBlockState(), 2.0F, 10.0F));
     public static final Supplier<Block> STAIRS_ARCANE_BRICK = BLOCKS.register("stairs_arcane_brick", () -> stoneStairBlock(STONE_ARCANE_BRICK.get().defaultBlockState(), 2.0F, 10.0F));
@@ -70,8 +72,8 @@ public final class TCBlocks {
     public static final Supplier<Block> STAIRS_GREATWOOD = BLOCKS.register("stairs_greatwood", () -> woodStairBlock(PLANK_GREATWOOD.get().defaultBlockState()));
     public static final Supplier<Block> STAIRS_SILVERWOOD = BLOCKS.register("stairs_silverwood", () -> woodStairBlock(PLANK_SILVERWOOD.get().defaultBlockState()));
 
-    public static final Supplier<Block> SLAB_GREATWOOD = BLOCKS.register("slab_greatwood", () -> woodSlabBlock());
-    public static final Supplier<Block> SLAB_SILVERWOOD = BLOCKS.register("slab_silverwood", () -> woodSlabBlock());
+    public static final Supplier<Block> SLAB_GREATWOOD = BLOCKS.register("slab_greatwood", () -> woodSlabBlock(1.2F, 2.0F));
+    public static final Supplier<Block> SLAB_SILVERWOOD = BLOCKS.register("slab_silverwood", () -> woodSlabBlock(1.0F, 2.0F));
 
     private static Block stoneBlock(float strength, float resistance) {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
@@ -79,6 +81,12 @@ public final class TCBlocks {
                 .requiresCorrectToolForDrops());
     }
 
+
+    private static Block unbreakableStoneBlock(float resistance) {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(-1.0F, resistance)
+                .requiresCorrectToolForDrops());
+    }
     private static Block woodBlock() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                 .strength(2.0F, 5.0F));
@@ -86,7 +94,7 @@ public final class TCBlocks {
 
     private static Block amberBlock() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
-                .strength(0.5F, 3.0F)
+                .strength(0.5F, 2.0F)
                 .sound(SoundType.STONE)
                 .noOcclusion());
     }
@@ -97,11 +105,11 @@ public final class TCBlocks {
         if (silverwood) {
             properties = properties.lightLevel(state -> 5);
         }
-        return new RotatedPillarBlock(properties);
+        return new TCLogBlock(properties);
     }
 
     private static Block leavesBlock() {
-        return new LeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)
+        return new TCLeavesBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LEAVES)
                 .strength(0.2F)
                 .noOcclusion());
     }
@@ -149,9 +157,9 @@ public final class TCBlocks {
                 .requiresCorrectToolForDrops());
     }
 
-    private static Block woodSlabBlock() {
+    private static Block woodSlabBlock(float strength, float resistance) {
         return new SlabBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_SLAB)
-                .strength(2.0F, 5.0F));
+                .strength(strength, resistance));
     }
 
     private static Block crystalPlaceholder() {
