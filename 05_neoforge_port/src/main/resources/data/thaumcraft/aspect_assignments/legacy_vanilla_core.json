@@ -1,0 +1,100 @@
+{
+  "replace": false,
+  "assignments": [
+    {
+      "item": "minecraft:coal_ore",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:potentia", "amount": 15 },
+        { "aspect": "thaumcraft:ignis", "amount": 15 }
+      ]
+    },
+    {
+      "item": "minecraft:coal",
+      "aspects": [
+        { "aspect": "thaumcraft:potentia", "amount": 10 },
+        { "aspect": "thaumcraft:ignis", "amount": 10 }
+      ]
+    },
+    {
+      "item": "minecraft:charcoal",
+      "aspects": [
+        { "aspect": "thaumcraft:potentia", "amount": 10 },
+        { "aspect": "thaumcraft:ignis", "amount": 10 }
+      ]
+    },
+    {
+      "item": "minecraft:bedrock",
+      "aspects": [
+        { "aspect": "thaumcraft:vacuos", "amount": 25 },
+        { "aspect": "thaumcraft:perditio", "amount": 25 },
+        { "aspect": "thaumcraft:terra", "amount": 25 },
+        { "aspect": "thaumcraft:tenebrae", "amount": 25 }
+      ]
+    },
+    {
+      "item": "minecraft:clay_ball",
+      "aspects": [
+        { "aspect": "thaumcraft:aqua", "amount": 5 },
+        { "aspect": "thaumcraft:terra", "amount": 5 }
+      ]
+    },
+    {
+      "item": "minecraft:brick",
+      "aspects": [
+        { "aspect": "thaumcraft:aqua", "amount": 5 },
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:ignis", "amount": 1 }
+      ]
+    },
+    {
+      "item": "minecraft:bucket",
+      "aspects": [
+        { "aspect": "thaumcraft:vacuos", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 33 }
+      ]
+    },
+    {
+      "item": "minecraft:water_bucket",
+      "aspects": [
+        { "aspect": "thaumcraft:vacuos", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 33 },
+        { "aspect": "thaumcraft:aqua", "amount": 20 }
+      ]
+    },
+    {
+      "item": "minecraft:lava_bucket",
+      "aspects": [
+        { "aspect": "thaumcraft:vacuos", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 33 },
+        { "aspect": "thaumcraft:ignis", "amount": 15 },
+        { "aspect": "thaumcraft:terra", "amount": 5 }
+      ]
+    },
+    {
+      "item": "minecraft:milk_bucket",
+      "aspects": [
+        { "aspect": "thaumcraft:vacuos", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 33 },
+        { "aspect": "thaumcraft:victus", "amount": 10 },
+        { "aspect": "thaumcraft:bestia", "amount": 5 },
+        { "aspect": "thaumcraft:aqua", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "c:ingots/copper",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:permutatio", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "c:ores/copper",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:permutatio", "amount": 5 }
+      ]
+    }
+  ]
+}

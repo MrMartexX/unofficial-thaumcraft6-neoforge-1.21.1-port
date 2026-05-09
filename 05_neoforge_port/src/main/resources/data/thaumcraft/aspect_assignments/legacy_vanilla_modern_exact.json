@@ -1,0 +1,3642 @@
+{
+  "replace": false,
+  "assignments": [
+    {
+      "item": "minecraft:redstone_ore",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:potentia",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "item": "minecraft:podzol",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:farmland",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:grass_block",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:dirt_path",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:end_stone",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:mycelium",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:vitium",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:netherrack",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:soul_sand",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 3
+        },
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:ice",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:gelum",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "item": "minecraft:packed_ice",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:gelum",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:snowball",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:gelum",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:slime_ball",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:rotten_flesh",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:humanus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:feather",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:volatus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:bone",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:egg",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:gunpowder",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:glass",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vitreus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:glass_pane",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vitreus",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:mossy_cobblestone",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 3
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:mossy_stone_bricks",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:tall_grass",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:fern",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:large_fern",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:lily_pad",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:dead_bush",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:vine",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:wheat_seeds",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:melon_seeds",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:pumpkin_seeds",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:beetroot_seeds",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:nether_wart",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:vitium",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:wheat",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:apple",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:carrot",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:potato",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:beetroot",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:baked_potato",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:poisonous_potato",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:pumpkin",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:melon_slice",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:melon",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:poppy",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:dandelion",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:brown_mushroom",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:red_mushroom",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:brown_mushroom_block",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:red_mushroom_block",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cactus",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aversio",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:sugar_cane",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 3
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:sugar",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:potentia",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:white_wool",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:bread",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cake",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:pumpkin_pie",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cod",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:salmon",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:tropical_fish",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:pufferfish",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cooked_cod",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cooked_salmon",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:chicken",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cooked_chicken",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:porkchop",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cooked_porkchop",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:beef",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cooked_beef",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:mutton",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cooked_mutton",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:rabbit",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cooked_rabbit",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:rabbit_hide",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:leather",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:rabbit_foot",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:string",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:spider_eye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:fermented_spider_eye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:blaze_rod",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:potentia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:magma_cream",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:ender_pearl",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:alienis",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "item": "minecraft:ghast_tear",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:exanimis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:phantom_membrane",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:volatus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:exanimis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:skeleton_skull",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:exanimis",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:wither_skeleton_skull",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:exanimis",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:zombie_head",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:humanus",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:player_head",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:humanus",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:creeper_head",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:dragon_head",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:dragon_breath",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:nether_star",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:alienis",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:auram",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:totem_of_undying",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 25
+        },
+        {
+          "aspect": "thaumcraft:exanimis",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:chorus_flower",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:alienis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:chorus_plant",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:alienis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:chorus_fruit",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:alienis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:popped_chorus_fruit",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:alienis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 4
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:shulker_shell",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:alienis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:elytra",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:volatus",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "item": "minecraft:end_rod",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:dragon_egg",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:alienis",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:end_portal_frame",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:alienis",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:potentia",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:glowstone",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 30
+        }
+      ]
+    },
+    {
+      "item": "minecraft:prismarine_shard",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:prismarine_crystals",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:vitreus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:ink_sac",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:glow_ink_sac",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:experience_bottle",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:cognitio",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "item": "minecraft:name_tag",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:cognitio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:saddle",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:iron_horse_armor",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:golden_horse_armor",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:diamond_horse_armor",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vitreus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:chainmail_helmet",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 42
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 8
+        }
+      ]
+    },
+    {
+      "item": "minecraft:chainmail_chestplate",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 67
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "item": "minecraft:chainmail_leggings",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 58
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 12
+        }
+      ]
+    },
+    {
+      "item": "minecraft:chainmail_boots",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 33
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 4
+        }
+      ]
+    },
+    {
+      "item": "minecraft:flint",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:instrumentum",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:compass",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:clock",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:lead",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:shield",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 13
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 11
+        }
+      ]
+    },
+    {
+      "item": "minecraft:chest",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 18
+        }
+      ]
+    },
+    {
+      "item": "minecraft:trapped_chest",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 14
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:ender_chest",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:permutatio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 18
+        },
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 30
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 32
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 30
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 7
+        }
+      ]
+    },
+    {
+      "item": "minecraft:glass_bottle",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:vitreus",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:flower_pot",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:paper",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:cognitio",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:book",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:cognitio",
+          "amount": 4
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 6
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 4
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 3
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:enchanted_book",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:cognitio",
+          "amount": 4
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 6
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 4
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 2
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 3
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:bookshelf",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:cognitio",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:writable_book",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:cognitio",
+          "amount": 8
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:written_book",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:cognitio",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:map",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:cognitio",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:lever",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:piston",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:sticky_piston",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:repeater",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:potentia",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:comparator",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:hopper",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:permutatio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:dropper",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:permutatio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:dispenser",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:permutatio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aversio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:observer",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "item": "minecraft:daylight_detector",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:tripwire_hook",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:furnace",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:blast_furnace",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:smoker",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:brewing_stand",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 25
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cauldron",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:enchanting_table",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 25
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:cognitio",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:anvil",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 40
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:grindstone",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:instrumentum",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:smithing_table",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:instrumentum",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:loom",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:stonecutter",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cartography_table",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:fletching_table",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:aversio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:jukebox",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "item": "minecraft:note_block",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_13",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_cat",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_blocks",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:instrumentum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_chirp",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_far",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:alienis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_mall",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:humanus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_mellohi",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_stal",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_strad",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:potentia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_ward",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_11",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_wait",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:music_disc_pigstep",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:arrow",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aversio",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:instrumentum",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:volatus",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:spectral_arrow",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 17
+        },
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:aversio",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:golden_apple",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:enchanted_golden_apple",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:praemunio",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "item": "minecraft:golden_carrot",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:glistering_melon_slice",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:sponge",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:wet_sponge",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cobweb",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:torch",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:soul_torch",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:lantern",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:soul_lantern",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:beacon",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:auram",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:permutatio",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "item": "minecraft:black_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:white_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:red_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:blue_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:yellow_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:green_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:brown_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:cyan_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:purple_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:orange_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:pink_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:lime_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:lux",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:magenta_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 1
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "item": "minecraft:light_blue_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:aer",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:gray_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:light_gray_dye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 2
+        }
+      ]
+    },
+    {
+      "item": "minecraft:netherite_scrap",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:netherite_ingot",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 25
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:netherite_block",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 200
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 120
+        },
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 80
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 80
+        }
+      ]
+    },
+    {
+      "item": "minecraft:ancient_debris",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:amethyst_shard",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vitreus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:auram",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:amethyst_block",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vitreus",
+          "amount": 25
+        },
+        {
+          "aspect": "thaumcraft:auram",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:budding_amethyst",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vitreus",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:auram",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:honeycomb",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 3
+        }
+      ]
+    },
+    {
+      "item": "minecraft:honey_bottle",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:honeycomb_block",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:ordo",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:honey_block",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:bee_nest",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:herba",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:beehive",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:bestia",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:raw_copper",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:permutatio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:copper_block",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 80
+        },
+        {
+          "aspect": "thaumcraft:permutatio",
+          "amount": 40
+        }
+      ]
+    },
+    {
+      "item": "minecraft:raw_copper_block",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 80
+        },
+        {
+          "aspect": "thaumcraft:terra",
+          "amount": 40
+        },
+        {
+          "aspect": "thaumcraft:permutatio",
+          "amount": 40
+        }
+      ]
+    },
+    {
+      "item": "minecraft:spyglass",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:metallum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:vitreus",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:sculk",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:perditio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "item": "minecraft:sculk_sensor",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:sculk_catalyst",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:victus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:sculk_shrieker",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "item": "minecraft:echo_shard",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:tenebrae",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "item": "minecraft:recovery_compass",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:spiritus",
+          "amount": 20
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 15
+        },
+        {
+          "aspect": "thaumcraft:mortuus",
+          "amount": 10
+        }
+      ]
+    }
+  ]
+}

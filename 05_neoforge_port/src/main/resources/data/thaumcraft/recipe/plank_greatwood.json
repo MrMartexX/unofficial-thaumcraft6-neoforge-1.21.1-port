@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "thaumcraft_planks",
+  "key": {
+    "#": {
+      "item": "thaumcraft:log_greatwood"
+    }
+  },
+  "pattern": [
+    "#"
+  ],
+  "result": {
+    "count": 4,
+    "id": "thaumcraft:plank_greatwood"
+  }
+}

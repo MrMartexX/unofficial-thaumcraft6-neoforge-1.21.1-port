@@ -1,0 +1,228 @@
+{
+  "replace": false,
+  "assignments": [
+    {
+      "tag": "c:ores/lapis",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:sensus", "amount": 15 }
+      ]
+    },
+    {
+      "tag": "c:ores/diamond",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:desiderium", "amount": 15 },
+        { "aspect": "thaumcraft:vitreus", "amount": 15 }
+      ]
+    },
+    {
+      "tag": "c:gems/diamond",
+      "aspects": [
+        { "aspect": "thaumcraft:vitreus", "amount": 15 },
+        { "aspect": "thaumcraft:desiderium", "amount": 15 }
+      ]
+    },
+    {
+      "tag": "c:ores/redstone",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:potentia", "amount": 15 }
+      ]
+    },
+    {
+      "tag": "c:ores/emerald",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:desiderium", "amount": 10 },
+        { "aspect": "thaumcraft:vitreus", "amount": 15 }
+      ]
+    },
+    {
+      "tag": "c:gems/emerald",
+      "aspects": [
+        { "aspect": "thaumcraft:vitreus", "amount": 15 },
+        { "aspect": "thaumcraft:desiderium", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "c:gems/quartz",
+      "aspects": [
+        { "aspect": "thaumcraft:vitreus", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "c:ores/iron",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 15 }
+      ]
+    },
+    {
+      "tag": "c:ingots/iron",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 15 }
+      ]
+    },
+    {
+      "tag": "c:raw_materials/iron",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 15 }
+      ]
+    },
+    {
+      "tag": "c:ores/gold",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:desiderium", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "c:ingots/gold",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:desiderium", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "c:raw_materials/gold",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:desiderium", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "c:raw_materials/copper",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:permutatio", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "c:dusts/redstone",
+      "aspects": [
+        { "aspect": "thaumcraft:potentia", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "c:dusts/glowstone",
+      "aspects": [
+        { "aspect": "thaumcraft:sensus", "amount": 5 },
+        { "aspect": "thaumcraft:lux", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "c:stones",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "c:cobblestones",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:perditio", "amount": 1 }
+      ]
+    },
+    {
+      "tag": "c:dirts",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "c:sands",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:perditio", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "c:gravels",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:perditio", "amount": 2 }
+      ]
+    },
+    {
+      "tag": "minecraft:logs",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 20 }
+      ]
+    },
+    {
+      "tag": "minecraft:saplings",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 15 },
+        { "aspect": "thaumcraft:victus", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "minecraft:leaves",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "minecraft:wool",
+      "aspects": [
+        { "aspect": "thaumcraft:bestia", "amount": 15 },
+        { "aspect": "thaumcraft:fabrico", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "thaumcraft:legacy_ore_dictionary/block_glass",
+      "aspects": [
+        { "aspect": "thaumcraft:vitreus", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "c:ores/coal",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:potentia", "amount": 15 },
+        { "aspect": "thaumcraft:ignis", "amount": 15 }
+      ]
+    },
+    {
+      "tag": "minecraft:flowers",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 5 },
+        { "aspect": "thaumcraft:victus", "amount": 1 },
+        { "aspect": "thaumcraft:sensus", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "minecraft:bamboo_blocks",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 20 }
+      ]
+    },
+    {
+      "tag": "minecraft:soul_fire_base_blocks",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 3 },
+        { "aspect": "thaumcraft:vinculum", "amount": 1 },
+        { "aspect": "thaumcraft:spiritus", "amount": 3 }
+      ]
+    },
+    {
+      "tag": "minecraft:terracotta",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:ignis", "amount": 1 },
+        { "aspect": "thaumcraft:sensus", "amount": 1 }
+      ]
+    },
+    {
+      "tag": "minecraft:anvil",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 33 }
+      ]
+    }
+  ]
+}

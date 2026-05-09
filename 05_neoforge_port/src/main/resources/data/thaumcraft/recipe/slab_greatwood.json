@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "thaumcraft_wooden_slab",
+  "key": {
+    "#": {
+      "item": "thaumcraft:plank_greatwood"
+    }
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "thaumcraft:slab_greatwood"
+  }
+}
