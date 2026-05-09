@@ -21,6 +21,10 @@ public final class TCConfig {
             .comment("Automatically initializes Thaumcraft aura data for loaded chunks.")
             .define("generateAura", true);
 
+
+    public static final ModConfigSpec.BooleanValue ENABLE_KNOWLEDGE_DEBUG_COMMANDS = BUILDER
+            .comment("Registers permission-level-2 Thaumcraft knowledge and research debug commands for port validation.")
+            .define("enableKnowledgeDebugCommands", true);
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private TCConfig() {

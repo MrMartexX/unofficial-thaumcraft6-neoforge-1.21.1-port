@@ -177,3 +177,11 @@ Started:
 - Next implementation should start with knowledge storage and commands only.
 
 Do not start full Thaumonomicon GUI, crucible, infusion or warp before the player knowledge and research skeleton is stable.
+## Player knowledge command skeleton
+
+Started:
+- Added server-side player persistent knowledge storage wrapper.
+- Added observation and theory knowledge types with legacy-like raw point conversion.
+- Added /thaumcraft, /thaum and /tc knowledge debug command tree.
+- Added minimal stored research key skeleton commands.
+- Full research category/entry loader, recursive research completion, scanning predicates and Thaumometer GUI are still intentionally not implemented.

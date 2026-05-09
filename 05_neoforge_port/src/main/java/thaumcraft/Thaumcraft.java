@@ -18,6 +18,7 @@ import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.research.TCKnowledgeCommands;
 import thaumcraft.common.world.aura.TCAuraDebugCommands;
 import thaumcraft.common.world.aura.TCAuraEvents;
 import thaumcraft.common.world.aura.TCAuraNetwork;
@@ -44,6 +45,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCAuraEvents::onChunkLoad);
         NeoForge.EVENT_BUS.addListener(TCAuraEvents::onChunkUnload);
         NeoForge.EVENT_BUS.addListener(TCAuraDebugCommands::onRegisterCommands);
+        NeoForge.EVENT_BUS.addListener(TCKnowledgeCommands::onRegisterCommands);
         TCAspectAssignments.bootstrap();
 
         LOGGER.info("Thaumcraft NeoForge bootstrap initialized.");
