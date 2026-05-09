@@ -168,3 +168,12 @@ From `05_neoforge_port`:
 .\gradlew.bat runClient --no-daemon
 .\gradlew.bat runServer --no-daemon
 ```
+
+## Research, knowledge and scanning design
+
+Started:
+- Added design document for player knowledge, research commands and scanning.
+- Added legacy source audit for CommandThaumcraft, PlayerKnowledge, IPlayerKnowledge, ResearchManager, ScanningManager and scan predicate classes.
+- Next implementation should start with knowledge storage and commands only.
+
+Do not start full Thaumonomicon GUI, crucible, infusion or warp before the player knowledge and research skeleton is stable.
