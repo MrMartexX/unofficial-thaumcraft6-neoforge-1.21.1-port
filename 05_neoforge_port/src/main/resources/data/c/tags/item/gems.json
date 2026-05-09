@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#c:gems/amber",
+    "#c:gems/diamond",
+    "#c:gems/emerald",
+    "#c:gems/quartz"
+  ]
+}

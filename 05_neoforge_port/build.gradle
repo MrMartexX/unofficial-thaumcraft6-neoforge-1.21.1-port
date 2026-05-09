@@ -59,6 +59,14 @@ neoForge {
 
         configureEach {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
+            def aspectDumpEnabled = providers.gradleProperty('tcAspectDump').orNull ?: System.getProperty('tc.aspectDump')
+            def aspectDumpPath = providers.gradleProperty('tcAspectDumpPath').orNull ?: System.getProperty('tc.aspectDumpPath')
+            if (aspectDumpEnabled != null) {
+                systemProperty 'tc.aspectDump', aspectDumpEnabled
+            }
+            if (aspectDumpPath != null) {
+                systemProperty 'tc.aspectDumpPath', aspectDumpPath
+            }
             logLevel = org.slf4j.event.Level.DEBUG
         }
     }

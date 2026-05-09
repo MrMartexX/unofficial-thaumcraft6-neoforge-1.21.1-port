@@ -44,12 +44,12 @@ public final class TCCreativeTabOrder {
         output.accept(TCItems.SLAB_ANCIENT.get());
         output.accept(TCItems.SLAB_ELDRITCH.get());
 
+        output.accept(TCItems.SAPLING_GREATWOOD.get());
+        output.accept(TCItems.SAPLING_SILVERWOOD.get());
         output.accept(TCItems.LOG_GREATWOOD.get());
         output.accept(TCItems.LOG_SILVERWOOD.get());
         output.accept(TCItems.LEAVES_GREATWOOD.get());
         output.accept(TCItems.LEAVES_SILVERWOOD.get());
-        output.accept(TCItems.SAPLING_GREATWOOD.get());
-        output.accept(TCItems.SAPLING_SILVERWOOD.get());
         output.accept(TCItems.SHIMMERLEAF.get());
         output.accept(TCItems.CINDERPEARL.get());
         output.accept(TCItems.VISHROOM.get());

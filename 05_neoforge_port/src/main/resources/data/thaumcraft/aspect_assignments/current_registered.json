@@ -1,0 +1,305 @@
+{
+  "replace": false,
+  "assignments": [
+    {
+      "item": "thaumcraft:ore_quartz",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:ore_cinnabar",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:alkimia", "amount": 5 },
+        { "aspect": "thaumcraft:mortuus", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:ore_amber",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:vinculum", "amount": 10 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:quicksilver",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:mortuus", "amount": 5 },
+        { "aspect": "thaumcraft:alkimia", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:amber",
+      "aspects": [
+        { "aspect": "thaumcraft:vinculum", "amount": 10 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:crystal_aer",
+      "aspects": [
+        { "aspect": "thaumcraft:aer", "amount": 15 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:crystal_ignis",
+      "aspects": [
+        { "aspect": "thaumcraft:ignis", "amount": 15 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:crystal_aqua",
+      "aspects": [
+        { "aspect": "thaumcraft:aqua", "amount": 15 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:crystal_terra",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 15 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:crystal_ordo",
+      "aspects": [
+        { "aspect": "thaumcraft:ordo", "amount": 15 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:crystal_perditio",
+      "aspects": [
+        { "aspect": "thaumcraft:perditio", "amount": 15 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:crystal_vitium",
+      "aspects": [
+        { "aspect": "thaumcraft:vitium", "amount": 15 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:log_greatwood",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 20 },
+        { "aspect": "thaumcraft:victus", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:log_silverwood",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 20 },
+        { "aspect": "thaumcraft:auram", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:leaves_greatwood",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:leaves_silverwood",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:sapling_greatwood",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 15 },
+        { "aspect": "thaumcraft:victus", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:sapling_silverwood",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 15 },
+        { "aspect": "thaumcraft:auram", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:shimmerleaf",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 5 },
+        { "aspect": "thaumcraft:auram", "amount": 10 },
+        { "aspect": "thaumcraft:potentia", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:cinderpearl",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 5 },
+        { "aspect": "thaumcraft:auram", "amount": 5 },
+        { "aspect": "thaumcraft:ignis", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:vishroom",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 2 },
+        { "aspect": "thaumcraft:mortuus", "amount": 1 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 1 },
+        { "aspect": "thaumcraft:perditio", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stone_ancient",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:alienis", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stone_ancient_tile",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:alienis", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stone_ancient_rock",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:alienis", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stone_eldritch_tile",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:alienis", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stone_ancient_doorway",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 5 },
+        { "aspect": "thaumcraft:alienis", "amount": 5 },
+        { "aspect": "thaumcraft:vinculum", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stone_ancient_glyphed",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 5 },
+        { "aspect": "thaumcraft:alienis", "amount": 5 },
+        { "aspect": "thaumcraft:cognitio", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stone_porous",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:vacuos", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:goggles",
+      "aspects": [
+        { "aspect": "thaumcraft:sensus", "amount": 10 },
+        { "aspect": "thaumcraft:auram", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "c:ores/amber",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:vinculum", "amount": 10 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "c:ores/cinnabar",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:alkimia", "amount": 5 },
+        { "aspect": "thaumcraft:mortuus", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "c:ores/quartz",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "c:gems/amber",
+      "aspects": [
+        { "aspect": "thaumcraft:vinculum", "amount": 10 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "thaumcraft:legacy_ore_dictionary/ore_amber",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:vinculum", "amount": 10 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "thaumcraft:legacy_ore_dictionary/ore_cinnabar",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:alkimia", "amount": 5 },
+        { "aspect": "thaumcraft:mortuus", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "thaumcraft:legacy_ore_dictionary/ore_quartz",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "thaumcraft:legacy_ore_dictionary/log_wood",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 20 }
+      ]
+    },
+    {
+      "tag": "thaumcraft:legacy_ore_dictionary/tree_sapling",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 15 },
+        { "aspect": "thaumcraft:victus", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "thaumcraft:legacy_ore_dictionary/tree_leaves",
+      "aspects": [
+        { "aspect": "thaumcraft:herba", "amount": 5 }
+      ]
+    },
+    {
+      "tag": "thaumcraft:legacy_ore_dictionary/gem_amber",
+      "aspects": [
+        { "aspect": "thaumcraft:vinculum", "amount": 10 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "tag": "thaumcraft:legacy_ore_dictionary/quicksilver",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:mortuus", "amount": 5 },
+        { "aspect": "thaumcraft:alkimia", "amount": 5 }
+      ]
+    }
+  ]
+}

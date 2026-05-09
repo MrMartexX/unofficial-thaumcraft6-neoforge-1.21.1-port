@@ -1,0 +1,82 @@
+{
+  "replace": false,
+  "overrides": true,
+  "purpose": "Resolved 1.12.2 runtime parity values for Thaumcraft ids already registered in the NeoForge port. These values are final getObjectAspects results from the legacy dump, not guesses from recipe/source intent.",
+  "assignments": [
+    {
+      "item": "thaumcraft:amber_brick",
+      "aspects": []
+    },
+    {
+      "item": "thaumcraft:fabric",
+      "aspects": [
+        { "aspect": "thaumcraft:bestia", "amount": 26 },
+        { "aspect": "thaumcraft:fabrico", "amount": 6 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:goggles",
+      "aspects": [
+        { "aspect": "thaumcraft:sensus", "amount": 25 },
+        { "aspect": "thaumcraft:auram", "amount": 25 },
+        { "aspect": "thaumcraft:bestia", "amount": 15 },
+        { "aspect": "thaumcraft:praemunio", "amount": 15 },
+        { "aspect": "thaumcraft:metallum", "amount": 60 },
+        { "aspect": "thaumcraft:desiderium", "amount": 45 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 9 }
+      ]
+    },
+    {
+      "item": "thaumcraft:slab_ancient",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 1 },
+        { "aspect": "thaumcraft:alienis", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:slab_arcane_stone",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:slab_eldritch",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 1 },
+        { "aspect": "thaumcraft:alienis", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stairs_ancient",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:alienis", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stairs_arcane",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 3 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stairs_arcane_brick",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 2 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stone_arcane",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 3 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stone_arcane_brick",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 2 }
+      ]
+    }
+  ]
+}

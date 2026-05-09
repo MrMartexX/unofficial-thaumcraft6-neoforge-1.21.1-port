@@ -1,0 +1,389 @@
+{
+  "replace": false,
+  "assignments": [
+    {
+      "complex_item": "minecraft:cookie",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:bowl",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vacuos",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:minecart",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:flint_and_steel",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:ignis",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:instrumentum",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:fishing_rod",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:instrumentum",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:stone_button",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:rail",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:powered_rail",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:potentia",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:detector_rail",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:activator_rail",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:crafting_table",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:fabrico",
+          "amount": 20
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:carrot_on_a_stick",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:desiderium",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:blaze_powder",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:alkimia",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:ender_eye",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:sensus",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:praecantatio",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:oak_boat",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:spruce_boat",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:birch_boat",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:jungle_boat",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:acacia_boat",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:dark_oak_boat",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:aqua",
+          "amount": 10
+        },
+        {
+          "aspect": "thaumcraft:motus",
+          "amount": 15
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:iron_door",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:oak_door",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:spruce_door",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:birch_door",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:jungle_door",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:acacia_door",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:dark_oak_door",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:spruce_fence_gate",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:birch_fence_gate",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:jungle_fence_gate",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:acacia_fence_gate",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "complex_item": "minecraft:dark_oak_fence_gate",
+      "aspects": [
+        {
+          "aspect": "thaumcraft:vinculum",
+          "amount": 5
+        },
+        {
+          "aspect": "thaumcraft:machina",
+          "amount": 5
+        }
+      ]
+    }
+  ]
+}

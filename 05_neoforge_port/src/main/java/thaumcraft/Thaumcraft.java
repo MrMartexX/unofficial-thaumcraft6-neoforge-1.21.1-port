@@ -1,15 +1,26 @@
 package thaumcraft;
 
 import com.mojang.logging.LogUtils;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
+import thaumcraft.client.gui.TCClientTooltipComponents;
+import thaumcraft.common.aspects.TCAspectAssignments;
+import thaumcraft.common.aspects.TCAspectDumpExporter;
+import thaumcraft.common.aspects.TCAspectReloadValidator;
+import thaumcraft.common.aspects.TCGeneratedAspectRecipeGenerator;
 import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.world.aura.TCAuraDebugCommands;
+import thaumcraft.common.world.aura.TCAuraEvents;
+import thaumcraft.common.world.aura.TCAuraNetwork;
 
 @Mod(Thaumcraft.MODID)
 public final class Thaumcraft {
@@ -20,7 +31,20 @@ public final class Thaumcraft {
         TCBlocks.BLOCKS.register(modEventBus);
         TCItems.ITEMS.register(modEventBus);
         TCCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            TCClientTooltipComponents.register(modEventBus);
+        }
+        modEventBus.addListener(TCAuraNetwork::onRegisterPayloadHandlers);
         modContainer.registerConfig(ModConfig.Type.COMMON, TCConfig.SPEC);
+        NeoForge.EVENT_BUS.addListener(TCAspectAssignments::onAddReloadListeners);
+        NeoForge.EVENT_BUS.addListener(TCGeneratedAspectRecipeGenerator::onTagsUpdated);
+        NeoForge.EVENT_BUS.addListener(TCAspectReloadValidator::onTagsUpdated);
+        NeoForge.EVENT_BUS.addListener(TCAspectDumpExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCAuraEvents::onServerTick);
+        NeoForge.EVENT_BUS.addListener(TCAuraEvents::onChunkLoad);
+        NeoForge.EVENT_BUS.addListener(TCAuraEvents::onChunkUnload);
+        NeoForge.EVENT_BUS.addListener(TCAuraDebugCommands::onRegisterCommands);
+        TCAspectAssignments.bootstrap();
 
         LOGGER.info("Thaumcraft NeoForge bootstrap initialized.");
     }

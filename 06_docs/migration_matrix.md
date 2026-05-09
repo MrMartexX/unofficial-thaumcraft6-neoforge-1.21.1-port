@@ -17,6 +17,16 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 | Subsystem inventory | `06_docs/subsystem_inventory.md` |
 | Porting order | `06_docs/porting_order.md` |
 | Creative tab reference | `06_docs/creative_tab_order_reference.md` |
+| Aspect assignment tag audit | `06_docs/aspect_assignment_tag_audit.md` |
+| Aspect generateTags audit | `06_docs/aspect_generate_tags_audit.md` |
+| Aspect assignment data format | `06_docs/aspect_assignment_data_format.md` |
+| Aspect generated cache design | `06_docs/aspect_generated_cache_design.md` |
+| Vanilla aspect policy | `06_docs/vanilla_aspect_policy.md` |
+| Vanilla 1.21 aspect assignment audit | `06_docs/vanilla_1_21_aspect_assignments.md` |
+| Vanilla post-1.12 aspect rationale table | `06_docs/vanilla_post_1_12_aspect_rationale.md` |
+| Aspect legacy gap audit | `06_docs/aspect_legacy_gap_audit.md` |
+| Aspect runtime logic audit | `06_docs/aspect_legacy_runtime_logic_audit.md` |
+| Aspect parity comparison harness | `06_docs/aspect_parity_comparison_harness.md`; mapped runtime artifacts under `07_Test_Instance_and_Comparisons/aspect_parity` |
 | Visual reference | `07_Test_Instance_and_Comparisons/02_Thaumcraft 1.12.2 Inventory Screenshots` |
 
 ## Target baseline
@@ -27,7 +37,7 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 | NeoForge | `21.1.228` |
 | Java | `21` |
 | Mod id | `thaumcraft` |
-| Project state | Gate 0 complete enough to continue; Gate 1 and early Gate 2 identity work are in progress; active resources have been runtime-audited; original legacy asset corpus is imported as reference/base material |
+| Project state | Gate 0 complete enough to continue; Gate 1 and early Gate 2 identity work are in progress; active resources have been runtime-audited; original legacy asset corpus is imported as reference/base material; Gate 3 aspect core/API slice has started with parity validation, OreDictionary-to-tag audit, generateTags audit, detailed legacy runtime logic audit, mapped runtime parity dump harness, safe current common tag resources, exact legacy compatibility tags, conservative vanilla seeds, vanilla material tag bridges, ore-derived 1.21 raw materials, reload-safe data-driven exact/tag/manual assignments, generated cache for current `minecraft:*`/`thaumcraft:*` standard crafting outputs, legacy stack-sensitive bonus rules, component-aware potion/enchanted-book behavior, spawn-egg/firework/infested no-aspect parity, audited tag-backed fallback, and server-data-load tag validation |
 
 ## Purpose
 
@@ -58,10 +68,10 @@ The main rule from the migration guide is: port the role of each subsystem, not 
 | Gate 0 | Bootstrap | Empty NeoForge mod builds and loads | Complete enough to continue | Thaumcraft gameplay content |
 | Gate 1 | Item identity | Safe simple items and creative tab order scaffold | In progress, expanded beyond first slice; active item models/lang covered | Research, aura, GUI, networking |
 | Gate 2 | Block identity | Simple blocks, block items, models and loot | Started early; active blockstates/models/loot/lang covered; imported legacy assets remain reference | BlockEntity machines |
-| Gate 3 | Data layer | Aspects, tags, data loaders and registries | Design-only started through `06_docs/aspects_design.md` | Gameplay-heavy crafting logic |
+| Gate 3 | Data layer | Aspects, tags, data loaders and registries | Started with exact legacy aspect definitions, lists, pure helper logic, data-driven current registered-id assignments, conservative vanilla seeds, tag compatibility, documented manual 1.21 vanilla assignments, generated aspects for `minecraft:*`/`thaumcraft:*` standard crafting outputs, stack-sensitive bonus rules, component-aware potion/enchanted-book behavior, spawn-egg/firework/infested no-aspect parity, bootstrap/reload validation, runtime logic audit, and mapped dump-based parity harness | Gameplay-heavy custom crafting logic |
 | Gate 4 | Basic BlockEntities | Storage, ticking and save/load | Not started | Final GUI and full sync |
 | Gate 5 | Capabilities | Item, fluid, energy and essentia access patterns | Not started | Large machine networks |
-| Gate 6 | Recipes | Vanilla-like, arcane, crucible and infusion serializers | Not started | Final research UI |
+| Gate 6 | Recipes | Vanilla-like, arcane, crucible and infusion serializers | Basic vanilla crafting recipes started for generated-aspect fixtures; custom serializers not started | Final research UI |
 | Gate 7 | Player progression | Research, scanning, knowledge and warp | Not started | Final Thaumonomicon UI polish |
 | Gate 8 | Menus and Screens | Modern GUI for machines and research | Not started | Large visual overhaul |
 | Gate 9 | Networking | Custom payload categories and validation | Not started | Uncontrolled client authority |
@@ -87,10 +97,10 @@ The main rule from the migration guide is: port the role of each subsystem, not 
 | 9 | Item behavior marker API | Internal interfaces first; public API after stable behavior | Medium | Recreate minimal marker interfaces without behavior | Design required |
 | 10 | Basic blocks | `DeferredRegister.Blocks`, block items, blockstates, models, loot tables | Medium | Keep current 1.21 blockstates/models/loot authoritative over imported legacy variants | In progress; active resources covered |
 | 11 | Block metadata variants | `BlockState` or separate blocks | High | Create block variant mapping table | Design required |
-| 12 | Aspects model | Modern aspect service, data-driven assignments, tags, reload support | High | Implement immutable aspect definitions and id-keyed amount lists after `aspects_design.md` | Design complete; implementation not started |
-| 13 | Aspect assignment | JSON/datapack or generated mappings to items, blocks, tags, entities | High | Implement exact id/tag assignment loader after the aspect value model | Design complete; implementation not started |
+| 12 | Aspects model | Modern aspect service, data-driven assignments, tags, reload support | High | Preserve exact legacy core semantics before adding gameplay consumers | Started: `Aspect`, `AspectList`, pure `AspectHelper` logic, and cached `generateTags` lookup are implemented and parity-validated; deeper legacy runtime behavior is documented in `aspect_legacy_runtime_logic_audit.md` |
+| 13 | Aspect assignment | JSON/datapack or generated mappings to items, blocks, tags, entities | High | Exact direct/tag/manual/runtime-parity assignments stay authoritative; generated values are reload-owned and must not be heuristic | Started: 672 exact assignments, 46 audited tag assignments, and 32 complex exact assignments are loaded from `aspect_assignments` data; generated cache produced 475 current `minecraft:*`/`thaumcraft:*` standard crafting entries; assignable vanilla item-id coverage is `1230/1230`; spawn eggs, firework star/rocket, and infested blocks intentionally have no aspects; mapped runtime comparison currently has `0` real `PORT_GAP_*` buckets for comparable stacks |
 | 14 | Essentia transport API | BlockEntity capabilities or explicit service interfaces | Very high | Define modern essentia access interface | Port later |
-| 15 | Aura storage | Server-owned `SavedData` or chunk attachments, safe tick/update loop | Very high | Prototype server-side aura data without visuals | Port later |
+| 15 | Aura storage | Server-owned `SavedData` or chunk attachments, safe tick/update loop | Very high | Prototype server-side aura data without visuals | Started: `aura_design.md`, `AuraHelper`, per-level `SavedData`, chunk `base/vis/flux`, automatic chunk initialization with legacy base formula, main-thread legacy-like update loop, and permission-level-2 debug commands exist; 1.21 biome categories are mapped legacy-like because `BiomeDictionary` is gone; sync, FX, rifts, research-aware preservation, and gameplay consumers remain blocked. |
 | 16 | Research model | Reloadable data loader/datapack format, validation, datagen | Very high | Create model classes and load a tiny test category | Design required |
 | 17 | Player knowledge | Player attachment/capability, explicit sync payloads, server authority | Very high | Store one test research flag per player | Port later |
 | 18 | Scanning system | Tags, item predicates, entity predicates, server validation | High | Port scan predicate model, no GUI | Port later |
@@ -138,8 +148,10 @@ Active registered content cleanup note: `amber`, `quicksilver`, and `fabric` ite
 
 ## Immediate next work
 
-1. Read `06_docs/current_port_status.md`, `06_docs/runtime_asset_audit.md`, and `06_docs/aspects_design.md`.
+1. Read `06_docs/current_port_status.md`, `06_docs/runtime_asset_audit.md`, `06_docs/aspects_design.md`, `06_docs/aspect_legacy_runtime_logic_audit.md`, and `06_docs/aspect_parity_comparison_harness.md`.
 2. Re-run local build from `05_neoforge_port` after each change batch.
-3. Use the next client visual pass to confirm the fixed active item texture paths and review creative tab order.
-4. If starting aspects implementation, keep it limited to the data-layer checklist in `aspects_design.md`.
-5. Do not begin aura, research, recipes, BlockEntities, networking, GUI, or expanded worldgen without a design note.
+3. Keep the mapped dump-based aspect parity harness at `0` real `PORT_GAP_*` buckets before treating current aspect coverage as safe for gameplay consumers.
+4. Use the next client visual pass to confirm the fixed active item texture paths and review creative tab order.
+5. Define the policy for broad 1.21.1 vanilla/modded recipe-derived aspects before generating values for unrelated new content.
+6. Continue vanilla aspect changes only from exact `ConfigAspects` assignments, audited legacy OreDictionary-to-tag bridges, validated crafting generation, or documented 1.21-only manual categories.
+7. Do not expand aura beyond the current saved-data/query/debug-command/autogenerated chunk state core, or begin research, custom recipes, BlockEntities, networking, GUI, or expanded worldgen without a design note.
