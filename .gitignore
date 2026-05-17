@@ -5,3 +5,8 @@ script.ps1
 
 __pycache__/
 *.pyc
+/temp/
+
+*.bak
+stop
+/05_neoforge_port/stop

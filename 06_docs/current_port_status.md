@@ -1,9 +1,9 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
-Last reviewed branch: `main`
-Last reviewed base commit: `70ec2f06ff06d53f7119f7db9adb83b792368874`
+Last reviewed branch: `research-knowledge-scanning-design`
+Last reviewed base commit: `6598aa65160aef196cb9874d4e761cba512d3ba2`
 Reviewed target module: `05_neoforge_port`
-Working tree note: runtime asset audit, Gate 1/2 cleanup notes, and aspects design are being finalized after the asset checkpoint.
+Working tree note: scanning/knowledge work is in progress; aspect, item-level scan, and entity-level scan parity dumps are clean for all comparable runtime keys. Thaumometer scan-key mutation and legacy-shaped client highlight/overlay behavior are active for the current predicate layer.
 
 ## Purpose
 
@@ -28,7 +28,11 @@ This is the current implementation status document. Use it together with the mig
 15. `06_docs/aspect_legacy_runtime_logic_audit.md` - detailed 1.12 runtime aspect lookup/bonus/generation/scanning audit.
 16. `06_docs/aspect_parity_comparison_harness.md` - runtime dump and comparison method for 1.12.2 vs 1.21.1 aspect parity.
 17. `06_docs/aura_design.md` - server-side aura storage/query/tick design for the first aura slice.
-18. `06_docs/gate1_items_plan.md` - historical Gate 1 workflow, not a full current inventory.
+18. `06_docs/research_knowledge_scanning_design.md` - current research/knowledge/scanning design slice.
+19. `06_docs/scanning_parity_validation.md` - runtime dump and comparison method for scan predicate parity.
+20. `06_docs/entity_aspect_assignment_audit.md` - entity aspect assignment parity/policy audit for scanning.
+21. `06_docs/rendering_model_pipeline_audit.md` - model/resource/rendering pipeline audit for 1.12 -> NeoForge 1.21.1.
+22. `06_docs/gate1_items_plan.md` - historical Gate 1 workflow, not a full current inventory.
 
 ## High-level status
 
@@ -39,18 +43,18 @@ This is the current implementation status document. Use it together with the mig
 | Item registry | Partially implemented | More than the original Gate 1 item slice exists. |
 | Block registry | Partially implemented | Simple blocks, ores, stones, wood blocks, and plants have started. |
 | Creative tab | Implemented, needs visual review | `TCCreativeTabOrder` owns visible order. Do not use registry order. |
-| Assets | Runtime audited for active content | Missing original `assets` files were copied into the port without overwriting adapted 1.21 resources. Registered active content has model/lang/blockstate/loot coverage; `amber`, `quicksilver`, and `fabric` item model texture paths were fixed from legacy `items/` to modern `item/`, with active PNGs copied into `textures/item`. |
+| Assets | Runtime audited for active content | Missing original `assets` files were copied into the port without overwriting adapted 1.21 resources. Registered active content has model/lang/blockstate/loot coverage; `amber`, `quicksilver`, and `fabric` item model texture paths were fixed from legacy `items/` to modern `item/`, with active PNGs copied into `textures/item`. `thaumometer` now uses the legacy 3D `scanner.obj` through the NeoForge OBJ loader with modern `textures/item/thaumometer.png`, alpha-pane `textures/item/scanscreen.png`, explicit OBJ texture aliases and translucent render type; in-game transform tuning still needs visual comparison against 1.12.2. |
 | Loot tables | Active registered content covered | Modern simple-block loot tables exist under `data/thaumcraft/loot_table`; legacy `assets/thaumcraft/loot_tables` is imported as reference material and is not the 1.21 data path. |
 | Tags | Aspect tag audit expanded | Tags replace old `OreDictionary` patterns. `aspect_assignment_tag_audit.md` maps current legacy aspect-related keys; safe current common tag resources exist for amber/cinnabar/quartz ores, amber gems, vanilla ore/gem/ingot/dust/raw-material bridges, and copper material bridges; exact `thaumcraft:legacy_ore_dictionary/*` item/block tags now preserve all already registered 1.12 OreDictionary entries. |
-| Aspects | Core/API slice started with parity validation | `Aspect`, `AspectList`, pure `AspectHelper` logic, reload-safe data-driven exact/tag/manual assignments, vanilla material tag bridges, crafting generated-cache slice, legacy stack-sensitive bonus rules, component-aware potion and enchanted-book lookup, spawn-egg exclusion, bootstrap parity validation, server-data-load tag validation, OreDictionary-to-tag audit, `generateTags` audit, read-only Shift inventory tooltip rendering, and assignment/cache/manual-policy docs are implemented/documented. All assignable current `minecraft:*` item ids have aspects after reload validation; spawn eggs and empty component-only potion carriers are intentionally excluded for legacy parity. The runtime dump harness now runs on both original Forge 1.12.2 Thaumcraft and the 1.21.1 port; the comparer uses `legacy_to_modern_stack_map.json` to separate expected version differences from real port gaps. Crucible/infusion/arcane recipe generation and aura/research/essentia/scanning/gameplay integrations are still not started. |
+| Aspects | Core/API slice parity-clean for comparable stacks/entities, with two documented modern entity policy rows | `Aspect`, `AspectList`, pure `AspectHelper` logic, reload-safe data-driven exact/tag/manual assignments, vanilla material tag bridges, crafting generated-cache slice, legacy stack-sensitive bonus rules, component-aware potion and enchanted-book lookup, spawn-egg exclusion, vanilla entity aspect assignments, bootstrap parity validation, server-data-load tag validation, OreDictionary-to-tag audit, `generateTags` audit, read-only Shift inventory tooltip rendering, and assignment/cache/manual-policy docs are implemented/documented. All assignable current `minecraft:*` item ids have aspects after reload validation; spawn eggs, firework star/rocket, infested blocks, and empty component-only potion carriers remain intentionally excluded for legacy runtime parity. `elder_guardian` and `zombie_villager` now have documented living-mob aspect rows as intentional modern-policy corrections. The runtime dump harness now runs on both original Forge 1.12.2 Thaumcraft and the 1.21.1 port; the comparers separate expected version differences from real port gaps. Current comparable item aspect parity is `1139/1139` with `0` amount/set/order/kind/null gaps; current comparable entity scan report has `83/85` fully parity-ok rows plus `2` expected modern entity aspect policy rows and `0` actionable gaps. Crucible, infusion, arcane recipe outputs, essentia transport, Thaumcraft custom entity aspects, and gameplay-heavy consumers remain blocked until their own design slices. |
 | Aura | Started with server-side core | `AuraHelper`, per-level `SavedData`, chunk `base/vis/flux`, automatic chunk initialization, legacy formula for aura base generation, main-thread 20-tick legacy-like update loop, and permission-level-2 debug commands are implemented. The biome category mapper is legacy-like because 1.21 has no `BiomeDictionary`. HUD sync, FX, flux rifts, research-aware preservation, and gameplay consumers are intentionally not started. |
-| Research | Not started | Requires data model, player storage, and sync design. |
+| Research | Started as server progression skeleton | Player knowledge storage and debug commands exist. A reload-safe research category/entry skeleton now parses the copied legacy research JSON from `data/thaumcraft/research`, validates `7` categories, `148` entries, `271` stages, and `16` addenda, and exposes research list/info/status/visible/stage-check commands. The first legacy-like server progression layer now stores stages and flags, checks parent requisites, supports `progressResearch`, `completeResearch`, `startResearchWithPopup`, sibling completion, category/entry visibility helpers, and is used by Thaumometer scan-key mutation. A separate checked-stage path now mirrors the role of legacy `PacketSyncProgressToServer.checkRequisites` for the future Thaumonomicon page action: it checks current-stage item/craft/research/knowledge gates and consumes item/knowledge requirements only after all checks pass. Modern crafting-event marker emission exists for resolvable `required_craft` entries. Exact direct ItemStack craft-hash parity, recipe unlocks, reward items/knowledge, warp, addendum notifications, Thaumonomicon UI, and full stage/flag sync are still blocked. |
 | Recipes | Basic vanilla crafting fixtures started | Simple modern `data/thaumcraft/recipe` crafting recipes exist for generated-aspect validation. Custom Thaumcraft recipe serializers are not started. |
 | BlockEntities | Not started | Do not copy legacy `TileEntity` classes directly. |
 | Menus/screens | Not started | Requires server menu/client screen split. The current aspect tooltip is a client-only vanilla tooltip component, not a menu/screen subsystem. |
-| Networking | Not started | Must use modern custom payloads with server validation. |
+| Networking | Started narrowly | Modern custom payloads exist only for aura sync and completed-research-key sync. Do not treat this as a general networking subsystem yet; every new payload still needs a focused design and server validation. |
 | Worldgen | Started early, not as a system | Sapling-grown Greatwood/Silverwood tree generators exist; biome modifiers, configured features, and structure/world placement are not implemented. |
-| Rendering/FX | Started early, still high risk | Legacy-style FX dispatcher/particle scaffolding exists; full rendering systems must wait for design and validation. |
+| Rendering/FX | Started early, still high risk | Legacy-style FX dispatcher/particle scaffolding exists and `rendering_model_pipeline_audit.md` documents the 1.12 -> 1.21 resource/model split. Thaumometer right-click runes, held target highlight, and living-mob aspect icon overlay are started with legacy target ranges, wild block highlight behavior, legacy icon UV order, and separate known-vs-unknown gating. Full rendering systems, BER/BEWLR work, overlays and old shader wiring must wait for design and validation. |
 
 ## Legacy asset corpus import
 
@@ -77,10 +81,11 @@ The runtime asset audit is `06_docs/runtime_asset_audit.md`.
 
 | Check | Result | Notes |
 |---|---|---|
-| `.\gradlew.bat build --no-daemon` | Passed | Re-run after each aspect/tag/client-tooltip/aura expansion batch. |
+| `.\gradlew.bat build --no-daemon` | Passed | Re-run after each aspect/tag/client-tooltip/aura/research expansion batch. Latest checked-stage research patch compiles. |
 | `.\gradlew.bat runClient --no-daemon` | Passed startup/resource smoke check | Client reached resource atlas creation, aspect assignment reload, generated cache rebuild, tag validation, and integrated-server player join. Visual tooltip inspection still needs a manual inventory hover check. |
-| `.\gradlew.bat runServer --no-daemon` | Started successfully | Dedicated server reached `Done`; bundled bootstrap, data-resource assignment reload, generated crafting cache rebuild, tag reload validation, aura event/command registration, automatic aura chunk initialization, and the client-only tooltip registration boundary all passed. Latest dump run loaded `672` exact assignments, `46` tag assignments, `32` complex exact assignments, rebuilt `475` generated crafting cache entries, and reported `1230 of 1230` assignable minecraft item ids with non-empty aspects. Spawn eggs and empty component-only splash/lingering/tipped carrier ids are excluded for 1.12 parity. Server smoke produced `run/world/data/thaumcraft_aura.dat` with `49` aura chunks in the prepared spawn area. |
-| Aspect runtime dumps | Passed mapped harness run | Original Forge 1.12.2 Thaumcraft server wrote `1798` entries; NeoForge 1.21.1 server wrote `1986` entries. With `legacy_to_modern_stack_map.json`, the comparer has `1138` comparable keys: `1138` identical, including `283` legacy-to-modern mapped parity entries. Current real mapped gaps are `0`; potion content/order, mapped Sweeping Edge stored books, and currently registered Thaumcraft set differences are closed. |
+| `.\gradlew.bat runServer --no-daemon` | Started successfully | Dedicated server reached `Done`; bundled bootstrap, data-resource assignment reload, generated crafting cache rebuild, tag reload validation, research data reload, aura event/command registration, automatic aura chunk initialization, and the client-only tooltip registration boundary all passed. Latest dump run loaded `673` exact assignments, `46` tag assignments, `32` complex exact assignments, rebuilt `475` generated crafting cache entries, loaded `7` research categories / `148` entries / `271` stages / `16` addenda, and reported `1230 of 1230` assignable minecraft item ids with non-empty aspects. Spawn eggs and empty component-only splash/lingering/tipped carrier ids are excluded for 1.12 parity. Server smoke produced `run/world/data/thaumcraft_aura.dat` with `49` aura chunks in the prepared spawn area. |
+| Aspect runtime dumps | Passed mapped harness run | Original Forge 1.12.2 Thaumcraft server wrote `1798` entries; NeoForge 1.21.1 server wrote `1987` entries. With `legacy_to_modern_stack_map.json`, the comparer has `1139` comparable keys: `1139` identical, including `283` legacy-to-modern mapped parity entries. Current real mapped gaps are `0`; potion content/order, mapped Sweeping Edge stored books, and currently registered Thaumcraft set differences are closed. |
+| Scan runtime dumps | Passed item-level and entity-level scan harness runs | Original Forge 1.12.2 scan exporter wrote `1798` item entries and `129` entity entries; NeoForge 1.21.1 server wrote `1987` item entries and `131` entity entries. With stack/research-key/entity-id normalization, item scans have `1139/1139` comparable parity-ok rows. Entity scans now have `83/85` comparable parity-ok rows plus `2` expected modern-policy living-mob rows (`elder_guardian`, `zombie_villager`). Both reports have `0` actionable scan key/set/found/aspect gaps. |
 
 ## Implemented identity entries seen in `TCItems`
 
@@ -91,7 +96,7 @@ The runtime asset audit is `06_docs/runtime_asset_audit.md`.
 | Stone blocks | `stone_arcane`, `stone_arcane_brick`, `stone_ancient`, `stone_ancient_tile`, `stone_ancient_rock`, `stone_ancient_glyphed`, `stone_ancient_doorway`, `stone_eldritch_tile`, `stone_porous` |
 | Stairs and slabs | `stairs_arcane`, `stairs_arcane_brick`, `stairs_ancient`, `stairs_greatwood`, `stairs_silverwood`, `slab_arcane_stone`, `slab_arcane_brick`, `slab_ancient`, `slab_eldritch`, `slab_greatwood`, `slab_silverwood` |
 | Wood, leaves, plants | `log_greatwood`, `log_silverwood`, `leaves_greatwood`, `leaves_silverwood`, `sapling_greatwood`, `sapling_silverwood`, `shimmerleaf`, `cinderpearl`, `vishroom`, `plank_greatwood`, `plank_silverwood` |
-| Other blocks/items | `amber_block`, `amber_brick`, `goggles`, `amber`, `quicksilver`, `fabric` |
+| Other blocks/items | `amber_block`, `amber_brick`, `thaumometer`, `goggles`, `amber`, `quicksilver`, `fabric` |
 
 ## Aspect assignment data resources
 
@@ -99,7 +104,7 @@ The current aspect assignment source of truth is split across bundled data files
 
 | Assignment layer | Count | Notes |
 |---|---:|---|
-| Exact item assignments | `672` | `current_registered.json` covers normally authored registered Thaumcraft ids; `current_registered_runtime_parity.json` preserves dump-derived registered Thaumcraft final values; `legacy_vanilla_core.json` and `legacy_vanilla_modern_exact.json` preserve direct vanilla seeds; `legacy_vanilla_modern_manual.json` covers 1.21-only vanilla ids by audited Thaumcraft-style category; `legacy_vanilla_runtime_parity.json` preserves dump-derived final 1.12 values for shared plain vanilla stacks affected by metadata flattening, generated recipes, complex extras, wildcard specificity, or stack bonuses. Spawn eggs, firework star/rocket, and infested blocks are excluded because 1.12 gave those comparable stacks no aspects. |
+| Exact item assignments | `673` | `current_registered.json` covers normally authored registered Thaumcraft ids; `current_registered_runtime_parity.json` preserves dump-derived registered Thaumcraft final values, including the registered `thaumometer`; `legacy_vanilla_core.json` and `legacy_vanilla_modern_exact.json` preserve direct vanilla seeds; `legacy_vanilla_modern_manual.json` covers 1.21-only vanilla ids by audited Thaumcraft-style category; `legacy_vanilla_runtime_parity.json` preserves dump-derived final 1.12 values for shared plain vanilla stacks affected by metadata flattening, generated recipes, complex extras, wildcard specificity, or stack bonuses. Spawn eggs, firework star/rocket, and infested blocks are excluded because 1.12 gave those comparable stacks no aspects. |
 | Item tag assignments | `46` | Includes safe current common `c:` tags, vanilla material bridges for legacy ore/gem/ingot/dust/base-block keys, ore-derived 1.21 raw materials, `blockGlass`, plus exact `thaumcraft:legacy_ore_dictionary/*` compatibility tags where legacy used string-key aspect assignments. |
 | Complex exact assignments | `32` | Current complex extras cover audited buckets, boats, doors, fence gates, and related legacy complex additions. Runtime diff proves this layer must continue to be source-vs-runtime reviewed before broad expansion because legacy exact/generated/wildcard lookup order can mask wildcard complex values. |
 | Generated crafting assignments | `475` | Built from `RecipeType.CRAFTING` recipes after server data/tag reload for current `minecraft:*` and `thaumcraft:*` outputs that have known ingredient aspects. Exact/tag/manual/runtime-parity assignments still win over generated values. |
@@ -121,6 +126,7 @@ Validation proves:
 - 1.21 raw iron/gold/copper are intentionally ore-derived from corresponding legacy `ore*` entries;
 - spawn eggs intentionally return no aspects;
 - potions, splash potions, lingering potions, tipped arrows, and enchanted books use stack components for legacy parity instead of plain id-only lookup;
+- scan-specific long slowness potion quirks are isolated in `AspectHelper.getScanAspects` so the normal object/tooltip aspect dump remains identical to legacy;
 - shapeless crafting and remaining-item subtraction match the legacy crafting formula.
 
 ## Current gate interpretation
@@ -130,7 +136,7 @@ Validation proves:
 | Gate 0 | Complete enough to continue, but still validate `runServer` after client/render changes. |
 | Gate 1 | In progress and expanded beyond the first simple item batch. Active registered item resources are covered; creative order still needs visual review. |
 | Gate 2 | Started early through simple block and block item identity work. Active registered blockstates, models, loot tables, and translations are covered. |
-| Gate 3 | Implementation started carefully. Exact legacy core aspect definitions/list/helper logic, current registered-id assignments, generated crafting cache, and read-only Shift tooltip rendering are present and guarded by validation; no gameplay integrations yet. |
+| Gate 3 | Implementation started carefully. Exact legacy core aspect definitions/list/helper logic, current registered-id assignments, generated crafting cache, vanilla entity aspect lookup, read-only Shift tooltip rendering, and scan-resolved aspect lookup are present and guarded by validation; gameplay-heavy consumers remain blocked. |
 | Gate 4+ | Aura is started as an isolated server-side storage/API slice after `aura_design.md`; BlockEntities, capabilities, research, custom recipes, menus, networking, worldgen, and large rendering systems remain not started. |
 
 ## Partially stale documents
@@ -150,9 +156,9 @@ Do not implement aura, research, arcane crafting, crucible, infusion, BlockEntit
 
 1. Re-run `./gradlew build --no-daemon` after the runtime audit and design-document cleanup.
 2. Keep the mapped aspect diff report at `0` real `PORT_GAP_*` buckets before treating current coverage as safe for gameplay consumers.
-3. Use the next full `./gradlew runClient --no-daemon` visual pass to inspect creative tab order, active item icons, and Shift-held aspect tooltip visuals.
+3. Use the next full `./gradlew runClient --no-daemon` visual pass to inspect creative tab order, active item icons, Shift-held aspect tooltip visuals, and the 3D Thaumometer OBJ transforms in GUI/hand views.
 4. Compare creative tab order with the 1.12.2 inventory screenshots.
-5. Add future registered-id aspect values through `data/thaumcraft/aspect_assignments`, not hardcoded Java maps.
+5. Add future registered item/block aspect values through `data/thaumcraft/aspect_assignments`; entity aspects currently use a legacy Java table until an entity assignment datapack format is designed.
 6. Keep vanilla item coverage at `0 missing` after every aspect/tag change; do not broaden third-party modded generated outputs until an addon policy exists.
 7. Implement crucible, infusion, and arcane recipe-derived `generateTags` behavior from `aspect_generate_tags_audit.md` before assigning aspects to those custom recipe outputs.
 8. Continue vanilla aspect changes only from `ConfigAspects`, audited legacy OreDictionary-to-tag bridges, recipe-derived cache behavior, or documented 1.21-only category policy.
@@ -177,6 +183,21 @@ Started:
 - Next implementation should start with knowledge storage and commands only.
 
 Do not start full Thaumonomicon GUI, crucible, infusion or warp before the player knowledge and research skeleton is stable.
+## Research data skeleton
+
+Started:
+- Added server data reload listener for `data/thaumcraft/research/*.json`.
+- Copied the eight legacy Thaumcraft research files into the server-data path.
+- Added category/entry/stage model records and hardcoded legacy category metadata/formulas.
+- Added read-only `/thaumcraft research list` and `/thaumcraft research info <key>` commands.
+- Latest server reload validates `7` categories, `148` entries, `271` stages, and `16` addenda.
+- Added read-only research reference validation through reload logging and `/thaumcraft research validate`; latest server reload reports `201` resolved entry references, `95` external scan/flag trigger references, and `0` unresolved research references.
+- Added checked current-stage requirement diagnostics and advancement commands: `/thaumcraft research <player> stage <research_key> check` and `advance`.
+- The checked-stage path mirrors legacy `PacketSyncProgressToServer.checkRequisites`: it verifies current-stage item/craft/research/knowledge gates and consumes item/knowledge costs only after all gates pass.
+- Added modern crafting-event marker emission for resolvable `required_craft` entries. This preserves the legacy hidden-marker role for future stage checks, while exact direct legacy ItemStack hash ids remain blocked until exported/mapped.
+
+Still blocked:
+- Thaumonomicon screen rendering, exact direct craft-reference hash parity, rewards, recipe unlocks, full sync, UI, warp, and addendum notifications.
 ## Player knowledge command skeleton
 
 Started:
@@ -184,4 +205,35 @@ Started:
 - Added observation and theory knowledge types with legacy-like raw point conversion.
 - Added /thaumcraft, /thaum and /tc knowledge debug command tree.
 - Added minimal stored research key skeleton commands.
-- Full research category/entry loader, recursive research completion, scanning predicates and Thaumometer GUI are still intentionally not implemented.
+- Full scan rewards and Thaumometer GUI are still intentionally not implemented. Thaumometer right-click now mutates scan keys through the research progression layer, and client visual feedback is started.
+## Scanning debug command skeleton
+
+Started:
+- Added TCScanningManager and TCScanResult.
+- Added /thaumcraft, /thaum and /tc scan debug command tree.
+- Added held item aspect lookup.
+- Added looking block aspect lookup through block item form.
+- Added legacy-shaped `thaumcraft.api.research.IScanThing` and `ScanningManager` shell.
+- Added modern `ScanItem`, `ScanBlock`, `ScanEntity`, `ScanOreDictionary`, and `ScanAspect` predicate classes.
+- Added initial generic scan predicate for aspect-bearing items, blocks and entities.
+- Restored legacy aspect-trigger scan behavior: `Aspect` registers `ScanAspect("!"+tag)` and the reload bootstrap re-adds aspect predicates before generic scan.
+- Added reloadable `data/thaumcraft/scannables/*.json` format and documented it in `scannable_data_format.md`.
+- Added bundled `legacy_core.json` with 32 currently valid legacy scan definitions.
+- Dedicated server reload currently reports 123 active scan predicates before dynamic server predicates and 205 after dynamic mob-effect/enchantment predicates register.
+- Added dynamic mob-effect and enchantment scan predicates as modern equivalents for legacy `ScanPotion` and `ScanEnchantment`; server startup currently reports 205 active predicates after dynamic registration.
+- Added gated sky scan predicate for `CELESTIALSCANNING`, without celestial note side effects.
+- Added vanilla entity aspect assignments for legacy mob/object scan targets, with documented post-1.12 entity policy rows. Runtime parity shows `minecraft:elder_guardian` and `minecraft:zombie_villager` had no effective 1.12 aspects, but the port now intentionally gives them living-mob aspect rows: elder guardian uses the legacy Guardian+Elder NBT intent; zombie villager uses zombie/villager hybrid semantics. Thaumcraft custom entity assignments remain deferred until those entities are registered.
+- Thaumometer right-click now plays registered `thaumcraft:scan` sound and spawns legacy-shaped rune particles. Server scan and client use visuals share the legacy entity target resolver: min range `1`, scan range `9`, zone-style inflated hitboxes, and line-of-sight checks. While held, the client uses the longer legacy highlight pass: entity range `16` with `padding=5`, plus separate wild block rays at range `16` with random yaw/pitch spread. Highlight eligibility derives potential scan keys from aspect lookup, active data scannables, potion/effect scans, and enchantment scans, then filters already-known keys through a narrow completed-research sync payload. Living-mob aspect icons plus amounts render above normal aspect-bearing living mobs even after known keys; sparkle highlight is the part gated by not-yet-known keys. Right-click scan mutation now uses `TCResearchManager.progressResearch`, grants only newly unknown scan keys, respects parent requisites where loaded entries exist, and preserves blank-key suppress behavior. Aura HUD and full scan reward/research side effects are still pending.
+- Added legacy scan learning side effects: `ScanAspect` now grants the same raw `+1` observation unit to AUROMANCY/BASICS/ALCHEMY as 1.12, and `TCScanGeneric` applies the legacy category formula to scanned aspects before adding raw OBSERVATION knowledge.
+- Added `post_1_12_scanning_policy.md`: post-1.12 vanilla items use documented aspect policy plus generic scan; bespoke research keys require explicit design.
+- Added `/thaumcraft scan audit_items`, automated `-PtcScanDump=true` server dumps, `scanning_parity_validation.md`, and `07_Test_Instance_and_Comparisons/scan_parity` for deterministic item, potion, enchantment and scan-key audit diffs.
+- The latest scan report has `1139/1139` comparable item/potion/enchantment rows parity-ok and no aspect-value or scan-logic differences.
+- Added `scanning_gap_audit.md`, restored legacy dropped-item scan targeting by allowing `ItemEntity` look targets, and added `/thaumcraft scan audit_entities` plus `-PtcScanEntityDump=true` modern server dumps.
+- Added Forge 1.12.2 legacy entity/state-variant exporter and `compare_entity_scan_dumps.py`. Latest entity report: `83/85` comparable vanilla entity/state rows parity-ok, `2` expected modern entity aspect policy rows, `0` actionable gaps, `44` expected legacy-only rows for deferred Thaumcraft entities/guardian NBT probe, and `46` expected modern-only post-1.12 rows.
+- Scan commands currently report aspects and matched scan keys without mutating player knowledge; the actual Thaumometer item performs the server-side scan-key mutation.
+
+Next:
+- Fill deferred `ConfigResearch.initScannables` entries as their target ids become registered.
+- Keep checking scan observation rewards against real Thaumonomicon knowledge costs once the page UI exists.
+- Add `ScanSky` celestial-note side effects after celestial notes and scribing tools exist.
+- Continue research with stage item/craft/knowledge fulfillment, reward handling, visibility filtering, and full stage/flag sync before starting Thaumonomicon UI.

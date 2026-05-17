@@ -1,0 +1,4400 @@
+{
+  "schema": 1,
+  "side": "legacy_1_12_2",
+  "environment": {
+    "minecraft": "1.12.2",
+    "forge": "14.23.5.2860",
+    "thaumcraft": "6.1.BETA26"
+  },
+  "predicate_count": 214,
+  "predicate_types": [
+    {
+      "class": "thaumcraft.api.research.ScanAspect",
+      "count": 37
+    },
+    {
+      "class": "thaumcraft.api.research.ScanBlock",
+      "count": 18
+    },
+    {
+      "class": "thaumcraft.api.research.ScanEntity",
+      "count": 34
+    },
+    {
+      "class": "thaumcraft.api.research.ScanItem",
+      "count": 52
+    },
+    {
+      "class": "thaumcraft.api.research.ScanMaterial",
+      "count": 1
+    },
+    {
+      "class": "thaumcraft.api.research.ScanOreDictionary",
+      "count": 4
+    },
+    {
+      "class": "thaumcraft.common.lib.research.ScanEnchantment",
+      "count": 30
+    },
+    {
+      "class": "thaumcraft.common.lib.research.ScanGeneric",
+      "count": 1
+    },
+    {
+      "class": "thaumcraft.common.lib.research.ScanPotion",
+      "count": 36
+    },
+    {
+      "class": "thaumcraft.common.lib.research.ScanSky",
+      "count": 1
+    }
+  ],
+  "entry_count": 129,
+  "entries": [
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:fireworks_rocket",
+      "entity": "minecraft:fireworks_rocket",
+      "legacy_entity_string": "FireworksRocketEntity",
+      "variant": "plain",
+      "display_name": "entity.FireworksRocketEntity.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:cultistportallesser",
+      "entity": "thaumcraft:cultistportallesser",
+      "legacy_entity_string": "CultistPortalLesser",
+      "variant": "plain",
+      "display_name": "Lesser Crimson Portal",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:eldritchcrab",
+      "entity": "thaumcraft:eldritchcrab",
+      "legacy_entity_string": "EldritchCrab",
+      "variant": "plain",
+      "display_name": "Eldritch Crab",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!EldritchCrab",
+        "!ORMOB"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:xp_bottle",
+      "entity": "minecraft:xp_bottle",
+      "legacy_entity_string": "ThrownExpBottle",
+      "variant": "plain",
+      "display_name": "entity.ThrownExpBottle.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:item_frame",
+      "entity": "minecraft:item_frame",
+      "legacy_entity_string": "ItemFrame",
+      "variant": "plain",
+      "display_name": "entity.ItemFrame.name",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "sensus",
+            "amount": 5
+          },
+          {
+            "id": "fabrico",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!fabrico",
+        "!sensus",
+        "!ItemFrame"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:wither_skeleton",
+      "entity": "minecraft:wither_skeleton",
+      "legacy_entity_string": "WitherSkeleton",
+      "variant": "plain",
+      "display_name": "Wither Skeleton",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "exanimis",
+            "amount": 25
+          },
+          {
+            "id": "humanus",
+            "amount": 5
+          },
+          {
+            "id": "perditio",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!perditio",
+        "!exanimis",
+        "!humanus",
+        "!WitherSkeleton"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:pech",
+      "entity": "thaumcraft:pech",
+      "legacy_entity_string": "Pech",
+      "variant": "plain",
+      "display_name": "Pech Forager",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!Pech"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:area_effect_cloud",
+      "entity": "minecraft:area_effect_cloud",
+      "legacy_entity_string": "AreaEffectCloud",
+      "variant": "plain",
+      "display_name": "entity.AreaEffectCloud.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:firebat",
+      "entity": "thaumcraft:firebat",
+      "legacy_entity_string": "Firebat",
+      "variant": "plain",
+      "display_name": "Firebat",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!Firebat",
+        "f_BAT",
+        "f_FLY"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:evocation_fangs",
+      "entity": "minecraft:evocation_fangs",
+      "legacy_entity_string": "EvocationFangs",
+      "variant": "plain",
+      "display_name": "entity.EvocationFangs.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:evocation_illager",
+      "entity": "minecraft:evocation_illager",
+      "legacy_entity_string": "EvocationIllager",
+      "variant": "plain",
+      "display_name": "Evoker",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "alienis",
+            "amount": 5
+          },
+          {
+            "id": "praecantatio",
+            "amount": 5
+          },
+          {
+            "id": "humanus",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!praecantatio",
+        "!alienis",
+        "!humanus",
+        "!EvocationIllager"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:eldritchwarden",
+      "entity": "thaumcraft:eldritchwarden",
+      "legacy_entity_string": "EldritchWarden",
+      "variant": "plain",
+      "display_name": "Eldritch Warden",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ORMOB",
+        "!ORBOSS"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:endermite",
+      "entity": "minecraft:endermite",
+      "legacy_entity_string": "Endermite",
+      "variant": "plain",
+      "display_name": "Endermite",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 5
+          },
+          {
+            "id": "alienis",
+            "amount": 5
+          },
+          {
+            "id": "motus",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!motus",
+        "!alienis",
+        "!bestia",
+        "!Endermite"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:golemdart",
+      "entity": "thaumcraft:golemdart",
+      "legacy_entity_string": "GolemDart",
+      "variant": "plain",
+      "display_name": "Golem Dart",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_arrow"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:arrow",
+      "entity": "minecraft:arrow",
+      "legacy_entity_string": "Arrow",
+      "variant": "plain",
+      "display_name": "Arrow",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_arrow"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:turretbasic",
+      "entity": "thaumcraft:turretbasic",
+      "legacy_entity_string": "TurretBasic",
+      "variant": "plain",
+      "display_name": "Automated Crossbow",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_golem"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:alumentum",
+      "entity": "thaumcraft:alumentum",
+      "legacy_entity_string": "Alumentum",
+      "variant": "plain",
+      "display_name": "Alumentum",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:eldritchorb",
+      "entity": "thaumcraft:eldritchorb",
+      "legacy_entity_string": "EldritchOrb",
+      "variant": "plain",
+      "display_name": "Eldritch Orb",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:cow",
+      "entity": "minecraft:cow",
+      "legacy_entity_string": "Cow",
+      "variant": "plain",
+      "display_name": "Cow",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 15
+          },
+          {
+            "id": "terra",
+            "amount": 15
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!terra",
+        "!bestia",
+        "!Cow"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:snowman",
+      "entity": "minecraft:snowman",
+      "legacy_entity_string": "SnowMan",
+      "variant": "plain",
+      "display_name": "Snow Golem",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "gelum",
+            "amount": 10
+          },
+          {
+            "id": "humanus",
+            "amount": 5
+          },
+          {
+            "id": "machina",
+            "amount": 5
+          },
+          {
+            "id": "praecantatio",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!gelum",
+        "!praecantatio",
+        "!machina",
+        "!humanus",
+        "!SnowMan",
+        "f_golem"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:golemorb",
+      "entity": "thaumcraft:golemorb",
+      "legacy_entity_string": "GolemOrb",
+      "variant": "plain",
+      "display_name": "Energy Orb",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:hopper_minecart",
+      "entity": "minecraft:hopper_minecart",
+      "legacy_entity_string": "MinecartHopper",
+      "variant": "plain",
+      "display_name": "Minecart with Hopper",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:spider",
+      "entity": "minecraft:spider",
+      "legacy_entity_string": "Spider",
+      "variant": "plain",
+      "display_name": "Spider",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 10
+          },
+          {
+            "id": "perditio",
+            "amount": 10
+          },
+          {
+            "id": "vinculum",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!perditio",
+        "!vinculum",
+        "!bestia",
+        "!Spider",
+        "f_SPIDER"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:small_fireball",
+      "entity": "minecraft:small_fireball",
+      "legacy_entity_string": "SmallFireball",
+      "variant": "plain",
+      "display_name": "Small Fireball",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_fireball"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:painting",
+      "entity": "minecraft:painting",
+      "legacy_entity_string": "Painting",
+      "variant": "plain",
+      "display_name": "Painting",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "sensus",
+            "amount": 10
+          },
+          {
+            "id": "fabrico",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!fabrico",
+        "!sensus",
+        "!Painting"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:polar_bear",
+      "entity": "minecraft:polar_bear",
+      "legacy_entity_string": "PolarBear",
+      "variant": "plain",
+      "display_name": "Polar Bear",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 15
+          },
+          {
+            "id": "gelum",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!gelum",
+        "!bestia",
+        "!PolarBear"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:potion",
+      "entity": "minecraft:potion",
+      "legacy_entity_string": "ThrownPotion",
+      "variant": "plain",
+      "display_name": "Potion",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:furnace_minecart",
+      "entity": "minecraft:furnace_minecart",
+      "legacy_entity_string": "MinecartFurnace",
+      "variant": "plain",
+      "display_name": "entity.MinecartFurnace.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:boat",
+      "entity": "minecraft:boat",
+      "legacy_entity_string": "Boat",
+      "variant": "plain",
+      "display_name": "Boat",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:cultistleader",
+      "entity": "thaumcraft:cultistleader",
+      "legacy_entity_string": "CultistLeader",
+      "variant": "plain",
+      "display_name": "Crimson Praetor",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ORBOSS"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:rabbit",
+      "entity": "minecraft:rabbit",
+      "legacy_entity_string": "Rabbit",
+      "variant": "plain",
+      "display_name": "Rabbit",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 5
+          },
+          {
+            "id": "terra",
+            "amount": 5
+          },
+          {
+            "id": "motus",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!terra",
+        "!motus",
+        "!bestia",
+        "!Rabbit"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:magma_cube",
+      "entity": "minecraft:magma_cube",
+      "legacy_entity_string": "LavaSlime",
+      "variant": "plain",
+      "display_name": "Magma Cube",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "aqua",
+            "amount": 5
+          },
+          {
+            "id": "ignis",
+            "amount": 10
+          },
+          {
+            "id": "alkimia",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ignis",
+        "!aqua",
+        "!alkimia",
+        "!LavaSlime"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:inhabitedzombie",
+      "entity": "thaumcraft:inhabitedzombie",
+      "legacy_entity_string": "InhabitedZombie",
+      "variant": "plain",
+      "display_name": "Shambling Husk",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!EldritchCrab",
+        "!ORMOB"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:bat",
+      "entity": "minecraft:bat",
+      "legacy_entity_string": "Bat",
+      "variant": "plain",
+      "display_name": "Bat",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 5
+          },
+          {
+            "id": "volatus",
+            "amount": 5
+          },
+          {
+            "id": "tenebrae",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!tenebrae",
+        "!volatus",
+        "!bestia",
+        "!Bat",
+        "f_BAT",
+        "f_FLY"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric",
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:grapple",
+      "entity": "thaumcraft:grapple",
+      "legacy_entity_string": "Grapple",
+      "variant": "plain",
+      "display_name": "entity.Grapple.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:blaze",
+      "entity": "minecraft:blaze",
+      "legacy_entity_string": "Blaze",
+      "variant": "plain",
+      "display_name": "Blaze",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "alienis",
+            "amount": 5
+          },
+          {
+            "id": "ignis",
+            "amount": 15
+          },
+          {
+            "id": "volatus",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ignis",
+        "!alienis",
+        "!volatus",
+        "!Blaze",
+        "f_FLY"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:llama",
+      "entity": "minecraft:llama",
+      "legacy_entity_string": "Llama",
+      "variant": "plain",
+      "display_name": "Llama",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 15
+          },
+          {
+            "id": "aqua",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aqua",
+        "!bestia",
+        "!Llama"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:chicken",
+      "entity": "minecraft:chicken",
+      "legacy_entity_string": "Chicken",
+      "variant": "plain",
+      "display_name": "Chicken",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 5
+          },
+          {
+            "id": "volatus",
+            "amount": 5
+          },
+          {
+            "id": "aer",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aer",
+        "!volatus",
+        "!bestia",
+        "!Chicken"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:slime",
+      "entity": "minecraft:slime",
+      "legacy_entity_string": "Slime",
+      "variant": "plain",
+      "display_name": "Slime",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "victus",
+            "amount": 10
+          },
+          {
+            "id": "aqua",
+            "amount": 10
+          },
+          {
+            "id": "alkimia",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aqua",
+        "!victus",
+        "!alkimia",
+        "!Slime"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:wisp",
+      "entity": "thaumcraft:wisp",
+      "legacy_entity_string": "Wisp",
+      "variant": "plain",
+      "display_name": "Wisp",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!Wisp",
+        "f_FLY"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:xp_orb",
+      "entity": "minecraft:xp_orb",
+      "legacy_entity_string": "XPOrb",
+      "variant": "plain",
+      "display_name": "Experience Orb",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "cognitio",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!cognitio",
+        "!XPOrb"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:armor_stand",
+      "entity": "minecraft:armor_stand",
+      "legacy_entity_string": "ArmorStand",
+      "variant": "plain",
+      "display_name": "Armor Stand",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:eldritchguardian",
+      "entity": "thaumcraft:eldritchguardian",
+      "legacy_entity_string": "EldritchGuardian",
+      "variant": "plain",
+      "display_name": "Eldritch Guardian",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!EldritchGuardian",
+        "!ORMOB"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:donkey",
+      "entity": "minecraft:donkey",
+      "legacy_entity_string": "Donkey",
+      "variant": "plain",
+      "display_name": "Donkey",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 15
+          },
+          {
+            "id": "terra",
+            "amount": 5
+          },
+          {
+            "id": "aer",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aer",
+        "!terra",
+        "!bestia",
+        "!Donkey"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:skeleton",
+      "entity": "minecraft:skeleton",
+      "legacy_entity_string": "Skeleton",
+      "variant": "plain",
+      "display_name": "Skeleton",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "exanimis",
+            "amount": 20
+          },
+          {
+            "id": "humanus",
+            "amount": 5
+          },
+          {
+            "id": "terra",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!terra",
+        "!exanimis",
+        "!humanus",
+        "!Skeleton"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:taintseed",
+      "entity": "thaumcraft:taintseed",
+      "legacy_entity_string": "TaintSeed",
+      "variant": "plain",
+      "display_name": "Taint Seed",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!TaintSeed"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:bottletaint",
+      "entity": "thaumcraft:bottletaint",
+      "legacy_entity_string": "BottleTaint",
+      "variant": "plain",
+      "display_name": "Bottled Taint",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:parrot",
+      "entity": "minecraft:parrot",
+      "legacy_entity_string": "Parrot",
+      "variant": "plain",
+      "display_name": "Parrot",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 5
+          },
+          {
+            "id": "volatus",
+            "amount": 5
+          },
+          {
+            "id": "sensus",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!volatus",
+        "!sensus",
+        "!bestia",
+        "!Parrot",
+        "f_FLY"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:ender_dragon",
+      "entity": "minecraft:ender_dragon",
+      "legacy_entity_string": "EnderDragon",
+      "variant": "plain",
+      "display_name": "Ender Dragon",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "alienis",
+            "amount": 50
+          },
+          {
+            "id": "bestia",
+            "amount": 30
+          },
+          {
+            "id": "perditio",
+            "amount": 50
+          },
+          {
+            "id": "volatus",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!perditio",
+        "!alienis",
+        "!volatus",
+        "!bestia",
+        "!EnderDragon"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:shulker_bullet",
+      "entity": "minecraft:shulker_bullet",
+      "legacy_entity_string": "ShulkerBullet",
+      "variant": "plain",
+      "display_name": "entity.ShulkerBullet.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:llama_spit",
+      "entity": "minecraft:llama_spit",
+      "legacy_entity_string": "LlamaSpit",
+      "variant": "plain",
+      "display_name": "entity.LlamaSpit.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_spit"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:snowball",
+      "entity": "minecraft:snowball",
+      "legacy_entity_string": "Snowball",
+      "variant": "plain",
+      "display_name": "Snowball",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:tnt",
+      "entity": "minecraft:tnt",
+      "legacy_entity_string": "PrimedTnt",
+      "variant": "plain",
+      "display_name": "Block of TNT",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:skeleton_horse",
+      "entity": "minecraft:skeleton_horse",
+      "legacy_entity_string": "SkeletonHorse",
+      "variant": "plain",
+      "display_name": "Skeleton Horse",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 5
+          },
+          {
+            "id": "exanimis",
+            "amount": 10
+          },
+          {
+            "id": "terra",
+            "amount": 5
+          },
+          {
+            "id": "aer",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aer",
+        "!terra",
+        "!exanimis",
+        "!bestia",
+        "!SkeletonHorse"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:fallingtaint",
+      "entity": "thaumcraft:fallingtaint",
+      "legacy_entity_string": "FallingTaint",
+      "variant": "plain",
+      "display_name": "Tainted Crust",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:item",
+      "entity": "minecraft:item",
+      "legacy_entity_string": "Item",
+      "variant": "plain",
+      "display_name": "item.tile.air",
+      "item_stack": "minecraft:air@0@{}",
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:vindication_illager",
+      "entity": "minecraft:vindication_illager",
+      "legacy_entity_string": "VindicationIllager",
+      "variant": "plain",
+      "display_name": "Vindicator",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "aversio",
+            "amount": 5
+          },
+          {
+            "id": "praecantatio",
+            "amount": 5
+          },
+          {
+            "id": "humanus",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!praecantatio",
+        "!aversio",
+        "!humanus",
+        "!VindicationIllager"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:elder_guardian",
+      "entity": "minecraft:elder_guardian",
+      "legacy_entity_string": "ElderGuardian",
+      "variant": "plain",
+      "display_name": "Elder Guardian",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:brainyzombie",
+      "entity": "thaumcraft:brainyzombie",
+      "legacy_entity_string": "BrainyZombie",
+      "variant": "plain",
+      "display_name": "Angry Zombie",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!BrainyZombie",
+        "f_BRAIN"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:golem",
+      "entity": "thaumcraft:golem",
+      "legacy_entity_string": "Golem",
+      "variant": "plain",
+      "display_name": "Golem",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_golem"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:villager_golem",
+      "entity": "minecraft:villager_golem",
+      "legacy_entity_string": "VillagerGolem",
+      "variant": "plain",
+      "display_name": "Iron Golem",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "metallum",
+            "amount": 15
+          },
+          {
+            "id": "humanus",
+            "amount": 5
+          },
+          {
+            "id": "machina",
+            "amount": 5
+          },
+          {
+            "id": "praecantatio",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!metallum",
+        "!praecantatio",
+        "!machina",
+        "!humanus",
+        "!VillagerGolem",
+        "f_golem"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:zombie_pigman",
+      "entity": "minecraft:zombie_pigman",
+      "legacy_entity_string": "PigZombie",
+      "variant": "plain",
+      "display_name": "Zombie Pigman",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "exanimis",
+            "amount": 15
+          },
+          {
+            "id": "ignis",
+            "amount": 15
+          },
+          {
+            "id": "bestia",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ignis",
+        "!exanimis",
+        "!bestia",
+        "!PigZombie"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:eldritchgolem",
+      "entity": "thaumcraft:eldritchgolem",
+      "legacy_entity_string": "EldritchGolem",
+      "variant": "plain",
+      "display_name": "Eldritch Construct",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ORMOB",
+        "!ORBOSS"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:taintswarm",
+      "entity": "thaumcraft:taintswarm",
+      "legacy_entity_string": "TaintSwarm",
+      "variant": "plain",
+      "display_name": "Taint Swarm",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!TaintSwarm",
+        "f_FLY"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:mule",
+      "entity": "minecraft:mule",
+      "legacy_entity_string": "Mule",
+      "variant": "plain",
+      "display_name": "Mule",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 15
+          },
+          {
+            "id": "terra",
+            "amount": 5
+          },
+          {
+            "id": "aer",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aer",
+        "!terra",
+        "!bestia",
+        "!Mule"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:ender_crystal",
+      "entity": "minecraft:ender_crystal",
+      "legacy_entity_string": "EnderCrystal",
+      "variant": "plain",
+      "display_name": "entity.EnderCrystal.name",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "alienis",
+            "amount": 15
+          },
+          {
+            "id": "auram",
+            "amount": 15
+          },
+          {
+            "id": "victus",
+            "amount": 15
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!victus",
+        "!auram",
+        "!alienis",
+        "!EnderCrystal"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:fireball",
+      "entity": "minecraft:fireball",
+      "legacy_entity_string": "Fireball",
+      "variant": "plain",
+      "display_name": "Fireball",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_fireball"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:giant",
+      "entity": "minecraft:giant",
+      "legacy_entity_string": "Giant",
+      "variant": "plain",
+      "display_name": "Giant",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "exanimis",
+            "amount": 25
+          },
+          {
+            "id": "humanus",
+            "amount": 15
+          },
+          {
+            "id": "terra",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!terra",
+        "!exanimis",
+        "!humanus",
+        "!Giant"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:zombie_villager",
+      "entity": "minecraft:zombie_villager",
+      "legacy_entity_string": "ZombieVillager",
+      "variant": "plain",
+      "display_name": "Zombie Villager",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:silverfish",
+      "entity": "minecraft:silverfish",
+      "legacy_entity_string": "Silverfish",
+      "variant": "plain",
+      "display_name": "Silverfish",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 5
+          },
+          {
+            "id": "terra",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!terra",
+        "!bestia",
+        "!Silverfish"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:sheep",
+      "entity": "minecraft:sheep",
+      "legacy_entity_string": "Sheep",
+      "variant": "plain",
+      "display_name": "Sheep",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 10
+          },
+          {
+            "id": "terra",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!terra",
+        "!bestia",
+        "!Sheep"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:guardian",
+      "entity": "minecraft:guardian",
+      "legacy_entity_string": "Guardian",
+      "variant": "plain",
+      "display_name": "Guardian",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 10
+          },
+          {
+            "id": "alienis",
+            "amount": 10
+          },
+          {
+            "id": "aqua",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aqua",
+        "!alienis",
+        "!bestia",
+        "!Guardian"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:husk",
+      "entity": "minecraft:husk",
+      "legacy_entity_string": "Husk",
+      "variant": "plain",
+      "display_name": "Husk",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "exanimis",
+            "amount": 20
+          },
+          {
+            "id": "humanus",
+            "amount": 10
+          },
+          {
+            "id": "ignis",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ignis",
+        "!exanimis",
+        "!humanus",
+        "!Husk"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:fluxrift",
+      "entity": "thaumcraft:fluxrift",
+      "legacy_entity_string": "FluxRift",
+      "variant": "plain",
+      "display_name": "Flux Rift",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_toomuchflux",
+        "!FluxRift"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:focuscloud",
+      "entity": "thaumcraft:focuscloud",
+      "legacy_entity_string": "FocusCloud",
+      "variant": "plain",
+      "display_name": "Focus Cloud",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:zombie_horse",
+      "entity": "minecraft:zombie_horse",
+      "legacy_entity_string": "ZombieHorse",
+      "variant": "plain",
+      "display_name": "Zombie Horse",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 10
+          },
+          {
+            "id": "exanimis",
+            "amount": 5
+          },
+          {
+            "id": "terra",
+            "amount": 5
+          },
+          {
+            "id": "aer",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aer",
+        "!terra",
+        "!exanimis",
+        "!bestia",
+        "!ZombieHorse"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:arcanebore",
+      "entity": "thaumcraft:arcanebore",
+      "legacy_entity_string": "ArcaneBore",
+      "variant": "plain",
+      "display_name": "Arcane Bore",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_golem"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:taintacle",
+      "entity": "thaumcraft:taintacle",
+      "legacy_entity_string": "Taintacle",
+      "variant": "plain",
+      "display_name": "Taintacle",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!Taintacle"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:dragon_fireball",
+      "entity": "minecraft:dragon_fireball",
+      "legacy_entity_string": "DragonFireball",
+      "variant": "plain",
+      "display_name": "Dragon Fireball",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_fireball"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:egg",
+      "entity": "minecraft:egg",
+      "legacy_entity_string": "ThrownEgg",
+      "variant": "plain",
+      "display_name": "entity.ThrownEgg.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:ender_pearl",
+      "entity": "minecraft:ender_pearl",
+      "legacy_entity_string": "ThrownEnderpearl",
+      "variant": "plain",
+      "display_name": "entity.ThrownEnderpearl.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:witch",
+      "entity": "minecraft:witch",
+      "legacy_entity_string": "Witch",
+      "variant": "plain",
+      "display_name": "Witch",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "humanus",
+            "amount": 15
+          },
+          {
+            "id": "praecantatio",
+            "amount": 5
+          },
+          {
+            "id": "alkimia",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!praecantatio",
+        "!alkimia",
+        "!humanus",
+        "!Witch"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:wither",
+      "entity": "minecraft:wither",
+      "legacy_entity_string": "WitherBoss",
+      "variant": "plain",
+      "display_name": "Wither",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "exanimis",
+            "amount": 50
+          },
+          {
+            "id": "perditio",
+            "amount": 25
+          },
+          {
+            "id": "ignis",
+            "amount": 25
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ignis",
+        "!perditio",
+        "!exanimis",
+        "!WitherBoss"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:falling_block",
+      "entity": "minecraft:falling_block",
+      "legacy_entity_string": "FallingSand",
+      "variant": "plain",
+      "display_name": "Falling Block",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:illusion_illager",
+      "entity": "minecraft:illusion_illager",
+      "legacy_entity_string": "IllusionIllager",
+      "variant": "plain",
+      "display_name": "Illusioner",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "sensus",
+            "amount": 5
+          },
+          {
+            "id": "praecantatio",
+            "amount": 5
+          },
+          {
+            "id": "humanus",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!praecantatio",
+        "!sensus",
+        "!humanus",
+        "!IllusionIllager"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:creeper",
+      "entity": "minecraft:creeper",
+      "legacy_entity_string": "Creeper",
+      "variant": "plain",
+      "display_name": "Creeper",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "herba",
+            "amount": 15
+          },
+          {
+            "id": "ignis",
+            "amount": 15
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ignis",
+        "!herba",
+        "!Creeper"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:stray",
+      "entity": "minecraft:stray",
+      "legacy_entity_string": "Stray",
+      "variant": "plain",
+      "display_name": "Stray",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "exanimis",
+            "amount": 20
+          },
+          {
+            "id": "humanus",
+            "amount": 5
+          },
+          {
+            "id": "vinculum",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!vinculum",
+        "!exanimis",
+        "!humanus",
+        "!Stray"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:cultistportalgreater",
+      "entity": "thaumcraft:cultistportalgreater",
+      "legacy_entity_string": "CultistPortalGreater",
+      "variant": "plain",
+      "display_name": "Greater Crimson Portal",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:wither_skull",
+      "entity": "minecraft:wither_skull",
+      "legacy_entity_string": "WitherSkull",
+      "variant": "plain",
+      "display_name": "entity.WitherSkull.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_fireball"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:taintseedprime",
+      "entity": "thaumcraft:taintseedprime",
+      "legacy_entity_string": "TaintSeedPrime",
+      "variant": "plain",
+      "display_name": "Giant Taint Seed",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!TaintSeed"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:mindspider",
+      "entity": "thaumcraft:mindspider",
+      "legacy_entity_string": "MindSpider",
+      "variant": "plain",
+      "display_name": "Mind Spider",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_SPIDER",
+        "!ORMOB"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:shulker",
+      "entity": "minecraft:shulker",
+      "legacy_entity_string": "Shulker",
+      "variant": "plain",
+      "display_name": "Shulker",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "alienis",
+            "amount": 10
+          },
+          {
+            "id": "vinculum",
+            "amount": 5
+          },
+          {
+            "id": "volatus",
+            "amount": 5
+          },
+          {
+            "id": "praemunio",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!alienis",
+        "!volatus",
+        "!vinculum",
+        "!praemunio",
+        "!Shulker",
+        "f_golem"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:turretadvanced",
+      "entity": "thaumcraft:turretadvanced",
+      "legacy_entity_string": "TurretAdvanced",
+      "variant": "plain",
+      "display_name": "Advanced Automated Crossbow",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_golem"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:focusmine",
+      "entity": "thaumcraft:focusmine",
+      "legacy_entity_string": "Focusmine",
+      "variant": "plain",
+      "display_name": "entity.Focusmine.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:spectral_arrow",
+      "entity": "minecraft:spectral_arrow",
+      "legacy_entity_string": "SpectralArrow",
+      "variant": "plain",
+      "display_name": "entity.SpectralArrow.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "f_arrow"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:tnt_minecart",
+      "entity": "minecraft:tnt_minecart",
+      "legacy_entity_string": "MinecartTNT",
+      "variant": "plain",
+      "display_name": "entity.MinecartTNT.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:cave_spider",
+      "entity": "minecraft:cave_spider",
+      "legacy_entity_string": "CaveSpider",
+      "variant": "plain",
+      "display_name": "Cave Spider",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 5
+          },
+          {
+            "id": "mortuus",
+            "amount": 10
+          },
+          {
+            "id": "vinculum",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!mortuus",
+        "!vinculum",
+        "!bestia",
+        "!CaveSpider",
+        "f_SPIDER"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:spellbat",
+      "entity": "thaumcraft:spellbat",
+      "legacy_entity_string": "Spellbat",
+      "variant": "plain",
+      "display_name": "Spellbat",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:villager",
+      "entity": "minecraft:villager",
+      "legacy_entity_string": "Villager",
+      "variant": "plain",
+      "display_name": "Farmer",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "humanus",
+            "amount": 15
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!humanus",
+        "!Villager"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:wolf",
+      "entity": "minecraft:wolf",
+      "legacy_entity_string": "Wolf",
+      "variant": "plain",
+      "display_name": "Wolf",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 15
+          },
+          {
+            "id": "terra",
+            "amount": 10
+          },
+          {
+            "id": "aversio",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!terra",
+        "!aversio",
+        "!bestia",
+        "!Wolf"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:ocelot",
+      "entity": "minecraft:ocelot",
+      "legacy_entity_string": "Ozelot",
+      "variant": "plain",
+      "display_name": "Ocelot",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 10
+          },
+          {
+            "id": "perditio",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!perditio",
+        "!bestia",
+        "!Ozelot"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:vex",
+      "entity": "minecraft:vex",
+      "legacy_entity_string": "Vex",
+      "variant": "plain",
+      "display_name": "Vex",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "alienis",
+            "amount": 5
+          },
+          {
+            "id": "volatus",
+            "amount": 5
+          },
+          {
+            "id": "praecantatio",
+            "amount": 5
+          },
+          {
+            "id": "humanus",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!praecantatio",
+        "!alienis",
+        "!volatus",
+        "!humanus",
+        "!Vex"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:cultistcleric",
+      "entity": "thaumcraft:cultistcleric",
+      "legacy_entity_string": "CultistCleric",
+      "variant": "plain",
+      "display_name": "Crimson Cleric",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!CrimsonCultist"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:taintacletiny",
+      "entity": "thaumcraft:taintacletiny",
+      "legacy_entity_string": "TaintacleTiny",
+      "variant": "plain",
+      "display_name": "Taint Tendril",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!Taintacle"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:causalitycollapser",
+      "entity": "thaumcraft:causalitycollapser",
+      "legacy_entity_string": "CausalityCollapser",
+      "variant": "plain",
+      "display_name": "entity.CausalityCollapser.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:pig",
+      "entity": "minecraft:pig",
+      "legacy_entity_string": "Pig",
+      "variant": "plain",
+      "display_name": "Pig",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 10
+          },
+          {
+            "id": "terra",
+            "amount": 10
+          },
+          {
+            "id": "desiderium",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!terra",
+        "!desiderium",
+        "!bestia",
+        "!Pig"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:zombie",
+      "entity": "minecraft:zombie",
+      "legacy_entity_string": "Zombie",
+      "variant": "plain",
+      "display_name": "Zombie",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "exanimis",
+            "amount": 20
+          },
+          {
+            "id": "humanus",
+            "amount": 10
+          },
+          {
+            "id": "terra",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!terra",
+        "!exanimis",
+        "!humanus",
+        "!Zombie"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:giantbrainyzombie",
+      "entity": "thaumcraft:giantbrainyzombie",
+      "legacy_entity_string": "GiantBrainyZombie",
+      "variant": "plain",
+      "display_name": "Furious Zombie",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!BrainyZombie",
+        "f_BRAIN"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:followitem",
+      "entity": "thaumcraft:followitem",
+      "legacy_entity_string": "FollowItem",
+      "variant": "plain",
+      "display_name": "item.tile.air",
+      "item_stack": "minecraft:air@0@{}",
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:taintcrawler",
+      "entity": "thaumcraft:taintcrawler",
+      "legacy_entity_string": "TaintCrawler",
+      "variant": "plain",
+      "display_name": "Tainted Crawler",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!TaintCrawler"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:ghast",
+      "entity": "minecraft:ghast",
+      "legacy_entity_string": "Ghast",
+      "variant": "plain",
+      "display_name": "Ghast",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "exanimis",
+            "amount": 15
+          },
+          {
+            "id": "ignis",
+            "amount": 15
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ignis",
+        "!exanimis",
+        "!Ghast",
+        "f_FLY"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:focusprojectile",
+      "entity": "thaumcraft:focusprojectile",
+      "legacy_entity_string": "FocusProjectile",
+      "variant": "plain",
+      "display_name": "Focus Projectile",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:mooshroom",
+      "entity": "minecraft:mooshroom",
+      "legacy_entity_string": "MushroomCow",
+      "variant": "plain",
+      "display_name": "Mooshroom",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 15
+          },
+          {
+            "id": "herba",
+            "amount": 15
+          },
+          {
+            "id": "terra",
+            "amount": 15
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!terra",
+        "!herba",
+        "!bestia",
+        "!MushroomCow"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:commandblock_minecart",
+      "entity": "minecraft:commandblock_minecart",
+      "legacy_entity_string": "MinecartCommandBlock",
+      "variant": "plain",
+      "display_name": "entity.MinecartCommandBlock.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:thaumslime",
+      "entity": "thaumcraft:thaumslime",
+      "legacy_entity_string": "ThaumSlime",
+      "variant": "plain",
+      "display_name": "Thaumic Slime",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ThaumSlime"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:leash_knot",
+      "entity": "minecraft:leash_knot",
+      "legacy_entity_string": "LeashKnot",
+      "variant": "plain",
+      "display_name": "entity.LeashKnot.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:taintaclegiant",
+      "entity": "thaumcraft:taintaclegiant",
+      "legacy_entity_string": "TaintacleGiant",
+      "variant": "plain",
+      "display_name": "Giant Taintacle",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!Taintacle",
+        "!ORMOB"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:horse",
+      "entity": "minecraft:horse",
+      "legacy_entity_string": "Horse",
+      "variant": "plain",
+      "display_name": "Horse",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 15
+          },
+          {
+            "id": "terra",
+            "amount": 5
+          },
+          {
+            "id": "aer",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aer",
+        "!terra",
+        "!bestia",
+        "!Horse"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:spawner_minecart",
+      "entity": "minecraft:spawner_minecart",
+      "legacy_entity_string": "MinecartSpawner",
+      "variant": "plain",
+      "display_name": "entity.MinecartSpawner.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:specialitem",
+      "entity": "thaumcraft:specialitem",
+      "legacy_entity_string": "SpecialItem",
+      "variant": "plain",
+      "display_name": "item.tile.air",
+      "item_stack": "minecraft:air@0@{}",
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:minecart",
+      "entity": "minecraft:minecart",
+      "legacy_entity_string": "MinecartRideable",
+      "variant": "plain",
+      "display_name": "entity.MinecartRideable.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:chest_minecart",
+      "entity": "minecraft:chest_minecart",
+      "legacy_entity_string": "MinecartChest",
+      "variant": "plain",
+      "display_name": "Minecart with Chest",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:eye_of_ender_signal",
+      "entity": "minecraft:eye_of_ender_signal",
+      "legacy_entity_string": "EyeOfEnderSignal",
+      "variant": "plain",
+      "display_name": "entity.EyeOfEnderSignal.name",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": false,
+      "still_scannable": false,
+      "suppress_message": false,
+      "matched_research_keys": [],
+      "matched_predicates": []
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:enderman",
+      "entity": "minecraft:enderman",
+      "legacy_entity_string": "Enderman",
+      "variant": "plain",
+      "display_name": "Enderman",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "alienis",
+            "amount": 10
+          },
+          {
+            "id": "motus",
+            "amount": 15
+          },
+          {
+            "id": "desiderium",
+            "amount": 5
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!motus",
+        "!alienis",
+        "!desiderium",
+        "!Enderman",
+        "f_TELEPORT"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric",
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:thaumcraft:cultistknight",
+      "entity": "thaumcraft:cultistknight",
+      "legacy_entity_string": "CultistKnight",
+      "variant": "plain",
+      "display_name": "Crimson Knight",
+      "item_stack": null,
+      "aspect_source": "none",
+      "object_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!CrimsonCultist"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanEntity"
+      ]
+    },
+    {
+      "category": "plain",
+      "comparison_key": "entity:minecraft:squid",
+      "entity": "minecraft:squid",
+      "legacy_entity_string": "Squid",
+      "variant": "plain",
+      "display_name": "Squid",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 5
+          },
+          {
+            "id": "aqua",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aqua",
+        "!bestia",
+        "!Squid"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "state_variant",
+      "comparison_key": "entity:minecraft:creeper#powered",
+      "entity": "minecraft:creeper",
+      "legacy_entity_string": "Creeper",
+      "variant": "powered",
+      "display_name": "Creeper",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "herba",
+            "amount": 15
+          },
+          {
+            "id": "ignis",
+            "amount": 15
+          },
+          {
+            "id": "potentia",
+            "amount": 15
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!ignis",
+        "!potentia",
+        "!herba",
+        "!Creeper"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "state_variant",
+      "comparison_key": "entity:minecraft:guardian#elder_nbt",
+      "entity": "minecraft:guardian",
+      "legacy_entity_string": "Guardian",
+      "variant": "elder_nbt",
+      "display_name": "Guardian",
+      "item_stack": null,
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "bestia",
+            "amount": 10
+          },
+          {
+            "id": "alienis",
+            "amount": 10
+          },
+          {
+            "id": "aqua",
+            "amount": 10
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!aqua",
+        "!alienis",
+        "!bestia",
+        "!Guardian"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    },
+    {
+      "category": "item_entity",
+      "comparison_key": "entity:minecraft:item#diamond_stack",
+      "entity": "minecraft:item",
+      "legacy_entity_string": "Item",
+      "variant": "diamond_stack",
+      "display_name": "item.item.diamond",
+      "item_stack": "minecraft:diamond@0@{}",
+      "aspect_source": "object",
+      "object_aspects": {
+        "result_kind": "aspects",
+        "aspects": [
+          {
+            "id": "vitreus",
+            "amount": 15
+          },
+          {
+            "id": "desiderium",
+            "amount": 15
+          }
+        ]
+      },
+      "generated_aspects": {
+        "result_kind": "null",
+        "aspects": []
+      },
+      "scan_found": true,
+      "still_scannable": true,
+      "suppress_message": false,
+      "matched_research_keys": [
+        "!vitreus",
+        "!desiderium",
+        "!minecraft:diamond0"
+      ],
+      "matched_predicates": [
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.api.research.ScanAspect",
+        "thaumcraft.common.lib.research.ScanGeneric"
+      ]
+    }
+  ]
+}

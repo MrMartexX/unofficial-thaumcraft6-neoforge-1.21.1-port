@@ -28,6 +28,16 @@
       ]
     },
     {
+      "item": "thaumcraft:thaumometer",
+      "aspects": [
+        { "aspect": "thaumcraft:sensus", "amount": 10 },
+        { "aspect": "thaumcraft:auram", "amount": 10 },
+        { "aspect": "thaumcraft:metallum", "amount": 30 },
+        { "aspect": "thaumcraft:desiderium", "amount": 30 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 3 }
+      ]
+    },
+    {
       "item": "thaumcraft:slab_ancient",
       "aspects": [
         { "aspect": "thaumcraft:terra", "amount": 1 },

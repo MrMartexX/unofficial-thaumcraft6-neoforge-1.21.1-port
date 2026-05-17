@@ -62,5 +62,11 @@ public final class TCCreativeTabOrder {
 
         output.accept(TCItems.AMBER_BLOCK.get());
         output.accept(TCItems.AMBER_BRICK.get());
+
+        output.accept(TCItems.AMBER.get());
+        output.accept(TCItems.QUICKSILVER.get());
+        output.accept(TCItems.FABRIC.get());
+        output.accept(TCItems.THAUMOMETER.get());
+        output.accept(TCItems.GOGGLES.get());
     }
 }

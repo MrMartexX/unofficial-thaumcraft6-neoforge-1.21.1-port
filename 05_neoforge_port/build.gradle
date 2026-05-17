@@ -61,11 +61,27 @@ neoForge {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             def aspectDumpEnabled = providers.gradleProperty('tcAspectDump').orNull ?: System.getProperty('tc.aspectDump')
             def aspectDumpPath = providers.gradleProperty('tcAspectDumpPath').orNull ?: System.getProperty('tc.aspectDumpPath')
+            def scanDumpEnabled = providers.gradleProperty('tcScanDump').orNull ?: System.getProperty('tc.scanDump')
+            def scanDumpPath = providers.gradleProperty('tcScanDumpPath').orNull ?: System.getProperty('tc.scanDumpPath')
+            def scanEntityDumpEnabled = providers.gradleProperty('tcScanEntityDump').orNull ?: System.getProperty('tc.scanEntityDump')
+            def scanEntityDumpPath = providers.gradleProperty('tcScanEntityDumpPath').orNull ?: System.getProperty('tc.scanEntityDumpPath')
             if (aspectDumpEnabled != null) {
                 systemProperty 'tc.aspectDump', aspectDumpEnabled
             }
             if (aspectDumpPath != null) {
                 systemProperty 'tc.aspectDumpPath', aspectDumpPath
+            }
+            if (scanDumpEnabled != null) {
+                systemProperty 'tc.scanDump', scanDumpEnabled
+            }
+            if (scanDumpPath != null) {
+                systemProperty 'tc.scanDumpPath', scanDumpPath
+            }
+            if (scanEntityDumpEnabled != null) {
+                systemProperty 'tc.scanEntityDump', scanEntityDumpEnabled
+            }
+            if (scanEntityDumpPath != null) {
+                systemProperty 'tc.scanEntityDumpPath', scanEntityDumpPath
             }
             logLevel = org.slf4j.event.Level.DEBUG
         }

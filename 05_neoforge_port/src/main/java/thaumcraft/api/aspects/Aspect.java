@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import thaumcraft.Thaumcraft;
+import thaumcraft.api.research.ScanAspect;
+import thaumcraft.api.research.ScanningManager;
 
 public class Aspect {
     String tag;
@@ -33,6 +35,7 @@ public class Aspect {
         this.image = image;
         this.blend = blend;
         aspects.put(tag, this);
+        ScanningManager.addScannableThing(new ScanAspect("!" + tag, this));
 
         if (components != null) {
             int h = (components[0].getTag() + components[1].getTag()).hashCode();

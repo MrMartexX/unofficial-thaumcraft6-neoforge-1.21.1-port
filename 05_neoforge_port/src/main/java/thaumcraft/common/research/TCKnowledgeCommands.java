@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -94,14 +96,33 @@ public final class TCKnowledgeCommands {
     private static com.mojang.brigadier.builder.LiteralArgumentBuilder<CommandSourceStack> researchTree() {
         return Commands.literal("research")
                 .then(Commands.literal("list")
-                        .executes(TCKnowledgeCommands::listKnownResearchKeysUnavailable))
+                        .executes(TCKnowledgeCommands::listKnownResearchEntries))
+                .then(Commands.literal("validate")
+                        .executes(TCKnowledgeCommands::validateResearchData))
+                .then(Commands.literal("info")
+                        .then(Commands.argument("research_key", StringArgumentType.word())
+                                .executes(TCKnowledgeCommands::showResearchEntryInfo)))
                 .then(Commands.argument("player", EntityArgument.player())
                         .then(Commands.literal("list")
                                 .executes(TCKnowledgeCommands::listPlayerResearch))
+                        .then(Commands.literal("visible")
+                                .executes(TCKnowledgeCommands::listVisibleResearch)
+                                .then(Commands.argument("category", StringArgumentType.word())
+                                        .executes(TCKnowledgeCommands::listVisibleResearchInCategory)))
                         .then(Commands.literal("all")
-                                .executes(TCKnowledgeCommands::researchAllUnavailable))
+                                .executes(TCKnowledgeCommands::completeAllResearch))
                         .then(Commands.literal("reset")
                                 .executes(TCKnowledgeCommands::resetPlayerResearch))
+                        .then(Commands.literal("status")
+                                .then(Commands.argument("research_key", StringArgumentType.word())
+                                        .executes(TCKnowledgeCommands::showPlayerResearchStatus)))
+                        .then(Commands.literal("stage")
+                                .then(Commands.argument("research_key", StringArgumentType.word())
+                                        .executes(TCKnowledgeCommands::showPlayerCurrentStageRequirements)
+                                        .then(Commands.literal("check")
+                                                .executes(TCKnowledgeCommands::showPlayerCurrentStageRequirements))
+                                        .then(Commands.literal("advance")
+                                                .executes(TCKnowledgeCommands::advancePlayerCurrentStage))))
                         .then(Commands.literal("revoke")
                                 .then(Commands.argument("research_key", StringArgumentType.word())
                                         .executes(TCKnowledgeCommands::revokePlayerResearch)))
@@ -224,11 +245,69 @@ public final class TCKnowledgeCommands {
         return 1;
     }
 
-    private static int listKnownResearchKeysUnavailable(CommandContext<CommandSourceStack> context) {
-        context.getSource().sendFailure(Component.literal(
-                "Research data registry is not ported yet. Use /thaumcraft research <player> list for stored player research keys."
-        ));
-        return 0;
+    private static int listKnownResearchEntries(CommandContext<CommandSourceStack> context) {
+        TCResearchData data = TCResearchManager.data();
+        context.getSource().sendSuccess(() -> Component.literal(
+                "Loaded Thaumcraft research: " + data.categories().size() + " categories, "
+                        + data.entries().size() + " entries, " + data.stageCount() + " stages, "
+                        + data.addendumCount() + " addenda."
+        ), false);
+
+        data.categories().values().stream()
+                .sorted(Comparator.comparing(TCResearchCategoryDefinition::key))
+                .forEach(category -> {
+                    List<TCResearchEntryDefinition> entries = TCResearchManager.entriesByCategory(category.key());
+                    context.getSource().sendSuccess(() -> Component.literal(
+                            "- " + category.key() + ": " + entries.size() + " entries"
+                    ), false);
+                });
+        return data.entries().size();
+    }
+
+    private static int validateResearchData(CommandContext<CommandSourceStack> context) {
+        TCResearchValidationReport report = TCResearchManager.validateReferences();
+        context.getSource().sendSuccess(() -> Component.literal(
+                "Research references: entry=" + report.entryReferenceCount()
+                        + ", external_scan_or_flag=" + report.externalTriggerReferenceCount()
+                        + ", unresolved=" + report.unresolvedReferenceCount()
+        ), false);
+
+        if (report.hasUnresolvedReferences()) {
+            report.unresolvedReferences().stream()
+                    .limit(10)
+                    .forEach(reference -> context.getSource().sendFailure(Component.literal(
+                            reference.ownerKey() + " " + reference.location()
+                                    + " raw=" + reference.rawReference()
+                                    + " normalized=" + reference.normalizedReference()
+                    )));
+            return report.unresolvedReferenceCount();
+        }
+
+        return 1;
+    }
+
+    private static int showResearchEntryInfo(CommandContext<CommandSourceStack> context) {
+        String key = TCPlayerKnowledge.normalizeResearchKey(StringArgumentType.getString(context, "research_key"));
+        return TCResearchManager.getEntry(key).map(entry -> {
+            context.getSource().sendSuccess(() -> Component.literal(
+                    entry.key() + " [" + entry.category() + "] at " + entry.locationX() + "," + entry.locationY()
+                            + " stages=" + entry.stages().size()
+                            + " addenda=" + entry.addenda().size()
+            ), false);
+            if (!entry.parents().isEmpty()) {
+                context.getSource().sendSuccess(() -> Component.literal("parents: " + String.join(", ", entry.parents())), false);
+            }
+            if (!entry.siblings().isEmpty()) {
+                context.getSource().sendSuccess(() -> Component.literal("siblings: " + String.join(", ", entry.siblings())), false);
+            }
+            if (!entry.meta().isEmpty()) {
+                context.getSource().sendSuccess(() -> Component.literal("meta: " + String.join(", ", entry.meta())), false);
+            }
+            return 1;
+        }).orElseGet(() -> {
+            context.getSource().sendFailure(Component.literal("Unknown loaded research entry: " + key));
+            return 0;
+        });
     }
 
     private static int listPlayerResearch(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
@@ -242,17 +321,82 @@ public final class TCKnowledgeCommands {
         }
 
         context.getSource().sendSuccess(() -> Component.literal(
-                player.getGameProfile().getName() + " stored Thaumcraft research keys: " + String.join(", ", keys)
+                player.getGameProfile().getName() + " stored Thaumcraft research keys:"
         ), false);
+
+        for (String key : keys) {
+            context.getSource().sendSuccess(() -> Component.literal("- " + formatResearchState(knowledge, key)), false);
+        }
 
         return keys.size();
     }
 
-    private static int researchAllUnavailable(CommandContext<CommandSourceStack> context) {
-        context.getSource().sendFailure(Component.literal(
-                "Research all is blocked until the research category and entry loader is ported."
-        ));
-        return 0;
+    private static int listVisibleResearch(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, "player");
+        int count = 0;
+
+        context.getSource().sendSuccess(() -> Component.literal(
+                "Visible Thaumcraft research for " + player.getGameProfile().getName() + ":"
+        ), false);
+
+        for (TCResearchCategoryDefinition category : TCResearchManager.categories().stream()
+                .sorted(Comparator.comparing(TCResearchCategoryDefinition::key))
+                .toList()) {
+            if (!TCResearchManager.isCategoryVisible(TCPlayerKnowledgeStore.get(player), category.key())) {
+                continue;
+            }
+            List<TCResearchEntryDefinition> visible = TCResearchManager.visibleEntriesByCategory(player, category.key());
+            if (!visible.isEmpty()) {
+                int categoryCount = visible.size();
+                count += categoryCount;
+                context.getSource().sendSuccess(() -> Component.literal("- " + category.key() + ": " + categoryCount), false);
+            }
+        }
+
+        int total = count;
+        context.getSource().sendSuccess(() -> Component.literal("Total visible entries: " + total), false);
+        return count;
+    }
+
+    private static int listVisibleResearchInCategory(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, "player");
+        String category = TCPlayerKnowledge.normalizeCategory(StringArgumentType.getString(context, "category"));
+
+        if (!TCResearchManager.isCategoryVisible(TCPlayerKnowledgeStore.get(player), category)) {
+            context.getSource().sendFailure(Component.literal("Research category is not visible: " + category));
+            return 0;
+        }
+
+        List<TCResearchEntryDefinition> visible = TCResearchManager.visibleEntriesByCategory(player, category);
+        context.getSource().sendSuccess(() -> Component.literal(
+                "Visible Thaumcraft research in " + category + " for " + player.getGameProfile().getName() + ":"
+        ), false);
+
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        for (TCResearchEntryDefinition entry : visible) {
+            context.getSource().sendSuccess(() -> Component.literal("- " + formatResearchState(knowledge, entry.key())), false);
+        }
+
+        return visible.size();
+    }
+
+    private static int completeAllResearch(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, "player");
+        int progressed = 0;
+
+        for (TCResearchEntryDefinition entry : TCResearchManager.entries()) {
+            if (TCResearchManager.completeResearch(player, entry.key(), false)) {
+                progressed++;
+            }
+        }
+
+        int progressedCount = progressed;
+        context.getSource().sendSuccess(() -> Component.literal(
+                "Completed/progressed " + progressedCount + " loaded Thaumcraft research entr"
+                        + (progressedCount == 1 ? "y" : "ies") + " for " + player.getGameProfile().getName()
+                        + ". Rewards, recipes and GUI flags are still limited to the current progression slice."
+        ), true);
+        return progressed;
     }
 
     private static int resetPlayerResearch(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
@@ -267,17 +411,88 @@ public final class TCKnowledgeCommands {
         return 1;
     }
 
+    private static int showPlayerResearchStatus(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, "player");
+        String key = TCPlayerKnowledge.normalizeResearchKey(StringArgumentType.getString(context, "research_key"));
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        boolean requisites = TCResearchManager.doesPlayerHaveRequisites(player, key);
+        boolean visible = TCResearchManager.isResearchVisible(player, key);
+        boolean unlockable = TCResearchManager.canUnlockResearch(player, key);
+
+        context.getSource().sendSuccess(() -> Component.literal(
+                player.getGameProfile().getName() + " " + formatResearchState(knowledge, key)
+                        + ", visible=" + visible
+                        + ", can_unlock=" + unlockable
+                        + ", requisites=" + requisites
+        ), false);
+
+        sendStageRequirementReport(context.getSource(), TCResearchManager.checkCurrentStageRequirements(player, key), 3);
+        return TCResearchManager.isResearchKnown(knowledge, key) ? 1 : 0;
+    }
+
+    private static int showPlayerCurrentStageRequirements(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, "player");
+        String key = TCPlayerKnowledge.normalizeResearchKey(StringArgumentType.getString(context, "research_key"));
+        TCResearchStageRequirementResult result = TCResearchManager.checkCurrentStageRequirements(player, key);
+        sendStageRequirementReport(context.getSource(), result, 12);
+        return result.passed() ? 1 : 0;
+    }
+
+    private static int advancePlayerCurrentStage(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerPlayer player = EntityArgument.getPlayer(context, "player");
+        String key = TCPlayerKnowledge.normalizeResearchKey(StringArgumentType.getString(context, "research_key"));
+        TCResearchStageRequirementResult result = TCResearchManager.checkCurrentStageRequirements(player, key);
+
+        if (!result.hasStage() || !result.passed()) {
+            context.getSource().sendFailure(Component.literal(
+                    "Cannot advance current Thaumcraft research stage for " + player.getGameProfile().getName() + "."
+            ));
+            sendStageRequirementReport(context.getSource(), result, 12);
+            return 0;
+        }
+
+        boolean progressed = TCResearchManager.completeCurrentStageWithChecks(player, key, true, true);
+        if (!progressed) {
+            context.getSource().sendFailure(Component.literal(
+                    "Stage requirements passed, but checked progression failed for " + key + "."
+            ));
+            return 0;
+        }
+
+        TCPlayerKnowledge updated = TCPlayerKnowledgeStore.get(player);
+        context.getSource().sendSuccess(() -> Component.literal(
+                "Advanced current Thaumcraft research stage for " + player.getGameProfile().getName()
+                        + ": " + formatResearchState(updated, key)
+        ), true);
+        return Math.max(1, updated.getResearchStage(key));
+    }
+
     private static int grantPlayerResearch(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         String key = TCPlayerKnowledge.normalizeResearchKey(StringArgumentType.getString(context, "research_key"));
 
-        TCPlayerKnowledgeStore.mutate(player, knowledge -> knowledge.addResearch(key));
+        boolean progressed = TCResearchManager.completeResearch(player, key, true);
+
+        if (!progressed && TCResearchManager.isResearchComplete(TCPlayerKnowledgeStore.get(player), key)) {
+            context.getSource().sendFailure(Component.literal(
+                    player.getGameProfile().getName() + " already has complete Thaumcraft research key " + key + "."
+            ));
+            return 0;
+        }
+
+        if (!progressed) {
+            context.getSource().sendFailure(Component.literal(
+                    "Could not progress Thaumcraft research key " + key + " for " + player.getGameProfile().getName()
+                            + ". Missing parent requisites or invalid key."
+            ));
+            return 0;
+        }
 
         context.getSource().sendSuccess(() -> Component.literal(
-                "Granted stored Thaumcraft research key " + key + " to " + player.getGameProfile().getName() + "."
+                "Completed/progressed Thaumcraft research key " + key + " for " + player.getGameProfile().getName() + "."
         ), true);
 
-        return 1;
+        return Math.max(1, TCPlayerKnowledgeStore.get(player).getResearchStage(key));
     }
 
     private static int revokePlayerResearch(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
@@ -307,6 +522,33 @@ public final class TCKnowledgeCommands {
                     "- " + type.id() + " " + entry.getKey() + ": points=" + points + ", raw=" + entry.getValue()
             ), false);
         }
+    }
+
+    private static String formatResearchState(TCPlayerKnowledge knowledge, String key) {
+        TCResearchStatus status = TCResearchManager.getResearchStatus(knowledge, key);
+        int stage = knowledge.getResearchStage(key);
+        Set<TCResearchFlag> flags = knowledge.researchFlags().getOrDefault(key, Set.of());
+        String suffix = flags.isEmpty() ? "" : ", flags=" + flags;
+        return key + " [" + status + ", stage=" + stage + suffix + "]";
+    }
+
+    private static void sendStageRequirementReport(CommandSourceStack source, TCResearchStageRequirementResult result, int detailLimit) {
+        int displayStage = result.stageIndex() + 1;
+        source.sendSuccess(() -> Component.literal(
+                "Stage requirements for " + result.researchKey()
+                        + ": stage=" + displayStage + "/" + result.totalStages()
+                        + ", passed=" + result.passed()
+                        + ", satisfied=" + result.satisfied().size()
+                        + ", missing=" + result.missing().size()
+                        + ", blocked=" + result.blocked().size()
+        ), false);
+
+        result.missing().stream()
+                .limit(detailLimit)
+                .forEach(line -> source.sendFailure(Component.literal("- missing " + line)));
+        result.blocked().stream()
+                .limit(detailLimit)
+                .forEach(line -> source.sendFailure(Component.literal("- blocked " + line)));
     }
 
     private static TCKnowledgeType parseTypeOrFail(CommandContext<CommandSourceStack> context) {

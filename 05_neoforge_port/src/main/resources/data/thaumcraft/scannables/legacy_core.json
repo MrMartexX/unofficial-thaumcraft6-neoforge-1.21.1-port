@@ -1,0 +1,283 @@
+{
+  "replace": false,
+  "scannables": [
+    {
+      "type": "block",
+      "research": "!ORBLOCK1",
+      "blocks": [
+        "thaumcraft:stone_ancient",
+        "thaumcraft:stone_ancient_tile"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "!ORBLOCK2",
+      "blocks": [
+        "thaumcraft:stone_eldritch_tile"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "!ORBLOCK3",
+      "blocks": [
+        "thaumcraft:stone_ancient_glyphed"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "ORE",
+      "blocks": [
+        "thaumcraft:ore_amber",
+        "thaumcraft:ore_cinnabar",
+        "thaumcraft:crystal_aer",
+        "thaumcraft:crystal_ignis",
+        "thaumcraft:crystal_aqua",
+        "thaumcraft:crystal_terra",
+        "thaumcraft:crystal_ordo",
+        "thaumcraft:crystal_perditio",
+        "thaumcraft:crystal_vitium"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "!OREAMBER",
+      "blocks": [
+        "thaumcraft:ore_amber"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "!ORECINNABAR",
+      "blocks": [
+        "thaumcraft:ore_cinnabar"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "!ORECRYSTAL",
+      "blocks": [
+        "thaumcraft:crystal_aer",
+        "thaumcraft:crystal_ignis",
+        "thaumcraft:crystal_aqua",
+        "thaumcraft:crystal_terra",
+        "thaumcraft:crystal_ordo",
+        "thaumcraft:crystal_perditio",
+        "thaumcraft:crystal_vitium"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "PLANTS",
+      "blocks": [
+        "thaumcraft:log_greatwood",
+        "thaumcraft:log_silverwood",
+        "thaumcraft:sapling_greatwood",
+        "thaumcraft:sapling_silverwood",
+        "thaumcraft:cinderpearl",
+        "thaumcraft:shimmerleaf",
+        "thaumcraft:vishroom"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "!PLANTWOOD",
+      "blocks": [
+        "thaumcraft:log_greatwood",
+        "thaumcraft:log_silverwood",
+        "thaumcraft:sapling_greatwood",
+        "thaumcraft:sapling_silverwood"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "!PLANTCINDERPEARL",
+      "blocks": [
+        "thaumcraft:cinderpearl"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "!PLANTSHIMMERLEAF",
+      "blocks": [
+        "thaumcraft:shimmerleaf"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "!PLANTVISHROOM",
+      "blocks": [
+        "thaumcraft:vishroom"
+      ]
+    },
+    {
+      "type": "item",
+      "research": "!DRAGONBREATH",
+      "items": [
+        "minecraft:dragon_breath"
+      ]
+    },
+    {
+      "type": "item",
+      "research": "!TOTEMUNDYING",
+      "items": [
+        "minecraft:totem_of_undying"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "f_TELEPORT",
+      "blocks": [
+        "minecraft:nether_portal",
+        "minecraft:end_portal",
+        "minecraft:end_portal_frame"
+      ]
+    },
+    {
+      "type": "item",
+      "research": "f_TELEPORT",
+      "items": [
+        "minecraft:ender_pearl"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "f_TELEPORT",
+      "entities": [
+        "minecraft:enderman"
+      ]
+    },
+    {
+      "type": "item",
+      "research": "f_MATCLAY",
+      "items": [
+        "minecraft:clay_ball",
+        "minecraft:terracotta",
+        "minecraft:white_terracotta"
+      ]
+    },
+    {
+      "type": "tag",
+      "research": "f_MATCLAY",
+      "block_tags": [
+        "minecraft:terracotta"
+      ]
+    },
+    {
+      "type": "block",
+      "research": "f_DISPENSER",
+      "blocks": [
+        "minecraft:dispenser"
+      ]
+    },
+    {
+      "type": "item",
+      "research": "f_DISPENSER",
+      "items": [
+        "minecraft:dispenser"
+      ]
+    },
+    {
+      "type": "ore_dictionary",
+      "research": "f_MATIRON",
+      "entries": [
+        "oreIron",
+        "ingotIron",
+        "blockIron",
+        "plateIron"
+      ]
+    },
+    {
+      "type": "ore_dictionary",
+      "research": "f_MATBRASS",
+      "entries": [
+        "ingotBrass",
+        "blockBrass",
+        "plateBrass"
+      ]
+    },
+    {
+      "type": "ore_dictionary",
+      "research": "f_MATTHAUMIUM",
+      "entries": [
+        "ingotThaumium",
+        "blockThaumium",
+        "plateThaumium"
+      ]
+    },
+    {
+      "type": "ore_dictionary",
+      "research": "f_MATVOID",
+      "entries": [
+        "ingotVoid",
+        "blockVoid",
+        "plateVoid"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "f_arrow",
+      "entities": [
+        "minecraft:arrow",
+        "minecraft:spectral_arrow"
+      ]
+    },
+    {
+      "type": "item",
+      "research": "f_arrow",
+      "items": [
+        "minecraft:arrow"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "f_fireball",
+      "entities": [
+        "minecraft:dragon_fireball",
+        "minecraft:fireball",
+        "minecraft:small_fireball",
+        "minecraft:wither_skull"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "f_spit",
+      "entities": [
+        "minecraft:llama_spit"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "f_SPIDER",
+      "entities": [
+        "minecraft:spider",
+        "minecraft:cave_spider"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "f_golem",
+      "entities": [
+        "minecraft:iron_golem",
+        "minecraft:shulker",
+        "minecraft:snow_golem"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "f_BAT",
+      "entities": [
+        "minecraft:bat"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "f_FLY",
+      "entities": [
+        "minecraft:bat",
+        "minecraft:parrot",
+        "minecraft:ghast",
+        "minecraft:blaze"
+      ]
+    }
+  ]
+}

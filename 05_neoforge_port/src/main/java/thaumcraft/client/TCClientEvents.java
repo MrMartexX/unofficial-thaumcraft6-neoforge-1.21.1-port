@@ -9,6 +9,7 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.fx.legacy.TCLegacyParticleEngine;
 import thaumcraft.common.lib.fx.TCFXDispatcher;
+import thaumcraft.common.research.TCKnowledgeClientCache;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class TCClientEvents {
@@ -23,21 +24,26 @@ public final class TCClientEvents {
     public static void onClientTick(ClientTickEvent.Pre event) {
         if (Minecraft.getInstance().level == null) {
             TCLegacyParticleEngine.clear();
+            TCKnowledgeClientCache.clear();
             return;
         }
 
         TCLegacyParticleEngine.tick();
+        TCThaumometerClientEffects.onClientTick(Minecraft.getInstance());
     }
 
     @SubscribeEvent
     public static void onRenderLevelStage(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            TCLegacyParticleEngine.render(
+                    event.getCamera(),
+                    event.getPartialTick().getGameTimeDeltaPartialTick(false)
+            );
             return;
         }
 
-        TCLegacyParticleEngine.render(
-                event.getCamera(),
-                event.getPartialTick().getGameTimeDeltaPartialTick(false)
-        );
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER) {
+            TCThaumometerClientEffects.renderAspectOverlay(event);
+        }
     }
 }

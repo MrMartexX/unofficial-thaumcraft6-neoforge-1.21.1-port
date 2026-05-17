@@ -43,8 +43,13 @@
   "block.thaumcraft.stairs_silverwood": "Silverwood Stairs",
   "block.thaumcraft.slab_greatwood": "Greatwood Slab",
   "block.thaumcraft.slab_silverwood": "Silverwood Slab",
+  "item.thaumcraft.thaumometer": "Thaumometer",
   "item.thaumcraft.goggles": "Goggles of Revealing",
   "item.thaumcraft.amber": "Amber",
   "item.thaumcraft.quicksilver": "Quicksilver",
-  "item.thaumcraft.fabric": "Enchanted Fabric"
+  "item.thaumcraft.fabric": "Enchanted Fabric",
+  "tc.unknownobject": "Nothing new can be learned from this.",
+  "tc.knownobject": "You have learned something new.",
+  "tc.invtoolarge": "Inventory too large. Only scanning first 100 items.",
+  "research.FLUX.warn": "Something seems to be building up in the aura. Something bad."
 }

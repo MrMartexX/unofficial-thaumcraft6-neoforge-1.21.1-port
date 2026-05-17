@@ -217,10 +217,10 @@ Latest mapped report:
 | Metric | Count |
 |---|---:|
 | Legacy dump entries | `1798` |
-| Modern dump entries | `1986` |
+| Modern dump entries | `1987` |
 | Legacy comparison keys after mapping | `1537` |
-| Modern comparison keys | `1986` |
-| Comparable keys | `1138` |
+| Modern comparison keys | `1987` |
+| Comparable keys | `1139` |
 | Configured key aliases | `82` |
 | Configured stack-key aliases | `201` |
 | Legacy entries mapped through aliases | `283` |
@@ -229,26 +229,26 @@ Raw result:
 
 | Raw category | Count |
 |---|---:|
-| `IDENTICAL` | `1138` |
+| `IDENTICAL` | `1139` |
 | `ORDER_ONLY_DIFF` | `0` |
 | `AMOUNT_DIFF` | `0` |
 | `ASPECT_SET_DIFF` | `0` |
 | `NULL_EMPTY_DIFF` | `0` |
 | `RESULT_KIND_DIFF` | `0` |
-| `LEGACY_ONLY` | `399` |
+| `LEGACY_ONLY` | `398` |
 | `MODERN_ONLY` | `848` |
 
 Policy classification:
 
 | Classification | Count | Meaning |
 |---|---:|---|
-| `PARITY_OK` | `855` | Direct exact runtime match. |
+| `PARITY_OK` | `856` | Direct exact runtime match. |
 | `PARITY_OK_LEGACY_TO_MODERN_MAP` | `283` | Runtime match after explicit legacy-to-modern id/meta mapping. |
 | `EXPECTED_VERSION_FLATTENED_STACK` | `332` | Expected flattening/new-id difference, including per-entity spawn eggs. |
 | `EXPECTED_VERSION_MODERN_ADDITION` | `93` | 1.21-only item/enchantment/music-disc additions. |
 | `MODERN_ONLY_COMPONENT_POLICY_REVIEW` | `40` | Modern-only component samples needing policy, not 1.12 exact parity. |
 | `MODERN_ONLY_POLICY_REVIEW` | `383` | Modern-only ids still requiring documented policy review. |
-| `LEGACY_ONLY_THAUMCRAFT_UNPORTED` | `396` | Legacy Thaumcraft content not registered in the port yet. |
+| `LEGACY_ONLY_THAUMCRAFT_UNPORTED` | `395` | Legacy Thaumcraft content not registered in the port yet. |
 | `LEGACY_ONLY_MAPPING_REVIEW` | `3` | Remaining legacy-only non-Thaumcraft keys needing map/removal review. |
 
 Confirmed fixed by the latest mapped run:
@@ -262,7 +262,7 @@ Confirmed fixed by the latest mapped run:
 | buckets, boats, doors, fence gates, chests, arrows, and color/meta families | Fixed through audited direct/complex data plus `legacy_vanilla_runtime_parity.json` final dump-value overrides. |
 | potion carrier/content variants | Fixed through dump-derived final 1.12 runtime outputs for comparable potion, splash potion, lingering potion, and tipped-arrow stacks. |
 | mapped `sweeping` -> `sweeping_edge` stored books | Fixed by preserving the legacy stored-book base aspects and omitting a non-legacy Sweeping Edge aspect bonus. |
-| currently registered Thaumcraft runtime values | Fixed through `current_registered_runtime_parity.json`, including exact empty-list parity for `amber_brick`. |
+| currently registered Thaumcraft runtime values | Fixed through `current_registered_runtime_parity.json`, including exact empty-list parity for `amber_brick` and final runtime parity for `thaumometer`. |
 
 Primary root cause learned from the dump: do not trust source-line intent alone for `registerComplexObjectTag`, potion reagent paths, or generated fallback candidates. Legacy runtime can register a generated exact stack and a later wildcard complex stack; because lookup checks exact before wildcard, the plain meta-0 item may resolve to the generated value rather than the wildcard complex value. The current mapped comparable set has no real `PORT_GAP_*` buckets, but the same trace-first rule must be used for future Thaumcraft/stateful/addon stacks.
 
@@ -318,9 +318,9 @@ The current implemented pass is stored under `07_Test_Instance_and_Comparisons/a
 | Metric | Count |
 |---|---:|
 | Legacy 1.12 dump entries | `1798` |
-| Modern 1.21 dump entries | `1986` |
-| Comparable keys after mapping | `1138` |
-| Identical comparable keys | `1138` |
+| Modern 1.21 dump entries | `1987` |
+| Comparable keys after mapping | `1139` |
+| Identical comparable keys | `1139` |
 | Legacy-to-modern mapped parity keys | `283` |
 | Order-only diffs | `0` |
 | Amount diffs | `0` |

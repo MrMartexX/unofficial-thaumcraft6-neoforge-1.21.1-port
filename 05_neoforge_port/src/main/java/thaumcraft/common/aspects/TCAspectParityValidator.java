@@ -9,6 +9,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -62,6 +63,7 @@ final class TCAspectParityValidator {
         validateAspectRegistry();
         validateAspectListSemantics();
         validateAspectHelperSemantics();
+        validateEntityAspectAssignments();
         validateDirectAssignments();
         validateTagAssignments();
         validateComplexAssignments();
@@ -196,9 +198,19 @@ final class TCAspectParityValidator {
         expect(AspectHelper.generateTags(ItemStack.EMPTY) == null, "generateTags must remain unavailable until exact legacy generation is ported");
     }
 
+    private static void validateEntityAspectAssignments() {
+        expectEntity(EntityType.SPIDER, amount(Aspect.BEAST, 10), amount(Aspect.ENTROPY, 10), amount(Aspect.TRAP, 10));
+        expectEntity(EntityType.BAT, amount(Aspect.BEAST, 5), amount(Aspect.FLIGHT, 5), amount(Aspect.DARKNESS, 5));
+        expectEntity(EntityType.ENDERMAN, amount(Aspect.ELDRITCH, 10), amount(Aspect.MOTION, 15), amount(Aspect.DESIRE, 5));
+        expectEntity(EntityType.CREEPER, amount(Aspect.PLANT, 15), amount(Aspect.FIRE, 15));
+        expectEntity(EntityType.ELDER_GUARDIAN, amount(Aspect.BEAST, 10), amount(Aspect.ELDRITCH, 15), amount(Aspect.WATER, 15));
+        expectEntity(EntityType.ZOMBIE_VILLAGER, amount(Aspect.UNDEAD, 20), amount(Aspect.MAN, 15), amount(Aspect.EARTH, 5));
+        expectEntity(EntityType.WARDEN, amount(Aspect.BEAST, 30), amount(Aspect.DARKNESS, 30), amount(Aspect.SENSES, 20), amount(Aspect.AVERSION, 30), amount(Aspect.SOUL, 15));
+    }
+
     private static void validateDirectAssignments() {
         Map<ResourceLocation, AspectList> tags = TCAspectAssignments.directObjectTags();
-        expectEquals(672, tags.size(), "direct object assignment count");
+        expectEquals(673, tags.size(), "direct object assignment count");
 
         expectDirect(tags, "ore_quartz", amount(Aspect.EARTH, 5), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "ore_cinnabar", amount(Aspect.EARTH, 5), amount(Aspect.METAL, 10), amount(Aspect.ALCHEMY, 5), amount(Aspect.DEATH, 5));
@@ -249,6 +261,12 @@ final class TCAspectParityValidator {
                 amount(Aspect.METAL, 60),
                 amount(Aspect.DESIRE, 45),
                 amount(Aspect.MAGIC, 9));
+        expectDirect(tags, "thaumometer",
+                amount(Aspect.SENSES, 10),
+                amount(Aspect.AURA, 10),
+                amount(Aspect.METAL, 30),
+                amount(Aspect.DESIRE, 30),
+                amount(Aspect.MAGIC, 3));
 
         expectDirect(tags, "minecraft", "coal_ore", amount(Aspect.EARTH, 5), amount(Aspect.ENERGY, 15), amount(Aspect.FIRE, 15));
         expectDirect(tags, "minecraft", "coal", amount(Aspect.ENERGY, 10), amount(Aspect.FIRE, 10));
@@ -412,6 +430,22 @@ final class TCAspectParityValidator {
             expectSame(expected[i].aspect(), actualAspects[i], namespace + ":" + path + " aspect order " + i);
             expectEquals(expected[i].amount(), actual.getAmount(expected[i].aspect()), namespace + ":" + path + " amount for " + expected[i].aspect().getTag());
         }
+    }
+
+    private static void expectEntity(EntityType<?> type, Amount... expected) {
+        AspectList actual = TCEntityAspectAssignments.getEntityTypeAspectsForValidation(type);
+        expectNotNull(actual, "missing entity aspect assignment " + EntityType.getKey(type));
+        Aspect[] actualAspects = actual.getAspects();
+        expectEquals(expected.length, actualAspects.length, EntityType.getKey(type) + " aspect count");
+        for (int i = 0; i < expected.length; i++) {
+            expectSame(expected[i].aspect(), actualAspects[i], EntityType.getKey(type) + " aspect order " + i);
+            expectEquals(expected[i].amount(), actual.getAmount(expected[i].aspect()), EntityType.getKey(type) + " amount for " + expected[i].aspect().getTag());
+        }
+    }
+
+    private static void expectNoEntity(EntityType<?> type) {
+        AspectList actual = TCEntityAspectAssignments.getEntityTypeAspectsForValidation(type);
+        expect(actual == null, "unexpected entity aspect assignment " + EntityType.getKey(type));
     }
 
     private static void expectAspectOrder(Aspect[] expected, Aspect[] actual, String message) {

@@ -17,6 +17,7 @@ public final class TCPlayerKnowledgeStore {
 
     public static void set(ServerPlayer player, TCPlayerKnowledge knowledge) {
         player.getPersistentData().put(ROOT_KEY, knowledge.save());
+        TCKnowledgeNetwork.syncToPlayer(player);
     }
 
     public static void mutate(ServerPlayer player, KnowledgeMutation mutation) {

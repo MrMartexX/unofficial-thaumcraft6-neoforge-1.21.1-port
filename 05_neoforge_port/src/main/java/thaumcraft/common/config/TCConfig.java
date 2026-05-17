@@ -25,6 +25,10 @@ public final class TCConfig {
     public static final ModConfigSpec.BooleanValue ENABLE_KNOWLEDGE_DEBUG_COMMANDS = BUILDER
             .comment("Registers permission-level-2 Thaumcraft knowledge and research debug commands for port validation.")
             .define("enableKnowledgeDebugCommands", true);
+
+    public static final ModConfigSpec.BooleanValue ENABLE_SCANNING_DEBUG_COMMANDS = BUILDER
+            .comment("Registers permission-level-2 Thaumcraft scanning debug commands for port validation.")
+            .define("enableScanningDebugCommands", true);
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private TCConfig() {
