@@ -37,6 +37,12 @@ public final class TCResearchRequirementResolver {
         String[] split = value.split(";");
         String rawId = split[0];
         String damageText = split.length > 2 ? split[2] : "0";
+
+        ItemRequirementResolution legacyFamilyResolution = classifyUnmappedLegacyFamily(rawId, damageText);
+        if (legacyFamilyResolution != null) {
+            return legacyFamilyResolution;
+        }
+
         String mappedId = legacyFlattenedItemId(rawId, damageText);
         ResourceLocation id;
 
@@ -143,6 +149,32 @@ public final class TCResearchRequirementResolver {
         } catch (Exception ignored) {
             return fallback;
         }
+    }
+
+    private static ItemRequirementResolution classifyUnmappedLegacyFamily(String rawId, String damageText) {
+        int damage = parsePositiveInt(damageText, 0);
+        if (rawId.equals("thaumcraft:crystal_essence")) {
+            return ItemRequirementResolution.unresolved(
+                    "legacy aspect crystal essence requirement not mapped yet",
+                    "legacy aspect crystal essence requirement"
+            );
+        }
+        if (rawId.equals("thaumcraft:phial")) {
+            return ItemRequirementResolution.unresolved(
+                    "legacy essentia phial requirement not mapped yet",
+                    "legacy essentia phial requirement"
+            );
+        }
+        if (rawId.equals("thaumcraft:ingot")
+                || rawId.equals("thaumcraft:metal")
+                || rawId.equals("thaumcraft:plate")
+                || rawId.equals("thaumcraft:nugget")) {
+            return ItemRequirementResolution.unresolved(
+                    "legacy material-family requirement not mapped yet: " + rawId + ";damage=" + damage,
+                    "legacy material-family requirement: " + rawId
+            );
+        }
+        return null;
     }
 
     private static String commonTagPath(String entry) {
