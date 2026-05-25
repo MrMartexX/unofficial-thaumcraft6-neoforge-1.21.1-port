@@ -22,6 +22,7 @@ import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.research.TCKnowledgeCommands;
 import thaumcraft.common.research.TCKnowledgeNetwork;
 import thaumcraft.common.research.TCResearchManager;
+import thaumcraft.common.research.TCResearchRequirementAuditCommands;
 import thaumcraft.common.research.TCScanningCommands;
 import thaumcraft.common.research.TCScanningManager;
 import thaumcraft.common.world.aura.TCAuraDebugCommands;
@@ -58,6 +59,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCKnowledgeNetwork::onPlayerLoggedIn);
         NeoForge.EVENT_BUS.addListener(TCKnowledgeNetwork::onPlayerRespawn);
         NeoForge.EVENT_BUS.addListener(TCKnowledgeNetwork::onPlayerChangedDimension);
+        NeoForge.EVENT_BUS.addListener(TCResearchRequirementAuditCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCScanningCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCScanningManager::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onItemCrafted);
