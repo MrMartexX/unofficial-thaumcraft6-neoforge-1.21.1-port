@@ -102,7 +102,7 @@ public final class TCScanningCommands {
         ), false);
 
         source.sendSuccess(() -> Component.literal(
-                "No permanent knowledge mutation yet. This is a debug scan pipeline check."
+                "This command is read-only. Thaumometer use may mutate scan, research and knowledge state."
         ), false);
 
         return Math.max(1, result.aspects().visSize());
