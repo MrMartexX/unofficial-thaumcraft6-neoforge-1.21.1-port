@@ -4,7 +4,9 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -21,6 +23,7 @@ public final class TCResearchRequirementAuditCommands {
     private static final String[] ROOT_ALIASES = {"thaumcraft", "thaum", "tc"};
     private static final int DEFAULT_DETAIL_LIMIT = 20;
     private static final int MAX_DETAIL_LIMIT = 200;
+    private static final int SUMMARY_LIMIT = 30;
 
     private TCResearchRequirementAuditCommands() {
     }
@@ -60,6 +63,21 @@ public final class TCResearchRequirementAuditCommands {
                 "Note: required_craft modern-matchable means the current ItemCraftedEvent marker path can identify the crafted stack. Exact legacy ItemStack.toString().hashCode() parity is still a separate exporter task."
         ), false);
 
+        if (!report.unresolvedSummary().isEmpty()) {
+            context.getSource().sendSuccess(() -> Component.literal("Unresolved requirement summary:"), false);
+            report.unresolvedSummary().entrySet().stream()
+                    .limit(SUMMARY_LIMIT)
+                    .forEach(entry -> context.getSource().sendFailure(Component.literal(
+                            "- " + entry.getValue() + "x " + entry.getKey()
+                    )));
+        }
+
+        if (!report.unresolvedDetails().isEmpty()) {
+            context.getSource().sendSuccess(() -> Component.literal(
+                    "First unresolved requirement details, limit=" + detailLimit + ":"
+            ), false);
+        }
+
         for (String detail : report.unresolvedDetails()) {
             context.getSource().sendFailure(Component.literal("- " + detail));
         }
@@ -75,6 +93,7 @@ public final class TCResearchRequirementAuditCommands {
         int knowledgeTotal = 0;
         int knowledgeUnresolved = 0;
         ArrayList<String> details = new ArrayList<>();
+        LinkedHashMap<String, Integer> summary = new LinkedHashMap<>();
 
         for (TCResearchEntryDefinition entry : TCResearchManager.entries()) {
             for (int stageIndex = 0; stageIndex < entry.stages().size(); stageIndex++) {
@@ -86,7 +105,7 @@ public final class TCResearchRequirementAuditCommands {
                     RequirementResolution resolution = resolveItemRequirement(required);
                     if (!resolution.resolved()) {
                         itemUnresolved++;
-                        addDetail(details, detailLimit, stageLabel, "required_item", required, resolution.reason());
+                        recordUnresolved(details, summary, detailLimit, stageLabel, "required_item", required, resolution);
                     }
                 }
 
@@ -95,7 +114,7 @@ public final class TCResearchRequirementAuditCommands {
                     RequirementResolution resolution = resolveItemRequirement(required);
                     if (!resolution.resolved()) {
                         craftUnresolved++;
-                        addDetail(details, detailLimit, stageLabel, "required_craft", required, resolution.reason());
+                        recordUnresolved(details, summary, detailLimit, stageLabel, "required_craft", required, resolution);
                     }
                 }
 
@@ -104,7 +123,7 @@ public final class TCResearchRequirementAuditCommands {
                     RequirementResolution resolution = resolveKnowledgeRequirement(required);
                     if (!resolution.resolved()) {
                         knowledgeUnresolved++;
-                        addDetail(details, detailLimit, stageLabel, "required_knowledge", required, resolution.reason());
+                        recordUnresolved(details, summary, detailLimit, stageLabel, "required_knowledge", required, resolution);
                     }
                 }
             }
@@ -117,34 +136,39 @@ public final class TCResearchRequirementAuditCommands {
                 craftUnresolved,
                 knowledgeTotal,
                 knowledgeUnresolved,
-                details
+                details,
+                summary
         );
     }
 
-    private static void addDetail(
+    private static void recordUnresolved(
             List<String> details,
+            LinkedHashMap<String, Integer> summary,
             int detailLimit,
             String stageLabel,
             String type,
             String raw,
-            String reason
+            RequirementResolution resolution
     ) {
+        String bucket = type + " " + resolution.summaryKey();
+        summary.merge(bucket, 1, Integer::sum);
+
         if (details.size() >= detailLimit) {
             return;
         }
-        details.add(stageLabel + " " + type + " raw=" + raw + " reason=" + reason);
+        details.add(stageLabel + " " + type + " raw=" + raw + " reason=" + resolution.reason());
     }
 
     private static RequirementResolution resolveItemRequirement(String raw) {
         if (raw == null || raw.isBlank()) {
-            return RequirementResolution.unresolved("blank requirement");
+            return RequirementResolution.unresolved("blank requirement", "blank requirement");
         }
 
         String value = raw.trim().replace('\'', '"');
         if (value.startsWith("oredict:")) {
             String oreName = value.substring("oredict:".length());
             if (oreName.isBlank()) {
-                return RequirementResolution.unresolved("blank legacy oredict key");
+                return RequirementResolution.unresolved("blank legacy oredict key", "blank legacy oredict key");
             }
             return RequirementResolution.ok();
         }
@@ -158,22 +182,34 @@ public final class TCResearchRequirementAuditCommands {
         try {
             id = ResourceLocation.parse(mappedId);
         } catch (Exception ignored) {
-            return RequirementResolution.unresolved("invalid resource location after mapping: " + mappedId);
+            return RequirementResolution.unresolved(
+                    "invalid resource location after mapping: " + mappedId,
+                    "invalid resource location: " + mappedId
+            );
         }
 
         if (BuiltInRegistries.ITEM.getOptional(id).isEmpty()) {
-            return RequirementResolution.unresolved("missing modern item id: " + id);
+            return RequirementResolution.unresolved(
+                    "missing modern item id: " + id,
+                    "missing modern item id: " + id
+            );
         }
 
         int damage = parsePositiveInt(damageText, 0);
         boolean hasNbt = value.contains("{");
 
         if (hasNbt) {
-            return RequirementResolution.unresolved("legacy NBT-sensitive ItemStack requirement not mapped yet");
+            return RequirementResolution.unresolved(
+                    "legacy NBT-sensitive ItemStack requirement not mapped yet",
+                    "legacy NBT-sensitive ItemStack requirement: " + id
+            );
         }
 
         if (damage > 0 && mappedId.equals(rawId)) {
-            return RequirementResolution.unresolved("legacy metadata value has no explicit flattening mapping: damage=" + damage);
+            return RequirementResolution.unresolved(
+                    "legacy metadata value has no explicit flattening mapping: damage=" + damage,
+                    "legacy metadata unmapped: " + rawId + ";" + damage
+            );
         }
 
         return RequirementResolution.ok();
@@ -181,24 +217,24 @@ public final class TCResearchRequirementAuditCommands {
 
     private static RequirementResolution resolveKnowledgeRequirement(String raw) {
         if (raw == null || raw.isBlank()) {
-            return RequirementResolution.unresolved("blank requirement");
+            return RequirementResolution.unresolved("blank requirement", "blank requirement");
         }
 
         String[] split = raw.split(";");
         if (split.length != 3) {
-            return RequirementResolution.unresolved("expected type;category;points");
+            return RequirementResolution.unresolved("expected type;category;points", "malformed knowledge requirement");
         }
 
         TCKnowledgeType type = TCKnowledgeType.parse(split[0]);
         int points = parsePositiveInt(split[2], 0);
         if (type == null) {
-            return RequirementResolution.unresolved("unknown knowledge type: " + split[0]);
+            return RequirementResolution.unresolved("unknown knowledge type: " + split[0], "unknown knowledge type: " + split[0]);
         }
         if (TCPlayerKnowledge.normalizeCategory(split[1]).isBlank()) {
-            return RequirementResolution.unresolved("blank category");
+            return RequirementResolution.unresolved("blank category", "blank knowledge category");
         }
         if (points <= 0) {
-            return RequirementResolution.unresolved("non-positive point cost");
+            return RequirementResolution.unresolved("non-positive point cost", "non-positive knowledge point cost");
         }
 
         return RequirementResolution.ok();
@@ -281,13 +317,13 @@ public final class TCResearchRequirementAuditCommands {
         }
     }
 
-    private record RequirementResolution(boolean resolved, String reason) {
+    private record RequirementResolution(boolean resolved, String reason, String summaryKey) {
         static RequirementResolution ok() {
-            return new RequirementResolution(true, "resolved");
+            return new RequirementResolution(true, "resolved", "resolved");
         }
 
-        static RequirementResolution unresolved(String reason) {
-            return new RequirementResolution(false, reason);
+        static RequirementResolution unresolved(String reason, String summaryKey) {
+            return new RequirementResolution(false, reason, summaryKey);
         }
     }
 
@@ -298,10 +334,12 @@ public final class TCResearchRequirementAuditCommands {
             int craftUnresolved,
             int knowledgeTotal,
             int knowledgeUnresolved,
-            List<String> unresolvedDetails
+            List<String> unresolvedDetails,
+            Map<String, Integer> unresolvedSummary
     ) {
         private RequirementAuditReport {
             unresolvedDetails = List.copyOf(unresolvedDetails);
+            unresolvedSummary = Map.copyOf(unresolvedSummary);
         }
 
         int itemResolved() {
