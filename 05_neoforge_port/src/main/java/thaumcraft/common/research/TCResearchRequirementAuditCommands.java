@@ -146,7 +146,7 @@ public final class TCResearchRequirementAuditCommands {
             if (oreName.isBlank()) {
                 return RequirementResolution.unresolved("blank legacy oredict key");
             }
-            return RequirementResolution.resolved();
+            return RequirementResolution.ok();
         }
 
         String[] split = value.split(";");
@@ -176,7 +176,7 @@ public final class TCResearchRequirementAuditCommands {
             return RequirementResolution.unresolved("legacy metadata value has no explicit flattening mapping: damage=" + damage);
         }
 
-        return RequirementResolution.resolved();
+        return RequirementResolution.ok();
     }
 
     private static RequirementResolution resolveKnowledgeRequirement(String raw) {
@@ -201,7 +201,7 @@ public final class TCResearchRequirementAuditCommands {
             return RequirementResolution.unresolved("non-positive point cost");
         }
 
-        return RequirementResolution.resolved();
+        return RequirementResolution.ok();
     }
 
     @SuppressWarnings("unused")
@@ -282,7 +282,7 @@ public final class TCResearchRequirementAuditCommands {
     }
 
     private record RequirementResolution(boolean resolved, String reason) {
-        static RequirementResolution resolved() {
+        static RequirementResolution ok() {
             return new RequirementResolution(true, "resolved");
         }
 
