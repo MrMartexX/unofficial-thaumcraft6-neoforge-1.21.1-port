@@ -120,6 +120,9 @@ public final class TCResearchRequirementResolver {
                 default -> "minecraft:ink_sac";
             };
         }
+        if (id.equals("thaumcraft:arcane_stone")) {
+            return "thaumcraft:stone_arcane";
+        }
         return id;
     }
 
