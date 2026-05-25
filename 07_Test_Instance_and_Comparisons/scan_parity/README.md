@@ -2,20 +2,26 @@
 
 This folder contains the runtime parity harness for comparing original Thaumcraft 6 Forge 1.12.2 scan matching with the NeoForge 1.21.1 port.
 
+## Artifact policy
+
+The `dumps/*.json` and `reports/*.json` files are generated audit artifacts. They are committed for reproducibility and historical parity review, but they are not hand-authored runtime source and should not be edited manually.
+
+If scan/aspect behavior changes, regenerate the dumps with the commands below, regenerate the Markdown/JSON reports, and review the human-readable `reports/*.md` summaries first. The repository `.gitattributes` marks the generated JSON artifacts as `linguist-generated=true` and disables normal inline diffs for them to keep review noise manageable.
+
 ## Artifacts
 
 | Artifact | Purpose |
 |---|---|
 | `legacy_exporter/` | Standalone Forge 1.12.2 diagnostic addon source. |
-| `dumps/thaumcraft_1_12_scan_items.json` | Runtime item/potion/enchantment scan dump from original Thaumcraft 6. |
-| `dumps/thaumcraft_1_12_scan_entities.json` | Runtime entity/state-variant scan dump from original Thaumcraft 6. |
-| `dumps/thaumcraft_1_21_scan_items.json` | Runtime item/potion/enchantment scan dump from the NeoForge port. |
-| `dumps/thaumcraft_1_21_scan_entities.json` | Runtime entity scan dump from the NeoForge port. |
+| `dumps/thaumcraft_1_12_scan_items.json` | Runtime item/potion/enchantment scan dump from original Thaumcraft 6. Generated audit artifact. |
+| `dumps/thaumcraft_1_12_scan_entities.json` | Runtime entity/state-variant scan dump from original Thaumcraft 6. Generated audit artifact. |
+| `dumps/thaumcraft_1_21_scan_items.json` | Runtime item/potion/enchantment scan dump from the NeoForge port. Generated audit artifact. |
+| `dumps/thaumcraft_1_21_scan_entities.json` | Runtime entity scan dump from the NeoForge port. Generated audit artifact. |
 | `tools/compare_scan_dumps.py` | Deterministic JSON/Markdown diff generator. |
 | `tools/compare_entity_scan_dumps.py` | Deterministic entity/state-variant JSON/Markdown diff generator. |
-| `reports/scan_diff.json` | Machine-readable diff report. |
+| `reports/scan_diff.json` | Machine-readable generated diff report. |
 | `reports/scan_diff.md` | Human-readable diff summary. |
-| `reports/entity_scan_diff.json` | Machine-readable entity diff report. |
+| `reports/entity_scan_diff.json` | Machine-readable generated entity diff report. |
 | `reports/entity_scan_diff.md` | Human-readable entity diff summary. |
 
 `legacy_server/` is a generated local Forge server folder and is intentionally ignored.
