@@ -8,9 +8,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,6 +17,10 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirement;
+import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirementResolution;
+import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirement;
+import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirementResolution;
 
 public final class TCResearchManager {
     private static TCResearchData activeData = TCResearchData.empty();
@@ -449,12 +450,13 @@ public final class TCResearchManager {
         }
 
         for (String required : stage.requiredKnowledge()) {
-            KnowledgeRequirement requirement = KnowledgeRequirement.parse(required);
-            if (requirement == null) {
+            KnowledgeRequirementResolution resolution = TCResearchRequirementResolver.resolveKnowledgeRequirement(required);
+            if (!resolution.resolved()) {
                 blocked.add("required_knowledge_unresolved:" + required);
                 continue;
             }
 
+            KnowledgeRequirement requirement = resolution.requirement();
             int points = knowledge.getPoints(requirement.type(), requirement.category());
             if (points < requirement.points()) {
                 missing.add("required_knowledge:" + required + " has=" + points);
@@ -492,10 +494,11 @@ public final class TCResearchManager {
         }
 
         for (String required : stage.requiredKnowledge()) {
-            KnowledgeRequirement requirement = KnowledgeRequirement.parse(required);
-            if (requirement == null) {
+            KnowledgeRequirementResolution resolution = TCResearchRequirementResolver.resolveKnowledgeRequirement(required);
+            if (!resolution.resolved()) {
                 return false;
             }
+            KnowledgeRequirement requirement = resolution.requirement();
             int rawCost = requirement.type().pointsToRaw(requirement.points());
             if (knowledge.getRaw(requirement.type(), requirement.category()) < rawCost) {
                 return false;
@@ -559,60 +562,8 @@ public final class TCResearchManager {
     }
 
     private static ItemRequirement parseItemRequirement(String raw) {
-        if (raw == null || raw.isBlank()) {
-            return null;
-        }
-
-        String value = raw.trim().replace('\'', '"');
-        if (value.startsWith("oredict:")) {
-            String oreName = value.substring("oredict:".length());
-            if (oreName.isBlank()) {
-                return null;
-            }
-            return ItemRequirement.tags(raw, oreDictionaryItemTags(oreName), 1);
-        }
-
-        String[] split = value.split(";");
-        ResourceLocation id;
-        try {
-            id = ResourceLocation.parse(legacyFlattenedItemId(split[0], split.length > 2 ? split[2] : "0"));
-        } catch (Exception ignored) {
-            return null;
-        }
-
-        Item item = BuiltInRegistries.ITEM.getOptional(id).orElse(null);
-        if (item == null) {
-            return null;
-        }
-
-        int count = parsePositiveInt(split.length > 1 ? split[1] : "", 1);
-        int damage = parsePositiveInt(split.length > 2 ? split[2] : "", 0);
-        boolean hasNbt = value.contains("{");
-
-        if (hasNbt || damage > 0 && legacyFlattenedItemId(split[0], split[2]).equals(split[0])) {
-            return null;
-        }
-
-        return ItemRequirement.item(raw, item, count);
-    }
-
-    private static String legacyFlattenedItemId(String id, String damageText) {
-        int damage = parsePositiveInt(damageText, 0);
-        if (id.equals("minecraft:web")) {
-            return "minecraft:cobweb";
-        }
-        if (id.equals("minecraft:noteblock")) {
-            return "minecraft:note_block";
-        }
-        if (id.equals("minecraft:dye")) {
-            return switch (damage) {
-                case 15 -> "minecraft:bone_meal";
-                case 4 -> "minecraft:lapis_lazuli";
-                case 3 -> "minecraft:cocoa_beans";
-                default -> "minecraft:ink_sac";
-            };
-        }
-        return id;
+        ItemRequirementResolution resolution = TCResearchRequirementResolver.resolveItemRequirement(raw);
+        return resolution.resolved() ? resolution.requirement() : null;
     }
 
     private static boolean hasRequiredItem(ServerPlayer player, ItemRequirement requirement) {
@@ -684,69 +635,12 @@ public final class TCResearchManager {
         return "[#]craft:" + (raw == null ? "" : raw.trim().replace('\'', '"'));
     }
 
-    private static List<TagKey<Item>> oreDictionaryItemTags(String oreName) {
-        ArrayList<TagKey<Item>> tags = new ArrayList<>();
-        String commonPath = commonTagPath(oreName);
-        if (commonPath != null) {
-            tags.add(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", commonPath)));
-        }
-        tags.add(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "legacy_ore_dictionary/" + camelToSnake(oreName))));
-        return tags;
-    }
-
-    private static String commonTagPath(String entry) {
-        String lower = entry.toLowerCase(java.util.Locale.ROOT);
-        if (lower.startsWith("ore") && entry.length() > 3) {
-            return "ores/" + camelToSnake(entry.substring(3));
-        }
-        if (lower.startsWith("ingot") && entry.length() > 5) {
-            return "ingots/" + camelToSnake(entry.substring(5));
-        }
-        if (lower.startsWith("block") && entry.length() > 5) {
-            return "storage_blocks/" + camelToSnake(entry.substring(5));
-        }
-        if (lower.startsWith("plate") && entry.length() > 5) {
-            return "plates/" + camelToSnake(entry.substring(5));
-        }
-        if (lower.startsWith("gem") && entry.length() > 3) {
-            return "gems/" + camelToSnake(entry.substring(3));
-        }
-        if (lower.startsWith("dust") && entry.length() > 4) {
-            return "dusts/" + camelToSnake(entry.substring(4));
-        }
-        if (lower.startsWith("nugget") && entry.length() > 6) {
-            return "nuggets/" + camelToSnake(entry.substring(6));
-        }
-        return null;
-    }
-
-    private static String camelToSnake(String value) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < value.length(); i++) {
-            char ch = value.charAt(i);
-            if (Character.isUpperCase(ch) && builder.length() > 0) {
-                builder.append('_');
-            }
-            builder.append(Character.toLowerCase(ch));
-        }
-        return builder.toString();
-    }
-
     private static int javaStringHash(String value) {
         int hash = 0;
         for (int i = 0; i < value.length(); i++) {
             hash = 31 * hash + value.charAt(i);
         }
         return hash;
-    }
-
-    private static int parsePositiveInt(String value, int fallback) {
-        try {
-            int parsed = Integer.parseInt(value.trim());
-            return parsed < 0 ? fallback : parsed;
-        } catch (Exception ignored) {
-            return fallback;
-        }
     }
 
     private static String canonicalResearchKey(String key) {
@@ -759,41 +653,5 @@ public final class TCResearchManager {
             stripped = stripped.substring(1);
         }
         return stripped;
-    }
-
-    private record ItemRequirement(String raw, Item item, List<TagKey<Item>> tags, int count) {
-        private ItemRequirement {
-            tags = List.copyOf(tags);
-        }
-
-        static ItemRequirement item(String raw, Item item, int count) {
-            return new ItemRequirement(raw, item, List.of(), count);
-        }
-
-        static ItemRequirement tags(String raw, List<TagKey<Item>> tags, int count) {
-            return new ItemRequirement(raw, null, tags, count);
-        }
-    }
-
-    private record KnowledgeRequirement(String raw, TCKnowledgeType type, String category, int points) {
-        static KnowledgeRequirement parse(String raw) {
-            if (raw == null || raw.isBlank()) {
-                return null;
-            }
-
-            String[] split = raw.split(";");
-            if (split.length != 3) {
-                return null;
-            }
-
-            TCKnowledgeType type = TCKnowledgeType.parse(split[0]);
-            String category = TCPlayerKnowledge.normalizeCategory(split[1]);
-            int points = parsePositiveInt(split[2], 0);
-            if (type == null || points <= 0) {
-                return null;
-            }
-
-            return new KnowledgeRequirement(raw, type, category, points);
-        }
     }
 }
