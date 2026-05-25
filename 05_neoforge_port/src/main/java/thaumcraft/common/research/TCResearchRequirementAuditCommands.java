@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +67,8 @@ public final class TCResearchRequirementAuditCommands {
         if (!report.unresolvedSummary().isEmpty()) {
             context.getSource().sendSuccess(() -> Component.literal("Unresolved requirement summary:"), false);
             report.unresolvedSummary().entrySet().stream()
+                    .sorted(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder())
+                            .thenComparing(Map.Entry.comparingByKey()))
                     .limit(SUMMARY_LIMIT)
                     .forEach(entry -> context.getSource().sendFailure(Component.literal(
                             "- " + entry.getValue() + "x " + entry.getKey()
