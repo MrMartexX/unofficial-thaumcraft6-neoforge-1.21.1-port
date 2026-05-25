@@ -13,7 +13,7 @@ public final class TCKnowledgeClientCache {
     public static void accept(TCKnowledgeSyncPayload payload) {
         TreeSet<String> keys = new TreeSet<>();
 
-        for (String key : payload.researchKeys()) {
+        for (String key : payload.completedResearchKeys()) {
             String normalized = TCPlayerKnowledge.normalizeResearchKey(key);
             if (!normalized.isBlank()) {
                 keys.add(normalized);
