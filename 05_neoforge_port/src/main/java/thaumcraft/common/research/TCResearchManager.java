@@ -83,7 +83,7 @@ public final class TCResearchManager {
     }
 
     public static Optional<TCResearchEntryDefinition> getEntry(String key) {
-        return Optional.ofNullable(activeData.entries().get(TCPlayerKnowledge.normalizeResearchKey(key)));
+        return Optional.ofNullable(activeData.entries().get(canonicalResearchKey(key)));
     }
 
     public static Collection<TCResearchCategoryDefinition> categories() {
@@ -134,7 +134,7 @@ public final class TCResearchManager {
     }
 
     public static TCResearchStatus getResearchStatus(TCPlayerKnowledge knowledge, String key) {
-        String researchKey = TCPlayerKnowledge.baseResearchKey(key);
+        String researchKey = canonicalResearchKey(key);
         if (!knowledge.isResearchKnown(researchKey)) {
             return TCResearchStatus.UNKNOWN;
         }
@@ -156,7 +156,7 @@ public final class TCResearchManager {
     }
 
     public static boolean doesPlayerHaveRequisites(ServerPlayer player, String key) {
-        TCResearchEntryDefinition entry = activeData.entries().get(TCPlayerKnowledge.baseResearchKey(key));
+        TCResearchEntryDefinition entry = activeData.entries().get(canonicalResearchKey(key));
         if (entry == null) {
             return true;
         }
@@ -184,7 +184,7 @@ public final class TCResearchManager {
     }
 
     public static boolean isResearchVisible(ServerPlayer player, String key) {
-        TCResearchEntryDefinition entry = activeData.entries().get(TCPlayerKnowledge.baseResearchKey(key));
+        TCResearchEntryDefinition entry = activeData.entries().get(canonicalResearchKey(key));
         if (entry == null) {
             return false;
         }
@@ -206,7 +206,7 @@ public final class TCResearchManager {
     }
 
     private static boolean progressResearch(ServerPlayer player, String key, boolean sync, boolean noResearchFlag) {
-        String researchKey = TCPlayerKnowledge.baseResearchKey(key);
+        String researchKey = canonicalResearchKey(key);
         if (researchKey.isBlank()) {
             return false;
         }
@@ -288,7 +288,7 @@ public final class TCResearchManager {
     }
 
     public static boolean startResearchWithPopup(ServerPlayer player, String key) {
-        String researchKey = TCPlayerKnowledge.baseResearchKey(key);
+        String researchKey = canonicalResearchKey(key);
         boolean progressed = progressResearch(player, researchKey, true);
         if (progressed) {
             TCPlayerKnowledgeStore.mutate(player, knowledge -> {
@@ -336,7 +336,7 @@ public final class TCResearchManager {
     private static void completeAvailableSiblings(ServerPlayer player, TCResearchEntryDefinition entry, boolean sync) {
         for (String sibling : entry.siblings()) {
             TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
-            String siblingKey = TCPlayerKnowledge.baseResearchKey(sibling);
+            String siblingKey = canonicalResearchKey(sibling);
             if (!isResearchComplete(knowledge, siblingKey) && doesPlayerHaveRequisites(player, siblingKey)) {
                 completeResearch(player, siblingKey, sync);
             }
@@ -365,7 +365,7 @@ public final class TCResearchManager {
         }
 
         for (String parent : entry.parents()) {
-            TCResearchEntryDefinition parentEntry = activeData.entries().get(TCPlayerKnowledge.normalizeResearchKey(parent));
+            TCResearchEntryDefinition parentEntry = activeData.entries().get(canonicalResearchKey(parent));
             if (parentEntry != null && !isResearchVisible(player, parentEntry, visiting)) {
                 visiting.remove(entry.key());
                 return false;
@@ -393,7 +393,7 @@ public final class TCResearchManager {
     }
 
     private static TCResearchStageRequirementResult checkCurrentStageRequirementsInternal(ServerPlayer player, String key) {
-        String researchKey = TCPlayerKnowledge.baseResearchKey(key);
+        String researchKey = canonicalResearchKey(key);
         TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
         TCResearchEntryDefinition entry = activeData.entries().get(researchKey);
         ArrayList<String> satisfied = new ArrayList<>();
@@ -467,41 +467,72 @@ public final class TCResearchManager {
     }
 
     private static boolean consumeCurrentStageRequirements(ServerPlayer player, String key) {
+        String researchKey = canonicalResearchKey(key);
         TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
-        TCResearchEntryDefinition entry = activeData.entries().get(TCPlayerKnowledge.baseResearchKey(key));
+        TCResearchEntryDefinition entry = activeData.entries().get(researchKey);
         if (entry == null || entry.stages().isEmpty()) {
             return false;
         }
 
-        int stageIndex = knowledge.getResearchStage(key) - 1;
+        int stageIndex = knowledge.getResearchStage(researchKey) - 1;
         if (stageIndex < 0 || stageIndex >= entry.stages().size()) {
             return false;
         }
 
         TCResearchStageDefinition stage = entry.stages().get(stageIndex);
+        ArrayList<ItemRequirement> itemRequirements = new ArrayList<>();
+        ArrayList<KnowledgeRequirement> knowledgeRequirements = new ArrayList<>();
+
         for (String required : stage.requiredItem()) {
             ItemRequirement item = parseItemRequirement(required);
-            if (item == null || !consumeRequiredItem(player, item)) {
+            if (item == null) {
+                return false;
+            }
+            itemRequirements.add(item);
+        }
+
+        for (String required : stage.requiredKnowledge()) {
+            KnowledgeRequirement requirement = KnowledgeRequirement.parse(required);
+            if (requirement == null) {
+                return false;
+            }
+            int rawCost = requirement.type().pointsToRaw(requirement.points());
+            if (knowledge.getRaw(requirement.type(), requirement.category()) < rawCost) {
+                return false;
+            }
+            knowledgeRequirements.add(requirement);
+        }
+
+        ArrayList<ItemStack> simulatedInventory = new ArrayList<>();
+        for (ItemStack stack : player.getInventory().items) {
+            simulatedInventory.add(stack.copy());
+        }
+
+        for (ItemRequirement requirement : itemRequirements) {
+            if (!consumeRequiredItemFromStacks(simulatedInventory, requirement)) {
                 return false;
             }
         }
 
-        final boolean[] consumedKnowledge = {true};
-        TCPlayerKnowledgeStore.mutate(player, storedKnowledge -> {
-            for (String required : stage.requiredKnowledge()) {
-                KnowledgeRequirement requirement = KnowledgeRequirement.parse(required);
-                if (requirement == null) {
-                    consumedKnowledge[0] = false;
-                    continue;
-                }
-                consumedKnowledge[0] &= storedKnowledge.addRaw(
-                        requirement.type(),
-                        requirement.category(),
-                        -requirement.type().pointsToRaw(requirement.points())
-                );
+        for (ItemRequirement requirement : itemRequirements) {
+            if (!consumeRequiredItem(player, requirement)) {
+                return false;
             }
-        });
-        return consumedKnowledge[0];
+        }
+
+        if (!knowledgeRequirements.isEmpty()) {
+            TCPlayerKnowledgeStore.mutate(player, storedKnowledge -> {
+                for (KnowledgeRequirement requirement : knowledgeRequirements) {
+                    storedKnowledge.addRaw(
+                            requirement.type(),
+                            requirement.category(),
+                            -requirement.type().pointsToRaw(requirement.points())
+                    );
+                }
+            });
+        }
+
+        return true;
     }
 
     private static void markCraftedResearchReferences(ServerPlayer player, ItemStack crafted) {
@@ -603,11 +634,19 @@ public final class TCResearchManager {
     }
 
     private static boolean consumeRequiredItem(ServerPlayer player, ItemRequirement requirement) {
-        int remaining = requirement.count();
         Inventory inventory = player.getInventory();
+        boolean consumed = consumeRequiredItemFromStacks(inventory.items, requirement);
+        if (consumed) {
+            inventory.setChanged();
+        }
+        return consumed;
+    }
 
-        for (int slot = 0; slot < inventory.items.size() && remaining > 0; slot++) {
-            ItemStack stack = inventory.items.get(slot);
+    private static boolean consumeRequiredItemFromStacks(List<ItemStack> stacks, ItemRequirement requirement) {
+        int remaining = requirement.count();
+
+        for (int slot = 0; slot < stacks.size() && remaining > 0; slot++) {
+            ItemStack stack = stacks.get(slot);
             if (!matchesRequirement(stack, requirement)) {
                 continue;
             }
@@ -616,11 +655,10 @@ public final class TCResearchManager {
             stack.shrink(consumed);
             remaining -= consumed;
             if (stack.isEmpty()) {
-                inventory.items.set(slot, ItemStack.EMPTY);
+                stacks.set(slot, ItemStack.EMPTY);
             }
         }
 
-        inventory.setChanged();
         return remaining <= 0;
     }
 
@@ -709,6 +747,10 @@ public final class TCResearchManager {
         } catch (Exception ignored) {
             return fallback;
         }
+    }
+
+    private static String canonicalResearchKey(String key) {
+        return TCPlayerKnowledge.baseResearchKey(stripHiddenPrefix(key));
     }
 
     private static String stripHiddenPrefix(String key) {
