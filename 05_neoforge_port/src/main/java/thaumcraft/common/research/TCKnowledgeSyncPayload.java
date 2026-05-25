@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import thaumcraft.Thaumcraft;
 
-public record TCKnowledgeSyncPayload(List<String> researchKeys) implements CustomPacketPayload {
+public record TCKnowledgeSyncPayload(List<String> completedResearchKeys) implements CustomPacketPayload {
     public static final Type<TCKnowledgeSyncPayload> TYPE = new Type<>(
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "knowledge_sync")
     );
@@ -28,16 +28,16 @@ public record TCKnowledgeSyncPayload(List<String> researchKeys) implements Custo
 
         @Override
         public void encode(RegistryFriendlyByteBuf buffer, TCKnowledgeSyncPayload payload) {
-            buffer.writeVarInt(payload.researchKeys.size());
+            buffer.writeVarInt(payload.completedResearchKeys.size());
 
-            for (String key : payload.researchKeys) {
+            for (String key : payload.completedResearchKeys) {
                 buffer.writeUtf(key);
             }
         }
     };
 
     public TCKnowledgeSyncPayload {
-        researchKeys = List.copyOf(researchKeys);
+        completedResearchKeys = List.copyOf(completedResearchKeys);
     }
 
     static TCKnowledgeSyncPayload from(TCPlayerKnowledge knowledge) {
