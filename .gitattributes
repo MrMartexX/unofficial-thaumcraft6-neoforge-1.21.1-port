@@ -1,0 +1,6 @@
+# Generated comparison dumps/reports are kept for reproducibility, but they are not hand-authored source.
+# Keep them out of GitHub language statistics and avoid noisy inline diffs.
+/07_Test_Instance_and_Comparisons/aspect_parity/dumps/*.json linguist-generated=true -diff
+/07_Test_Instance_and_Comparisons/aspect_parity/reports/*.json linguist-generated=true -diff
+/07_Test_Instance_and_Comparisons/scan_parity/dumps/*.json linguist-generated=true -diff
+/07_Test_Instance_and_Comparisons/scan_parity/reports/*.json linguist-generated=true -diff
