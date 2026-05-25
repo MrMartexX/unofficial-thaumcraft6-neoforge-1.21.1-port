@@ -10,15 +10,11 @@ import java.util.List;
 import java.util.Map;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import thaumcraft.Thaumcraft;
 import thaumcraft.common.config.TCConfig;
+import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirementResolution;
+import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirementResolution;
 
 public final class TCResearchRequirementAuditCommands {
     private static final String[] ROOT_ALIASES = {"thaumcraft", "thaum", "tc"};
@@ -105,28 +101,28 @@ public final class TCResearchRequirementAuditCommands {
 
                 for (String required : stage.requiredItem()) {
                     itemTotal++;
-                    RequirementResolution resolution = resolveItemRequirement(required);
+                    ItemRequirementResolution resolution = TCResearchRequirementResolver.resolveItemRequirement(required);
                     if (!resolution.resolved()) {
                         itemUnresolved++;
-                        recordUnresolved(details, summary, detailLimit, stageLabel, "required_item", required, resolution);
+                        recordUnresolved(details, summary, detailLimit, stageLabel, "required_item", required, resolution.reason(), resolution.summaryKey());
                     }
                 }
 
                 for (String required : stage.requiredCraft()) {
                     craftTotal++;
-                    RequirementResolution resolution = resolveItemRequirement(required);
+                    ItemRequirementResolution resolution = TCResearchRequirementResolver.resolveItemRequirement(required);
                     if (!resolution.resolved()) {
                         craftUnresolved++;
-                        recordUnresolved(details, summary, detailLimit, stageLabel, "required_craft", required, resolution);
+                        recordUnresolved(details, summary, detailLimit, stageLabel, "required_craft", required, resolution.reason(), resolution.summaryKey());
                     }
                 }
 
                 for (String required : stage.requiredKnowledge()) {
                     knowledgeTotal++;
-                    RequirementResolution resolution = resolveKnowledgeRequirement(required);
+                    KnowledgeRequirementResolution resolution = TCResearchRequirementResolver.resolveKnowledgeRequirement(required);
                     if (!resolution.resolved()) {
                         knowledgeUnresolved++;
-                        recordUnresolved(details, summary, detailLimit, stageLabel, "required_knowledge", required, resolution);
+                        recordUnresolved(details, summary, detailLimit, stageLabel, "required_knowledge", required, resolution.reason(), resolution.summaryKey());
                     }
                 }
             }
@@ -151,190 +147,16 @@ public final class TCResearchRequirementAuditCommands {
             String stageLabel,
             String type,
             String raw,
-            RequirementResolution resolution
+            String reason,
+            String summaryKey
     ) {
-        String bucket = type + " " + resolution.summaryKey();
+        String bucket = type + " " + summaryKey;
         summary.merge(bucket, 1, Integer::sum);
 
         if (details.size() >= detailLimit) {
             return;
         }
-        details.add(stageLabel + " " + type + " raw=" + raw + " reason=" + resolution.reason());
-    }
-
-    private static RequirementResolution resolveItemRequirement(String raw) {
-        if (raw == null || raw.isBlank()) {
-            return RequirementResolution.unresolved("blank requirement", "blank requirement");
-        }
-
-        String value = raw.trim().replace('\'', '"');
-        if (value.contains("enchanted_placeholder")) {
-            return RequirementResolution.unresolved(
-                    "legacy enchanted placeholder requirement not mapped yet",
-                    "legacy enchanted placeholder requirement"
-            );
-        }
-
-        if (value.startsWith("oredict:")) {
-            String oreName = value.substring("oredict:".length());
-            if (oreName.isBlank()) {
-                return RequirementResolution.unresolved("blank legacy oredict key", "blank legacy oredict key");
-            }
-            return RequirementResolution.ok();
-        }
-
-        String[] split = value.split(";");
-        String rawId = split[0];
-        String damageText = split.length > 2 ? split[2] : "0";
-        String mappedId = legacyFlattenedItemId(rawId, damageText);
-        ResourceLocation id;
-
-        try {
-            id = ResourceLocation.parse(mappedId);
-        } catch (Exception ignored) {
-            return RequirementResolution.unresolved(
-                    "invalid resource location after mapping: " + mappedId,
-                    "invalid resource location: " + mappedId
-            );
-        }
-
-        if (BuiltInRegistries.ITEM.getOptional(id).isEmpty()) {
-            return RequirementResolution.unresolved(
-                    "missing modern item id: " + id,
-                    "missing modern item id: " + id
-            );
-        }
-
-        int damage = parsePositiveInt(damageText, 0);
-        boolean hasNbt = value.contains("{");
-
-        if (hasNbt) {
-            return RequirementResolution.unresolved(
-                    "legacy NBT-sensitive ItemStack requirement not mapped yet",
-                    "legacy NBT-sensitive ItemStack requirement: " + id
-            );
-        }
-
-        if (damage > 0 && mappedId.equals(rawId)) {
-            return RequirementResolution.unresolved(
-                    "legacy metadata value has no explicit flattening mapping: damage=" + damage,
-                    "legacy metadata unmapped: " + rawId + ";" + damage
-            );
-        }
-
-        return RequirementResolution.ok();
-    }
-
-    private static RequirementResolution resolveKnowledgeRequirement(String raw) {
-        if (raw == null || raw.isBlank()) {
-            return RequirementResolution.unresolved("blank requirement", "blank requirement");
-        }
-
-        String[] split = raw.split(";");
-        if (split.length != 3) {
-            return RequirementResolution.unresolved("expected type;category;points", "malformed knowledge requirement");
-        }
-
-        TCKnowledgeType type = TCKnowledgeType.parse(split[0]);
-        int points = parsePositiveInt(split[2], 0);
-        if (type == null) {
-            return RequirementResolution.unresolved("unknown knowledge type: " + split[0], "unknown knowledge type: " + split[0]);
-        }
-        if (TCPlayerKnowledge.normalizeCategory(split[1]).isBlank()) {
-            return RequirementResolution.unresolved("blank category", "blank knowledge category");
-        }
-        if (points <= 0) {
-            return RequirementResolution.unresolved("non-positive point cost", "non-positive knowledge point cost");
-        }
-
-        return RequirementResolution.ok();
-    }
-
-    @SuppressWarnings("unused")
-    private static List<TagKey<Item>> oreDictionaryItemTags(String oreName) {
-        ArrayList<TagKey<Item>> tags = new ArrayList<>();
-        String commonPath = commonTagPath(oreName);
-        if (commonPath != null) {
-            tags.add(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", commonPath)));
-        }
-        tags.add(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "legacy_ore_dictionary/" + camelToSnake(oreName))));
-        return tags;
-    }
-
-    private static String legacyFlattenedItemId(String id, String damageText) {
-        int damage = parsePositiveInt(damageText, 0);
-        if (id.equals("minecraft:web")) {
-            return "minecraft:cobweb";
-        }
-        if (id.equals("minecraft:noteblock")) {
-            return "minecraft:note_block";
-        }
-        if (id.equals("minecraft:dye")) {
-            return switch (damage) {
-                case 15 -> "minecraft:bone_meal";
-                case 4 -> "minecraft:lapis_lazuli";
-                case 3 -> "minecraft:cocoa_beans";
-                default -> "minecraft:ink_sac";
-            };
-        }
-        return id;
-    }
-
-    private static String commonTagPath(String entry) {
-        String lower = entry.toLowerCase(java.util.Locale.ROOT);
-        if (lower.startsWith("ore") && entry.length() > 3) {
-            return "ores/" + camelToSnake(entry.substring(3));
-        }
-        if (lower.startsWith("ingot") && entry.length() > 5) {
-            return "ingots/" + camelToSnake(entry.substring(5));
-        }
-        if (lower.startsWith("block") && entry.length() > 5) {
-            return "storage_blocks/" + camelToSnake(entry.substring(5));
-        }
-        if (lower.startsWith("plate") && entry.length() > 5) {
-            return "plates/" + camelToSnake(entry.substring(5));
-        }
-        if (lower.startsWith("gem") && entry.length() > 3) {
-            return "gems/" + camelToSnake(entry.substring(3));
-        }
-        if (lower.startsWith("dust") && entry.length() > 4) {
-            return "dusts/" + camelToSnake(entry.substring(4));
-        }
-        if (lower.startsWith("nugget") && entry.length() > 6) {
-            return "nuggets/" + camelToSnake(entry.substring(6));
-        }
-        return null;
-    }
-
-    private static String camelToSnake(String value) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < value.length(); i++) {
-            char ch = value.charAt(i);
-            if (Character.isUpperCase(ch) && builder.length() > 0) {
-                builder.append('_');
-            }
-            builder.append(Character.toLowerCase(ch));
-        }
-        return builder.toString();
-    }
-
-    private static int parsePositiveInt(String value, int fallback) {
-        try {
-            int parsed = Integer.parseInt(value.trim());
-            return parsed < 0 ? fallback : parsed;
-        } catch (Exception ignored) {
-            return fallback;
-        }
-    }
-
-    private record RequirementResolution(boolean resolved, String reason, String summaryKey) {
-        static RequirementResolution ok() {
-            return new RequirementResolution(true, "resolved", "resolved");
-        }
-
-        static RequirementResolution unresolved(String reason, String summaryKey) {
-            return new RequirementResolution(false, reason, summaryKey);
-        }
+        details.add(stageLabel + " " + type + " raw=" + raw + " reason=" + reason);
     }
 
     private record RequirementAuditReport(
