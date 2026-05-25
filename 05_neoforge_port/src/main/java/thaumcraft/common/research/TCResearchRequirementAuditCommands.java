@@ -168,6 +168,13 @@ public final class TCResearchRequirementAuditCommands {
         }
 
         String value = raw.trim().replace('\'', '"');
+        if (value.contains("enchanted_placeholder")) {
+            return RequirementResolution.unresolved(
+                    "legacy enchanted placeholder requirement not mapped yet",
+                    "legacy enchanted placeholder requirement"
+            );
+        }
+
         if (value.startsWith("oredict:")) {
             String oreName = value.substring("oredict:".length());
             if (oreName.isBlank()) {
