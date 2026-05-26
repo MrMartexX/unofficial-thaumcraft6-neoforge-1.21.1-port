@@ -1,114 +1,74 @@
 # Research requirement blocker audit
 
-Status: current blocker audit for the `research-knowledge-scanning-design` branch after the first working research/scanning slice and the shared requirement resolver refactor.
+Status: current blocker audit for the `research-knowledge-scanning-design` branch after the non-interactive requirement audit exporter.
 
-This document records the current `/tc research requirements` output and explains which unresolved research-stage requirements are real implementation blockers rather than parser bugs.
+This document records the current research-stage requirement state and separates registry identity resolution from real gameplay readiness. That distinction matters: an item id can be resolvable while still being only a bridge for a subsystem that is not implemented yet.
 
-## Latest command snapshot
+## Latest automated snapshot
 
 Command:
 
-```text
-/tc research requirements 50
+```powershell
+.\gradlew.bat runServer --no-daemon -PtcResearchRequirementAudit=true "-PtcResearchRequirementAuditPath=D:\Thaumcraft_6_port_to_1.21.1\07_Test_Instance_and_Comparisons\research_requirement_audit\thaumcraft_1_21_research_requirements.md" -PtcResearchRequirementAuditDetailLimit=200
 ```
 
-Current summary after legacy requirement classification:
+Generated report:
+
+```text
+07_Test_Instance_and_Comparisons/research_requirement_audit/thaumcraft_1_21_research_requirements.md
+```
+
+Current summary:
 
 | Requirement class | Result |
 |---|---:|
-| `required_item` | `29/69` resolved |
-| `required_craft` | `10/34` modern-matchable |
+| `required_item` | `69/69` resolved |
+| `required_craft` | `34/34` modern-matchable |
 | `required_knowledge` | `170/170` resolved |
-| Total unresolved item/craft/knowledge requirements | `64` |
+| Total unresolved item/craft/knowledge requirements | `0` |
+| Identity bridge / placeholder warnings | `69` |
 
-Interpretation: the knowledge parser and legacy point conversion are currently clean for every loaded research-stage knowledge requirement. The remaining blockers are item/craft identity, legacy NBT/container semantics, and subsystem implementation issues.
+Interpretation: the parser, registry lookup, legacy flattening, material-family mapping, and knowledge requirement conversion now cover every loaded stage requirement. The remaining risk is semantic, not parser-level: many resolved ids are bridge identities or placeholders whose final source, recipe, item behavior, or container/component semantics are still owned by later subsystem slices.
 
-## Resolved safe identity mapping
+## Bridge warning families
 
-| Legacy requirement id | Current port id | Reason this mapping is allowed |
-|---|---|---|
-| `thaumcraft:arcane_stone` | `thaumcraft:stone_arcane` | The port already registers the arcane stone block/item as `stone_arcane`. This is a stable renamed identity mapping, not a dummy placeholder. |
-
-## Highest-priority blockers
-
-| Count | Requirement type | Blocked family | Interpretation |
+| Count | Requirement type | Family | Interpretation |
 |---:|---|---|---|
-| 23 | `required_item` | legacy aspect crystal essence | Legacy aspect-carrying crystal item. Do not blindly map this to current `crystal_aer`/`crystal_*` block items until the item/component semantics are designed. Compound-aspect requirements also exist. |
-| 7 | `required_item` | legacy essentia phial | Legacy essentia phial requirement with aspect NBT. This belongs to the essentia/container item slice, not plain item registration. |
-| 4 | `required_item` | legacy enchanted placeholder | Legacy enchanted-placeholder requirement. Needs explicit modern enchantment-component mapping, likely to an enchanted book or matching enchanted tool stack. |
-| 2 | `required_craft` | legacy material family: `thaumcraft:ingot` | Legacy metadata-backed material family. Needs explicit material id mapping before stage crafting markers can be trusted. |
-| 2 | `required_craft` | legacy material family: `thaumcraft:metal` | Legacy metadata-backed metal family. Needs explicit material id mapping. |
-| 2 | `required_item` | legacy material family: `thaumcraft:plate` | Legacy metadata-backed plate family. Needs material/item slice. |
+| 23 | `required_item` | aspect crystal essence bridge | Flattened aspect-specific ids currently stand in for legacy NBT aspect stacks. This is acceptable for requirement identity validation, but final crystal essence behavior still needs DataComponent/container design. |
+| 7 | `required_item` | essentia phial bridge | Flattened filled phial ids currently stand in for legacy aspect NBT. Real phial filling, draining, stack rules and essentia semantics remain blocked. |
+| 5 | `required_craft` | auromancy placeholders | Focus/caster/vis ids are resolvable, but focus sockets, caster behavior, vis costs and related recipe flows are not implemented. |
+| 5 | `required_craft` | thaumium tool placeholders | Tool ids are resolvable, but actual tool classes, material behavior, enchant/repair rules and elemental behavior are not implemented. |
+| 4 | `required_craft` | legacy metadata material family | `ingot` and `metal` metadata families map to modern ids, but the real material/recipe source is still an identity bridge. |
+| 4 | `required_craft` | research/crafting station placeholders | Arcane workbench, research table, scribing tools and wand workbench ids are resolvable; full menus, recipes and research-table flow remain blocked. |
+| 4 | `required_item` | enchanted placeholder bridge | Legacy enchantment-placeholder requirements map to explicit placeholder ids. Final policy should use real modern enchantment components/stacks. |
+| 3 | `required_craft` | alchemy placeholders | Tallow, smelter and crucible ids are resolvable; alchemy/crucible/smelter systems remain blocked. |
+| 3 | `required_item` | legacy metadata material family | `plate` and `nugget` metadata families map to modern ids, but full material item semantics and recipe sources still need their own slice. |
 
-## Single-reference subsystem blockers
+The generated report contains the complete warning list, including single-reference bridges such as mirrored glass, zombie brain, curio metadata, `arcane_stone` rename, `oredict:chest`, and flattened vanilla metadata ids.
 
-These are currently one reference each, but many are major subsystem entry points:
+## Safe conclusions
 
-### Research/crafting station
+- `required_knowledge` is clean for all loaded research stages.
+- `required_item` and `required_craft` no longer have registry-identity gaps in the current branch.
+- `0` unresolved does not mean research progression is gameplay-complete.
+- The shared `TCResearchRequirementResolver` remains the single source for legacy requirement interpretation.
+- The non-interactive exporter is now the preferred gate for requirement changes because it runs after real server data reload and does not depend on manual console input.
+- Exact legacy direct `ItemStack.toString().hashCode()` craft marker parity remains unresolved and still requires a dedicated 1.12 exporter/mapping pass.
 
-- `thaumcraft:arcane_workbench`
-- `thaumcraft:research_table`
-- `thaumcraft:scribing_tools`
-- `thaumcraft:wand_workbench`
+## Still blocked
 
-### Auromancy
+- Full crystal essence and filled phial DataComponent/container semantics.
+- Real arcane workbench, wand workbench, research table and scribing tools behavior.
+- Focus/caster/vis behavior.
+- Crucible, nitor, smelter and broader alchemy behavior.
+- Infusion matrix and infusion recipe behavior.
+- Thaumium tools and material behavior.
+- Enchanted-placeholder replacement with real modern enchantment-component stack matching.
+- Full Thaumonomicon UI, rewards, recipe unlock side effects and broad player knowledge/stage sync.
 
-- `thaumcraft:caster_basic`
-- `thaumcraft:focus_1`
-- `thaumcraft:focus_2`
-- `thaumcraft:focus_3`
-- `thaumcraft:vis_resonator`
+## Pass criteria
 
-### Alchemy
-
-- `thaumcraft:crucible`
-- `thaumcraft:leather`
-- `thaumcraft:nitor`
-- `thaumcraft:smelter_basic`
-- `thaumcraft:tallow`
-
-### Infusion
-
-- `thaumcraft:infusion_matrix`
-
-### Thaumium tools and material-family item
-
-- `thaumcraft:thaumium_axe`
-- `thaumcraft:thaumium_hoe`
-- `thaumcraft:thaumium_pick`
-- `thaumcraft:thaumium_shovel`
-- `thaumcraft:thaumium_sword`
-- `thaumcraft:nugget`
-
-### Other families
-
-- `thaumcraft:brain`
-- `thaumcraft:curio`
-- `thaumcraft:mirrored_glass`
-
-Some of these are simple identity/registry blockers. Others are not safe to resolve as plain items because they represent larger systems: arcane crafting, crucible, focus crafting, infusion, essentia, or research table workflows.
-
-## Current safe conclusions
-
-- `required_knowledge` is not the active bottleneck.
-- The shared `TCResearchRequirementResolver` is now the single source for research-stage item and knowledge requirement interpretation.
-- Most unresolved stage gates are expected because the corresponding items, blocks, container items, or subsystem flows do not exist in the current port yet.
-- `crystal_essence`, `phial`, and enchanted-placeholder requirements must not be solved by registering dummy placeholder items. Doing that would make research stages appear fulfillable while the real item semantics are absent.
-- Metadata-backed legacy families such as `ingot`, `metal`, `plate`, and `nugget` need an explicit legacy-to-modern material mapping table before they can safely participate in item consumption or craft marker checks.
-- Exact legacy `ItemStack.toString().hashCode()` craft marker parity remains unresolved and still requires a dedicated 1.12 exporter/mapping pass.
-
-## Recommended next implementation order
-
-1. Keep `TCResearchRequirementResolver` as the only place for item/knowledge research requirement interpretation.
-2. Add explicit mapping entries only for already-implemented renamed identities. `thaumcraft:arcane_stone -> thaumcraft:stone_arcane` is the first accepted example.
-3. Create a dedicated material-family mapping note before resolving `thaumcraft:ingot`, `thaumcraft:metal`, `thaumcraft:plate`, or `thaumcraft:nugget`.
-4. Defer `crystal_essence` and `phial` until aspect-container item semantics are designed.
-5. Defer `arcane_workbench`, `wand_workbench`, focus items, crucible, infusion matrix, and research table until their subsystem slices exist.
-6. Add the 1.12 craft-hash exporter before relying on exact legacy direct craft marker ids.
-
-## Pass criteria for this audit to improve
-
-- The unresolved count may decrease only when the corresponding modern item behavior is real or the mapping is explicitly documented.
-- A lower unresolved count is not automatically better if it was achieved by dummy registrations.
-- Every new mapping must be safe for both requirement checking and requirement consumption.
-- Audit output should keep describing unresolved requirements by semantic family, not just by missing registry id.
+- The generated audit must stay at `0` identity-unresolved requirements unless new legacy data is added.
+- Bridge warning count may decrease only when the corresponding subsystem-owned semantics are real, not because a dummy id was added.
+- Every new mapping must be safe for both requirement checking and item consumption or craft marker matching.
+- Audit output must keep describing bridge warnings by semantic family, not just by registry id.

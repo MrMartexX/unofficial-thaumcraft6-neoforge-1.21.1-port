@@ -2,33 +2,33 @@
 
 Status: planning document for legacy metadata-backed material-family requirements used by research-stage `required_item` and `required_craft` gates.
 
-This document records the known legacy ids and metadata values seen in `/tc research requirements 50`, plus the current inferred semantic targets from surrounding research recipe context. These semantic targets are **not yet resolved** until the corresponding modern items are registered and safe for requirement matching/consumption.
+This document records the known legacy ids and metadata values seen in the research requirement audit, plus the current inferred semantic targets from surrounding research recipe context. These semantic targets are now registry-resolved as bridge identities, but the report still flags them until their final material items, recipes and subsystem semantics are complete.
 
 ## Why this exists
 
 Thaumcraft 6 1.12 used metadata-backed item families such as `thaumcraft:ingot`, `thaumcraft:metal`, `thaumcraft:plate`, and `thaumcraft:nugget`. Minecraft 1.21.1 uses flattened item ids, so the legacy id alone is not enough. The metadata/damage value is part of the semantic identity.
 
-The shared `TCResearchRequirementResolver` classifies these as `legacy material-family requirement` or, when the semantic target is known but the modern item does not exist yet, as `legacy material-family target not implemented`.
+The shared `TCResearchRequirementResolver` maps the currently known family metadata values to flattened ids. The non-interactive audit still reports them as `legacy metadata material-family bridge` because registry identity resolution is not the same as final material/recipe parity.
 
 ## Current audit snapshot
 
 Command:
 
-```text
-/tc research requirements 50
+```powershell
+.\gradlew.bat runServer --no-daemon -PtcResearchRequirementAudit=true "-PtcResearchRequirementAuditPath=D:\Thaumcraft_6_port_to_1.21.1\07_Test_Instance_and_Comparisons\research_requirement_audit\thaumcraft_1_21_research_requirements.md" -PtcResearchRequirementAuditDetailLimit=200
 ```
 
-Current material-family blockers:
+Current material-family bridge warnings:
 
 | Requirement source | Requirement type | Legacy raw requirement | Observed metadata/damage | Current state |
 |---|---|---|---:|---|
-| `METALLURGY stage 1` | `required_craft` | `thaumcraft:ingot;1;2` | `2` | target inferred: brass ingot, item not implemented |
-| `METALLURGY stage 2` | `required_craft` | `thaumcraft:ingot;1;0` | `0` | target inferred: thaumium ingot, item not implemented |
-| `ESSENTIASMELTERTHAUMIUM stage 1` | `required_item` | `thaumcraft:plate;1;2` | `2` | target inferred: thaumium plate, item not implemented |
-| `ESSENTIASMELTERTHAUMIUM stage 1` | `required_craft` | `thaumcraft:metal;1;2` | `2` | target inferred: thaumium metal, item not implemented |
-| `ESSENTIASMELTERVOID stage 1` | `required_item` | `thaumcraft:plate;1;3` | `3` | target inferred: void plate, item not implemented |
-| `ESSENTIASMELTERVOID stage 1` | `required_craft` | `thaumcraft:metal;1;3` | `3` | target inferred: void metal, item not implemented |
-| `GRAPPLEGUN stage 1` | `required_item` | `thaumcraft:nugget;1;10` | `10` | still blocked: material-family mapping required |
+| `METALLURGY stage 1` | `required_craft` | `thaumcraft:ingot;1;2` | `2` | maps to `thaumcraft:brass_ingot`; bridge until final material recipe/source parity |
+| `METALLURGY stage 2` | `required_craft` | `thaumcraft:ingot;1;0` | `0` | maps to `thaumcraft:thaumium_ingot`; bridge until final material recipe/source parity |
+| `ESSENTIASMELTERTHAUMIUM stage 1` | `required_item` | `thaumcraft:plate;1;2` | `2` | maps to `thaumcraft:thaumium_plate`; bridge until final material recipe/source parity |
+| `ESSENTIASMELTERTHAUMIUM stage 1` | `required_craft` | `thaumcraft:metal;1;2` | `2` | maps to `thaumcraft:metal_thaumium`; bridge until block/material parity |
+| `ESSENTIASMELTERVOID stage 1` | `required_item` | `thaumcraft:plate;1;3` | `3` | maps to `thaumcraft:void_plate`; bridge until final material recipe/source parity |
+| `ESSENTIASMELTERVOID stage 1` | `required_craft` | `thaumcraft:metal;1;3` | `3` | maps to `thaumcraft:metal_void`; bridge until block/material parity |
+| `GRAPPLEGUN stage 1` | `required_item` | `thaumcraft:nugget;1;10` | `10` | maps to `thaumcraft:rare_earth`; bridge until source/drop/recipe parity |
 
 ## Context used for current semantic targets
 
@@ -39,15 +39,7 @@ The current targets are inferred from the legacy research recipe context, not fr
 - `ESSENTIASMELTERTHAUMIUM` uses `plate;1;2` and `metal;1;2` in a stage named for thaumium smelter progression, so metadata `2` is currently treated as thaumium material target for those families.
 - `ESSENTIASMELTERVOID` uses `plate;1;3` and `metal;1;3` in a stage named for void smelter progression and is gated by `BASEELDRITCH`, whose recipes include void ingot/void stuff, so metadata `3` is currently treated as void material target.
 
-These inferences must still be confirmed later against legacy source or a 1.12 runtime export before being treated as final parity data.
-
-## Do not guess unresolved metadata
-
-Do **not** map the following directly until confirmed from legacy source/exported registry data:
-
-| Legacy family | Metadata values currently observed | Why guessing is unsafe |
-|---|---|---|
-| `thaumcraft:nugget` | `10` | Nugget metadata may not correspond to the same material index as ingot/metal/plate. |
+These inferences are now encoded as bridge mappings, not final parity claims. If a 1.12 runtime item-stack exporter later disproves any metadata target, update `TCLegacyMaterialFamilyMappings` and regenerate the requirement audit.
 
 ## Required confirmation source
 
@@ -61,26 +53,25 @@ Before final parity implementation, confirm each mapping from at least one of th
 
 | Legacy raw id | Metadata/damage | Current semantic target | Planned modern item id | Safe for `required_item` consumption? | Safe for `required_craft` marker matching? | Current confirmation source |
 |---|---:|---|---|---|---|---|
-| `thaumcraft:ingot` | `0` | thaumium ingot | `thaumcraft:thaumium_ingot` | no: item not registered yet | no: item not registered yet | inferred from `METALLURGY` recipe context |
-| `thaumcraft:ingot` | `2` | brass ingot | `thaumcraft:brass_ingot` | no: item not registered yet | no: item not registered yet | inferred from `METALLURGY` recipe context |
-| `thaumcraft:metal` | `2` | thaumium metal | `thaumcraft:thaumium_metal` | no: item not registered yet | no: item not registered yet | inferred from `ESSENTIASMELTERTHAUMIUM` context |
-| `thaumcraft:metal` | `3` | void metal | `thaumcraft:void_metal` | no: item not registered yet | no: item not registered yet | inferred from `ESSENTIASMELTERVOID` + `BASEELDRITCH` context |
-| `thaumcraft:plate` | `2` | thaumium plate | `thaumcraft:thaumium_plate` | no: item not registered yet | no: item not registered yet | inferred from `ESSENTIASMELTERTHAUMIUM` context |
-| `thaumcraft:plate` | `3` | void plate | `thaumcraft:void_plate` | no: item not registered yet | no: item not registered yet | inferred from `ESSENTIASMELTERVOID` + `BASEELDRITCH` context |
-| `thaumcraft:nugget` | `10` | TODO | TODO | no | no | TODO |
+| `thaumcraft:ingot` | `0` | thaumium ingot | `thaumcraft:thaumium_ingot` | yes as bridge identity | yes as modern-matchable bridge | inferred from `METALLURGY` recipe context |
+| `thaumcraft:ingot` | `2` | brass ingot | `thaumcraft:brass_ingot` | yes as bridge identity | yes as modern-matchable bridge | inferred from `METALLURGY` recipe context |
+| `thaumcraft:metal` | `2` | thaumium metal block | `thaumcraft:metal_thaumium` | yes as bridge identity | yes as modern-matchable bridge | inferred from `ESSENTIASMELTERTHAUMIUM` context and registered block id |
+| `thaumcraft:metal` | `3` | void metal block | `thaumcraft:metal_void` | yes as bridge identity | yes as modern-matchable bridge | inferred from `ESSENTIASMELTERVOID` + `BASEELDRITCH` context and registered block id |
+| `thaumcraft:plate` | `2` | thaumium plate | `thaumcraft:thaumium_plate` | yes as bridge identity | yes as modern-matchable bridge | inferred from `ESSENTIASMELTERTHAUMIUM` context |
+| `thaumcraft:plate` | `3` | void plate | `thaumcraft:void_plate` | yes as bridge identity | yes as modern-matchable bridge | inferred from `ESSENTIASMELTERVOID` + `BASEELDRITCH` context |
+| `thaumcraft:nugget` | `10` | rare earth | `thaumcraft:rare_earth` | yes as bridge identity | yes as modern-matchable bridge | current mapping policy; still needs legacy item-stack confirmation |
 
 ## Implementation rule
 
-Only after the modern target item exists should `TCLegacyMaterialFamilyMappings` return a resolved mapping for any of these entries.
-
-Until then, these blockers must remain unresolved, but the audit output may report the planned target as `legacy material-family target not implemented`.
+`TCLegacyMaterialFamilyMappings` may return resolved mappings for these entries because the modern ids now exist. The audit must still keep them in bridge warnings until their source recipes, drops and material semantics are implemented and validated.
 
 ## Pass criteria
 
-A material-family requirement can be marked resolved only when all of the following are true:
+A material-family requirement can leave the bridge-warning bucket only when all of the following are true:
 
 - the modern item is registered;
 - the legacy metadata value maps to exactly one modern semantic material;
 - `required_item` consumption cannot consume the wrong material variant;
 - `required_craft` marker matching is documented as either modern-matchable or still requiring exact 1.12 craft-hash parity;
+- the source recipe/drop or subsystem that should produce the item exists;
 - the mapping is documented in this file.

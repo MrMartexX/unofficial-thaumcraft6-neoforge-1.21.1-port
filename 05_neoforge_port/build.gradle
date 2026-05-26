@@ -65,6 +65,9 @@ neoForge {
             def scanDumpPath = providers.gradleProperty('tcScanDumpPath').orNull ?: System.getProperty('tc.scanDumpPath')
             def scanEntityDumpEnabled = providers.gradleProperty('tcScanEntityDump').orNull ?: System.getProperty('tc.scanEntityDump')
             def scanEntityDumpPath = providers.gradleProperty('tcScanEntityDumpPath').orNull ?: System.getProperty('tc.scanEntityDumpPath')
+            def researchRequirementAuditEnabled = providers.gradleProperty('tcResearchRequirementAudit').orNull ?: System.getProperty('tc.researchRequirementAudit')
+            def researchRequirementAuditPath = providers.gradleProperty('tcResearchRequirementAuditPath').orNull ?: System.getProperty('tc.researchRequirementAuditPath')
+            def researchRequirementAuditDetailLimit = providers.gradleProperty('tcResearchRequirementAuditDetailLimit').orNull ?: System.getProperty('tc.researchRequirementAuditDetailLimit')
             if (aspectDumpEnabled != null) {
                 systemProperty 'tc.aspectDump', aspectDumpEnabled
             }
@@ -82,6 +85,15 @@ neoForge {
             }
             if (scanEntityDumpPath != null) {
                 systemProperty 'tc.scanEntityDumpPath', scanEntityDumpPath
+            }
+            if (researchRequirementAuditEnabled != null) {
+                systemProperty 'tc.researchRequirementAudit', researchRequirementAuditEnabled
+            }
+            if (researchRequirementAuditPath != null) {
+                systemProperty 'tc.researchRequirementAuditPath', researchRequirementAuditPath
+            }
+            if (researchRequirementAuditDetailLimit != null) {
+                systemProperty 'tc.researchRequirementAuditDetailLimit', researchRequirementAuditDetailLimit
             }
             logLevel = org.slf4j.event.Level.DEBUG
         }
