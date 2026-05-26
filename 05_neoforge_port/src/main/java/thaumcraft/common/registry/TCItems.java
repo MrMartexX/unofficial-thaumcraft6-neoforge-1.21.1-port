@@ -5,6 +5,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.items.ItemAspectVariant;
 import thaumcraft.common.items.tools.ItemThaumometer;
 
 public final class TCItems {
@@ -178,7 +179,19 @@ public final class TCItems {
     public static final Supplier<Item> ENCHANTED_PLACEHOLDER_FORTUNE_1 = simpleItem("enchanted_placeholder_fortune_1");
 
     private static Supplier<Item> simpleItem(String id) {
-        return ITEMS.register(id, () -> new Item(new Item.Properties()));
+        return ITEMS.register(id, () -> createSimpleItem(id));
+    }
+
+    private static Item createSimpleItem(String id) {
+        if (id.startsWith("crystal_essence_")) {
+            String aspect = id.substring("crystal_essence_".length());
+            return new ItemAspectVariant(ItemAspectVariant.Kind.CRYSTAL_ESSENCE, aspect, 1);
+        }
+        if (id.startsWith("phial_")) {
+            String aspect = id.substring("phial_".length());
+            return new ItemAspectVariant(ItemAspectVariant.Kind.PHIAL, aspect, 10);
+        }
+        return new Item(new Item.Properties());
     }
 
     private static Supplier<BlockItem> blockItem(String id, Supplier<? extends net.minecraft.world.level.block.Block> block) {
