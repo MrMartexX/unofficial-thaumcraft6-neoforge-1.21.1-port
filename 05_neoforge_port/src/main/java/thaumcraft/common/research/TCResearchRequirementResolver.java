@@ -132,6 +132,15 @@ public final class TCResearchRequirementResolver {
         if (id.equals("thaumcraft:arcane_stone")) {
             return "thaumcraft:stone_arcane";
         }
+        if (id.equals("thaumcraft:leather")) {
+            return "minecraft:leather";
+        }
+        if (id.equals("thaumcraft:nitor") && damage == 4) {
+            return "thaumcraft:nitor_yellow";
+        }
+        if (id.equals("thaumcraft:curio") && damage == 6) {
+            return "thaumcraft:curio_rites";
+        }
         return id;
     }
 
