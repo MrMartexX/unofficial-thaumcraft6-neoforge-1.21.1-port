@@ -11,9 +11,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.items.components.TCAspectStackComponent;
 
 public final class TCResearchRequirementResolver {
     private static final Pattern ASPECT_KEY_PATTERN = Pattern.compile("key:\\s*\\\"([^\\\"]+)\\\"");
+    private static final Pattern ASPECT_AMOUNT_PATTERN = Pattern.compile("amount:\\s*(\\d+)s?");
     private static final Pattern ENCHANTMENT_PATTERN = Pattern.compile("id:\\s*(\\d+)s?\\s*,\\s*lvl:\\s*(\\d+)s?");
 
     private TCResearchRequirementResolver() {
@@ -80,7 +82,7 @@ public final class TCResearchRequirementResolver {
             );
         }
 
-        return ItemRequirementResolution.ok(ItemRequirement.item(raw, item, count));
+        return ItemRequirementResolution.ok(ItemRequirement.item(raw, item, count, legacyAspectStackRequirement(rawId, damage, value)));
     }
 
     public static KnowledgeRequirementResolution resolveKnowledgeRequirement(String raw) {
@@ -227,12 +229,34 @@ public final class TCResearchRequirementResolver {
         return null;
     }
 
+    private static TCAspectStackComponent legacyAspectStackRequirement(String rawId, int damage, String normalizedRaw) {
+        String aspect = extractAspectKey(normalizedRaw);
+        if (aspect.isBlank()) {
+            return null;
+        }
+        if (rawId.equals("thaumcraft:crystal_essence")) {
+            return new TCAspectStackComponent(aspect, extractAspectAmount(normalizedRaw, 1));
+        }
+        if (rawId.equals("thaumcraft:phial") && damage == 1) {
+            return new TCAspectStackComponent(aspect, extractAspectAmount(normalizedRaw, 10));
+        }
+        return null;
+    }
+
     private static String extractAspectKey(String normalizedRaw) {
         Matcher matcher = ASPECT_KEY_PATTERN.matcher(normalizedRaw);
         if (!matcher.find()) {
             return "";
         }
         return sanitizePathSegment(matcher.group(1));
+    }
+
+    private static int extractAspectAmount(String normalizedRaw, int fallback) {
+        Matcher matcher = ASPECT_AMOUNT_PATTERN.matcher(normalizedRaw);
+        if (!matcher.find()) {
+            return fallback;
+        }
+        return parsePositiveInt(matcher.group(1), fallback);
     }
 
     private static String flattenedEnchantmentPlaceholderId(String normalizedRaw) {
@@ -325,17 +349,25 @@ public final class TCResearchRequirementResolver {
         return builder.toString();
     }
 
-    public record ItemRequirement(String raw, Item item, List<TagKey<Item>> tags, int count) {
+    public record ItemRequirement(String raw, Item item, List<TagKey<Item>> tags, int count, TCAspectStackComponent aspectStack) {
         public ItemRequirement {
             tags = List.copyOf(tags);
         }
 
         static ItemRequirement item(String raw, Item item, int count) {
-            return new ItemRequirement(raw, item, List.of(), count);
+            return item(raw, item, count, null);
+        }
+
+        static ItemRequirement item(String raw, Item item, int count, TCAspectStackComponent aspectStack) {
+            return new ItemRequirement(raw, item, List.of(), count, aspectStack);
         }
 
         static ItemRequirement tags(String raw, List<TagKey<Item>> tags, int count) {
-            return new ItemRequirement(raw, null, tags, count);
+            return new ItemRequirement(raw, null, tags, count, null);
+        }
+
+        boolean hasAspectStackRequirement() {
+            return aspectStack != null && !aspectStack.isEmpty();
         }
     }
 
