@@ -15,10 +15,14 @@ final class TCLegacyMaterialFamilyMappings {
     }
 
     static String modernItemId(String rawId, String damageText) {
+        int damage = parsePositiveInt(damageText, 0);
+        String simpleIdentity = simpleModernItemId(rawId, damage);
+        if (simpleIdentity != null) {
+            return simpleIdentity;
+        }
         if (!isMaterialFamily(rawId)) {
             return null;
         }
-        int damage = parsePositiveInt(damageText, 0);
         LegacyMaterialTarget target = confirmedTarget(rawId, damage);
         return target == null ? null : target.modernItemId();
     }
@@ -47,6 +51,19 @@ final class TCLegacyMaterialFamilyMappings {
                 || rawId.equals("thaumcraft:metal")
                 || rawId.equals("thaumcraft:plate")
                 || rawId.equals("thaumcraft:nugget");
+    }
+
+    private static String simpleModernItemId(String rawId, int damage) {
+        if (rawId.equals("thaumcraft:leather")) {
+            return "minecraft:leather";
+        }
+        if (rawId.equals("thaumcraft:nitor") && damage == 4) {
+            return "thaumcraft:nitor_yellow";
+        }
+        if (rawId.equals("thaumcraft:curio") && damage == 6) {
+            return "thaumcraft:curio_rites";
+        }
+        return null;
     }
 
     private static LegacyMaterialTarget confirmedTarget(String rawId, int damage) {
