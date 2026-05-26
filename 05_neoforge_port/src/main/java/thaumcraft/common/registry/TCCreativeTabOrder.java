@@ -5,15 +5,21 @@ import net.minecraft.world.item.CreativeModeTab;
 /**
  * Controls the visible Thaumcraft creative tab order.
  *
- * <p>Do not sort this class alphabetically and do not rely on registry declaration order.
- * The visible order should follow the Thaumcraft 6 1.12.2 creative inventory screenshots where parity data exists,
- * with clearly grouped compatibility placeholders after the currently visible ported content.</p>
+ * <p>Do not sort this class alphabetically and do not rely on registry declaration order. The visible order follows
+ * the Thaumcraft 6 1.12.2 registration order for the subset currently ported to NeoForge. Missing legacy entries are
+ * intentionally skipped, so the remaining implemented entries keep their relative legacy position.</p>
  */
 public final class TCCreativeTabOrder {
     private TCCreativeTabOrder() {
     }
 
     public static void addThaumcraftItems(CreativeModeTab.Output output) {
+        addWorldAndDecorativeBlocks(output);
+        addDeviceAndCraftingBlocks(output);
+        addLegacyItemSequence(output);
+    }
+
+    private static void addWorldAndDecorativeBlocks(CreativeModeTab.Output output) {
         output.accept(TCItems.ORE_AMBER.get());
         output.accept(TCItems.ORE_CINNABAR.get());
         output.accept(TCItems.ORE_QUARTZ.get());
@@ -63,54 +69,67 @@ public final class TCCreativeTabOrder {
 
         output.accept(TCItems.AMBER_BLOCK.get());
         output.accept(TCItems.AMBER_BRICK.get());
+
         output.accept(TCItems.METAL_BRASS.get());
         output.accept(TCItems.METAL_THAUMIUM.get());
         output.accept(TCItems.METAL_VOID.get());
         output.accept(TCItems.NITOR_YELLOW.get());
+    }
 
+    private static void addDeviceAndCraftingBlocks(CreativeModeTab.Output output) {
         output.accept(TCItems.ARCANE_WORKBENCH.get());
         output.accept(TCItems.RESEARCH_TABLE.get());
         output.accept(TCItems.CRUCIBLE.get());
         output.accept(TCItems.SMELTER_BASIC.get());
         output.accept(TCItems.WAND_WORKBENCH.get());
         output.accept(TCItems.INFUSION_MATRIX.get());
+    }
+
+    private static void addLegacyItemSequence(CreativeModeTab.Output output) {
+        // Legacy ConfigItems starts with thaumonomicon/curios/loot variants; only the rites curio is ported here.
+        output.accept(TCItems.CURIO_RITES.get());
 
         output.accept(TCItems.AMBER.get());
         output.accept(TCItems.QUICKSILVER.get());
-        output.accept(TCItems.FABRIC.get());
         output.accept(TCItems.THAUMIUM_INGOT.get());
         output.accept(TCItems.BRASS_INGOT.get());
+        output.accept(TCItems.RARE_EARTH.get());
+        output.accept(TCItems.FABRIC.get());
+        output.accept(TCItems.VIS_RESONATOR.get());
+        output.accept(TCItems.TALLOW.get());
         output.accept(TCItems.THAUMIUM_PLATE.get());
         output.accept(TCItems.VOID_PLATE.get());
-        output.accept(TCItems.RARE_EARTH.get());
-        output.accept(TCItems.TALLOW.get());
-        output.accept(TCItems.VIS_RESONATOR.get());
         output.accept(TCItems.MIRRORED_GLASS.get());
+
+        addCrystalEssenceVariants(output);
+
         output.accept(TCItems.BRAIN.get());
-        output.accept(TCItems.CURIO_RITES.get());
+
+        addPhialVariants(output);
+
         output.accept(TCItems.SCRIBING_TOOLS.get());
-
         output.accept(TCItems.THAUMOMETER.get());
-        output.accept(TCItems.GOGGLES.get());
-        output.accept(TCItems.CASTER_BASIC.get());
-        output.accept(TCItems.FOCUS_1.get());
-        output.accept(TCItems.FOCUS_2.get());
-        output.accept(TCItems.FOCUS_3.get());
-        output.accept(TCItems.THAUMIUM_AXE.get());
-        output.accept(TCItems.THAUMIUM_HOE.get());
-        output.accept(TCItems.THAUMIUM_PICK.get());
-        output.accept(TCItems.THAUMIUM_SHOVEL.get());
-        output.accept(TCItems.THAUMIUM_SWORD.get());
 
-        addAspectCompatibilityItems(output);
+        output.accept(TCItems.THAUMIUM_AXE.get());
+        output.accept(TCItems.THAUMIUM_SWORD.get());
+        output.accept(TCItems.THAUMIUM_SHOVEL.get());
+        output.accept(TCItems.THAUMIUM_PICK.get());
+        output.accept(TCItems.THAUMIUM_HOE.get());
+
+        output.accept(TCItems.GOGGLES.get());
 
         output.accept(TCItems.ENCHANTED_PLACEHOLDER_PROTECTION_1.get());
         output.accept(TCItems.ENCHANTED_PLACEHOLDER_SHARPNESS_1.get());
         output.accept(TCItems.ENCHANTED_PLACEHOLDER_SILK_TOUCH_1.get());
         output.accept(TCItems.ENCHANTED_PLACEHOLDER_FORTUNE_1.get());
+
+        output.accept(TCItems.CASTER_BASIC.get());
+        output.accept(TCItems.FOCUS_1.get());
+        output.accept(TCItems.FOCUS_2.get());
+        output.accept(TCItems.FOCUS_3.get());
     }
 
-    private static void addAspectCompatibilityItems(CreativeModeTab.Output output) {
+    private static void addCrystalEssenceVariants(CreativeModeTab.Output output) {
         output.accept(TCItems.CRYSTAL_ESSENCE_AER.get());
         output.accept(TCItems.CRYSTAL_ESSENCE_TERRA.get());
         output.accept(TCItems.CRYSTAL_ESSENCE_IGNIS.get());
@@ -148,7 +167,9 @@ public final class TCCreativeTabOrder {
         output.accept(TCItems.CRYSTAL_ESSENCE_EXANIMIS.get());
         output.accept(TCItems.CRYSTAL_ESSENCE_BESTIA.get());
         output.accept(TCItems.CRYSTAL_ESSENCE_HUMANUS.get());
+    }
 
+    private static void addPhialVariants(CreativeModeTab.Output output) {
         output.accept(TCItems.PHIAL_AER.get());
         output.accept(TCItems.PHIAL_TERRA.get());
         output.accept(TCItems.PHIAL_IGNIS.get());
