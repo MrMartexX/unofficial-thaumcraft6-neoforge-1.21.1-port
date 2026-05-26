@@ -77,6 +77,8 @@ public final class TCItems {
     public static final Supplier<Item> TALLOW = simpleItem("tallow");
     public static final Supplier<Item> VIS_RESONATOR = simpleItem("vis_resonator");
     public static final Supplier<Item> MIRRORED_GLASS = simpleItem("mirrored_glass");
+    public static final Supplier<Item> BRAIN = simpleItem("brain");
+    public static final Supplier<Item> CURIO_RITES = simpleItem("curio_rites");
 
     private static Supplier<Item> simpleItem(String id) {
         return ITEMS.register(id, () -> new Item(new Item.Properties()));
