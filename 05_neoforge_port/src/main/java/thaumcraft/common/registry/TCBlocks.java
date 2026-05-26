@@ -53,6 +53,10 @@ public final class TCBlocks {
     public static final Supplier<Block> AMBER_BLOCK = BLOCKS.register("amber_block", () -> amberBlock());
     public static final Supplier<Block> AMBER_BRICK = BLOCKS.register("amber_brick", () -> amberBlock());
 
+    public static final Supplier<Block> METAL_BRASS = BLOCKS.register("metal_brass", () -> metalBlock());
+    public static final Supplier<Block> METAL_THAUMIUM = BLOCKS.register("metal_thaumium", () -> metalBlock());
+    public static final Supplier<Block> METAL_VOID = BLOCKS.register("metal_void", () -> metalBlock());
+
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
 
@@ -90,6 +94,12 @@ public final class TCBlocks {
     private static Block woodBlock() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                 .strength(2.0F, 2.0F));
+    }
+
+    private static Block metalBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(5.0F, 10.0F)
+                .requiresCorrectToolForDrops());
     }
 
     private static Block amberBlock() {
