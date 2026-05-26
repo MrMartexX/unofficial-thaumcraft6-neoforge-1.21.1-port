@@ -19,6 +19,8 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.items.components.TCAspectStackComponent;
+import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirement;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirementResolution;
 import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirement;
@@ -634,6 +636,13 @@ public final class TCResearchManager {
         if (stack.isEmpty()) {
             return false;
         }
+        if (!matchesRequirementIdentity(stack, requirement)) {
+            return false;
+        }
+        return matchesAspectStackRequirement(stack, requirement);
+    }
+
+    private static boolean matchesRequirementIdentity(ItemStack stack, ItemRequirement requirement) {
         if (requirement.item() != null && stack.is(requirement.item())) {
             return true;
         }
@@ -643,6 +652,18 @@ public final class TCResearchManager {
             }
         }
         return false;
+    }
+
+    private static boolean matchesAspectStackRequirement(ItemStack stack, ItemRequirement requirement) {
+        if (!requirement.hasAspectStackRequirement()) {
+            return true;
+        }
+        TCAspectStackComponent required = requirement.aspectStack();
+        TCAspectStackComponent actual = stack.get(TCDataComponents.ASPECT_STACK.get());
+        if (actual == null || actual.isEmpty()) {
+            return false;
+        }
+        return actual.aspect().equals(required.aspect()) && actual.amount() >= required.amount();
     }
 
     private static String craftRequirementMarker(String raw) {
