@@ -8,6 +8,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.items.ItemAspectVariant;
 import thaumcraft.common.items.ItemLegacyPlaceholder;
+import thaumcraft.common.items.consumables.ItemZombieBrain;
+import thaumcraft.common.items.tools.ItemScribingTools;
 import thaumcraft.common.items.tools.ItemThaumometer;
 
 public final class TCItems {
@@ -195,10 +197,8 @@ public final class TCItems {
         }
 
         return switch (id) {
-            case "scribing_tools" -> new ItemLegacyPlaceholder(
-                    new Item.Properties().stacksTo(1),
-                    "tc.placeholder.scribing_tools"
-            );
+            case "brain" -> new ItemZombieBrain();
+            case "scribing_tools" -> new ItemScribingTools();
             case "caster_basic" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
                     "tc.placeholder.caster_basic"
