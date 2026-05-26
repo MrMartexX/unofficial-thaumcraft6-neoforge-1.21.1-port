@@ -4,10 +4,12 @@ import java.util.function.Supplier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.items.ItemAspectVariant;
 import thaumcraft.common.items.ItemLegacyPlaceholder;
+import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.items.consumables.ItemZombieBrain;
 import thaumcraft.common.items.tools.ItemScribingTools;
@@ -200,6 +202,12 @@ public final class TCItems {
         return switch (id) {
             case "brain" -> new ItemZombieBrain();
             case "scribing_tools" -> new ItemScribingTools();
+            case "thaumium_ingot" -> legacyItem("ingot", "thaumium", 0);
+            case "brass_ingot" -> legacyItem("ingot", "brass", 2);
+            case "thaumium_plate" -> legacyItem("plate", "thaumium", 2);
+            case "void_plate" -> legacyItem("plate", "void", 3);
+            case "rare_earth" -> legacyItem("nugget", "rare_earth", 10);
+            case "curio_rites" -> legacyItem("curio", "rites", 6);
             case "caster_basic" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
                     "tc.placeholder.caster_basic"
@@ -220,7 +228,14 @@ public final class TCItems {
         };
     }
 
-    private static Item legacyMagicPlaceholder(String id) {
+    private static Item legacyItem(String family, String variant, int metadata) {
+        return new Item(new Item.Properties().component(
+                TCDataComponents.LEGACY_ITEM.get(),
+                new TCLegacyItemComponent(family, variant, metadata)
+        ));
+    }
+
+    private static ItemLegacyPlaceholder legacyMagicPlaceholder(String id) {
         return new ItemLegacyPlaceholder(
                 new Item.Properties()
                         .stacksTo(1)
@@ -231,8 +246,22 @@ public final class TCItems {
         );
     }
 
-    private static Supplier<BlockItem> blockItem(String id, Supplier<? extends net.minecraft.world.level.block.Block> block) {
-        return ITEMS.register(id, () -> new BlockItem(block.get(), new Item.Properties()));
+    private static Supplier<BlockItem> blockItem(String id, Supplier<? extends Block> block) {
+        return ITEMS.register(id, () -> new BlockItem(block.get(), legacyBlockItemProperties(id)));
+    }
+
+    private static Item.Properties legacyBlockItemProperties(String id) {
+        return switch (id) {
+            case "metal_thaumium" -> new Item.Properties().component(
+                    TCDataComponents.LEGACY_ITEM.get(),
+                    new TCLegacyItemComponent("metal", "thaumium", 2)
+            );
+            case "metal_void" -> new Item.Properties().component(
+                    TCDataComponents.LEGACY_ITEM.get(),
+                    new TCLegacyItemComponent("metal", "void", 3)
+            );
+            default -> new Item.Properties();
+        };
     }
 
     private TCItems() {
