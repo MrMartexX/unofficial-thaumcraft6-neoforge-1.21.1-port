@@ -1,13 +1,14 @@
 package thaumcraft.common.research;
 
 final class TCLegacyMaterialFamilyMappings {
-    private static final LegacyMaterialTarget[] INFERRED_TARGETS = {
+    private static final LegacyMaterialTarget[] CONFIRMED_TARGETS = {
             new LegacyMaterialTarget("thaumcraft:ingot", 0, "thaumium ingot", "thaumcraft:thaumium_ingot"),
             new LegacyMaterialTarget("thaumcraft:ingot", 2, "brass ingot", "thaumcraft:brass_ingot"),
             new LegacyMaterialTarget("thaumcraft:plate", 2, "thaumium plate", "thaumcraft:thaumium_plate"),
             new LegacyMaterialTarget("thaumcraft:plate", 3, "void plate", "thaumcraft:void_plate"),
-            new LegacyMaterialTarget("thaumcraft:metal", 2, "thaumium metal", "thaumcraft:thaumium_metal"),
-            new LegacyMaterialTarget("thaumcraft:metal", 3, "void metal", "thaumcraft:void_metal")
+            new LegacyMaterialTarget("thaumcraft:metal", 2, "thaumium metal block", "thaumcraft:metal_thaumium"),
+            new LegacyMaterialTarget("thaumcraft:metal", 3, "void metal block", "thaumcraft:metal_void"),
+            new LegacyMaterialTarget("thaumcraft:nugget", 10, "rare earth", "thaumcraft:rare_earth")
     };
 
     private TCLegacyMaterialFamilyMappings() {
@@ -18,7 +19,7 @@ final class TCLegacyMaterialFamilyMappings {
             return null;
         }
         int damage = parsePositiveInt(damageText, 0);
-        LegacyMaterialTarget target = inferredTarget(rawId, damage);
+        LegacyMaterialTarget target = confirmedTarget(rawId, damage);
         if (target != null) {
             return new Classification(
                     "legacy material-family target not implemented yet: " + rawId + ";damage=" + damage
@@ -39,8 +40,8 @@ final class TCLegacyMaterialFamilyMappings {
                 || rawId.equals("thaumcraft:nugget");
     }
 
-    private static LegacyMaterialTarget inferredTarget(String rawId, int damage) {
-        for (LegacyMaterialTarget target : INFERRED_TARGETS) {
+    private static LegacyMaterialTarget confirmedTarget(String rawId, int damage) {
+        for (LegacyMaterialTarget target : CONFIRMED_TARGETS) {
             if (target.rawId().equals(rawId) && target.damage() == damage) {
                 return target;
             }
