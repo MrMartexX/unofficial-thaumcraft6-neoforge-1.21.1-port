@@ -1,13 +1,13 @@
 package thaumcraft.common.research;
 
 final class TCLegacyMaterialFamilyMappings {
-    private static final LegacyMaterialMapping[] CONFIRMED_MAPPINGS = {
-            new LegacyMaterialMapping("thaumcraft:ingot", 0, "thaumium ingot", "thaumcraft:thaumium_ingot"),
-            new LegacyMaterialMapping("thaumcraft:ingot", 2, "brass ingot", "thaumcraft:brass_ingot"),
-            new LegacyMaterialMapping("thaumcraft:plate", 2, "thaumium plate", "thaumcraft:thaumium_plate"),
-            new LegacyMaterialMapping("thaumcraft:plate", 3, "void plate", "thaumcraft:void_plate"),
-            new LegacyMaterialMapping("thaumcraft:metal", 2, "thaumium metal", "thaumcraft:thaumium_metal"),
-            new LegacyMaterialMapping("thaumcraft:metal", 3, "void metal", "thaumcraft:void_metal")
+    private static final LegacyMaterialTarget[] INFERRED_TARGETS = {
+            new LegacyMaterialTarget("thaumcraft:ingot", 0, "thaumium ingot", "thaumcraft:thaumium_ingot"),
+            new LegacyMaterialTarget("thaumcraft:ingot", 2, "brass ingot", "thaumcraft:brass_ingot"),
+            new LegacyMaterialTarget("thaumcraft:plate", 2, "thaumium plate", "thaumcraft:thaumium_plate"),
+            new LegacyMaterialTarget("thaumcraft:plate", 3, "void plate", "thaumcraft:void_plate"),
+            new LegacyMaterialTarget("thaumcraft:metal", 2, "thaumium metal", "thaumcraft:thaumium_metal"),
+            new LegacyMaterialTarget("thaumcraft:metal", 3, "void metal", "thaumcraft:void_metal")
     };
 
     private TCLegacyMaterialFamilyMappings() {
@@ -18,12 +18,12 @@ final class TCLegacyMaterialFamilyMappings {
             return null;
         }
         int damage = parsePositiveInt(damageText, 0);
-        LegacyMaterialMapping mapping = confirmedMapping(rawId, damage);
-        if (mapping != null) {
+        LegacyMaterialTarget target = inferredTarget(rawId, damage);
+        if (target != null) {
             return new Classification(
                     "legacy material-family target not implemented yet: " + rawId + ";damage=" + damage
-                            + " -> " + mapping.modernItemId() + " (" + mapping.legacyMaterialName() + ")",
-                    "legacy material-family target not implemented: " + mapping.legacyMaterialName()
+                            + " -> " + target.modernItemId() + " (" + target.legacyMaterialName() + ")",
+                    "legacy material-family target not implemented: " + target.legacyMaterialName()
             );
         }
         return new Classification(
@@ -39,10 +39,10 @@ final class TCLegacyMaterialFamilyMappings {
                 || rawId.equals("thaumcraft:nugget");
     }
 
-    private static LegacyMaterialMapping confirmedMapping(String rawId, int damage) {
-        for (LegacyMaterialMapping mapping : CONFIRMED_MAPPINGS) {
-            if (mapping.rawId().equals(rawId) && mapping.damage() == damage) {
-                return mapping;
+    private static LegacyMaterialTarget inferredTarget(String rawId, int damage) {
+        for (LegacyMaterialTarget target : INFERRED_TARGETS) {
+            if (target.rawId().equals(rawId) && target.damage() == damage) {
+                return target;
             }
         }
         return null;
@@ -60,6 +60,6 @@ final class TCLegacyMaterialFamilyMappings {
     record Classification(String reason, String summaryKey) {
     }
 
-    private record LegacyMaterialMapping(String rawId, int damage, String legacyMaterialName, String modernItemId) {
+    private record LegacyMaterialTarget(String rawId, int damage, String legacyMaterialName, String modernItemId) {
     }
 }
