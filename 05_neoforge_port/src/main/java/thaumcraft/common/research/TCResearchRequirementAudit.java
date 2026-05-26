@@ -41,7 +41,7 @@ final class TCResearchRequirementAudit {
                         itemUnresolved++;
                         recordUnresolved(details, summary, detailLimit, stageLabel, "required_item", required, resolution.reason(), resolution.summaryKey());
                     } else {
-                        recordBridgeIfNeeded(bridgeDetails, bridgeSummary, detailLimit, stageLabel, "required_item", required);
+                        recordBridgeIfNeeded(bridgeDetails, bridgeSummary, detailLimit, stageLabel, "required_item", required, resolution);
                     }
                 }
 
@@ -52,7 +52,7 @@ final class TCResearchRequirementAudit {
                         craftUnresolved++;
                         recordUnresolved(details, summary, detailLimit, stageLabel, "required_craft", required, resolution.reason(), resolution.summaryKey());
                     } else {
-                        recordBridgeIfNeeded(bridgeDetails, bridgeSummary, detailLimit, stageLabel, "required_craft", required);
+                        recordBridgeIfNeeded(bridgeDetails, bridgeSummary, detailLimit, stageLabel, "required_craft", required, resolution);
                     }
                 }
 
@@ -115,6 +115,8 @@ final class TCResearchRequirementAudit {
             writer.write("`required_craft` modern-matchable means the current `ItemCraftedEvent` marker path can identify the crafted stack. Exact legacy `ItemStack.toString().hashCode()` parity is still a separate exporter/mapping task.");
             writer.newLine();
             writer.write("Bridge warnings are not parser failures. They mark requirements whose registry identity is resolvable, but whose final gameplay source, item semantics, recipe flow, or legacy container/component behavior is still a migration boundary.");
+            writer.newLine();
+            writer.write("Aspect stack component requirements are no longer counted as bridge warnings: the legacy NBT aspect/amount pair is now carried by a modern DataComponent payload.");
             writer.newLine();
             writer.newLine();
             writer.write("## Unresolved Summary");
@@ -212,9 +214,10 @@ final class TCResearchRequirementAudit {
             int detailLimit,
             String stageLabel,
             String type,
-            String raw
+            String raw,
+            ItemRequirementResolution resolution
     ) {
-        String bucket = bridgeBucket(raw);
+        String bucket = bridgeBucket(raw, resolution);
         if (bucket.isBlank()) {
             return;
         }
@@ -226,7 +229,7 @@ final class TCResearchRequirementAudit {
         details.add(stageLabel + " " + type + " raw=" + raw + " warning=" + bucket);
     }
 
-    private static String bridgeBucket(String raw) {
+    private static String bridgeBucket(String raw, ItemRequirementResolution resolution) {
         if (raw == null || raw.isBlank()) {
             return "";
         }
@@ -245,10 +248,10 @@ final class TCResearchRequirementAudit {
             return "safe renamed Thaumcraft identity bridge";
         }
         if (rawId.equals("thaumcraft:crystal_essence")) {
-            return "aspect crystal essence bridge: flattened aspect variant before final component/container semantics";
+            return hasAspectStackRequirement(resolution) ? "" : "aspect crystal essence bridge: flattened aspect variant before final component/container semantics";
         }
         if (rawId.equals("thaumcraft:phial")) {
-            return "essentia phial bridge: flattened aspect variant before final DataComponent/container semantics";
+            return hasAspectStackRequirement(resolution) ? "" : "essentia phial bridge: flattened aspect variant before final DataComponent/container semantics";
         }
         if (rawId.endsWith("thaumcraft:enchanted_placeholder")) {
             return "legacy enchanted placeholder bridge before final enchantment-component policy";
@@ -258,6 +261,13 @@ final class TCResearchRequirementAudit {
         }
         String subsystem = subsystemPlaceholder(rawId, damageText);
         return subsystem == null ? "" : subsystem;
+    }
+
+    private static boolean hasAspectStackRequirement(ItemRequirementResolution resolution) {
+        return resolution != null
+                && resolution.resolved()
+                && resolution.requirement() != null
+                && resolution.requirement().hasAspectStackRequirement();
     }
 
     private static String subsystemPlaceholder(String rawId, String damageText) {
