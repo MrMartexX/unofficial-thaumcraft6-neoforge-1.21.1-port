@@ -1,11 +1,7 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "transform": "forge:default-block",
-        "model": "thaumcraft:crucible"
-     },
-     "variants": {
-        "normal": [{}], "inventory": [{}]
+  "variants": {
+    "": {
+      "model": "minecraft:block/cauldron"
     }
-
+  }
 }
