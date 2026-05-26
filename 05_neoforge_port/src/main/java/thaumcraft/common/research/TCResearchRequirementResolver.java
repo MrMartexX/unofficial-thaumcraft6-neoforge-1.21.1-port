@@ -174,7 +174,48 @@ public final class TCResearchRequirementResolver {
                     "legacy material-family requirement: " + rawId
             );
         }
+        if (rawId.equals("thaumcraft:curio")) {
+            return ItemRequirementResolution.unresolved(
+                    "legacy curio-family requirement not mapped yet: " + rawId + ";damage=" + damage,
+                    "legacy curio-family requirement: " + rawId
+            );
+        }
+        String subsystem = legacySubsystemRequirement(rawId);
+        if (subsystem != null) {
+            return ItemRequirementResolution.unresolved(
+                    subsystem + " requirement not mapped yet: " + rawId + ";damage=" + damage,
+                    subsystem + " requirement: " + rawId
+            );
+        }
         return null;
+    }
+
+    private static String legacySubsystemRequirement(String rawId) {
+        return switch (rawId) {
+            case "thaumcraft:arcane_workbench",
+                 "thaumcraft:wand_workbench",
+                 "thaumcraft:research_table",
+                 "thaumcraft:scribing_tools" -> "legacy research/crafting station";
+            case "thaumcraft:caster_basic",
+                 "thaumcraft:focus_1",
+                 "thaumcraft:focus_2",
+                 "thaumcraft:focus_3",
+                 "thaumcraft:vis_resonator" -> "legacy auromancy";
+            case "thaumcraft:crucible",
+                 "thaumcraft:nitor",
+                 "thaumcraft:smelter_basic",
+                 "thaumcraft:tallow",
+                 "thaumcraft:leather" -> "legacy alchemy";
+            case "thaumcraft:infusion_matrix" -> "legacy infusion";
+            case "thaumcraft:thaumium_axe",
+                 "thaumcraft:thaumium_hoe",
+                 "thaumcraft:thaumium_pick",
+                 "thaumcraft:thaumium_shovel",
+                 "thaumcraft:thaumium_sword" -> "legacy thaumium tool";
+            case "thaumcraft:mirrored_glass" -> "legacy artifice/mirror";
+            case "thaumcraft:brain" -> "legacy biological component";
+            default -> null;
+        };
     }
 
     private static String commonTagPath(String entry) {
