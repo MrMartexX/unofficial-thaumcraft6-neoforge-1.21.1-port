@@ -117,7 +117,7 @@ public final class TCBlocks {
     }
 
     private static Block furnaceLikeBlock() {
-        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                 .strength(3.5F, 17.5F)
                 .requiresCorrectToolForDrops());
     }
