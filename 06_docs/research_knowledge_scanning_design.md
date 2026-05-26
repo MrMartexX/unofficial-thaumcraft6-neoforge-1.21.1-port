@@ -241,7 +241,7 @@ Started:
   - `completeCurrentStageWithChecks` is the future Thaumonomicon page-click path: it checks the current stored stage, verifies `required_item`, `required_craft`, `required_research`, and `required_knowledge`, consumes item/knowledge requirements only after all checks pass, then advances the research.
   - `required_research` uses the existing strict `&&`, `||`, and `@stage` logic.
   - `required_knowledge` consumes raw points by `points * type.progression`, preserving the legacy distinction between displayed points and raw storage.
-  - `required_item` currently supports resolvable modern item ids, legacy flattening bridges for old metadata/NBT-shaped ids, material-family mappings, and tag-backed `oredict:*` checks.
+  - `required_item` currently supports resolvable modern item ids, legacy flattening bridges for old metadata-shaped ids, component-backed aspect crystal/phial requirements, component-backed legacy material-family mappings, legacy enchanted-placeholder matching against real modern enchantment components, and tag-backed `oredict:*` checks.
   - `required_craft` currently checks stored craft markers and reports missing markers. The non-interactive requirement audit exporter reports `0` identity-unresolved item/craft/knowledge stage requirements, but also reports bridge/placeholder warnings where final item semantics, recipes or subsystem behavior are not complete. OreDictionary craft markers use the exact Java string hash of `oredict:<name>`; direct ItemStack craft hashes still need a dedicated legacy exporter/mapping before they can be claimed exact.
 - Added modern `PlayerEvent.ItemCraftedEvent` handling for craft markers. When a crafted result matches a resolvable `required_craft` entry, the port stores the same hidden research-marker role that legacy used for `[#]...` craft completion. This covers resolvable modern ids and tag-backed `oredict:*` markers; exact direct legacy ItemStack hash ids remain a separate parity task.
 - Added debug commands:
@@ -252,7 +252,7 @@ Started:
 Not implemented by this skeleton:
 - Thaumonomicon screen filtering/rendering.
 - Exact direct `required_craft` ItemStack hash parity for legacy marker ids.
-- Full item requirement mapping for legacy metadata/NBT-heavy items such as phials, enchanted placeholders, and unported Thaumcraft ids.
+- Producer/container behavior for legacy metadata/NBT-heavy items such as phials, crystal essence, material-family outputs, and unported Thaumcraft ids.
 - Recipe unlocks and rewards.
 - Thaumonomicon UI/page rendering.
 - Client sync.

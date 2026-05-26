@@ -41,6 +41,18 @@ public final class TCResearchRequirementResolver {
         String[] split = value.split(";");
         String rawId = split[0];
         String damageText = split.length > 2 ? split[2] : "0";
+        int count = parsePositiveInt(split.length > 1 ? split[1] : "", 1);
+
+        if (rawId.endsWith("thaumcraft:enchanted_placeholder")) {
+            TCStoredEnchantComponent storedMagic = legacyStoredMagicRequirement(rawId, value);
+            if (storedMagic == null || storedMagic.isEmpty()) {
+                return ItemRequirementResolution.unresolved(
+                        "legacy enchanted placeholder requirement not mapped yet: " + value,
+                        "legacy enchanted placeholder requirement"
+                );
+            }
+            return ItemRequirementResolution.ok(ItemRequirement.any(raw, count, storedMagic));
+        }
 
         String mappedId = legacyFlattenedItemId(rawId, damageText, value);
         ResourceLocation id;
@@ -66,7 +78,6 @@ public final class TCResearchRequirementResolver {
             );
         }
 
-        int count = parsePositiveInt(split.length > 1 ? split[1] : "", 1);
         int damage = parsePositiveInt(damageText, 0);
         boolean hasNbt = value.contains("{");
 
@@ -401,7 +412,7 @@ public final class TCResearchRequirementResolver {
         return builder.toString();
     }
 
-    public record ItemRequirement(String raw, Item item, List<TagKey<Item>> tags, int count, TCAspectStackComponent aspectStack, TCStoredEnchantComponent storedMagic, TCLegacyItemComponent legacyItem) {
+    public record ItemRequirement(String raw, Item item, List<TagKey<Item>> tags, int count, TCAspectStackComponent aspectStack, TCStoredEnchantComponent storedMagic, TCLegacyItemComponent legacyItem, boolean anyItem) {
         public ItemRequirement {
             tags = List.copyOf(tags);
         }
@@ -419,11 +430,15 @@ public final class TCResearchRequirementResolver {
         }
 
         static ItemRequirement item(String raw, Item item, int count, TCAspectStackComponent aspectStack, TCStoredEnchantComponent storedMagic, TCLegacyItemComponent legacyItem) {
-            return new ItemRequirement(raw, item, List.of(), count, aspectStack, storedMagic, legacyItem);
+            return new ItemRequirement(raw, item, List.of(), count, aspectStack, storedMagic, legacyItem, false);
         }
 
         static ItemRequirement tags(String raw, List<TagKey<Item>> tags, int count) {
-            return new ItemRequirement(raw, null, tags, count, null, null, null);
+            return new ItemRequirement(raw, null, tags, count, null, null, null, false);
+        }
+
+        static ItemRequirement any(String raw, int count, TCStoredEnchantComponent storedMagic) {
+            return new ItemRequirement(raw, null, List.of(), count, null, storedMagic, null, true);
         }
 
         boolean hasAspectStackRequirement() {

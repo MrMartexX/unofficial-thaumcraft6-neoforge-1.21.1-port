@@ -36,6 +36,7 @@ The local smoke tests after stabilization confirmed build correctness plus clien
 - Checked current-stage advancement now builds an item-consumption plan and validates knowledge costs before mutating inventory or stored knowledge.
 - The `research all` command output is explicitly marked debug-only, and it sends a final completed-key sync after the batch.
 - Research requirement auditing now has a server-start exporter. It writes a reproducible Markdown report and halts the server, avoiding reliance on Gradle stdin for `/tc research requirements`.
+- Legacy aspect crystal essence, filled phial, material-family metadata and stored-enchantment research requirements now carry component-aware matching semantics. `enchanted_placeholder` follows the legacy `InventoryUtils.checkEnchantedPlaceholder` role by matching real enchanted item/book stacks with the required enchantment level.
 
 ## Important current limitation
 
@@ -69,7 +70,7 @@ The current stage-advance path is still a server-side skeleton for future Thaumo
 
 Exact direct legacy `ItemStack.toString().hashCode()` craft marker parity is not solved. Do not guess those marker ids. They require a separate 1.12 runtime exporter/mapping pass.
 
-The current requirement audit has `0` registry-identity unresolved item/craft/knowledge requirements, but that is not the same as finished gameplay. The audit separately reports bridge/placeholder warnings for aspect crystal essence, filled phials, focus/caster items, research/crafting stations, crucible/smelter/infusion blocks, thaumium tools, material families, and other subsystem-owned identities.
+The current requirement audit has `0` registry-identity unresolved item/craft/knowledge requirements, but that is not the same as finished gameplay. The audit separately reports `28` bridge/placeholder warnings for focus/caster items, research/crafting stations, crucible/smelter/nitor, infusion blocks, thaumium tools, mirror/curio/brain identities, OreDictionary/flattened vanilla compatibility and other subsystem-owned behavior.
 
 ## Generated artifact policy
 
@@ -107,6 +108,6 @@ Do not treat the current branch as a full research system yet. These areas remai
 
 1. Keep this branch stable and avoid adding unrelated gameplay systems.
 2. Use the non-interactive requirement audit as the gate before changing research requirement mapping.
-3. Replace bridge/placeholder identities with real subsystem-owned semantics in focused slices, starting with aspect crystal essence/phial DataComponent behavior or the Research Table/Scribing Tools flow.
+3. Replace bridge/placeholder identities with real subsystem-owned semantics in focused slices, starting with the Research Table/Scribing Tools flow or the first arcane/alchemy recipe-source slice.
 4. Add a dedicated 1.12 exporter for direct craft-hash markers.
 5. Only after that, design the full Thaumonomicon research UI sync and page action flow.

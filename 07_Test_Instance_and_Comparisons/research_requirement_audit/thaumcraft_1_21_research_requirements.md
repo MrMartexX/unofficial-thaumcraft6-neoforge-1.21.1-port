@@ -9,10 +9,11 @@ Equivalent command: `/tc research requirements 200`
 | `required_craft` | `34/34` modern-matchable |
 | `required_knowledge` | `170/170` resolved |
 | Total unresolved item/craft/knowledge requirements | `0` |
-| Identity bridge / placeholder warnings | `69` |
+| Identity bridge / placeholder warnings | `28` |
 
 `required_craft` modern-matchable means the current `ItemCraftedEvent` marker path can identify the crafted stack. Exact legacy `ItemStack.toString().hashCode()` parity is still a separate exporter/mapping task.
 Bridge warnings are not parser failures. They mark requirements whose registry identity is resolvable, but whose final gameplay source, item semantics, recipe flow, or legacy container/component behavior is still a migration boundary.
+Aspect stack, stored-enchantment and legacy item component requirements are no longer counted as bridge warnings when their legacy NBT/metadata semantics are carried by modern DataComponent or vanilla enchantment-component payloads.
 
 ## Unresolved Summary
 
@@ -22,15 +23,10 @@ No unresolved stage requirements.
 
 | Count | Bucket |
 |---:|---|
-| 23 | `required_item aspect crystal essence bridge: flattened aspect variant before final component/container semantics` |
-| 7 | `required_item essentia phial bridge: flattened aspect variant before final DataComponent/container semantics` |
 | 5 | `required_craft auromancy placeholder before focus/caster/vis semantics` |
 | 5 | `required_craft thaumium tool placeholder before tool material/enchant/repair semantics` |
-| 4 | `required_craft legacy metadata material-family bridge` |
 | 4 | `required_craft research/crafting station placeholder before full UI/menu/recipe semantics` |
-| 4 | `required_item legacy enchanted placeholder bridge before final enchantment-component policy` |
 | 3 | `required_craft alchemy placeholder before crucible/smelter/container semantics` |
-| 3 | `required_item legacy metadata material-family bridge` |
 | 2 | `required_craft legacy flattened vanilla metadata bridge` |
 | 2 | `required_item legacy flattened vanilla metadata bridge` |
 | 1 | `required_craft alchemy identity bridge before nitor recipe/subsystem semantics` |
@@ -45,75 +41,34 @@ No unresolved stage requirements.
 
 Detail limit: `200`.
 
-- `METALLURGY stage 1 required_craft raw=thaumcraft:ingot;1;2 warning=legacy metadata material-family bridge`
-- `METALLURGY stage 2 required_craft raw=thaumcraft:ingot;1;0 warning=legacy metadata material-family bridge`
 - `HEDGEALCHEMY stage 1 required_craft raw=thaumcraft:tallow warning=alchemy placeholder before crucible/smelter/container semantics`
 - `HEDGEALCHEMY stage 2 required_craft raw=minecraft:dye warning=legacy flattened vanilla metadata bridge`
 - `HEDGEALCHEMY stage 3 required_craft raw=minecraft:web warning=legacy flattened vanilla metadata bridge`
-- `ESSENTIASMELTER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'aer'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'terra'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'ignis'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'aqua'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'ordo'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'perditio'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 2 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'vacuos'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 2 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'lux'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 2 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'motus'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 2 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'gelum'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 2 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'vitreus'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 2 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'metallum'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 2 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'victus'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 2 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'mortuus'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 2 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'potentia'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `ESSENTIASMELTER stage 2 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'permutatio'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
 - `ESSENTIASMELTER stage 3 required_craft raw=thaumcraft:smelter_basic warning=alchemy placeholder before crucible/smelter/container semantics`
-- `TUBES stage 1 required_item raw=thaumcraft:phial;1;1;{Aspects:[{amount:10,key:'vitium'}]} warning=essentia phial bridge: flattened aspect variant before final DataComponent/container semantics`
-- `TUBES stage 1 required_item raw=thaumcraft:phial;1;1;{Aspects:[{amount:10,key:'vinculum'}]} warning=essentia phial bridge: flattened aspect variant before final DataComponent/container semantics`
-- `TUBES stage 1 required_item raw=thaumcraft:phial;1;1;{Aspects:[{amount:10,key:'alienis'}]} warning=essentia phial bridge: flattened aspect variant before final DataComponent/container semantics`
-- `TUBES stage 1 required_item raw=thaumcraft:phial;1;1;{Aspects:[{amount:10,key:'alkimia'}]} warning=essentia phial bridge: flattened aspect variant before final DataComponent/container semantics`
-- `ESSENTIASMELTERTHAUMIUM stage 1 required_item raw=thaumcraft:plate;1;2 warning=legacy metadata material-family bridge`
-- `ESSENTIASMELTERTHAUMIUM stage 1 required_craft raw=thaumcraft:metal;1;2 warning=legacy metadata material-family bridge`
-- `ESSENTIASMELTERVOID stage 1 required_item raw=thaumcraft:plate;1;3 warning=legacy metadata material-family bridge`
-- `ESSENTIASMELTERVOID stage 1 required_craft raw=thaumcraft:metal;1;3 warning=legacy metadata material-family bridge`
 - `HUNGRYCHEST stage 1 required_item raw=oredict:chest warning=legacy OreDictionary tag bridge`
-- `BELLOWS stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'aer'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
 - `ARCANEEAR stage 1 required_item raw=minecraft:noteblock warning=legacy flattened vanilla metadata bridge`
 - `MIRROR stage 1 required_item raw=thaumcraft:mirrored_glass warning=artifice mirror placeholder before mirror behavior`
 - `LAMPGROWTH stage 1 required_item raw=minecraft:dye;1;15 warning=legacy flattened vanilla metadata bridge`
-- `GRAPPLEGUN stage 1 required_item raw=thaumcraft:nugget;1;10 warning=legacy metadata material-family bridge`
 - `BASEAUROMANCY stage 1 required_craft raw=thaumcraft:focus_1 warning=auromancy placeholder before focus/caster/vis semantics`
 - `BASEAUROMANCY stage 2 required_craft raw=thaumcraft:wand_workbench warning=research/crafting station placeholder before full UI/menu/recipe semantics`
 - `FOCUSADVANCED stage 1 required_craft raw=thaumcraft:focus_2 warning=auromancy placeholder before focus/caster/vis semantics`
 - `FOCUSGREATER stage 1 required_craft raw=thaumcraft:focus_3 warning=auromancy placeholder before focus/caster/vis semantics`
-- `FOCUSBREAK stage 1 required_item raw=thaumcraft:enchanted_placeholder;1;0;{ench:[{id:33s,lvl:1s}]} warning=legacy enchanted placeholder bridge before final enchantment-component policy`
-- `FOCUSBREAK stage 1 required_item raw=thaumcraft:enchanted_placeholder;1;0;{ench:[{id:35s,lvl:1s}]} warning=legacy enchanted placeholder bridge before final enchantment-component policy`
 - `FIRSTSTEPS stage 1 required_craft raw=thaumcraft:arcane_workbench warning=research/crafting station placeholder before full UI/menu/recipe semantics`
 - `THEORYRESEARCH stage 1 required_craft raw=thaumcraft:scribing_tools warning=research/crafting station placeholder before full UI/menu/recipe semantics`
 - `THEORYRESEARCH stage 1 required_craft raw=thaumcraft:research_table warning=research/crafting station placeholder before full UI/menu/recipe semantics`
-- `CRYSTALFARMER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'aer'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `CRYSTALFARMER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'terra'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `CRYSTALFARMER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'ignis'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `CRYSTALFARMER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'aqua'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `CRYSTALFARMER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'ordo'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
-- `CRYSTALFARMER stage 1 required_item raw=thaumcraft:crystal_essence;1;0;{Aspects:[{amount:1,key:'perditio'}]} warning=aspect crystal essence bridge: flattened aspect variant before final component/container semantics`
 - `UNLOCKALCHEMY stage 2 required_craft raw=thaumcraft:crucible warning=alchemy placeholder before crucible/smelter/container semantics`
 - `UNLOCKALCHEMY stage 3 required_craft raw=thaumcraft:nitor;1;4 warning=alchemy identity bridge before nitor recipe/subsystem semantics`
 - `UNLOCKAUROMANCY stage 2 required_craft raw=thaumcraft:vis_resonator warning=auromancy placeholder before focus/caster/vis semantics`
 - `UNLOCKAUROMANCY stage 2 required_craft raw=thaumcraft:caster_basic warning=auromancy placeholder before focus/caster/vis semantics`
 - `CrimsonRites stage 1 required_item raw=thaumcraft:curio;1;6 warning=curio metadata identity bridge`
-- `FLUXCLEANUP stage 1 required_item raw=thaumcraft:phial;1;1;{Aspects:[{amount:10,key:'vitium'}]} warning=essentia phial bridge: flattened aspect variant before final DataComponent/container semantics`
 - `JARBRAIN stage 1 required_item raw=thaumcraft:brain warning=biological component identity before golem/brain subsystem semantics`
-- `INFUSION stage 1 required_item raw=thaumcraft:phial;1;1;{Aspects:[{amount:10,key:'aer'}]} warning=essentia phial bridge: flattened aspect variant before final DataComponent/container semantics`
 - `INFUSION stage 2 required_craft raw=thaumcraft:infusion_matrix warning=infusion placeholder before multiblock/recipe semantics`
-- `INFUSIONSTABLE stage 1 required_item raw=thaumcraft:phial;1;1;{Aspects:[{amount:10,key:'vitium'}]} warning=essentia phial bridge: flattened aspect variant before final DataComponent/container semantics`
 - `PAVINGSTONES stage 1 required_craft raw=thaumcraft:arcane_stone warning=safe renamed Thaumcraft identity bridge`
 - `ELEMENTALTOOLS stage 1 required_craft raw=thaumcraft:thaumium_axe warning=thaumium tool placeholder before tool material/enchant/repair semantics`
 - `ELEMENTALTOOLS stage 1 required_craft raw=thaumcraft:thaumium_sword warning=thaumium tool placeholder before tool material/enchant/repair semantics`
 - `ELEMENTALTOOLS stage 1 required_craft raw=thaumcraft:thaumium_pick warning=thaumium tool placeholder before tool material/enchant/repair semantics`
 - `ELEMENTALTOOLS stage 1 required_craft raw=thaumcraft:thaumium_shovel warning=thaumium tool placeholder before tool material/enchant/repair semantics`
 - `ELEMENTALTOOLS stage 1 required_craft raw=thaumcraft:thaumium_hoe warning=thaumium tool placeholder before tool material/enchant/repair semantics`
-- `INFUSIONENCHANTMENT stage 1 required_item raw=minecraft:thaumcraft:enchanted_placeholder;1;0;{ench:[{id:16s,lvl:1s}]} warning=legacy enchanted placeholder bridge before final enchantment-component policy`
-- `RUNICSHIELDING stage 1 required_item raw=minecraft:thaumcraft:enchanted_placeholder;1;0;{ench:[{id:0s,lvl:1s}]} warning=legacy enchanted placeholder bridge before final enchantment-component policy`
 
 ## Unresolved Details
 

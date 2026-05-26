@@ -10,11 +10,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import thaumcraft.Thaumcraft;
@@ -647,6 +653,9 @@ public final class TCResearchManager {
     }
 
     private static boolean matchesRequirementIdentity(ItemStack stack, ItemRequirement requirement) {
+        if (requirement.anyItem()) {
+            return true;
+        }
         if (requirement.item() != null && stack.is(requirement.item())) {
             return true;
         }
@@ -676,10 +685,26 @@ public final class TCResearchManager {
         }
         TCStoredEnchantComponent required = requirement.storedMagic();
         TCStoredEnchantComponent actual = stack.get(TCDataComponents.STORED_MAGIC.get());
-        if (actual == null || actual.isEmpty()) {
-            return false;
+        if (actual != null && !actual.isEmpty()) {
+            return actual.id().equals(required.id()) && actual.level() >= required.level();
         }
-        return actual.id().equals(required.id()) && actual.level() >= required.level();
+        return matchesVanillaEnchantmentRequirement(stack, required);
+    }
+
+    private static boolean matchesVanillaEnchantmentRequirement(ItemStack stack, TCStoredEnchantComponent required) {
+        ItemEnchantments enchantments = stack.is(Items.ENCHANTED_BOOK)
+                ? stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY)
+                : stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+
+        for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
+            String id = entry.getKey().unwrapKey()
+                    .map(key -> key.location().getPath())
+                    .orElse("");
+            if (id.equals(required.id()) && entry.getIntValue() >= required.level()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean matchesLegacyItemRequirement(ItemStack stack, ItemRequirement requirement) {
