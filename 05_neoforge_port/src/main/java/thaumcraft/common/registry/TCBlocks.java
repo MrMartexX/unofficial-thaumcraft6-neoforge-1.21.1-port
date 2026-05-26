@@ -57,6 +57,8 @@ public final class TCBlocks {
     public static final Supplier<Block> METAL_THAUMIUM = BLOCKS.register("metal_thaumium", () -> metalBlock());
     public static final Supplier<Block> METAL_VOID = BLOCKS.register("metal_void", () -> metalBlock());
 
+    public static final Supplier<Block> NITOR_YELLOW = BLOCKS.register("nitor_yellow", () -> nitorBlock(14));
+
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
 
@@ -100,6 +102,12 @@ public final class TCBlocks {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
                 .strength(5.0F, 10.0F)
                 .requiresCorrectToolForDrops());
+    }
+
+    private static Block nitorBlock(int lightLevel) {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLOWSTONE)
+                .strength(0.3F, 0.3F)
+                .lightLevel(state -> lightLevel));
     }
 
     private static Block amberBlock() {
