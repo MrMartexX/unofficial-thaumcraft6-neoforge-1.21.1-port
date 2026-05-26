@@ -12,6 +12,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.items.components.TCAspectStackComponent;
+import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
 
 public final class TCResearchRequirementResolver {
@@ -88,7 +89,8 @@ public final class TCResearchRequirementResolver {
                 item,
                 count,
                 legacyAspectStackRequirement(rawId, damage, value),
-                legacyStoredMagicRequirement(rawId, value)
+                legacyStoredMagicRequirement(rawId, value),
+                legacyItemRequirement(rawId, damage)
         ));
     }
 
@@ -270,6 +272,29 @@ public final class TCResearchRequirementResolver {
         return id.isBlank() ? null : new TCStoredEnchantComponent(id, level);
     }
 
+    private static TCLegacyItemComponent legacyItemRequirement(String rawId, int damage) {
+        return switch (rawId) {
+            case "thaumcraft:ingot" -> switch (damage) {
+                case 0 -> new TCLegacyItemComponent("ingot", "thaumium", 0);
+                case 2 -> new TCLegacyItemComponent("ingot", "brass", 2);
+                default -> null;
+            };
+            case "thaumcraft:plate" -> switch (damage) {
+                case 2 -> new TCLegacyItemComponent("plate", "thaumium", 2);
+                case 3 -> new TCLegacyItemComponent("plate", "void", 3);
+                default -> null;
+            };
+            case "thaumcraft:metal" -> switch (damage) {
+                case 2 -> new TCLegacyItemComponent("metal", "thaumium", 2);
+                case 3 -> new TCLegacyItemComponent("metal", "void", 3);
+                default -> null;
+            };
+            case "thaumcraft:nugget" -> damage == 10 ? new TCLegacyItemComponent("nugget", "rare_earth", 10) : null;
+            case "thaumcraft:curio" -> damage == 6 ? new TCLegacyItemComponent("curio", "rites", 6) : null;
+            default -> null;
+        };
+    }
+
     private static String extractAspectKey(String normalizedRaw) {
         Matcher matcher = ASPECT_KEY_PATTERN.matcher(normalizedRaw);
         if (!matcher.find()) {
@@ -376,25 +401,29 @@ public final class TCResearchRequirementResolver {
         return builder.toString();
     }
 
-    public record ItemRequirement(String raw, Item item, List<TagKey<Item>> tags, int count, TCAspectStackComponent aspectStack, TCStoredEnchantComponent storedMagic) {
+    public record ItemRequirement(String raw, Item item, List<TagKey<Item>> tags, int count, TCAspectStackComponent aspectStack, TCStoredEnchantComponent storedMagic, TCLegacyItemComponent legacyItem) {
         public ItemRequirement {
             tags = List.copyOf(tags);
         }
 
         static ItemRequirement item(String raw, Item item, int count) {
-            return item(raw, item, count, null, null);
+            return item(raw, item, count, null, null, null);
         }
 
         static ItemRequirement item(String raw, Item item, int count, TCAspectStackComponent aspectStack) {
-            return item(raw, item, count, aspectStack, null);
+            return item(raw, item, count, aspectStack, null, null);
         }
 
         static ItemRequirement item(String raw, Item item, int count, TCAspectStackComponent aspectStack, TCStoredEnchantComponent storedMagic) {
-            return new ItemRequirement(raw, item, List.of(), count, aspectStack, storedMagic);
+            return item(raw, item, count, aspectStack, storedMagic, null);
+        }
+
+        static ItemRequirement item(String raw, Item item, int count, TCAspectStackComponent aspectStack, TCStoredEnchantComponent storedMagic, TCLegacyItemComponent legacyItem) {
+            return new ItemRequirement(raw, item, List.of(), count, aspectStack, storedMagic, legacyItem);
         }
 
         static ItemRequirement tags(String raw, List<TagKey<Item>> tags, int count) {
-            return new ItemRequirement(raw, null, tags, count, null, null);
+            return new ItemRequirement(raw, null, tags, count, null, null, null);
         }
 
         boolean hasAspectStackRequirement() {
@@ -403,6 +432,10 @@ public final class TCResearchRequirementResolver {
 
         boolean hasStoredMagicRequirement() {
             return storedMagic != null && !storedMagic.isEmpty();
+        }
+
+        boolean hasLegacyItemRequirement() {
+            return legacyItem != null && !legacyItem.isEmpty();
         }
     }
 
