@@ -43,6 +43,9 @@ public final class TCItems {
 
     public static final Supplier<BlockItem> AMBER_BLOCK = blockItem("amber_block", TCBlocks.AMBER_BLOCK);
     public static final Supplier<BlockItem> AMBER_BRICK = blockItem("amber_brick", TCBlocks.AMBER_BRICK);
+    public static final Supplier<BlockItem> METAL_BRASS = blockItem("metal_brass", TCBlocks.METAL_BRASS);
+    public static final Supplier<BlockItem> METAL_THAUMIUM = blockItem("metal_thaumium", TCBlocks.METAL_THAUMIUM);
+    public static final Supplier<BlockItem> METAL_VOID = blockItem("metal_void", TCBlocks.METAL_VOID);
     public static final Supplier<BlockItem> LOG_GREATWOOD = blockItem("log_greatwood", TCBlocks.LOG_GREATWOOD);
     public static final Supplier<BlockItem> LOG_SILVERWOOD = blockItem("log_silverwood", TCBlocks.LOG_SILVERWOOD);
     public static final Supplier<BlockItem> LEAVES_GREATWOOD = blockItem("leaves_greatwood", TCBlocks.LEAVES_GREATWOOD);
@@ -65,6 +68,15 @@ public final class TCItems {
     public static final Supplier<Item> AMBER = ITEMS.register("amber", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> QUICKSILVER = ITEMS.register("quicksilver", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> FABRIC = ITEMS.register("fabric", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> THAUMIUM_INGOT = simpleItem("thaumium_ingot");
+    public static final Supplier<Item> BRASS_INGOT = simpleItem("brass_ingot");
+    public static final Supplier<Item> THAUMIUM_PLATE = simpleItem("thaumium_plate");
+    public static final Supplier<Item> VOID_PLATE = simpleItem("void_plate");
+    public static final Supplier<Item> RARE_EARTH = simpleItem("rare_earth");
+
+    private static Supplier<Item> simpleItem(String id) {
+        return ITEMS.register(id, () -> new Item(new Item.Properties()));
+    }
 
     private static Supplier<BlockItem> blockItem(String id, Supplier<? extends net.minecraft.world.level.block.Block> block) {
         return ITEMS.register(id, () -> new BlockItem(block.get(), new Item.Properties()));
