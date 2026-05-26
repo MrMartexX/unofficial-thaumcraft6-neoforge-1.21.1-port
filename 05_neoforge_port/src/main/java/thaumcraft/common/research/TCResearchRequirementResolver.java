@@ -12,6 +12,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.items.components.TCAspectStackComponent;
+import thaumcraft.common.items.components.TCStoredEnchantComponent;
 
 public final class TCResearchRequirementResolver {
     private static final Pattern ASPECT_KEY_PATTERN = Pattern.compile("key:\\s*\\\"([^\\\"]+)\\\"");
@@ -82,7 +83,13 @@ public final class TCResearchRequirementResolver {
             );
         }
 
-        return ItemRequirementResolution.ok(ItemRequirement.item(raw, item, count, legacyAspectStackRequirement(rawId, damage, value)));
+        return ItemRequirementResolution.ok(ItemRequirement.item(
+                raw,
+                item,
+                count,
+                legacyAspectStackRequirement(rawId, damage, value),
+                legacyStoredMagicRequirement(rawId, value)
+        ));
     }
 
     public static KnowledgeRequirementResolution resolveKnowledgeRequirement(String raw) {
@@ -243,6 +250,26 @@ public final class TCResearchRequirementResolver {
         return null;
     }
 
+    private static TCStoredEnchantComponent legacyStoredMagicRequirement(String rawId, String normalizedRaw) {
+        if (!rawId.endsWith("thaumcraft:enchanted_placeholder")) {
+            return null;
+        }
+        Matcher matcher = ENCHANTMENT_PATTERN.matcher(normalizedRaw);
+        if (!matcher.find()) {
+            return null;
+        }
+        int legacyId = parsePositiveInt(matcher.group(1), -1);
+        int level = parsePositiveInt(matcher.group(2), 1);
+        String id = switch (legacyId) {
+            case 0 -> "protection";
+            case 16 -> "sharpness";
+            case 33 -> "silk_touch";
+            case 35 -> "fortune";
+            default -> "";
+        };
+        return id.isBlank() ? null : new TCStoredEnchantComponent(id, level);
+    }
+
     private static String extractAspectKey(String normalizedRaw) {
         Matcher matcher = ASPECT_KEY_PATTERN.matcher(normalizedRaw);
         if (!matcher.find()) {
@@ -349,25 +376,33 @@ public final class TCResearchRequirementResolver {
         return builder.toString();
     }
 
-    public record ItemRequirement(String raw, Item item, List<TagKey<Item>> tags, int count, TCAspectStackComponent aspectStack) {
+    public record ItemRequirement(String raw, Item item, List<TagKey<Item>> tags, int count, TCAspectStackComponent aspectStack, TCStoredEnchantComponent storedMagic) {
         public ItemRequirement {
             tags = List.copyOf(tags);
         }
 
         static ItemRequirement item(String raw, Item item, int count) {
-            return item(raw, item, count, null);
+            return item(raw, item, count, null, null);
         }
 
         static ItemRequirement item(String raw, Item item, int count, TCAspectStackComponent aspectStack) {
-            return new ItemRequirement(raw, item, List.of(), count, aspectStack);
+            return item(raw, item, count, aspectStack, null);
+        }
+
+        static ItemRequirement item(String raw, Item item, int count, TCAspectStackComponent aspectStack, TCStoredEnchantComponent storedMagic) {
+            return new ItemRequirement(raw, item, List.of(), count, aspectStack, storedMagic);
         }
 
         static ItemRequirement tags(String raw, List<TagKey<Item>> tags, int count) {
-            return new ItemRequirement(raw, null, tags, count, null);
+            return new ItemRequirement(raw, null, tags, count, null, null);
         }
 
         boolean hasAspectStackRequirement() {
             return aspectStack != null && !aspectStack.isEmpty();
+        }
+
+        boolean hasStoredMagicRequirement() {
+            return storedMagic != null && !storedMagic.isEmpty();
         }
     }
 
