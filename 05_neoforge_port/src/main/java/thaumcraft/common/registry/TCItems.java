@@ -47,6 +47,12 @@ public final class TCItems {
     public static final Supplier<BlockItem> METAL_THAUMIUM = blockItem("metal_thaumium", TCBlocks.METAL_THAUMIUM);
     public static final Supplier<BlockItem> METAL_VOID = blockItem("metal_void", TCBlocks.METAL_VOID);
     public static final Supplier<BlockItem> NITOR_YELLOW = blockItem("nitor_yellow", TCBlocks.NITOR_YELLOW);
+    public static final Supplier<BlockItem> ARCANE_WORKBENCH = blockItem("arcane_workbench", TCBlocks.ARCANE_WORKBENCH);
+    public static final Supplier<BlockItem> RESEARCH_TABLE = blockItem("research_table", TCBlocks.RESEARCH_TABLE);
+    public static final Supplier<BlockItem> CRUCIBLE = blockItem("crucible", TCBlocks.CRUCIBLE);
+    public static final Supplier<BlockItem> SMELTER_BASIC = blockItem("smelter_basic", TCBlocks.SMELTER_BASIC);
+    public static final Supplier<BlockItem> WAND_WORKBENCH = blockItem("wand_workbench", TCBlocks.WAND_WORKBENCH);
+    public static final Supplier<BlockItem> INFUSION_MATRIX = blockItem("infusion_matrix", TCBlocks.INFUSION_MATRIX);
     public static final Supplier<BlockItem> LOG_GREATWOOD = blockItem("log_greatwood", TCBlocks.LOG_GREATWOOD);
     public static final Supplier<BlockItem> LOG_SILVERWOOD = blockItem("log_silverwood", TCBlocks.LOG_SILVERWOOD);
     public static final Supplier<BlockItem> LEAVES_GREATWOOD = blockItem("leaves_greatwood", TCBlocks.LEAVES_GREATWOOD);
@@ -79,6 +85,16 @@ public final class TCItems {
     public static final Supplier<Item> MIRRORED_GLASS = simpleItem("mirrored_glass");
     public static final Supplier<Item> BRAIN = simpleItem("brain");
     public static final Supplier<Item> CURIO_RITES = simpleItem("curio_rites");
+    public static final Supplier<Item> SCRIBING_TOOLS = simpleItem("scribing_tools");
+    public static final Supplier<Item> CASTER_BASIC = simpleItem("caster_basic");
+    public static final Supplier<Item> FOCUS_1 = simpleItem("focus_1");
+    public static final Supplier<Item> FOCUS_2 = simpleItem("focus_2");
+    public static final Supplier<Item> FOCUS_3 = simpleItem("focus_3");
+    public static final Supplier<Item> THAUMIUM_AXE = simpleItem("thaumium_axe");
+    public static final Supplier<Item> THAUMIUM_HOE = simpleItem("thaumium_hoe");
+    public static final Supplier<Item> THAUMIUM_PICK = simpleItem("thaumium_pick");
+    public static final Supplier<Item> THAUMIUM_SHOVEL = simpleItem("thaumium_shovel");
+    public static final Supplier<Item> THAUMIUM_SWORD = simpleItem("thaumium_sword");
 
     private static Supplier<Item> simpleItem(String id) {
         return ITEMS.register(id, () -> new Item(new Item.Properties()));
