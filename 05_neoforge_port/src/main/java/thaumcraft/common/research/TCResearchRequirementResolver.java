@@ -165,14 +165,9 @@ public final class TCResearchRequirementResolver {
                     "legacy essentia phial requirement"
             );
         }
-        if (rawId.equals("thaumcraft:ingot")
-                || rawId.equals("thaumcraft:metal")
-                || rawId.equals("thaumcraft:plate")
-                || rawId.equals("thaumcraft:nugget")) {
-            return ItemRequirementResolution.unresolved(
-                    "legacy material-family requirement not mapped yet: " + rawId + ";damage=" + damage,
-                    "legacy material-family requirement: " + rawId
-            );
+        TCLegacyMaterialFamilyMappings.Classification materialFamily = TCLegacyMaterialFamilyMappings.classify(rawId, damageText);
+        if (materialFamily != null) {
+            return ItemRequirementResolution.unresolved(materialFamily.reason(), materialFamily.summaryKey());
         }
         if (rawId.equals("thaumcraft:curio")) {
             return ItemRequirementResolution.unresolved(
