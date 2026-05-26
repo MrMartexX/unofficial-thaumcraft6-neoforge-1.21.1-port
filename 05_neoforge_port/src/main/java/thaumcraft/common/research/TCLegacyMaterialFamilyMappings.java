@@ -14,6 +14,15 @@ final class TCLegacyMaterialFamilyMappings {
     private TCLegacyMaterialFamilyMappings() {
     }
 
+    static String modernItemId(String rawId, String damageText) {
+        if (!isMaterialFamily(rawId)) {
+            return null;
+        }
+        int damage = parsePositiveInt(damageText, 0);
+        LegacyMaterialTarget target = confirmedTarget(rawId, damage);
+        return target == null ? null : target.modernItemId();
+    }
+
     static Classification classify(String rawId, String damageText) {
         if (!isMaterialFamily(rawId)) {
             return null;
