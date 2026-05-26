@@ -38,11 +38,6 @@ public final class TCResearchRequirementResolver {
         String rawId = split[0];
         String damageText = split.length > 2 ? split[2] : "0";
 
-        ItemRequirementResolution legacyFamilyResolution = classifyUnmappedLegacyFamily(rawId, damageText);
-        if (legacyFamilyResolution != null) {
-            return legacyFamilyResolution;
-        }
-
         String mappedId = legacyFlattenedItemId(rawId, damageText);
         ResourceLocation id;
 
@@ -57,6 +52,10 @@ public final class TCResearchRequirementResolver {
 
         Item item = BuiltInRegistries.ITEM.getOptional(id).orElse(null);
         if (item == null) {
+            ItemRequirementResolution legacyFamilyResolution = classifyUnmappedLegacyFamily(rawId, damageText);
+            if (legacyFamilyResolution != null) {
+                return legacyFamilyResolution;
+            }
             return ItemRequirementResolution.unresolved(
                     "missing modern item id: " + id,
                     "missing modern item id: " + id
@@ -112,6 +111,10 @@ public final class TCResearchRequirementResolver {
 
     public static String legacyFlattenedItemId(String id, String damageText) {
         int damage = parsePositiveInt(damageText, 0);
+        String materialFamilyId = TCLegacyMaterialFamilyMappings.modernItemId(id, damageText);
+        if (materialFamilyId != null) {
+            return materialFamilyId;
+        }
         if (id.equals("minecraft:web")) {
             return "minecraft:cobweb";
         }
