@@ -20,6 +20,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.items.components.TCAspectStackComponent;
+import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirement;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirementResolution;
@@ -639,7 +640,7 @@ public final class TCResearchManager {
         if (!matchesRequirementIdentity(stack, requirement)) {
             return false;
         }
-        return matchesAspectStackRequirement(stack, requirement);
+        return matchesAspectStackRequirement(stack, requirement) && matchesStoredMagicRequirement(stack, requirement);
     }
 
     private static boolean matchesRequirementIdentity(ItemStack stack, ItemRequirement requirement) {
@@ -664,6 +665,18 @@ public final class TCResearchManager {
             return false;
         }
         return actual.aspect().equals(required.aspect()) && actual.amount() >= required.amount();
+    }
+
+    private static boolean matchesStoredMagicRequirement(ItemStack stack, ItemRequirement requirement) {
+        if (!requirement.hasStoredMagicRequirement()) {
+            return true;
+        }
+        TCStoredEnchantComponent required = requirement.storedMagic();
+        TCStoredEnchantComponent actual = stack.get(TCDataComponents.STORED_MAGIC.get());
+        if (actual == null || actual.isEmpty()) {
+            return false;
+        }
+        return actual.id().equals(required.id()) && actual.level() >= required.level();
     }
 
     private static String craftRequirementMarker(String raw) {
