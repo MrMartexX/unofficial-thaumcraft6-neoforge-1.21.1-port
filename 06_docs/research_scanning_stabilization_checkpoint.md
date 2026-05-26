@@ -19,7 +19,7 @@ The current branch contains a working server-side research/scanning skeleton:
 - completed-research-key client cache for highlight gating;
 - scan/audit parity tooling and generated runtime reports.
 
-The local smoke tests after stabilization confirmed that commands and client-side highlight behavior still work after the latest payload and scan command text cleanup.
+The local smoke tests after stabilization confirmed build correctness plus client/server startup and reload safety after the latest payload, stage-consumption, and scan command text cleanup. Direct `/tc research ...` command execution through the Codex Gradle terminal did not reach the running server stdin, so command-specific output still needs a manual in-game/server-console pass or a future non-interactive validation task.
 
 ## Stabilization fixes already applied
 
@@ -31,6 +31,9 @@ The local smoke tests after stabilization confirmed that commands and client-sid
 - The client sync payload field is named `completedResearchKeys` to clarify that it is not full legacy `PlayerKnowledge` sync.
 - Large generated parity JSON files are marked as generated/no-diff artifacts in `.gitattributes`.
 - The scan parity README documents that generated dumps/reports must be regenerated, not edited manually.
+- Player knowledge storage now has explicit sync/no-sync mutation paths. Normal gameplay/debug mutations still sync completed research keys immediately, while batch debug flows can suppress repeated payloads and send one final sync.
+- Checked current-stage advancement now builds an item-consumption plan and validates knowledge costs before mutating inventory or stored knowledge.
+- The `research all` command output is explicitly marked debug-only, and it sends a final completed-key sync after the batch.
 
 ## Important current limitation
 

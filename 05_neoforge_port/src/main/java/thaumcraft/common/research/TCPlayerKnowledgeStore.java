@@ -16,14 +16,28 @@ public final class TCPlayerKnowledgeStore {
     }
 
     public static void set(ServerPlayer player, TCPlayerKnowledge knowledge) {
+        set(player, knowledge, true);
+    }
+
+    public static void set(ServerPlayer player, TCPlayerKnowledge knowledge, boolean sync) {
         player.getPersistentData().put(ROOT_KEY, knowledge.save());
-        TCKnowledgeNetwork.syncToPlayer(player);
+        if (sync) {
+            sync(player);
+        }
     }
 
     public static void mutate(ServerPlayer player, KnowledgeMutation mutation) {
+        mutate(player, mutation, true);
+    }
+
+    public static void mutate(ServerPlayer player, KnowledgeMutation mutation, boolean sync) {
         TCPlayerKnowledge knowledge = get(player);
         mutation.apply(knowledge);
-        set(player, knowledge);
+        set(player, knowledge, sync);
+    }
+
+    public static void sync(ServerPlayer player) {
+        TCKnowledgeNetwork.syncToPlayer(player);
     }
 
     @FunctionalInterface

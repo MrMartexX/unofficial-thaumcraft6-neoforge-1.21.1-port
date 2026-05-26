@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public final class TCKnowledgeClientCache {
+    // Narrow client cache for Thaumometer highlight filtering. Full research UI sync is a separate future payload.
     private static Set<String> completedResearch = Set.of();
 
     private TCKnowledgeClientCache() {

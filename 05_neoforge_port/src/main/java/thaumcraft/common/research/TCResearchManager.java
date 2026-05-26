@@ -4,8 +4,10 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import net.minecraft.server.level.ServerPlayer;
@@ -247,7 +249,7 @@ public final class TCResearchManager {
                     storedKnowledge.setResearchFlag(researchKey, TCResearchFlag.RESEARCH);
                 }
             }
-        });
+        }, sync);
 
         if (entry != null) {
             completeAvailableSiblings(player, entry, sync);
@@ -269,7 +271,7 @@ public final class TCResearchManager {
             return false;
         }
 
-        if (!consumeCurrentStageRequirements(player, result.researchKey())) {
+        if (!consumeCurrentStageRequirements(player, result.researchKey(), sync)) {
             return false;
         }
 
@@ -468,7 +470,7 @@ public final class TCResearchManager {
         return new TCResearchStageRequirementResult(researchKey, stageIndex, entry.stages().size(), satisfied, missing, blocked);
     }
 
-    private static boolean consumeCurrentStageRequirements(ServerPlayer player, String key) {
+    private static boolean consumeCurrentStageRequirements(ServerPlayer player, String key, boolean sync) {
         String researchKey = canonicalResearchKey(key);
         TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
         TCResearchEntryDefinition entry = activeData.entries().get(researchKey);
@@ -506,21 +508,9 @@ public final class TCResearchManager {
             knowledgeRequirements.add(requirement);
         }
 
-        ArrayList<ItemStack> simulatedInventory = new ArrayList<>();
-        for (ItemStack stack : player.getInventory().items) {
-            simulatedInventory.add(stack.copy());
-        }
-
-        for (ItemRequirement requirement : itemRequirements) {
-            if (!consumeRequiredItemFromStacks(simulatedInventory, requirement)) {
-                return false;
-            }
-        }
-
-        for (ItemRequirement requirement : itemRequirements) {
-            if (!consumeRequiredItem(player, requirement)) {
-                return false;
-            }
+        ItemConsumePlan itemConsumePlan = buildItemConsumePlan(player, itemRequirements);
+        if (itemConsumePlan == null) {
+            return false;
         }
 
         if (!knowledgeRequirements.isEmpty()) {
@@ -532,9 +522,13 @@ public final class TCResearchManager {
                             -requirement.type().pointsToRaw(requirement.points())
                     );
                 }
-            });
+            }, false);
         }
 
+        applyItemConsumePlan(player, itemConsumePlan);
+        if (sync) {
+            TCPlayerKnowledgeStore.sync(player);
+        }
         return true;
     }
 
@@ -584,16 +578,22 @@ public final class TCResearchManager {
         return count;
     }
 
-    private static boolean consumeRequiredItem(ServerPlayer player, ItemRequirement requirement) {
-        Inventory inventory = player.getInventory();
-        boolean consumed = consumeRequiredItemFromStacks(inventory.items, requirement);
-        if (consumed) {
-            inventory.setChanged();
+    private static ItemConsumePlan buildItemConsumePlan(ServerPlayer player, List<ItemRequirement> requirements) {
+        ArrayList<ItemStack> simulatedInventory = new ArrayList<>();
+        for (ItemStack stack : player.getInventory().items) {
+            simulatedInventory.add(stack.copy());
         }
-        return consumed;
+
+        HashMap<Integer, Integer> slotCounts = new HashMap<>();
+        for (ItemRequirement requirement : requirements) {
+            if (!planRequiredItem(simulatedInventory, requirement, slotCounts)) {
+                return null;
+            }
+        }
+        return new ItemConsumePlan(slotCounts);
     }
 
-    private static boolean consumeRequiredItemFromStacks(List<ItemStack> stacks, ItemRequirement requirement) {
+    private static boolean planRequiredItem(List<ItemStack> stacks, ItemRequirement requirement, Map<Integer, Integer> slotCounts) {
         int remaining = requirement.count();
 
         for (int slot = 0; slot < stacks.size() && remaining > 0; slot++) {
@@ -604,6 +604,7 @@ public final class TCResearchManager {
 
             int consumed = Math.min(remaining, stack.getCount());
             stack.shrink(consumed);
+            slotCounts.merge(slot, consumed, Integer::sum);
             remaining -= consumed;
             if (stack.isEmpty()) {
                 stacks.set(slot, ItemStack.EMPTY);
@@ -611,6 +612,22 @@ public final class TCResearchManager {
         }
 
         return remaining <= 0;
+    }
+
+    private static void applyItemConsumePlan(ServerPlayer player, ItemConsumePlan plan) {
+        if (plan.slotCounts().isEmpty()) {
+            return;
+        }
+
+        Inventory inventory = player.getInventory();
+        for (Map.Entry<Integer, Integer> entry : plan.slotCounts().entrySet()) {
+            int slot = entry.getKey();
+            if (slot < 0 || slot >= inventory.items.size()) {
+                continue;
+            }
+            inventory.items.get(slot).shrink(entry.getValue());
+        }
+        inventory.setChanged();
     }
 
     private static boolean matchesRequirement(ItemStack stack, ItemRequirement requirement) {
@@ -653,5 +670,11 @@ public final class TCResearchManager {
             stripped = stripped.substring(1);
         }
         return stripped;
+    }
+
+    private record ItemConsumePlan(Map<Integer, Integer> slotCounts) {
+        private ItemConsumePlan {
+            slotCounts = Map.copyOf(slotCounts);
+        }
     }
 }

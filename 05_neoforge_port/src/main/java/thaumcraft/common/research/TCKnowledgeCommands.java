@@ -390,9 +390,13 @@ public final class TCKnowledgeCommands {
             }
         }
 
+        if (progressed > 0) {
+            TCPlayerKnowledgeStore.sync(player);
+        }
+
         int progressedCount = progressed;
         context.getSource().sendSuccess(() -> Component.literal(
-                "Completed/progressed " + progressedCount + " loaded Thaumcraft research entr"
+                "Debug-only completed/progressed " + progressedCount + " loaded Thaumcraft research entr"
                         + (progressedCount == 1 ? "y" : "ies") + " for " + player.getGameProfile().getName()
                         + ". Rewards, recipes and GUI flags are still limited to the current progression slice."
         ), true);
