@@ -1,6 +1,7 @@
 {
-    "parent": "item/handheld",
-    "textures": {
-        "layer0": "thaumcraft:items/scribing_tools"
-    }
+  "textures": {
+    "layer0": "minecraft:item/feather"
+  },
+  "parent": "minecraft:item/generated"
 }
+

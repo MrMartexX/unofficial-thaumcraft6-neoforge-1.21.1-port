@@ -1,6 +1,7 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "thaumcraft:items/focus_3"
-    }
+  "textures": {
+    "layer0": "minecraft:item/amethyst_shard"
+  },
+  "parent": "minecraft:item/generated"
 }
+

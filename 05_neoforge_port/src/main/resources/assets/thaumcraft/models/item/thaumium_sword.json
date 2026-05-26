@@ -1,6 +1,7 @@
 {
-    "parent": "item/handheld",
-    "textures": {
-        "layer0": "thaumcraft:items/thaumium_sword"
-    }
+  "textures": {
+    "layer0": "minecraft:item/iron_sword"
+  },
+  "parent": "minecraft:item/handheld"
 }
+

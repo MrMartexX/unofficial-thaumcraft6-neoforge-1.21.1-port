@@ -1,6 +1,6 @@
 {
   "textures": {
-    "layer0": "minecraft:item/rotten_flesh"
+    "layer0": "minecraft:item/enchanted_book"
   },
   "parent": "minecraft:item/generated"
 }

@@ -1,6 +1,7 @@
 {
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "thaumcraft:items/tallow"
-    }
+  "textures": {
+    "layer0": "minecraft:item/slime_ball"
+  },
+  "parent": "minecraft:item/generated"
 }
+
