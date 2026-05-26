@@ -2,6 +2,9 @@ package thaumcraft.common.research;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -10,6 +13,9 @@ import net.minecraft.world.item.Item;
 import thaumcraft.Thaumcraft;
 
 public final class TCResearchRequirementResolver {
+    private static final Pattern ASPECT_KEY_PATTERN = Pattern.compile("key:\\s*\\\"([^\\\"]+)\\\"");
+    private static final Pattern ENCHANTMENT_PATTERN = Pattern.compile("id:\\s*(\\d+)s?\\s*,\\s*lvl:\\s*(\\d+)s?");
+
     private TCResearchRequirementResolver() {
     }
 
@@ -19,12 +25,6 @@ public final class TCResearchRequirementResolver {
         }
 
         String value = raw.trim().replace('\'', '"');
-        if (value.contains("enchanted_placeholder")) {
-            return ItemRequirementResolution.unresolved(
-                    "legacy enchanted placeholder requirement not mapped yet",
-                    "legacy enchanted placeholder requirement"
-            );
-        }
 
         if (value.startsWith("oredict:")) {
             String oreName = value.substring("oredict:".length());
@@ -38,7 +38,7 @@ public final class TCResearchRequirementResolver {
         String rawId = split[0];
         String damageText = split.length > 2 ? split[2] : "0";
 
-        String mappedId = legacyFlattenedItemId(rawId, damageText);
+        String mappedId = legacyFlattenedItemId(rawId, damageText, value);
         ResourceLocation id;
 
         try {
@@ -52,7 +52,7 @@ public final class TCResearchRequirementResolver {
 
         Item item = BuiltInRegistries.ITEM.getOptional(id).orElse(null);
         if (item == null) {
-            ItemRequirementResolution legacyFamilyResolution = classifyUnmappedLegacyFamily(rawId, damageText);
+            ItemRequirementResolution legacyFamilyResolution = classifyUnmappedLegacyFamily(rawId, damageText, value);
             if (legacyFamilyResolution != null) {
                 return legacyFamilyResolution;
             }
@@ -66,7 +66,7 @@ public final class TCResearchRequirementResolver {
         int damage = parsePositiveInt(damageText, 0);
         boolean hasNbt = value.contains("{");
 
-        if (hasNbt) {
+        if (hasNbt && mappedId.equals(rawId)) {
             return ItemRequirementResolution.unresolved(
                     "legacy NBT-sensitive ItemStack requirement not mapped yet",
                     "legacy NBT-sensitive ItemStack requirement: " + id
@@ -110,6 +110,10 @@ public final class TCResearchRequirementResolver {
     }
 
     public static String legacyFlattenedItemId(String id, String damageText) {
+        return legacyFlattenedItemId(id, damageText, "");
+    }
+
+    private static String legacyFlattenedItemId(String id, String damageText, String normalizedRaw) {
         int damage = parsePositiveInt(damageText, 0);
         String materialFamilyId = TCLegacyMaterialFamilyMappings.modernItemId(id, damageText);
         if (materialFamilyId != null) {
@@ -141,6 +145,24 @@ public final class TCResearchRequirementResolver {
         if (id.equals("thaumcraft:curio") && damage == 6) {
             return "thaumcraft:curio_rites";
         }
+        if (id.equals("thaumcraft:crystal_essence")) {
+            String aspect = extractAspectKey(normalizedRaw);
+            if (!aspect.isBlank()) {
+                return "thaumcraft:crystal_essence_" + aspect;
+            }
+        }
+        if (id.equals("thaumcraft:phial") && damage == 1) {
+            String aspect = extractAspectKey(normalizedRaw);
+            if (!aspect.isBlank()) {
+                return "thaumcraft:phial_" + aspect;
+            }
+        }
+        if (id.endsWith("thaumcraft:enchanted_placeholder")) {
+            String target = flattenedEnchantmentPlaceholderId(normalizedRaw);
+            if (!target.isBlank()) {
+                return target;
+            }
+        }
         return id;
     }
 
@@ -163,18 +185,26 @@ public final class TCResearchRequirementResolver {
         }
     }
 
-    private static ItemRequirementResolution classifyUnmappedLegacyFamily(String rawId, String damageText) {
+    private static ItemRequirementResolution classifyUnmappedLegacyFamily(String rawId, String damageText, String normalizedRaw) {
         int damage = parsePositiveInt(damageText, 0);
         if (rawId.equals("thaumcraft:crystal_essence")) {
+            String aspect = extractAspectKey(normalizedRaw);
             return ItemRequirementResolution.unresolved(
-                    "legacy aspect crystal essence requirement not mapped yet",
+                    "legacy aspect crystal essence requirement not mapped yet: aspect=" + (aspect.isBlank() ? "unknown" : aspect),
                     "legacy aspect crystal essence requirement"
             );
         }
         if (rawId.equals("thaumcraft:phial")) {
+            String aspect = extractAspectKey(normalizedRaw);
             return ItemRequirementResolution.unresolved(
-                    "legacy essentia phial requirement not mapped yet",
+                    "legacy essentia phial requirement not mapped yet: aspect=" + (aspect.isBlank() ? "unknown" : aspect),
                     "legacy essentia phial requirement"
+            );
+        }
+        if (rawId.endsWith("thaumcraft:enchanted_placeholder")) {
+            return ItemRequirementResolution.unresolved(
+                    "legacy enchanted placeholder requirement not mapped yet: " + normalizedRaw,
+                    "legacy enchanted placeholder requirement"
             );
         }
         TCLegacyMaterialFamilyMappings.Classification materialFamily = TCLegacyMaterialFamilyMappings.classify(rawId, damageText);
@@ -195,6 +225,38 @@ public final class TCResearchRequirementResolver {
             );
         }
         return null;
+    }
+
+    private static String extractAspectKey(String normalizedRaw) {
+        Matcher matcher = ASPECT_KEY_PATTERN.matcher(normalizedRaw);
+        if (!matcher.find()) {
+            return "";
+        }
+        return sanitizePathSegment(matcher.group(1));
+    }
+
+    private static String flattenedEnchantmentPlaceholderId(String normalizedRaw) {
+        Matcher matcher = ENCHANTMENT_PATTERN.matcher(normalizedRaw);
+        if (!matcher.find()) {
+            return "";
+        }
+        int legacyId = parsePositiveInt(matcher.group(1), -1);
+        int level = parsePositiveInt(matcher.group(2), 1);
+        String enchantment = switch (legacyId) {
+            case 0 -> "protection";
+            case 16 -> "sharpness";
+            case 33 -> "silk_touch";
+            case 35 -> "fortune";
+            default -> "";
+        };
+        if (enchantment.isBlank()) {
+            return "";
+        }
+        return "thaumcraft:enchanted_placeholder_" + enchantment + "_" + level;
+    }
+
+    private static String sanitizePathSegment(String value) {
+        return value.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9_./-]", "_");
     }
 
     private static String legacySubsystemRequirement(String rawId) {
