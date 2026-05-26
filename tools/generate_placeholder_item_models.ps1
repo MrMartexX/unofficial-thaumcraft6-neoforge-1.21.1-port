@@ -58,16 +58,16 @@ function BlockItemModel {
 
 # BlockItem placeholders. These deliberately point to vanilla block models until native TC block models are ported.
 $blockItemParents = @{
-    metal_brass     = 'minecraft:block/iron_block'
-    metal_thaumium  = 'minecraft:block/iron_block'
-    metal_void      = 'minecraft:block/obsidian'
-    nitor_yellow    = 'minecraft:block/glowstone'
+    metal_brass      = 'minecraft:block/iron_block'
+    metal_thaumium   = 'minecraft:block/iron_block'
+    metal_void       = 'minecraft:block/obsidian'
+    nitor_yellow     = 'minecraft:block/glowstone'
     arcane_workbench = 'minecraft:block/crafting_table'
-    research_table  = 'minecraft:block/oak_planks'
-    crucible        = 'minecraft:block/cauldron'
-    smelter_basic   = 'minecraft:block/stone'
-    wand_workbench  = 'minecraft:block/crafting_table'
-    infusion_matrix = 'minecraft:block/diamond_block'
+    research_table   = 'minecraft:block/oak_planks'
+    crucible         = 'minecraft:block/cauldron'
+    smelter_basic    = 'minecraft:block/stone'
+    wand_workbench   = 'minecraft:block/crafting_table'
+    infusion_matrix  = 'minecraft:block/diamond_block'
 }
 
 foreach ($entry in $blockItemParents.GetEnumerator()) {
@@ -83,7 +83,7 @@ $itemTextures = @{
     rare_earth = 'minecraft:item/gunpowder'
     tallow = 'minecraft:item/slime_ball'
     vis_resonator = 'minecraft:item/echo_shard'
-    mirrored_glass = 'minecraft:item/glass'
+    mirrored_glass = 'minecraft:block/glass'
     brain = 'minecraft:item/rotten_flesh'
     curio_rites = 'minecraft:item/book'
     scribing_tools = 'minecraft:item/feather'
