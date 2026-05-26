@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.items.ItemAspectVariant;
 import thaumcraft.common.items.ItemLegacyPlaceholder;
+import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.items.consumables.ItemZombieBrain;
 import thaumcraft.common.items.tools.ItemScribingTools;
 import thaumcraft.common.items.tools.ItemThaumometer;
@@ -211,16 +212,23 @@ public final class TCItems {
                     new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
                     "tc.placeholder.focus"
             );
-            case "enchanted_placeholder_protection_1",
-                 "enchanted_placeholder_sharpness_1",
-                 "enchanted_placeholder_silk_touch_1",
-                 "enchanted_placeholder_fortune_1" -> new ItemLegacyPlaceholder(
-                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
-                    "tc.placeholder.enchanted",
-                    true
-            );
+            case "enchanted_placeholder_protection_1" -> legacyMagicPlaceholder("protection");
+            case "enchanted_placeholder_sharpness_1" -> legacyMagicPlaceholder("sharpness");
+            case "enchanted_placeholder_silk_touch_1" -> legacyMagicPlaceholder("silk_touch");
+            case "enchanted_placeholder_fortune_1" -> legacyMagicPlaceholder("fortune");
             default -> new Item(new Item.Properties());
         };
+    }
+
+    private static Item legacyMagicPlaceholder(String id) {
+        return new ItemLegacyPlaceholder(
+                new Item.Properties()
+                        .stacksTo(1)
+                        .rarity(Rarity.RARE)
+                        .component(TCDataComponents.STORED_MAGIC.get(), new TCStoredEnchantComponent(id, 1)),
+                "tc.placeholder.enchanted",
+                true
+        );
     }
 
     private static Supplier<BlockItem> blockItem(String id, Supplier<? extends net.minecraft.world.level.block.Block> block) {
