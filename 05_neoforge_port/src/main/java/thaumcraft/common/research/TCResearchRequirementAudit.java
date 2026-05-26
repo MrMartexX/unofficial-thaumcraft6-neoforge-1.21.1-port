@@ -116,7 +116,7 @@ final class TCResearchRequirementAudit {
             writer.newLine();
             writer.write("Bridge warnings are not parser failures. They mark requirements whose registry identity is resolvable, but whose final gameplay source, item semantics, recipe flow, or legacy container/component behavior is still a migration boundary.");
             writer.newLine();
-            writer.write("Aspect stack component requirements are no longer counted as bridge warnings: the legacy NBT aspect/amount pair is now carried by a modern DataComponent payload.");
+            writer.write("Aspect stack and stored magic component requirements are no longer counted as bridge warnings when their legacy NBT semantics are carried by modern DataComponent payloads.");
             writer.newLine();
             writer.newLine();
             writer.write("## Unresolved Summary");
@@ -254,7 +254,7 @@ final class TCResearchRequirementAudit {
             return hasAspectStackRequirement(resolution) ? "" : "essentia phial bridge: flattened aspect variant before final DataComponent/container semantics";
         }
         if (rawId.endsWith("thaumcraft:enchanted_placeholder")) {
-            return "legacy enchanted placeholder bridge before final enchantment-component policy";
+            return hasStoredMagicRequirement(resolution) ? "" : "legacy enchanted placeholder bridge before final enchantment-component policy";
         }
         if (TCLegacyMaterialFamilyMappings.isMaterialFamily(rawId)) {
             return "legacy metadata material-family bridge";
@@ -268,6 +268,13 @@ final class TCResearchRequirementAudit {
                 && resolution.resolved()
                 && resolution.requirement() != null
                 && resolution.requirement().hasAspectStackRequirement();
+    }
+
+    private static boolean hasStoredMagicRequirement(ItemRequirementResolution resolution) {
+        return resolution != null
+                && resolution.resolved()
+                && resolution.requirement() != null
+                && resolution.requirement().hasStoredMagicRequirement();
     }
 
     private static String subsystemPlaceholder(String rawId, String damageText) {
