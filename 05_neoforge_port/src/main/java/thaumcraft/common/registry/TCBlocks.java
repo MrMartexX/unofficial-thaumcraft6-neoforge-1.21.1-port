@@ -59,6 +59,13 @@ public final class TCBlocks {
 
     public static final Supplier<Block> NITOR_YELLOW = BLOCKS.register("nitor_yellow", () -> nitorBlock(14));
 
+    public static final Supplier<Block> ARCANE_WORKBENCH = BLOCKS.register("arcane_workbench", () -> workbenchBlock());
+    public static final Supplier<Block> RESEARCH_TABLE = BLOCKS.register("research_table", () -> woodBlock());
+    public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> cauldronLikeBlock());
+    public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> furnaceLikeBlock());
+    public static final Supplier<Block> WAND_WORKBENCH = BLOCKS.register("wand_workbench", () -> workbenchBlock());
+    public static final Supplier<Block> INFUSION_MATRIX = BLOCKS.register("infusion_matrix", () -> stoneBlock(5.0F, 1200.0F));
+
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
 
@@ -96,6 +103,23 @@ public final class TCBlocks {
     private static Block woodBlock() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                 .strength(2.0F, 2.0F));
+    }
+
+    private static Block workbenchBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
+                .strength(2.5F, 2.5F));
+    }
+
+    private static Block cauldronLikeBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
+                .strength(2.0F, 6.0F)
+                .requiresCorrectToolForDrops());
+    }
+
+    private static Block furnaceLikeBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
+                .strength(3.5F, 17.5F)
+                .requiresCorrectToolForDrops());
     }
 
     private static Block metalBlock() {
