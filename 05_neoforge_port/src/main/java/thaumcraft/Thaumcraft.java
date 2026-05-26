@@ -17,6 +17,7 @@ import thaumcraft.common.aspects.TCGeneratedAspectRecipeGenerator;
 import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCCreativeTabs;
+import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.research.TCKnowledgeCommands;
@@ -36,6 +37,7 @@ public final class Thaumcraft {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public Thaumcraft(IEventBus modEventBus, ModContainer modContainer) {
+        TCDataComponents.DATA_COMPONENT_TYPES.register(modEventBus);
         TCBlocks.BLOCKS.register(modEventBus);
         TCItems.ITEMS.register(modEventBus);
         TCSounds.SOUND_EVENTS.register(modEventBus);
