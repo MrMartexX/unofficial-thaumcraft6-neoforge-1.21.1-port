@@ -73,6 +73,9 @@ public final class TCItems {
     public static final Supplier<Item> THAUMIUM_PLATE = simpleItem("thaumium_plate");
     public static final Supplier<Item> VOID_PLATE = simpleItem("void_plate");
     public static final Supplier<Item> RARE_EARTH = simpleItem("rare_earth");
+    public static final Supplier<Item> TALLOW = simpleItem("tallow");
+    public static final Supplier<Item> VIS_RESONATOR = simpleItem("vis_resonator");
+    public static final Supplier<Item> MIRRORED_GLASS = simpleItem("mirrored_glass");
 
     private static Supplier<Item> simpleItem(String id) {
         return ITEMS.register(id, () -> new Item(new Item.Properties()));
