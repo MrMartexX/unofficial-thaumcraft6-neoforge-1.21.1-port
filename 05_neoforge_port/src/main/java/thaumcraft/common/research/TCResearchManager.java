@@ -20,6 +20,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.items.components.TCAspectStackComponent;
+import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirement;
@@ -640,7 +641,9 @@ public final class TCResearchManager {
         if (!matchesRequirementIdentity(stack, requirement)) {
             return false;
         }
-        return matchesAspectStackRequirement(stack, requirement) && matchesStoredMagicRequirement(stack, requirement);
+        return matchesAspectStackRequirement(stack, requirement)
+                && matchesStoredMagicRequirement(stack, requirement)
+                && matchesLegacyItemRequirement(stack, requirement);
     }
 
     private static boolean matchesRequirementIdentity(ItemStack stack, ItemRequirement requirement) {
@@ -677,6 +680,20 @@ public final class TCResearchManager {
             return false;
         }
         return actual.id().equals(required.id()) && actual.level() >= required.level();
+    }
+
+    private static boolean matchesLegacyItemRequirement(ItemStack stack, ItemRequirement requirement) {
+        if (!requirement.hasLegacyItemRequirement()) {
+            return true;
+        }
+        TCLegacyItemComponent required = requirement.legacyItem();
+        TCLegacyItemComponent actual = stack.get(TCDataComponents.LEGACY_ITEM.get());
+        if (actual == null || actual.isEmpty()) {
+            return false;
+        }
+        return actual.family().equals(required.family())
+                && actual.variant().equals(required.variant())
+                && actual.metadata() == required.metadata();
     }
 
     private static String craftRequirementMarker(String raw) {
