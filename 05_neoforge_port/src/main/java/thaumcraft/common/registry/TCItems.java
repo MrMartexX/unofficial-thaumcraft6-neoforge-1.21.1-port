@@ -3,9 +3,11 @@ package thaumcraft.common.registry;
 import java.util.function.Supplier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.items.ItemAspectVariant;
+import thaumcraft.common.items.ItemLegacyPlaceholder;
 import thaumcraft.common.items.tools.ItemThaumometer;
 
 public final class TCItems {
@@ -191,7 +193,34 @@ public final class TCItems {
             String aspect = id.substring("phial_".length());
             return new ItemAspectVariant(ItemAspectVariant.Kind.PHIAL, aspect, 10);
         }
-        return new Item(new Item.Properties());
+
+        return switch (id) {
+            case "scribing_tools" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1),
+                    "tc.placeholder.scribing_tools"
+            );
+            case "caster_basic" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
+                    "tc.placeholder.caster_basic"
+            );
+            case "focus_1" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
+                    "tc.placeholder.focus"
+            );
+            case "focus_2", "focus_3" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
+                    "tc.placeholder.focus"
+            );
+            case "enchanted_placeholder_protection_1",
+                 "enchanted_placeholder_sharpness_1",
+                 "enchanted_placeholder_silk_touch_1",
+                 "enchanted_placeholder_fortune_1" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
+                    "tc.placeholder.enchanted",
+                    true
+            );
+            default -> new Item(new Item.Properties());
+        };
     }
 
     private static Supplier<BlockItem> blockItem(String id, Supplier<? extends net.minecraft.world.level.block.Block> block) {
