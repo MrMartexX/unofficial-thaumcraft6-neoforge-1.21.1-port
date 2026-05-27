@@ -1,6 +1,7 @@
 package thaumcraft.common.tiles.crafting;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -120,21 +121,34 @@ public class TCResearchTableBlockEntity extends BlockEntity implements Container
             return;
         }
 
-        ArrayList<Map.Entry<String, Integer>> sorted = new ArrayList<>(theoryData.categoryTotals.entrySet());
-        sorted.sort((left, right) -> right.getValue().compareTo(left.getValue()));
-
-        int index = 0;
-        for (Map.Entry<String, Integer> entry : sorted) {
-            int rawAmount = Math.round(entry.getValue() / 100.0F * TCKnowledgeType.THEORY.rawUnitsPerPoint());
-            if (index > theoryData.penaltyStart) {
-                rawAmount = (int) Math.max(1.0D, rawAmount * 0.666666667D);
-            }
+        for (Map.Entry<String, Integer> entry : calculateTheoryRawAwards(theoryData).entrySet()) {
+            int rawAmount = entry.getValue();
             TCResearchManager.addKnowledgeRaw(player, TCKnowledgeType.THEORY, entry.getKey(), rawAmount);
-            index++;
         }
 
         theoryData = null;
         setChanged();
+    }
+
+    public static Map<String, Integer> calculateTheoryRawAwards(TCResearchTableData data) {
+        if (data == null) {
+            return Map.of();
+        }
+
+        ArrayList<Map.Entry<String, Integer>> sorted = new ArrayList<>(data.categoryTotals.entrySet());
+        sorted.sort((left, right) -> right.getValue().compareTo(left.getValue()));
+
+        LinkedHashMap<String, Integer> awards = new LinkedHashMap<>();
+        int index = 0;
+        for (Map.Entry<String, Integer> entry : sorted) {
+            int rawAmount = Math.round(entry.getValue() / 100.0F * TCKnowledgeType.THEORY.rawUnitsPerPoint());
+            if (index > data.penaltyStart) {
+                rawAmount = (int) Math.max(1.0D, rawAmount * 0.666666667D);
+            }
+            awards.put(entry.getKey(), rawAmount);
+            index++;
+        }
+        return awards;
     }
 
     public boolean consumePaperFromTable() {

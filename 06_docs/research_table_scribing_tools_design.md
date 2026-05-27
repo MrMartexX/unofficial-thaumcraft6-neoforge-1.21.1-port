@@ -32,6 +32,7 @@ Guide rule applied: research, BlockEntity, menu and player-progression systems a
 | Theory data model | `TCResearchTableData` | Preserves legacy field names and NBT keys: `player`, `inspiration`, `inspirationStart`, `placedCards`, `bonusDraws`, `aidsChosen`, `penaltyStart`, `savedCards`, `categoriesBlocked`, `categoryTotals`, `aidCards`, `cardChoices`, `lastDraw`. |
 | Theory card registry | `TCTheorycraftManager` with first core-card slice | Registers the public API/core legacy card ids for `CardStudy`, `CardAnalyze`, `CardBalance`, `CardNotation`, `CardPonder`, `CardRethink`, `CardReject`, `CardExperimentation`, and `CardInspired`. Advanced cards from `thaumcraft.common.lib.research.theorycraft` remain deferred. |
 | Research table payloads | `TCResearchTableActionPayload`, `TCResearchTableSyncPayload`, `TCResearchTableNetwork` | Client sends only action intent. Server validates the currently open `TCResearchTableMenu`, table validity, paper, scribing tools, card index and current theory state before mutation. |
+| Diagnostic parity harness | `TCResearchTableDiagnostics`, `/tc research_table validate`, `-PtcResearchTableAudit=true` | Static checks cover legacy NBT keys, round-trip card choices, `addTotal`, `addInspiration`, finish-theory raw award math, first card registry count and sync payload round-trip. Player checks cover real scribing-tool damage, paper consumption, draw-card availability and finish-theory knowledge mutation without leaving player knowledge changed. |
 | Wood-table conversion | `TCTableBlock#useItemOn` | Held scribing tools are transferred into the research table block entity, removed from the hand, and the modern required-craft marker path is notified for `thaumcraft:research_table`. |
 | Active assets | Modern blockstates/models/item models using `textures/block` and `textures/item` | Legacy imported `textures/blocks` and `textures/items` remain reference/base assets. |
 | Aspect parity for new active ids | Exact runtime dump values for `table_wood`, `table_stone`, `research_table` | These are final 1.12 `getObjectAspects` values from the legacy dump, not recalculated guesses. |
@@ -47,7 +48,7 @@ Guide rule applied: research, BlockEntity, menu and player-progression systems a
 
 ## Next Checklist
 
-1. Add parity fixtures for paper consumption, scribing-tool damage, inspiration calculation, category totals and legacy NBT round-trip.
+1. Run and keep `-PtcResearchTableAudit=true` passing after every research-table change.
 2. Port the next safe advanced cards by dependency family, starting with cards that do not require unported subsystems.
 3. Add research aid detection around the table after block/entity aid matching is audited.
 4. Add a block entity renderer for table-top scribing tools/paper after the storage/menu sync is visually checked.
