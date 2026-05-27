@@ -10,6 +10,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 import thaumcraft.client.gui.TCClientTooltipComponents;
+import thaumcraft.client.gui.TCMenuScreens;
 import thaumcraft.common.aspects.TCAspectAssignments;
 import thaumcraft.common.aspects.TCAspectDumpExporter;
 import thaumcraft.common.aspects.TCAspectReloadValidator;
@@ -20,6 +21,7 @@ import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.registry.TCMenus;
 import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.research.TCKnowledgeCommands;
 import thaumcraft.common.research.TCKnowledgeNetwork;
@@ -42,10 +44,12 @@ public final class Thaumcraft {
         TCBlocks.BLOCKS.register(modEventBus);
         TCBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         TCItems.ITEMS.register(modEventBus);
+        TCMenus.MENUS.register(modEventBus);
         TCSounds.SOUND_EVENTS.register(modEventBus);
         TCCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             TCClientTooltipComponents.register(modEventBus);
+            TCMenuScreens.register(modEventBus);
         }
         modEventBus.addListener(TCAuraNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCKnowledgeNetwork::onRegisterPayloadHandlers);
