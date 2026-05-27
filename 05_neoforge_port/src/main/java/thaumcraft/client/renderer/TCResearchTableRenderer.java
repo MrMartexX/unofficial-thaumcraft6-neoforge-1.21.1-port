@@ -3,6 +3,12 @@ package thaumcraft.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -24,8 +30,15 @@ final class TCResearchTableRenderer implements BlockEntityRenderer<TCResearchTab
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/research/quill.png");
     private static final int TEXTURE_WIDTH = 64;
     private static final int TEXTURE_HEIGHT = 32;
+    private final ModelPart inkwell;
+    private final ModelPart scrollTube;
+    private final ModelPart scrollRibbon;
 
     TCResearchTableRenderer(BlockEntityRendererProvider.Context context) {
+        ModelPart root = createLegacyModel().bakeRoot();
+        inkwell = root.getChild("inkwell");
+        scrollTube = root.getChild("scroll_tube");
+        scrollRibbon = root.getChild("scroll_ribbon");
     }
 
     @Override
@@ -56,7 +69,8 @@ final class TCResearchTableRenderer implements BlockEntityRenderer<TCResearchTab
         Direction facing = table.getBlockState().hasProperty(TCResearchTableBlock.FACING)
                 ? table.getBlockState().getValue(TCResearchTableBlock.FACING)
                 : Direction.NORTH;
-        poseStack.translate(0.5D, 1.005D, 0.5D);
+        poseStack.translate(0.5D, 1.0D, 0.5D);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         poseStack.mulPose(Axis.YP.rotationDegrees(rotationFor(facing)));
     }
 
@@ -69,77 +83,26 @@ final class TCResearchTableRenderer implements BlockEntityRenderer<TCResearchTab
         };
     }
 
-    private static void renderScroll(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    private void renderScroll(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(TABLE_DETAIL_TEXTURE));
-        renderBox(
-                consumer,
-                poseStack,
-                packedLight,
-                -0.62F,
-                0.015F,
-                -0.02F,
-                -0.12F,
-                0.14F,
-                0.105F,
-                0,
-                0,
-                10,
-                4,
-                255,
-                255,
-                255,
-                255);
-
-        int color = Aspect.ALCHEMY.getColor();
-        renderBox(
-                consumer,
-                poseStack,
-                packedLight,
-                -0.40F,
-                0.005F,
-                -0.035F,
-                -0.32F,
-                0.15F,
-                0.12F,
-                0,
-                4,
-                4,
-                8,
-                (color >> 16) & 255,
-                (color >> 8) & 255,
-                color & 255,
-                255);
+        scrollTube.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY);
+        poseStack.pushPose();
+        poseStack.scale(1.2F, 1.2F, 1.2F);
+        scrollRibbon.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY, 0xFF000000 | Aspect.ALCHEMY.getColor());
+        poseStack.popPose();
     }
 
-    private static void renderInkwell(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    private void renderInkwell(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(TABLE_DETAIL_TEXTURE));
-        renderBox(
-                consumer,
-                poseStack,
-                packedLight,
-                -0.38F,
-                0.01F,
-                0.17F,
-                -0.19F,
-                0.135F,
-                0.36F,
-                0,
-                16,
-                8,
-                24,
-                255,
-                255,
-                255,
-                255);
+        inkwell.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY);
     }
 
     private static void renderQuill(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
-        poseStack.translate(-0.34D, 0.145D, 0.26D);
+        poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
+        poseStack.translate(-0.5D, 0.1D, 0.125D);
         poseStack.mulPose(Axis.YP.rotationDegrees(60.0F));
-        poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(-20.0F));
-        poseStack.scale(0.34F, 0.34F, 0.34F);
+        poseStack.scale(0.5F, 0.5F, 0.5F);
 
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(QUILL_TEXTURE));
         PoseStack.Pose pose = poseStack.last();
@@ -148,75 +111,6 @@ final class TCResearchTableRenderer implements BlockEntityRenderer<TCResearchTab
         addVertex(consumer, pose, packedLight, 0.5F, 0.5F, 0.0F, 1.0F, 0.0F, 255, 255, 255, 255, 0.0F, 1.0F, 0.0F);
         addVertex(consumer, pose, packedLight, -0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 255, 255, 255, 255, 0.0F, 1.0F, 0.0F);
         poseStack.popPose();
-    }
-
-    private static void renderBox(
-            VertexConsumer consumer,
-            PoseStack poseStack,
-            int packedLight,
-            float minX,
-            float minY,
-            float minZ,
-            float maxX,
-            float maxY,
-            float maxZ,
-            int textureU,
-            int textureV,
-            int textureWidth,
-            int textureHeight,
-            int red,
-            int green,
-            int blue,
-            int alpha) {
-        float u0 = textureU / (float) TEXTURE_WIDTH;
-        float v0 = textureV / (float) TEXTURE_HEIGHT;
-        float u1 = (textureU + textureWidth) / (float) TEXTURE_WIDTH;
-        float v1 = (textureV + textureHeight) / (float) TEXTURE_HEIGHT;
-        PoseStack.Pose pose = poseStack.last();
-
-        addQuad(consumer, pose, packedLight, minX, minY, maxZ, maxX, minY, maxZ, maxX, maxY, maxZ, minX, maxY, maxZ, u0, v1, u1, v1, u1, v0, u0, v0, red, green, blue, alpha, 0.0F, 0.0F, 1.0F);
-        addQuad(consumer, pose, packedLight, maxX, minY, minZ, minX, minY, minZ, minX, maxY, minZ, maxX, maxY, minZ, u0, v1, u1, v1, u1, v0, u0, v0, red, green, blue, alpha, 0.0F, 0.0F, -1.0F);
-        addQuad(consumer, pose, packedLight, minX, minY, minZ, minX, minY, maxZ, minX, maxY, maxZ, minX, maxY, minZ, u0, v1, u1, v1, u1, v0, u0, v0, red, green, blue, alpha, -1.0F, 0.0F, 0.0F);
-        addQuad(consumer, pose, packedLight, maxX, minY, maxZ, maxX, minY, minZ, maxX, maxY, minZ, maxX, maxY, maxZ, u0, v1, u1, v1, u1, v0, u0, v0, red, green, blue, alpha, 1.0F, 0.0F, 0.0F);
-        addQuad(consumer, pose, packedLight, minX, maxY, maxZ, maxX, maxY, maxZ, maxX, maxY, minZ, minX, maxY, minZ, u0, v1, u1, v1, u1, v0, u0, v0, red, green, blue, alpha, 0.0F, 1.0F, 0.0F);
-        addQuad(consumer, pose, packedLight, minX, minY, minZ, maxX, minY, minZ, maxX, minY, maxZ, minX, minY, maxZ, u0, v1, u1, v1, u1, v0, u0, v0, red, green, blue, alpha, 0.0F, -1.0F, 0.0F);
-    }
-
-    private static void addQuad(
-            VertexConsumer consumer,
-            PoseStack.Pose pose,
-            int packedLight,
-            float x1,
-            float y1,
-            float z1,
-            float x2,
-            float y2,
-            float z2,
-            float x3,
-            float y3,
-            float z3,
-            float x4,
-            float y4,
-            float z4,
-            float u1,
-            float v1,
-            float u2,
-            float v2,
-            float u3,
-            float v3,
-            float u4,
-            float v4,
-            int red,
-            int green,
-            int blue,
-            int alpha,
-            float normalX,
-            float normalY,
-            float normalZ) {
-        addVertex(consumer, pose, packedLight, x1, y1, z1, u1, v1, red, green, blue, alpha, normalX, normalY, normalZ);
-        addVertex(consumer, pose, packedLight, x2, y2, z2, u2, v2, red, green, blue, alpha, normalX, normalY, normalZ);
-        addVertex(consumer, pose, packedLight, x3, y3, z3, u3, v3, red, green, blue, alpha, normalX, normalY, normalZ);
-        addVertex(consumer, pose, packedLight, x4, y4, z4, u4, v4, red, green, blue, alpha, normalX, normalY, normalZ);
     }
 
     private static void addVertex(
@@ -241,5 +135,32 @@ final class TCResearchTableRenderer implements BlockEntityRenderer<TCResearchTab
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
                 .setNormal(pose, normalX, normalY, normalZ);
+    }
+
+    private static LayerDefinition createLegacyModel() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+        root.addOrReplaceChild(
+                "inkwell",
+                CubeListBuilder.create()
+                        .texOffs(0, 16)
+                        .mirror()
+                        .addBox(0.0F, 0.0F, 0.0F, 3.0F, 2.0F, 3.0F),
+                PartPose.offset(-6.0F, -2.0F, 3.0F));
+        root.addOrReplaceChild(
+                "scroll_tube",
+                CubeListBuilder.create()
+                        .texOffs(0, 0)
+                        .mirror()
+                        .addBox(-8.0F, -0.5F, 0.0F, 8.0F, 2.0F, 2.0F),
+                PartPose.offsetAndRotation(-2.0F, -2.0F, 2.0F, 0.0F, 10.0F, 0.0F));
+        root.addOrReplaceChild(
+                "scroll_ribbon",
+                CubeListBuilder.create()
+                        .texOffs(0, 4)
+                        .mirror()
+                        .addBox(-4.25F, -0.275F, 0.0F, 1.0F, 2.0F, 2.0F),
+                PartPose.offsetAndRotation(-2.0F, -2.0F, 2.0F, 0.0F, 10.0F, 0.0F));
+        return LayerDefinition.create(mesh, TEXTURE_WIDTH, TEXTURE_HEIGHT);
     }
 }

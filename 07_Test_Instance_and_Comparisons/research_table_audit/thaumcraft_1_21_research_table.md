@@ -31,7 +31,7 @@
 | card_analyze_deferred_by_legacy_bug | PASS | Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source. |
 | bookshelf_aid_registry | PASS | Legacy AidBookshelf adds Balance, two Notation cards and three Study cards. |
 | bookshelf_aid_initialize_data | PASS | Selected aids should reduce initial inspiration by one each and append their card ids to aidCards. |
-| vanilla_aid_registry | PASS | The active vanilla aid slice should contain bookshelf, enchanting table and beacon aids. |
+| vanilla_aid_registry | PASS | The active vanilla aid slice should contain bookshelf, enchanting table, beacon and dragon egg aids. |
 | card_measure_activation | PASS | Legacy CardMeasure adds 15 INFUSION and one bonus draw. |
 | card_calibrate_activation | PASS | Legacy CardCalibrate adds 15 ARTIFICE and one bonus draw. |
 | card_focus_activation | PASS | Legacy CardFocus adds 15 AUROMANCY and one bonus draw. |
@@ -42,10 +42,11 @@
 | card_tinker_activation | PASS | Legacy CardTinker chooses from the Artifice item option list and awards random ARTIFICE from aspect visSize. |
 | card_mind_over_matter_activation | PASS | Legacy CardMindOverMatter consumes one Artifice option item and awards ARTIFICE from 10 + sqrt(aspect visSize). |
 | card_scripting_activation | PASS | Legacy CardScripting consumes one extra paper and one extra ink from the research table, then adds 25 GOLEMANCY. |
+| card_dragon_egg_activation | PASS | Legacy CardDragonEgg is aid-only and performs ten random +2..+5 category-total grants. |
 | card_concentrate_activation | PASS | Legacy CardConcentrate requires one aspect crystal, adds 15 ALCHEMY and one bonus draw. |
 | card_reactions_activation | PASS | Legacy CardReactions requires two different aspect crystals and adds 25 ALCHEMY. |
 | card_synthesis_activation | PASS | Legacy CardSynthesis consumes two component crystals, adds 40 ALCHEMY and creates the compound crystal when a player is present. |
 | sync_payload_roundtrip | PASS | Client cache payload can reconstruct theory data. |
 
-Passed: 44
+Passed: 45
 Failed: 0

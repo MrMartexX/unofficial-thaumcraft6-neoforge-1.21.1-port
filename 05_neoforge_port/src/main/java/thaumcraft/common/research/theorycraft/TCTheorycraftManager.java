@@ -17,6 +17,7 @@ public final class TCTheorycraftManager {
     public static final String AID_BOOKSHELF = "thaumcraft.api.research.theorycraft.AidBookshelf";
     public static final String AID_ENCHANTMENT_TABLE = "thaumcraft.common.lib.research.theorycraft.AidEnchantmentTable";
     public static final String AID_BEACON = "thaumcraft.common.lib.research.theorycraft.AidBeacon";
+    public static final String AID_DRAGON_EGG = "thaumcraft.common.lib.research.theorycraft.AidDragonEgg";
     static final int AID_HORIZONTAL_RADIUS = 4;
     static final int AID_VERTICAL_RADIUS = 1;
     static final double AID_ENTITY_RANGE = 5.0D;
@@ -54,6 +55,7 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.common.lib.research.theorycraft.CardTinker", CardTinker::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter", CardMindOverMatter::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardScripting", CardScripting::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg", CardDragonEgg::new);
 
         registerAid(TCTheorycraftAid.block(
                 AID_BOOKSHELF,
@@ -79,6 +81,12 @@ public final class TCTheorycraftManager {
                 new ItemStack(Blocks.BEACON),
                 state -> state.is(Blocks.BEACON),
                 List.of("thaumcraft.common.lib.research.theorycraft.CardBeacon")
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_DRAGON_EGG,
+                new ItemStack(Blocks.DRAGON_EGG),
+                state -> state.is(Blocks.DRAGON_EGG),
+                List.of("thaumcraft.common.lib.research.theorycraft.CardDragonEgg")
         ));
     }
 
