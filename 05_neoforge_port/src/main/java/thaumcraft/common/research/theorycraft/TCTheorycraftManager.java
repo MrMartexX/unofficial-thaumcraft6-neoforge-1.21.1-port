@@ -49,6 +49,8 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.common.lib.research.theorycraft.CardEnchantment", CardEnchantment::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardBeacon", CardBeacon::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardSpellbinding", CardSpellbinding::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardChannel", CardChannel::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardSculpting", CardSculpting::new);
 
         registerAid(TCTheorycraftAid.block(
                 AID_BOOKSHELF,

@@ -71,7 +71,7 @@ public final class TCResearchTableDiagnostics {
         report.check("finish_theory_penalty_raw", awards.getOrDefault("ALCHEMY", -1) == 2, "10% ALCHEMY after penalty rounds down from 3 to 2 raw.");
 
         report.check("public_api_card_registry_count", registeredCardCount("thaumcraft.api.research.theorycraft.") == 9, "The public/API theorycraft card slice should keep the original 9 card ids.");
-        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 19
+        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 21
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMeasure")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardReactions")
@@ -81,8 +81,10 @@ public final class TCResearchTableDiagnostics {
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardSynergy")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardEnchantment")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardBeacon")
-                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardSpellbinding"),
-                "First common card bridge should add dependency-free, aspect-crystal Alchemy, and vanilla XP/aid cards only.");
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardSpellbinding")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardChannel")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardSculpting"),
+                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid and vanilla-item Golemancy cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
         addResearchAidChecks(report);
         addSafeBridgeCardActivationChecks(report);
@@ -172,6 +174,26 @@ public final class TCResearchTableDiagnostics {
                         && beaconData.bonusDraws == 1
                         && beaconData.penaltyStart == 1,
                 "Legacy CardBeacon is aid-only, restores two inspiration through negative cost, adds one bonus draw and increments penaltyStart.");
+
+        TCResearchTableData channelData = new TCResearchTableData();
+        CardChannel channel = new CardChannel();
+        channel.setSeed(12345L);
+        boolean channelActivated = channel.initialize(null, channelData) && channel.activate(null, channelData);
+        report.check("card_channel_activation", channelActivated
+                        && channelData.getTotal("INFUSION") == 25
+                        && hasAspectStackRequirement(channel.getRequiredItems(), 1),
+                "Legacy CardChannel picks a compound aspect, requires the matching filled phial and adds 25 INFUSION.");
+
+        TCResearchTableData sculptingData = new TCResearchTableData();
+        CardSculpting sculpting = new CardSculpting();
+        boolean sculptingActivated = sculpting.activate(null, sculptingData);
+        report.check("card_sculpting_activation", sculptingActivated
+                        && sculptingData.getTotal("GOLEMANCY") == 20
+                        && sculptingData.bonusDraws == 1
+                        && sculpting.getRequiredItems().size() == 1
+                        && sculpting.getRequiredItems().get(0).is(Items.CLAY_BALL)
+                        && sculpting.getRequiredItemsConsumed().equals(List.of(true)),
+                "Legacy CardSculpting consumes one clay ball, adds 20 GOLEMANCY and grants one bonus draw.");
     }
 
     private static void addAlchemyCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {
