@@ -1,9 +1,13 @@
 package thaumcraft.common.research.theorycraft;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import thaumcraft.common.menu.TCResearchTableMenu;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 
@@ -69,7 +73,11 @@ final class TCResearchTableActions {
         }
 
         TCResearchTableData.CardChoice choice = data.cardChoices.get(choiceIndex);
-        if (!choice.card.getRequiredItems().isEmpty()) {
+        List<ItemStack> requiredItems = choice.card.getRequiredItems();
+        if (!hasRequiredItems(player, requiredItems)) {
+            return false;
+        }
+        if (!consumeRequiredItems(player, requiredItems, choice.card.getRequiredItemsConsumed())) {
             return false;
         }
         if (!choice.card.activate(player, data)) {
@@ -116,5 +124,101 @@ final class TCResearchTableActions {
         }
         table.setTheoryData(null);
         return true;
+    }
+
+    static boolean hasRequiredItems(ServerPlayer player, List<ItemStack> requiredItems) {
+        if (requiredItems == null || requiredItems.isEmpty()) {
+            return true;
+        }
+        for (ItemStack required : requiredItems) {
+            if (!isRequirementSatisfied(player, required)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static boolean consumeRequiredItems(ServerPlayer player, List<ItemStack> requiredItems, List<Boolean> consumed) {
+        if (requiredItems == null || requiredItems.isEmpty()) {
+            return true;
+        }
+        if (consumed == null || consumed.size() != requiredItems.size()) {
+            return true;
+        }
+
+        ArrayList<ConsumeEntry> plan = new ArrayList<>();
+        ArrayList<ItemStack> simulated = new ArrayList<>();
+        for (ItemStack stack : player.getInventory().items) {
+            simulated.add(stack.copy());
+        }
+
+        for (int requirementIndex = 0; requirementIndex < requiredItems.size(); requirementIndex++) {
+            if (!Boolean.TRUE.equals(consumed.get(requirementIndex))) {
+                continue;
+            }
+            ItemStack required = requiredItems.get(requirementIndex);
+            if (!planRequirement(simulated, required, plan)) {
+                return false;
+            }
+        }
+
+        if (plan.isEmpty()) {
+            return true;
+        }
+
+        Inventory inventory = player.getInventory();
+        for (ConsumeEntry entry : plan) {
+            if (entry.slot() >= 0 && entry.slot() < inventory.items.size()) {
+                inventory.items.get(entry.slot()).shrink(entry.amount());
+            }
+        }
+        inventory.setChanged();
+        return true;
+    }
+
+    private static boolean isRequirementSatisfied(ServerPlayer player, ItemStack required) {
+        if (required == null || required.isEmpty()) {
+            return true;
+        }
+
+        int remaining = required.getCount();
+        for (ItemStack stack : player.getInventory().items) {
+            if (matchesRequiredStack(stack, required)) {
+                remaining -= stack.getCount();
+                if (remaining <= 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean planRequirement(List<ItemStack> simulated, ItemStack required, List<ConsumeEntry> plan) {
+        if (required == null || required.isEmpty()) {
+            return true;
+        }
+
+        int remaining = required.getCount();
+        for (int slot = 0; slot < simulated.size() && remaining > 0; slot++) {
+            ItemStack stack = simulated.get(slot);
+            if (!matchesRequiredStack(stack, required)) {
+                continue;
+            }
+
+            int amount = Math.min(remaining, stack.getCount());
+            stack.shrink(amount);
+            plan.add(new ConsumeEntry(slot, amount));
+            remaining -= amount;
+        }
+        return remaining <= 0;
+    }
+
+    private static boolean matchesRequiredStack(ItemStack stack, ItemStack required) {
+        return !stack.isEmpty()
+                && !required.isEmpty()
+                && ItemStack.isSameItemSameComponents(stack, required);
+    }
+
+    private record ConsumeEntry(int slot, int amount) {
     }
 }

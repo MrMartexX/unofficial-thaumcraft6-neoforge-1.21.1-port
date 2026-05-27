@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -11,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import thaumcraft.common.registry.TCBlocks;
+import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.research.TCKnowledgeType;
 import thaumcraft.common.research.TCPlayerKnowledge;
@@ -67,8 +70,19 @@ public final class TCResearchTableDiagnostics {
         report.check("finish_theory_second_category_raw", awards.getOrDefault("AUROMANCY", -1) == 14, "45% AUROMANCY rounds to 14 raw.");
         report.check("finish_theory_penalty_raw", awards.getOrDefault("ALCHEMY", -1) == 2, "10% ALCHEMY after penalty rounds down from 3 to 2 raw.");
 
-        report.check("core_card_registry_count", TCTheorycraftManager.cards().size() == 9, "First core-card slice should register exactly 9 legacy public/API card ids.");
+        report.check("public_api_card_registry_count", registeredCardCount("thaumcraft.api.research.theorycraft.") == 9, "The public/API theorycraft card slice should keep the original 9 card ids.");
+        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 16
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardMeasure")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardReactions")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardSynthesis")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardCalibrate")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardFocus")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardSynergy"),
+                "First common card bridge should add dependency-free and aspect-crystal Alchemy cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
+        addSafeBridgeCardActivationChecks(report);
+        addAlchemyCardActivationChecks(report);
 
         TCResearchTableSyncPayload syncPayload = new TCResearchTableSyncPayload(BlockPos.ZERO, true, serialized);
         TCResearchTableBlockEntity table = new TCResearchTableBlockEntity(BlockPos.ZERO, TCBlocks.RESEARCH_TABLE.get().defaultBlockState());
@@ -78,11 +92,86 @@ public final class TCResearchTableDiagnostics {
         return report.build();
     }
 
+    private static void addSafeBridgeCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {
+        TCResearchTableData measureData = new TCResearchTableData();
+        boolean measure = new CardMeasure().activate(null, measureData);
+        report.check("card_measure_activation", measure
+                        && measureData.getTotal("INFUSION") == 15
+                        && measureData.bonusDraws == 1,
+                "Legacy CardMeasure adds 15 INFUSION and one bonus draw.");
+
+        TCResearchTableData calibrateData = new TCResearchTableData();
+        boolean calibrate = new CardCalibrate().activate(null, calibrateData);
+        report.check("card_calibrate_activation", calibrate
+                        && calibrateData.getTotal("ARTIFICE") == 15
+                        && calibrateData.bonusDraws == 1,
+                "Legacy CardCalibrate adds 15 ARTIFICE and one bonus draw.");
+
+        TCResearchTableData focusData = new TCResearchTableData();
+        boolean focus = new CardFocus().activate(null, focusData);
+        report.check("card_focus_activation", focus
+                        && focusData.getTotal("AUROMANCY") == 15
+                        && focusData.bonusDraws == 1,
+                "Legacy CardFocus adds 15 AUROMANCY and one bonus draw.");
+
+        TCResearchTableData synergyData = new TCResearchTableData();
+        synergyData.addTotal("ARTIFICE", 5);
+        synergyData.addTotal("ALCHEMY", 5);
+        synergyData.addTotal("INFUSION", 5);
+        CardSynergy synergyCard = new CardSynergy();
+        boolean synergy = synergyCard.initialize(null, synergyData) && synergyCard.activate(null, synergyData);
+        report.check("card_synergy_activation", synergy
+                        && synergyData.getTotal("ARTIFICE") == 0
+                        && synergyData.getTotal("ALCHEMY") == 0
+                        && synergyData.getTotal("INFUSION") == 0
+                        && synergyData.getTotal("GOLEMANCY") == 30
+                        && synergyData.penaltyStart == 1,
+                "Legacy CardSynergy drains 15 from ARTIFICE/ALCHEMY/INFUSION, adds 30 GOLEMANCY and increments penaltyStart.");
+    }
+
+    private static void addAlchemyCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {
+        CardConcentrate concentrate = new CardConcentrate();
+        concentrate.setSeed(1L);
+        TCResearchTableData concentrateData = new TCResearchTableData();
+        boolean concentrateInitialized = concentrate.initialize(null, concentrateData);
+        boolean concentrateActivated = concentrate.activate(null, concentrateData);
+        report.check("card_concentrate_activation", concentrateInitialized
+                        && concentrateActivated
+                        && concentrateData.getTotal("ALCHEMY") == 15
+                        && concentrateData.bonusDraws == 1
+                        && hasAspectStackRequirement(concentrate.getRequiredItems(), 1),
+                "Legacy CardConcentrate requires one aspect crystal, adds 15 ALCHEMY and one bonus draw.");
+
+        CardReactions reactions = new CardReactions();
+        reactions.setSeed(2L);
+        TCResearchTableData reactionsData = new TCResearchTableData();
+        boolean reactionsInitialized = reactions.initialize(null, reactionsData);
+        boolean reactionsActivated = reactions.activate(null, reactionsData);
+        report.check("card_reactions_activation", reactionsInitialized
+                        && reactionsActivated
+                        && reactionsData.getTotal("ALCHEMY") == 25
+                        && hasAspectStackRequirement(reactions.getRequiredItems(), 2),
+                "Legacy CardReactions requires two different aspect crystals and adds 25 ALCHEMY.");
+
+        CardSynthesis synthesis = new CardSynthesis();
+        synthesis.setSeed(3L);
+        TCResearchTableData synthesisData = new TCResearchTableData();
+        boolean synthesisInitialized = synthesis.initialize(null, synthesisData);
+        boolean synthesisActivated = synthesis.activate(null, synthesisData);
+        report.check("card_synthesis_activation", synthesisInitialized
+                        && synthesisActivated
+                        && synthesisData.getTotal("ALCHEMY") == 40
+                        && hasAspectStackRequirement(synthesis.getRequiredItems(), 2)
+                        && synthesis.getRequiredItemsConsumed().equals(List.of(true, true)),
+                "Legacy CardSynthesis consumes two component crystals, adds 40 ALCHEMY and creates the compound crystal when a player is present.");
+    }
+
     public static TCResearchTableDiagnosticReport buildPlayerReport(ServerPlayer player) {
         TCResearchTableDiagnosticReport.Builder report = TCResearchTableDiagnosticReport.builder();
         TCTheorycraftManager.bootstrap();
 
         TCPlayerKnowledge before = TCPlayerKnowledgeStore.get(player);
+        ArrayList<ItemStack> beforeInventory = copyMainInventory(player);
         try {
             TCResearchTableBlockEntity table = new TCResearchTableBlockEntity(BlockPos.ZERO, TCBlocks.RESEARCH_TABLE.get().defaultBlockState());
             table.setItem(TCResearchTableBlockEntity.SLOT_SCRIBING_TOOLS, new ItemStack(TCItems.SCRIBING_TOOLS.get()));
@@ -102,6 +191,12 @@ public final class TCResearchTableDiagnostics {
             report.check("draw_cards_non_empty", !data.cardChoices.isEmpty(), "Draw should produce at least one currently ported valid card from seeded totals.");
             report.check("draw_cards_max_two", data.cardChoices.size() <= 2, "Legacy draw count caps this request at two choices; actual=" + data.cardChoices.size());
 
+            player.getInventory().items.set(0, new ItemStack(Items.PAPER, 3));
+            report.check("required_item_check", TCResearchTableActions.hasRequiredItems(player, List.of(new ItemStack(Items.PAPER, 2))), "Card requirement checks should see matching main-inventory stacks.");
+            report.check("required_item_consume", TCResearchTableActions.consumeRequiredItems(player, List.of(new ItemStack(Items.PAPER, 2)), List.of(true))
+                            && player.getInventory().items.get(0).getCount() == 1,
+                    "Consumed card requirements should shrink matching main-inventory stacks.");
+
             table.setTheoryData(seededCompleteTheory());
             Map<String, Integer> awards = TCResearchTableBlockEntity.calculateTheoryRawAwards(table.getTheoryData());
             table.finishTheory(player);
@@ -111,9 +206,51 @@ public final class TCResearchTableDiagnostics {
             report.check("finish_theory_clears_data", table.getTheoryData() == null, "finishTheory should clear table theory data.");
         } finally {
             TCPlayerKnowledgeStore.set(player, before, false);
+            restoreMainInventory(player, beforeInventory);
         }
 
         return report.build();
+    }
+
+    private static int registeredCardCount(String prefix) {
+        int count = 0;
+        for (String key : TCTheorycraftManager.cards().keySet()) {
+            if (key.startsWith(prefix)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static boolean hasCard(String key) {
+        return TCTheorycraftManager.cards().containsKey(key);
+    }
+
+    private static boolean hasAspectStackRequirement(List<ItemStack> stacks, int expectedSize) {
+        if (stacks.size() != expectedSize) {
+            return false;
+        }
+        for (ItemStack stack : stacks) {
+            if (stack.isEmpty() || stack.get(TCDataComponents.ASPECT_STACK.get()) == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static ArrayList<ItemStack> copyMainInventory(ServerPlayer player) {
+        ArrayList<ItemStack> copy = new ArrayList<>();
+        for (ItemStack stack : player.getInventory().items) {
+            copy.add(stack.copy());
+        }
+        return copy;
+    }
+
+    private static void restoreMainInventory(ServerPlayer player, List<ItemStack> copy) {
+        for (int slot = 0; slot < player.getInventory().items.size() && slot < copy.size(); slot++) {
+            player.getInventory().items.set(slot, copy.get(slot).copy());
+        }
+        player.getInventory().setChanged();
     }
 
     public static void writeMarkdown(Path output, TCResearchTableDiagnosticReport report) throws IOException {

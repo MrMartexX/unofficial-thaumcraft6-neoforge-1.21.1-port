@@ -21,6 +21,13 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.api.research.theorycraft.CardReject", CardReject::new);
         registerCard("thaumcraft.api.research.theorycraft.CardExperimentation", CardExperimentation::new);
         registerCard("thaumcraft.api.research.theorycraft.CardInspired", CardInspired::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardMeasure", CardMeasure::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate", CardConcentrate::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardReactions", CardReactions::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardSynthesis", CardSynthesis::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardCalibrate", CardCalibrate::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardFocus", CardFocus::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardSynergy", CardSynergy::new);
     }
 
     public static void registerCard(String legacyKey, Supplier<? extends TCTheorycraftCard> factory) {
