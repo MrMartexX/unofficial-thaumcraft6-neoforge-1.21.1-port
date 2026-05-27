@@ -15,6 +15,7 @@ import thaumcraft.common.aspects.TCAspectDumpExporter;
 import thaumcraft.common.aspects.TCAspectReloadValidator;
 import thaumcraft.common.aspects.TCGeneratedAspectRecipeGenerator;
 import thaumcraft.common.config.TCConfig;
+import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCDataComponents;
@@ -39,6 +40,7 @@ public final class Thaumcraft {
     public Thaumcraft(IEventBus modEventBus, ModContainer modContainer) {
         TCDataComponents.DATA_COMPONENT_TYPES.register(modEventBus);
         TCBlocks.BLOCKS.register(modEventBus);
+        TCBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         TCItems.ITEMS.register(modEventBus);
         TCSounds.SOUND_EVENTS.register(modEventBus);
         TCCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);

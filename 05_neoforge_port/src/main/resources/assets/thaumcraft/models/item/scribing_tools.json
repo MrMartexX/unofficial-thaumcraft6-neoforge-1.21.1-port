@@ -1,6 +1,6 @@
 {
   "textures": {
-    "layer0": "minecraft:item/feather"
+    "layer0": "thaumcraft:item/scribing_tools"
   },
   "parent": "minecraft:item/generated"
 }

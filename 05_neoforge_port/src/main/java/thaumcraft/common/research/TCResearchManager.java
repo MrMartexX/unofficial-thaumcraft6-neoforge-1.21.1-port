@@ -542,7 +542,7 @@ public final class TCResearchManager {
         return true;
     }
 
-    private static void markCraftedResearchReferences(ServerPlayer player, ItemStack crafted) {
+    public static void markCraftedResearchReferences(ServerPlayer player, ItemStack crafted) {
         LinkedHashSet<String> markers = new LinkedHashSet<>();
 
         for (TCResearchEntryDefinition entry : activeData.entries().values()) {

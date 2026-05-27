@@ -15,6 +15,8 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.blocks.basic.TCTableBlock;
+import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
 
 public final class TCBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Thaumcraft.MODID);
@@ -59,8 +61,10 @@ public final class TCBlocks {
 
     public static final Supplier<Block> NITOR_YELLOW = BLOCKS.register("nitor_yellow", () -> nitorBlock(14));
 
+    public static final Supplier<Block> TABLE_WOOD = BLOCKS.register("table_wood", () -> tableBlock(true));
+    public static final Supplier<Block> TABLE_STONE = BLOCKS.register("table_stone", () -> tableBlock(false));
     public static final Supplier<Block> ARCANE_WORKBENCH = BLOCKS.register("arcane_workbench", () -> workbenchBlock());
-    public static final Supplier<Block> RESEARCH_TABLE = BLOCKS.register("research_table", () -> woodBlock());
+    public static final Supplier<Block> RESEARCH_TABLE = BLOCKS.register("research_table", () -> researchTableBlock());
     public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> cauldronLikeBlock());
     public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> furnaceLikeBlock());
     public static final Supplier<Block> WAND_WORKBENCH = BLOCKS.register("wand_workbench", () -> workbenchBlock());
@@ -108,6 +112,19 @@ public final class TCBlocks {
     private static Block workbenchBlock() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
                 .strength(2.5F, 2.5F));
+    }
+
+    private static Block tableBlock(boolean wood) {
+        BlockBehaviour.Properties properties = BlockBehaviour.Properties.ofFullCopy(wood ? Blocks.OAK_PLANKS : Blocks.STONE)
+                .strength(wood ? 2.0F : 2.5F, wood ? 2.0F : 2.5F)
+                .noOcclusion();
+        return new TCTableBlock(properties, wood);
+    }
+
+    private static Block researchTableBlock() {
+        return new TCResearchTableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                .strength(2.0F, 2.0F)
+                .noOcclusion());
     }
 
     private static Block cauldronLikeBlock() {

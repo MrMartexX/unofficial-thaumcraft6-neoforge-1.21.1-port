@@ -8,6 +8,28 @@
       "aspects": []
     },
     {
+      "item": "thaumcraft:table_wood",
+      "aspects": [
+        { "aspect": "thaumcraft:instrumentum", "amount": 1 },
+        { "aspect": "thaumcraft:herba", "amount": 6 }
+      ]
+    },
+    {
+      "item": "thaumcraft:table_stone",
+      "aspects": [
+        { "aspect": "thaumcraft:instrumentum", "amount": 1 },
+        { "aspect": "thaumcraft:terra", "amount": 9 }
+      ]
+    },
+    {
+      "item": "thaumcraft:research_table",
+      "aspects": [
+        { "aspect": "thaumcraft:instrumentum", "amount": 1 },
+        { "aspect": "thaumcraft:herba", "amount": 6 },
+        { "aspect": "thaumcraft:cognitio", "amount": 5 }
+      ]
+    },
+    {
       "item": "thaumcraft:fabric",
       "aspects": [
         { "aspect": "thaumcraft:bestia", "amount": 26 },

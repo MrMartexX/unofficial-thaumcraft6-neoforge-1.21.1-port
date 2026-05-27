@@ -77,6 +77,8 @@ public final class TCCreativeTabOrder {
     }
 
     private static void addDeviceAndCraftingBlocks(CreativeModeTab.Output output) {
+        output.accept(TCItems.TABLE_WOOD.get());
+        output.accept(TCItems.TABLE_STONE.get());
         output.accept(TCItems.ARCANE_WORKBENCH.get());
         output.accept(TCItems.RESEARCH_TABLE.get());
         output.accept(TCItems.CRUCIBLE.get());

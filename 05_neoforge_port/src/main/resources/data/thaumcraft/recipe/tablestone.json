@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "thaumcraft_tables",
+  "key": {
+    "S": {
+      "item": "minecraft:stone_slab"
+    },
+    "W": {
+      "tag": "c:stones"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "W W"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:table_stone"
+  }
+}

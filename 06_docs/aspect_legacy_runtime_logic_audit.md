@@ -214,12 +214,12 @@ Modern status: the current Shift tooltip is a useful visual check, but it is not
 | Aspect definitions | Close/exact for built-in 37 aspects. | Constructor-side scanning registration intentionally deferred. |
 | `AspectList` | Close/exact for core mutable semantics. | Need parity dump for null-key/zero-amount edge cases if external API compatibility matters. |
 | `AspectHelper` pure methods | Close/exact for cull, combination, primals, aura-aspects, random primal. | Entity aspects now include player branch and vanilla entity assignment lookup. |
-| Built-in direct/tag assignments | Data-driven and validated for current registered ids and vanilla item-id coverage. | Current counts are `673` exact, `46` tag, and `32` complex exact assignments after server reload. Full legacy catalog still depends on unported Thaumcraft items and modded material policy. |
+| Built-in direct/tag assignments | Data-driven and validated for current registered ids and vanilla item-id coverage. | Current counts are `676` exact, `46` tag, and `32` complex exact assignments after server reload. Full legacy catalog still depends on unported Thaumcraft items and modded material policy. |
 | Object lookup | Modern id/tag/generated/bonus service matches the current mapped runtime target. | Wildcard metadata and stripped-NBT behavior are represented only through audited flattened ids or component-aware rules so far. Addon event timing and future stateful/custom stacks remain deferred. |
 | Spawn eggs | Visible no-aspect behavior implemented. | API-level `null` vs empty-list parity must be decided by runtime dump. |
 | Potions | Component-aware carrier behavior implemented, including dump-derived final 1.12 potion carrier/content overrides for comparable regular, splash, lingering, and tipped-arrow stacks. | New 1.21-only potion/component samples remain policy review, not 1.12 parity targets. |
 | Enchantments | Legacy enchantment mapping implemented for current components, including the mapped `sweeping` -> `sweeping_edge` stored-book parity case. | New 1.21-only enchantments remain policy review. |
-| Generated crafting | Standard crafting cache implemented and reload-safe; latest server dump rebuilt `475` generated object assignments after exact runtime parity overrides took ownership of legacy-equivalent flattened vanilla ids and current registered Thaumcraft overrides. | Crucible, infusion, arcane crafting, wildcard/NBT generation for stateful stacks, and third-party namespaces deferred. |
+| Generated crafting | Standard crafting cache implemented and reload-safe; latest server dump rebuilt `476` generated object assignments after exact runtime parity overrides took ownership of legacy-equivalent flattened vanilla ids and current registered Thaumcraft overrides. | Crucible, infusion, arcane crafting, wildcard/NBT generation for stateful stacks, and third-party namespaces deferred. |
 
 ## Current Runtime Diff Lessons
 

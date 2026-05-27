@@ -210,13 +210,16 @@ final class TCAspectParityValidator {
 
     private static void validateDirectAssignments() {
         Map<ResourceLocation, AspectList> tags = TCAspectAssignments.directObjectTags();
-        expectEquals(673, tags.size(), "direct object assignment count");
+        expectEquals(676, tags.size(), "direct object assignment count");
 
         expectDirect(tags, "ore_quartz", amount(Aspect.EARTH, 5), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "ore_cinnabar", amount(Aspect.EARTH, 5), amount(Aspect.METAL, 10), amount(Aspect.ALCHEMY, 5), amount(Aspect.DEATH, 5));
         expectDirect(tags, "ore_amber", amount(Aspect.EARTH, 5), amount(Aspect.TRAP, 10), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "quicksilver", amount(Aspect.METAL, 10), amount(Aspect.DEATH, 5), amount(Aspect.ALCHEMY, 5));
         expectDirect(tags, "amber", amount(Aspect.TRAP, 10), amount(Aspect.CRYSTAL, 10));
+        expectDirect(tags, "table_wood", amount(Aspect.TOOL, 1), amount(Aspect.PLANT, 6));
+        expectDirect(tags, "table_stone", amount(Aspect.TOOL, 1), amount(Aspect.EARTH, 9));
+        expectDirect(tags, "research_table", amount(Aspect.TOOL, 1), amount(Aspect.PLANT, 6), amount(Aspect.MIND, 5));
 
         expectDirect(tags, "crystal_aer", amount(Aspect.AIR, 15), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "crystal_ignis", amount(Aspect.FIRE, 15), amount(Aspect.CRYSTAL, 10));

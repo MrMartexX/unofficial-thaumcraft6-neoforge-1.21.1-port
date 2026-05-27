@@ -68,7 +68,7 @@ The first named validation slice covers already registered simple Thaumcraft con
 
 This logic is recipe-type based, not UI based. A 2x2 inventory recipe and a 3x3 crafting table recipe both live under `RecipeType.CRAFTING`; the recipe's own dimensions decide where it can actually be crafted. Validation-only fixtures now cover shapeless recipe math and remaining-item subtraction without adding fake gameplay recipes.
 
-The live generated cache now also scans current `minecraft:*` standard crafting outputs. The latest server validation rebuilt `475` generated entries and then enforced `1230/1230` assignable current vanilla item-id coverage. Final 1.12 dump values for legacy-equivalent flattened vanilla ids and currently registered Thaumcraft ids can be promoted into exact runtime parity layers when generated/manual/tag behavior would otherwise resolve differently from 1.12. Spawn eggs, firework star/rocket, infested blocks, and empty component-only potion carrier ids are intentionally excluded for legacy parity.
+The live generated cache now also scans current `minecraft:*` standard crafting outputs. The latest server validation rebuilt `476` generated entries and then enforced `1230/1230` assignable current vanilla item-id coverage. Final 1.12 dump values for legacy-equivalent flattened vanilla ids and currently registered Thaumcraft ids can be promoted into exact runtime parity layers when generated/manual/tag behavior would otherwise resolve differently from 1.12. Spawn eggs, firework star/rocket, infested blocks, and empty component-only potion carrier ids are intentionally excluded for legacy parity.
 
 ## Current Tag Expansion Scope
 
