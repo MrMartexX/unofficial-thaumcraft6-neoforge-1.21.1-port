@@ -11,6 +11,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 import thaumcraft.client.gui.TCClientTooltipComponents;
 import thaumcraft.client.gui.TCMenuScreens;
+import thaumcraft.client.renderer.TCBlockEntityRenderers;
 import thaumcraft.common.aspects.TCAspectAssignments;
 import thaumcraft.common.aspects.TCAspectDumpExporter;
 import thaumcraft.common.aspects.TCAspectReloadValidator;
@@ -54,6 +55,7 @@ public final class Thaumcraft {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             TCClientTooltipComponents.register(modEventBus);
             TCMenuScreens.register(modEventBus);
+            TCBlockEntityRenderers.register(modEventBus);
         }
         modEventBus.addListener(TCAuraNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCKnowledgeNetwork::onRegisterPayloadHandlers);

@@ -71,7 +71,7 @@ public final class TCResearchTableDiagnostics {
         report.check("finish_theory_penalty_raw", awards.getOrDefault("ALCHEMY", -1) == 2, "10% ALCHEMY after penalty rounds down from 3 to 2 raw.");
 
         report.check("public_api_card_registry_count", registeredCardCount("thaumcraft.api.research.theorycraft.") == 9, "The public/API theorycraft card slice should keep the original 9 card ids.");
-        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 21
+        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 23
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMeasure")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardReactions")
@@ -83,8 +83,10 @@ public final class TCResearchTableDiagnostics {
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardBeacon")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardSpellbinding")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardChannel")
-                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardSculpting"),
-                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid and vanilla-item Golemancy cards only.");
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardSculpting")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardTinker")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter"),
+                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, vanilla-item Golemancy and Artifice item-option cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
         addResearchAidChecks(report);
         addSafeBridgeCardActivationChecks(report);
@@ -194,6 +196,27 @@ public final class TCResearchTableDiagnostics {
                         && sculpting.getRequiredItems().get(0).is(Items.CLAY_BALL)
                         && sculpting.getRequiredItemsConsumed().equals(List.of(true)),
                 "Legacy CardSculpting consumes one clay ball, adds 20 GOLEMANCY and grants one bonus draw.");
+
+        TCResearchTableData tinkerData = new TCResearchTableData();
+        CardTinker tinker = new CardTinker();
+        tinker.setSeed(0L);
+        boolean tinkerActivated = tinker.initialize(null, tinkerData) && tinker.activate(null, tinkerData);
+        int tinkerAmount = tinkerData.getTotal("ARTIFICE");
+        report.check("card_tinker_activation", tinkerActivated
+                        && !tinker.getRequiredItems().isEmpty()
+                        && tinkerAmount >= 0
+                        && tinkerAmount <= 64,
+                "Legacy CardTinker chooses from the Artifice item option list and awards random ARTIFICE from aspect visSize.");
+
+        TCResearchTableData mindData = new TCResearchTableData();
+        CardMindOverMatter mind = new CardMindOverMatter();
+        mind.setSeed(0L);
+        boolean mindActivated = mind.initialize(null, mindData) && mind.activate(null, mindData);
+        report.check("card_mind_over_matter_activation", mindActivated
+                        && !mind.getRequiredItems().isEmpty()
+                        && mind.getRequiredItemsConsumed().equals(List.of(true))
+                        && mindData.getTotal("ARTIFICE") >= 10,
+                "Legacy CardMindOverMatter consumes one Artifice option item and awards ARTIFICE from 10 + sqrt(aspect visSize).");
     }
 
     private static void addAlchemyCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {
