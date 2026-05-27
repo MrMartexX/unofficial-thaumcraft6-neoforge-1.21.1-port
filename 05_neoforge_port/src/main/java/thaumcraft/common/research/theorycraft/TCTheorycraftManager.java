@@ -15,6 +15,8 @@ import net.minecraft.world.phys.AABB;
 
 public final class TCTheorycraftManager {
     public static final String AID_BOOKSHELF = "thaumcraft.api.research.theorycraft.AidBookshelf";
+    public static final String AID_ENCHANTMENT_TABLE = "thaumcraft.common.lib.research.theorycraft.AidEnchantmentTable";
+    public static final String AID_BEACON = "thaumcraft.common.lib.research.theorycraft.AidBeacon";
     static final int AID_HORIZONTAL_RADIUS = 4;
     static final int AID_VERTICAL_RADIUS = 1;
     static final double AID_ENTITY_RANGE = 5.0D;
@@ -44,6 +46,9 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.common.lib.research.theorycraft.CardCalibrate", CardCalibrate::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardFocus", CardFocus::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardSynergy", CardSynergy::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardEnchantment", CardEnchantment::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardBeacon", CardBeacon::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardSpellbinding", CardSpellbinding::new);
 
         registerAid(TCTheorycraftAid.block(
                 AID_BOOKSHELF,
@@ -57,6 +62,18 @@ public final class TCTheorycraftManager {
                         "thaumcraft.api.research.theorycraft.CardStudy",
                         "thaumcraft.api.research.theorycraft.CardStudy"
                 )
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_ENCHANTMENT_TABLE,
+                new ItemStack(Blocks.ENCHANTING_TABLE),
+                state -> state.is(Blocks.ENCHANTING_TABLE),
+                List.of("thaumcraft.common.lib.research.theorycraft.CardEnchantment")
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_BEACON,
+                new ItemStack(Blocks.BEACON),
+                state -> state.is(Blocks.BEACON),
+                List.of("thaumcraft.common.lib.research.theorycraft.CardBeacon")
         ));
     }
 

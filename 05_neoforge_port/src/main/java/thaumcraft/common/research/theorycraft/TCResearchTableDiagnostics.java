@@ -71,15 +71,18 @@ public final class TCResearchTableDiagnostics {
         report.check("finish_theory_penalty_raw", awards.getOrDefault("ALCHEMY", -1) == 2, "10% ALCHEMY after penalty rounds down from 3 to 2 raw.");
 
         report.check("public_api_card_registry_count", registeredCardCount("thaumcraft.api.research.theorycraft.") == 9, "The public/API theorycraft card slice should keep the original 9 card ids.");
-        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 16
+        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 19
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMeasure")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardReactions")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardSynthesis")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardCalibrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardFocus")
-                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardSynergy"),
-                "First common card bridge should add dependency-free and aspect-crystal Alchemy cards only.");
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardSynergy")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardEnchantment")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardBeacon")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardSpellbinding"),
+                "First common card bridge should add dependency-free, aspect-crystal Alchemy, and vanilla XP/aid cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
         addResearchAidChecks(report);
         addSafeBridgeCardActivationChecks(report);
@@ -113,6 +116,15 @@ public final class TCResearchTableDiagnostics {
                         && aidData.inspiration == 5
                         && aidData.aidCards.equals(expectedBookshelfCards),
                 "Selected aids should reduce initial inspiration by one each and append their card ids to aidCards.");
+
+        TCTheorycraftAid enchantmentTable = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_ENCHANTMENT_TABLE);
+        TCTheorycraftAid beacon = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BEACON);
+        report.check("vanilla_aid_registry", TCTheorycraftManager.aids().size() == 3
+                        && enchantmentTable != null
+                        && enchantmentTable.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardEnchantment"))
+                        && beacon != null
+                        && beacon.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardBeacon")),
+                "The active vanilla aid slice should contain bookshelf, enchanting table and beacon aids.");
     }
 
     private static void addSafeBridgeCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {
@@ -150,6 +162,16 @@ public final class TCResearchTableDiagnostics {
                         && synergyData.getTotal("GOLEMANCY") == 30
                         && synergyData.penaltyStart == 1,
                 "Legacy CardSynergy drains 15 from ARTIFICE/ALCHEMY/INFUSION, adds 30 GOLEMANCY and increments penaltyStart.");
+
+        TCResearchTableData beaconData = new TCResearchTableData();
+        CardBeacon beacon = new CardBeacon();
+        boolean beaconActivated = beacon.activate(null, beaconData);
+        report.check("card_beacon_activation", beaconActivated
+                        && beacon.getInspirationCost() == -2
+                        && beacon.isAidOnly()
+                        && beaconData.bonusDraws == 1
+                        && beaconData.penaltyStart == 1,
+                "Legacy CardBeacon is aid-only, restores two inspiration through negative cost, adds one bonus draw and increments penaltyStart.");
     }
 
     private static void addAlchemyCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {
@@ -195,6 +217,9 @@ public final class TCResearchTableDiagnostics {
 
         TCPlayerKnowledge before = TCPlayerKnowledgeStore.get(player);
         ArrayList<ItemStack> beforeInventory = copyMainInventory(player);
+        int beforeExperienceLevel = player.experienceLevel;
+        int beforeTotalExperience = player.totalExperience;
+        float beforeExperienceProgress = player.experienceProgress;
         try {
             TCResearchTableBlockEntity table = new TCResearchTableBlockEntity(BlockPos.ZERO, TCBlocks.RESEARCH_TABLE.get().defaultBlockState());
             table.setItem(TCResearchTableBlockEntity.SLOT_SCRIBING_TOOLS, new ItemStack(TCItems.SCRIBING_TOOLS.get()));
@@ -220,6 +245,33 @@ public final class TCResearchTableDiagnostics {
                             && player.getInventory().items.get(0).getCount() == 1,
                     "Consumed card requirements should shrink matching main-inventory stacks.");
 
+            player.experienceLevel = 7;
+            player.totalExperience = 0;
+            player.experienceProgress = 0.0F;
+            TCResearchTableData spellbindingData = new TCResearchTableData();
+            CardSpellbinding spellbinding = new CardSpellbinding();
+            boolean spellbindingActivated = spellbinding.initialize(player, spellbindingData) && spellbinding.activate(player, spellbindingData);
+            report.check("card_spellbinding_xp_activation", spellbindingActivated
+                            && player.experienceLevel == 2
+                            && spellbindingData.getTotal("AUROMANCY") == 25,
+                    "Legacy CardSpellbinding consumes up to five XP levels and adds 5 AUROMANCY per level.");
+
+            player.experienceLevel = 5;
+            player.totalExperience = 0;
+            player.experienceProgress = 0.0F;
+            TCResearchTableData enchantmentData = new TCResearchTableData();
+            CardEnchantment enchantment = new CardEnchantment();
+            boolean enchantmentActivated = enchantment.activate(player, enchantmentData);
+            int infusion = enchantmentData.getTotal("INFUSION");
+            int auromancy = enchantmentData.getTotal("AUROMANCY");
+            report.check("card_enchantment_xp_activation", enchantmentActivated
+                            && player.experienceLevel == 0
+                            && infusion >= 15
+                            && infusion <= 20
+                            && auromancy >= 15
+                            && auromancy <= 20,
+                    "Legacy CardEnchantment consumes five XP levels and adds 15-20 INFUSION plus 15-20 AUROMANCY.");
+
             table.setTheoryData(seededCompleteTheory());
             Map<String, Integer> awards = TCResearchTableBlockEntity.calculateTheoryRawAwards(table.getTheoryData());
             table.finishTheory(player);
@@ -230,6 +282,9 @@ public final class TCResearchTableDiagnostics {
         } finally {
             TCPlayerKnowledgeStore.set(player, before, false);
             restoreMainInventory(player, beforeInventory);
+            player.experienceLevel = beforeExperienceLevel;
+            player.totalExperience = beforeTotalExperience;
+            player.experienceProgress = beforeExperienceProgress;
         }
 
         return report.build();
