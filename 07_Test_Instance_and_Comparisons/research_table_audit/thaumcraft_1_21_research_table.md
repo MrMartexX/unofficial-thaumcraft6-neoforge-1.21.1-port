@@ -29,6 +29,8 @@
 | public_api_card_registry_count | PASS | The public/API theorycraft card slice should keep the original 9 card ids. |
 | safe_bridge_card_registry_count | PASS | First common card bridge should add dependency-free and aspect-crystal Alchemy cards only. |
 | card_analyze_deferred_by_legacy_bug | PASS | Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source. |
+| bookshelf_aid_registry | PASS | Legacy AidBookshelf adds Balance, two Notation cards and three Study cards. |
+| bookshelf_aid_initialize_data | PASS | Selected aids should reduce initial inspiration by one each and append their card ids to aidCards. |
 | card_measure_activation | PASS | Legacy CardMeasure adds 15 INFUSION and one bonus draw. |
 | card_calibrate_activation | PASS | Legacy CardCalibrate adds 15 ARTIFICE and one bonus draw. |
 | card_focus_activation | PASS | Legacy CardFocus adds 15 AUROMANCY and one bonus draw. |
@@ -38,5 +40,5 @@
 | card_synthesis_activation | PASS | Legacy CardSynthesis consumes two component crystals, adds 40 ALCHEMY and creates the compound crystal when a player is present. |
 | sync_payload_roundtrip | PASS | Client cache payload can reconstruct theory data. |
 
-Passed: 35
+Passed: 37
 Failed: 0

@@ -65,10 +65,26 @@ public class TCResearchTableData {
     public void initialize(ServerPlayer player, Iterable<String> aids) {
         this.player = player.getName().getString();
         inspirationStart = TCResearchManager.availableTheoryInspiration(player);
+        initializeAids(aids);
+    }
+
+    void initializeWithFixedInspirationForDiagnostics(String playerName, int fixedInspirationStart, Iterable<String> aids) {
+        this.player = playerName;
+        inspirationStart = fixedInspirationStart;
+        initializeAids(aids);
+    }
+
+    private void initializeAids(Iterable<String> aids) {
+        aidCards.clear();
         int aidCount = 0;
         if (aids != null) {
-            for (String ignored : aids) {
+            for (String aidKey : aids) {
+                TCTheorycraftAid aid = TCTheorycraftManager.aids().get(aidKey);
+                if (aid == null) {
+                    continue;
+                }
                 aidCount++;
+                aidCards.addAll(aid.cardKeys());
             }
         }
         aidsChosen = aidCount;

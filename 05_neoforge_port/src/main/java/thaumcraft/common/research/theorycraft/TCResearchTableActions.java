@@ -2,6 +2,7 @@ package thaumcraft.common.research.theorycraft;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import thaumcraft.common.menu.TCResearchTableMenu;
+import thaumcraft.common.research.TCResearchManager;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 
 final class TCResearchTableActions {
@@ -24,7 +26,7 @@ final class TCResearchTableActions {
         }
 
         boolean changed = switch (payload.actionId()) {
-            case TCResearchTableActionPayload.ACTION_START_THEORY -> startTheory(player, table);
+            case TCResearchTableActionPayload.ACTION_START_THEORY -> startTheory(player, table, payload.aidKeys());
             case TCResearchTableActionPayload.ACTION_DRAW_CARDS -> drawCards(player, table);
             case TCResearchTableActionPayload.ACTION_SELECT_CARD -> selectCard(player, table, payload.choiceIndex());
             case TCResearchTableActionPayload.ACTION_COMMIT_SELECTED -> commitSelected(table);
@@ -40,12 +42,24 @@ final class TCResearchTableActions {
         }
     }
 
-    private static boolean startTheory(ServerPlayer player, TCResearchTableBlockEntity table) {
+    private static boolean startTheory(ServerPlayer player, TCResearchTableBlockEntity table, List<String> selectedAidKeys) {
         if (table.getTheoryData() != null || !table.hasUsableScribingTools() || table.getPaperCount() <= 0) {
             return false;
         }
+        LinkedHashSet<String> nearbyAidKeys = TCTheorycraftManager.collectNearbyAidKeys(table.getLevel(), table.getBlockPos());
+        ArrayList<String> acceptedAidKeys = new ArrayList<>();
+        int inspirationStart = TCResearchManager.availableTheoryInspiration(player);
+        if (selectedAidKeys != null) {
+            for (String aidKey : selectedAidKeys) {
+                if (nearbyAidKeys.contains(aidKey)
+                        && !acceptedAidKeys.contains(aidKey)
+                        && acceptedAidKeys.size() + 1 < inspirationStart) {
+                    acceptedAidKeys.add(aidKey);
+                }
+            }
+        }
         TCResearchTableData data = new TCResearchTableData(player);
-        data.initialize(player, java.util.List.of());
+        data.initialize(player, acceptedAidKeys);
         table.setTheoryData(data);
         return true;
     }

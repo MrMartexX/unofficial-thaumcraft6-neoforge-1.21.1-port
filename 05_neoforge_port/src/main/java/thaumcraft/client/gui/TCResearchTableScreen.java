@@ -1,5 +1,8 @@
 package thaumcraft.client.gui;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -13,17 +16,23 @@ import thaumcraft.common.research.theorycraft.TCResearchTableActionPayload;
 import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
 import thaumcraft.common.research.theorycraft.TCResearchTableData;
 import thaumcraft.common.research.theorycraft.TCResearchTableSyncPayload;
+import thaumcraft.common.research.theorycraft.TCTheorycraftAid;
+import thaumcraft.common.research.theorycraft.TCTheorycraftManager;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 
 public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTableMenu> {
     private static final ResourceLocation BACKGROUND =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/gui_research_table.png");
+    private static final int AID_RECHECK_TICKS = 100;
 
     private Button createButton;
     private Button completeButton;
     private Button scrapButton;
     private Button drawButton;
     private final Button[] cardButtons = new Button[3];
+    private List<String> currentAids = List.of();
+    private final LinkedHashSet<String> selectedAids = new LinkedHashSet<>();
+    private int nextAidCheckTick;
 
     public TCResearchTableScreen(TCResearchTableMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -40,7 +49,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         super.init();
         createButton = addRenderableWidget(Button.builder(
                         Component.translatable("button.create.theory"),
-                        button -> sendAction(TCResearchTableActionPayload.ACTION_START_THEORY, -1)
+                        button -> sendStartTheory()
                 )
                 .bounds(leftPos + 126, topPos + 20, 72, 16)
                 .build());
@@ -80,12 +89,14 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     @Override
     protected void containerTick() {
         applyLatestSync();
+        refreshCurrentAids();
         updateButtons();
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         applyLatestSync();
+        refreshCurrentAids();
         updateButtons();
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderTooltip(guiGraphics, mouseX, mouseY);
@@ -94,6 +105,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         guiGraphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+        renderAidSelection(guiGraphics, mouseX, mouseY);
     }
 
     @Override
@@ -119,6 +131,22 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         }
     }
 
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0 && currentData() == null && clickAid((int) mouseX, (int) mouseY)) {
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    private void sendStartTheory() {
+        PacketDistributor.sendToServer(new TCResearchTableActionPayload(
+                TCResearchTableActionPayload.ACTION_START_THEORY,
+                -1,
+                new ArrayList<>(selectedAids)
+        ));
+    }
+
     private void sendAction(int actionId, int choiceIndex) {
         PacketDistributor.sendToServer(new TCResearchTableActionPayload(actionId, choiceIndex));
     }
@@ -138,6 +166,81 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     private TCResearchTableData currentData() {
         TCResearchTableBlockEntity table = menu.blockEntity();
         return table == null ? null : table.getTheoryData();
+    }
+
+    private void refreshCurrentAids() {
+        TCResearchTableBlockEntity table = menu.blockEntity();
+        if (minecraft == null || minecraft.player == null || table == null || table.getLevel() == null || table.getTheoryData() != null) {
+            currentAids = List.of();
+            selectedAids.clear();
+            return;
+        }
+
+        int tick = minecraft.player.tickCount;
+        if (tick < nextAidCheckTick) {
+            return;
+        }
+        nextAidCheckTick = tick + AID_RECHECK_TICKS;
+
+        LinkedHashSet<String> keys = TCTheorycraftManager.collectNearbyAidKeys(table.getLevel(), table.getBlockPos());
+        currentAids = new ArrayList<>(keys);
+        selectedAids.removeIf(key -> !keys.contains(key));
+    }
+
+    private void renderAidSelection(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        if (currentData() != null || currentAids.isEmpty()) {
+            return;
+        }
+
+        for (int index = 0; index < currentAids.size(); index++) {
+            String aidKey = currentAids.get(index);
+            TCTheorycraftAid aid = TCTheorycraftManager.aids().get(aidKey);
+            if (aid == null) {
+                continue;
+            }
+
+            int x = aidX(index);
+            int y = aidY(index);
+            if (selectedAids.contains(aidKey)) {
+                guiGraphics.fill(x - 1, y - 1, x + 17, y + 17, 0x805A3A08);
+            } else if (isInside(mouseX, mouseY, x, y, 16, 16)) {
+                guiGraphics.fill(x - 1, y - 1, x + 17, y + 17, 0x40FFFFFF);
+            }
+            guiGraphics.renderItem(aid.displayStack(), x, y);
+        }
+    }
+
+    private boolean clickAid(int mouseX, int mouseY) {
+        for (int index = 0; index < currentAids.size(); index++) {
+            String aidKey = currentAids.get(index);
+            if (!isInside(mouseX, mouseY, aidX(index), aidY(index), 16, 16)) {
+                continue;
+            }
+
+            if (selectedAids.contains(aidKey)) {
+                selectedAids.remove(aidKey);
+            } else if (selectedAids.size() + 1 < 5) {
+                selectedAids.add(aidKey);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private int aidX(int index) {
+        int side = Math.min(currentAids.size(), 6);
+        int column = index % side;
+        return leftPos + 128 + 20 * column - side * 10;
+    }
+
+    private int aidY(int index) {
+        int side = Math.min(currentAids.size(), 6);
+        int row = index / side;
+        return topPos + 85 + 35 * row;
+    }
+
+    private static boolean isInside(int mouseX, int mouseY, int x, int y, int width, int height) {
+        return mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
     }
 
     private void updateButtons() {

@@ -1,17 +1,33 @@
 package thaumcraft.common.research.theorycraft;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 public final class TCTheorycraftManager {
-    private static final HashMap<String, Supplier<? extends TCTheorycraftCard>> CARDS = new HashMap<>();
+    public static final String AID_BOOKSHELF = "thaumcraft.api.research.theorycraft.AidBookshelf";
+    static final int AID_HORIZONTAL_RADIUS = 4;
+    static final int AID_VERTICAL_RADIUS = 1;
+    static final double AID_ENTITY_RANGE = 5.0D;
+
+    private static final LinkedHashMap<String, Supplier<? extends TCTheorycraftCard>> CARDS = new LinkedHashMap<>();
+    private static final LinkedHashMap<String, TCTheorycraftAid> AIDS = new LinkedHashMap<>();
 
     private TCTheorycraftManager() {
     }
 
     public static void bootstrap() {
         CARDS.clear();
+        AIDS.clear();
         registerCard("thaumcraft.api.research.theorycraft.CardStudy", CardStudy::new);
         registerCard("thaumcraft.api.research.theorycraft.CardAnalyze", CardAnalyze::new);
         registerCard("thaumcraft.api.research.theorycraft.CardBalance", CardBalance::new);
@@ -28,6 +44,20 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.common.lib.research.theorycraft.CardCalibrate", CardCalibrate::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardFocus", CardFocus::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardSynergy", CardSynergy::new);
+
+        registerAid(TCTheorycraftAid.block(
+                AID_BOOKSHELF,
+                new ItemStack(Blocks.BOOKSHELF),
+                state -> state.is(Blocks.BOOKSHELF),
+                List.of(
+                        "thaumcraft.api.research.theorycraft.CardBalance",
+                        "thaumcraft.api.research.theorycraft.CardNotation",
+                        "thaumcraft.api.research.theorycraft.CardNotation",
+                        "thaumcraft.api.research.theorycraft.CardStudy",
+                        "thaumcraft.api.research.theorycraft.CardStudy",
+                        "thaumcraft.api.research.theorycraft.CardStudy"
+                )
+        ));
     }
 
     public static void registerCard(String legacyKey, Supplier<? extends TCTheorycraftCard> factory) {
@@ -35,6 +65,48 @@ public final class TCTheorycraftManager {
             return;
         }
         CARDS.put(legacyKey, factory);
+    }
+
+    public static void registerAid(TCTheorycraftAid aid) {
+        if (aid == null || aid.legacyKey() == null || aid.legacyKey().isBlank() || AIDS.containsKey(aid.legacyKey())) {
+            return;
+        }
+        AIDS.put(aid.legacyKey(), aid);
+    }
+
+    public static Map<String, TCTheorycraftAid> aids() {
+        return AIDS;
+    }
+
+    public static LinkedHashSet<String> collectNearbyAidKeys(Level level, BlockPos tablePos) {
+        LinkedHashSet<String> keys = new LinkedHashSet<>();
+        if (level == null || tablePos == null || AIDS.isEmpty()) {
+            return keys;
+        }
+
+        for (int y = -AID_VERTICAL_RADIUS; y <= AID_VERTICAL_RADIUS; y++) {
+            for (int x = -AID_HORIZONTAL_RADIUS; x <= AID_HORIZONTAL_RADIUS; x++) {
+                for (int z = -AID_HORIZONTAL_RADIUS; z <= AID_HORIZONTAL_RADIUS; z++) {
+                    BlockPos pos = tablePos.offset(x, y, z);
+                    BlockState state = level.getBlockState(pos);
+                    for (TCTheorycraftAid aid : AIDS.values()) {
+                        if (aid.matchesBlock(state)) {
+                            keys.add(aid.legacyKey());
+                        }
+                    }
+                }
+            }
+        }
+
+        AABB box = new AABB(tablePos).inflate(AID_ENTITY_RANGE);
+        for (Entity entity : level.getEntities((Entity) null, box, entity -> true)) {
+            for (TCTheorycraftAid aid : AIDS.values()) {
+                if (aid.matchesEntity(entity)) {
+                    keys.add(aid.legacyKey());
+                }
+            }
+        }
+        return keys;
     }
 
     static Map<String, Supplier<? extends TCTheorycraftCard>> cards() {

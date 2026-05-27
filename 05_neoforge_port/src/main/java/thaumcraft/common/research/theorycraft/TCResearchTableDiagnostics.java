@@ -81,6 +81,7 @@ public final class TCResearchTableDiagnostics {
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardSynergy"),
                 "First common card bridge should add dependency-free and aspect-crystal Alchemy cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
+        addResearchAidChecks(report);
         addSafeBridgeCardActivationChecks(report);
         addAlchemyCardActivationChecks(report);
 
@@ -90,6 +91,28 @@ public final class TCResearchTableDiagnostics {
         report.check("sync_payload_roundtrip", table.getTheoryData() != null && table.getTheoryData().getTotal("BASICS") == 100, "Client cache payload can reconstruct theory data.");
 
         return report.build();
+    }
+
+    private static void addResearchAidChecks(TCResearchTableDiagnosticReport.Builder report) {
+        List<String> expectedBookshelfCards = List.of(
+                "thaumcraft.api.research.theorycraft.CardBalance",
+                "thaumcraft.api.research.theorycraft.CardNotation",
+                "thaumcraft.api.research.theorycraft.CardNotation",
+                "thaumcraft.api.research.theorycraft.CardStudy",
+                "thaumcraft.api.research.theorycraft.CardStudy",
+                "thaumcraft.api.research.theorycraft.CardStudy"
+        );
+        TCTheorycraftAid bookshelf = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BOOKSHELF);
+        report.check("bookshelf_aid_registry", bookshelf != null && bookshelf.cardKeys().equals(expectedBookshelfCards),
+                "Legacy AidBookshelf adds Balance, two Notation cards and three Study cards.");
+
+        TCResearchTableData aidData = new TCResearchTableData();
+        aidData.initializeWithFixedInspirationForDiagnostics("Martin", 6, List.of(TCTheorycraftManager.AID_BOOKSHELF));
+        report.check("bookshelf_aid_initialize_data", aidData.aidsChosen == 1
+                        && aidData.inspirationStart == 6
+                        && aidData.inspiration == 5
+                        && aidData.aidCards.equals(expectedBookshelfCards),
+                "Selected aids should reduce initial inspiration by one each and append their card ids to aidCards.");
     }
 
     private static void addSafeBridgeCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {
