@@ -116,7 +116,7 @@ final class TCResearchRequirementAudit {
             writer.newLine();
             writer.write("Bridge warnings are not parser failures. They mark requirements whose registry identity is resolvable, but whose final gameplay source, item semantics, recipe flow, or legacy container/component behavior is still a migration boundary.");
             writer.newLine();
-            writer.write("Aspect stack, stored-enchantment and legacy item component requirements are no longer counted as bridge warnings when their legacy NBT/metadata semantics are carried by modern DataComponent or vanilla enchantment-component payloads.");
+            writer.write("Aspect stack, stored-enchantment and legacy item component requirements are no longer counted as bridge warnings when their legacy NBT/metadata semantics are carried by modern DataComponent or vanilla enchantment-component payloads. Safe 1.12-to-1.21 identity remaps are also not counted as bridge warnings once the resolver maps them directly to final modern ids.");
             writer.newLine();
             writer.newLine();
             writer.write("## Unresolved Summary");
@@ -242,10 +242,10 @@ final class TCResearchRequirementAudit {
         String rawId = value.split(";")[0];
         String damageText = value.split(";").length > 2 ? value.split(";")[2] : "0";
         if (rawId.equals("minecraft:web") || rawId.equals("minecraft:noteblock") || rawId.equals("minecraft:dye")) {
-            return "legacy flattened vanilla metadata bridge";
+            return "";
         }
         if (rawId.equals("thaumcraft:arcane_stone")) {
-            return "safe renamed Thaumcraft identity bridge";
+            return "";
         }
         if (rawId.equals("thaumcraft:crystal_essence")) {
             return hasAspectStackRequirement(resolution) ? "" : "aspect crystal essence bridge: flattened aspect variant before final component/container semantics";
