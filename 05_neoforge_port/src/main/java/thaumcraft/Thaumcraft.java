@@ -30,6 +30,8 @@ import thaumcraft.common.research.TCResearchRequirementAuditCommands;
 import thaumcraft.common.research.TCResearchRequirementAuditExporter;
 import thaumcraft.common.research.TCScanningCommands;
 import thaumcraft.common.research.TCScanningManager;
+import thaumcraft.common.research.theorycraft.TCResearchTableNetwork;
+import thaumcraft.common.research.theorycraft.TCTheorycraftManager;
 import thaumcraft.common.world.aura.TCAuraDebugCommands;
 import thaumcraft.common.world.aura.TCAuraEvents;
 import thaumcraft.common.world.aura.TCAuraNetwork;
@@ -53,6 +55,7 @@ public final class Thaumcraft {
         }
         modEventBus.addListener(TCAuraNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCKnowledgeNetwork::onRegisterPayloadHandlers);
+        modEventBus.addListener(TCResearchTableNetwork::onRegisterPayloadHandlers);
         modContainer.registerConfig(ModConfig.Type.COMMON, TCConfig.SPEC);
         NeoForge.EVENT_BUS.addListener(TCAspectAssignments::onAddReloadListeners);
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onAddReloadListeners);
@@ -75,6 +78,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onItemCrafted);
         TCAspectAssignments.bootstrap();
         TCResearchManager.bootstrap();
+        TCTheorycraftManager.bootstrap();
         TCScanningManager.bootstrap();
 
         LOGGER.info("Thaumcraft NeoForge bootstrap initialized.");

@@ -1,11 +1,14 @@
 package thaumcraft.common.tiles.crafting;
 
+import java.util.ArrayList;
+import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.Containers;
@@ -22,6 +25,10 @@ import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.items.IScribeTools;
 import thaumcraft.common.menu.TCResearchTableMenu;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.research.TCKnowledgeType;
+import thaumcraft.common.research.TCResearchManager;
+import thaumcraft.common.research.theorycraft.TCResearchTableData;
+import thaumcraft.common.research.theorycraft.TCResearchTableSyncPayload;
 
 public class TCResearchTableBlockEntity extends BlockEntity implements Container, MenuProvider {
     public static final int SLOT_SCRIBING_TOOLS = 0;
@@ -29,6 +36,7 @@ public class TCResearchTableBlockEntity extends BlockEntity implements Container
     private static final int SLOT_COUNT = 2;
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
+    private TCResearchTableData theoryData;
 
     public TCResearchTableBlockEntity(BlockPos pos, BlockState blockState) {
         super(TCBlockEntities.RESEARCH_TABLE.get(), pos, blockState);
@@ -44,6 +52,22 @@ public class TCResearchTableBlockEntity extends BlockEntity implements Container
 
     public boolean canInsertPaper() {
         return items.get(SLOT_PAPER).getCount() < Items.PAPER.getDefaultInstance().getMaxStackSize();
+    }
+
+    public TCResearchTableData getTheoryData() {
+        return theoryData;
+    }
+
+    public void setTheoryData(@Nullable TCResearchTableData theoryData) {
+        this.theoryData = theoryData;
+        setChanged();
+    }
+
+    public boolean hasUsableScribingTools() {
+        ItemStack tools = items.get(SLOT_SCRIBING_TOOLS);
+        return tools.getItem() instanceof IScribeTools
+                && tools.isDamageableItem()
+                && tools.getDamageValue() < tools.getMaxDamage();
     }
 
     public boolean setScribingTools(ItemStack stack) {
@@ -89,6 +113,28 @@ public class TCResearchTableBlockEntity extends BlockEntity implements Container
             return true;
         }
         return false;
+    }
+
+    public void finishTheory(ServerPlayer player) {
+        if (theoryData == null) {
+            return;
+        }
+
+        ArrayList<Map.Entry<String, Integer>> sorted = new ArrayList<>(theoryData.categoryTotals.entrySet());
+        sorted.sort((left, right) -> right.getValue().compareTo(left.getValue()));
+
+        int index = 0;
+        for (Map.Entry<String, Integer> entry : sorted) {
+            int rawAmount = Math.round(entry.getValue() / 100.0F * TCKnowledgeType.THEORY.rawUnitsPerPoint());
+            if (index > theoryData.penaltyStart) {
+                rawAmount = (int) Math.max(1.0D, rawAmount * 0.666666667D);
+            }
+            TCResearchManager.addKnowledgeRaw(player, TCKnowledgeType.THEORY, entry.getKey(), rawAmount);
+            index++;
+        }
+
+        theoryData = null;
+        setChanged();
     }
 
     public boolean consumePaperFromTable() {
@@ -199,10 +245,36 @@ public class TCResearchTableBlockEntity extends BlockEntity implements Container
         }
     }
 
+    public TCResearchTableSyncPayload toSyncPayload() {
+        return new TCResearchTableSyncPayload(
+                worldPosition,
+                theoryData != null,
+                theoryData == null ? new CompoundTag() : theoryData.serialize()
+        );
+    }
+
+    public void applyTheoryDataFromSync(TCResearchTableSyncPayload payload) {
+        if (!worldPosition.equals(payload.pos())) {
+            return;
+        }
+        if (!payload.hasData()) {
+            theoryData = null;
+            return;
+        }
+        TCResearchTableData data = new TCResearchTableData();
+        data.deserialize(payload.data());
+        theoryData = data;
+    }
+
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         ContainerHelper.saveAllItems(tag, items, registries);
+        if (theoryData != null) {
+            tag.put("note", theoryData.serialize());
+        } else {
+            tag.remove("note");
+        }
     }
 
     @Override
@@ -212,5 +284,12 @@ public class TCResearchTableBlockEntity extends BlockEntity implements Container
             items.set(slot, ItemStack.EMPTY);
         }
         ContainerHelper.loadAllItems(tag, items, registries);
+        if (tag.contains("note")) {
+            TCResearchTableData data = new TCResearchTableData();
+            data.deserialize(tag.getCompound("note"));
+            theoryData = data;
+        } else {
+            theoryData = null;
+        }
     }
 }

@@ -2,6 +2,7 @@ package thaumcraft.common.menu;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import thaumcraft.api.items.IScribeTools;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCMenus;
+import thaumcraft.common.research.theorycraft.TCResearchTableNetwork;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 
 public class TCResearchTableMenu extends AbstractContainerMenu {
@@ -66,10 +68,18 @@ public class TCResearchTableMenu extends AbstractContainerMenu {
         });
 
         bindPlayerInventory(playerInventory);
+
+        if (blockEntity != null && playerInventory.player instanceof ServerPlayer serverPlayer) {
+            TCResearchTableNetwork.syncToPlayer(serverPlayer, blockEntity);
+        }
     }
 
     public TCResearchTableBlockEntity blockEntity() {
         return blockEntity;
+    }
+
+    public BlockPos blockPos() {
+        return blockEntity == null ? BlockPos.ZERO : blockEntity.getBlockPos();
     }
 
     private static Container getClientTable(Inventory playerInventory, RegistryFriendlyByteBuf extraData) {

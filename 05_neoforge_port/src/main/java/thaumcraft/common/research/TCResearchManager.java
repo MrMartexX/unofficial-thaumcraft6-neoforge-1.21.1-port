@@ -103,6 +103,54 @@ public final class TCResearchManager {
         return activeData.categories().values();
     }
 
+    public static List<String> categoryKeys() {
+        return new ArrayList<>(activeData.categories().keySet());
+    }
+
+    public static List<String> availableTheoryCategories(ServerPlayer player, Set<String> blockedCategories) {
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        HashSet<String> blocked = new HashSet<>();
+        if (blockedCategories != null) {
+            for (String category : blockedCategories) {
+                blocked.add(TCPlayerKnowledge.normalizeCategory(category));
+            }
+        }
+
+        ArrayList<String> categories = new ArrayList<>();
+        for (TCResearchCategoryDefinition category : activeData.categories().values()) {
+            if (blocked.contains(category.key())) {
+                continue;
+            }
+            if (category.requiredResearch().isBlank() || knowsResearchStrict(knowledge, category.requiredResearch())) {
+                categories.add(category.key());
+            }
+        }
+        return categories;
+    }
+
+    public static int availableTheoryInspiration(ServerPlayer player) {
+        float total = 5.0F;
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        for (String researchKey : knowledge.completedResearch()) {
+            if (!knowsResearchStrict(knowledge, researchKey)) {
+                continue;
+            }
+
+            TCResearchEntryDefinition entry = activeData.entries().get(canonicalResearchKey(researchKey));
+            if (entry == null) {
+                continue;
+            }
+
+            if (hasMeta(entry, "SPIKY")) {
+                total += 0.5F;
+            }
+            if (hasMeta(entry, "HIDDEN")) {
+                total += 0.1F;
+            }
+        }
+        return Math.min(15, Math.round(total));
+    }
+
     public static Collection<TCResearchEntryDefinition> entries() {
         return activeData.entries().values();
     }
@@ -126,6 +174,23 @@ public final class TCResearchManager {
 
         final boolean[] changed = {false};
         TCPlayerKnowledgeStore.mutate(player, knowledge -> changed[0] = knowledge.addRaw(type, category, rawAmount));
+        return changed[0];
+    }
+
+    public static int getKnowledgePoints(ServerPlayer player, TCKnowledgeType type, String category) {
+        if (player == null || type == null) {
+            return 0;
+        }
+        return TCPlayerKnowledgeStore.get(player).getPoints(type, category);
+    }
+
+    public static boolean consumeKnowledgeRaw(ServerPlayer player, TCKnowledgeType type, String category, int rawAmount) {
+        if (player == null || type == null || rawAmount <= 0) {
+            return false;
+        }
+
+        final boolean[] changed = {false};
+        TCPlayerKnowledgeStore.mutate(player, knowledge -> changed[0] = knowledge.addRaw(type, category, -rawAmount));
         return changed[0];
     }
 

@@ -1,16 +1,29 @@
 package thaumcraft.client.gui;
 
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.neoforged.neoforge.network.PacketDistributor;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.menu.TCResearchTableMenu;
+import thaumcraft.common.research.theorycraft.TCResearchTableActionPayload;
+import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
+import thaumcraft.common.research.theorycraft.TCResearchTableData;
+import thaumcraft.common.research.theorycraft.TCResearchTableSyncPayload;
+import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 
 public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTableMenu> {
     private static final ResourceLocation BACKGROUND =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/gui_research_table.png");
+
+    private Button createButton;
+    private Button completeButton;
+    private Button scrapButton;
+    private Button drawButton;
+    private final Button[] cardButtons = new Button[3];
 
     public TCResearchTableScreen(TCResearchTableMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -23,7 +36,139 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     }
 
     @Override
+    protected void init() {
+        super.init();
+        createButton = addRenderableWidget(Button.builder(
+                        Component.translatable("button.create.theory"),
+                        button -> sendAction(TCResearchTableActionPayload.ACTION_START_THEORY, -1)
+                )
+                .bounds(leftPos + 126, topPos + 20, 72, 16)
+                .build());
+        completeButton = addRenderableWidget(Button.builder(
+                        Component.translatable("button.complete.theory"),
+                        button -> sendAction(TCResearchTableActionPayload.ACTION_COMPLETE_THEORY, -1)
+                )
+                .bounds(leftPos + 186, topPos + 94, 74, 16)
+                .build());
+        scrapButton = addRenderableWidget(Button.builder(
+                        Component.translatable("button.scrap.theory"),
+                        button -> sendAction(TCResearchTableActionPayload.ACTION_SCRAP_THEORY, -1)
+                )
+                .bounds(leftPos + 126, topPos + 166, 72, 16)
+                .build());
+        drawButton = addRenderableWidget(Button.builder(
+                        Component.literal("?"),
+                        button -> sendAction(TCResearchTableActionPayload.ACTION_DRAW_CARDS, -1)
+                )
+                .bounds(leftPos + 52, topPos + 88, 28, 20)
+                .build());
+        for (int index = 0; index < cardButtons.length; index++) {
+            final int choice = index;
+            cardButtons[index] = addRenderableWidget(Button.builder(
+                            Component.empty(),
+                            button -> {
+                                sendAction(TCResearchTableActionPayload.ACTION_SELECT_CARD, choice);
+                                sendAction(TCResearchTableActionPayload.ACTION_COMMIT_SELECTED, -1);
+                            }
+                    )
+                    .bounds(leftPos + 16 + index * 72, topPos + 54, 68, 18)
+                    .build());
+        }
+        updateButtons();
+    }
+
+    @Override
+    protected void containerTick() {
+        applyLatestSync();
+        updateButtons();
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        applyLatestSync();
+        updateButtons();
+        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        renderTooltip(guiGraphics, mouseX, mouseY);
+    }
+
+    @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         guiGraphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+    }
+
+    @Override
+    protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        TCResearchTableData data = currentData();
+        if (data == null) {
+            return;
+        }
+
+        guiGraphics.drawString(font, data.inspiration + "/" + data.inspirationStart, 117, 16, 0x3F2A12, false);
+        int row = 0;
+        for (String category : data.categoryTotals.keySet()) {
+            String value = category + " " + data.categoryTotals.get(category) + "%";
+            guiGraphics.drawString(font, value, 176, 18 + row * 10, 0x3F2A12, false);
+            row++;
+            if (row >= 7) {
+                break;
+            }
+        }
+
+        if (data.lastDraw != null) {
+            guiGraphics.drawString(font, data.lastDraw.card.getLocalizedName(), 150, 132, 0x3F2A12, false);
+        }
+    }
+
+    private void sendAction(int actionId, int choiceIndex) {
+        PacketDistributor.sendToServer(new TCResearchTableActionPayload(actionId, choiceIndex));
+    }
+
+    private void applyLatestSync() {
+        TCResearchTableBlockEntity table = menu.blockEntity();
+        if (table == null) {
+            return;
+        }
+
+        TCResearchTableSyncPayload payload = TCResearchTableClientCache.get(menu.blockPos());
+        if (payload != null) {
+            table.applyTheoryDataFromSync(payload);
+        }
+    }
+
+    private TCResearchTableData currentData() {
+        TCResearchTableBlockEntity table = menu.blockEntity();
+        return table == null ? null : table.getTheoryData();
+    }
+
+    private void updateButtons() {
+        if (createButton == null) {
+            return;
+        }
+
+        TCResearchTableBlockEntity table = menu.blockEntity();
+        TCResearchTableData data = table == null ? null : table.getTheoryData();
+        boolean hasUsableTools = table != null && table.hasUsableScribingTools();
+        boolean hasPaper = table != null && table.getPaperCount() > 0;
+
+        createButton.visible = data == null;
+        createButton.active = data == null && hasUsableTools && hasPaper;
+
+        completeButton.visible = data != null && data.isComplete();
+        completeButton.active = completeButton.visible;
+
+        scrapButton.visible = data != null && !data.isComplete();
+        scrapButton.active = scrapButton.visible;
+
+        drawButton.visible = data != null && !data.isComplete() && data.cardChoices.isEmpty();
+        drawButton.active = drawButton.visible && hasPaper;
+
+        for (int index = 0; index < cardButtons.length; index++) {
+            boolean visible = data != null && index < data.cardChoices.size();
+            cardButtons[index].visible = visible;
+            cardButtons[index].active = visible && hasUsableTools && data.cardChoices.stream().noneMatch(choice -> choice.selected);
+            if (visible) {
+                cardButtons[index].setMessage(data.cardChoices.get(index).card.getLocalizedName());
+            }
+        }
     }
 }
