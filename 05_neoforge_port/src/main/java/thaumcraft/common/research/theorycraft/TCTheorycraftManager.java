@@ -53,6 +53,7 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.common.lib.research.theorycraft.CardSculpting", CardSculpting::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardTinker", CardTinker::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter", CardMindOverMatter::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardScripting", CardScripting::new);
 
         registerAid(TCTheorycraftAid.block(
                 AID_BOOKSHELF,

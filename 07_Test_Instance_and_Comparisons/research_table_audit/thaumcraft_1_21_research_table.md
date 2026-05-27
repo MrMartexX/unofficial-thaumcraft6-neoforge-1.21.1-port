@@ -27,7 +27,7 @@
 | finish_theory_second_category_raw | PASS | 45% AUROMANCY rounds to 14 raw. |
 | finish_theory_penalty_raw | PASS | 10% ALCHEMY after penalty rounds down from 3 to 2 raw. |
 | public_api_card_registry_count | PASS | The public/API theorycraft card slice should keep the original 9 card ids. |
-| safe_bridge_card_registry_count | PASS | First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, vanilla-item Golemancy and Artifice item-option cards only. |
+| safe_bridge_card_registry_count | PASS | First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy and Artifice item-option cards only. |
 | card_analyze_deferred_by_legacy_bug | PASS | Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source. |
 | bookshelf_aid_registry | PASS | Legacy AidBookshelf adds Balance, two Notation cards and three Study cards. |
 | bookshelf_aid_initialize_data | PASS | Selected aids should reduce initial inspiration by one each and append their card ids to aidCards. |
@@ -41,10 +41,11 @@
 | card_sculpting_activation | PASS | Legacy CardSculpting consumes one clay ball, adds 20 GOLEMANCY and grants one bonus draw. |
 | card_tinker_activation | PASS | Legacy CardTinker chooses from the Artifice item option list and awards random ARTIFICE from aspect visSize. |
 | card_mind_over_matter_activation | PASS | Legacy CardMindOverMatter consumes one Artifice option item and awards ARTIFICE from 10 + sqrt(aspect visSize). |
+| card_scripting_activation | PASS | Legacy CardScripting consumes one extra paper and one extra ink from the research table, then adds 25 GOLEMANCY. |
 | card_concentrate_activation | PASS | Legacy CardConcentrate requires one aspect crystal, adds 15 ALCHEMY and one bonus draw. |
 | card_reactions_activation | PASS | Legacy CardReactions requires two different aspect crystals and adds 25 ALCHEMY. |
 | card_synthesis_activation | PASS | Legacy CardSynthesis consumes two component crystals, adds 40 ALCHEMY and creates the compound crystal when a player is present. |
 | sync_payload_roundtrip | PASS | Client cache payload can reconstruct theory data. |
 
-Passed: 43
+Passed: 44
 Failed: 0

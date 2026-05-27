@@ -60,11 +60,17 @@ public class TCResearchTableBlockEntity extends BlockEntity implements Container
     }
 
     public TCResearchTableData getTheoryData() {
+        if (theoryData != null) {
+            theoryData.setTable(this);
+        }
         return theoryData;
     }
 
     public void setTheoryData(@Nullable TCResearchTableData theoryData) {
         this.theoryData = theoryData;
+        if (this.theoryData != null) {
+            this.theoryData.setTable(this);
+        }
         setChanged();
     }
 
@@ -281,6 +287,7 @@ public class TCResearchTableBlockEntity extends BlockEntity implements Container
         }
         TCResearchTableData data = new TCResearchTableData();
         data.deserialize(payload.data());
+        data.setTable(this);
         theoryData = data;
     }
 
@@ -324,6 +331,7 @@ public class TCResearchTableBlockEntity extends BlockEntity implements Container
         if (tag.contains("note")) {
             TCResearchTableData data = new TCResearchTableData();
             data.deserialize(tag.getCompound("note"));
+            data.setTable(this);
             theoryData = data;
         } else {
             theoryData = null;

@@ -71,7 +71,7 @@ public final class TCResearchTableDiagnostics {
         report.check("finish_theory_penalty_raw", awards.getOrDefault("ALCHEMY", -1) == 2, "10% ALCHEMY after penalty rounds down from 3 to 2 raw.");
 
         report.check("public_api_card_registry_count", registeredCardCount("thaumcraft.api.research.theorycraft.") == 9, "The public/API theorycraft card slice should keep the original 9 card ids.");
-        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 23
+        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 24
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMeasure")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardReactions")
@@ -85,8 +85,9 @@ public final class TCResearchTableDiagnostics {
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardChannel")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardSculpting")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardTinker")
-                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter"),
-                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, vanilla-item Golemancy and Artifice item-option cards only.");
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardScripting"),
+                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy and Artifice item-option cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
         addResearchAidChecks(report);
         addSafeBridgeCardActivationChecks(report);
@@ -217,6 +218,18 @@ public final class TCResearchTableDiagnostics {
                         && mind.getRequiredItemsConsumed().equals(List.of(true))
                         && mindData.getTotal("ARTIFICE") >= 10,
                 "Legacy CardMindOverMatter consumes one Artifice option item and awards ARTIFICE from 10 + sqrt(aspect visSize).");
+
+        TCResearchTableBlockEntity table = new TCResearchTableBlockEntity(BlockPos.ZERO, TCBlocks.RESEARCH_TABLE.get().defaultBlockState());
+        table.setItem(TCResearchTableBlockEntity.SLOT_SCRIBING_TOOLS, new ItemStack(TCItems.SCRIBING_TOOLS.get()));
+        table.setItem(TCResearchTableBlockEntity.SLOT_PAPER, new ItemStack(Items.PAPER, 2));
+        TCResearchTableData scriptingData = new TCResearchTableData();
+        scriptingData.setTable(table);
+        boolean scriptingActivated = new CardScripting().activate(null, scriptingData);
+        report.check("card_scripting_activation", scriptingActivated
+                        && scriptingData.getTotal("GOLEMANCY") == 25
+                        && table.getPaperCount() == 1
+                        && table.getScribingTools().getDamageValue() == 1,
+                "Legacy CardScripting consumes one extra paper and one extra ink from the research table, then adds 25 GOLEMANCY.");
     }
 
     private static void addAlchemyCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {

@@ -8,8 +8,10 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import thaumcraft.common.research.TCResearchManager;
+import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 
 public class TCResearchTableData {
+    private transient TCResearchTableBlockEntity table;
     public String player;
     public int inspiration;
     public int inspirationStart;
@@ -29,6 +31,14 @@ public class TCResearchTableData {
 
     public TCResearchTableData(ServerPlayer player) {
         this.player = player.getName().getString();
+    }
+
+    public TCResearchTableBlockEntity getTable() {
+        return table;
+    }
+
+    public void setTable(TCResearchTableBlockEntity table) {
+        this.table = table;
     }
 
     public boolean isComplete() {
