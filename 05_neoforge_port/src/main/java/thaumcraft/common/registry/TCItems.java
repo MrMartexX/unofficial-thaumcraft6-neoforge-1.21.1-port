@@ -1,9 +1,14 @@
 package thaumcraft.common.registry;
 
 import java.util.function.Supplier;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
@@ -14,6 +19,7 @@ import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.items.consumables.ItemZombieBrain;
 import thaumcraft.common.items.tools.ItemScribingTools;
 import thaumcraft.common.items.tools.ItemThaumometer;
+import thaumcraft.common.items.tools.TCToolTiers;
 
 public final class TCItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Thaumcraft.MODID);
@@ -210,6 +216,11 @@ public final class TCItems {
             case "void_plate" -> legacyItem("plate", "void", 3);
             case "rare_earth" -> legacyItem("nugget", "rare_earth", 10);
             case "curio_rites" -> legacyItem("curio", "rites", 6);
+            case "thaumium_axe" -> new AxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(AxeItem.createAttributes(TCToolTiers.THAUMIUM, 5.0F, -3.0F)));
+            case "thaumium_hoe" -> new HoeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(HoeItem.createAttributes(TCToolTiers.THAUMIUM, -2.0F, -1.0F)));
+            case "thaumium_pick" -> new PickaxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(PickaxeItem.createAttributes(TCToolTiers.THAUMIUM, 1.0F, -2.8F)));
+            case "thaumium_shovel" -> new ShovelItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(ShovelItem.createAttributes(TCToolTiers.THAUMIUM, 1.5F, -3.0F)));
+            case "thaumium_sword" -> new SwordItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(SwordItem.createAttributes(TCToolTiers.THAUMIUM, 3, -2.4F)));
             case "caster_basic" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
                     "tc.placeholder.caster_basic"
