@@ -71,7 +71,7 @@ public final class TCResearchTableDiagnostics {
         report.check("finish_theory_penalty_raw", awards.getOrDefault("ALCHEMY", -1) == 2, "10% ALCHEMY after penalty rounds down from 3 to 2 raw.");
 
         report.check("public_api_card_registry_count", registeredCardCount("thaumcraft.api.research.theorycraft.") == 9, "The public/API theorycraft card slice should keep the original 9 card ids.");
-        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 25
+        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 26
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMeasure")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardReactions")
@@ -83,12 +83,13 @@ public final class TCResearchTableDiagnostics {
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardBeacon")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardSpellbinding")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardChannel")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardInfuse")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardSculpting")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardTinker")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardScripting")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg"),
-                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy and Artifice item-option cards only.");
+                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy, Artifice item-option and basic Infusion option cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
         addResearchAidChecks(report);
         addSafeBridgeCardActivationChecks(report);
@@ -126,14 +127,54 @@ public final class TCResearchTableDiagnostics {
         TCTheorycraftAid enchantmentTable = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_ENCHANTMENT_TABLE);
         TCTheorycraftAid beacon = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BEACON);
         TCTheorycraftAid dragonEgg = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_DRAGON_EGG);
-        report.check("vanilla_aid_registry", TCTheorycraftManager.aids().size() == 4
-                        && enchantmentTable != null
+        report.check("vanilla_aid_registry", enchantmentTable != null
                         && enchantmentTable.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardEnchantment"))
                         && beacon != null
                         && beacon.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardBeacon"))
                         && dragonEgg != null
                         && dragonEgg.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardDragonEgg")),
                 "The active vanilla aid slice should contain bookshelf, enchanting table, beacon and dragon egg aids.");
+
+        TCTheorycraftAid basicAlchemy = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_ALCHEMY);
+        TCTheorycraftAid basicArtifice = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_ARTIFICE);
+        TCTheorycraftAid basicInfusion = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_INFUSION);
+        List<String> expectedAlchemyCards = List.of(
+                "thaumcraft.common.lib.research.theorycraft.CardConcentrate",
+                "thaumcraft.common.lib.research.theorycraft.CardReactions",
+                "thaumcraft.common.lib.research.theorycraft.CardSynthesis"
+        );
+        List<String> expectedArtificeCards = List.of(
+                "thaumcraft.common.lib.research.theorycraft.CardCalibrate",
+                "thaumcraft.common.lib.research.theorycraft.CardTinker",
+                "thaumcraft.common.lib.research.theorycraft.CardMindOverMatter"
+        );
+        List<String> expectedInfusionCards = List.of(
+                "thaumcraft.common.lib.research.theorycraft.CardMeasure",
+                "thaumcraft.common.lib.research.theorycraft.CardChannel",
+                "thaumcraft.common.lib.research.theorycraft.CardInfuse"
+        );
+        report.check("basic_block_aid_registry", TCTheorycraftManager.aids().size() == 7
+                        && basicAlchemy != null
+                        && basicAlchemy.cardKeys().equals(expectedAlchemyCards)
+                        && basicArtifice != null
+                        && basicArtifice.cardKeys().equals(expectedArtificeCards)
+                        && basicInfusion != null
+                        && basicInfusion.cardKeys().equals(expectedInfusionCards),
+                "Legacy basic block aids now bridge crucible, arcane workbench and infusion matrix card injection.");
+
+        TCResearchTableData basicAidData = new TCResearchTableData();
+        basicAidData.initializeWithFixedInspirationForDiagnostics("Martin", 6, List.of(
+                TCTheorycraftManager.AID_BASIC_ALCHEMY,
+                TCTheorycraftManager.AID_BASIC_INFUSION
+        ));
+        ArrayList<String> expectedBasicAidCards = new ArrayList<>();
+        expectedBasicAidCards.addAll(expectedAlchemyCards);
+        expectedBasicAidCards.addAll(expectedInfusionCards);
+        report.check("basic_block_aid_initialize_data", basicAidData.aidsChosen == 2
+                        && basicAidData.inspirationStart == 6
+                        && basicAidData.inspiration == 4
+                        && basicAidData.aidCards.equals(expectedBasicAidCards),
+                "Selected basic block aids should reduce initial inspiration and append their legacy card ids in selection order.");
     }
 
     private static void addSafeBridgeCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {
@@ -190,6 +231,19 @@ public final class TCResearchTableDiagnostics {
                         && channelData.getTotal("INFUSION") == 25
                         && hasAspectStackRequirement(channel.getRequiredItems(), 1),
                 "Legacy CardChannel picks a compound aspect, requires the matching filled phial and adds 25 INFUSION.");
+
+        TCResearchTableData infuseData = new TCResearchTableData();
+        CardInfuse infuse = new CardInfuse();
+        infuse.setSeed(4L);
+        boolean infuseActivated = infuse.initialize(null, infuseData) && infuse.activate(null, infuseData);
+        List<ItemStack> infuseRequiredItems = infuse.getRequiredItems();
+        report.check("card_infuse_activation", infuseActivated
+                        && infuseData.getTotal("INFUSION") >= 10
+                        && infuseRequiredItems.size() == 2
+                        && !infuseRequiredItems.get(0).isEmpty()
+                        && hasAspectStackRequirementAt(infuseRequiredItems, 1)
+                        && infuse.getRequiredItemsConsumed().equals(List.of(true, true)),
+                "Legacy CardInfuse picks a compound aspect and option item, consumes both that item and the matching filled phial, then adds Infusion by option visSize.");
 
         TCResearchTableData sculptingData = new TCResearchTableData();
         CardSculpting sculpting = new CardSculpting();
@@ -388,6 +442,12 @@ public final class TCResearchTableDiagnostics {
             }
         }
         return true;
+    }
+
+    private static boolean hasAspectStackRequirementAt(List<ItemStack> stacks, int index) {
+        return stacks.size() > index
+                && !stacks.get(index).isEmpty()
+                && stacks.get(index).get(TCDataComponents.ASPECT_STACK.get()) != null;
     }
 
     private static int sumTotals(TCResearchTableData data) {

@@ -37,6 +37,42 @@ final class TCTheorycraftItemOptions {
         return List.copyOf(options);
     }
 
+    static List<ItemStack> infusionOptions() {
+        ArrayList<ItemStack> options = new ArrayList<>();
+        add(options, TCItems.ALUMENTUM.get());
+        add(options, TCItems.NITOR_YELLOW.get());
+        add(options, TCItems.AMBER.get());
+        add(options, TCItems.BRAIN.get());
+        add(options, TCItems.FABRIC.get());
+        add(options, TCItems.SALIS_MUNDUS.get());
+        add(options, TCItems.THAUMIUM_INGOT.get());
+        add(options, TCItems.BRASS_INGOT.get());
+        add(options, TCItems.QUICKSILVER.get());
+        add(options, Items.GOLD_INGOT);
+        add(options, Items.IRON_INGOT);
+        add(options, Items.DIAMOND);
+        add(options, Items.EMERALD);
+        add(options, Items.BLAZE_ROD);
+        add(options, Items.LEATHER);
+        add(options, Blocks.WHITE_WOOL.asItem());
+        add(options, Items.BRICK);
+        add(options, Items.ARROW);
+        add(options, Items.EGG);
+        add(options, Items.FEATHER);
+        add(options, Items.GLOWSTONE_DUST);
+        add(options, Items.REDSTONE);
+        add(options, Items.GHAST_TEAR);
+        add(options, Items.GUNPOWDER);
+        add(options, Items.BOW);
+        add(options, Items.GOLDEN_SWORD);
+        add(options, Items.IRON_SWORD);
+        add(options, Items.IRON_PICKAXE);
+        add(options, Items.GOLDEN_PICKAXE);
+        add(options, Items.QUARTZ);
+        add(options, Items.APPLE);
+        return List.copyOf(options);
+    }
+
     static ItemStack stackFromId(String id) {
         if (id == null || id.isBlank()) {
             return ItemStack.EMPTY;

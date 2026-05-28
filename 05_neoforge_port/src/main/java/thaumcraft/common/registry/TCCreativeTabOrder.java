@@ -101,6 +101,7 @@ public final class TCCreativeTabOrder {
         output.accept(TCItems.TALLOW.get());
         output.accept(TCItems.THAUMIUM_PLATE.get());
         output.accept(TCItems.VOID_PLATE.get());
+        output.accept(TCItems.SALIS_MUNDUS.get());
         output.accept(TCItems.MIRRORED_GLASS.get());
 
         addCrystalEssenceVariants(output);
@@ -108,6 +109,8 @@ public final class TCCreativeTabOrder {
         output.accept(TCItems.BRAIN.get());
 
         addPhialVariants(output);
+
+        output.accept(TCItems.ALUMENTUM.get());
 
         output.accept(TCItems.SCRIBING_TOOLS.get());
         output.accept(TCItems.THAUMOMETER.get());

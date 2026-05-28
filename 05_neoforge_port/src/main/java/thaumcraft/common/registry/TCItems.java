@@ -96,10 +96,12 @@ public final class TCItems {
     public static final Supplier<Item> THAUMIUM_PLATE = simpleItem("thaumium_plate");
     public static final Supplier<Item> VOID_PLATE = simpleItem("void_plate");
     public static final Supplier<Item> RARE_EARTH = simpleItem("rare_earth");
+    public static final Supplier<Item> SALIS_MUNDUS = simpleItem("salis_mundus");
     public static final Supplier<Item> TALLOW = simpleItem("tallow");
     public static final Supplier<Item> VIS_RESONATOR = simpleItem("vis_resonator");
     public static final Supplier<Item> MIRRORED_GLASS = simpleItem("mirrored_glass");
     public static final Supplier<Item> BRAIN = simpleItem("brain");
+    public static final Supplier<Item> ALUMENTUM = simpleItem("alumentum");
     public static final Supplier<Item> CURIO_RITES = simpleItem("curio_rites");
     public static final Supplier<Item> SCRIBING_TOOLS = simpleItem("scribing_tools");
     public static final Supplier<Item> CASTER_BASIC = simpleItem("caster_basic");
@@ -216,6 +218,14 @@ public final class TCItems {
             case "void_plate" -> legacyItem("plate", "void", 3);
             case "rare_earth" -> legacyItem("nugget", "rare_earth", 10);
             case "curio_rites" -> legacyItem("curio", "rites", 6);
+            case "salis_mundus" -> new ItemLegacyPlaceholder(
+                    new Item.Properties(),
+                    "tc.placeholder.salis_mundus"
+            );
+            case "alumentum" -> new ItemLegacyPlaceholder(
+                    new Item.Properties(),
+                    "tc.placeholder.alumentum"
+            );
             case "thaumium_axe" -> new AxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(AxeItem.createAttributes(TCToolTiers.THAUMIUM, 5.0F, -3.0F)));
             case "thaumium_hoe" -> new HoeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(HoeItem.createAttributes(TCToolTiers.THAUMIUM, -2.0F, -1.0F)));
             case "thaumium_pick" -> new PickaxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(PickaxeItem.createAttributes(TCToolTiers.THAUMIUM, 1.0F, -2.8F)));

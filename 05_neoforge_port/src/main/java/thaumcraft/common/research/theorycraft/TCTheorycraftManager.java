@@ -12,9 +12,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import thaumcraft.common.registry.TCBlocks;
 
 public final class TCTheorycraftManager {
     public static final String AID_BOOKSHELF = "thaumcraft.api.research.theorycraft.AidBookshelf";
+    public static final String AID_BASIC_ALCHEMY = "thaumcraft.common.lib.research.theorycraft.AidBasicAlchemy";
+    public static final String AID_BASIC_ARTIFICE = "thaumcraft.common.lib.research.theorycraft.AidBasicArtifice";
+    public static final String AID_BASIC_INFUSION = "thaumcraft.common.lib.research.theorycraft.AidBasicInfusion";
     public static final String AID_ENCHANTMENT_TABLE = "thaumcraft.common.lib.research.theorycraft.AidEnchantmentTable";
     public static final String AID_BEACON = "thaumcraft.common.lib.research.theorycraft.AidBeacon";
     public static final String AID_DRAGON_EGG = "thaumcraft.common.lib.research.theorycraft.AidDragonEgg";
@@ -51,6 +55,7 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.common.lib.research.theorycraft.CardBeacon", CardBeacon::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardSpellbinding", CardSpellbinding::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardChannel", CardChannel::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardInfuse", CardInfuse::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardSculpting", CardSculpting::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardTinker", CardTinker::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter", CardMindOverMatter::new);
@@ -68,6 +73,36 @@ public final class TCTheorycraftManager {
                         "thaumcraft.api.research.theorycraft.CardStudy",
                         "thaumcraft.api.research.theorycraft.CardStudy",
                         "thaumcraft.api.research.theorycraft.CardStudy"
+                )
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_BASIC_ALCHEMY,
+                () -> new ItemStack(TCBlocks.CRUCIBLE.get()),
+                state -> state.is(TCBlocks.CRUCIBLE.get()),
+                List.of(
+                        "thaumcraft.common.lib.research.theorycraft.CardConcentrate",
+                        "thaumcraft.common.lib.research.theorycraft.CardReactions",
+                        "thaumcraft.common.lib.research.theorycraft.CardSynthesis"
+                )
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_BASIC_ARTIFICE,
+                () -> new ItemStack(TCBlocks.ARCANE_WORKBENCH.get()),
+                state -> state.is(TCBlocks.ARCANE_WORKBENCH.get()),
+                List.of(
+                        "thaumcraft.common.lib.research.theorycraft.CardCalibrate",
+                        "thaumcraft.common.lib.research.theorycraft.CardTinker",
+                        "thaumcraft.common.lib.research.theorycraft.CardMindOverMatter"
+                )
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_BASIC_INFUSION,
+                () -> new ItemStack(TCBlocks.INFUSION_MATRIX.get()),
+                state -> state.is(TCBlocks.INFUSION_MATRIX.get()),
+                List.of(
+                        "thaumcraft.common.lib.research.theorycraft.CardMeasure",
+                        "thaumcraft.common.lib.research.theorycraft.CardChannel",
+                        "thaumcraft.common.lib.research.theorycraft.CardInfuse"
                 )
         ));
         registerAid(TCTheorycraftAid.block(
