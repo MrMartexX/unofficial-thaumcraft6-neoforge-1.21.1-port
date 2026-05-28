@@ -20,6 +20,7 @@ import thaumcraft.common.research.TCPlayerKnowledge;
 import thaumcraft.common.research.TCPlayerKnowledgeStore;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 import thaumcraft.common.warp.TCPlayerWarp;
+import thaumcraft.common.warp.TCPlayerWarpStore;
 import thaumcraft.common.warp.TCWarpType;
 
 public final class TCResearchTableDiagnostics {
@@ -73,7 +74,7 @@ public final class TCResearchTableDiagnostics {
         report.check("finish_theory_penalty_raw", awards.getOrDefault("ALCHEMY", -1) == 2, "10% ALCHEMY after penalty rounds down from 3 to 2 raw.");
 
         report.check("public_api_card_registry_count", registeredCardCount("thaumcraft.api.research.theorycraft.") == 9, "The public/API theorycraft card slice should keep the original 9 card ids.");
-        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 26
+        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 31
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMeasure")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardReactions")
@@ -91,8 +92,13 @@ public final class TCResearchTableDiagnostics {
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardTinker")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardScripting")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardDarkWhispers")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardGlyphs")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardPortal")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardRevelation")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardRealization")
                         && !hasCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg"),
-                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy, Artifice item-option, Basic Auromancy, basic Infusion and Basic Golemancy option cards only.");
+                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy, Artifice item-option, Basic Auromancy, basic Infusion, Basic Golemancy and safe Eldritch option cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
         addWarpBridgeChecks(report);
         addResearchAidChecks(report);
@@ -136,6 +142,17 @@ public final class TCResearchTableDiagnostics {
                         && beacon.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardBeacon")),
                 "The active vanilla aid slice should contain bookshelf, enchanting table and beacon aids; AidDragonEgg exists in legacy classes but is not registered by ConfigResearch.");
 
+        TCTheorycraftAid glyphedStone = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_GLYPHED_STONE);
+        TCTheorycraftAid portalEnd = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_PORTAL_END);
+        TCTheorycraftAid portalNether = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_PORTAL_NETHER);
+        report.check("safe_eldritch_aid_registry", glyphedStone != null
+                        && glyphedStone.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardGlyphs"))
+                        && portalEnd != null
+                        && portalEnd.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardPortal"))
+                        && portalNether != null
+                        && portalNether.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardPortal")),
+                "The safe Eldritch aid bridge should contain Glyphed Stone, End portal and Nether portal aids; Brain-in-a-Jar, Crimson portal and Basic Eldritch remain deferred.");
+
         TCTheorycraftAid basicAlchemy = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_ALCHEMY);
         TCTheorycraftAid basicArtifice = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_ARTIFICE);
         TCTheorycraftAid basicAuromancy = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_AUROMANCY);
@@ -166,7 +183,7 @@ public final class TCResearchTableDiagnostics {
                 "thaumcraft.common.lib.research.theorycraft.CardScripting",
                 "thaumcraft.common.lib.research.theorycraft.CardSynergy"
         );
-        report.check("basic_block_aid_registry", TCTheorycraftManager.aids().size() == 8
+        report.check("basic_block_aid_registry", TCTheorycraftManager.aids().size() == 11
                         && basicAlchemy != null
                         && basicAlchemy.cardKeys().equals(expectedAlchemyCards)
                         && basicArtifice != null
@@ -178,6 +195,22 @@ public final class TCResearchTableDiagnostics {
                         && basicGolemancy != null
                         && basicGolemancy.cardKeys().equals(expectedGolemancyCards),
                 "Legacy basic block aids now bridge crucible, arcane workbench, infusion matrix, wand workbench and golem press card injection.");
+
+        TCResearchTableData safeEldritchAidData = new TCResearchTableData();
+        safeEldritchAidData.initializeWithFixedInspirationForDiagnostics("Martin", 6, List.of(
+                TCTheorycraftManager.AID_GLYPHED_STONE,
+                TCTheorycraftManager.AID_PORTAL_END,
+                TCTheorycraftManager.AID_PORTAL_NETHER
+        ));
+        report.check("safe_eldritch_aid_initialize_data", safeEldritchAidData.aidsChosen == 3
+                        && safeEldritchAidData.inspirationStart == 6
+                        && safeEldritchAidData.inspiration == 3
+                        && safeEldritchAidData.aidCards.equals(List.of(
+                        "thaumcraft.common.lib.research.theorycraft.CardGlyphs",
+                        "thaumcraft.common.lib.research.theorycraft.CardPortal",
+                        "thaumcraft.common.lib.research.theorycraft.CardPortal"
+                )),
+                "Selected safe Eldritch aids should append Glyphed Stone and vanilla portal card ids in legacy aid order.");
 
         TCResearchTableData basicAidData = new TCResearchTableData();
         basicAidData.initializeWithFixedInspirationForDiagnostics("Martin", 6, List.of(
@@ -332,6 +365,48 @@ public final class TCResearchTableDiagnostics {
                         && table.getScribingTools().getDamageValue() == 1,
                 "Legacy CardScripting consumes one extra paper and one extra ink from the research table, then adds 25 GOLEMANCY.");
 
+        TCResearchTableData glyphsData = new TCResearchTableData();
+        CardGlyphs glyphs = new CardGlyphs();
+        glyphs.setSeed(5L);
+        boolean glyphsActivated = glyphs.activate(null, glyphsData);
+        report.check("card_glyphs_activation", glyphsActivated
+                        && glyphs.isAidOnly()
+                        && glyphs.getInspirationCost() == 1
+                        && glyphsData.getTotal("ELDRITCH") >= 10
+                        && glyphsData.getTotal("ELDRITCH") <= 40,
+                "Legacy CardGlyphs is aid-only, adds 10-20 ELDRITCH plus 10-20 in one random category, and applies temporary warp only with a real player.");
+
+        TCResearchTableData portalData = new TCResearchTableData();
+        CardPortal portal = new CardPortal();
+        portal.setSeed(6L);
+        boolean portalActivated = portal.activate(null, portalData);
+        report.check("card_portal_activation", portalActivated
+                        && portal.isAidOnly()
+                        && portal.getInspirationCost() == -1
+                        && portalData.bonusDraws == 2
+                        && portalData.getTotal("ELDRITCH") >= 5
+                        && portalData.getTotal("ELDRITCH") <= 30,
+                "Legacy CardPortal is aid-only, restores one inspiration through negative cost, grants two bonus draws, adds random category progress and applies warp only with a real player.");
+
+        TCResearchTableData revelationData = new TCResearchTableData();
+        CardRevelation revelation = new CardRevelation();
+        revelation.setSeed(7L);
+        boolean revelationActivated = revelation.activate(null, revelationData);
+        report.check("card_revelation_activation", revelationActivated
+                        && revelationData.getTotal("ELDRITCH") >= 30
+                        && revelationData.getTotal("ELDRITCH") <= 40
+                        && revelationData.penaltyStart == 1,
+                "Legacy CardRevelation adds 30 ELDRITCH, 5-10 in one random category, increments penaltyStart and applies warp only with a real player.");
+
+        TCResearchTableData realizationData = new TCResearchTableData();
+        CardRealization realization = new CardRealization();
+        realization.setSeed(8L);
+        boolean realizationActivated = realization.activate(null, realizationData);
+        report.check("card_realization_activation", realizationActivated
+                        && realizationData.getTotal("ELDRITCH") >= 15
+                        && realizationData.getTotal("ELDRITCH") <= 35,
+                "Legacy CardRealization adds 15 ELDRITCH plus 5-10 in two random categories and applies temporary/possible normal warp only with a real player.");
+
         report.check("card_dragon_egg_not_registered", !hasCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg"),
                 "The decompiled CardDragonEgg class is left as reference code only; original ConfigResearch does not register it.");
     }
@@ -378,6 +453,7 @@ public final class TCResearchTableDiagnostics {
         TCTheorycraftManager.bootstrap();
 
         TCPlayerKnowledge before = TCPlayerKnowledgeStore.get(player);
+        TCPlayerWarp beforeWarp = TCPlayerWarpStore.get(player);
         ArrayList<ItemStack> beforeInventory = copyMainInventory(player);
         int beforeExperienceLevel = player.experienceLevel;
         int beforeTotalExperience = player.totalExperience;
@@ -434,6 +510,20 @@ public final class TCResearchTableDiagnostics {
                             && auromancy <= 20,
                     "Legacy CardEnchantment consumes five XP levels and adds 15-20 INFUSION plus 15-20 AUROMANCY.");
 
+            player.experienceLevel = 9;
+            player.totalExperience = 0;
+            player.experienceProgress = 0.0F;
+            TCPlayerWarpStore.clear(player);
+            TCResearchTableData darkWhispersData = new TCResearchTableData();
+            boolean darkWhispersActivated = new CardDarkWhispers().activate(player, darkWhispersData);
+            TCPlayerWarp darkWhispersWarp = TCPlayerWarpStore.get(player);
+            report.check("card_dark_whispers_xp_warp_activation", darkWhispersActivated
+                            && player.experienceLevel == 0
+                            && darkWhispersData.getTotal("ELDRITCH") >= 1
+                            && darkWhispersData.getTotal("ELDRITCH") <= 8
+                            && darkWhispersWarp.get(TCWarpType.NORMAL) >= 3,
+                    "Legacy CardDarkWhispers consumes all current XP levels plus ten, adds Eldritch/random-category progress, and grants normal warp based on sqrt(level).");
+
             table.setTheoryData(seededCompleteTheory());
             Map<String, Integer> awards = TCResearchTableBlockEntity.calculateTheoryRawAwards(table.getTheoryData());
             table.finishTheory(player);
@@ -443,6 +533,7 @@ public final class TCResearchTableDiagnostics {
             report.check("finish_theory_clears_data", table.getTheoryData() == null, "finishTheory should clear table theory data.");
         } finally {
             TCPlayerKnowledgeStore.set(player, before, false);
+            TCPlayerWarpStore.set(player, beforeWarp);
             restoreMainInventory(player, beforeInventory);
             player.experienceLevel = beforeExperienceLevel;
             player.totalExperience = beforeTotalExperience;

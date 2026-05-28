@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,6 +17,9 @@ import thaumcraft.common.registry.TCBlocks;
 
 public final class TCTheorycraftManager {
     public static final String AID_BOOKSHELF = "thaumcraft.api.research.theorycraft.AidBookshelf";
+    public static final String AID_GLYPHED_STONE = "thaumcraft.common.lib.research.theorycraft.AidGlyphedStone";
+    public static final String AID_PORTAL_END = "thaumcraft.common.lib.research.theorycraft.AidPortal$AidPortalEnd";
+    public static final String AID_PORTAL_NETHER = "thaumcraft.common.lib.research.theorycraft.AidPortal$AidPortalNether";
     public static final String AID_BASIC_ALCHEMY = "thaumcraft.common.lib.research.theorycraft.AidBasicAlchemy";
     public static final String AID_BASIC_ARTIFICE = "thaumcraft.common.lib.research.theorycraft.AidBasicArtifice";
     public static final String AID_BASIC_AUROMANCY = "thaumcraft.common.lib.research.theorycraft.AidBasicAuromancy";
@@ -62,6 +66,11 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.common.lib.research.theorycraft.CardTinker", CardTinker::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter", CardMindOverMatter::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardScripting", CardScripting::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardDarkWhispers", CardDarkWhispers::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardGlyphs", CardGlyphs::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardPortal", CardPortal::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardRevelation", CardRevelation::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardRealization", CardRealization::new);
 
         registerAid(TCTheorycraftAid.block(
                 AID_BOOKSHELF,
@@ -75,6 +84,24 @@ public final class TCTheorycraftManager {
                         "thaumcraft.api.research.theorycraft.CardStudy",
                         "thaumcraft.api.research.theorycraft.CardStudy"
                 )
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_GLYPHED_STONE,
+                () -> new ItemStack(TCBlocks.STONE_ANCIENT_GLYPHED.get()),
+                state -> state.is(TCBlocks.STONE_ANCIENT_GLYPHED.get()),
+                List.of("thaumcraft.common.lib.research.theorycraft.CardGlyphs")
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_PORTAL_END,
+                new ItemStack(Items.ENDER_EYE),
+                state -> state.is(Blocks.END_PORTAL),
+                List.of("thaumcraft.common.lib.research.theorycraft.CardPortal")
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_PORTAL_NETHER,
+                new ItemStack(Items.FLINT_AND_STEEL),
+                state -> state.is(Blocks.NETHER_PORTAL),
+                List.of("thaumcraft.common.lib.research.theorycraft.CardPortal")
         ));
         registerAid(TCTheorycraftAid.block(
                 AID_BASIC_ALCHEMY,
