@@ -255,6 +255,8 @@
   "card.synergy.text": "At its root, Golemancy is a blend of Alchemy, Artifice and Infusion. Only by fully understanding how these three disciplines interact with each other will you be able to master Golemancy. Lose 15 points divided evenly between Alchemy, Artifice and Infusion to gain 30 Golemancy. An additional category will gain the full bonus upon completion.",
   "card.spellbinding.name": "Spellbinding",
   "card.spellbinding.text": "You bind various test enchantments to small pieces of leftover crystal. They have no practical purpose, but grant you invaluable knowledge. Lose up to 5 experience levels, but gain 5 Auromancy per level lost.",
+  "card.awareness.name": "Awareness",
+  "card.awareness.text": "You open yourself to the flows of vis around you. You gain a deeper understanding of how it works and the underlying nature of things, but this leaves you metaphysically vulnerable. Gain 20 Auromancy. There is a chance you gain Eldritch knowledge and Warp.",
   "card.sculpting.name": "Sculpting",
   "card.sculpting.text": "You can hone your knowledge by creating simple and short-lived animated figurines. Gain 20 Golemancy and a bonus draw.",
   "card.tinker.name": "Tinker",

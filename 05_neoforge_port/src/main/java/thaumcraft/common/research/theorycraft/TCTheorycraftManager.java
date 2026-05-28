@@ -18,6 +18,7 @@ public final class TCTheorycraftManager {
     public static final String AID_BOOKSHELF = "thaumcraft.api.research.theorycraft.AidBookshelf";
     public static final String AID_BASIC_ALCHEMY = "thaumcraft.common.lib.research.theorycraft.AidBasicAlchemy";
     public static final String AID_BASIC_ARTIFICE = "thaumcraft.common.lib.research.theorycraft.AidBasicArtifice";
+    public static final String AID_BASIC_AUROMANCY = "thaumcraft.common.lib.research.theorycraft.AidBasicAuromancy";
     public static final String AID_BASIC_INFUSION = "thaumcraft.common.lib.research.theorycraft.AidBasicInfusion";
     public static final String AID_ENCHANTMENT_TABLE = "thaumcraft.common.lib.research.theorycraft.AidEnchantmentTable";
     public static final String AID_BEACON = "thaumcraft.common.lib.research.theorycraft.AidBeacon";
@@ -50,6 +51,7 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.common.lib.research.theorycraft.CardSynthesis", CardSynthesis::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardCalibrate", CardCalibrate::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardFocus", CardFocus::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardAwareness", CardAwareness::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardSynergy", CardSynergy::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardEnchantment", CardEnchantment::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardBeacon", CardBeacon::new);
@@ -93,6 +95,16 @@ public final class TCTheorycraftManager {
                         "thaumcraft.common.lib.research.theorycraft.CardCalibrate",
                         "thaumcraft.common.lib.research.theorycraft.CardTinker",
                         "thaumcraft.common.lib.research.theorycraft.CardMindOverMatter"
+                )
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_BASIC_AUROMANCY,
+                () -> new ItemStack(TCBlocks.WAND_WORKBENCH.get()),
+                state -> state.is(TCBlocks.WAND_WORKBENCH.get()),
+                List.of(
+                        "thaumcraft.common.lib.research.theorycraft.CardFocus",
+                        "thaumcraft.common.lib.research.theorycraft.CardAwareness",
+                        "thaumcraft.common.lib.research.theorycraft.CardSpellbinding"
                 )
         ));
         registerAid(TCTheorycraftAid.block(

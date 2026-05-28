@@ -19,6 +19,8 @@ import thaumcraft.common.research.TCKnowledgeType;
 import thaumcraft.common.research.TCPlayerKnowledge;
 import thaumcraft.common.research.TCPlayerKnowledgeStore;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
+import thaumcraft.common.warp.TCPlayerWarp;
+import thaumcraft.common.warp.TCWarpType;
 
 public final class TCResearchTableDiagnostics {
     private static final String[] LEGACY_DATA_KEYS = {
@@ -71,13 +73,14 @@ public final class TCResearchTableDiagnostics {
         report.check("finish_theory_penalty_raw", awards.getOrDefault("ALCHEMY", -1) == 2, "10% ALCHEMY after penalty rounds down from 3 to 2 raw.");
 
         report.check("public_api_card_registry_count", registeredCardCount("thaumcraft.api.research.theorycraft.") == 9, "The public/API theorycraft card slice should keep the original 9 card ids.");
-        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 26
+        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 27
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMeasure")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardReactions")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardSynthesis")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardCalibrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardFocus")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardAwareness")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardSynergy")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardEnchantment")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardBeacon")
@@ -89,8 +92,9 @@ public final class TCResearchTableDiagnostics {
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardScripting")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg"),
-                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy, Artifice item-option and basic Infusion option cards only.");
+                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy, Artifice item-option, Basic Auromancy and basic Infusion option cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
+        addWarpBridgeChecks(report);
         addResearchAidChecks(report);
         addSafeBridgeCardActivationChecks(report);
         addAlchemyCardActivationChecks(report);
@@ -137,6 +141,7 @@ public final class TCResearchTableDiagnostics {
 
         TCTheorycraftAid basicAlchemy = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_ALCHEMY);
         TCTheorycraftAid basicArtifice = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_ARTIFICE);
+        TCTheorycraftAid basicAuromancy = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_AUROMANCY);
         TCTheorycraftAid basicInfusion = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_INFUSION);
         List<String> expectedAlchemyCards = List.of(
                 "thaumcraft.common.lib.research.theorycraft.CardConcentrate",
@@ -148,33 +153,57 @@ public final class TCResearchTableDiagnostics {
                 "thaumcraft.common.lib.research.theorycraft.CardTinker",
                 "thaumcraft.common.lib.research.theorycraft.CardMindOverMatter"
         );
+        List<String> expectedAuromancyCards = List.of(
+                "thaumcraft.common.lib.research.theorycraft.CardFocus",
+                "thaumcraft.common.lib.research.theorycraft.CardAwareness",
+                "thaumcraft.common.lib.research.theorycraft.CardSpellbinding"
+        );
         List<String> expectedInfusionCards = List.of(
                 "thaumcraft.common.lib.research.theorycraft.CardMeasure",
                 "thaumcraft.common.lib.research.theorycraft.CardChannel",
                 "thaumcraft.common.lib.research.theorycraft.CardInfuse"
         );
-        report.check("basic_block_aid_registry", TCTheorycraftManager.aids().size() == 7
+        report.check("basic_block_aid_registry", TCTheorycraftManager.aids().size() == 8
                         && basicAlchemy != null
                         && basicAlchemy.cardKeys().equals(expectedAlchemyCards)
                         && basicArtifice != null
                         && basicArtifice.cardKeys().equals(expectedArtificeCards)
+                        && basicAuromancy != null
+                        && basicAuromancy.cardKeys().equals(expectedAuromancyCards)
                         && basicInfusion != null
                         && basicInfusion.cardKeys().equals(expectedInfusionCards),
-                "Legacy basic block aids now bridge crucible, arcane workbench and infusion matrix card injection.");
+                "Legacy basic block aids now bridge crucible, arcane workbench, wand workbench and infusion matrix card injection.");
 
         TCResearchTableData basicAidData = new TCResearchTableData();
         basicAidData.initializeWithFixedInspirationForDiagnostics("Martin", 6, List.of(
                 TCTheorycraftManager.AID_BASIC_ALCHEMY,
+                TCTheorycraftManager.AID_BASIC_AUROMANCY,
                 TCTheorycraftManager.AID_BASIC_INFUSION
         ));
         ArrayList<String> expectedBasicAidCards = new ArrayList<>();
         expectedBasicAidCards.addAll(expectedAlchemyCards);
+        expectedBasicAidCards.addAll(expectedAuromancyCards);
         expectedBasicAidCards.addAll(expectedInfusionCards);
-        report.check("basic_block_aid_initialize_data", basicAidData.aidsChosen == 2
+        report.check("basic_block_aid_initialize_data", basicAidData.aidsChosen == 3
                         && basicAidData.inspirationStart == 6
-                        && basicAidData.inspiration == 4
+                        && basicAidData.inspiration == 3
                         && basicAidData.aidCards.equals(expectedBasicAidCards),
                 "Selected basic block aids should reduce initial inspiration and append their legacy card ids in selection order.");
+    }
+
+    private static void addWarpBridgeChecks(TCResearchTableDiagnosticReport.Builder report) {
+        TCPlayerWarp warp = new TCPlayerWarp();
+        warp.add(TCWarpType.PERMANENT, 600);
+        warp.add(TCWarpType.NORMAL, 5);
+        warp.add(TCWarpType.TEMPORARY, 3);
+        warp.setCounter(7);
+        TCPlayerWarp copy = TCPlayerWarp.load(warp.save());
+        report.check("warp_storage_bridge_roundtrip", copy.get(TCWarpType.PERMANENT) == TCPlayerWarp.MAX_WARP
+                        && copy.get(TCWarpType.NORMAL) == 5
+                        && copy.get(TCWarpType.TEMPORARY) == 3
+                        && copy.actualWarp() == TCPlayerWarp.MAX_WARP + 5
+                        && copy.getCounter() == 7,
+                "Minimal warp bridge should preserve legacy warp array order, counter and 0..500 clamp.");
     }
 
     private static void addSafeBridgeCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {
@@ -198,6 +227,13 @@ public final class TCResearchTableDiagnostics {
                         && focusData.getTotal("AUROMANCY") == 15
                         && focusData.bonusDraws == 1,
                 "Legacy CardFocus adds 15 AUROMANCY and one bonus draw.");
+
+        TCResearchTableData awarenessData = new TCResearchTableData();
+        boolean awareness = new CardAwareness().activate(null, awarenessData);
+        report.check("card_awareness_activation", awareness
+                        && awarenessData.getTotal("AUROMANCY") == 20
+                        && awarenessData.getTotal("ELDRITCH") == 0,
+                "Legacy CardAwareness adds 20 AUROMANCY; the 33% Eldritch/normal-warp branch requires a real server player RNG.");
 
         TCResearchTableData synergyData = new TCResearchTableData();
         synergyData.addTotal("ARTIFICE", 5);

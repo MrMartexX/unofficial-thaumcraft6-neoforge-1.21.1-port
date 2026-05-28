@@ -35,6 +35,7 @@ import thaumcraft.common.research.theorycraft.TCResearchTableAuditCommands;
 import thaumcraft.common.research.theorycraft.TCResearchTableAuditExporter;
 import thaumcraft.common.research.theorycraft.TCResearchTableNetwork;
 import thaumcraft.common.research.theorycraft.TCTheorycraftManager;
+import thaumcraft.common.warp.TCWarpCommands;
 import thaumcraft.common.world.aura.TCAuraDebugCommands;
 import thaumcraft.common.world.aura.TCAuraEvents;
 import thaumcraft.common.world.aura.TCAuraNetwork;
@@ -80,6 +81,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCScanningCommands::onRegisterCommands);
+        NeoForge.EVENT_BUS.addListener(TCWarpCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCScanningManager::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onItemCrafted);
         TCAspectAssignments.bootstrap();
