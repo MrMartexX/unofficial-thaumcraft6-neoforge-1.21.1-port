@@ -25,10 +25,28 @@ public final class TCResearchTableNetwork {
                 TCResearchTableSyncPayload.STREAM_CODEC,
                 TCResearchTableNetwork::handleSync
         );
+        registrar.playToClient(
+                TCResearchTableActionResultPayload.TYPE,
+                TCResearchTableActionResultPayload.STREAM_CODEC,
+                TCResearchTableNetwork::handleActionResult
+        );
     }
 
     public static void syncToPlayer(ServerPlayer player, TCResearchTableBlockEntity table) {
         PacketDistributor.sendToPlayer(player, table.toSyncPayload());
+    }
+
+    static void sendActionResult(
+            ServerPlayer player,
+            TCResearchTableBlockEntity table,
+            int actionId,
+            boolean accepted,
+            String resultKey
+    ) {
+        PacketDistributor.sendToPlayer(
+                player,
+                TCResearchTableActionResultPayload.fromTable(table, actionId, accepted, resultKey)
+        );
     }
 
     private static void handleAction(TCResearchTableActionPayload payload, IPayloadContext context) {
@@ -44,6 +62,10 @@ public final class TCResearchTableNetwork {
     }
 
     private static void handleSync(TCResearchTableSyncPayload payload, IPayloadContext context) {
+        TCResearchTableClientCache.accept(payload);
+    }
+
+    private static void handleActionResult(TCResearchTableActionResultPayload payload, IPayloadContext context) {
         TCResearchTableClientCache.accept(payload);
     }
 }

@@ -15,9 +15,12 @@ import net.minecraft.world.item.Items;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.research.TCKnowledgeClientCache;
+import thaumcraft.common.research.TCKnowledgeSyncPayload;
 import thaumcraft.common.research.TCKnowledgeType;
 import thaumcraft.common.research.TCPlayerKnowledge;
 import thaumcraft.common.research.TCPlayerKnowledgeStore;
+import thaumcraft.common.research.TCResearchFlag;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 import thaumcraft.common.warp.TCPlayerWarp;
 import thaumcraft.common.warp.TCPlayerWarpStore;
@@ -109,8 +112,50 @@ public final class TCResearchTableDiagnostics {
         TCResearchTableBlockEntity table = new TCResearchTableBlockEntity(BlockPos.ZERO, TCBlocks.RESEARCH_TABLE.get().defaultBlockState());
         table.applyTheoryDataFromSync(syncPayload);
         report.check("sync_payload_roundtrip", table.getTheoryData() != null && table.getTheoryData().getTotal("BASICS") == 100, "Client cache payload can reconstruct theory data.");
+        addNetworkPayloadChecks(report, serialized);
 
         return report.build();
+    }
+
+    private static void addNetworkPayloadChecks(TCResearchTableDiagnosticReport.Builder report, CompoundTag serializedTableData) {
+        TCPlayerKnowledge knowledge = new TCPlayerKnowledge();
+        knowledge.addResearch("THEORYRESEARCH");
+        knowledge.setResearchStage("THEORYRESEARCH", 2);
+        knowledge.setResearchFlag("THEORYRESEARCH", TCResearchFlag.RESEARCH);
+        knowledge.addRaw(TCKnowledgeType.OBSERVATION, "BASICS", 16);
+        knowledge.addRaw(TCKnowledgeType.THEORY, "AUROMANCY", 64);
+
+        TCKnowledgeClientCache.accept(TCKnowledgeSyncPayload.from(knowledge));
+        report.check("knowledge_sync_full_payload_cache",
+                TCKnowledgeClientCache.hasResearch("THEORYRESEARCH")
+                        && TCKnowledgeClientCache.researchStage("THEORYRESEARCH") == 2
+                        && TCKnowledgeClientCache.hasResearchFlag("THEORYRESEARCH", TCResearchFlag.RESEARCH)
+                        && TCKnowledgeClientCache.knowledgePoints(TCKnowledgeType.OBSERVATION, "BASICS") == 1
+                        && TCKnowledgeClientCache.knowledgePoints(TCKnowledgeType.THEORY, "AUROMANCY") == 2,
+                "Knowledge sync should now carry completed research keys, stages, flags, and raw observation/theory points for future research GUI consumers.");
+        TCKnowledgeClientCache.clear();
+
+        BlockPos pos = new BlockPos(1, 2, 3);
+        TCResearchTableActionResultPayload result = new TCResearchTableActionResultPayload(
+                pos,
+                TCResearchTableActionPayload.ACTION_DRAW_CARDS,
+                true,
+                "cards_drawn",
+                true,
+                serializedTableData
+        );
+        TCResearchTableClientCache.accept(result);
+        TCResearchTableActionResultPayload cachedResult = TCResearchTableClientCache.pollResult(pos);
+        TCResearchTableSyncPayload cachedTable = TCResearchTableClientCache.get(pos);
+        report.check("action_result_payload_updates_table_cache",
+                cachedResult != null
+                        && cachedResult.accepted()
+                        && "cards_drawn".equals(cachedResult.resultKey())
+                        && cachedTable != null
+                        && cachedTable.hasData()
+                        && cachedTable.data().getList("categoryTotals", net.minecraft.nbt.Tag.TAG_COMPOUND).size() == 3,
+                "Every research-table action result should include the authoritative table data so rejected or accepted actions cannot leave the screen stale.");
+        TCResearchTableClientCache.clear();
     }
 
     private static void addResearchAidChecks(TCResearchTableDiagnosticReport.Builder report) {

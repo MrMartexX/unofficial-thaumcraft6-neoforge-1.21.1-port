@@ -21,30 +21,42 @@ final class TCResearchTableActions {
 
     static void handle(ServerPlayer player, TCResearchTableMenu menu, TCResearchTableActionPayload payload) {
         TCResearchTableBlockEntity table = menu.blockEntity();
-        if (table == null || !menu.stillValid(player)) {
+        if (table == null) {
             return;
         }
 
-        boolean changed = switch (payload.actionId()) {
+        ActionResult result;
+        if (!menu.stillValid(player)) {
+            result = ActionResult.rejected("invalid_menu");
+        } else {
+            result = switch (payload.actionId()) {
             case TCResearchTableActionPayload.ACTION_START_THEORY -> startTheory(player, table, payload.aidKeys());
             case TCResearchTableActionPayload.ACTION_DRAW_CARDS -> drawCards(player, table);
             case TCResearchTableActionPayload.ACTION_SELECT_CARD -> selectCard(player, table, payload.choiceIndex());
             case TCResearchTableActionPayload.ACTION_COMMIT_SELECTED -> commitSelected(table);
             case TCResearchTableActionPayload.ACTION_COMPLETE_THEORY -> completeTheory(player, table);
             case TCResearchTableActionPayload.ACTION_SCRAP_THEORY -> scrapTheory(table);
-            default -> false;
-        };
-
-        if (changed) {
-            table.setChanged();
-            TCResearchTableNetwork.syncToPlayer(player, table);
-            menu.broadcastChanges();
+            case TCResearchTableActionPayload.ACTION_SELECT_AND_COMMIT -> selectAndCommit(player, table, payload.choiceIndex());
+            default -> ActionResult.rejected("unknown_action");
+            };
         }
+
+        if (result.changed()) {
+            table.setChanged();
+        }
+        menu.broadcastChanges();
+        TCResearchTableNetwork.sendActionResult(player, table, payload.actionId(), result.accepted(), result.key());
     }
 
-    private static boolean startTheory(ServerPlayer player, TCResearchTableBlockEntity table, List<String> selectedAidKeys) {
-        if (table.getTheoryData() != null || !table.hasUsableScribingTools() || table.getPaperCount() <= 0) {
-            return false;
+    private static ActionResult startTheory(ServerPlayer player, TCResearchTableBlockEntity table, List<String> selectedAidKeys) {
+        if (table.getTheoryData() != null) {
+            return ActionResult.rejected("theory_exists");
+        }
+        if (!table.hasUsableScribingTools()) {
+            return ActionResult.rejected("missing_scribing_tools");
+        }
+        if (table.getPaperCount() <= 0) {
+            return ActionResult.rejected("missing_paper");
         }
         LinkedHashSet<String> nearbyAidKeys = TCTheorycraftManager.collectNearbyAidKeys(table.getLevel(), table.getBlockPos());
         ArrayList<String> acceptedAidKeys = new ArrayList<>();
@@ -61,53 +73,70 @@ final class TCResearchTableActions {
         TCResearchTableData data = new TCResearchTableData(player);
         data.initialize(player, acceptedAidKeys);
         table.setTheoryData(data);
-        return true;
+        return ActionResult.changed("started");
     }
 
-    private static boolean drawCards(ServerPlayer player, TCResearchTableBlockEntity table) {
+    private static ActionResult drawCards(ServerPlayer player, TCResearchTableBlockEntity table) {
         TCResearchTableData data = table.getTheoryData();
-        if (data == null || data.isComplete() || !table.consumePaperFromTable()) {
-            return false;
+        if (data == null) {
+            return ActionResult.rejected("missing_theory");
+        }
+        if (data.isComplete()) {
+            return ActionResult.rejected("theory_complete");
+        }
+        if (!table.consumePaperFromTable()) {
+            return ActionResult.rejected("missing_paper");
         }
         data.drawCards(data.bonusDraws > 0 ? 3 : 2, player);
-        return true;
+        return ActionResult.changed("cards_drawn");
     }
 
-    private static boolean selectCard(ServerPlayer player, TCResearchTableBlockEntity table, int choiceIndex) {
+    private static ActionResult selectCard(ServerPlayer player, TCResearchTableBlockEntity table, int choiceIndex) {
         long now = System.currentTimeMillis();
         long previous = ANTI_SPAM.getOrDefault(player.getUUID(), 0L);
         if (now - previous < 333L) {
-            return false;
+            return ActionResult.rejected("cooldown");
         }
         ANTI_SPAM.put(player.getUUID(), now);
 
         TCResearchTableData data = table.getTheoryData();
-        if (data == null || choiceIndex < 0 || choiceIndex >= data.cardChoices.size() || !table.hasUsableScribingTools()) {
-            return false;
+        if (data == null) {
+            return ActionResult.rejected("missing_theory");
+        }
+        if (choiceIndex < 0 || choiceIndex >= data.cardChoices.size()) {
+            return ActionResult.rejected("invalid_choice");
+        }
+        if (!table.hasUsableScribingTools()) {
+            return ActionResult.rejected("missing_scribing_tools");
         }
 
         TCResearchTableData.CardChoice choice = data.cardChoices.get(choiceIndex);
+        if (choice.selected) {
+            return ActionResult.rejected("card_already_selected");
+        }
         List<ItemStack> requiredItems = choice.card.getRequiredItems();
         if (!hasRequiredItems(player, requiredItems)) {
-            return false;
+            return ActionResult.rejected("missing_required_items");
         }
-        if (!consumeRequiredItems(player, requiredItems, choice.card.getRequiredItemsConsumed())) {
-            return false;
+        ArrayList<ConsumeEntry> consumePlan = buildRequiredItemConsumePlan(player, requiredItems, choice.card.getRequiredItemsConsumed());
+        if (consumePlan == null) {
+            return ActionResult.rejected("missing_required_items");
         }
         if (!choice.card.activate(player, data)) {
-            return false;
+            return ActionResult.rejected("activation_failed");
         }
 
+        applyConsumePlan(player, consumePlan);
         table.consumeInkFromTable();
         choice.selected = true;
         data.addInspiration(-choice.card.getInspirationCost());
-        return true;
+        return ActionResult.changed("card_selected");
     }
 
-    private static boolean commitSelected(TCResearchTableBlockEntity table) {
+    private static ActionResult commitSelected(TCResearchTableBlockEntity table) {
         TCResearchTableData data = table.getTheoryData();
         if (data == null) {
-            return false;
+            return ActionResult.rejected("missing_theory");
         }
         if (data.lastDraw != null) {
             data.savedCards.add(data.lastDraw.card.getSeed());
@@ -116,28 +145,47 @@ final class TCResearchTableActions {
             if (choice.selected) {
                 data.lastDraw = choice;
                 data.cardChoices.clear();
-                return true;
+                return ActionResult.changed("selected_card_committed");
             }
         }
-        return false;
+        return ActionResult.rejected("no_selected_card");
     }
 
-    private static boolean completeTheory(ServerPlayer player, TCResearchTableBlockEntity table) {
+    private static ActionResult selectAndCommit(ServerPlayer player, TCResearchTableBlockEntity table, int choiceIndex) {
+        ActionResult selected = selectCard(player, table, choiceIndex);
+        if (!selected.accepted()) {
+            return selected;
+        }
+
+        ActionResult committed = commitSelected(table);
+        if (!committed.accepted()) {
+            return committed;
+        }
+        return ActionResult.changed("selected_card_committed");
+    }
+
+    private static ActionResult completeTheory(ServerPlayer player, TCResearchTableBlockEntity table) {
         TCResearchTableData data = table.getTheoryData();
-        if (data == null || !data.isComplete()) {
-            return false;
+        if (data == null) {
+            return ActionResult.rejected("missing_theory");
+        }
+        if (!data.isComplete()) {
+            return ActionResult.rejected("theory_incomplete");
         }
         table.finishTheory(player);
-        return true;
+        return ActionResult.changed("theory_completed");
     }
 
-    private static boolean scrapTheory(TCResearchTableBlockEntity table) {
+    private static ActionResult scrapTheory(TCResearchTableBlockEntity table) {
         TCResearchTableData data = table.getTheoryData();
-        if (data == null || data.isComplete()) {
-            return false;
+        if (data == null) {
+            return ActionResult.rejected("missing_theory");
+        }
+        if (data.isComplete()) {
+            return ActionResult.rejected("theory_complete");
         }
         table.setTheoryData(null);
-        return true;
+        return ActionResult.changed("theory_scrapped");
     }
 
     static boolean hasRequiredItems(ServerPlayer player, List<ItemStack> requiredItems) {
@@ -153,31 +201,47 @@ final class TCResearchTableActions {
     }
 
     static boolean consumeRequiredItems(ServerPlayer player, List<ItemStack> requiredItems, List<Boolean> consumed) {
+        ArrayList<ConsumeEntry> plan = buildRequiredItemConsumePlan(player, requiredItems, consumed);
+        if (plan == null) {
+            return false;
+        }
+        applyConsumePlan(player, plan);
+        return true;
+    }
+
+    private static ArrayList<ConsumeEntry> buildRequiredItemConsumePlan(
+            ServerPlayer player,
+            List<ItemStack> requiredItems,
+            List<Boolean> consumed
+    ) {
+        ArrayList<ConsumeEntry> plan = new ArrayList<>();
         if (requiredItems == null || requiredItems.isEmpty()) {
-            return true;
+            return plan;
         }
         if (consumed == null || consumed.size() != requiredItems.size()) {
-            return true;
+            return plan;
         }
 
-        ArrayList<ConsumeEntry> plan = new ArrayList<>();
         ArrayList<ItemStack> simulated = new ArrayList<>();
         for (ItemStack stack : player.getInventory().items) {
             simulated.add(stack.copy());
         }
-
         for (int requirementIndex = 0; requirementIndex < requiredItems.size(); requirementIndex++) {
             if (!Boolean.TRUE.equals(consumed.get(requirementIndex))) {
                 continue;
             }
             ItemStack required = requiredItems.get(requirementIndex);
             if (!planRequirement(simulated, required, plan)) {
-                return false;
+                return null;
             }
         }
 
+        return plan;
+    }
+
+    private static void applyConsumePlan(ServerPlayer player, ArrayList<ConsumeEntry> plan) {
         if (plan.isEmpty()) {
-            return true;
+            return;
         }
 
         Inventory inventory = player.getInventory();
@@ -187,7 +251,6 @@ final class TCResearchTableActions {
             }
         }
         inventory.setChanged();
-        return true;
     }
 
     private static boolean isRequirementSatisfied(ServerPlayer player, ItemStack required) {
@@ -234,5 +297,15 @@ final class TCResearchTableActions {
     }
 
     private record ConsumeEntry(int slot, int amount) {
+    }
+
+    private record ActionResult(boolean accepted, String key, boolean changed) {
+        private static ActionResult changed(String key) {
+            return new ActionResult(true, key, true);
+        }
+
+        private static ActionResult rejected(String key) {
+            return new ActionResult(false, key, false);
+        }
     }
 }

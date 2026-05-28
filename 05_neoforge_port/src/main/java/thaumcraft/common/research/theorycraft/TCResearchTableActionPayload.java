@@ -15,6 +15,7 @@ public record TCResearchTableActionPayload(int actionId, int choiceIndex, List<S
     public static final int ACTION_SELECT_CARD = 4;
     public static final int ACTION_COMPLETE_THEORY = 7;
     public static final int ACTION_SCRAP_THEORY = 9;
+    public static final int ACTION_SELECT_AND_COMMIT = 10;
     private static final int MAX_AID_KEYS = 64;
 
     public static final Type<TCResearchTableActionPayload> TYPE = new Type<>(
@@ -33,7 +34,7 @@ public record TCResearchTableActionPayload(int actionId, int choiceIndex, List<S
 
             ArrayList<String> aidKeys = new ArrayList<>(aidCount);
             for (int index = 0; index < aidCount; index++) {
-                aidKeys.add(buffer.readUtf());
+                aidKeys.add(buffer.readUtf(256));
             }
             return new TCResearchTableActionPayload(actionId, choiceIndex, aidKeys);
         }
@@ -44,7 +45,7 @@ public record TCResearchTableActionPayload(int actionId, int choiceIndex, List<S
             buffer.writeVarInt(payload.choiceIndex());
             buffer.writeVarInt(payload.aidKeys().size());
             for (String aidKey : payload.aidKeys()) {
-                buffer.writeUtf(aidKey);
+                buffer.writeUtf(aidKey, 256);
             }
         }
     };
@@ -55,6 +56,9 @@ public record TCResearchTableActionPayload(int actionId, int choiceIndex, List<S
 
     public TCResearchTableActionPayload {
         aidKeys = aidKeys == null ? List.of() : List.copyOf(aidKeys);
+        if (aidKeys.size() > MAX_AID_KEYS) {
+            throw new IllegalArgumentException("Too many research table aid keys: " + aidKeys.size());
+        }
     }
 
     @Override

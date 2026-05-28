@@ -58,6 +58,8 @@
 | card_reactions_activation | PASS | Legacy CardReactions requires two different aspect crystals and adds 25 ALCHEMY. |
 | card_synthesis_activation | PASS | Legacy CardSynthesis consumes two component crystals, adds 40 ALCHEMY and creates the compound crystal when a player is present. |
 | sync_payload_roundtrip | PASS | Client cache payload can reconstruct theory data. |
+| knowledge_sync_full_payload_cache | PASS | Knowledge sync should now carry completed research keys, stages, flags, and raw observation/theory points for future research GUI consumers. |
+| action_result_payload_updates_table_cache | PASS | Every research-table action result should include the authoritative table data so rejected or accepted actions cannot leave the screen stale. |
 
-Passed: 56
+Passed: 58
 Failed: 0

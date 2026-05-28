@@ -13,6 +13,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.menu.TCResearchTableMenu;
 import thaumcraft.common.research.theorycraft.TCResearchTableActionPayload;
+import thaumcraft.common.research.theorycraft.TCResearchTableActionResultPayload;
 import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
 import thaumcraft.common.research.theorycraft.TCResearchTableData;
 import thaumcraft.common.research.theorycraft.TCResearchTableSyncPayload;
@@ -33,6 +34,8 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     private List<String> currentAids = List.of();
     private final LinkedHashSet<String> selectedAids = new LinkedHashSet<>();
     private int nextAidCheckTick;
+    private Component lastActionMessage = Component.empty();
+    private int lastActionMessageTicks;
 
     public TCResearchTableScreen(TCResearchTableMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -76,8 +79,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             cardButtons[index] = addRenderableWidget(Button.builder(
                             Component.empty(),
                             button -> {
-                                sendAction(TCResearchTableActionPayload.ACTION_SELECT_CARD, choice);
-                                sendAction(TCResearchTableActionPayload.ACTION_COMMIT_SELECTED, -1);
+                                sendAction(TCResearchTableActionPayload.ACTION_SELECT_AND_COMMIT, choice);
                             }
                     )
                     .bounds(leftPos + 16 + index * 72, topPos + 54, 68, 18)
@@ -90,6 +92,9 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     protected void containerTick() {
         applyLatestSync();
         refreshCurrentAids();
+        if (lastActionMessageTicks > 0) {
+            lastActionMessageTicks--;
+        }
         updateButtons();
     }
 
@@ -111,6 +116,9 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         TCResearchTableData data = currentData();
+        if (lastActionMessageTicks > 0) {
+            guiGraphics.drawString(font, lastActionMessage, 76, 176, 0x5A3A08, false);
+        }
         if (data == null) {
             return;
         }
@@ -155,6 +163,13 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         TCResearchTableBlockEntity table = menu.blockEntity();
         if (table == null) {
             return;
+        }
+
+        TCResearchTableActionResultPayload result = TCResearchTableClientCache.pollResult(menu.blockPos());
+        if (result != null) {
+            table.applyTheoryDataFromSync(result.toTableSyncPayload());
+            lastActionMessage = Component.translatable("gui.thaumcraft.research_table.action." + result.resultKey());
+            lastActionMessageTicks = result.accepted() ? 40 : 80;
         }
 
         TCResearchTableSyncPayload payload = TCResearchTableClientCache.get(menu.blockPos());
