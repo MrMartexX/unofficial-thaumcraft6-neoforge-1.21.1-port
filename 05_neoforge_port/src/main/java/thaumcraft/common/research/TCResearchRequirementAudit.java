@@ -107,7 +107,7 @@ final class TCResearchRequirementAudit {
             writer.newLine();
             writer.write("| `required_knowledge` | `" + report.knowledgeResolved() + "/" + report.knowledgeTotal() + "` resolved |");
             writer.newLine();
-            writer.write("| Total unresolved item/craft/knowledge requirements | `" + report.unresolvedTotal() + "` |");
+            writer.write("| Total unresolved item/craft/knowledge requirements | `" + report.unresolvedTotal() + "` |>");
             writer.newLine();
             writer.write("| Identity bridge / placeholder warnings | `" + report.bridgeWarningTotal() + "` |");
             writer.newLine();
@@ -116,7 +116,7 @@ final class TCResearchRequirementAudit {
             writer.newLine();
             writer.write("Bridge warnings are not parser failures. They mark requirements whose registry identity is resolvable, but whose final gameplay source, item semantics, recipe flow, or legacy container/component behavior is still a migration boundary.");
             writer.newLine();
-            writer.write("Aspect stack, stored-enchantment and legacy item component requirements are no longer counted as bridge warnings when their legacy NBT/metadata semantics are carried by modern DataComponent or vanilla enchantment-component payloads. Safe 1.12-to-1.21 identity remaps and implemented research-table/scribing-tools requirements are also not counted as bridge warnings.");
+            writer.write("Aspect stack, stored-enchantment and legacy item component requirements are no longer counted as bridge warnings when their legacy NBT/metadata semantics are carried by modern DataComponent or vanilla enchantment-component payloads. Safe 1.12-to-1.21 identity remaps, implemented research-table/scribing-tools requirements and implemented Thaumium tool items are also not counted as bridge warnings.");
             writer.newLine();
             writer.newLine();
             writer.write("## Unresolved Summary");
@@ -300,11 +300,6 @@ final class TCResearchRequirementAudit {
                  "thaumcraft:smelter_basic",
                  "thaumcraft:tallow" -> "alchemy placeholder before crucible/smelter/container semantics";
             case "thaumcraft:infusion_matrix" -> "infusion placeholder before multiblock/recipe semantics";
-            case "thaumcraft:thaumium_axe",
-                 "thaumcraft:thaumium_hoe",
-                 "thaumcraft:thaumium_pick",
-                 "thaumcraft:thaumium_shovel",
-                 "thaumcraft:thaumium_sword" -> "thaumium tool placeholder before tool material/enchant/repair semantics";
             case "thaumcraft:mirrored_glass" -> "artifice mirror placeholder before mirror behavior";
             case "thaumcraft:brain" -> "biological component identity before golem/brain subsystem semantics";
             case "thaumcraft:curio" -> "curio metadata identity bridge";
