@@ -20,9 +20,9 @@ public final class TCTheorycraftManager {
     public static final String AID_BASIC_ARTIFICE = "thaumcraft.common.lib.research.theorycraft.AidBasicArtifice";
     public static final String AID_BASIC_AUROMANCY = "thaumcraft.common.lib.research.theorycraft.AidBasicAuromancy";
     public static final String AID_BASIC_INFUSION = "thaumcraft.common.lib.research.theorycraft.AidBasicInfusion";
+    public static final String AID_BASIC_GOLEMANCY = "thaumcraft.common.lib.research.theorycraft.AidBasicGolemancy";
     public static final String AID_ENCHANTMENT_TABLE = "thaumcraft.common.lib.research.theorycraft.AidEnchantmentTable";
     public static final String AID_BEACON = "thaumcraft.common.lib.research.theorycraft.AidBeacon";
-    public static final String AID_DRAGON_EGG = "thaumcraft.common.lib.research.theorycraft.AidDragonEgg";
     static final int AID_HORIZONTAL_RADIUS = 4;
     static final int AID_VERTICAL_RADIUS = 1;
     static final double AID_ENTITY_RANGE = 5.0D;
@@ -62,7 +62,6 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.common.lib.research.theorycraft.CardTinker", CardTinker::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter", CardMindOverMatter::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardScripting", CardScripting::new);
-        registerCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg", CardDragonEgg::new);
 
         registerAid(TCTheorycraftAid.block(
                 AID_BOOKSHELF,
@@ -98,6 +97,16 @@ public final class TCTheorycraftManager {
                 )
         ));
         registerAid(TCTheorycraftAid.block(
+                AID_BASIC_INFUSION,
+                () -> new ItemStack(TCBlocks.INFUSION_MATRIX.get()),
+                state -> state.is(TCBlocks.INFUSION_MATRIX.get()),
+                List.of(
+                        "thaumcraft.common.lib.research.theorycraft.CardMeasure",
+                        "thaumcraft.common.lib.research.theorycraft.CardChannel",
+                        "thaumcraft.common.lib.research.theorycraft.CardInfuse"
+                )
+        ));
+        registerAid(TCTheorycraftAid.block(
                 AID_BASIC_AUROMANCY,
                 () -> new ItemStack(TCBlocks.WAND_WORKBENCH.get()),
                 state -> state.is(TCBlocks.WAND_WORKBENCH.get()),
@@ -108,13 +117,13 @@ public final class TCTheorycraftManager {
                 )
         ));
         registerAid(TCTheorycraftAid.block(
-                AID_BASIC_INFUSION,
-                () -> new ItemStack(TCBlocks.INFUSION_MATRIX.get()),
-                state -> state.is(TCBlocks.INFUSION_MATRIX.get()),
+                AID_BASIC_GOLEMANCY,
+                () -> new ItemStack(TCBlocks.GOLEM_BUILDER.get()),
+                state -> state.is(TCBlocks.GOLEM_BUILDER.get()),
                 List.of(
-                        "thaumcraft.common.lib.research.theorycraft.CardMeasure",
-                        "thaumcraft.common.lib.research.theorycraft.CardChannel",
-                        "thaumcraft.common.lib.research.theorycraft.CardInfuse"
+                        "thaumcraft.common.lib.research.theorycraft.CardSculpting",
+                        "thaumcraft.common.lib.research.theorycraft.CardScripting",
+                        "thaumcraft.common.lib.research.theorycraft.CardSynergy"
                 )
         ));
         registerAid(TCTheorycraftAid.block(
@@ -128,12 +137,6 @@ public final class TCTheorycraftManager {
                 new ItemStack(Blocks.BEACON),
                 state -> state.is(Blocks.BEACON),
                 List.of("thaumcraft.common.lib.research.theorycraft.CardBeacon")
-        ));
-        registerAid(TCTheorycraftAid.block(
-                AID_DRAGON_EGG,
-                new ItemStack(Blocks.DRAGON_EGG),
-                state -> state.is(Blocks.DRAGON_EGG),
-                List.of("thaumcraft.common.lib.research.theorycraft.CardDragonEgg")
         ));
     }
 

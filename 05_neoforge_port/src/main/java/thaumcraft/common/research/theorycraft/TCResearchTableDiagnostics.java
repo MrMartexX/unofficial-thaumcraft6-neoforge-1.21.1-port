@@ -73,7 +73,7 @@ public final class TCResearchTableDiagnostics {
         report.check("finish_theory_penalty_raw", awards.getOrDefault("ALCHEMY", -1) == 2, "10% ALCHEMY after penalty rounds down from 3 to 2 raw.");
 
         report.check("public_api_card_registry_count", registeredCardCount("thaumcraft.api.research.theorycraft.") == 9, "The public/API theorycraft card slice should keep the original 9 card ids.");
-        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 27
+        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 26
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMeasure")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardReactions")
@@ -91,8 +91,8 @@ public final class TCResearchTableDiagnostics {
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardTinker")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMindOverMatter")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardScripting")
-                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg"),
-                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy, Artifice item-option, Basic Auromancy and basic Infusion option cards only.");
+                        && !hasCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg"),
+                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy, Artifice item-option, Basic Auromancy, basic Infusion and Basic Golemancy option cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
         addWarpBridgeChecks(report);
         addResearchAidChecks(report);
@@ -130,19 +130,17 @@ public final class TCResearchTableDiagnostics {
 
         TCTheorycraftAid enchantmentTable = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_ENCHANTMENT_TABLE);
         TCTheorycraftAid beacon = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BEACON);
-        TCTheorycraftAid dragonEgg = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_DRAGON_EGG);
         report.check("vanilla_aid_registry", enchantmentTable != null
                         && enchantmentTable.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardEnchantment"))
                         && beacon != null
-                        && beacon.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardBeacon"))
-                        && dragonEgg != null
-                        && dragonEgg.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardDragonEgg")),
-                "The active vanilla aid slice should contain bookshelf, enchanting table, beacon and dragon egg aids.");
+                        && beacon.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardBeacon")),
+                "The active vanilla aid slice should contain bookshelf, enchanting table and beacon aids; AidDragonEgg exists in legacy classes but is not registered by ConfigResearch.");
 
         TCTheorycraftAid basicAlchemy = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_ALCHEMY);
         TCTheorycraftAid basicArtifice = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_ARTIFICE);
         TCTheorycraftAid basicAuromancy = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_AUROMANCY);
         TCTheorycraftAid basicInfusion = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_INFUSION);
+        TCTheorycraftAid basicGolemancy = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_GOLEMANCY);
         List<String> expectedAlchemyCards = List.of(
                 "thaumcraft.common.lib.research.theorycraft.CardConcentrate",
                 "thaumcraft.common.lib.research.theorycraft.CardReactions",
@@ -163,6 +161,11 @@ public final class TCResearchTableDiagnostics {
                 "thaumcraft.common.lib.research.theorycraft.CardChannel",
                 "thaumcraft.common.lib.research.theorycraft.CardInfuse"
         );
+        List<String> expectedGolemancyCards = List.of(
+                "thaumcraft.common.lib.research.theorycraft.CardSculpting",
+                "thaumcraft.common.lib.research.theorycraft.CardScripting",
+                "thaumcraft.common.lib.research.theorycraft.CardSynergy"
+        );
         report.check("basic_block_aid_registry", TCTheorycraftManager.aids().size() == 8
                         && basicAlchemy != null
                         && basicAlchemy.cardKeys().equals(expectedAlchemyCards)
@@ -171,22 +174,26 @@ public final class TCResearchTableDiagnostics {
                         && basicAuromancy != null
                         && basicAuromancy.cardKeys().equals(expectedAuromancyCards)
                         && basicInfusion != null
-                        && basicInfusion.cardKeys().equals(expectedInfusionCards),
-                "Legacy basic block aids now bridge crucible, arcane workbench, wand workbench and infusion matrix card injection.");
+                        && basicInfusion.cardKeys().equals(expectedInfusionCards)
+                        && basicGolemancy != null
+                        && basicGolemancy.cardKeys().equals(expectedGolemancyCards),
+                "Legacy basic block aids now bridge crucible, arcane workbench, infusion matrix, wand workbench and golem press card injection.");
 
         TCResearchTableData basicAidData = new TCResearchTableData();
         basicAidData.initializeWithFixedInspirationForDiagnostics("Martin", 6, List.of(
                 TCTheorycraftManager.AID_BASIC_ALCHEMY,
+                TCTheorycraftManager.AID_BASIC_INFUSION,
                 TCTheorycraftManager.AID_BASIC_AUROMANCY,
-                TCTheorycraftManager.AID_BASIC_INFUSION
+                TCTheorycraftManager.AID_BASIC_GOLEMANCY
         ));
         ArrayList<String> expectedBasicAidCards = new ArrayList<>();
         expectedBasicAidCards.addAll(expectedAlchemyCards);
-        expectedBasicAidCards.addAll(expectedAuromancyCards);
         expectedBasicAidCards.addAll(expectedInfusionCards);
-        report.check("basic_block_aid_initialize_data", basicAidData.aidsChosen == 3
+        expectedBasicAidCards.addAll(expectedAuromancyCards);
+        expectedBasicAidCards.addAll(expectedGolemancyCards);
+        report.check("basic_block_aid_initialize_data", basicAidData.aidsChosen == 4
                         && basicAidData.inspirationStart == 6
-                        && basicAidData.inspiration == 3
+                        && basicAidData.inspiration == 2
                         && basicAidData.aidCards.equals(expectedBasicAidCards),
                 "Selected basic block aids should reduce initial inspiration and append their legacy card ids in selection order.");
     }
@@ -325,17 +332,8 @@ public final class TCResearchTableDiagnostics {
                         && table.getScribingTools().getDamageValue() == 1,
                 "Legacy CardScripting consumes one extra paper and one extra ink from the research table, then adds 25 GOLEMANCY.");
 
-        TCResearchTableData dragonEggData = new TCResearchTableData();
-        CardDragonEgg dragonEgg = new CardDragonEgg();
-        dragonEgg.setSeed(0L);
-        boolean dragonEggActivated = dragonEgg.activate(null, dragonEggData);
-        int dragonEggTotal = sumTotals(dragonEggData);
-        report.check("card_dragon_egg_activation", dragonEggActivated
-                        && dragonEgg.isAidOnly()
-                        && dragonEgg.getInspirationCost() == 1
-                        && dragonEggTotal >= 20
-                        && dragonEggTotal <= 50,
-                "Legacy CardDragonEgg is aid-only and performs ten random +2..+5 category-total grants.");
+        report.check("card_dragon_egg_not_registered", !hasCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg"),
+                "The decompiled CardDragonEgg class is left as reference code only; original ConfigResearch does not register it.");
     }
 
     private static void addAlchemyCardActivationChecks(TCResearchTableDiagnosticReport.Builder report) {
@@ -484,14 +482,6 @@ public final class TCResearchTableDiagnostics {
         return stacks.size() > index
                 && !stacks.get(index).isEmpty()
                 && stacks.get(index).get(TCDataComponents.ASPECT_STACK.get()) != null;
-    }
-
-    private static int sumTotals(TCResearchTableData data) {
-        int sum = 0;
-        for (int amount : data.categoryTotals.values()) {
-            sum += amount;
-        }
-        return sum;
     }
 
     private static ArrayList<ItemStack> copyMainInventory(ServerPlayer player) {

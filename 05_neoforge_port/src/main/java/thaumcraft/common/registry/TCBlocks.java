@@ -69,6 +69,7 @@ public final class TCBlocks {
     public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> furnaceLikeBlock());
     public static final Supplier<Block> WAND_WORKBENCH = BLOCKS.register("wand_workbench", () -> workbenchBlock());
     public static final Supplier<Block> INFUSION_MATRIX = BLOCKS.register("infusion_matrix", () -> stoneBlock(5.0F, 1200.0F));
+    public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
 
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
@@ -149,6 +150,13 @@ public final class TCBlocks {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLOWSTONE)
                 .strength(0.3F, 0.3F)
                 .lightLevel(state -> lightLevel));
+    }
+
+    private static Block golemBuilderBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(1.5F, 2.0F)
+                .sound(SoundType.STONE)
+                .noOcclusion());
     }
 
     private static Block amberBlock() {
