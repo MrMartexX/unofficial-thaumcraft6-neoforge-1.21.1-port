@@ -1,9 +1,11 @@
 package thaumcraft.client.gui;
 
+import com.mojang.math.Axis;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -16,6 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.menu.TCResearchTableMenu;
+import thaumcraft.common.research.TCResearchCategoryDefinition;
+import thaumcraft.common.research.TCResearchManager;
 import thaumcraft.common.research.theorycraft.TCResearchTableActionPayload;
 import thaumcraft.common.research.theorycraft.TCResearchTableActionResultPayload;
 import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
@@ -39,7 +43,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/aspects/_unknown.png");
     private static final int AID_RECHECK_TICKS = 100;
     private static final int BASE_INSPIRATION_PREVIEW = 5;
-    private static final int CARD_SHEET_SIZE = 92;
+    private static final int CARD_SHEET_SIZE = 96;
     private static final int CARD_HIT_WIDTH = 100;
     private static final int CARD_HIT_HEIGHT = 120;
     private static final int CARD_SPACING = 74;
@@ -357,10 +361,10 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             renderBlankDrawStack(guiGraphics);
         }
         if (!data.savedCards.isEmpty()) {
-            renderSavedStack(guiGraphics, Math.min(data.savedCards.size(), 6));
+            renderSavedStack(guiGraphics, data);
         }
         if (data.lastDraw != null) {
-            renderSmallSheet(guiGraphics, leftPos + 191, topPos + 100, data.lastDraw.fromAid, 0.72F, 1.0F);
+            renderSmallSheet(guiGraphics, leftPos + 191, topPos + 100, data.lastDraw.fromAid, 0.72F, 1.0F, data.lastDraw.card.getSeed(), 0.15F);
         }
         for (int index = 0; index < data.cardChoices.size(); index++) {
             renderCardChoice(guiGraphics, data.cardChoices.get(index), index, mouseX, mouseY);
@@ -369,14 +373,16 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
     private void renderBlankDrawStack(GuiGraphics guiGraphics) {
         for (int index = 2; index >= 0; index--) {
-            renderSmallSheet(guiGraphics, leftPos + 65 + index * 2, topPos + 100 - index, false, 0.68F, 0.85F);
+            renderSmallSheet(guiGraphics, leftPos + 65 + index * 2, topPos + 100 - index, false, 0.68F, 0.85F, 5521L + index * 173L, 0.65F);
         }
         guiGraphics.blit(UNKNOWN, leftPos + 57, topPos + 91, 0, 0, 16, 16, 16, 16);
     }
 
-    private void renderSavedStack(GuiGraphics guiGraphics, int count) {
+    private void renderSavedStack(GuiGraphics guiGraphics, TCResearchTableData data) {
+        int count = Math.min(data.savedCards.size(), 6);
         for (int index = 0; index < count; index++) {
-            renderSmallSheet(guiGraphics, leftPos + 191 + index, topPos + 100 - index, false, 0.66F, 0.72F);
+            long seed = data.savedCards.get(index);
+            renderSmallSheet(guiGraphics, leftPos + 191 + index, topPos + 100 - index, false, 0.66F, 0.72F, seed, 0.45F);
         }
     }
 
@@ -394,21 +400,86 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         float scale = hovered && !selected ? 1.06F : 1.0F;
         float alpha = selected ? 0.72F : 1.0F;
 
-        renderSmallSheet(guiGraphics, centerX, centerY, choice.fromAid, scale, alpha);
-        if (hovered && !selected) {
-            guiGraphics.fill(centerX - 42, centerY - 46, centerX + 42, centerY + 48, 0x24FFFFFF);
-        }
-        renderCardContents(guiGraphics, choice, centerX, centerY, selected);
+        renderCardSheet(guiGraphics, centerX, centerY, choice, scale, alpha, hovered, selected);
     }
 
-    private void renderSmallSheet(GuiGraphics guiGraphics, int centerX, int centerY, boolean gilded, float scale, float alpha) {
-        float drawSize = CARD_SHEET_SIZE * scale;
-        float textureScale = drawSize / 256.0F;
+    private void renderCardSheet(
+            GuiGraphics guiGraphics,
+            int centerX,
+            int centerY,
+            TCResearchTableData.CardChoice choice,
+            float scale,
+            float alpha,
+            boolean hovered,
+            boolean selected
+    ) {
+        Random random = new Random(choice.card.getSeed());
+        float offsetX = (float) random.nextGaussian();
+        float offsetY = (float) random.nextGaussian();
+        float rotation = (float) (random.nextGaussian() * (selected ? 0.15D : 0.8D));
+
         guiGraphics.pose().pushPose();
-        guiGraphics.pose().translate(centerX - drawSize / 2.0F, centerY - drawSize / 2.0F, 0.0F);
-        guiGraphics.pose().scale(textureScale, textureScale, 1.0F);
+        guiGraphics.pose().translate(centerX + offsetX, centerY + offsetY, 0.0F);
+        guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(rotation));
+        guiGraphics.pose().scale(scale, scale, 1.0F);
+        renderLocalPaper(guiGraphics, choice.fromAid, alpha, random);
+        renderCardCategoryWatermark(guiGraphics, choice.card.getResearchCategory(), alpha);
+        if (hovered && !selected) {
+            guiGraphics.fill(-42, -46, 42, 48, 0x24FFFFFF);
+        }
+        renderCardContents(guiGraphics, choice, selected);
+        guiGraphics.pose().popPose();
+    }
+
+    private void renderSmallSheet(
+            GuiGraphics guiGraphics,
+            int centerX,
+            int centerY,
+            boolean gilded,
+            float scale,
+            float alpha,
+            long seed,
+            float tilt
+    ) {
+        Random random = new Random(seed);
+        float offsetX = (float) random.nextGaussian();
+        float offsetY = (float) random.nextGaussian();
+        float rotation = (float) (random.nextGaussian() * tilt);
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(centerX + offsetX, centerY + offsetY, 0.0F);
+        guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(rotation));
+        guiGraphics.pose().scale(scale, scale, 1.0F);
+        renderLocalPaper(guiGraphics, gilded, alpha, random);
+        guiGraphics.pose().popPose();
+    }
+
+    private void renderLocalPaper(GuiGraphics guiGraphics, boolean gilded, float alpha, Random random) {
+        float textureScale = CARD_SHEET_SIZE / 256.0F;
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(random.nextBoolean() ? -textureScale : textureScale, random.nextBoolean() ? -textureScale : textureScale, 1.0F);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, alpha);
-        guiGraphics.blit(gilded ? PAPER_GILDED : PAPER, 0, 0, 0, 0, 256, 256, 256, 256);
+        guiGraphics.blit(gilded ? PAPER_GILDED : PAPER, -128, -128, 0, 0, 256, 256, 256, 256);
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        guiGraphics.pose().popPose();
+    }
+
+    private void renderCardCategoryWatermark(GuiGraphics guiGraphics, String category, float alpha) {
+        if (category == null || category.isBlank()) {
+            return;
+        }
+
+        Optional<TCResearchCategoryDefinition> definition = TCResearchManager.categories().stream()
+                .filter(candidate -> candidate.key().equalsIgnoreCase(category.trim()))
+                .findFirst();
+        if (definition.isEmpty() || definition.get().icon() == null) {
+            return;
+        }
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(48.0F / 255.0F, 48.0F / 255.0F, 1.0F);
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, Math.min(0.18F, alpha / 5.5F));
+        guiGraphics.blit(definition.get().icon(), -128, -128, 0, 0, 255, 255, 255, 255);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         guiGraphics.pose().popPose();
     }
@@ -416,18 +487,16 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     private void renderCardContents(
             GuiGraphics guiGraphics,
             TCResearchTableData.CardChoice choice,
-            int centerX,
-            int centerY,
             boolean selected
     ) {
         int textColor = selected ? 0x7A5A2A : 0x2D1A08;
-        int left = centerX - 42;
-        int top = centerY - 42;
+        int left = -42;
+        int top = -42;
         int width = 84;
-        drawCenteredTrimmed(guiGraphics, font, choice.card.getLocalizedName(), centerX, top + 7, width, textColor);
+        drawCenteredTrimmed(guiGraphics, font, choice.card.getLocalizedName(), 0, top + 7, width, textColor);
         drawWrapped(guiGraphics, choice.card.getLocalizedText(), left + 6, top + 21, width - 12, 5, textColor);
-        renderCardCost(guiGraphics, choice.card.getInspirationCost(), left + 5, centerY + 23);
-        renderRequiredItems(guiGraphics, choice, centerX, centerY + 31);
+        renderCardCost(guiGraphics, choice.card.getInspirationCost(), left + 5, 23);
+        renderRequiredItems(guiGraphics, choice, 0, 31);
     }
 
     private void renderCardCost(GuiGraphics guiGraphics, int cost, int x, int y) {
