@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
-record TCResearchCategoryDefinition(
+public record TCResearchCategoryDefinition(
         String key,
         String requiredResearch,
         AspectList formula,
