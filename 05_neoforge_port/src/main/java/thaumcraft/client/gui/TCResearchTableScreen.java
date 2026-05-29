@@ -3,25 +3,19 @@ package thaumcraft.client.gui;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.menu.TCResearchTableMenu;
 import thaumcraft.common.research.theorycraft.TCResearchTableActionPayload;
-import thaumcraft.common.research.theorycraft.TCResearchTableActionResultPayload;
 import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
 import thaumcraft.common.research.theorycraft.TCResearchTableData;
 import thaumcraft.common.research.theorycraft.TCResearchTableSyncPayload;
-import thaumcraft.common.research.theorycraft.TCTheorycraftCard;
 import thaumcraft.common.research.theorycraft.TCTheorycraftAid;
 import thaumcraft.common.research.theorycraft.TCTheorycraftManager;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
@@ -29,29 +23,29 @@ import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTableMenu> {
     private static final ResourceLocation BACKGROUND =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/gui_research_table.png");
-    private static final ResourceLocation BASE =
+    private static final ResourceLocation GUI_BASE =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/gui_base.png");
-    private static final ResourceLocation PAPER =
-            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/paper.png");
-    private static final ResourceLocation PAPER_GILDED =
-            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/papergilded.png");
-    private static final ResourceLocation UNKNOWN =
-            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/aspects/_unknown.png");
     private static final int AID_RECHECK_TICKS = 100;
-    private static final int CARD_SHEET_SIZE = 92;
-    private static final int CARD_HIT_WIDTH = 100;
-    private static final int CARD_HIT_HEIGHT = 120;
-    private static final int CARD_SPACING = 74;
+    private static final int BASE_INSPIRATION_PREVIEW = 5;
 
-    private Button createButton;
-    private Button completeButton;
-    private Button scrapButton;
+    private static final int BUTTON_U = 37;
+    private static final int BUTTON_V = 66;
+    private static final int BUTTON_TEX_WIDTH = 51;
+    private static final int BUTTON_TEX_HEIGHT = 13;
+    private static final int BUTTON_HIT_WIDTH = 49;
+    private static final int BUTTON_HIT_HEIGHT = 11;
+
+    private boolean createVisible;
+    private boolean createActive;
+    private boolean completeVisible;
+    private boolean completeActive;
+    private boolean scrapVisible;
+    private boolean scrapActive;
     private Button drawButton;
+    private final Button[] cardButtons = new Button[3];
     private List<String> currentAids = List.of();
     private final LinkedHashSet<String> selectedAids = new LinkedHashSet<>();
     private int nextAidCheckTick;
-    private Component lastActionMessage = Component.empty();
-    private int lastActionMessageTicks;
 
     public TCResearchTableScreen(TCResearchTableMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -66,30 +60,24 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     @Override
     protected void init() {
         super.init();
-        createButton = addRenderableWidget(Button.builder(
-                        Component.translatable("button.create.theory"),
-                        button -> sendStartTheory()
-                )
-                .bounds(leftPos + 126, topPos + 20, 72, 16)
-                .build());
-        completeButton = addRenderableWidget(Button.builder(
-                        Component.translatable("button.complete.theory"),
-                        button -> sendAction(TCResearchTableActionPayload.ACTION_COMPLETE_THEORY, -1)
-                )
-                .bounds(leftPos + 186, topPos + 94, 74, 16)
-                .build());
-        scrapButton = addRenderableWidget(Button.builder(
-                        Component.translatable("button.scrap.theory"),
-                        button -> sendAction(TCResearchTableActionPayload.ACTION_SCRAP_THEORY, -1)
-                )
-                .bounds(leftPos + 126, topPos + 166, 72, 16)
-                .build());
         drawButton = addRenderableWidget(Button.builder(
                         Component.literal("?"),
                         button -> sendAction(TCResearchTableActionPayload.ACTION_DRAW_CARDS, -1)
                 )
                 .bounds(leftPos + 52, topPos + 88, 28, 20)
                 .build());
+        for (int index = 0; index < cardButtons.length; index++) {
+            final int choice = index;
+            cardButtons[index] = addRenderableWidget(Button.builder(
+                            Component.empty(),
+                            button -> {
+                                sendAction(TCResearchTableActionPayload.ACTION_SELECT_CARD, choice);
+                                sendAction(TCResearchTableActionPayload.ACTION_COMMIT_SELECTED, -1);
+                            }
+                    )
+                    .bounds(leftPos + 16 + index * 72, topPos + 54, 68, 18)
+                    .build());
+        }
         updateButtons();
     }
 
@@ -97,9 +85,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     protected void containerTick() {
         applyLatestSync();
         refreshCurrentAids();
-        if (lastActionMessageTicks > 0) {
-            lastActionMessageTicks--;
-        }
         updateButtons();
     }
 
@@ -110,27 +95,23 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         updateButtons();
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderTooltip(guiGraphics, mouseX, mouseY);
-        renderCustomTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
         guiGraphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+        renderInspirationIcons(guiGraphics);
+        renderLegacyActionButtons(guiGraphics, mouseX, mouseY);
         renderAidSelection(guiGraphics, mouseX, mouseY);
-        renderTheorySheets(guiGraphics, mouseX, mouseY);
     }
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         TCResearchTableData data = currentData();
-        if (lastActionMessageTicks > 0) {
-            guiGraphics.drawString(font, lastActionMessage, 76, 176, 0x5A3A08, false);
-        }
         if (data == null) {
             return;
         }
 
-        guiGraphics.drawString(font, data.inspiration + "/" + data.inspirationStart, 117, 16, 0x3F2A12, false);
         int row = 0;
         for (String category : data.categoryTotals.keySet()) {
             String value = category + " " + data.categoryTotals.get(category) + "%";
@@ -142,25 +123,17 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         }
 
         if (data.lastDraw != null) {
-            guiGraphics.drawString(font, data.lastDraw.card.getLocalizedName(), 151, 154, 0x3F2A12, false);
+            guiGraphics.drawString(font, data.lastDraw.card.getLocalizedName(), 150, 132, 0x3F2A12, false);
         }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (button == 0 && currentData() == null && clickAid((int) mouseX, (int) mouseY)) {
+        if (button == 0 && clickLegacyActionButton((int) mouseX, (int) mouseY)) {
             return true;
         }
-        if (button == 0) {
-            int cardIndex = hoveredCardIndex((int) mouseX, (int) mouseY);
-            if (cardIndex >= 0) {
-                TCResearchTableData data = currentData();
-                boolean cardAlreadySelected = data != null && data.cardChoices.stream().anyMatch(choice -> choice.selected);
-                if (!cardAlreadySelected) {
-                    sendAction(TCResearchTableActionPayload.ACTION_SELECT_AND_COMMIT, cardIndex);
-                }
-                return true;
-            }
+        if (button == 0 && currentData() == null && clickAid((int) mouseX, (int) mouseY)) {
+            return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -181,13 +154,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         TCResearchTableBlockEntity table = menu.blockEntity();
         if (table == null) {
             return;
-        }
-
-        TCResearchTableActionResultPayload result = TCResearchTableClientCache.pollResult(menu.blockPos());
-        if (result != null) {
-            table.applyTheoryDataFromSync(result.toTableSyncPayload());
-            lastActionMessage = Component.translatable("gui.thaumcraft.research_table.action." + result.resultKey());
-            lastActionMessageTicks = result.accepted() ? 40 : 80;
         }
 
         TCResearchTableSyncPayload payload = TCResearchTableClientCache.get(menu.blockPos());
@@ -220,6 +186,111 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         selectedAids.removeIf(key -> !keys.contains(key));
     }
 
+    private void renderInspirationIcons(GuiGraphics guiGraphics) {
+        TCResearchTableData data = currentData();
+        int start;
+        int remaining;
+        int y;
+        if (data == null) {
+            start = BASE_INSPIRATION_PREVIEW;
+            remaining = Math.max(0, start - selectedAids.size());
+            y = topPos + 55;
+        } else {
+            start = data.inspirationStart;
+            remaining = data.inspiration;
+            y = topPos + 16;
+        }
+
+        if (start <= 0) {
+            return;
+        }
+
+        int x = leftPos + 128 - start * 5;
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(0.5F, 0.5F, 1.0F);
+        for (int index = 0; index < start; index++) {
+            int u = remaining <= index ? 48 : 32;
+            guiGraphics.blit(GUI_BASE, (x + index * 10) * 2, y * 2, u, 96, 16, 16, 256, 256);
+        }
+        guiGraphics.pose().popPose();
+    }
+
+    private void renderLegacyActionButtons(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        renderLegacyButton(
+                guiGraphics,
+                mouseX,
+                mouseY,
+                createX(),
+                createY(),
+                Component.translatable("button.create.theory"),
+                createVisible,
+                createActive,
+                0x88FF8A
+        );
+        renderLegacyButton(
+                guiGraphics,
+                mouseX,
+                mouseY,
+                completeX(),
+                completeY(),
+                Component.translatable("button.complete.theory"),
+                completeVisible,
+                completeActive,
+                0x88FF8A
+        );
+        renderLegacyButton(
+                guiGraphics,
+                mouseX,
+                mouseY,
+                scrapX(),
+                scrapY(),
+                Component.translatable("button.scrap.theory"),
+                scrapVisible,
+                scrapActive,
+                0xFF2CA2
+        );
+    }
+
+    private void renderLegacyButton(
+            GuiGraphics guiGraphics,
+            int mouseX,
+            int mouseY,
+            int x,
+            int y,
+            Component label,
+            boolean visible,
+            boolean active,
+            int textColor
+    ) {
+        if (!visible) {
+            return;
+        }
+
+        boolean hovered = isInside(mouseX, mouseY, x, y, BUTTON_HIT_WIDTH, BUTTON_HIT_HEIGHT);
+        float brightness = active ? (hovered ? 1.0F : 0.85F) : 0.45F;
+        guiGraphics.setColor(brightness, brightness, brightness, 1.0F);
+        guiGraphics.blit(GUI_BASE, x, y, BUTTON_U, BUTTON_V, BUTTON_TEX_WIDTH, BUTTON_TEX_HEIGHT, 256, 256);
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        int color = active ? textColor : 0x606060;
+        guiGraphics.drawCenteredString(font, label, x + BUTTON_HIT_WIDTH / 2, y + 2, color);
+    }
+
+    private boolean clickLegacyActionButton(int mouseX, int mouseY) {
+        if (createVisible && createActive && isInside(mouseX, mouseY, createX(), createY(), BUTTON_HIT_WIDTH, BUTTON_HIT_HEIGHT)) {
+            sendStartTheory();
+            return true;
+        }
+        if (completeVisible && completeActive && isInside(mouseX, mouseY, completeX(), completeY(), BUTTON_HIT_WIDTH, BUTTON_HIT_HEIGHT)) {
+            sendAction(TCResearchTableActionPayload.ACTION_COMPLETE_THEORY, -1);
+            return true;
+        }
+        if (scrapVisible && scrapActive && isInside(mouseX, mouseY, scrapX(), scrapY(), BUTTON_HIT_WIDTH, BUTTON_HIT_HEIGHT)) {
+            sendAction(TCResearchTableActionPayload.ACTION_SCRAP_THEORY, -1);
+            return true;
+        }
+        return false;
+    }
+
     private void renderAidSelection(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (currentData() != null || currentAids.isEmpty()) {
             return;
@@ -234,202 +305,15 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
             int x = aidX(index);
             int y = aidY(index);
-            if (selectedAids.contains(aidKey)) {
-                guiGraphics.fill(x - 1, y - 1, x + 17, y + 17, 0x805A3A08);
-            } else if (isInside(mouseX, mouseY, x, y, 16, 16)) {
-                guiGraphics.fill(x - 1, y - 1, x + 17, y + 17, 0x40FFFFFF);
+            boolean selected = selectedAids.contains(aidKey);
+            boolean hovered = isInside(mouseX, mouseY, x, y, 16, 16);
+            if (selected || hovered) {
+                guiGraphics.setColor(1.0F, 1.0F, 1.0F, selected ? 1.0F : 0.28F);
+                guiGraphics.blit(GUI_BASE, x, y, 0, 96, 16, 16, 256, 256);
+                guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
             guiGraphics.renderItem(aid.displayStack(), x, y);
         }
-    }
-
-    private void renderTheorySheets(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        TCResearchTableData data = currentData();
-        if (data == null) {
-            return;
-        }
-
-        if (!data.isComplete() && data.cardChoices.isEmpty()) {
-            renderBlankDrawStack(guiGraphics);
-        }
-        if (!data.savedCards.isEmpty()) {
-            renderSavedStack(guiGraphics, Math.min(data.savedCards.size(), 6));
-        }
-        if (data.lastDraw != null) {
-            renderSmallSheet(guiGraphics, leftPos + 191, topPos + 100, data.lastDraw.fromAid, 0.72F, 1.0F);
-        }
-        for (int index = 0; index < data.cardChoices.size(); index++) {
-            renderCardChoice(guiGraphics, data.cardChoices.get(index), index, mouseX, mouseY);
-        }
-    }
-
-    private void renderBlankDrawStack(GuiGraphics guiGraphics) {
-        for (int index = 2; index >= 0; index--) {
-            renderSmallSheet(guiGraphics, leftPos + 65 + index * 2, topPos + 100 - index, false, 0.68F, 0.85F);
-        }
-        guiGraphics.blit(UNKNOWN, leftPos + 57, topPos + 91, 0, 0, 16, 16, 16, 16);
-    }
-
-    private void renderSavedStack(GuiGraphics guiGraphics, int count) {
-        for (int index = 0; index < count; index++) {
-            renderSmallSheet(guiGraphics, leftPos + 191 + index, topPos + 100 - index, false, 0.66F, 0.72F);
-        }
-    }
-
-    private void renderCardChoice(
-            GuiGraphics guiGraphics,
-            TCResearchTableData.CardChoice choice,
-            int index,
-            int mouseX,
-            int mouseY
-    ) {
-        int centerX = cardCenterX(index, choiceCount());
-        int centerY = topPos + 100;
-        boolean hovered = isInside(mouseX, mouseY, centerX - CARD_HIT_WIDTH / 2, centerY - 60, CARD_HIT_WIDTH, CARD_HIT_HEIGHT);
-        boolean selected = choice.selected;
-        float scale = hovered && !selected ? 1.06F : 1.0F;
-        float alpha = selected ? 0.72F : 1.0F;
-
-        renderSmallSheet(guiGraphics, centerX, centerY, choice.fromAid, scale, alpha);
-        if (hovered && !selected) {
-            guiGraphics.fill(centerX - 42, centerY - 46, centerX + 42, centerY + 48, 0x24FFFFFF);
-        }
-        renderCardContents(guiGraphics, choice, centerX, centerY, selected);
-    }
-
-    private void renderSmallSheet(GuiGraphics guiGraphics, int centerX, int centerY, boolean gilded, float scale, float alpha) {
-        float drawSize = CARD_SHEET_SIZE * scale;
-        float textureScale = drawSize / 256.0F;
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().translate(centerX - drawSize / 2.0F, centerY - drawSize / 2.0F, 0.0F);
-        guiGraphics.pose().scale(textureScale, textureScale, 1.0F);
-        guiGraphics.setColor(1.0F, 1.0F, 1.0F, alpha);
-        guiGraphics.blit(gilded ? PAPER_GILDED : PAPER, 0, 0, 0, 0, 256, 256, 256, 256);
-        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        guiGraphics.pose().popPose();
-    }
-
-    private void renderCardContents(
-            GuiGraphics guiGraphics,
-            TCResearchTableData.CardChoice choice,
-            int centerX,
-            int centerY,
-            boolean selected
-    ) {
-        int textColor = selected ? 0x7A5A2A : 0x2D1A08;
-        int left = centerX - 42;
-        int top = centerY - 42;
-        int width = 84;
-        drawCenteredTrimmed(guiGraphics, font, choice.card.getLocalizedName(), centerX, top + 7, width, textColor);
-        drawWrapped(guiGraphics, choice.card.getLocalizedText(), left + 6, top + 21, width - 12, 5, textColor);
-        renderCardCost(guiGraphics, choice.card.getInspirationCost(), left + 5, centerY + 23);
-        renderRequiredItems(guiGraphics, choice, centerX, centerY + 31);
-    }
-
-    private void renderCardCost(GuiGraphics guiGraphics, int cost, int x, int y) {
-        int count = Math.min(Math.abs(cost), 5);
-        int sourceU = cost < 0 ? 48 : 32;
-        int sourceV = cost < 0 ? 0 : 96;
-        for (int index = 0; index < count; index++) {
-            guiGraphics.blit(BASE, x + index * 9, y, sourceU, sourceV, 16, 16, 256, 256);
-        }
-    }
-
-    private void renderRequiredItems(GuiGraphics guiGraphics, TCResearchTableData.CardChoice choice, int centerX, int y) {
-        List<ItemStack> requiredItems = choice.card.getRequiredItems();
-        if (requiredItems.isEmpty()) {
-            return;
-        }
-        List<Boolean> consumed = choice.card.getRequiredItemsConsumed();
-        int visible = Math.min(requiredItems.size(), 4);
-        int startX = centerX - visible * 9;
-        for (int index = 0; index < visible; index++) {
-            ItemStack stack = requiredItems.get(index);
-            if (stack.isEmpty()) {
-                continue;
-            }
-            int x = startX + index * 18;
-            guiGraphics.renderItem(stack, x, y);
-            guiGraphics.renderItemDecorations(font, stack, x, y);
-            if (index < consumed.size() && Boolean.TRUE.equals(consumed.get(index))) {
-                guiGraphics.blit(BASE, x + 8, y + 8, 64, 120, 16, 16, 256, 256);
-            }
-        }
-    }
-
-    private void drawCenteredTrimmed(
-            GuiGraphics guiGraphics,
-            Font font,
-            Component component,
-            int centerX,
-            int y,
-            int maxWidth,
-            int color
-    ) {
-        String text = component.getString();
-        if (font.width(text) > maxWidth) {
-            text = font.plainSubstrByWidth(text, maxWidth - font.width("...")) + "...";
-        }
-        guiGraphics.drawCenteredString(font, text, centerX, y, color);
-    }
-
-    private void drawWrapped(
-            GuiGraphics guiGraphics,
-            Component component,
-            int x,
-            int y,
-            int width,
-            int maxLines,
-            int color
-    ) {
-        List<FormattedCharSequence> lines = font.split(component, width);
-        int rendered = Math.min(lines.size(), maxLines);
-        for (int index = 0; index < rendered; index++) {
-            guiGraphics.drawString(font, lines.get(index), x, y + index * 9, color, false);
-        }
-    }
-
-    private void renderCustomTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        List<Component> tooltip = customTooltip(mouseX, mouseY);
-        if (!tooltip.isEmpty()) {
-            guiGraphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
-        }
-    }
-
-    private List<Component> customTooltip(int mouseX, int mouseY) {
-        int cardIndex = hoveredCardIndex(mouseX, mouseY);
-        TCResearchTableData data = currentData();
-        if (data != null && cardIndex >= 0 && cardIndex < data.cardChoices.size()) {
-            TCTheorycraftCard card = data.cardChoices.get(cardIndex).card;
-            ArrayList<Component> lines = new ArrayList<>();
-            lines.add(card.getLocalizedName());
-            lines.add(card.getLocalizedText());
-            lines.add(Component.translatable("gui.thaumcraft.research_table.card.inspiration_cost", card.getInspirationCost()));
-            List<ItemStack> requiredItems = card.getRequiredItems();
-            if (!requiredItems.isEmpty()) {
-                lines.add(Component.translatable("gui.thaumcraft.research_table.card.required_items"));
-                for (ItemStack stack : requiredItems) {
-                    if (!stack.isEmpty()) {
-                        lines.add(Component.literal(stack.getCount() + "x ").append(stack.getHoverName()));
-                    }
-                }
-            }
-            return lines;
-        }
-
-        if (currentData() == null) {
-            String aidKey = hoveredAidKey(mouseX, mouseY);
-            if (aidKey != null) {
-                TCTheorycraftAid aid = TCTheorycraftManager.aids().get(aidKey);
-                if (aid != null) {
-                    return List.of(
-                            aid.displayStack().getHoverName(),
-                            Component.translatable("gui.thaumcraft.research_table.aid_hint")
-                    );
-                }
-            }
-        }
-        return List.of();
     }
 
     private boolean clickAid(int mouseX, int mouseY) {
@@ -449,41 +333,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         return false;
     }
 
-    private String hoveredAidKey(int mouseX, int mouseY) {
-        for (int index = 0; index < currentAids.size(); index++) {
-            String aidKey = currentAids.get(index);
-            if (isInside(mouseX, mouseY, aidX(index), aidY(index), 16, 16)) {
-                return aidKey;
-            }
-        }
-        return null;
-    }
-
-    private int hoveredCardIndex(int mouseX, int mouseY) {
-        TCResearchTableData data = currentData();
-        if (data == null || data.cardChoices.isEmpty()) {
-            return -1;
-        }
-        int count = choiceCount();
-        for (int index = 0; index < data.cardChoices.size(); index++) {
-            int centerX = cardCenterX(index, count);
-            int centerY = topPos + 100;
-            if (isInside(mouseX, mouseY, centerX - CARD_HIT_WIDTH / 2, centerY - 60, CARD_HIT_WIDTH, CARD_HIT_HEIGHT)) {
-                return index;
-            }
-        }
-        return -1;
-    }
-
-    private int cardCenterX(int index, int count) {
-        return leftPos + imageWidth / 2 - CARD_SPACING * (count - 1) / 2 + CARD_SPACING * index;
-    }
-
-    private int choiceCount() {
-        TCResearchTableData data = currentData();
-        return data == null ? 0 : Math.min(data.cardChoices.size(), 3);
-    }
-
     private int aidX(int index) {
         int side = Math.min(currentAids.size(), 6);
         int column = index % side;
@@ -496,12 +345,36 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         return topPos + 85 + 35 * row;
     }
 
+    private int createX() {
+        return leftPos + 128;
+    }
+
+    private int createY() {
+        return topPos + 22;
+    }
+
+    private int completeX() {
+        return leftPos + 191;
+    }
+
+    private int completeY() {
+        return topPos + 96;
+    }
+
+    private int scrapX() {
+        return leftPos + 128;
+    }
+
+    private int scrapY() {
+        return topPos + 168;
+    }
+
     private static boolean isInside(int mouseX, int mouseY, int x, int y, int width, int height) {
         return mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
     }
 
     private void updateButtons() {
-        if (createButton == null) {
+        if (drawButton == null) {
             return;
         }
 
@@ -510,16 +383,25 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         boolean hasUsableTools = table != null && table.hasUsableScribingTools();
         boolean hasPaper = table != null && table.getPaperCount() > 0;
 
-        createButton.visible = data == null;
-        createButton.active = data == null && hasUsableTools && hasPaper;
+        createVisible = data == null;
+        createActive = data == null && hasUsableTools && hasPaper;
 
-        completeButton.visible = data != null && data.isComplete();
-        completeButton.active = completeButton.visible;
+        completeVisible = data != null && data.isComplete();
+        completeActive = completeVisible;
 
-        scrapButton.visible = data != null && !data.isComplete();
-        scrapButton.active = scrapButton.visible;
+        scrapVisible = data != null && !data.isComplete();
+        scrapActive = scrapVisible;
 
         drawButton.visible = data != null && !data.isComplete() && data.cardChoices.isEmpty();
         drawButton.active = drawButton.visible && hasPaper;
+
+        for (int index = 0; index < cardButtons.length; index++) {
+            boolean visible = data != null && index < data.cardChoices.size();
+            cardButtons[index].visible = visible;
+            cardButtons[index].active = visible && hasUsableTools && data.cardChoices.stream().noneMatch(choice -> choice.selected);
+            if (visible) {
+                cardButtons[index].setMessage(data.cardChoices.get(index).card.getLocalizedName());
+            }
+        }
     }
 }
