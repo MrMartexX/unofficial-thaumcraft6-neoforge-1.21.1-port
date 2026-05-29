@@ -12,7 +12,7 @@ public record TCResearchCategoryDefinition(
         ResourceLocation background,
         ResourceLocation overlay
 ) {
-    TCResearchCategoryDefinition {
+    public TCResearchCategoryDefinition {
         key = TCPlayerKnowledge.normalizeCategory(key);
         requiredResearch = TCPlayerKnowledge.normalizeResearchKey(requiredResearch);
         formula = formula == null ? new AspectList() : formula.copy();
