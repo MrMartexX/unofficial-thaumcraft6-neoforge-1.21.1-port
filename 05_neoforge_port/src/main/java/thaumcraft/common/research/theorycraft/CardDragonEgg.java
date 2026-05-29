@@ -29,7 +29,9 @@ final class CardDragonEgg extends TCTheorycraftCard {
 
     @Override
     public boolean activate(ServerPlayer player, TCResearchTableData data) {
-        List<String> categories = TCResearchManager.categoryKeys();
+        List<String> categories = TCResearchManager.categories().stream()
+                .map(category -> category.key())
+                .toList();
         if (categories.isEmpty()) {
             return false;
         }
