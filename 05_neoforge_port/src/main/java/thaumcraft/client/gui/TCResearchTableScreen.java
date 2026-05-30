@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -46,11 +46,22 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/aspects/_unknown.png");
     private static final int AID_RECHECK_TICKS = 100;
     private static final int BASE_INSPIRATION_PREVIEW = 5;
-    private static final int CARD_SHEET_SIZE = 96;
+    private static final int CARD_SHEET_SIZE = 16;
     private static final int CARD_HIT_WIDTH = 100;
     private static final int CARD_HIT_HEIGHT = 120;
-    private static final int CARD_SPACING = 74;
+    private static final int CARD_TARGET_CENTER_X = 183;
+    private static final int CARD_TARGET_HALF_SPACING = 55;
+    private static final int CARD_TARGET_SPACING = 110;
     private static final int MAX_VISIBLE_CARDS = 3;
+
+    private static final int DRAW_STACK_CENTER_X = 65;
+    private static final int DRAW_STACK_CENTER_Y = 100;
+    private static final int SAVED_STACK_CENTER_X = 191;
+    private static final int SAVED_STACK_CENTER_Y = 100;
+    private static final int DRAW_CLICK_X = 25;
+    private static final int DRAW_CLICK_Y = 55;
+    private static final int DRAW_CLICK_WIDTH = 75;
+    private static final int DRAW_CLICK_HEIGHT = 90;
 
     private static final int LEGACY_BUTTON_U = 37;
     private static final int LEGACY_BUTTON_V = 66;
@@ -65,7 +76,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     private boolean completeActive;
     private boolean scrapVisible;
     private boolean scrapActive;
-    private Button drawButton;
     private List<String> currentAids = List.of();
     private final LinkedHashSet<String> selectedAids = new LinkedHashSet<>();
     private final LinkedHashMap<String, Integer> displayedCategoryTotals = new LinkedHashMap<>();
@@ -92,12 +102,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     @Override
     protected void init() {
         super.init();
-        drawButton = addRenderableWidget(Button.builder(
-                        Component.literal("?"),
-                        button -> sendAction(TCResearchTableActionPayload.ACTION_DRAW_CARDS, -1)
-                )
-                .bounds(leftPos + 52, topPos + 88, 28, 20)
-                .build());
         updateButtons();
     }
 
@@ -135,16 +139,8 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        TCResearchTableData data = currentData();
         if (lastActionMessageTicks > 0) {
             guiGraphics.drawString(font, lastActionMessage, 76, 176, 0x5A3A08, false);
-        }
-        if (data == null) {
-            return;
-        }
-
-        if (data.lastDraw != null) {
-            guiGraphics.drawString(font, data.lastDraw.card.getLocalizedName(), 151, 154, 0x3F2A12, false);
         }
     }
 
@@ -154,6 +150,9 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             return true;
         }
         if (button == 0 && currentData() == null && clickAid((int) mouseX, (int) mouseY)) {
+            return true;
+        }
+        if (button == 0 && clickDrawStack((int) mouseX, (int) mouseY)) {
             return true;
         }
         if (button == 0) {
@@ -337,23 +336,23 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             }
 
             if (index == count - 1 || cardZoomOut[index + 1] > 0.6F) {
-                cardZoomOut[index] = approach(cardZoomOut[index], 1.0F, Math.max((1.0F - cardZoomOut[index]) / 5.0F * partialTick, 0.004F));
+                cardZoomOut[index] = approach(cardZoomOut[index], 1.0F, Math.max((1.0F - cardZoomOut[index]) / 5.0F * partialTick, 0.0025F));
             }
 
             if (animatingSelectedCard >= 0) {
                 if (index == animatingSelectedCard) {
-                    cardZoomIn[index] = approach(cardZoomIn[index], 1.0F, Math.max((1.0F - cardZoomIn[index]) / 3.0F * partialTick, 0.006F));
-                    cardHover[index] = approach(cardHover[index], Math.max(0.0F, 1.0F - cardZoomIn[index]) * 0.25F, 0.08F * partialTick);
+                    cardZoomIn[index] = approach(cardZoomIn[index], 1.0F, Math.max((1.0F - cardZoomIn[index]) / 3.0F * partialTick, 0.0025F));
+                    cardHover[index] = approach(cardHover[index], Math.max(0.0F, 1.0F - cardZoomIn[index]), 0.1F * partialTick);
                     if (cardZoomIn[index] >= 0.995F && !selectionCommitSent) {
                         selectionCommitSent = true;
                         sendAction(TCResearchTableActionPayload.ACTION_SELECT_AND_COMMIT, animatingSelectedCard);
                     }
                 } else {
-                    cardZoomIn[index] = approach(cardZoomIn[index], 1.0F, 0.16F * partialTick);
+                    cardZoomIn[index] = approach(cardZoomIn[index], 1.0F, 0.3F * partialTick);
                     cardHover[index] = approach(cardHover[index], 0.0F, 0.1F * partialTick);
                 }
             } else if (hovered == index && cardZoomOut[index] >= 0.95F) {
-                cardHover[index] = approach(cardHover[index], 0.25F, Math.max((0.25F - cardHover[index]) / 3.0F * partialTick, 0.004F));
+                cardHover[index] = approach(cardHover[index], 0.25F, Math.max((0.25F - cardHover[index]) / 3.0F * partialTick, 0.0025F));
             } else {
                 cardHover[index] = approach(cardHover[index], 0.0F, 0.1F * partialTick);
             }
@@ -406,32 +405,50 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             return;
         }
 
+        renderBonusDraws(guiGraphics, data);
         if (!data.isComplete() && data.cardChoices.isEmpty()) {
-            renderBlankDrawStack(guiGraphics);
+            renderBlankDrawStack(guiGraphics, mouseX, mouseY);
         }
         if (!data.savedCards.isEmpty()) {
             renderSavedStack(guiGraphics, data);
         }
         if (data.lastDraw != null) {
-            renderSmallSheet(guiGraphics, leftPos + 191, topPos + 100, data.lastDraw.fromAid, 0.72F, 1.0F, data.lastDraw.card.getSeed(), 0.15F);
+            renderSmallSheet(guiGraphics, leftPos + SAVED_STACK_CENTER_X, topPos + SAVED_STACK_CENTER_Y, data.lastDraw.fromAid, 6.0F, 1.0F, data.lastDraw.card.getSeed(), 0.15F);
         }
         for (int index = 0; index < data.cardChoices.size(); index++) {
             renderCardChoice(guiGraphics, data.cardChoices.get(index), index, mouseX, mouseY);
         }
     }
 
-    private void renderBlankDrawStack(GuiGraphics guiGraphics) {
-        for (int index = 2; index >= 0; index--) {
-            renderSmallSheet(guiGraphics, leftPos + 65 + index * 2, topPos + 100 - index, false, 0.68F, 0.85F, 5521L + index * 173L, 0.65F);
+    private void renderBonusDraws(GuiGraphics guiGraphics, TCResearchTableData data) {
+        for (int index = 0; index < data.bonusDraws; index++) {
+            blitGui(guiGraphics, BASE, leftPos + 15 + index * 2, topPos + 150 + index, 64, 96, 16, 16, 256, 256);
         }
-        blitGui(guiGraphics, UNKNOWN, leftPos + 57, topPos + 91, 0, 0, 16, 16, 16, 16);
+    }
+
+    private void renderBlankDrawStack(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        TCResearchTableBlockEntity table = menu.blockEntity();
+        int paperCount = table == null ? 0 : table.getPaperCount();
+        int sheets = paperCount <= 0 ? 0 : 1 + paperCount / 4;
+        Random random = new Random(55L);
+        for (int index = 0; index < sheets; index++) {
+            renderSmallSheet(guiGraphics, leftPos + DRAW_STACK_CENTER_X, topPos + DRAW_STACK_CENTER_Y, false, 6.0F, 1.0F, random.nextLong(), 1.0F);
+        }
+        if (sheets > 0) {
+            boolean highlight = isInside(mouseX, mouseY, leftPos + DRAW_CLICK_X, topPos + DRAW_CLICK_Y, DRAW_CLICK_WIDTH, DRAW_CLICK_HEIGHT);
+            guiGraphics.pose().pushPose();
+            guiGraphics.pose().translate(leftPos + DRAW_STACK_CENTER_X, topPos + DRAW_STACK_CENTER_Y, 0.0F);
+            guiGraphics.pose().scale(highlight ? 1.75F : 1.5F, highlight ? 1.75F : 1.5F, 1.0F);
+            guiGraphics.setColor(1.0F, 1.0F, 1.0F, highlight ? 1.0F : 0.5F);
+            blitGui(guiGraphics, UNKNOWN, -8, -8, 0, 0, 16, 16, 16, 16);
+            guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            guiGraphics.pose().popPose();
+        }
     }
 
     private void renderSavedStack(GuiGraphics guiGraphics, TCResearchTableData data) {
-        int count = Math.min(data.savedCards.size(), 6);
-        for (int index = 0; index < count; index++) {
-            long seed = data.savedCards.get(index);
-            renderSmallSheet(guiGraphics, leftPos + 191 + index, topPos + 100 - index, false, 0.66F, 0.72F, seed, 0.45F);
+        for (Long seed : data.savedCards) {
+            renderSmallSheet(guiGraphics, leftPos + SAVED_STACK_CENTER_X, topPos + SAVED_STACK_CENTER_Y, false, 6.0F, 1.0F, seed, 1.0F);
         }
     }
 
@@ -442,10 +459,10 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
         int count = choiceCount();
         float targetX = cardCenterX(index, count);
-        float startX = leftPos + 65.0F;
-        float savedX = leftPos + 191.0F;
+        float startX = leftPos + DRAW_STACK_CENTER_X;
+        float savedX = leftPos + SAVED_STACK_CENTER_X;
         float centerX = startX + (targetX - startX) * cardZoomOut[index];
-        float centerY = topPos + 100.0F;
+        float centerY = topPos + DRAW_STACK_CENTER_Y;
         float zoomIn = cardZoomIn[index];
         boolean selectedAnimating = animatingSelectedCard == index;
         if (selectedAnimating) {
@@ -456,20 +473,21 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
                 && animatingSelectedCard < 0
                 && cardZoomOut[index] >= 0.95F;
         boolean inactiveDuringSelection = animatingSelectedCard >= 0 && !selectedAnimating;
-        float scale = 0.65F + cardZoomOut[index] * 0.35F - zoomIn * 0.28F + cardHover[index] * 0.28F;
+        float scale = 6.0F + cardZoomOut[index] * 2.0F - zoomIn * 2.0F + cardHover[index];
         float alpha = inactiveDuringSelection ? Math.max(0.0F, 1.0F - cardZoomIn[index]) : 1.0F;
+        float tilt = Math.max(1.0F - cardZoomOut[index], zoomIn);
         if (alpha <= 0.02F) {
             return;
         }
 
-        renderCardSheet(guiGraphics, centerX, centerY, choice, scale, alpha, hovered, selectedAnimating);
+        renderCardSheet(guiGraphics, centerX, centerY, choice, scale, alpha, tilt, hovered, selectedAnimating);
     }
 
-    private void renderCardSheet(GuiGraphics guiGraphics, float centerX, float centerY, TCResearchTableData.CardChoice choice, float scale, float alpha, boolean hovered, boolean selected) {
+    private void renderCardSheet(GuiGraphics guiGraphics, float centerX, float centerY, TCResearchTableData.CardChoice choice, float scale, float alpha, float tilt, boolean hovered, boolean selected) {
         Random random = new Random(choice.card.getSeed());
         float offsetX = (float) random.nextGaussian();
         float offsetY = (float) random.nextGaussian();
-        float rotation = (float) (random.nextGaussian() * (selected ? 0.15D : 0.8D));
+        float rotation = (float) (random.nextGaussian() * tilt);
 
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(centerX + offsetX, centerY + offsetY, 0.0F);
@@ -478,9 +496,11 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         renderLocalPaper(guiGraphics, choice.fromAid, alpha);
         renderCardCategoryWatermark(guiGraphics, choice.card.getResearchCategory(), alpha);
         if (hovered && !selected) {
-            guiGraphics.fill(-42, -46, 42, 48, 0x24FFFFFF);
+            guiGraphics.fill(-8, -8, 8, 8, 0x20FFFFFF);
         }
-        renderCardContents(guiGraphics, choice, selected);
+        if (alpha >= 0.99F) {
+            renderCardContents(guiGraphics, choice, selected);
+        }
         guiGraphics.pose().popPose();
     }
 
@@ -521,53 +541,67 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         }
 
         guiGraphics.pose().pushPose();
-        guiGraphics.pose().scale(48.0F / 255.0F, 48.0F / 255.0F, 1.0F);
-        guiGraphics.setColor(1.0F, 1.0F, 1.0F, Math.min(0.18F, alpha / 5.5F));
-        blitGui(guiGraphics, definition.get().icon(), -128, -128, 0, 0, 255, 255, 255, 255);
+        guiGraphics.pose().scale(0.5F, 0.5F, 1.0F);
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, alpha / 6.0F);
+        blitGui(guiGraphics, definition.get().icon(), -8, -8, 0, 0, 16, 16, 16, 16);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         guiGraphics.pose().popPose();
     }
 
     private void renderCardContents(GuiGraphics guiGraphics, TCResearchTableData.CardChoice choice, boolean selected) {
-        int textColor = selected ? 0x7A5A2A : 0x2D1A08;
-        int left = -42;
-        int top = -42;
-        int width = 84;
-        drawCenteredTrimmed(guiGraphics, font, choice.card.getLocalizedName(), 0, top + 7, width, textColor);
-        drawWrapped(guiGraphics, choice.card.getLocalizedText(), left + 6, top + 21, width - 12, 5, textColor);
-        renderCardCost(guiGraphics, choice.card.getInspirationCost(), left + 5, 23);
-        renderRequiredItems(guiGraphics, choice, 0, 31);
+        int textColor = selected ? 0x7A5A2A : 0x000000;
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(0.0625F, 0.0625F, 1.0F);
+        drawCenteredTrimmed(guiGraphics, font, choice.card.getLocalizedName().copy().withStyle(ChatFormatting.BOLD), 0, -65, 140, textColor);
+        drawWrapped(guiGraphics, choice.card.getLocalizedText(), -70, -48, 140, 6, textColor);
+        guiGraphics.pose().popPose();
+        renderCardCost(guiGraphics, choice.card.getInspirationCost());
+        renderRequiredItems(guiGraphics, choice);
     }
 
-    private void renderCardCost(GuiGraphics guiGraphics, int cost, int x, int y) {
+    private void renderCardCost(GuiGraphics guiGraphics, int cost) {
         int count = Math.min(Math.abs(cost), 5);
-        int sourceU = cost < 0 ? 48 : 32;
-        int sourceV = cost < 0 ? 0 : 96;
-        for (int index = 0; index < count; index++) {
-            blitGui(guiGraphics, BASE, x + index * 9, y, sourceU, sourceV, 16, 16, 256, 256);
+        boolean add = false;
+        if (cost < 0) {
+            add = true;
+            count = Math.min(Math.abs(cost) + 1, 5);
         }
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(0.0625F, 0.0625F, 1.0F);
+        for (int index = 0; index < count; index++) {
+            int u = index == 0 && add ? 48 : 32;
+            int v = index == 0 && add ? 0 : 96;
+            blitGui(guiGraphics, BASE, -10 * count + 20 * index, -95, u, v, 16, 16, 256, 256);
+        }
+        guiGraphics.pose().popPose();
     }
 
-    private void renderRequiredItems(GuiGraphics guiGraphics, TCResearchTableData.CardChoice choice, int centerX, int y) {
+    private void renderRequiredItems(GuiGraphics guiGraphics, TCResearchTableData.CardChoice choice) {
         List<ItemStack> requiredItems = choice.card.getRequiredItems();
         if (requiredItems.isEmpty()) {
             return;
         }
         List<Boolean> consumed = choice.card.getRequiredItemsConsumed();
         int visible = Math.min(requiredItems.size(), 4);
-        int startX = centerX - visible * 9;
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().scale(0.125F, 0.125F, 1.0F);
         for (int index = 0; index < visible; index++) {
             ItemStack stack = requiredItems.get(index);
-            if (stack.isEmpty()) {
-                continue;
-            }
-            int x = startX + index * 18;
-            guiGraphics.renderItem(stack, x, y);
-            guiGraphics.renderItemDecorations(font, stack, x, y);
-            if (index < consumed.size() && Boolean.TRUE.equals(consumed.get(index))) {
-                blitGui(guiGraphics, BASE, x + 8, y + 8, 64, 120, 16, 16, 256, 256);
+            int x = -9 * visible + 18 * index;
+            int y = 35;
+            if (!stack.isEmpty()) {
+                guiGraphics.renderItem(stack, x, y);
+                guiGraphics.renderItemDecorations(font, stack, x, y);
+                if (index < consumed.size() && Boolean.TRUE.equals(consumed.get(index))) {
+                    blitGui(guiGraphics, BASE, x + 8, y + 8, 64, 120, 16, 16, 256, 256);
+                }
+            } else {
+                guiGraphics.setColor(0.75F, 0.75F, 0.75F, 1.0F);
+                blitGui(guiGraphics, UNKNOWN, x, y, 0, 0, 16, 16, 16, 16);
+                guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
         }
+        guiGraphics.pose().popPose();
     }
 
     private void renderCategoryProgressPanel(GuiGraphics guiGraphics) {
@@ -576,7 +610,8 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             return;
         }
 
-        List<Map.Entry<String, Integer>> sorted = new ArrayList<>(data.categoryTotals.entrySet());
+        List<Map.Entry<String, Integer>> sorted = new ArrayList<>(displayedCategoryTotals.entrySet());
+        sorted.removeIf(entry -> entry.getValue() == 0);
         sorted.sort((left, right) -> Integer.compare(right.getValue(), left.getValue()));
         int row = 0;
         for (Map.Entry<String, Integer> entry : sorted) {
@@ -585,11 +620,16 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             }
 
             String category = entry.getKey();
-            int shown = displayedCategoryTotals.getOrDefault(category, entry.getValue());
-            int y = topPos + 16 + row * 18;
-            renderCategoryIcon(guiGraphics, category, leftPos + 253, y);
-            int color = data.categoriesBlocked.contains(category) ? 0x8F4A3A : 0x3F2A12;
-            guiGraphics.drawString(font, shown + "%", leftPos + 274, y + 4, color, false);
+            int shown = entry.getValue();
+            int iconY = topPos + 16 + row * 18 + (row > 0 ? 4 : 0);
+            int textY = topPos + 20 + row * 18 + (row > data.penaltyStart ? 4 : 0);
+            renderCategoryIcon(guiGraphics, category, leftPos + 253, iconY);
+            String text = shown + "%";
+            if (row > data.penaltyStart) {
+                text += " (-" + shown / 3 + ")";
+            }
+            int color = data.categoriesBlocked.contains(category) ? 0x606060 : (row <= data.penaltyStart ? 0x00E0C0 : 0xFFFFFF);
+            guiGraphics.drawString(font, text, leftPos + 276, textY, color, false);
             row++;
         }
     }
@@ -604,7 +644,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(x, y, 0.0F);
-        guiGraphics.pose().scale(16.0F / 255.0F, 16.0F / 255.0F, 1.0F);
+        guiGraphics.pose().scale(0.0625F, 0.0625F, 1.0F);
         blitGui(guiGraphics, definition.get().icon(), 0, 0, 0, 0, 255, 255, 255, 255);
         guiGraphics.pose().popPose();
     }
@@ -627,6 +667,19 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             }
             displayedCategoryTotals.put(entry.getKey(), shown);
         }
+    }
+
+    private boolean clickDrawStack(int mouseX, int mouseY) {
+        TCResearchTableBlockEntity table = menu.blockEntity();
+        TCResearchTableData data = currentData();
+        if (table == null || data == null || data.isComplete() || !data.cardChoices.isEmpty() || table.getPaperCount() <= 0) {
+            return false;
+        }
+        if (!isInside(mouseX, mouseY, leftPos + DRAW_CLICK_X, topPos + DRAW_CLICK_Y, DRAW_CLICK_WIDTH, DRAW_CLICK_HEIGHT)) {
+            return false;
+        }
+        sendAction(TCResearchTableActionPayload.ACTION_DRAW_CARDS, data.bonusDraws > 0 ? 3 : 2);
+        return true;
     }
 
     private void drawCenteredTrimmed(GuiGraphics guiGraphics, Font font, Component component, int centerX, int y, int maxWidth, int color) {
@@ -697,7 +750,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
             if (selectedAids.contains(aidKey)) {
                 selectedAids.remove(aidKey);
-            } else if (selectedAids.size() + 1 < 5) {
+            } else if (selectedAids.size() + 1 < BASE_INSPIRATION_PREVIEW) {
                 selectedAids.add(aidKey);
             }
             return true;
@@ -717,14 +770,14 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
     private int hoveredCardIndex(int mouseX, int mouseY) {
         TCResearchTableData data = currentData();
-        if (data == null || data.cardChoices.isEmpty()) {
+        if (data == null || data.cardChoices.isEmpty() || animatingSelectedCard >= 0) {
             return -1;
         }
         int count = choiceCount();
         for (int index = 0; index < data.cardChoices.size(); index++) {
             int centerX = cardCenterX(index, count);
-            int centerY = topPos + 100;
-            if (isInside(mouseX, mouseY, centerX - CARD_HIT_WIDTH / 2, centerY - 60, CARD_HIT_WIDTH, CARD_HIT_HEIGHT)) {
+            int centerY = topPos + DRAW_STACK_CENTER_Y;
+            if (cardZoomOut[index] >= 0.95F && isInside(mouseX, mouseY, centerX - CARD_HIT_WIDTH / 2, centerY - 60, CARD_HIT_WIDTH, CARD_HIT_HEIGHT)) {
                 return index;
             }
         }
@@ -732,7 +785,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     }
 
     private int cardCenterX(int index, int count) {
-        return leftPos + imageWidth / 2 - CARD_SPACING * (count - 1) / 2 + CARD_SPACING * index;
+        return leftPos + CARD_TARGET_CENTER_X - CARD_TARGET_HALF_SPACING * count + CARD_TARGET_SPACING * index;
     }
 
     private int choiceCount() {
@@ -801,10 +854,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     }
 
     private void updateButtons() {
-        if (drawButton == null) {
-            return;
-        }
-
         TCResearchTableBlockEntity table = menu.blockEntity();
         TCResearchTableData data = table == null ? null : table.getTheoryData();
         boolean hasUsableTools = table != null && table.hasUsableScribingTools();
@@ -818,8 +867,5 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
         scrapVisible = data != null && !data.isComplete();
         scrapActive = scrapVisible;
-
-        drawButton.visible = data != null && !data.isComplete() && data.cardChoices.isEmpty();
-        drawButton.active = drawButton.visible && hasPaper;
     }
 }
