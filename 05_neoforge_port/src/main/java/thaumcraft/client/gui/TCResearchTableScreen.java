@@ -13,8 +13,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +31,6 @@ import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
 import thaumcraft.common.research.theorycraft.TCResearchTableData;
 import thaumcraft.common.research.theorycraft.TCResearchTableSyncPayload;
 import thaumcraft.common.research.theorycraft.TCTheorycraftAid;
-import thaumcraft.common.research.theorycraft.TCTheorycraftCard;
 import thaumcraft.common.research.theorycraft.TCTheorycraftManager;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 
@@ -69,6 +70,8 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     private static final int LEGACY_BUTTON_TEX_HEIGHT = 13;
     private static final int LEGACY_BUTTON_HIT_WIDTH = 49;
     private static final int LEGACY_BUTTON_HIT_HEIGHT = 11;
+    private static final int LEGACY_CREATE_BUTTON_TINT = 8978346;
+    private static final int LEGACY_SCRAP_BUTTON_TINT = 16720418;
 
     private boolean createVisible;
     private boolean createActive;
@@ -80,8 +83,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     private final LinkedHashSet<String> selectedAids = new LinkedHashSet<>();
     private final LinkedHashMap<String, Integer> displayedCategoryTotals = new LinkedHashMap<>();
     private int nextAidCheckTick;
-    private Component lastActionMessage = Component.empty();
-    private int lastActionMessageTicks;
     private final float[] cardHover = new float[MAX_VISIBLE_CARDS];
     private final float[] cardZoomOut = new float[MAX_VISIBLE_CARDS];
     private final float[] cardZoomIn = new float[MAX_VISIBLE_CARDS];
@@ -110,9 +111,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         applyLatestSync();
         refreshCurrentAids();
         updateDisplayedCategoryTotals();
-        if (lastActionMessageTicks > 0) {
-            lastActionMessageTicks--;
-        }
         updateButtons();
     }
 
@@ -123,7 +121,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         updateButtons();
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderTooltip(guiGraphics, mouseX, mouseY);
-        renderCustomTooltip(guiGraphics, mouseX, mouseY);
     }
 
     @Override
@@ -139,9 +136,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        if (lastActionMessageTicks > 0) {
-            guiGraphics.drawString(font, lastActionMessage, 76, 176, 0x5A3A08, false);
-        }
+        // Legacy Research Table does not render transient action-status text over the table.
     }
 
     @Override
@@ -190,8 +185,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         TCResearchTableActionResultPayload result = TCResearchTableClientCache.pollResult(menu.blockPos());
         if (result != null) {
             table.applyTheoryDataFromSync(result.toTableSyncPayload());
-            lastActionMessage = Component.translatable("gui.thaumcraft.research_table.action." + result.resultKey());
-            lastActionMessageTicks = result.accepted() ? 40 : 80;
         }
 
         TCResearchTableSyncPayload payload = TCResearchTableClientCache.get(menu.blockPos());
@@ -254,35 +247,47 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     }
 
     private void renderLegacyActionButtons(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        renderLegacyButton(guiGraphics, mouseX, mouseY, createX(), createY(), Component.translatable("button.create.theory"), createVisible, createActive, 0x88FF8A);
-        renderLegacyButton(guiGraphics, mouseX, mouseY, completeX(), completeY(), Component.translatable("button.complete.theory"), completeVisible, completeActive, 0x88FF8A);
-        renderLegacyButton(guiGraphics, mouseX, mouseY, scrapX(), scrapY(), Component.translatable("button.scrap.theory"), scrapVisible, scrapActive, 0xFF2CA2);
+        renderLegacyButton(guiGraphics, mouseX, mouseY, createX(), createY(), Component.translatable("button.create.theory"), createVisible, createActive, LEGACY_CREATE_BUTTON_TINT);
+        renderLegacyButton(guiGraphics, mouseX, mouseY, completeX(), completeY(), Component.translatable("button.complete.theory"), completeVisible, completeActive, LEGACY_CREATE_BUTTON_TINT);
+        renderLegacyButton(guiGraphics, mouseX, mouseY, scrapX(), scrapY(), Component.translatable("button.scrap.theory"), scrapVisible, scrapActive, LEGACY_SCRAP_BUTTON_TINT);
     }
 
-    private void renderLegacyButton(GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, Component label, boolean visible, boolean active, int textColor) {
+    private void renderLegacyButton(GuiGraphics guiGraphics, int mouseX, int mouseY, int centerX, int centerY, Component label, boolean visible, boolean active, int tintColor) {
         if (!visible) {
             return;
         }
 
-        boolean hovered = isInside(mouseX, mouseY, x, y, LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT);
-        float brightness = active ? (hovered ? 1.0F : 0.85F) : 0.45F;
-        guiGraphics.setColor(brightness, brightness, brightness, 1.0F);
-        blitGui(guiGraphics, BASE, x, y, LEGACY_BUTTON_U, LEGACY_BUTTON_V, LEGACY_BUTTON_TEX_WIDTH, LEGACY_BUTTON_TEX_HEIGHT, 256, 256);
+        boolean hovered = isInside(mouseX, mouseY, centerX - LEGACY_BUTTON_HIT_WIDTH / 2, centerY - LEGACY_BUTTON_HIT_HEIGHT / 2, LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT);
+        float brightness = active ? (hovered ? 1.0F : 0.9F) : 0.5F;
+        float alpha = active ? 1.0F : 0.9F;
+        float red = brightness * ((tintColor >> 16 & 255) / 255.0F);
+        float green = brightness * ((tintColor >> 8 & 255) / 255.0F);
+        float blue = brightness * ((tintColor & 255) / 255.0F);
+        guiGraphics.setColor(red, green, blue, alpha);
+        blitGui(guiGraphics, BASE, centerX - LEGACY_BUTTON_TEX_WIDTH / 2, centerY - LEGACY_BUTTON_TEX_HEIGHT / 2, LEGACY_BUTTON_U, LEGACY_BUTTON_V, LEGACY_BUTTON_TEX_WIDTH, LEGACY_BUTTON_TEX_HEIGHT, 256, 256);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        int color = active ? textColor : 0x606060;
-        guiGraphics.drawCenteredString(font, label, x + LEGACY_BUTTON_HIT_WIDTH / 2, y + 2, color);
+
+        int textColor = !active ? 10526880 : (hovered ? 16777120 : 16777215);
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(centerX, centerY, 0.0F);
+        guiGraphics.pose().scale(0.5F, 0.5F, 1.0F);
+        guiGraphics.drawCenteredString(font, label, 0, -4, textColor);
+        guiGraphics.pose().popPose();
     }
 
     private boolean clickLegacyActionButton(int mouseX, int mouseY) {
-        if (createVisible && createActive && isInside(mouseX, mouseY, createX(), createY(), LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT)) {
+        if (createVisible && createActive && isInside(mouseX, mouseY, createX() - LEGACY_BUTTON_HIT_WIDTH / 2, createY() - LEGACY_BUTTON_HIT_HEIGHT / 2, LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT)) {
+            playButtonClick();
             sendStartTheory();
             return true;
         }
-        if (completeVisible && completeActive && isInside(mouseX, mouseY, completeX(), completeY(), LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT)) {
+        if (completeVisible && completeActive && isInside(mouseX, mouseY, completeX() - LEGACY_BUTTON_HIT_WIDTH / 2, completeY() - LEGACY_BUTTON_HIT_HEIGHT / 2, LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT)) {
+            playButtonClick();
             sendAction(TCResearchTableActionPayload.ACTION_COMPLETE_THEORY, -1);
             return true;
         }
-        if (scrapVisible && scrapActive && isInside(mouseX, mouseY, scrapX(), scrapY(), LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT)) {
+        if (scrapVisible && scrapActive && isInside(mouseX, mouseY, scrapX() - LEGACY_BUTTON_HIT_WIDTH / 2, scrapY() - LEGACY_BUTTON_HIT_HEIGHT / 2, LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT)) {
+            playButtonClick();
             sendAction(TCResearchTableActionPayload.ACTION_SCRAP_THEORY, -1);
             return true;
         }
@@ -335,8 +340,12 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
                 continue;
             }
 
+            float previousZoomOut = cardZoomOut[index];
             if (index == count - 1 || cardZoomOut[index + 1] > 0.6F) {
                 cardZoomOut[index] = approach(cardZoomOut[index], 1.0F, Math.max((1.0F - cardZoomOut[index]) / 5.0F * partialTick, 0.0025F));
+                if (previousZoomOut <= 0.0F && cardZoomOut[index] > 0.0F) {
+                    playButtonPageFlip();
+                }
             }
 
             if (animatingSelectedCard >= 0) {
@@ -345,6 +354,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
                     cardHover[index] = approach(cardHover[index], Math.max(0.0F, 1.0F - cardZoomIn[index]), 0.1F * partialTick);
                     if (cardZoomIn[index] >= 0.995F && !selectionCommitSent) {
                         selectionCommitSent = true;
+                        playButtonWrite();
                         sendAction(TCResearchTableActionPayload.ACTION_SELECT_AND_COMMIT, animatingSelectedCard);
                     }
                 } else {
@@ -392,6 +402,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         if (cardIndex < 0 || cardIndex >= choiceCount()) {
             return;
         }
+        playButtonPageSelect();
         animatingSelectedCard = cardIndex;
         selectionCommitSent = false;
         for (int index = 0; index < MAX_VISIBLE_CARDS; index++) {
@@ -469,9 +480,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             centerX += (savedX - centerX) * zoomIn;
         }
 
-        boolean hovered = isInside(mouseX, mouseY, Math.round(centerX) - CARD_HIT_WIDTH / 2, Math.round(centerY) - 60, CARD_HIT_WIDTH, CARD_HIT_HEIGHT)
-                && animatingSelectedCard < 0
-                && cardZoomOut[index] >= 0.95F;
         boolean inactiveDuringSelection = animatingSelectedCard >= 0 && !selectedAnimating;
         float scale = 6.0F + cardZoomOut[index] * 2.0F - zoomIn * 2.0F + cardHover[index];
         float alpha = inactiveDuringSelection ? Math.max(0.0F, 1.0F - cardZoomIn[index]) : 1.0F;
@@ -480,10 +488,10 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             return;
         }
 
-        renderCardSheet(guiGraphics, centerX, centerY, choice, scale, alpha, tilt, hovered, selectedAnimating);
+        renderCardSheet(guiGraphics, centerX, centerY, choice, scale, alpha, tilt);
     }
 
-    private void renderCardSheet(GuiGraphics guiGraphics, float centerX, float centerY, TCResearchTableData.CardChoice choice, float scale, float alpha, float tilt, boolean hovered, boolean selected) {
+    private void renderCardSheet(GuiGraphics guiGraphics, float centerX, float centerY, TCResearchTableData.CardChoice choice, float scale, float alpha, float tilt) {
         Random random = new Random(choice.card.getSeed());
         float offsetX = (float) random.nextGaussian();
         float offsetY = (float) random.nextGaussian();
@@ -495,11 +503,8 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.pose().scale(scale, scale, 1.0F);
         renderLocalPaper(guiGraphics, choice.fromAid, alpha);
         renderCardCategoryWatermark(guiGraphics, choice.card.getResearchCategory(), alpha);
-        if (hovered && !selected) {
-            guiGraphics.fill(-8, -8, 8, 8, 0x20FFFFFF);
-        }
         if (alpha >= 0.99F) {
-            renderCardContents(guiGraphics, choice, selected);
+            renderCardContents(guiGraphics, choice);
         }
         guiGraphics.pose().popPose();
     }
@@ -548,12 +553,11 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.pose().popPose();
     }
 
-    private void renderCardContents(GuiGraphics guiGraphics, TCResearchTableData.CardChoice choice, boolean selected) {
-        int textColor = selected ? 0x7A5A2A : 0x000000;
+    private void renderCardContents(GuiGraphics guiGraphics, TCResearchTableData.CardChoice choice) {
         guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(0.0625F, 0.0625F, 1.0F);
-        drawCenteredTrimmed(guiGraphics, font, choice.card.getLocalizedName().copy().withStyle(ChatFormatting.BOLD), 0, -65, 140, textColor);
-        drawWrapped(guiGraphics, choice.card.getLocalizedText(), -70, -48, 140, 6, textColor);
+        drawCenteredTrimmed(guiGraphics, font, choice.card.getLocalizedName().copy().withStyle(ChatFormatting.BOLD), 0, -65, 140, 0x000000);
+        drawWrapped(guiGraphics, choice.card.getLocalizedText(), -70, -48, 140, 6, 0x000000);
         guiGraphics.pose().popPose();
         renderCardCost(guiGraphics, choice.card.getInspirationCost());
         renderRequiredItems(guiGraphics, choice);
@@ -678,6 +682,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         if (!isInside(mouseX, mouseY, leftPos + DRAW_CLICK_X, topPos + DRAW_CLICK_Y, DRAW_CLICK_WIDTH, DRAW_CLICK_HEIGHT)) {
             return false;
         }
+        playButtonPageFlip();
         sendAction(TCResearchTableActionPayload.ACTION_DRAW_CARDS, data.bonusDraws > 0 ? 3 : 2);
         return true;
     }
@@ -698,49 +703,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         }
     }
 
-    private void renderCustomTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        List<Component> tooltip = customTooltip(mouseX, mouseY);
-        if (!tooltip.isEmpty()) {
-            guiGraphics.renderTooltip(font, tooltip, Optional.empty(), mouseX, mouseY);
-        }
-    }
-
-    private List<Component> customTooltip(int mouseX, int mouseY) {
-        int cardIndex = hoveredCardIndex(mouseX, mouseY);
-        TCResearchTableData data = currentData();
-        if (data != null && cardIndex >= 0 && cardIndex < data.cardChoices.size()) {
-            TCTheorycraftCard card = data.cardChoices.get(cardIndex).card;
-            ArrayList<Component> lines = new ArrayList<>();
-            lines.add(card.getLocalizedName());
-            lines.add(card.getLocalizedText());
-            lines.add(Component.translatable("gui.thaumcraft.research_table.card.inspiration_cost", card.getInspirationCost()));
-            List<ItemStack> requiredItems = card.getRequiredItems();
-            if (!requiredItems.isEmpty()) {
-                lines.add(Component.translatable("gui.thaumcraft.research_table.card.required_items"));
-                for (ItemStack stack : requiredItems) {
-                    if (!stack.isEmpty()) {
-                        lines.add(Component.literal(stack.getCount() + "x ").append(stack.getHoverName()));
-                    }
-                }
-            }
-            return lines;
-        }
-
-        if (currentData() == null) {
-            String aidKey = hoveredAidKey(mouseX, mouseY);
-            if (aidKey != null) {
-                TCTheorycraftAid aid = TCTheorycraftManager.aids().get(aidKey);
-                if (aid != null) {
-                    return List.of(
-                            aid.displayStack().getHoverName(),
-                            Component.translatable("gui.thaumcraft.research_table.aid_hint")
-                    );
-                }
-            }
-        }
-        return List.of();
-    }
-
     private boolean clickAid(int mouseX, int mouseY) {
         for (int index = 0; index < currentAids.size(); index++) {
             String aidKey = currentAids.get(index);
@@ -756,16 +718,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             return true;
         }
         return false;
-    }
-
-    private String hoveredAidKey(int mouseX, int mouseY) {
-        for (int index = 0; index < currentAids.size(); index++) {
-            String aidKey = currentAids.get(index);
-            if (isInside(mouseX, mouseY, aidX(index), aidY(index), 16, 16)) {
-                return aidKey;
-            }
-        }
-        return null;
     }
 
     private int hoveredCardIndex(int mouseX, int mouseY) {
@@ -851,6 +803,34 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         guiGraphics.blit(texture, x, y, u, v, width, height, textureWidth, textureHeight);
+    }
+
+    private void playButtonClick() {
+        playUiButtonSound(1.0F);
+    }
+
+    private void playButtonPageFlip() {
+        playBookSound(1.0F);
+    }
+
+    private void playButtonPageSelect() {
+        playBookSound(0.95F);
+    }
+
+    private void playButtonWrite() {
+        playBookSound(0.75F);
+    }
+
+    private void playUiButtonSound(float pitch) {
+        if (minecraft != null) {
+            minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, pitch));
+        }
+    }
+
+    private void playBookSound(float pitch) {
+        if (minecraft != null) {
+            minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, pitch));
+        }
     }
 
     private void updateButtons() {
