@@ -2,14 +2,17 @@ package thaumcraft.client.gui;
 
 import com.mojang.math.Axis;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -65,6 +68,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     private Button drawButton;
     private List<String> currentAids = List.of();
     private final LinkedHashSet<String> selectedAids = new LinkedHashSet<>();
+    private final LinkedHashMap<String, Integer> displayedCategoryTotals = new LinkedHashMap<>();
     private int nextAidCheckTick;
     private Component lastActionMessage = Component.empty();
     private int lastActionMessageTicks;
@@ -101,6 +105,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     protected void containerTick() {
         applyLatestSync();
         refreshCurrentAids();
+        updateDisplayedCategoryTotals();
         if (lastActionMessageTicks > 0) {
             lastActionMessageTicks--;
         }
@@ -119,12 +124,13 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        guiGraphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+        blitGui(guiGraphics, BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
         renderInspirationIcons(guiGraphics);
         renderLegacyActionButtons(guiGraphics, mouseX, mouseY);
         renderAidSelection(guiGraphics, mouseX, mouseY);
         updateCardAnimations(mouseX, mouseY, partialTick);
         renderTheorySheets(guiGraphics, mouseX, mouseY);
+        renderCategoryProgressPanel(guiGraphics);
     }
 
     @Override
@@ -135,16 +141,6 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         }
         if (data == null) {
             return;
-        }
-
-        int row = 0;
-        for (String category : data.categoryTotals.keySet()) {
-            String value = category + " " + data.categoryTotals.get(category) + "%";
-            guiGraphics.drawString(font, value, 176, 18 + row * 10, 0x3F2A12, false);
-            row++;
-            if (row >= 7) {
-                break;
-            }
         }
 
         if (data.lastDraw != null) {
@@ -253,7 +249,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.pose().scale(0.5F, 0.5F, 1.0F);
         for (int index = 0; index < start; index++) {
             int u = remaining <= index ? 48 : 32;
-            guiGraphics.blit(BASE, (x + index * 10) * 2, y * 2, u, 96, 16, 16, 256, 256);
+            blitGui(guiGraphics, BASE, (x + index * 10) * 2, y * 2, u, 96, 16, 16, 256, 256);
         }
         guiGraphics.pose().popPose();
     }
@@ -312,7 +308,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         boolean hovered = isInside(mouseX, mouseY, x, y, LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT);
         float brightness = active ? (hovered ? 1.0F : 0.85F) : 0.45F;
         guiGraphics.setColor(brightness, brightness, brightness, 1.0F);
-        guiGraphics.blit(BASE, x, y, LEGACY_BUTTON_U, LEGACY_BUTTON_V, LEGACY_BUTTON_TEX_WIDTH, LEGACY_BUTTON_TEX_HEIGHT, 256, 256);
+        blitGui(guiGraphics, BASE, x, y, LEGACY_BUTTON_U, LEGACY_BUTTON_V, LEGACY_BUTTON_TEX_WIDTH, LEGACY_BUTTON_TEX_HEIGHT, 256, 256);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         int color = active ? textColor : 0x606060;
         guiGraphics.drawCenteredString(font, label, x + LEGACY_BUTTON_HIT_WIDTH / 2, y + 2, color);
@@ -352,7 +348,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             boolean hovered = isInside(mouseX, mouseY, x, y, 16, 16);
             if (selected || hovered) {
                 guiGraphics.setColor(1.0F, 1.0F, 1.0F, selected ? 1.0F : 0.28F);
-                guiGraphics.blit(BASE, x, y, 0, 96, 16, 16, 256, 256);
+                blitGui(guiGraphics, BASE, x, y, 0, 96, 16, 16, 256, 256);
                 guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
             guiGraphics.renderItem(aid.displayStack(), x, y);
@@ -468,7 +464,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         for (int index = 2; index >= 0; index--) {
             renderSmallSheet(guiGraphics, leftPos + 65 + index * 2, topPos + 100 - index, false, 0.68F, 0.85F, 5521L + index * 173L, 0.65F);
         }
-        guiGraphics.blit(UNKNOWN, leftPos + 57, topPos + 91, 0, 0, 16, 16, 16, 16);
+        blitGui(guiGraphics, UNKNOWN, leftPos + 57, topPos + 91, 0, 0, 16, 16, 16, 16);
     }
 
     private void renderSavedStack(GuiGraphics guiGraphics, TCResearchTableData data) {
@@ -571,7 +567,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(textureScale, textureScale, 1.0F);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, alpha);
-        guiGraphics.blit(gilded ? PAPER_GILDED : PAPER, -128, -128, 0, 0, 256, 256, 256, 256);
+        blitGui(guiGraphics, gilded ? PAPER_GILDED : PAPER, -128, -128, 0, 0, 256, 256, 256, 256);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         guiGraphics.pose().popPose();
     }
@@ -591,7 +587,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(48.0F / 255.0F, 48.0F / 255.0F, 1.0F);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, Math.min(0.18F, alpha / 5.5F));
-        guiGraphics.blit(definition.get().icon(), -128, -128, 0, 0, 255, 255, 255, 255);
+        blitGui(guiGraphics, definition.get().icon(), -128, -128, 0, 0, 255, 255, 255, 255);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         guiGraphics.pose().popPose();
     }
@@ -616,7 +612,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         int sourceU = cost < 0 ? 48 : 32;
         int sourceV = cost < 0 ? 0 : 96;
         for (int index = 0; index < count; index++) {
-            guiGraphics.blit(BASE, x + index * 9, y, sourceU, sourceV, 16, 16, 256, 256);
+            blitGui(guiGraphics, BASE, x + index * 9, y, sourceU, sourceV, 16, 16, 256, 256);
         }
     }
 
@@ -637,8 +633,67 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             guiGraphics.renderItem(stack, x, y);
             guiGraphics.renderItemDecorations(font, stack, x, y);
             if (index < consumed.size() && Boolean.TRUE.equals(consumed.get(index))) {
-                guiGraphics.blit(BASE, x + 8, y + 8, 64, 120, 16, 16, 256, 256);
+                blitGui(guiGraphics, BASE, x + 8, y + 8, 64, 120, 16, 16, 256, 256);
             }
+        }
+    }
+
+    private void renderCategoryProgressPanel(GuiGraphics guiGraphics) {
+        TCResearchTableData data = currentData();
+        if (data == null || data.categoryTotals.isEmpty()) {
+            return;
+        }
+
+        List<Map.Entry<String, Integer>> sorted = new ArrayList<>(data.categoryTotals.entrySet());
+        sorted.sort((left, right) -> Integer.compare(right.getValue(), left.getValue()));
+        int row = 0;
+        for (Map.Entry<String, Integer> entry : sorted) {
+            if (row >= 7) {
+                break;
+            }
+
+            String category = entry.getKey();
+            int shown = displayedCategoryTotals.getOrDefault(category, entry.getValue());
+            int y = topPos + 16 + row * 18;
+            renderCategoryIcon(guiGraphics, category, leftPos + 253, y);
+            int color = data.categoriesBlocked.contains(category) ? 0x8F4A3A : 0x3F2A12;
+            guiGraphics.drawString(font, shown + "%", leftPos + 274, y + 4, color, false);
+            row++;
+        }
+    }
+
+    private void renderCategoryIcon(GuiGraphics guiGraphics, String category, int x, int y) {
+        Optional<TCResearchCategoryDefinition> definition = TCResearchManager.categories().stream()
+                .filter(candidate -> candidate.key().equalsIgnoreCase(category.trim()))
+                .findFirst();
+        if (definition.isEmpty() || definition.get().icon() == null) {
+            return;
+        }
+
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(x, y, 0.0F);
+        guiGraphics.pose().scale(16.0F / 255.0F, 16.0F / 255.0F, 1.0F);
+        blitGui(guiGraphics, definition.get().icon(), 0, 0, 0, 0, 255, 255, 255, 255);
+        guiGraphics.pose().popPose();
+    }
+
+    private void updateDisplayedCategoryTotals() {
+        TCResearchTableData data = currentData();
+        if (data == null) {
+            displayedCategoryTotals.clear();
+            return;
+        }
+
+        displayedCategoryTotals.keySet().removeIf(category -> !data.categoryTotals.containsKey(category));
+        for (Map.Entry<String, Integer> entry : data.categoryTotals.entrySet()) {
+            int target = entry.getValue();
+            int shown = displayedCategoryTotals.getOrDefault(entry.getKey(), target);
+            if (shown < target) {
+                shown++;
+            } else if (shown > target) {
+                shown--;
+            }
+            displayedCategoryTotals.put(entry.getKey(), shown);
         }
     }
 
@@ -821,6 +876,21 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
     private static float clamp(float value, float min, float max) {
         return Math.max(min, Math.min(max, value));
+    }
+
+    private void blitGui(
+            GuiGraphics guiGraphics,
+            ResourceLocation texture,
+            int x,
+            int y,
+            float u,
+            float v,
+            int width,
+            int height,
+            int textureWidth,
+            int textureHeight
+    ) {
+        guiGraphics.blit(RenderType::guiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
 
     private void updateButtons() {
