@@ -534,7 +534,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.pose().translate(centerX + offsetX, centerY + offsetY, 0.0F);
         guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(rotation));
         guiGraphics.pose().scale(scale, scale, 1.0F);
-        renderLocalPaper(guiGraphics, choice.fromAid, alpha, random);
+        renderLocalPaper(guiGraphics, choice.fromAid, alpha);
         renderCardCategoryWatermark(guiGraphics, choice.card.getResearchCategory(), alpha);
         if (hovered && !selected) {
             guiGraphics.fill(-42, -46, 42, 48, 0x24FFFFFF);
@@ -562,14 +562,14 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.pose().translate(centerX + offsetX, centerY + offsetY, 0.0F);
         guiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(rotation));
         guiGraphics.pose().scale(scale, scale, 1.0F);
-        renderLocalPaper(guiGraphics, gilded, alpha, random);
+        renderLocalPaper(guiGraphics, gilded, alpha);
         guiGraphics.pose().popPose();
     }
 
-    private void renderLocalPaper(GuiGraphics guiGraphics, boolean gilded, float alpha, Random random) {
+    private void renderLocalPaper(GuiGraphics guiGraphics, boolean gilded, float alpha) {
         float textureScale = CARD_SHEET_SIZE / 256.0F;
         guiGraphics.pose().pushPose();
-        guiGraphics.pose().scale(random.nextBoolean() ? -textureScale : textureScale, random.nextBoolean() ? -textureScale : textureScale, 1.0F);
+        guiGraphics.pose().scale(textureScale, textureScale, 1.0F);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, alpha);
         guiGraphics.blit(gilded ? PAPER_GILDED : PAPER, -128, -128, 0, 0, 256, 256, 256, 256);
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
