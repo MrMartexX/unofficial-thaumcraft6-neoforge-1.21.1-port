@@ -47,6 +47,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     private static final int CARD_HIT_WIDTH = 100;
     private static final int CARD_HIT_HEIGHT = 120;
     private static final int CARD_SPACING = 74;
+    private static final int MAX_VISIBLE_CARDS = 3;
 
     private static final int LEGACY_BUTTON_U = 37;
     private static final int LEGACY_BUTTON_V = 66;
@@ -67,6 +68,12 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     private int nextAidCheckTick;
     private Component lastActionMessage = Component.empty();
     private int lastActionMessageTicks;
+    private final float[] cardHover = new float[MAX_VISIBLE_CARDS];
+    private final float[] cardZoomOut = new float[MAX_VISIBLE_CARDS];
+    private final float[] cardZoomIn = new float[MAX_VISIBLE_CARDS];
+    private long cardChoiceSignature;
+    private int animatingSelectedCard = -1;
+    private boolean selectionCommitSent;
 
     public TCResearchTableScreen(TCResearchTableMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title);
@@ -116,6 +123,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         renderInspirationIcons(guiGraphics);
         renderLegacyActionButtons(guiGraphics, mouseX, mouseY);
         renderAidSelection(guiGraphics, mouseX, mouseY);
+        updateCardAnimations(mouseX, mouseY, partialTick);
         renderTheorySheets(guiGraphics, mouseX, mouseY);
     }
 
@@ -157,8 +165,8 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             if (cardIndex >= 0) {
                 TCResearchTableData data = currentData();
                 boolean cardAlreadySelected = data != null && data.cardChoices.stream().anyMatch(choice -> choice.selected);
-                if (!cardAlreadySelected) {
-                    sendAction(TCResearchTableActionPayload.ACTION_SELECT_AND_COMMIT, cardIndex);
+                if (!cardAlreadySelected && animatingSelectedCard < 0) {
+                    startCardSelectionAnimation(cardIndex);
                 }
                 return true;
             }
@@ -351,6 +359,91 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         }
     }
 
+    private void updateCardAnimations(int mouseX, int mouseY, float partialTick) {
+        TCResearchTableData data = currentData();
+        long signature = cardChoiceSignature(data);
+        if (signature != cardChoiceSignature) {
+            cardChoiceSignature = signature;
+            resetCardAnimations();
+        }
+        if (data == null || data.cardChoices.isEmpty()) {
+            return;
+        }
+
+        int count = choiceCount();
+        int hovered = hoveredCardIndex(mouseX, mouseY);
+        for (int index = 0; index < MAX_VISIBLE_CARDS; index++) {
+            if (index >= count) {
+                cardHover[index] = 0.0F;
+                cardZoomOut[index] = 0.0F;
+                cardZoomIn[index] = 0.0F;
+                continue;
+            }
+
+            if (index == count - 1 || cardZoomOut[index + 1] > 0.6F) {
+                cardZoomOut[index] = approach(cardZoomOut[index], 1.0F, Math.max((1.0F - cardZoomOut[index]) / 5.0F * partialTick, 0.004F));
+            }
+
+            if (animatingSelectedCard >= 0) {
+                if (index == animatingSelectedCard) {
+                    cardZoomIn[index] = approach(cardZoomIn[index], 1.0F, Math.max((1.0F - cardZoomIn[index]) / 3.0F * partialTick, 0.006F));
+                    cardHover[index] = approach(cardHover[index], Math.max(0.0F, 1.0F - cardZoomIn[index]) * 0.25F, 0.08F * partialTick);
+                    if (cardZoomIn[index] >= 0.995F && !selectionCommitSent) {
+                        selectionCommitSent = true;
+                        sendAction(TCResearchTableActionPayload.ACTION_SELECT_AND_COMMIT, animatingSelectedCard);
+                    }
+                } else {
+                    cardZoomIn[index] = approach(cardZoomIn[index], 1.0F, 0.16F * partialTick);
+                    cardHover[index] = approach(cardHover[index], 0.0F, 0.1F * partialTick);
+                }
+            } else if (hovered == index && cardZoomOut[index] >= 0.95F) {
+                cardHover[index] = approach(cardHover[index], 0.25F, Math.max((0.25F - cardHover[index]) / 3.0F * partialTick, 0.004F));
+            } else {
+                cardHover[index] = approach(cardHover[index], 0.0F, 0.1F * partialTick);
+            }
+
+            cardHover[index] = clamp(cardHover[index], 0.0F, 0.25F);
+            cardZoomOut[index] = clamp(cardZoomOut[index], 0.0F, 1.0F);
+            cardZoomIn[index] = clamp(cardZoomIn[index], 0.0F, 1.0F);
+        }
+    }
+
+    private void resetCardAnimations() {
+        for (int index = 0; index < MAX_VISIBLE_CARDS; index++) {
+            cardHover[index] = 0.0F;
+            cardZoomOut[index] = 0.0F;
+            cardZoomIn[index] = 0.0F;
+        }
+        animatingSelectedCard = -1;
+        selectionCommitSent = false;
+    }
+
+    private long cardChoiceSignature(TCResearchTableData data) {
+        if (data == null || data.cardChoices.isEmpty()) {
+            return 0L;
+        }
+
+        long signature = 1125899906842597L;
+        int count = Math.min(data.cardChoices.size(), MAX_VISIBLE_CARDS);
+        for (int index = 0; index < count; index++) {
+            TCResearchTableData.CardChoice choice = data.cardChoices.get(index);
+            signature = 31L * signature + choice.card.getSeed();
+            signature = 31L * signature + (choice.fromAid ? 1L : 0L);
+        }
+        return signature;
+    }
+
+    private void startCardSelectionAnimation(int cardIndex) {
+        if (cardIndex < 0 || cardIndex >= choiceCount()) {
+            return;
+        }
+        animatingSelectedCard = cardIndex;
+        selectionCommitSent = false;
+        for (int index = 0; index < MAX_VISIBLE_CARDS; index++) {
+            cardZoomIn[index] = 0.0F;
+        }
+    }
+
     private void renderTheorySheets(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         TCResearchTableData data = currentData();
         if (data == null) {
@@ -393,20 +486,39 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             int mouseX,
             int mouseY
     ) {
-        int centerX = cardCenterX(index, choiceCount());
-        int centerY = topPos + 100;
-        boolean hovered = isInside(mouseX, mouseY, centerX - CARD_HIT_WIDTH / 2, centerY - 60, CARD_HIT_WIDTH, CARD_HIT_HEIGHT);
-        boolean selected = choice.selected;
-        float scale = hovered && !selected ? 1.06F : 1.0F;
-        float alpha = selected ? 0.72F : 1.0F;
+        if (index >= MAX_VISIBLE_CARDS || cardZoomOut[index] <= 0.01F) {
+            return;
+        }
 
-        renderCardSheet(guiGraphics, centerX, centerY, choice, scale, alpha, hovered, selected);
+        int count = choiceCount();
+        float targetX = cardCenterX(index, count);
+        float startX = leftPos + 65.0F;
+        float savedX = leftPos + 191.0F;
+        float centerX = startX + (targetX - startX) * cardZoomOut[index];
+        float centerY = topPos + 100.0F;
+        float zoomIn = cardZoomIn[index];
+        boolean selectedAnimating = animatingSelectedCard == index;
+        if (selectedAnimating) {
+            centerX += (savedX - centerX) * zoomIn;
+        }
+
+        boolean hovered = isInside(mouseX, mouseY, Math.round(centerX) - CARD_HIT_WIDTH / 2, Math.round(centerY) - 60, CARD_HIT_WIDTH, CARD_HIT_HEIGHT)
+                && animatingSelectedCard < 0
+                && cardZoomOut[index] >= 0.95F;
+        boolean inactiveDuringSelection = animatingSelectedCard >= 0 && !selectedAnimating;
+        float scale = 0.65F + cardZoomOut[index] * 0.35F - zoomIn * 0.28F + cardHover[index] * 0.28F;
+        float alpha = inactiveDuringSelection ? Math.max(0.0F, 1.0F - cardZoomIn[index]) : 1.0F;
+        if (alpha <= 0.02F) {
+            return;
+        }
+
+        renderCardSheet(guiGraphics, centerX, centerY, choice, scale, alpha, hovered, selectedAnimating);
     }
 
     private void renderCardSheet(
             GuiGraphics guiGraphics,
-            int centerX,
-            int centerY,
+            float centerX,
+            float centerY,
             TCResearchTableData.CardChoice choice,
             float scale,
             float alpha,
@@ -654,7 +766,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
     private int choiceCount() {
         TCResearchTableData data = currentData();
-        return data == null ? 0 : Math.min(data.cardChoices.size(), 3);
+        return data == null ? 0 : Math.min(data.cardChoices.size(), MAX_VISIBLE_CARDS);
     }
 
     private int aidX(int index) {
@@ -695,6 +807,20 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
     private static boolean isInside(int mouseX, int mouseY, int x, int y, int width, int height) {
         return mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
+    }
+
+    private static float approach(float current, float target, float step) {
+        if (current < target) {
+            return Math.min(target, current + step);
+        }
+        if (current > target) {
+            return Math.max(target, current - step);
+        }
+        return current;
+    }
+
+    private static float clamp(float value, float min, float max) {
+        return Math.max(min, Math.min(max, value));
     }
 
     private void updateButtons() {
