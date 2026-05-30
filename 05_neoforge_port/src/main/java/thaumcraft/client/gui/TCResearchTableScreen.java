@@ -1,5 +1,6 @@
 package thaumcraft.client.gui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.math.Axis;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -12,7 +13,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
@@ -255,52 +255,12 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     }
 
     private void renderLegacyActionButtons(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        renderLegacyButton(
-                guiGraphics,
-                mouseX,
-                mouseY,
-                createX(),
-                createY(),
-                Component.translatable("button.create.theory"),
-                createVisible,
-                createActive,
-                0x88FF8A
-        );
-        renderLegacyButton(
-                guiGraphics,
-                mouseX,
-                mouseY,
-                completeX(),
-                completeY(),
-                Component.translatable("button.complete.theory"),
-                completeVisible,
-                completeActive,
-                0x88FF8A
-        );
-        renderLegacyButton(
-                guiGraphics,
-                mouseX,
-                mouseY,
-                scrapX(),
-                scrapY(),
-                Component.translatable("button.scrap.theory"),
-                scrapVisible,
-                scrapActive,
-                0xFF2CA2
-        );
+        renderLegacyButton(guiGraphics, mouseX, mouseY, createX(), createY(), Component.translatable("button.create.theory"), createVisible, createActive, 0x88FF8A);
+        renderLegacyButton(guiGraphics, mouseX, mouseY, completeX(), completeY(), Component.translatable("button.complete.theory"), completeVisible, completeActive, 0x88FF8A);
+        renderLegacyButton(guiGraphics, mouseX, mouseY, scrapX(), scrapY(), Component.translatable("button.scrap.theory"), scrapVisible, scrapActive, 0xFF2CA2);
     }
 
-    private void renderLegacyButton(
-            GuiGraphics guiGraphics,
-            int mouseX,
-            int mouseY,
-            int x,
-            int y,
-            Component label,
-            boolean visible,
-            boolean active,
-            int textColor
-    ) {
+    private void renderLegacyButton(GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, Component label, boolean visible, boolean active, int textColor) {
         if (!visible) {
             return;
         }
@@ -475,13 +435,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         }
     }
 
-    private void renderCardChoice(
-            GuiGraphics guiGraphics,
-            TCResearchTableData.CardChoice choice,
-            int index,
-            int mouseX,
-            int mouseY
-    ) {
+    private void renderCardChoice(GuiGraphics guiGraphics, TCResearchTableData.CardChoice choice, int index, int mouseX, int mouseY) {
         if (index >= MAX_VISIBLE_CARDS || cardZoomOut[index] <= 0.01F) {
             return;
         }
@@ -511,16 +465,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         renderCardSheet(guiGraphics, centerX, centerY, choice, scale, alpha, hovered, selectedAnimating);
     }
 
-    private void renderCardSheet(
-            GuiGraphics guiGraphics,
-            float centerX,
-            float centerY,
-            TCResearchTableData.CardChoice choice,
-            float scale,
-            float alpha,
-            boolean hovered,
-            boolean selected
-    ) {
+    private void renderCardSheet(GuiGraphics guiGraphics, float centerX, float centerY, TCResearchTableData.CardChoice choice, float scale, float alpha, boolean hovered, boolean selected) {
         Random random = new Random(choice.card.getSeed());
         float offsetX = (float) random.nextGaussian();
         float offsetY = (float) random.nextGaussian();
@@ -539,16 +484,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.pose().popPose();
     }
 
-    private void renderSmallSheet(
-            GuiGraphics guiGraphics,
-            int centerX,
-            int centerY,
-            boolean gilded,
-            float scale,
-            float alpha,
-            long seed,
-            float tilt
-    ) {
+    private void renderSmallSheet(GuiGraphics guiGraphics, int centerX, int centerY, boolean gilded, float scale, float alpha, long seed, float tilt) {
         Random random = new Random(seed);
         float offsetX = (float) random.nextGaussian();
         float offsetY = (float) random.nextGaussian();
@@ -592,11 +528,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.pose().popPose();
     }
 
-    private void renderCardContents(
-            GuiGraphics guiGraphics,
-            TCResearchTableData.CardChoice choice,
-            boolean selected
-    ) {
+    private void renderCardContents(GuiGraphics guiGraphics, TCResearchTableData.CardChoice choice, boolean selected) {
         int textColor = selected ? 0x7A5A2A : 0x2D1A08;
         int left = -42;
         int top = -42;
@@ -697,15 +629,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         }
     }
 
-    private void drawCenteredTrimmed(
-            GuiGraphics guiGraphics,
-            Font font,
-            Component component,
-            int centerX,
-            int y,
-            int maxWidth,
-            int color
-    ) {
+    private void drawCenteredTrimmed(GuiGraphics guiGraphics, Font font, Component component, int centerX, int y, int maxWidth, int color) {
         String text = component.getString();
         if (font.width(text) > maxWidth) {
             text = font.plainSubstrByWidth(text, maxWidth - font.width("...")) + "...";
@@ -713,15 +637,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.drawCenteredString(font, text, centerX, y, color);
     }
 
-    private void drawWrapped(
-            GuiGraphics guiGraphics,
-            Component component,
-            int x,
-            int y,
-            int width,
-            int maxLines,
-            int color
-    ) {
+    private void drawWrapped(GuiGraphics guiGraphics, Component component, int x, int y, int width, int maxLines, int color) {
         List<FormattedCharSequence> lines = font.split(component, width);
         int rendered = Math.min(lines.size(), maxLines);
         for (int index = 0; index < rendered; index++) {
@@ -878,19 +794,10 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         return Math.max(min, Math.min(max, value));
     }
 
-    private void blitGui(
-            GuiGraphics guiGraphics,
-            ResourceLocation texture,
-            int x,
-            int y,
-            float u,
-            float v,
-            int width,
-            int height,
-            int textureWidth,
-            int textureHeight
-    ) {
-        guiGraphics.blit(RenderType::guiTextured, texture, x, y, u, v, width, height, textureWidth, textureHeight);
+    private void blitGui(GuiGraphics guiGraphics, ResourceLocation texture, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        guiGraphics.blit(texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
 
     private void updateButtons() {
