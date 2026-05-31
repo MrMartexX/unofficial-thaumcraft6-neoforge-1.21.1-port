@@ -15,8 +15,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -72,6 +72,12 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
     private static final int LEGACY_BUTTON_HIT_HEIGHT = 11;
     private static final int LEGACY_CREATE_BUTTON_TINT = 8978346;
     private static final int LEGACY_SCRAP_BUTTON_TINT = 16720418;
+
+    private static final SoundEvent SOUND_CLACK = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "clack"));
+    private static final SoundEvent SOUND_PAGE = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "page"));
+    private static final SoundEvent SOUND_PAGETURN = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pageturn"));
+    private static final SoundEvent SOUND_WRITE = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "write"));
+    private static final SoundEvent SOUND_LEARN = SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "learn"));
 
     private boolean createVisible;
     private boolean createActive;
@@ -277,17 +283,17 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
 
     private boolean clickLegacyActionButton(int mouseX, int mouseY) {
         if (createVisible && createActive && isInside(mouseX, mouseY, createX() - LEGACY_BUTTON_HIT_WIDTH / 2, createY() - LEGACY_BUTTON_HIT_HEIGHT / 2, LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT)) {
-            playButtonClick();
+            playClack();
             sendStartTheory();
             return true;
         }
         if (completeVisible && completeActive && isInside(mouseX, mouseY, completeX() - LEGACY_BUTTON_HIT_WIDTH / 2, completeY() - LEGACY_BUTTON_HIT_HEIGHT / 2, LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT)) {
-            playButtonClick();
+            playLearn();
             sendAction(TCResearchTableActionPayload.ACTION_COMPLETE_THEORY, -1);
             return true;
         }
         if (scrapVisible && scrapActive && isInside(mouseX, mouseY, scrapX() - LEGACY_BUTTON_HIT_WIDTH / 2, scrapY() - LEGACY_BUTTON_HIT_HEIGHT / 2, LEGACY_BUTTON_HIT_WIDTH, LEGACY_BUTTON_HIT_HEIGHT)) {
-            playButtonClick();
+            playClack();
             sendAction(TCResearchTableActionPayload.ACTION_SCRAP_THEORY, -1);
             return true;
         }
@@ -340,12 +346,8 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
                 continue;
             }
 
-            float previousZoomOut = cardZoomOut[index];
             if (index == count - 1 || cardZoomOut[index + 1] > 0.6F) {
                 cardZoomOut[index] = approach(cardZoomOut[index], 1.0F, Math.max((1.0F - cardZoomOut[index]) / 5.0F * partialTick, 0.0025F));
-                if (previousZoomOut <= 0.0F && cardZoomOut[index] > 0.0F) {
-                    playButtonPageFlip();
-                }
             }
 
             if (animatingSelectedCard >= 0) {
@@ -354,7 +356,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
                     cardHover[index] = approach(cardHover[index], Math.max(0.0F, 1.0F - cardZoomIn[index]), 0.1F * partialTick);
                     if (cardZoomIn[index] >= 0.995F && !selectionCommitSent) {
                         selectionCommitSent = true;
-                        playButtonWrite();
+                        playWrite();
                         sendAction(TCResearchTableActionPayload.ACTION_SELECT_AND_COMMIT, animatingSelectedCard);
                     }
                 } else {
@@ -402,7 +404,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         if (cardIndex < 0 || cardIndex >= choiceCount()) {
             return;
         }
-        playButtonPageSelect();
+        playPageTurn();
         animatingSelectedCard = cardIndex;
         selectionCommitSent = false;
         for (int index = 0; index < MAX_VISIBLE_CARDS; index++) {
@@ -480,6 +482,9 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             centerX += (savedX - centerX) * zoomIn;
         }
 
+        boolean hovered = isInside(mouseX, mouseY, Math.round(centerX) - CARD_HIT_WIDTH / 2, Math.round(centerY) - 60, CARD_HIT_WIDTH, CARD_HIT_HEIGHT)
+                && animatingSelectedCard < 0
+                && cardZoomOut[index] >= 0.95F;
         boolean inactiveDuringSelection = animatingSelectedCard >= 0 && !selectedAnimating;
         float scale = 6.0F + cardZoomOut[index] * 2.0F - zoomIn * 2.0F + cardHover[index];
         float alpha = inactiveDuringSelection ? Math.max(0.0F, 1.0F - cardZoomIn[index]) : 1.0F;
@@ -488,10 +493,10 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
             return;
         }
 
-        renderCardSheet(guiGraphics, centerX, centerY, choice, scale, alpha, tilt);
+        renderCardSheet(guiGraphics, centerX, centerY, choice, scale, alpha, tilt, hovered, selectedAnimating);
     }
 
-    private void renderCardSheet(GuiGraphics guiGraphics, float centerX, float centerY, TCResearchTableData.CardChoice choice, float scale, float alpha, float tilt) {
+    private void renderCardSheet(GuiGraphics guiGraphics, float centerX, float centerY, TCResearchTableData.CardChoice choice, float scale, float alpha, float tilt, boolean hovered, boolean selected) {
         Random random = new Random(choice.card.getSeed());
         float offsetX = (float) random.nextGaussian();
         float offsetY = (float) random.nextGaussian();
@@ -504,7 +509,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         renderLocalPaper(guiGraphics, choice.fromAid, alpha);
         renderCardCategoryWatermark(guiGraphics, choice.card.getResearchCategory(), alpha);
         if (alpha >= 0.99F) {
-            renderCardContents(guiGraphics, choice);
+            renderCardContents(guiGraphics, choice, selected);
         }
         guiGraphics.pose().popPose();
     }
@@ -553,11 +558,12 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.pose().popPose();
     }
 
-    private void renderCardContents(GuiGraphics guiGraphics, TCResearchTableData.CardChoice choice) {
+    private void renderCardContents(GuiGraphics guiGraphics, TCResearchTableData.CardChoice choice, boolean selected) {
+        int textColor = selected ? 0x7A5A2A : 0x000000;
         guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(0.0625F, 0.0625F, 1.0F);
-        drawCenteredTrimmed(guiGraphics, font, choice.card.getLocalizedName().copy().withStyle(ChatFormatting.BOLD), 0, -65, 140, 0x000000);
-        drawWrapped(guiGraphics, choice.card.getLocalizedText(), -70, -48, 140, 6, 0x000000);
+        drawCenteredTrimmed(guiGraphics, font, choice.card.getLocalizedName().copy().withStyle(ChatFormatting.BOLD), 0, -65, 140, textColor);
+        drawWrapped(guiGraphics, choice.card.getLocalizedText(), -70, -48, 140, 6, textColor);
         guiGraphics.pose().popPose();
         renderCardCost(guiGraphics, choice.card.getInspirationCost());
         renderRequiredItems(guiGraphics, choice);
@@ -682,7 +688,7 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         if (!isInside(mouseX, mouseY, leftPos + DRAW_CLICK_X, topPos + DRAW_CLICK_Y, DRAW_CLICK_WIDTH, DRAW_CLICK_HEIGHT)) {
             return false;
         }
-        playButtonPageFlip();
+        playPage();
         sendAction(TCResearchTableActionPayload.ACTION_DRAW_CARDS, data.bonusDraws > 0 ? 3 : 2);
         return true;
     }
@@ -805,31 +811,31 @@ public class TCResearchTableScreen extends AbstractContainerScreen<TCResearchTab
         guiGraphics.blit(texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
 
-    private void playButtonClick() {
-        playUiButtonSound(1.0F);
+
+
+    private void playClack() {
+        playUiSound(SOUND_CLACK, 1.0F);
     }
 
-    private void playButtonPageFlip() {
-        playBookSound(1.0F);
+    private void playPage() {
+        playUiSound(SOUND_PAGE, 1.0F);
     }
 
-    private void playButtonPageSelect() {
-        playBookSound(0.95F);
+    private void playPageTurn() {
+        playUiSound(SOUND_PAGETURN, 1.0F);
     }
 
-    private void playButtonWrite() {
-        playBookSound(0.75F);
+    private void playWrite() {
+        playUiSound(SOUND_WRITE, 0.9F);
     }
 
-    private void playUiButtonSound(float pitch) {
+    private void playLearn() {
+        playUiSound(SOUND_LEARN, 1.0F);
+    }
+
+    private void playUiSound(SoundEvent sound, float pitch) {
         if (minecraft != null) {
-            minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, pitch));
-        }
-    }
-
-    private void playBookSound(float pitch) {
-        if (minecraft != null) {
-            minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, pitch));
+            minecraft.getSoundManager().play(SimpleSoundInstance.forUI(sound, pitch));
         }
     }
 
