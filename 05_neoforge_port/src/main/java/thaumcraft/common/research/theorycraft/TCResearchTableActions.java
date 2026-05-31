@@ -55,9 +55,6 @@ final class TCResearchTableActions {
         if (!table.hasUsableScribingTools()) {
             return ActionResult.rejected("missing_scribing_tools");
         }
-        if (table.getPaperCount() <= 0) {
-            return ActionResult.rejected("missing_paper");
-        }
         LinkedHashSet<String> nearbyAidKeys = TCTheorycraftManager.collectNearbyAidKeys(table.getLevel(), table.getBlockPos());
         ArrayList<String> acceptedAidKeys = new ArrayList<>();
         int inspirationStart = TCResearchManager.availableTheoryInspiration(player);

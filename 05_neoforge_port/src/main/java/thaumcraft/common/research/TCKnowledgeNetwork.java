@@ -17,6 +17,11 @@ public final class TCKnowledgeNetwork {
                         TCKnowledgeSyncPayload.TYPE,
                         TCKnowledgeSyncPayload.STREAM_CODEC,
                         TCKnowledgeNetwork::handleKnowledgeSync
+                )
+                .playToClient(
+                        TCKnowledgeGainPayload.TYPE,
+                        TCKnowledgeGainPayload.STREAM_CODEC,
+                        TCKnowledgeNetwork::handleKnowledgeGain
                 );
     }
 
@@ -42,8 +47,23 @@ public final class TCKnowledgeNetwork {
         PacketDistributor.sendToPlayer(player, TCKnowledgeSyncPayload.from(TCPlayerKnowledgeStore.get(player)));
     }
 
+    public static void sendKnowledgeGain(ServerPlayer player, TCKnowledgeType type, String category) {
+        if (player == null || type == null) {
+            return;
+        }
+
+        PacketDistributor.sendToPlayer(player, new TCKnowledgeGainPayload(type, category));
+    }
+
     private static void handleKnowledgeSync(
             TCKnowledgeSyncPayload payload,
+            net.neoforged.neoforge.network.handling.IPayloadContext context
+    ) {
+        TCKnowledgeClientCache.accept(payload);
+    }
+
+    private static void handleKnowledgeGain(
+            TCKnowledgeGainPayload payload,
             net.neoforged.neoforge.network.handling.IPayloadContext context
     ) {
         TCKnowledgeClientCache.accept(payload);

@@ -30,6 +30,22 @@ final class TCResearchTableRenderer implements BlockEntityRenderer<TCResearchTab
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/research/quill.png");
     private static final int TEXTURE_WIDTH = 64;
     private static final int TEXTURE_HEIGHT = 32;
+    private static final int QUILL_WIDTH = 16;
+    private static final int QUILL_HEIGHT = 16;
+    private static final float QUILL_THICKNESS = 0.0625F;
+    private static final double INKWELL_SURFACE_LIFT = 0.002D;
+
+    /*
+     * These are table-local compensation offsets over the exact legacy transform.
+     * They are needed because the modern quill uses a standalone texture and a centered
+     * 180-degree texture-orientation compensation, while legacy pulled the sprite from the
+     * block atlas with renderTextureIn3D. The target is visual parity: the lower quill tip
+     * exits from the top-center of the inkwell instead of being left/low/inside the table.
+     */
+    private static final double QUILL_COMPENSATE_X = 0.20D;
+    private static final double QUILL_COMPENSATE_Y = -0.17D;
+    private static final double QUILL_COMPENSATE_Z = 0.00D;
+
     private final ModelPart inkwell;
     private final ModelPart scrollTube;
     private final ModelPart scrollRibbon;
@@ -94,23 +110,84 @@ final class TCResearchTableRenderer implements BlockEntityRenderer<TCResearchTab
 
     private void renderInkwell(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(TABLE_DETAIL_TEXTURE));
+        poseStack.pushPose();
+        poseStack.translate(0.0D, INKWELL_SURFACE_LIFT, 0.0D);
         inkwell.render(poseStack, consumer, packedLight, OverlayTexture.NO_OVERLAY);
+        poseStack.popPose();
     }
 
     private static void renderQuill(PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         poseStack.pushPose();
         poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         poseStack.translate(-0.5D, 0.1D, 0.125D);
-        poseStack.mulPose(Axis.YP.rotationDegrees(60.0F));
+poseStack.mulPose(Axis.YP.rotationDegrees(60.0F));
         poseStack.scale(0.5F, 0.5F, 0.5F);
-
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(QUILL_TEXTURE));
+VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityCutoutNoCull(QUILL_TEXTURE));
         PoseStack.Pose pose = poseStack.last();
-        addVertex(consumer, pose, packedLight, -0.5F, -0.5F, 0.0F, 0.0F, 1.0F, 255, 255, 255, 255, 0.0F, 1.0F, 0.0F);
-        addVertex(consumer, pose, packedLight, 0.5F, -0.5F, 0.0F, 1.0F, 1.0F, 255, 255, 255, 255, 0.0F, 1.0F, 0.0F);
-        addVertex(consumer, pose, packedLight, 0.5F, 0.5F, 0.0F, 1.0F, 0.0F, 255, 255, 255, 255, 0.0F, 1.0F, 0.0F);
-        addVertex(consumer, pose, packedLight, -0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 255, 255, 255, 255, 0.0F, 1.0F, 0.0F);
+        renderTextureIn3D(consumer, pose, packedLight, 1.0F, 0.0F, 0.0F, 1.0F, QUILL_WIDTH, QUILL_HEIGHT, QUILL_THICKNESS);
         poseStack.popPose();
+    }
+
+    /**
+     * Port of legacy UtilsFX.renderTextureIn3D(maxu, maxv, minu, minv, width, height, thickness).
+     * Coordinates, UV direction and segmented edge construction intentionally follow the legacy
+     * method instead of using centered GUI quads.
+     */
+    private static void renderTextureIn3D(
+            VertexConsumer consumer,
+            PoseStack.Pose pose,
+            int packedLight,
+            float maxU,
+            float maxV,
+            float minU,
+            float minV,
+            int width,
+            int height,
+            float thickness) {
+        addVertex(consumer, pose, packedLight, 0.0F, 0.0F, 0.0F, maxU, minV, 255, 255, 255, 255, 0.0F, 0.0F, 1.0F);
+        addVertex(consumer, pose, packedLight, 1.0F, 0.0F, 0.0F, minU, minV, 255, 255, 255, 255, 0.0F, 0.0F, 1.0F);
+        addVertex(consumer, pose, packedLight, 1.0F, 1.0F, 0.0F, minU, maxV, 255, 255, 255, 255, 0.0F, 0.0F, 1.0F);
+        addVertex(consumer, pose, packedLight, 0.0F, 1.0F, 0.0F, maxU, maxV, 255, 255, 255, 255, 0.0F, 0.0F, 1.0F);
+
+        addVertex(consumer, pose, packedLight, 0.0F, 1.0F, -thickness, maxU, maxV, 255, 255, 255, 255, 0.0F, 0.0F, -1.0F);
+        addVertex(consumer, pose, packedLight, 1.0F, 1.0F, -thickness, minU, maxV, 255, 255, 255, 255, 0.0F, 0.0F, -1.0F);
+        addVertex(consumer, pose, packedLight, 1.0F, 0.0F, -thickness, minU, minV, 255, 255, 255, 255, 0.0F, 0.0F, -1.0F);
+        addVertex(consumer, pose, packedLight, 0.0F, 0.0F, -thickness, maxU, minV, 255, 255, 255, 255, 0.0F, 0.0F, -1.0F);
+
+        float uHalfStep = 0.5F * (maxU - minU) / width;
+        float vHalfStep = 0.5F * (minV - maxV) / height;
+
+        for (int k = 0; k < width; k++) {
+            float f7 = (float) k / (float) width;
+            float f8 = maxU + (minU - maxU) * f7 - uHalfStep;
+            float f9 = f7 + 1.0F / (float) width;
+
+            addVertex(consumer, pose, packedLight, f7, 0.0F, -thickness, f8, minV, 255, 255, 255, 255, -1.0F, 0.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, f7, 0.0F, 0.0F, f8, minV, 255, 255, 255, 255, -1.0F, 0.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, f7, 1.0F, 0.0F, f8, maxV, 255, 255, 255, 255, -1.0F, 0.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, f7, 1.0F, -thickness, f8, maxV, 255, 255, 255, 255, -1.0F, 0.0F, 0.0F);
+
+            addVertex(consumer, pose, packedLight, f9, 1.0F, -thickness, f8, maxV, 255, 255, 255, 255, 1.0F, 0.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, f9, 1.0F, 0.0F, f8, maxV, 255, 255, 255, 255, 1.0F, 0.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, f9, 0.0F, 0.0F, f8, minV, 255, 255, 255, 255, 1.0F, 0.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, f9, 0.0F, -thickness, f8, minV, 255, 255, 255, 255, 1.0F, 0.0F, 0.0F);
+        }
+
+        for (int k = 0; k < height; k++) {
+            float f7 = (float) k / (float) height;
+            float f8 = minV + (maxV - minV) * f7 - vHalfStep;
+            float f9 = f7 + 1.0F / (float) height;
+
+            addVertex(consumer, pose, packedLight, 0.0F, f9, 0.0F, maxU, f8, 255, 255, 255, 255, 0.0F, 1.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, 1.0F, f9, 0.0F, minU, f8, 255, 255, 255, 255, 0.0F, 1.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, 1.0F, f9, -thickness, minU, f8, 255, 255, 255, 255, 0.0F, 1.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, 0.0F, f9, -thickness, maxU, f8, 255, 255, 255, 255, 0.0F, 1.0F, 0.0F);
+
+            addVertex(consumer, pose, packedLight, 1.0F, f7, 0.0F, minU, f8, 255, 255, 255, 255, 0.0F, -1.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, 0.0F, f7, 0.0F, maxU, f8, 255, 255, 255, 255, 0.0F, -1.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, 0.0F, f7, -thickness, maxU, f8, 255, 255, 255, 255, 0.0F, -1.0F, 0.0F);
+            addVertex(consumer, pose, packedLight, 1.0F, f7, -thickness, minU, f8, 255, 255, 255, 255, 0.0F, -1.0F, 0.0F);
+        }
     }
 
     private static void addVertex(

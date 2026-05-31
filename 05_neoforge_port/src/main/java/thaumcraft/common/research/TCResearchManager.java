@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.items.components.TCAspectStackComponent;
@@ -172,8 +174,22 @@ public final class TCResearchManager {
             return false;
         }
 
+        String normalizedCategory = TCPlayerKnowledge.normalizeCategory(category);
         final boolean[] changed = {false};
-        TCPlayerKnowledgeStore.mutate(player, knowledge -> changed[0] = knowledge.addRaw(type, category, rawAmount));
+        final int[] gainedPoints = {0};
+        TCPlayerKnowledgeStore.mutate(player, knowledge -> {
+            int before = knowledge.getPoints(type, normalizedCategory);
+            changed[0] = knowledge.addRaw(type, normalizedCategory, rawAmount);
+            int after = knowledge.getPoints(type, normalizedCategory);
+            gainedPoints[0] = Math.max(0, after - before);
+        });
+
+        if (changed[0] && rawAmount > 0) {
+            // Legacy sends one PacketKnowledgeGain per gained point. While this port still has
+            // several fractional raw awards, send at least one visual event for a positive
+            // changed award so the HUD path is not silently invisible.
+            sendKnowledgeGainPayloads(player, type, normalizedCategory, gainedPoints[0]);
+        }
         return changed[0];
     }
 
@@ -199,16 +215,42 @@ public final class TCResearchManager {
             return false;
         }
 
+        LinkedHashMap<String, Integer> gainedByCategory = new LinkedHashMap<>();
         final boolean[] changed = {false};
         TCPlayerKnowledgeStore.mutate(player, knowledge -> {
             for (TCResearchCategoryDefinition category : categories()) {
                 int rawAmount = category.applyFormula(aspects);
                 if (rawAmount > 0) {
-                    changed[0] |= knowledge.addRaw(TCKnowledgeType.OBSERVATION, category.key(), rawAmount);
+                    int before = knowledge.getPoints(TCKnowledgeType.OBSERVATION, category.key());
+                    boolean categoryChanged = knowledge.addRaw(TCKnowledgeType.OBSERVATION, category.key(), rawAmount);
+                    changed[0] |= categoryChanged;
+                    if (categoryChanged) {
+                        int after = knowledge.getPoints(TCKnowledgeType.OBSERVATION, category.key());
+                        int gained = Math.max(0, after - before);
+                        if (gained > 0) {
+                            gainedByCategory.merge(category.key(), gained, Integer::sum);
+                        }
+                    }
                 }
             }
         });
+
+        if (changed[0]) {
+            for (Map.Entry<String, Integer> entry : gainedByCategory.entrySet()) {
+                sendKnowledgeGainPayloads(player, TCKnowledgeType.OBSERVATION, entry.getKey(), entry.getValue());
+            }
+        }
         return changed[0];
+    }
+
+    private static void sendKnowledgeGainPayloads(ServerPlayer player, TCKnowledgeType type, String category, int gainedPoints) {
+        if (player == null || type == null || gainedPoints <= 0) {
+            return;
+        }
+
+        for (int index = 0; index < gainedPoints; index++) {
+            TCKnowledgeNetwork.sendKnowledgeGain(player, type, category);
+        }
     }
 
     public static TCResearchStatus getResearchStatus(TCPlayerKnowledge knowledge, String key) {

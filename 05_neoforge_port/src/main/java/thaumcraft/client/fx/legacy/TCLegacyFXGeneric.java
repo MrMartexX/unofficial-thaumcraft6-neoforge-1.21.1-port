@@ -2,13 +2,17 @@ package thaumcraft.client.fx.legacy;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import thaumcraft.common.lib.fx.TCLegacyFXData;
 
 public final class TCLegacyFXGeneric {
+    private final Level level;
     private final TCLegacyFXData data;
 
     private double x;
@@ -30,6 +34,7 @@ public final class TCLegacyFXGeneric {
     private boolean removed;
 
     public TCLegacyFXGeneric(
+            Level level,
             TCLegacyFXData data,
             double x,
             double y,
@@ -38,6 +43,7 @@ public final class TCLegacyFXGeneric {
             double yd,
             double zd
     ) {
+        this.level = level;
         this.data = data;
         this.x = x;
         this.y = y;
@@ -148,9 +154,10 @@ public final class TCLegacyFXGeneric {
         float v1 = getFrameV(frame, 1.0F);
 
         float progress = Mth.clamp((this.age + partialTicks) / (float) this.data.maxAge, 0.0F, 1.0F);
-        float red = this.data.redStart + (this.data.redEnd - this.data.redStart) * progress;
-        float green = this.data.greenStart + (this.data.greenEnd - this.data.greenStart) * progress;
-        float blue = this.data.blueStart + (this.data.blueEnd - this.data.blueStart) * progress;
+        float light = getLegacyBrightness(partialTicks);
+        float red = (this.data.redStart + (this.data.redEnd - this.data.redStart) * progress) * light;
+        float green = (this.data.greenStart + (this.data.greenEnd - this.data.greenStart) * progress) * light;
+        float blue = (this.data.blueStart + (this.data.blueEnd - this.data.blueStart) * progress) * light;
 
         buffer.addVertex(corners[0].x(), corners[0].y(), corners[0].z())
                 .setUv(u1, v1)
@@ -167,6 +174,28 @@ public final class TCLegacyFXGeneric {
         buffer.addVertex(corners[3].x(), corners[3].y(), corners[3].z())
                 .setUv(u0, v1)
                 .setColor(red, green, blue, alpha);
+    }
+
+    private float getLegacyBrightness(float partialTicks) {
+        if (this.data.fullBright || this.level == null) {
+            return 1.0F;
+        }
+
+        /*
+         * Legacy FXGeneric sent Particle#getBrightnessForRender(partialTicks) to the lightmap.
+         * The modern compatibility shader is intentionally texture/color only to keep the legacy
+         * 1/255 alpha cutoff. Approximate the old lightmap contribution on CPU so non-fullbright
+         * particles are no longer always rendered as fullbright.
+         */
+        double lx = Mth.lerp(partialTicks, this.xo, this.x);
+        double ly = Mth.lerp(partialTicks, this.yo, this.y);
+        double lz = Mth.lerp(partialTicks, this.zo, this.z);
+
+        int packedLight = LevelRenderer.getLightColor(this.level, BlockPos.containing(lx, ly, lz));
+        int block = (packedLight >> 4) & 0xF;
+        int sky = (packedLight >> 20) & 0xF;
+
+        return Mth.clamp(Math.max(block, sky) / 15.0F, 0.2F, 1.0F);
     }
 
     private int getCurrentFrame() {

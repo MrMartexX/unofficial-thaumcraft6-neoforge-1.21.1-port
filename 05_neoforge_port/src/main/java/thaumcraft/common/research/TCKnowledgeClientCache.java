@@ -1,10 +1,13 @@
 package thaumcraft.common.research;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class TCKnowledgeClientCache {
     private static Set<String> completedResearch = Set.of();
@@ -12,6 +15,7 @@ public final class TCKnowledgeClientCache {
     private static Map<String, Set<String>> researchFlags = Map.of();
     private static Map<String, Integer> observationRaw = Map.of();
     private static Map<String, Integer> theoryRaw = Map.of();
+    private static final Queue<TCKnowledgeGainPayload> knowledgeGainQueue = new ConcurrentLinkedQueue<>();
 
     private TCKnowledgeClientCache() {
     }
@@ -36,7 +40,7 @@ public final class TCKnowledgeClientCache {
         researchStages = Map.copyOf(stages);
 
         TreeMap<String, Set<String>> flags = new TreeMap<>();
-        for (Map.Entry<String, java.util.List<String>> entry : payload.researchFlags().entrySet()) {
+        for (Map.Entry<String, List<String>> entry : payload.researchFlags().entrySet()) {
             String normalized = TCPlayerKnowledge.baseResearchKey(entry.getKey());
             if (!normalized.isBlank() && !entry.getValue().isEmpty()) {
                 flags.put(normalized, Set.copyOf(entry.getValue()));
@@ -46,6 +50,16 @@ public final class TCKnowledgeClientCache {
 
         observationRaw = normalizeRawMap(payload.observationRaw());
         theoryRaw = normalizeRawMap(payload.theoryRaw());
+    }
+
+    public static void accept(TCKnowledgeGainPayload payload) {
+        if (payload != null) {
+            knowledgeGainQueue.offer(payload);
+        }
+    }
+
+    public static TCKnowledgeGainPayload pollKnowledgeGain() {
+        return knowledgeGainQueue.poll();
     }
 
     public static boolean hasResearch(String key) {
@@ -97,6 +111,7 @@ public final class TCKnowledgeClientCache {
         researchFlags = Map.of();
         observationRaw = Map.of();
         theoryRaw = Map.of();
+        knowledgeGainQueue.clear();
     }
 
     private static Map<String, Integer> rawMap(TCKnowledgeType type) {
