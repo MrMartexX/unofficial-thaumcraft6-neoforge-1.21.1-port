@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:rotten_flesh"
+    },
+    {
+      "item": "minecraft:bone"
+    },
+    {
+      "item": "minecraft:spider_eye"
+    }
+  ],
+  "category": "misc",
+  "result": {
+    "id": "thaumcraft:brain"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "minecraft:torch"
+    },
+    {
+      "item": "minecraft:yellow_dye"
+    },
+    {
+      "item": "thaumcraft:tallow"
+    }
+  ],
+  "category": "misc",
+  "result": {
+    "id": "thaumcraft:nitor_yellow"
+  }
+}

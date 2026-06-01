@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thaumcraft:focus_1"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:lapis_lazuli"
+    }
+  ],
+  "category": "misc",
+  "result": {
+    "id": "thaumcraft:focus_2"
+  }
+}
