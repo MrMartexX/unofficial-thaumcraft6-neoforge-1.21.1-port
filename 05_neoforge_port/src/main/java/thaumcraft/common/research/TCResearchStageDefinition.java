@@ -8,7 +8,8 @@ record TCResearchStageDefinition(
         List<String> requiredCraft,
         List<String> requiredItem,
         List<String> requiredKnowledge,
-        List<String> recipes
+        List<String> recipes,
+        int warp
 ) {
     TCResearchStageDefinition {
         text = text == null ? "" : text.trim();
@@ -17,5 +18,6 @@ record TCResearchStageDefinition(
         requiredItem = List.copyOf(requiredItem);
         requiredKnowledge = List.copyOf(requiredKnowledge);
         recipes = List.copyOf(recipes);
+        warp = Math.max(0, warp);
     }
 }

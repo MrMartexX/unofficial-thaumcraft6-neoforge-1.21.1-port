@@ -99,9 +99,14 @@ final class TCResearchParser {
                 parseStringsOptional(stage, "required_craft"),
                 parseStringsOptional(stage, "required_item"),
                 parseStringsOptional(stage, "required_knowledge"),
-                parseStringsOptional(stage, "recipes")
+                parseStringsOptional(stage, "recipes"),
+                parseWarp(stage)
         );
     }
+    private static int parseWarp(JsonObject stage) {
+        return Math.max(0, GsonHelper.getAsInt(stage, "warp", 0));
+    }
+
 
     private static List<String> parseStringsOptional(JsonObject object, String arrayName) {
         if (!object.has(arrayName)) {

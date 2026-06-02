@@ -36,6 +36,8 @@ import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirementR
 import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirement;
 import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirementResolution;
 
+import thaumcraft.common.warp.TCPlayerWarpStore;
+import thaumcraft.common.warp.TCWarpType;
 public final class TCResearchManager {
     private static TCResearchData activeData = TCResearchData.empty();
 
@@ -337,6 +339,7 @@ public final class TCResearchManager {
         }
 
         TCResearchEntryDefinition entry = activeData.entries().get(researchKey);
+        int previousStage = knowledge.getResearchStage(researchKey);
         TCPlayerKnowledgeStore.mutate(player, storedKnowledge -> {
             if (!storedKnowledge.isResearchKnown(researchKey)) {
                 storedKnowledge.addResearch(researchKey);
@@ -369,14 +372,36 @@ public final class TCResearchManager {
         }, sync);
 
         if (entry != null) {
+            int updatedStage = TCPlayerKnowledgeStore.get(player).getResearchStage(researchKey);
+            applyWarpRewardsForAdvancedStages(player, entry, previousStage, updatedStage);
             completeAvailableSiblings(player, entry, sync);
             if (sync) {
                 player.giveExperiencePoints(5);
             }
         }
 
-        return true;
+return true;
     }
+    private static void applyWarpRewardsForAdvancedStages(
+            ServerPlayer player,
+            TCResearchEntryDefinition entry,
+            int previousStage,
+            int updatedStage
+    ) {
+        if (player == null || entry == null || updatedStage <= 0) {
+            return;
+        }
+
+        int firstCompletedStageIndex = Math.max(0, previousStage - 1);
+        int endExclusive = Math.min(entry.stages().size(), Math.max(0, updatedStage - 1));
+        for (int stageIndex = firstCompletedStageIndex; stageIndex < endExclusive; stageIndex++) {
+            int warp = entry.stages().get(stageIndex).warp();
+            if (warp > 0) {
+                TCPlayerWarpStore.add(player, TCWarpType.PERMANENT, warp);
+            }
+        }
+    }
+
 
     public static TCResearchStageRequirementResult checkCurrentStageRequirements(ServerPlayer player, String key) {
         return checkCurrentStageRequirementsInternal(player, key);
