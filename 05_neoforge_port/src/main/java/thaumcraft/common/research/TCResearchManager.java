@@ -380,20 +380,21 @@ public final class TCResearchManager {
             }
         }
 
-return true;
+        return true;
     }
+
     private static void applyWarpRewardsForAdvancedStages(
             ServerPlayer player,
             TCResearchEntryDefinition entry,
             int previousStage,
             int updatedStage
     ) {
-        if (player == null || entry == null || updatedStage <= 0) {
+        if (player == null || entry == null || updatedStage <= previousStage) {
             return;
         }
 
-        int firstCompletedStageIndex = Math.max(0, previousStage - 1);
-        int endExclusive = Math.min(entry.stages().size(), Math.max(0, updatedStage - 1));
+        int firstCompletedStageIndex = Math.max(0, previousStage);
+        int endExclusive = Math.min(entry.stages().size(), Math.max(0, updatedStage));
         for (int stageIndex = firstCompletedStageIndex; stageIndex < endExclusive; stageIndex++) {
             int warp = entry.stages().get(stageIndex).warp();
             if (warp > 0) {
@@ -401,7 +402,6 @@ return true;
             }
         }
     }
-
 
     public static TCResearchStageRequirementResult checkCurrentStageRequirements(ServerPlayer player, String key) {
         return checkCurrentStageRequirementsInternal(player, key);

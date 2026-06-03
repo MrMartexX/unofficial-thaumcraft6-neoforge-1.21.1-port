@@ -107,7 +107,7 @@ final class TCResearchRequirementAudit {
             writer.newLine();
             writer.write("| `required_knowledge` | `" + report.knowledgeResolved() + "/" + report.knowledgeTotal() + "` resolved |");
             writer.newLine();
-            writer.write("| Total unresolved item/craft/knowledge requirements | `" + report.unresolvedTotal() + "` |>");
+            writer.write("| Total unresolved item/craft/knowledge requirements | `" + report.unresolvedTotal() + "` |");
             writer.newLine();
             writer.write("| Identity bridge / placeholder warnings | `" + report.bridgeWarningTotal() + "` |");
             writer.newLine();

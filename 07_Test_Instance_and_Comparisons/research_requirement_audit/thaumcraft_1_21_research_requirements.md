@@ -9,11 +9,11 @@ Equivalent command: `/tc research requirements 200`
 | `required_craft` | `34/34` modern-matchable |
 | `required_knowledge` | `170/170` resolved |
 | Total unresolved item/craft/knowledge requirements | `0` |
-| Identity bridge / placeholder warnings | `28` |
+| Identity bridge / placeholder warnings | `16` |
 
 `required_craft` modern-matchable means the current `ItemCraftedEvent` marker path can identify the crafted stack. Exact legacy `ItemStack.toString().hashCode()` parity is still a separate exporter/mapping task.
 Bridge warnings are not parser failures. They mark requirements whose registry identity is resolvable, but whose final gameplay source, item semantics, recipe flow, or legacy container/component behavior is still a migration boundary.
-Aspect stack, stored-enchantment and legacy item component requirements are no longer counted as bridge warnings when their legacy NBT/metadata semantics are carried by modern DataComponent or vanilla enchantment-component payloads.
+Aspect stack, stored-enchantment and legacy item component requirements are no longer counted as bridge warnings when their legacy NBT/metadata semantics are carried by modern DataComponent or vanilla enchantment-component payloads. Safe 1.12-to-1.21 identity remaps, implemented research-table/scribing-tools requirements and implemented Thaumium tool items are also not counted as bridge warnings.
 
 ## Unresolved Summary
 
@@ -24,14 +24,10 @@ No unresolved stage requirements.
 | Count | Bucket |
 |---:|---|
 | 5 | `required_craft auromancy placeholder before focus/caster/vis semantics` |
-| 5 | `required_craft thaumium tool placeholder before tool material/enchant/repair semantics` |
-| 4 | `required_craft research/crafting station placeholder before full UI/menu/recipe semantics` |
 | 3 | `required_craft alchemy placeholder before crucible/smelter/container semantics` |
-| 2 | `required_craft legacy flattened vanilla metadata bridge` |
-| 2 | `required_item legacy flattened vanilla metadata bridge` |
+| 2 | `required_craft research/crafting station placeholder before full UI/menu/recipe semantics` |
 | 1 | `required_craft alchemy identity bridge before nitor recipe/subsystem semantics` |
 | 1 | `required_craft infusion placeholder before multiblock/recipe semantics` |
-| 1 | `required_craft safe renamed Thaumcraft identity bridge` |
 | 1 | `required_item artifice mirror placeholder before mirror behavior` |
 | 1 | `required_item biological component identity before golem/brain subsystem semantics` |
 | 1 | `required_item curio metadata identity bridge` |
@@ -42,20 +38,14 @@ No unresolved stage requirements.
 Detail limit: `200`.
 
 - `HEDGEALCHEMY stage 1 required_craft raw=thaumcraft:tallow warning=alchemy placeholder before crucible/smelter/container semantics`
-- `HEDGEALCHEMY stage 2 required_craft raw=minecraft:dye warning=legacy flattened vanilla metadata bridge`
-- `HEDGEALCHEMY stage 3 required_craft raw=minecraft:web warning=legacy flattened vanilla metadata bridge`
 - `ESSENTIASMELTER stage 3 required_craft raw=thaumcraft:smelter_basic warning=alchemy placeholder before crucible/smelter/container semantics`
 - `HUNGRYCHEST stage 1 required_item raw=oredict:chest warning=legacy OreDictionary tag bridge`
-- `ARCANEEAR stage 1 required_item raw=minecraft:noteblock warning=legacy flattened vanilla metadata bridge`
 - `MIRROR stage 1 required_item raw=thaumcraft:mirrored_glass warning=artifice mirror placeholder before mirror behavior`
-- `LAMPGROWTH stage 1 required_item raw=minecraft:dye;1;15 warning=legacy flattened vanilla metadata bridge`
 - `BASEAUROMANCY stage 1 required_craft raw=thaumcraft:focus_1 warning=auromancy placeholder before focus/caster/vis semantics`
 - `BASEAUROMANCY stage 2 required_craft raw=thaumcraft:wand_workbench warning=research/crafting station placeholder before full UI/menu/recipe semantics`
 - `FOCUSADVANCED stage 1 required_craft raw=thaumcraft:focus_2 warning=auromancy placeholder before focus/caster/vis semantics`
 - `FOCUSGREATER stage 1 required_craft raw=thaumcraft:focus_3 warning=auromancy placeholder before focus/caster/vis semantics`
 - `FIRSTSTEPS stage 1 required_craft raw=thaumcraft:arcane_workbench warning=research/crafting station placeholder before full UI/menu/recipe semantics`
-- `THEORYRESEARCH stage 1 required_craft raw=thaumcraft:scribing_tools warning=research/crafting station placeholder before full UI/menu/recipe semantics`
-- `THEORYRESEARCH stage 1 required_craft raw=thaumcraft:research_table warning=research/crafting station placeholder before full UI/menu/recipe semantics`
 - `UNLOCKALCHEMY stage 2 required_craft raw=thaumcraft:crucible warning=alchemy placeholder before crucible/smelter/container semantics`
 - `UNLOCKALCHEMY stage 3 required_craft raw=thaumcraft:nitor;1;4 warning=alchemy identity bridge before nitor recipe/subsystem semantics`
 - `UNLOCKAUROMANCY stage 2 required_craft raw=thaumcraft:vis_resonator warning=auromancy placeholder before focus/caster/vis semantics`
@@ -63,12 +53,6 @@ Detail limit: `200`.
 - `CrimsonRites stage 1 required_item raw=thaumcraft:curio;1;6 warning=curio metadata identity bridge`
 - `JARBRAIN stage 1 required_item raw=thaumcraft:brain warning=biological component identity before golem/brain subsystem semantics`
 - `INFUSION stage 2 required_craft raw=thaumcraft:infusion_matrix warning=infusion placeholder before multiblock/recipe semantics`
-- `PAVINGSTONES stage 1 required_craft raw=thaumcraft:arcane_stone warning=safe renamed Thaumcraft identity bridge`
-- `ELEMENTALTOOLS stage 1 required_craft raw=thaumcraft:thaumium_axe warning=thaumium tool placeholder before tool material/enchant/repair semantics`
-- `ELEMENTALTOOLS stage 1 required_craft raw=thaumcraft:thaumium_sword warning=thaumium tool placeholder before tool material/enchant/repair semantics`
-- `ELEMENTALTOOLS stage 1 required_craft raw=thaumcraft:thaumium_pick warning=thaumium tool placeholder before tool material/enchant/repair semantics`
-- `ELEMENTALTOOLS stage 1 required_craft raw=thaumcraft:thaumium_shovel warning=thaumium tool placeholder before tool material/enchant/repair semantics`
-- `ELEMENTALTOOLS stage 1 required_craft raw=thaumcraft:thaumium_hoe warning=thaumium tool placeholder before tool material/enchant/repair semantics`
 
 ## Unresolved Details
 
