@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
+    "thaumcraft:metal_brass",
+    "thaumcraft:metal_thaumium",
+    "thaumcraft:metal_void",
     "thaumcraft:ore_cinnabar"
   ]
 }
