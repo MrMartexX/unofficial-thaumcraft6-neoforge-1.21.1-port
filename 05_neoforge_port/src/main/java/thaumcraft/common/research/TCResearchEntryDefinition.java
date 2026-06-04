@@ -12,6 +12,8 @@ record TCResearchEntryDefinition(
         List<String> parents,
         List<String> siblings,
         List<String> meta,
+        List<String> rewardItems,
+        List<String> rewardKnowledge,
         List<TCResearchStageDefinition> stages,
         List<TCResearchStageDefinition> addenda
 ) {
@@ -23,6 +25,8 @@ record TCResearchEntryDefinition(
         parents = List.copyOf(parents);
         siblings = List.copyOf(siblings);
         meta = List.copyOf(meta);
+        rewardItems = List.copyOf(rewardItems);
+        rewardKnowledge = List.copyOf(rewardKnowledge);
         stages = List.copyOf(stages);
         addenda = List.copyOf(addenda);
     }

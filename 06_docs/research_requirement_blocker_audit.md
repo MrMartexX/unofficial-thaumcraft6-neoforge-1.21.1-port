@@ -26,7 +26,7 @@ Current summary:
 | `required_craft` | `34/34` modern-matchable |
 | `required_knowledge` | `170/170` resolved |
 | Total unresolved item/craft/knowledge requirements | `0` |
-| Identity bridge / placeholder warnings | `28` |
+| Identity bridge / placeholder warnings | `16` |
 
 Interpretation: the parser, registry lookup, legacy flattening, component-backed aspect stack matching, component-backed metadata-family matching, real vanilla stored-enchantment matching, and knowledge requirement conversion now cover every loaded stage requirement. The remaining risk is semantic, not parser-level: the remaining warnings are bridge identities or placeholders whose final source, recipe, item behavior, menu, or subsystem behavior is still owned by later slices.
 
@@ -35,20 +35,16 @@ Interpretation: the parser, registry lookup, legacy flattening, component-backed
 | Count | Requirement type | Family | Interpretation |
 |---:|---|---|---|
 | 5 | `required_craft` | auromancy placeholders | Focus/caster/vis ids are resolvable, but focus sockets, caster behavior, vis costs and related recipe flows are not implemented. |
-| 5 | `required_craft` | thaumium tool placeholders | Tool ids are resolvable, but actual tool classes, material behavior, enchant/repair rules and elemental behavior are not implemented. |
-| 4 | `required_craft` | research/crafting station placeholders | Arcane workbench, research table, scribing tools and wand workbench ids are resolvable; full menus, recipes and research-table flow remain blocked. |
+| 2 | `required_craft` | research/crafting station placeholders | Arcane workbench and wand workbench ids are resolvable, but their final menus, recipes, vis rules, and station behavior are not implemented. |
 | 3 | `required_craft` | alchemy placeholders | Tallow, smelter and crucible ids are resolvable; alchemy/crucible/smelter systems remain blocked. |
-| 2 | `required_craft` | legacy flattened vanilla metadata bridge | Legacy `minecraft:dye` and `minecraft:web` craft markers are matchable through flattened modern ids, but exact direct craft-hash parity remains unresolved. |
-| 2 | `required_item` | legacy flattened vanilla metadata bridge | Legacy `minecraft:noteblock`/`minecraft:dye;1;15` item requirements are matchable through flattened modern ids, but remain documented compatibility bridges. |
 | 1 | `required_craft` | alchemy identity bridge | `thaumcraft:nitor;1;4` is mapped to the current yellow nitor identity, but nitor recipe/alchemy behavior is not implemented. |
 | 1 | `required_craft` | infusion placeholder | Infusion matrix id is resolvable, but multiblock, recipe and stability behavior are not implemented. |
-| 1 | `required_craft` | safe renamed Thaumcraft identity bridge | Legacy `arcane_stone` maps to `stone_arcane`; craft marker parity still needs the direct hash exporter. |
 | 1 | `required_item` | artifice mirror placeholder | Mirrored glass id is resolvable, but mirror behavior is not implemented. |
 | 1 | `required_item` | biological component identity | Zombie brain id is resolvable, but golem/brain subsystem behavior is not implemented. |
 | 1 | `required_item` | curio metadata identity bridge | Crimson Rites curio is component-resolved, but curio acquisition/behavior remains a bridge. |
 | 1 | `required_item` | legacy OreDictionary tag bridge | `oredict:chest` is tag-matchable, but exact legacy OreDictionary behavior stays documented as a bridge. |
 
-The generated report contains the complete warning list. Aspect crystal essence, filled phial, material-family metadata and enchanted-placeholder requirements are no longer warning buckets because their requirement semantics are now represented by DataComponents or real vanilla enchantment components. This does not mean their producer subsystems are finished.
+The generated report contains the complete warning list. Thaumium tools, implemented Research Table/Scribing Tools requirements, safe identity remaps, flattened vanilla metadata mappings, aspect crystal essence, filled phial, material-family metadata, and enchanted-placeholder requirements are no longer warning buckets because their requirement semantics are now represented by real items, explicit mappings, DataComponents, or real vanilla enchantment components. This does not mean every producer subsystem is finished.
 
 ## Safe conclusions
 
@@ -65,13 +61,13 @@ The generated report contains the complete warning list. Aspect crystal essence,
 ## Still blocked
 
 - Crystal essence and filled phial production, filling/draining and essentia container behavior.
-- Real arcane workbench, wand workbench, research table and scribing tools behavior.
+- Real arcane workbench and wand workbench behavior.
 - Focus/caster/vis behavior.
 - Crucible, nitor, smelter and broader alchemy behavior.
 - Infusion matrix and infusion recipe behavior.
 - Thaumium tools and material behavior.
 - Source recipes/drops for material-family bridge items.
-- Full Thaumonomicon UI, rewards, recipe unlock side effects and broad player knowledge/stage sync.
+- Permanent research recipe/page catalog, final Thaumonomicon UI/protocol, full warp behavior, and cancellable research/knowledge events.
 
 ## Pass criteria
 

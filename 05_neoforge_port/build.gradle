@@ -68,6 +68,8 @@ neoForge {
             def researchRequirementAuditEnabled = providers.gradleProperty('tcResearchRequirementAudit').orNull ?: System.getProperty('tc.researchRequirementAudit')
             def researchRequirementAuditPath = providers.gradleProperty('tcResearchRequirementAuditPath').orNull ?: System.getProperty('tc.researchRequirementAuditPath')
             def researchRequirementAuditDetailLimit = providers.gradleProperty('tcResearchRequirementAuditDetailLimit').orNull ?: System.getProperty('tc.researchRequirementAuditDetailLimit')
+            def researchDataAuditEnabled = providers.gradleProperty('tcResearchDataAudit').orNull ?: System.getProperty('tc.researchDataAudit')
+            def researchDataAuditPath = providers.gradleProperty('tcResearchDataAuditPath').orNull ?: System.getProperty('tc.researchDataAuditPath')
             def researchTableAuditEnabled = providers.gradleProperty('tcResearchTableAudit').orNull ?: System.getProperty('tc.researchTableAudit')
             def researchTableAuditPath = providers.gradleProperty('tcResearchTableAuditPath').orNull ?: System.getProperty('tc.researchTableAuditPath')
             if (aspectDumpEnabled != null) {
@@ -96,6 +98,12 @@ neoForge {
             }
             if (researchRequirementAuditDetailLimit != null) {
                 systemProperty 'tc.researchRequirementAuditDetailLimit', researchRequirementAuditDetailLimit
+            }
+            if (researchDataAuditEnabled != null) {
+                systemProperty 'tc.researchDataAudit', researchDataAuditEnabled
+            }
+            if (researchDataAuditPath != null) {
+                systemProperty 'tc.researchDataAuditPath', researchDataAuditPath
             }
             if (researchTableAuditEnabled != null) {
                 systemProperty 'tc.researchTableAudit', researchTableAuditEnabled

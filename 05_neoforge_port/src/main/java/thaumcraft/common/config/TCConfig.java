@@ -34,6 +34,10 @@ public final class TCConfig {
             .comment("Registers permission-level-2 Thaumcraft warp debug commands for port validation.")
             .define("enableWarpDebugCommands", true);
 
+    public static final ModConfigSpec.BooleanValue WUSS_MODE = BUILDER
+            .comment("Matches the legacy Thaumcraft wussMode option: research progression does not award warp.")
+            .define("wussMode", false);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private TCConfig() {

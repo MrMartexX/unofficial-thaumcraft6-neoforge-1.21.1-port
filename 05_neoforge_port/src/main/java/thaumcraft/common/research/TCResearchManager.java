@@ -14,6 +14,7 @@ import java.util.Set;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Inventory;
@@ -30,6 +31,7 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.items.components.TCAspectStackComponent;
 import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
+import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirement;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirementResolution;
@@ -324,10 +326,20 @@ public final class TCResearchManager {
     }
 
     public static boolean progressResearch(ServerPlayer player, String key, boolean sync) {
-        return progressResearch(player, key, sync, false);
+        return advanceResearch(player, key, sync, false, false);
     }
 
     private static boolean progressResearch(ServerPlayer player, String key, boolean sync, boolean noResearchFlag) {
+        return advanceResearch(player, key, sync, noResearchFlag, false);
+    }
+
+    private static boolean advanceResearch(
+            ServerPlayer player,
+            String key,
+            boolean sync,
+            boolean noResearchFlag,
+            boolean consumeCurrentStage
+    ) {
         String researchKey = canonicalResearchKey(key);
         if (researchKey.isBlank()) {
             return false;
@@ -339,67 +351,94 @@ public final class TCResearchManager {
         }
 
         TCResearchEntryDefinition entry = activeData.entries().get(researchKey);
-        int previousStage = knowledge.getResearchStage(researchKey);
-        TCPlayerKnowledgeStore.mutate(player, storedKnowledge -> {
-            if (!storedKnowledge.isResearchKnown(researchKey)) {
-                storedKnowledge.addResearch(researchKey);
+        StageConsumePlan consumePlan = StageConsumePlan.empty();
+        if (consumeCurrentStage) {
+            TCResearchStageRequirementResult result = checkCurrentStageRequirementsInternal(player, researchKey);
+            if (!result.hasStage() || !result.passed()) {
+                return false;
             }
-
-            if (entry != null && !entry.stages().isEmpty()) {
-                int stage = storedKnowledge.getResearchStage(researchKey);
-                if (stage < 0) {
-                    stage = 0;
-                }
-
-                if (entry.stages().size() == 1 && stage == 0 && isEmptyGateStage(entry.stages().getFirst())) {
-                    stage++;
-                } else if (entry.stages().size() > 1
-                        && entry.stages().size() <= stage + 1
-                        && stage < entry.stages().size()
-                        && isEmptyGateStage(entry.stages().get(stage))) {
-                    stage++;
-                }
-
-                storedKnowledge.setResearchStage(researchKey, Math.min(entry.stages().size() + 1, stage + 1));
+            consumePlan = buildCurrentStageConsumePlan(player, entry, knowledge);
+            if (consumePlan == null) {
+                return false;
             }
+        }
 
-            if (sync && entry != null && getResearchStatus(storedKnowledge, researchKey) == TCResearchStatus.COMPLETE) {
-                storedKnowledge.setResearchFlag(researchKey, TCResearchFlag.POPUP);
-                if (!noResearchFlag) {
-                    storedKnowledge.setResearchFlag(researchKey, TCResearchFlag.RESEARCH);
-                }
+        TCResearchProgressionSemantics.Advance advance = entry == null
+                ? null
+                : TCResearchProgressionSemantics.calculate(entry.stages(), knowledge.getResearchStage(researchKey));
+
+        for (KnowledgeRequirement requirement : consumePlan.knowledgeRequirements()) {
+            if (!knowledge.addRaw(
+                    requirement.type(),
+                    requirement.category(),
+                    -requirement.type().pointsToRaw(requirement.points())
+            )) {
+                return false;
             }
-        }, sync);
+        }
+
+        if (!knowledge.isResearchKnown(researchKey)) {
+            knowledge.addResearch(researchKey);
+        }
+        if (advance != null && !entry.stages().isEmpty()) {
+            knowledge.setResearchStage(researchKey, advance.updatedStage());
+        }
+
+        boolean completedEntry = entry != null && advance.completed();
+        List<KnowledgeRewardGrant> knowledgeRewardGrants = List.of();
+        if (completedEntry && sync) {
+            knowledge.setResearchFlag(researchKey, TCResearchFlag.POPUP);
+            if (!noResearchFlag) {
+                knowledge.setResearchFlag(researchKey, TCResearchFlag.RESEARCH);
+            }
+            knowledgeRewardGrants = applyRewardKnowledge(knowledge, entry);
+        }
+        List<TCResearchEntryDefinition> unlockedAddenda = completedEntry
+                ? unlockTriggeredAddenda(knowledge, researchKey)
+                : List.of();
+
+        applyItemConsumePlan(player, consumePlan.itemConsumePlan());
+        TCPlayerKnowledgeStore.set(player, knowledge, false);
+
+        if (advance != null) {
+            applyLegacyResearchWarp(player, advance.warp());
+        }
+        if (completedEntry && sync) {
+            giveRewardItems(player, entry);
+            for (KnowledgeRewardGrant grant : knowledgeRewardGrants) {
+                sendKnowledgeGainPayloads(player, grant.type(), grant.category(), grant.gainedPoints());
+            }
+        }
+        for (TCResearchEntryDefinition addendumEntry : unlockedAddenda) {
+            player.sendSystemMessage(Component.translatable(
+                    "tc.addaddendum",
+                    Component.translatable(addendumEntry.name())
+            ));
+        }
 
         if (entry != null) {
-            int updatedStage = TCPlayerKnowledgeStore.get(player).getResearchStage(researchKey);
-            applyWarpRewardsForAdvancedStages(player, entry, previousStage, updatedStage);
             completeAvailableSiblings(player, entry, sync);
             if (sync) {
                 player.giveExperiencePoints(5);
             }
         }
+        if (sync) {
+            TCPlayerKnowledgeStore.sync(player);
+        }
 
         return true;
     }
 
-    private static void applyWarpRewardsForAdvancedStages(
-            ServerPlayer player,
-            TCResearchEntryDefinition entry,
-            int previousStage,
-            int updatedStage
-    ) {
-        if (player == null || entry == null || updatedStage <= previousStage) {
+    private static void applyLegacyResearchWarp(ServerPlayer player, int warp) {
+        if (player == null || warp <= 0 || TCConfig.WUSS_MODE.get()) {
             return;
         }
-
-        int firstCompletedStageIndex = Math.max(0, previousStage);
-        int endExclusive = Math.min(entry.stages().size(), Math.max(0, updatedStage));
-        for (int stageIndex = firstCompletedStageIndex; stageIndex < endExclusive; stageIndex++) {
-            int warp = entry.stages().get(stageIndex).warp();
-            if (warp > 0) {
-                TCPlayerWarpStore.add(player, TCWarpType.PERMANENT, warp);
-            }
+        TCResearchProgressionSemantics.WarpAward award = TCResearchProgressionSemantics.splitWarp(warp);
+        if (award.permanent() > 0) {
+            TCPlayerWarpStore.add(player, TCWarpType.PERMANENT, award.permanent());
+        }
+        if (award.normal() > 0) {
+            TCPlayerWarpStore.add(player, TCWarpType.NORMAL, award.normal());
         }
     }
 
@@ -412,12 +451,7 @@ public final class TCResearchManager {
         if (!result.hasStage() || !result.passed()) {
             return false;
         }
-
-        if (!consumeCurrentStageRequirements(player, result.researchKey(), sync)) {
-            return false;
-        }
-
-        return progressResearch(player, key, sync, noResearchFlag);
+        return advanceResearch(player, result.researchKey(), sync, noResearchFlag, true);
     }
 
     public static boolean completeResearch(ServerPlayer player, String key) {
@@ -530,13 +564,6 @@ public final class TCResearchManager {
         return false;
     }
 
-    private static boolean isEmptyGateStage(TCResearchStageDefinition stage) {
-        return stage.requiredCraft().isEmpty()
-                && stage.requiredItem().isEmpty()
-                && stage.requiredKnowledge().isEmpty()
-                && stage.requiredResearch().isEmpty();
-    }
-
     private static TCResearchStageRequirementResult checkCurrentStageRequirementsInternal(ServerPlayer player, String key) {
         String researchKey = canonicalResearchKey(key);
         TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
@@ -612,17 +639,18 @@ public final class TCResearchManager {
         return new TCResearchStageRequirementResult(researchKey, stageIndex, entry.stages().size(), satisfied, missing, blocked);
     }
 
-    private static boolean consumeCurrentStageRequirements(ServerPlayer player, String key, boolean sync) {
-        String researchKey = canonicalResearchKey(key);
-        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
-        TCResearchEntryDefinition entry = activeData.entries().get(researchKey);
+    private static StageConsumePlan buildCurrentStageConsumePlan(
+            ServerPlayer player,
+            TCResearchEntryDefinition entry,
+            TCPlayerKnowledge knowledge
+    ) {
         if (entry == null || entry.stages().isEmpty()) {
-            return false;
+            return null;
         }
 
-        int stageIndex = knowledge.getResearchStage(researchKey) - 1;
+        int stageIndex = knowledge.getResearchStage(entry.key()) - 1;
         if (stageIndex < 0 || stageIndex >= entry.stages().size()) {
-            return false;
+            return null;
         }
 
         TCResearchStageDefinition stage = entry.stages().get(stageIndex);
@@ -632,7 +660,7 @@ public final class TCResearchManager {
         for (String required : stage.requiredItem()) {
             ItemRequirement item = parseItemRequirement(required);
             if (item == null) {
-                return false;
+                return null;
             }
             itemRequirements.add(item);
         }
@@ -640,38 +668,104 @@ public final class TCResearchManager {
         for (String required : stage.requiredKnowledge()) {
             KnowledgeRequirementResolution resolution = TCResearchRequirementResolver.resolveKnowledgeRequirement(required);
             if (!resolution.resolved()) {
-                return false;
+                return null;
             }
             KnowledgeRequirement requirement = resolution.requirement();
             int rawCost = requirement.type().pointsToRaw(requirement.points());
             if (knowledge.getRaw(requirement.type(), requirement.category()) < rawCost) {
-                return false;
+                return null;
             }
             knowledgeRequirements.add(requirement);
         }
 
         ItemConsumePlan itemConsumePlan = buildItemConsumePlan(player, itemRequirements);
         if (itemConsumePlan == null) {
-            return false;
+            return null;
+        }
+        return new StageConsumePlan(itemConsumePlan, knowledgeRequirements);
+    }
+
+    private static List<KnowledgeRewardGrant> applyRewardKnowledge(
+            TCPlayerKnowledge knowledge,
+            TCResearchEntryDefinition entry
+    ) {
+        ArrayList<KnowledgeRewardGrant> grants = new ArrayList<>();
+        for (String rawReward : entry.rewardKnowledge()) {
+            KnowledgeRequirementResolution resolution = TCResearchRequirementResolver.resolveKnowledgeRequirement(rawReward);
+            if (!resolution.resolved()) {
+                Thaumcraft.LOGGER.warn(
+                        "Skipping unresolved research knowledge reward for {}: raw={} reason={}",
+                        entry.key(),
+                        rawReward,
+                        resolution.reason()
+                );
+                continue;
+            }
+
+            KnowledgeRequirement reward = resolution.requirement();
+            int before = knowledge.getPoints(reward.type(), reward.category());
+            knowledge.addRaw(reward.type(), reward.category(), reward.type().pointsToRaw(reward.points()));
+            int gained = Math.max(0, knowledge.getPoints(reward.type(), reward.category()) - before);
+            grants.add(new KnowledgeRewardGrant(reward.type(), reward.category(), gained));
+        }
+        return List.copyOf(grants);
+    }
+
+    private static void giveRewardItems(ServerPlayer player, TCResearchEntryDefinition entry) {
+        for (String rawReward : entry.rewardItems()) {
+            ItemStack reward = createRewardStack(rawReward);
+            if (reward.isEmpty()) {
+                Thaumcraft.LOGGER.warn(
+                        "Skipping unresolved research item reward for {}: raw={}",
+                        entry.key(),
+                        rawReward
+                );
+                continue;
+            }
+            if (!player.getInventory().add(reward)) {
+                player.drop(reward, true);
+            }
+        }
+    }
+
+    private static ItemStack createRewardStack(String rawReward) {
+        ItemRequirementResolution resolution = TCResearchRequirementResolver.resolveItemRequirement(rawReward);
+        if (!resolution.resolved() || resolution.requirement() == null || resolution.requirement().item() == null) {
+            return ItemStack.EMPTY;
         }
 
-        if (!knowledgeRequirements.isEmpty()) {
-            TCPlayerKnowledgeStore.mutate(player, storedKnowledge -> {
-                for (KnowledgeRequirement requirement : knowledgeRequirements) {
-                    storedKnowledge.addRaw(
-                            requirement.type(),
-                            requirement.category(),
-                            -requirement.type().pointsToRaw(requirement.points())
-                    );
+        ItemRequirement reward = resolution.requirement();
+        ItemStack stack = new ItemStack(reward.item(), reward.count());
+        if (reward.hasAspectStackRequirement()) {
+            stack.set(TCDataComponents.ASPECT_STACK.get(), reward.aspectStack());
+        }
+        if (reward.hasStoredMagicRequirement()) {
+            stack.set(TCDataComponents.STORED_MAGIC.get(), reward.storedMagic());
+        }
+        if (reward.hasLegacyItemRequirement()) {
+            stack.set(TCDataComponents.LEGACY_ITEM.get(), reward.legacyItem());
+        }
+        return stack;
+    }
+
+    private static List<TCResearchEntryDefinition> unlockTriggeredAddenda(
+            TCPlayerKnowledge knowledge,
+            String completedResearchKey
+    ) {
+        ArrayList<TCResearchEntryDefinition> unlocked = new ArrayList<>();
+        for (TCResearchEntryDefinition candidate : activeData.entries().values()) {
+            if (candidate.addenda().isEmpty() || !isResearchComplete(knowledge, candidate.key())) {
+                continue;
+            }
+            for (TCResearchStageDefinition addendum : candidate.addenda()) {
+                if (addendum.requiredResearch().contains(completedResearchKey)) {
+                    knowledge.setResearchFlag(candidate.key(), TCResearchFlag.PAGE);
+                    unlocked.add(candidate);
+                    break;
                 }
-            }, false);
+            }
         }
-
-        applyItemConsumePlan(player, itemConsumePlan);
-        if (sync) {
-            TCPlayerKnowledgeStore.sync(player);
-        }
-        return true;
+        return List.copyOf(unlocked);
     }
 
     public static void markCraftedResearchReferences(ServerPlayer player, ItemStack crafted) {
@@ -884,5 +978,25 @@ public final class TCResearchManager {
         private ItemConsumePlan {
             slotCounts = Map.copyOf(slotCounts);
         }
+    }
+
+    private record StageConsumePlan(
+            ItemConsumePlan itemConsumePlan,
+            List<KnowledgeRequirement> knowledgeRequirements
+    ) {
+        private StageConsumePlan {
+            knowledgeRequirements = List.copyOf(knowledgeRequirements);
+        }
+
+        static StageConsumePlan empty() {
+            return new StageConsumePlan(new ItemConsumePlan(Map.of()), List.of());
+        }
+    }
+
+    private record KnowledgeRewardGrant(
+            TCKnowledgeType type,
+            String category,
+            int gainedPoints
+    ) {
     }
 }

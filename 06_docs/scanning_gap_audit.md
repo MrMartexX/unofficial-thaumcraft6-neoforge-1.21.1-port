@@ -2,7 +2,7 @@
 
 Status: active audit for the current research/knowledge/scanning slice.
 
-Guide rule applied: scanning must stay server-authoritative, data-driven where practical, and must not depend on client-only rendering or legacy `SimpleNetworkWrapper`. Scan-key mutation now goes through the current server research progression layer; full rewards, recipe unlocks, warp, and Thaumonomicon UI remain blocked until their subsystems exist.
+Guide rule applied: scanning must stay server-authoritative, data-driven where practical, and must not depend on client-only rendering or legacy `SimpleNetworkWrapper`. Scan-key mutation now goes through the current server research progression layer. Observation rewards and research progression are active; celestial-note side effects, non-observation scan rewards, full warp behavior, and Thaumonomicon UI remain blocked until their subsystems exist.
 
 ## Legacy 1.12.2 Flow
 
@@ -39,7 +39,7 @@ Guide rule applied: scanning must stay server-authoritative, data-driven where p
 
 | Gap | Blocker | Decision |
 |---|---|---|
-| Full research progression after scan | Rewards, recipes, warp, and UI | Research stage storage, flags, parent requisites, `progressResearch`, `completeResearch`, sibling propagation, and known-vs-new scan success are active. Reward items/knowledge, warp, recipe unlocks, addendum notifications, and GUI page handling are deferred. |
+| Full research progression after scan | Permanent page/catalog resolution, full warp behavior, events, and UI | Research stage storage, flags, parent requisites, `progressResearch`, `completeResearch`, sibling propagation, entry rewards, addendum notifications, exact stage warp awards, final knowledge sync, and known-vs-new scan success are active. The permanent recipe/page catalog, cancellable events, full warp effects/client sync, and GUI page handling are deferred. |
 | `ScanGeneric` observation rewards | Done for current research categories | Keep validating this through real scan use once Thaumonomicon pages display knowledge costs; the formula is now implemented on `TCResearchCategoryDefinition`. |
 | NeoForge item-handler inventory scan side effect | Modern inventory capability policy | Vanilla `Container` above-block scanning is active. NeoForge item-handler capability scanning should be added when block entities/capabilities are ported. |
 | Sky celestial-note side effects | `celestial_notes`, `scribing_tools`, paper consumption and daily `CEL_*` cleanup semantics | Defer until those items and research entries exist. |

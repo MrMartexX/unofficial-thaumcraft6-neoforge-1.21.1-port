@@ -16,7 +16,7 @@ The current branch contains a working server-side research/scanning skeleton:
 - debug command trees under `/thaumcraft`, `/thaum`, and `/tc`;
 - read-only scan debug commands;
 - Thaumometer right-click scan mutation;
-- completed-research-key client cache for highlight gating;
+- GUI-ready research/knowledge client cache, including completed keys, stages, flags, and raw observation/theory values;
 - scan/audit parity tooling and generated runtime reports.
 - non-interactive research requirement audit export through `-PtcResearchRequirementAudit=true`.
 
@@ -40,9 +40,9 @@ The local smoke tests after stabilization confirmed build correctness plus clien
 
 ## Important current limitation
 
-`TCKnowledgeSyncPayload` is intentionally a narrow client cache payload. It only synchronizes completed research keys for client-side scan highlight filtering. It does not synchronize full player knowledge, stages, flags, observation/theory values, recipes, rewards, popups, or Thaumonomicon page state.
+`TCKnowledgeSyncPayload` is a GUI-ready player knowledge cache payload. It synchronizes completed research keys, stages, flags, and raw observation/theory values. It still does not synchronize the permanent research recipe/page catalog, reward history, popup queue, warp state, or Thaumonomicon page state.
 
-This is acceptable for the current slice because the only client consumer is the highlight/overlay gating path. A future Thaumonomicon UI slice must define a separate full research/knowledge sync payload.
+Thaumometer highlight filtering still consumes only completed research keys. A future Thaumonomicon UI slice should extend or complement the current payload only for data that the browser/page protocol actually needs.
 
 ## Current debug command interpretation
 
@@ -70,7 +70,7 @@ The current stage-advance path is still a server-side skeleton for future Thaumo
 
 Exact direct legacy `ItemStack.toString().hashCode()` craft marker parity is not solved. Do not guess those marker ids. They require a separate 1.12 runtime exporter/mapping pass.
 
-The current requirement audit has `0` registry-identity unresolved item/craft/knowledge requirements, but that is not the same as finished gameplay. The audit separately reports `28` bridge/placeholder warnings for focus/caster items, research/crafting stations, crucible/smelter/nitor, infusion blocks, thaumium tools, mirror/curio/brain identities, OreDictionary/flattened vanilla compatibility and other subsystem-owned behavior.
+The current requirement audit has `0` registry-identity unresolved item/craft/knowledge requirements, but that is not the same as finished gameplay. The audit separately reports `16` bridge/placeholder warnings for focus/caster items, crucible/smelter/nitor, infusion blocks, thaumium tools, mirror/curio/brain identities, OreDictionary/flattened vanilla compatibility and other subsystem-owned behavior.
 
 ## Generated artifact policy
 
@@ -94,12 +94,9 @@ When research requirement mapping changes:
 Do not treat the current branch as a full research system yet. These areas remain blocked:
 
 - Thaumonomicon GUI and page interaction flow;
-- full stage/flag/knowledge sync for UI;
-- recipe unlocks;
-- research rewards;
-- addendum notifications;
-- warp;
-- theorycrafting;
+- permanent research recipe/page catalog;
+- full warp events/effects/client sync;
+- cancellable research/knowledge events;
 - exact legacy direct craft-hash mapping;
 - ScanSky celestial-note side effects;
 - complete Thaumcraft custom entity scan/aspect handling before those entities exist.
@@ -108,6 +105,6 @@ Do not treat the current branch as a full research system yet. These areas remai
 
 1. Keep this branch stable and avoid adding unrelated gameplay systems.
 2. Use the non-interactive requirement audit as the gate before changing research requirement mapping.
-3. Replace bridge/placeholder identities with real subsystem-owned semantics in focused slices, starting with the Research Table/Scribing Tools flow or the first arcane/alchemy recipe-source slice.
+3. Replace remaining bridge/placeholder identities with real subsystem-owned semantics in focused slices.
 4. Add a dedicated 1.12 exporter for direct craft-hash markers.
-5. Only after that, design the full Thaumonomicon research UI sync and page action flow.
+5. Resolve the permanent research recipe/page catalog before building the full Thaumonomicon browser/page protocol.

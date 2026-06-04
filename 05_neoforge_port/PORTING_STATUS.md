@@ -6,7 +6,7 @@ This file tracks the current porting checkpoint for the NeoForge 1.21.1 port. It
 
 ## Current checkpoint
 
-The current work branch has reached a stable baseline for research loading, data/resource integrity, current menu/network handling, and the existing Research Table BlockEntity path. The next major subsystem to validate is world generation.
+The current work branch has reached a stable baseline for research loading, exact progression semantics, data/resource integrity, current menu/network handling, and the existing Research Table BlockEntity path. The next research milestone is the permanent research recipe/page catalog and server-authoritative Thaumonomicon protocol foundation.
 
 ## Confirmed OK
 
@@ -25,7 +25,10 @@ The current work branch has reached a stable baseline for research loading, data
 - Required craft marker flow: OK for current implementation.
 - Required craft bridge recipe coverage: OK; all detected `required_craft` targets have a recipe output path.
 - Research stage `warp` parsing: OK.
-- Research stage `warp` reward logic: compile OK and runtime reload OK.
+- Research stage advancement and `warp` reward logic now preserve the exact legacy empty-gate, double-add, final-stage combination, `PERMANENT/NORMAL` split, and `wussMode` behavior.
+- Checked stage completion plans item and knowledge consumption before applying inventory/knowledge/stage mutation.
+- Completion flags, entry rewards, addendum `PAGE` notifications, siblings, XP, and final knowledge sync ordering are implemented.
+- Research data parity audit: `148/148` entries, `7/7` categories, `0` source differences, `0` runtime parser differences, and `10/10` progression/parser semantic checks passed.
 - Research `recipes` arrays were audited but are not yet wired into recipe unlocks or recipe page rendering.
 
 ### Aspect data
@@ -120,7 +123,7 @@ legacy research recipe ref -> modern recipe id / recipe page / recipe group
 
 ### World generation
 
-World generation is the next major subsystem to validate.
+World generation remains an independent future subsystem to validate after the current research milestone.
 
 Registered worldgen-related content exists:
 
@@ -153,15 +156,18 @@ Future gates:
 
 ## Recently completed checkpoints
 
-### Research warp rewards
+### Research progression parity and data audit
 
 Completed:
 
 - Added stage `warp` parsing to research stages.
 - Added non-negative clamp for parsed warp values.
-- Applied permanent warp reward when advancing through completed stages.
-- Compile check passed.
-- Runtime `/reload` passed.
+- Preserved exact legacy stage advancement and research warp calculation/split behavior.
+- Added `wussMode` config parity.
+- Added planned checked-stage item/knowledge consumption before mutation.
+- Added entry reward and addendum completion behavior.
+- Added source/runtime/category research data exporter and comparer.
+- Latest data parity result is exact, and runtime progression/parser checks are `10/10`.
 
 ### Required craft bridge recipes
 
@@ -200,16 +206,9 @@ Completed:
 
 ## Recommended next gate
 
-Run the worldgen integration audit and use its results to decide whether to implement ore/tree/plant generation through data-driven configured/placed features and NeoForge biome modifiers.
+Design and implement the permanent research recipe/page catalog. Classify every legacy `stages[].recipes` and addendum recipe reference as a modern vanilla recipe, future Thaumcraft custom recipe, grouped/fake research page, or explicit deferred reference. Then use that catalog as the data boundary for server-authoritative Thaumonomicon index/page payloads.
 
-Expected next command locally:
-
-```powershell
-cd D:\Thaumcraft_6_port_to_1.21.1
-.\audit_worldgen_integration.ps1 -RepoRoot "D:\Thaumcraft_6_port_to_1.21.1"
-```
-
-After worldgen implementation, the required runtime tests are:
+Required regression commands:
 
 ```powershell
 cd D:\Thaumcraft_6_port_to_1.21.1\05_neoforge_port

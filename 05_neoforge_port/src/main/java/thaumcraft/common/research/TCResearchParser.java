@@ -52,6 +52,8 @@ final class TCResearchParser {
                 parseStringsOptional(entry, "parents"),
                 parseStringsOptional(entry, "siblings"),
                 parseStringsOptional(entry, "meta"),
+                parseStringsOptional(entry, "reward_item"),
+                parseStringsOptional(entry, "reward_knowledge"),
                 parseStages(fileId, index, entry, "stages"),
                 parseStages(fileId, index, entry, "addenda")
         );

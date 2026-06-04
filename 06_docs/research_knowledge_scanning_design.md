@@ -253,10 +253,18 @@ Not implemented by this skeleton:
 - Thaumonomicon screen filtering/rendering.
 - Exact direct `required_craft` ItemStack hash parity for legacy marker ids.
 - Producer/container behavior for legacy metadata/NBT-heavy items such as phials, crystal essence, material-family outputs, and unported Thaumcraft ids.
-- Recipe unlocks and rewards.
+- Permanent research recipe/page catalog and recipe-page rendering.
 - Thaumonomicon UI/page rendering.
-- Client sync.
-- Reward item/knowledge/warp/addendum side effects.
+- Full warp events/effects/client sync and cancellable research/knowledge events.
+
+## Progression parity closure checkpoint
+
+- Checked stage advancement now plans all item and knowledge consumption before mutating inventory, knowledge, or stage state.
+- Exact legacy stage advancement, empty-gate rules, warp calculation/split, `wussMode`, completion flags, entry rewards, addendum `PAGE` notifications, siblings, XP, and final sync ordering are implemented.
+- `reward_item` and `reward_knowledge` are preserved by the runtime parser even though the built-in TC6 research files do not currently use them.
+- `07_Test_Instance_and_Comparisons/research_data_parity` compares legacy JSON, NeoForge source JSON, NeoForge runtime parser output, and all seven Java-registered legacy categories.
+- Latest parity result: `148/148` entries, `7/7` categories, `0` source differences, `0` runtime differences, and `10/10` progression/parser checks passed.
+- The next research boundary is the permanent research recipe/page catalog and server-authoritative Thaumonomicon protocol, not a naive vanilla recipe-unlock patch.
 
 Runtime note:
 - The loader intentionally preserves legacy references as strings. Many recipe/item references still point at 1.12 ids or unported Thaumcraft content, so resolving them eagerly would make the skeleton unusable until much later gates.

@@ -58,6 +58,7 @@
   "gui.thaumcraft.research_table.action.no_selected_card": "No selected card",
   "gui.thaumcraft.research_table.action.unknown_action": "Unknown table action",
   "gui.thaumcraft.research_table.action.unknown": "No result",
+  "tc.addaddendum": "§aAddendum added to %s§r",
   "gui.thaumcraft.research_table.card.inspiration_cost": "Inspiration cost: %s",
   "gui.thaumcraft.research_table.card.required_items": "Required items:",
   "gui.thaumcraft.research_table.aid_hint": "Select before creating the theory",

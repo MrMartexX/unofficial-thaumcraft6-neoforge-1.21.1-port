@@ -1,0 +1,58 @@
+[
+  {
+    "key": "BASICS",
+    "required_research": "",
+    "formula": {"aer": 5, "aqua": 5, "herba": 5, "ignis": 5, "ordo": 5, "perditio": 5, "terra": 3},
+    "icon": "thaumcraft:textures/items/thaumonomicon_cheat.png",
+    "background": "thaumcraft:textures/gui/gui_research_back_1.jpg",
+    "overlay": "thaumcraft:textures/gui/gui_research_back_over.png"
+  },
+  {
+    "key": "AUROMANCY",
+    "required_research": "UNLOCKAUROMANCY",
+    "formula": {"aer": 5, "auram": 20, "gelum": 5, "praecantatio": 20, "vitium": 15, "vitreus": 5},
+    "icon": "thaumcraft:textures/research/cat_auromancy.png",
+    "background": "thaumcraft:textures/gui/gui_research_back_2.jpg",
+    "overlay": "thaumcraft:textures/gui/gui_research_back_over.png"
+  },
+  {
+    "key": "ALCHEMY",
+    "required_research": "UNLOCKALCHEMY",
+    "formula": {"alkimia": 30, "aqua": 5, "aversio": 5, "desiderium": 5, "praecantatio": 10, "victus": 5, "vitium": 10},
+    "icon": "thaumcraft:textures/research/cat_alchemy.png",
+    "background": "thaumcraft:textures/gui/gui_research_back_3.jpg",
+    "overlay": "thaumcraft:textures/gui/gui_research_back_over.png"
+  },
+  {
+    "key": "ARTIFICE",
+    "required_research": "UNLOCKARTIFICE",
+    "formula": {"fabrico": 10, "ignis": 5, "instrumentum": 10, "lux": 5, "machina": 10, "metallum": 10, "potentia": 10, "vinculum": 5, "volatus": 5},
+    "icon": "thaumcraft:textures/research/cat_artifice.png",
+    "background": "thaumcraft:textures/gui/gui_research_back_4.jpg",
+    "overlay": "thaumcraft:textures/gui/gui_research_back_over.png"
+  },
+  {
+    "key": "INFUSION",
+    "required_research": "UNLOCKINFUSION",
+    "formula": {"fabrico": 5, "instrumentum": 10, "praecantatio": 30, "praemunio": 10, "spiritus": 5, "terra": 3, "vitium": 5},
+    "icon": "thaumcraft:textures/research/cat_infusion.png",
+    "background": "thaumcraft:textures/gui/gui_research_back_7.jpg",
+    "overlay": "thaumcraft:textures/gui/gui_research_back_over.png"
+  },
+  {
+    "key": "GOLEMANCY",
+    "required_research": "UNLOCKGOLEMANCY",
+    "formula": {"bestia": 5, "cognitio": 10, "humanus": 20, "machina": 10, "motus": 10, "ordo": 5, "permutatio": 5, "sensus": 5},
+    "icon": "thaumcraft:textures/research/cat_golemancy.png",
+    "background": "thaumcraft:textures/gui/gui_research_back_5.jpg",
+    "overlay": "thaumcraft:textures/gui/gui_research_back_over.png"
+  },
+  {
+    "key": "ELDRITCH",
+    "required_research": "UNLOCKELDRITCH",
+    "formula": {"alienis": 20, "cognitio": 5, "exanimis": 5, "mortuus": 5, "perditio": 5, "praecantatio": 5, "tenebrae": 10, "vacuos": 5},
+    "icon": "thaumcraft:textures/research/cat_eldritch.png",
+    "background": "thaumcraft:textures/gui/gui_research_back_6.jpg",
+    "overlay": "thaumcraft:textures/gui/gui_research_back_over.png"
+  }
+]
