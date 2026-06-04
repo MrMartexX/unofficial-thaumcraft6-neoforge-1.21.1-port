@@ -1,0 +1,48 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "FIRSTSTEPS@2",
+  "vis": 20,
+  "crystals": [
+    {
+      "amount": 1,
+      "aspect": "aer"
+    },
+    {
+      "amount": 1,
+      "aspect": "terra"
+    },
+    {
+      "amount": 1,
+      "aspect": "aqua"
+    },
+    {
+      "amount": 1,
+      "aspect": "ignis"
+    },
+    {
+      "amount": 1,
+      "aspect": "ordo"
+    },
+    {
+      "amount": 1,
+      "aspect": "perditio"
+    }
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "I": {
+      "tag": "c:ingots/gold"
+    }
+  },
+  "pattern": [
+    " I ",
+    "IGI",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:thaumometer"
+  }
+}

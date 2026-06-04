@@ -18,6 +18,8 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.crafting.arcane.TCArcaneRecipe;
+import thaumcraft.common.crafting.arcane.TCArcaneCrystalCost;
 
 public final class TCResearchPageCatalogManager {
     private static TCResearchPageCatalogData activeData = TCResearchPageCatalogData.empty();
@@ -178,10 +180,18 @@ public final class TCResearchPageCatalogManager {
             return;
         }
         TCResearchPageAvailability availability = availability(entry.id(), recipeManager, new HashSet<>());
-        Optional<TCCraftingRecipePageView> craftingRecipe = availability == TCResearchPageAvailability.READY
-                ? buildCraftingPage(entry.id(), recipeManager, registries)
-                : Optional.empty();
-        if (availability == TCResearchPageAvailability.READY && craftingRecipe.isEmpty()) {
+        Optional<TCCraftingRecipePageView> craftingRecipe = Optional.empty();
+        Optional<TCArcaneRecipePageView> arcaneRecipe = Optional.empty();
+        if (availability == TCResearchPageAvailability.READY) {
+            if (entry.kind() == TCResearchPageKind.CRAFTING) {
+                craftingRecipe = buildCraftingPage(entry.id(), recipeManager, registries);
+            } else if (entry.kind() == TCResearchPageKind.ARCANE) {
+                arcaneRecipe = buildArcanePage(entry.id(), recipeManager, registries);
+            }
+        }
+        if (availability == TCResearchPageAvailability.READY
+                && craftingRecipe.isEmpty()
+                && arcaneRecipe.isEmpty()) {
             availability = TCResearchPageAvailability.DEFERRED;
         }
         pages.add(new TCResearchPageView(
@@ -190,7 +200,8 @@ public final class TCResearchPageCatalogManager {
                 availability,
                 entry.requiredResearch(),
                 entry.legacyOutput(),
-                craftingRecipe
+                craftingRecipe,
+                arcaneRecipe
         ));
     }
 
@@ -227,6 +238,43 @@ public final class TCResearchPageCatalogManager {
                 });
     }
 
+    static Optional<TCArcaneRecipePageView> buildArcanePage(
+            ResourceLocation id,
+            RecipeManager recipeManager,
+            HolderLookup.Provider registries
+    ) {
+        return recipeManager.byKey(id)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> {
+                    TCArcaneRecipe recipe = (TCArcaneRecipe) holder.value();
+                    NonNullList<Ingredient> recipeIngredients = recipe.getIngredients();
+                    ArrayList<List<ItemStack>> ingredients = new ArrayList<>(recipeIngredients.size());
+                    for (Ingredient ingredient : recipeIngredients) {
+                        ItemStack[] variants = ingredient.getItems();
+                        ArrayList<ItemStack> copiedVariants = new ArrayList<>(variants.length);
+                        for (ItemStack variant : variants) {
+                            copiedVariants.add(variant.copy());
+                        }
+                        ingredients.add(List.copyOf(copiedVariants));
+                    }
+                    ArrayList<ItemStack> crystals = new ArrayList<>(recipe.crystalCosts().size());
+                    for (TCArcaneCrystalCost cost : recipe.crystalCosts()) {
+                        crystals.add(cost.displayStack());
+                    }
+                    return new TCArcaneRecipePageView(
+                            id,
+                            recipe.shaped(),
+                            recipe.width(),
+                            recipe.height(),
+                            recipe.getResultItem(registries),
+                            ingredients,
+                            recipe.getResearch(),
+                            recipe.getVis(),
+                            crystals
+                    );
+                });
+    }
+
     private static TCResearchPageAvailability availability(
             ResourceLocation id,
             RecipeManager recipeManager,
@@ -244,6 +292,13 @@ public final class TCResearchPageCatalogManager {
             if (entry.kind() == TCResearchPageKind.CRAFTING) {
                 return recipeManager.byKey(entry.id())
                         .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isPresent()
+                        ? TCResearchPageAvailability.READY
+                        : TCResearchPageAvailability.DEFERRED;
+            }
+            if (entry.kind() == TCResearchPageKind.ARCANE) {
+                return recipeManager.byKey(entry.id())
+                        .filter(holder -> holder.value() instanceof TCArcaneRecipe)
                         .isPresent()
                         ? TCResearchPageAvailability.READY
                         : TCResearchPageAvailability.DEFERRED;

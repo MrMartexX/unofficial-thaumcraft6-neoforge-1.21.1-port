@@ -21,6 +21,7 @@ final class TCThaumonomiconCodec {
     private static final int MAX_PAGES_PER_BOOKMARK = 512;
     private static final int MAX_CRAFTING_INGREDIENTS = 9;
     private static final int MAX_CRAFTING_INGREDIENT_VARIANTS = 1024;
+    private static final int MAX_ARCANE_CRYSTALS = 64;
     private static final int MAX_RESEARCH_FLAGS = 32;
 
     private TCThaumonomiconCodec() {
@@ -181,6 +182,8 @@ final class TCThaumonomiconCodec {
         page.legacyOutput().ifPresent(output -> writeLegacyOutput(buffer, output));
         buffer.writeBoolean(page.craftingRecipe().isPresent());
         page.craftingRecipe().ifPresent(recipe -> writeCraftingRecipe(buffer, recipe));
+        buffer.writeBoolean(page.arcaneRecipe().isPresent());
+        page.arcaneRecipe().ifPresent(recipe -> writeArcaneRecipe(buffer, recipe));
     }
 
     private static TCResearchPageView readPage(RegistryFriendlyByteBuf buffer) {
@@ -198,7 +201,10 @@ final class TCThaumonomiconCodec {
         Optional<TCCraftingRecipePageView> craftingRecipe = buffer.readBoolean()
                 ? Optional.of(readCraftingRecipe(buffer))
                 : Optional.empty();
-        return new TCResearchPageView(id, kind, availability, requiredResearch, output, craftingRecipe);
+        Optional<TCArcaneRecipePageView> arcaneRecipe = buffer.readBoolean()
+                ? Optional.of(readArcaneRecipe(buffer))
+                : Optional.empty();
+        return new TCResearchPageView(id, kind, availability, requiredResearch, output, craftingRecipe, arcaneRecipe);
     }
 
     private static void writeCraftingRecipe(RegistryFriendlyByteBuf buffer, TCCraftingRecipePageView recipe) {
@@ -240,6 +246,60 @@ final class TCThaumonomiconCodec {
                                 ItemStack.STREAM_CODEC::decode
                         )
                 )
+        );
+    }
+
+    private static void writeArcaneRecipe(RegistryFriendlyByteBuf buffer, TCArcaneRecipePageView recipe) {
+        writeResourceLocation(buffer, recipe.recipeId());
+        buffer.writeBoolean(recipe.shaped());
+        buffer.writeVarInt(recipe.width());
+        buffer.writeVarInt(recipe.height());
+        ItemStack.STREAM_CODEC.encode(buffer, recipe.result());
+        writeList(
+                buffer,
+                recipe.ingredients(),
+                MAX_CRAFTING_INGREDIENTS,
+                "arcane ingredients",
+                (target, variants) -> writeList(
+                        target,
+                        variants,
+                        MAX_CRAFTING_INGREDIENT_VARIANTS,
+                        "arcane ingredient variants",
+                        ItemStack.STREAM_CODEC::encode
+                )
+        );
+        writeString(buffer, recipe.research(), MAX_KEY_LENGTH, "arcane research");
+        buffer.writeVarInt(recipe.vis());
+        writeList(
+                buffer,
+                recipe.crystalStacks(),
+                MAX_ARCANE_CRYSTALS,
+                "arcane crystals",
+                ItemStack.STREAM_CODEC::encode
+        );
+    }
+
+    private static TCArcaneRecipePageView readArcaneRecipe(RegistryFriendlyByteBuf buffer) {
+        return new TCArcaneRecipePageView(
+                readResourceLocation(buffer),
+                buffer.readBoolean(),
+                buffer.readVarInt(),
+                buffer.readVarInt(),
+                ItemStack.STREAM_CODEC.decode(buffer),
+                readList(
+                        buffer,
+                        MAX_CRAFTING_INGREDIENTS,
+                        "arcane ingredients",
+                        target -> readList(
+                                target,
+                                MAX_CRAFTING_INGREDIENT_VARIANTS,
+                                "arcane ingredient variants",
+                                ItemStack.STREAM_CODEC::decode
+                        )
+                ),
+                readString(buffer, MAX_KEY_LENGTH),
+                buffer.readVarInt(),
+                readList(buffer, MAX_ARCANE_CRYSTALS, "arcane crystals", ItemStack.STREAM_CODEC::decode)
         );
     }
 

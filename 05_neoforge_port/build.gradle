@@ -74,6 +74,8 @@ neoForge {
             def researchPageCatalogAuditPath = providers.gradleProperty('tcResearchPageCatalogAuditPath').orNull ?: System.getProperty('tc.researchPageCatalogAuditPath')
             def thaumonomiconProtocolAuditEnabled = providers.gradleProperty('tcThaumonomiconProtocolAudit').orNull ?: System.getProperty('tc.thaumonomiconProtocolAudit')
             def thaumonomiconProtocolAuditPath = providers.gradleProperty('tcThaumonomiconProtocolAuditPath').orNull ?: System.getProperty('tc.thaumonomiconProtocolAuditPath')
+            def arcaneRecipeAuditEnabled = providers.gradleProperty('tcArcaneRecipeAudit').orNull ?: System.getProperty('tc.arcaneRecipeAudit')
+            def arcaneRecipeAuditPath = providers.gradleProperty('tcArcaneRecipeAuditPath').orNull ?: System.getProperty('tc.arcaneRecipeAuditPath')
             def researchTableAuditEnabled = providers.gradleProperty('tcResearchTableAudit').orNull ?: System.getProperty('tc.researchTableAudit')
             def researchTableAuditPath = providers.gradleProperty('tcResearchTableAuditPath').orNull ?: System.getProperty('tc.researchTableAuditPath')
             if (aspectDumpEnabled != null) {
@@ -120,6 +122,12 @@ neoForge {
             }
             if (thaumonomiconProtocolAuditPath != null) {
                 systemProperty 'tc.thaumonomiconProtocolAuditPath', thaumonomiconProtocolAuditPath
+            }
+            if (arcaneRecipeAuditEnabled != null) {
+                systemProperty 'tc.arcaneRecipeAudit', arcaneRecipeAuditEnabled
+            }
+            if (arcaneRecipeAuditPath != null) {
+                systemProperty 'tc.arcaneRecipeAuditPath', arcaneRecipeAuditPath
             }
             if (researchTableAuditEnabled != null) {
                 systemProperty 'tc.researchTableAudit', researchTableAuditEnabled

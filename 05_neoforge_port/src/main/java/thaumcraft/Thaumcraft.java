@@ -25,9 +25,11 @@ import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMenus;
+import thaumcraft.common.registry.TCRecipes;
 import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.research.TCKnowledgeCommands;
 import thaumcraft.common.research.TCKnowledgeNetwork;
+import thaumcraft.common.research.TCArcaneRecipeAuditExporter;
 import thaumcraft.common.research.TCResearchManager;
 import thaumcraft.common.research.TCResearchDataAuditExporter;
 import thaumcraft.common.research.TCResearchPageCatalogManager;
@@ -59,6 +61,8 @@ public final class Thaumcraft {
         TCBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         TCItems.ITEMS.register(modEventBus);
         TCMenus.MENUS.register(modEventBus);
+        TCRecipes.RECIPE_TYPES.register(modEventBus);
+        TCRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         TCSounds.SOUND_EVENTS.register(modEventBus);
         TCCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -92,6 +96,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCResearchDataAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCThaumonomiconProtocolAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCArcaneRecipeAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditExporter::onServerStarted);

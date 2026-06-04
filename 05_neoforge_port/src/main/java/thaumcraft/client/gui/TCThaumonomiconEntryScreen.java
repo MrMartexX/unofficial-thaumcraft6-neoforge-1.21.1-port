@@ -14,6 +14,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.registry.TCSounds;
+import thaumcraft.common.research.TCArcaneRecipePageView;
 import thaumcraft.common.research.TCCraftingRecipePageView;
 import thaumcraft.common.research.TCResearchPageAvailability;
 import thaumcraft.common.research.TCResearchPageBookmark;
@@ -306,7 +307,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
                     : ChatFormatting.GRAY;
             lines.add(Component.literal(page.kind() + " - " + page.availability()).withStyle(color));
         }
-        boolean renderable = bookmark.pages().stream().anyMatch(page -> page.craftingRecipe().isPresent());
+        boolean renderable = bookmark.pages().stream().anyMatch(TCThaumonomiconEntryScreen::hasRenderableRecipe);
         lines.add(Component.translatable(renderable
                         ? "gui.thaumcraft.thaumonomicon.bookmark_open"
                         : "gui.thaumcraft.thaumonomicon.bookmark_deferred")
@@ -317,7 +318,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private void openBookmark(TCResearchPageBookmark bookmark) {
         List<TCResearchPageView> renderable = bookmark.pages().stream()
                 .filter(page -> page.availability() == TCResearchPageAvailability.READY)
-                .filter(page -> page.craftingRecipe().isPresent())
+                .filter(TCThaumonomiconEntryScreen::hasRenderableRecipe)
                 .toList();
         if (renderable.isEmpty()) {
             lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.recipe_unavailable");
@@ -358,13 +359,17 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private void renderRecipePage(GuiGraphics graphics, int mouseX, int mouseY) {
         TCResearchPageView page = activeRecipePages.get(activeRecipeIndex);
-        TCCraftingRecipePageView recipe = page.craftingRecipe().orElseThrow();
         int x = recipePageX();
         int y = recipePageY();
         graphics.pose().pushPose();
         graphics.pose().translate(0.0F, 0.0F, 100.0F);
         blit(graphics, PAPER, x, y, 0, 0, RECIPE_PAGE_SIZE - 1, RECIPE_PAGE_SIZE - 1, RECIPE_PAGE_SIZE, RECIPE_PAGE_SIZE);
-        renderCraftingRecipe(graphics, recipe, x + 128, y + 128, mouseX, mouseY);
+        page.craftingRecipe().ifPresentOrElse(
+                recipe -> renderCraftingRecipe(graphics, recipe, x + 128, y + 128, mouseX, mouseY),
+                () -> page.arcaneRecipe().ifPresent(
+                        recipe -> renderArcaneRecipe(graphics, recipe, x + 128, y + 128, mouseX, mouseY)
+                )
+        );
         renderRecipeNavigation(graphics, x, y, mouseX, mouseY);
         graphics.pose().popPose();
     }
@@ -390,6 +395,73 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         graphics.pose().popPose();
 
         renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
+        for (int slot = 0; slot < recipe.ingredients().size() && slot < 9; slot++) {
+            List<ItemStack> variants = recipe.ingredients().get(slot);
+            if (variants.isEmpty()) {
+                continue;
+            }
+            int column = recipe.shaped() ? slot % recipe.width() : slot % 3;
+            int row = recipe.shaped() ? slot / recipe.width() : slot / 3;
+            if (column >= 3 || row >= 3) {
+                continue;
+            }
+            int variant = (int) ((System.currentTimeMillis() / 1000L + slot) % variants.size());
+            renderRecipeStack(
+                    graphics,
+                    variants.get(variant),
+                    centerX - 40 + column * 32,
+                    centerY - 40 + row * 32,
+                    mouseX,
+                    mouseY
+            );
+        }
+    }
+
+    private void renderArcaneRecipe(
+            GuiGraphics graphics,
+            TCArcaneRecipePageView recipe,
+            int centerX,
+            int centerY,
+            int mouseX,
+            int mouseY
+    ) {
+        Component type = Component.translatable(recipe.shaped()
+                ? "recipe.type.arcane"
+                : "recipe.type.arcane.shapeless");
+        graphics.drawCenteredString(font, type, centerX, centerY - 104, 0xFF505050);
+
+        graphics.pose().pushPose();
+        graphics.pose().translate(centerX, centerY, 0.0F);
+        graphics.pose().scale(2.0F, 2.0F, 1.0F);
+        blit(graphics, BOOK_OVERLAY, -26, -26, 112, 15, 52, 52, 512, 512);
+        blit(graphics, BOOK_OVERLAY, -8, -46, 20, 3, 16, 16, 512, 512);
+        graphics.pose().popPose();
+
+        graphics.pose().pushPose();
+        graphics.pose().translate(centerX, centerY, 0.0F);
+        graphics.pose().scale(2.0F, 2.0F, 1.0F);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 0.4F);
+        blit(graphics, BOOK_OVERLAY, -6, 40, 68, 76, 12, 12, 512, 512);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        graphics.pose().popPose();
+
+        String vis = Integer.toString(recipe.vis());
+        graphics.drawString(font, vis, centerX - font.width(vis) / 2, centerY + 90, 0xFF505050, false);
+
+        renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
+
+        int crystalCount = recipe.crystalStacks().size();
+        for (int index = 0; index < crystalCount; index++) {
+            renderRecipeStack(
+                    graphics,
+                    recipe.crystalStacks().get(index),
+                    centerX + 4 - crystalCount * 10 + index * 20,
+                    centerY + 59,
+                    mouseX,
+                    mouseY
+            );
+        }
+
         for (int slot = 0; slot < recipe.ingredients().size() && slot < 9; slot++) {
             List<ItemStack> variants = recipe.ingredients().get(slot);
             if (variants.isEmpty()) {
@@ -439,6 +511,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
         int color = inside(mouseX, mouseY, x + 96, y + 236, 64, 16) ? 0xFF805A24 : 0xFF4B351B;
         graphics.drawCenteredString(font, Component.translatable("recipe.return"), x + 128, y + 238, color);
+    }
+
+    private static boolean hasRenderableRecipe(TCResearchPageView page) {
+        return page.craftingRecipe().isPresent() || page.arcaneRecipe().isPresent();
     }
 
     private void renderResult(GuiGraphics graphics, int x, int y) {

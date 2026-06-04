@@ -91,6 +91,8 @@ final class TCThaumonomiconProtocolAudit {
         int pagesInspected = 0;
         boolean noLegacyMissingPages = true;
         boolean readyPageViewsHaveSnapshots = true;
+        boolean readyArcanePageViewsHaveSnapshots = true;
+        boolean readyPageViewsHaveCorrectSnapshotKind = true;
         boolean deferredPageViewsHaveNoSnapshots = true;
         Optional<TCThaumonomiconEntryView> sample = Optional.empty();
         for (TCThaumonomiconResearchView entry : index.entries()) {
@@ -114,8 +116,17 @@ final class TCThaumonomiconProtocolAudit {
                             && page.craftingRecipe().isEmpty()) {
                         readyPageViewsHaveSnapshots = false;
                     }
+                    if (page.availability() == TCResearchPageAvailability.READY
+                            && page.kind() == TCResearchPageKind.ARCANE
+                            && page.arcaneRecipe().isEmpty()) {
+                        readyArcanePageViewsHaveSnapshots = false;
+                    }
+                    if ((page.kind() == TCResearchPageKind.CRAFTING && page.arcaneRecipe().isPresent())
+                            || (page.kind() == TCResearchPageKind.ARCANE && page.craftingRecipe().isPresent())) {
+                        readyPageViewsHaveCorrectSnapshotKind = false;
+                    }
                     if (page.availability() != TCResearchPageAvailability.READY
-                            && page.craftingRecipe().isPresent()) {
+                            && (page.craftingRecipe().isPresent() || page.arcaneRecipe().isPresent())) {
                         deferredPageViewsHaveNoSnapshots = false;
                     }
                 }
@@ -129,7 +140,17 @@ final class TCThaumonomiconProtocolAudit {
                 "pages=" + pagesInspected
         ));
         checks.add(check(
-                "non_ready_page_views_have_no_crafting_snapshots",
+                "ready_page_views_have_server_arcane_snapshots",
+                readyArcanePageViewsHaveSnapshots,
+                "pages=" + pagesInspected
+        ));
+        checks.add(check(
+                "ready_page_views_use_matching_snapshot_kind",
+                readyPageViewsHaveCorrectSnapshotKind,
+                "pages=" + pagesInspected
+        ));
+        checks.add(check(
+                "non_ready_page_views_have_no_recipe_snapshots",
                 deferredPageViewsHaveNoSnapshots,
                 "pages=" + pagesInspected
         ));
@@ -163,6 +184,38 @@ final class TCThaumonomiconProtocolAudit {
                 "ready_crafting_catalog_entries_have_valid_server_snapshots",
                 readyCatalogSnapshotsValid && readyCraftingEntries > 0,
                 "ready_crafting_entries=" + readyCraftingEntries
+        ));
+
+        int readyArcaneEntries = 0;
+        boolean readyArcaneCatalogSnapshotsValid = true;
+        for (TCResearchPageCatalogEntry catalogEntry : TCResearchPageCatalogManager.entries()) {
+            if (catalogEntry.kind() != TCResearchPageKind.ARCANE) {
+                continue;
+            }
+            TCResearchPageAvailability availability = TCResearchPageCatalogManager.availability(
+                    catalogEntry.id().toString(),
+                    player.server.getRecipeManager()
+            );
+            Optional<TCArcaneRecipePageView> snapshot = TCResearchPageCatalogManager.buildArcanePage(
+                    catalogEntry.id(),
+                    player.server.getRecipeManager(),
+                    player.server.registryAccess()
+            );
+            if (availability == TCResearchPageAvailability.READY) {
+                readyArcaneEntries++;
+                readyArcaneCatalogSnapshotsValid &= snapshot.isPresent()
+                        && snapshot.get().recipeId().equals(catalogEntry.id())
+                        && !snapshot.get().result().isEmpty()
+                        && snapshot.get().ingredients().size() <= 9
+                        && !snapshot.get().research().isBlank();
+            } else if (snapshot.isPresent()) {
+                readyArcaneCatalogSnapshotsValid = false;
+            }
+        }
+        checks.add(check(
+                "ready_arcane_catalog_entries_have_valid_server_snapshots",
+                readyArcaneCatalogSnapshotsValid && readyArcaneEntries > 0,
+                "ready_arcane_entries=" + readyArcaneEntries
         ));
 
         boolean rejectedUnknown = TCThaumonomiconService.buildEntry(player, "AUDIT_MISSING_RESEARCH").isEmpty();
