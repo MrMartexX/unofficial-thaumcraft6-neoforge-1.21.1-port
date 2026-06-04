@@ -14,6 +14,7 @@
 | `legacy_resource_location_canonicalization` | `PASS` | uppercase/lowercase lookup |
 | `client_cache_accepts_authoritative_views` | `PASS` | sample_present=true |
 | `index_refresh_invalidates_entry_cache` | `PASS` | sample_present=true |
+| `explicit_open_intent_is_separate_from_refresh` | `PASS` | open_once=true, refresh_open=false |
 | `legacy_start_action_semantics` | `PASS` | candidate=FIRSTSTEPS |
 | `legacy_acknowledge_action_semantics` | `PASS` | candidate=FIRSTSTEPS |
 | `legacy_known_entry_final_stage_auto_progression` | `PASS` | candidate=ALUMENTUM |

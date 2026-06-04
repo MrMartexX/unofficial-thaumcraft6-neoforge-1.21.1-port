@@ -17,6 +17,7 @@ import thaumcraft.common.items.ItemLegacyPlaceholder;
 import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.items.consumables.ItemZombieBrain;
+import thaumcraft.common.items.curios.ItemThaumonomicon;
 import thaumcraft.common.items.tools.ItemScribingTools;
 import thaumcraft.common.items.tools.ItemThaumometer;
 import thaumcraft.common.items.tools.TCToolTiers;
@@ -86,6 +87,7 @@ public final class TCItems {
     public static final Supplier<BlockItem> SLAB_GREATWOOD = blockItem("slab_greatwood", TCBlocks.SLAB_GREATWOOD);
     public static final Supplier<BlockItem> SLAB_SILVERWOOD = blockItem("slab_silverwood", TCBlocks.SLAB_SILVERWOOD);
 
+    public static final Supplier<Item> THAUMONOMICON = ITEMS.register("thaumonomicon", ItemThaumonomicon::new);
     public static final Supplier<Item> THAUMOMETER = ITEMS.register("thaumometer", ItemThaumometer::new);
     public static final Supplier<Item> GOGGLES = ITEMS.register("goggles", () -> new Item(new Item.Properties()));
 

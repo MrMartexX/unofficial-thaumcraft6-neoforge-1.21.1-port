@@ -264,8 +264,8 @@ Not implemented by this skeleton:
 - `reward_item` and `reward_knowledge` are preserved by the runtime parser even though the built-in TC6 research files do not currently use them.
 - `07_Test_Instance_and_Comparisons/research_data_parity` compares legacy JSON, NeoForge source JSON, NeoForge runtime parser output, and all seven Java-registered legacy categories.
 - Latest parity result: `148/148` entries, `7/7` categories, `0` source differences, `0` runtime differences, and `10/10` progression/parser checks passed.
-- The permanent research recipe/page catalog and server-authoritative Thaumonomicon protocol are implemented. The catalog preserves `253` research occurrences, `203` direct references, and `325` entries including group members with `0` parity differences; the protocol foundation audit passes `15/15`, including the legacy known-entry final-stage progression path.
-- The next research boundary is the Thaumonomicon item/open flow and first real browser/entry screens over the authoritative view models, not client-side research or recipe resolution.
+- The permanent research recipe/page catalog, server-authoritative Thaumonomicon protocol, real item/open flow, and first browser/entry screens are implemented. The catalog preserves `253` research occurrences, `203` direct references, and `325` entries including group members with `0` parity differences; the protocol audit passes `16/16`, including the legacy known-entry final-stage progression path and explicit-open-versus-refresh separation.
+- The next research/crafting boundary is a server-authoritative recipe-page view model and first real renderer for catalog pages that are actually `READY`, not client-side recipe resolution.
 
 Runtime note:
 - The loader intentionally preserves legacy references as strings. Many recipe/item references still point at 1.12 ids or unported Thaumcraft content, so resolving them eagerly would make the skeleton unusable until much later gates.

@@ -8,6 +8,7 @@ public final class TCThaumonomiconClientCache {
     private static TCThaumonomiconIndexPayload index = new TCThaumonomiconIndexPayload(java.util.List.of(), java.util.List.of());
     private static Map<String, TCThaumonomiconEntryView> entries = Map.of();
     private static TCThaumonomiconEntryPayload lastEntryResult;
+    private static boolean openRequested;
 
     private TCThaumonomiconClientCache() {
     }
@@ -18,6 +19,7 @@ public final class TCThaumonomiconClientCache {
                 : payload;
         entries = Map.of();
         lastEntryResult = null;
+        openRequested |= payload != null && payload.openScreen();
     }
 
     public static void accept(TCThaumonomiconEntryPayload payload) {
@@ -48,9 +50,16 @@ public final class TCThaumonomiconClientCache {
         return result;
     }
 
+    public static boolean pollOpenRequested() {
+        boolean requested = openRequested;
+        openRequested = false;
+        return requested;
+    }
+
     public static void clear() {
         index = new TCThaumonomiconIndexPayload(java.util.List.of(), java.util.List.of());
         entries = Map.of();
         lastEntryResult = null;
+        openRequested = false;
     }
 }

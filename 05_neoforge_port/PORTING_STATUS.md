@@ -104,8 +104,8 @@ The catalog keeps legacy page identifiers separate from modern recipe unlocks. A
 ### Thaumonomicon / recipe visibility
 
 - Server-authoritative index, entry, current-stage, requirement-state, bookmark, start, stage-advance, and entry-acknowledgement payloads are implemented.
-- The protocol foundation audit passes `15/15` checks.
-- Full Thaumonomicon browser/entry rendering is not complete.
+- The protocol foundation audit passes `16/16` checks, including explicit open-versus-refresh separation.
+- The first real Thaumonomicon item/open/browser/entry flow is active. Final browser/search/visual parity is not complete.
 - Arcane, crucible, infusion, blueprint, fake/display-only, and grouped recipe-page renderers are not complete.
 - Recipe existence, page visibility, and research completion remain separate states.
 
@@ -182,7 +182,8 @@ Completed:
 - Added a reproducible generator/comparer and permanent reload-safe NeoForge page catalog.
 - Preserved resolver precedence, canonical legacy ids, ordered group members, required-research gates, legacy outputs, and original missing references.
 - Added server-authoritative index, entry, start, stage-advance, and entry-acknowledgement payloads plus an invalidating client view cache.
-- Added runtime catalog and protocol audits. Latest results are exact catalog parity and `15/15` protocol checks.
+- Added runtime catalog and protocol audits. Latest results are exact catalog parity and `16/16` protocol checks.
+- Added the real Thaumonomicon item plus the first server-authoritative browser and entry screens.
 
 ### Required craft bridge recipes
 

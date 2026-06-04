@@ -13,6 +13,12 @@ public final class TCSounds {
 
     public static final Supplier<SoundEvent> SCAN = SOUND_EVENTS.register("scan", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "scan")));
+    public static final Supplier<SoundEvent> PAGE = SOUND_EVENTS.register("page", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "page")));
+    public static final Supplier<SoundEvent> PAGETURN = SOUND_EVENTS.register("pageturn", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pageturn")));
+    public static final Supplier<SoundEvent> WRITE = SOUND_EVENTS.register("write", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "write")));
 
     private TCSounds() {
     }

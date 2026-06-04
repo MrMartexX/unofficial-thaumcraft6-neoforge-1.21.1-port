@@ -94,11 +94,11 @@ Latest validation:
   `325` total entries including group members, `0` field differences;
 - runtime structural validation: `0` missing catalog references, unresolved
   group targets, or cycles;
-- Thaumonomicon protocol foundation audit: `15/15` checks passed.
+- Thaumonomicon protocol audit: `16/16` checks passed. The first real item/open/browser/entry flow is active; recipe-page rendering remains catalog-gated.
 
 ## Remaining boundary
 
-- Register the Thaumonomicon item/open flow.
+- Preserve the implemented Thaumonomicon item/open flow and first browser/entry screens.
 - Build the first real browser and entry screens over the authoritative view
   models.
 - Keep arcane, crucible, infusion, blueprint, fake/display-only, and grouped

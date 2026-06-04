@@ -142,6 +142,22 @@ final class TCThaumonomiconProtocolAudit {
                 indexInvalidatesEntryCache,
                 "sample_present=" + sample.isPresent()
         ));
+        TCThaumonomiconClientCache.clear();
+        TCThaumonomiconClientCache.accept(new TCThaumonomiconIndexPayload(
+                index.categories(),
+                index.entries(),
+                true
+        ));
+        boolean explicitOpenIntent = TCThaumonomiconClientCache.pollOpenRequested()
+                && !TCThaumonomiconClientCache.pollOpenRequested();
+        TCThaumonomiconClientCache.accept(index);
+        boolean refreshDoesNotOpen = !TCThaumonomiconClientCache.pollOpenRequested();
+        TCThaumonomiconClientCache.clear();
+        checks.add(check(
+                "explicit_open_intent_is_separate_from_refresh",
+                explicitOpenIntent && refreshDoesNotOpen,
+                "open_once=" + explicitOpenIntent + ", refresh_open=" + !refreshDoesNotOpen
+        ));
 
         Optional<TCThaumonomiconResearchView> startCandidate = index.entries().stream()
                 .filter(entry -> entry.status() == TCResearchStatus.UNKNOWN)

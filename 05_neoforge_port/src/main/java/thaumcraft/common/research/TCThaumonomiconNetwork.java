@@ -45,6 +45,15 @@ public final class TCThaumonomiconNetwork {
         PacketDistributor.sendToPlayer(player, TCThaumonomiconService.buildIndex(player));
     }
 
+    public static void openFor(ServerPlayer player) {
+        TCPlayerKnowledgeStore.sync(player);
+        TCThaumonomiconIndexPayload index = TCThaumonomiconService.buildIndex(player);
+        PacketDistributor.sendToPlayer(
+                player,
+                new TCThaumonomiconIndexPayload(index.categories(), index.entries(), true)
+        );
+    }
+
     public static void sendEntry(ServerPlayer player, String researchKey, boolean accepted, String resultKey) {
         Optional<TCThaumonomiconEntryView> entry = TCThaumonomiconService.buildEntry(player, researchKey);
         boolean finalAccepted = accepted && entry.isPresent();

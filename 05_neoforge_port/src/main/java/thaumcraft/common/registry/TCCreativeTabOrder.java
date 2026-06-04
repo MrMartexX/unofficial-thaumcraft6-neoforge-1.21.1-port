@@ -88,7 +88,7 @@ public final class TCCreativeTabOrder {
     }
 
     private static void addLegacyItemSequence(CreativeModeTab.Output output) {
-        // Legacy ConfigItems starts with thaumonomicon/curios/loot variants; only the rites curio is ported here.
+        output.accept(TCItems.THAUMONOMICON.get());
         output.accept(TCItems.CURIO_RITES.get());
 
         output.accept(TCItems.AMBER.get());

@@ -8,6 +8,7 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.fx.legacy.TCLegacyParticleEngine;
+import thaumcraft.client.gui.TCThaumonomiconClientController;
 import thaumcraft.common.lib.fx.TCFXDispatcher;
 import thaumcraft.common.research.TCKnowledgeClientCache;
 import thaumcraft.common.research.TCThaumonomiconClientCache;
@@ -34,6 +35,7 @@ public final class TCClientEvents {
 
         TCLegacyParticleEngine.tick();
         TCThaumometerClientEffects.onClientTick(Minecraft.getInstance());
+        TCThaumonomiconClientController.tick(Minecraft.getInstance());
     }
 
     @SubscribeEvent

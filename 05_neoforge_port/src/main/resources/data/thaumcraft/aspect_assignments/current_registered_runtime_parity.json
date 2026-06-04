@@ -97,6 +97,18 @@
       ]
     },
     {
+      "item": "thaumcraft:thaumonomicon",
+      "aspects": [
+        { "aspect": "thaumcraft:cognitio", "amount": 17 },
+        { "aspect": "thaumcraft:herba", "amount": 27 },
+        { "aspect": "thaumcraft:aqua", "amount": 9 },
+        { "aspect": "thaumcraft:aer", "amount": 4 },
+        { "aspect": "thaumcraft:bestia", "amount": 6 },
+        { "aspect": "thaumcraft:praemunio", "amount": 6 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 10 }
+      ]
+    },
+    {
       "item": "thaumcraft:thaumometer",
       "aspects": [
         { "aspect": "thaumcraft:sensus", "amount": 10 },
