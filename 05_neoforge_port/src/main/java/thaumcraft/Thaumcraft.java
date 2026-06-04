@@ -30,6 +30,11 @@ import thaumcraft.common.research.TCKnowledgeCommands;
 import thaumcraft.common.research.TCKnowledgeNetwork;
 import thaumcraft.common.research.TCResearchManager;
 import thaumcraft.common.research.TCResearchDataAuditExporter;
+import thaumcraft.common.research.TCResearchPageCatalogManager;
+import thaumcraft.common.research.TCResearchPageCatalogAuditExporter;
+import thaumcraft.common.research.TCResearchPageCatalogCommands;
+import thaumcraft.common.research.TCThaumonomiconNetwork;
+import thaumcraft.common.research.TCThaumonomiconProtocolAuditExporter;
 import thaumcraft.common.research.TCResearchRequirementAuditCommands;
 import thaumcraft.common.research.TCResearchRequirementAuditExporter;
 import thaumcraft.common.research.TCScanningCommands;
@@ -65,9 +70,11 @@ public final class Thaumcraft {
         modEventBus.addListener(TCAuraNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCKnowledgeNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCResearchTableNetwork::onRegisterPayloadHandlers);
+        modEventBus.addListener(TCThaumonomiconNetwork::onRegisterPayloadHandlers);
         modContainer.registerConfig(ModConfig.Type.COMMON, TCConfig.SPEC);
         NeoForge.EVENT_BUS.addListener(TCAspectAssignments::onAddReloadListeners);
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onAddReloadListeners);
+        NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogManager::onAddReloadListeners);
         NeoForge.EVENT_BUS.addListener(TCScanningManager::onAddReloadListeners);
         NeoForge.EVENT_BUS.addListener(TCGeneratedAspectRecipeGenerator::onTagsUpdated);
         NeoForge.EVENT_BUS.addListener(TCAspectReloadValidator::onTagsUpdated);
@@ -83,6 +90,9 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCResearchRequirementAuditCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchRequirementAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchDataAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCThaumonomiconProtocolAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCScanningCommands::onRegisterCommands);
@@ -91,6 +101,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onItemCrafted);
         TCAspectAssignments.bootstrap();
         TCResearchManager.bootstrap();
+        TCResearchPageCatalogManager.bootstrap();
         TCTheorycraftManager.bootstrap();
         TCScanningManager.bootstrap();
 

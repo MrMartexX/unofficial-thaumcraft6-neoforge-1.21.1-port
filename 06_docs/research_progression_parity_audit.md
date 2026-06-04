@@ -59,5 +59,5 @@ The semantic checks cover gated start, non-final and final warp calculation, emp
 - A modern cancellable equivalent for legacy `ResearchEvent.Research` and `ResearchEvent.Knowledge` is not yet defined.
 - Full warp events, effects, client sync, and consequences remain outside the minimal warp storage bridge.
 - Built-in TC6 research JSON does not currently use entry rewards, so reward handling is parser/contract-tested but still needs a real addon/runtime fixture before it is treated as integration-proven.
-- Research recipe references are page/catalog identifiers, not simple vanilla recipe unlock ids. They require a permanent mapping/catalog layer before Thaumonomicon page rendering.
-- Thaumonomicon index/page payloads and progression action/result payloads remain the next server-authoritative UI boundary.
+- Research recipe references are page/catalog identifiers, not simple vanilla recipe unlock ids. The permanent catalog now preserves all `253` research occurrences, `203` direct references, and `325` entries including group members with `0` comparison differences.
+- Server-authoritative Thaumonomicon index/entry/action payloads are implemented and the protocol foundation audit passes `15/15`. The action audit covers exact legacy browser start, checked stage advance, entry acknowledgement flag semantics and known-entry final-stage progression, visibility filtering, server-owned unlockability/flags, and client-cache invalidation. The remaining boundary is the real browser/entry UI and custom recipe-page renderers.

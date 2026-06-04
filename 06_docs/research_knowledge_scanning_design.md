@@ -250,11 +250,11 @@ Started:
   These are server-authoritative diagnostics for the future Thaumonomicon action path, not a final UI.
 
 Not implemented by this skeleton:
-- Thaumonomicon screen filtering/rendering.
+- Thaumonomicon browser/entry rendering. Player-visible filtering is server-authoritative and implemented.
 - Exact direct `required_craft` ItemStack hash parity for legacy marker ids.
 - Producer/container behavior for legacy metadata/NBT-heavy items such as phials, crystal essence, material-family outputs, and unported Thaumcraft ids.
-- Permanent research recipe/page catalog and recipe-page rendering.
-- Thaumonomicon UI/page rendering.
+- Custom recipe-page rendering for arcane, crucible, infusion, blueprint, fake, and grouped pages.
+- Thaumonomicon browser/entry screen rendering.
 - Full warp events/effects/client sync and cancellable research/knowledge events.
 
 ## Progression parity closure checkpoint
@@ -264,7 +264,8 @@ Not implemented by this skeleton:
 - `reward_item` and `reward_knowledge` are preserved by the runtime parser even though the built-in TC6 research files do not currently use them.
 - `07_Test_Instance_and_Comparisons/research_data_parity` compares legacy JSON, NeoForge source JSON, NeoForge runtime parser output, and all seven Java-registered legacy categories.
 - Latest parity result: `148/148` entries, `7/7` categories, `0` source differences, `0` runtime differences, and `10/10` progression/parser checks passed.
-- The next research boundary is the permanent research recipe/page catalog and server-authoritative Thaumonomicon protocol, not a naive vanilla recipe-unlock patch.
+- The permanent research recipe/page catalog and server-authoritative Thaumonomicon protocol are implemented. The catalog preserves `253` research occurrences, `203` direct references, and `325` entries including group members with `0` parity differences; the protocol foundation audit passes `15/15`, including the legacy known-entry final-stage progression path.
+- The next research boundary is the Thaumonomicon item/open flow and first real browser/entry screens over the authoritative view models, not client-side research or recipe resolution.
 
 Runtime note:
 - The loader intentionally preserves legacy references as strings. Many recipe/item references still point at 1.12 ids or unported Thaumcraft content, so resolving them eagerly would make the skeleton unusable until much later gates.
@@ -308,7 +309,7 @@ Still pending:
 - Research-gated scan success for future stage-specific gameplay requirements beyond parent requisites.
 - Scan success rewards beyond current `ScanAspect` and `ScanGeneric` observation points.
 - Full legacy scannable definitions from `ConfigResearch.initScannables` once missing ids exist.
-- Thaumonomicon screen filtering on top of the loaded research model.
+- Thaumonomicon browser/entry rendering over the authoritative filtered view models.
 - `ScanSky` celestial-note creation side effects.
 - Legacy aura HUD/meter rendering while held.
 - Full research/knowledge sync beyond completed research keys, including stages and flags.

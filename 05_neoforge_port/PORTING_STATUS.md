@@ -6,7 +6,7 @@ This file tracks the current porting checkpoint for the NeoForge 1.21.1 port. It
 
 ## Current checkpoint
 
-The current work branch has reached a stable baseline for research loading, exact progression semantics, data/resource integrity, current menu/network handling, and the existing Research Table BlockEntity path. The next research milestone is the permanent research recipe/page catalog and server-authoritative Thaumonomicon protocol foundation.
+The current work branch has reached a stable baseline for research loading, exact progression semantics, the permanent research recipe/page catalog, the server-authoritative Thaumonomicon index/entry/action protocol foundation, data/resource integrity, current menu/network handling, and the existing Research Table BlockEntity path. The next research milestone is the Thaumonomicon item/open flow plus the first real browser and entry screens over the authoritative protocol.
 
 ## Confirmed OK
 
@@ -29,7 +29,9 @@ The current work branch has reached a stable baseline for research loading, exac
 - Checked stage completion plans item and knowledge consumption before applying inventory/knowledge/stage mutation.
 - Completion flags, entry rewards, addendum `PAGE` notifications, siblings, XP, and final knowledge sync ordering are implemented.
 - Research data parity audit: `148/148` entries, `7/7` categories, `0` source differences, `0` runtime parser differences, and `10/10` progression/parser semantic checks passed.
-- Research `recipes` arrays were audited but are not yet wired into recipe unlocks or recipe page rendering.
+- Research `recipes` arrays are covered by an exact legacy runtime catalog: `253` occurrences, `203` direct references, and `325` entries including group members, with `0` comparison differences.
+- The server-authoritative Thaumonomicon protocol returns only visible categories, entries, current stages, visible addenda, current requirement state, and visible recipe/page bookmarks.
+- Thaumonomicon start, stage-advance, and entry-acknowledgement actions validate and mutate on the server. Start preserves legacy `first=true`/`checks=false`/`noFlags=true`, stage advance preserves `first=false`/`checks=true`/`noFlags=true`, and acknowledgement clears the legacy `RESEARCH`/`PAGE` flags before attempting the legacy known-entry final-stage checked progression with `noFlags=false`.
 
 ### Aspect data
 
@@ -58,6 +60,8 @@ The current work branch has reached a stable baseline for research loading, exac
 - Network authority audit: OK for the currently implemented payloads.
 - High authority risks: 0.
 - Current serverbound Research Table action path validates server player/menu state before applying actions.
+- Current serverbound Thaumonomicon requests/actions validate player visibility and stage requirements before returning or mutating state.
+- Thaumonomicon index refresh invalidates detailed client entry views; after a stage mutation the server sends the refreshed index before the refreshed entry view.
 - Current knowledge sync path is clientbound or client cache acceptance only.
 - Future gameplay packets must keep the same rule: client sends intent; server validates and mutates state.
 
@@ -80,29 +84,30 @@ The current work branch has reached a stable baseline for research loading, exac
 
 ## Known backlog
 
-### Research recipe refs
+### Research recipe/page catalog
 
-The research JSON `recipes` arrays are not yet functionally wired.
+The permanent catalog now preserves the exact Forge 1.12.2 resolver result for every built-in research recipe/page occurrence.
 
 Latest audit summary:
 
-- Research recipe refs: 248.
-- Exact modern recipe id refs: 4.
-- Refs matching recipe output item id: 21.
-- Unresolved refs: 223.
-- Unique unresolved refs: 189.
+- Research occurrences: `253`.
+- Direct references: `203`.
+- Catalog entries including group members: `325`.
+- Field differences against the legacy runtime exporter: `0`.
+- Structural errors: `0`.
+- Currently render-ready normal crafting pages: `2`.
+- Explicitly deferred custom/fake/blueprint pages: `193`.
+- References missing even in the original runtime baseline: `8`.
 
-Conclusion: these are mostly legacy Thaumcraft recipe/page identifiers, not current Minecraft 1.21.1 recipe ids. Do not implement a naive `awardRecipes` patch yet. The correct future work is a mapping layer:
-
-```text
-legacy research recipe ref -> modern recipe id / recipe page / recipe group
-```
+The catalog keeps legacy page identifiers separate from modern recipe unlocks. Arcane, crucible, infusion, blueprint, and fake/display-only pages remain explicit deferred entries until their own recipe types and renderers exist.
 
 ### Thaumonomicon / recipe visibility
 
-- Full Thaumonomicon recipe page rendering is not complete.
-- Recipe visibility/unlock semantics are not complete.
-- Legacy research recipe refs need mapping before they can be displayed or unlocked reliably.
+- Server-authoritative index, entry, current-stage, requirement-state, bookmark, start, stage-advance, and entry-acknowledgement payloads are implemented.
+- The protocol foundation audit passes `15/15` checks.
+- Full Thaumonomicon browser/entry rendering is not complete.
+- Arcane, crucible, infusion, blueprint, fake/display-only, and grouped recipe-page renderers are not complete.
+- Recipe existence, page visibility, and research completion remain separate states.
 
 ### Capabilities and machines
 
@@ -169,6 +174,16 @@ Completed:
 - Added source/runtime/category research data exporter and comparer.
 - Latest data parity result is exact, and runtime progression/parser checks are `10/10`.
 
+### Research recipe/page catalog and Thaumonomicon protocol
+
+Completed:
+
+- Added a Forge 1.12.2 runtime exporter for exact research recipe/page resolution.
+- Added a reproducible generator/comparer and permanent reload-safe NeoForge page catalog.
+- Preserved resolver precedence, canonical legacy ids, ordered group members, required-research gates, legacy outputs, and original missing references.
+- Added server-authoritative index, entry, start, stage-advance, and entry-acknowledgement payloads plus an invalidating client view cache.
+- Added runtime catalog and protocol audits. Latest results are exact catalog parity and `15/15` protocol checks.
+
 ### Required craft bridge recipes
 
 Completed:
@@ -206,7 +221,7 @@ Completed:
 
 ## Recommended next gate
 
-Design and implement the permanent research recipe/page catalog. Classify every legacy `stages[].recipes` and addendum recipe reference as a modern vanilla recipe, future Thaumcraft custom recipe, grouped/fake research page, or explicit deferred reference. Then use that catalog as the data boundary for server-authoritative Thaumonomicon index/page payloads.
+Implement the Thaumonomicon item/open flow and the first real browser/entry screens over the server-authoritative view models. The client may render and navigate returned data, but it must not resolve raw research recipes, decide visibility, or advance stages locally. Keep custom recipe pages explicitly deferred until each custom recipe type and renderer has its own validated subsystem slice.
 
 Required regression commands:
 

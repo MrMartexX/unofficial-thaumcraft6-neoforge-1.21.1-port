@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "legacy_occurrence_count": 253,
+  "research_occurrence_count": 253,
+  "legacy_direct_reference_count": 203,
+  "runtime_direct_reference_count": 203,
+  "runtime_total_entry_count": 325,
+  "legacy_only_direct_references": [],
+  "runtime_only_direct_references": [],
+  "legacy_only_occurrences": [],
+  "research_only_occurrences": [],
+  "field_mismatches": [],
+  "source_counts": {
+    "crafting_registry": 83,
+    "fake_catalog": 13,
+    "missing": 8,
+    "recipe_group": 9,
+    "thaumcraft_catalog": 90
+  },
+  "kind_counts": {
+    "arcane": 73,
+    "blueprint": 6,
+    "crafting": 12,
+    "crucible": 37,
+    "group": 9,
+    "infusion": 58,
+    "missing": 8
+  },
+  "parity_ok": true
+}

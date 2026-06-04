@@ -10,6 +10,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.client.fx.legacy.TCLegacyParticleEngine;
 import thaumcraft.common.lib.fx.TCFXDispatcher;
 import thaumcraft.common.research.TCKnowledgeClientCache;
+import thaumcraft.common.research.TCThaumonomiconClientCache;
 import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
@@ -26,6 +27,7 @@ public final class TCClientEvents {
         if (Minecraft.getInstance().level == null) {
             TCLegacyParticleEngine.clear();
             TCKnowledgeClientCache.clear();
+            TCThaumonomiconClientCache.clear();
             TCResearchTableClientCache.clear();
             return;
         }

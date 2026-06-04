@@ -1,0 +1,7091 @@
+{
+  "schema": 2,
+  "side": "legacy_1_12_2",
+  "environment": {
+    "minecraft": "1.12.2",
+    "forge": "14.23.5.2860",
+    "thaumcraft": "6.1.BETA26"
+  },
+  "occurrence_count": 253,
+  "unique_reference_count": 203,
+  "references": [
+    {
+      "id": "thaumcraft:activatorrail",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "research": "FIRSTSTEPS",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:activator_rail",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "BASICTURRET",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:advalchemyconstruct",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ESSENTIASMELTERVOID@1",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:metal_alchemical_advanced",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "ESSENTIASMELTERVOID",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "ESSENTIASMELTERVOID",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:advancedcrossbow",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ADVANCEDTURRET",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:turret",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "ADVANCEDTURRET",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:alchemicalconstruct",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "TUBES",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:metal_alchemical",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "TUBES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 7
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:alembic",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ESSENTIASMELTER",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:alembic",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "ESSENTIASMELTER",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:alumentum",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "ALUMENTUM",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:alumentum",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "ALUMENTUM",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:ancientpedestal",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "INFUSIONANCIENT",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:pedestal_ancient",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONANCIENT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:arcane_brick",
+      "source": "missing",
+      "kind": "missing",
+      "class": "",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "PAVINGSTONES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:arcane_stone",
+      "source": "missing",
+      "kind": "missing",
+      "class": "",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "PAVINGSTONES",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "INFUSION",
+          "entry": "PAVINGSTONES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:arcanebore",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "ARCANEBORE",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:turret",
+        "metadata": 2,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "ARCANEBORE",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:arcaneear",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ARCANEEAR",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:arcane_ear",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "ARCANEEAR",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:arcaneeartoggle",
+      "source": "crafting_registry",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:arcane_ear_toggle",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "ARCANEEAR",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:arcanelamp",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ARCANELAMP",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:lamp_arcane",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "ARCANELAMP",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:arcanepedestal",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "INFUSION",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:pedestal_arcane",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSION",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:arcanespa",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ARCANESPA",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:spa",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "ARCANESPA",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:automatedcrossbow",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "BASICTURRET",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:turret",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "BASICTURRET",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:banners",
+      "source": "recipe_group",
+      "kind": "group",
+      "class": "java.util.ArrayList",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [
+        "thaumcraft:bannerblack",
+        "thaumcraft:bannerblue",
+        "thaumcraft:bannerbrown",
+        "thaumcraft:bannercyan",
+        "thaumcraft:bannergray",
+        "thaumcraft:bannergreen",
+        "thaumcraft:bannerlightblue",
+        "thaumcraft:bannerlime",
+        "thaumcraft:bannermagenta",
+        "thaumcraft:bannerorange",
+        "thaumcraft:bannerpink",
+        "thaumcraft:bannerpurple",
+        "thaumcraft:bannerred",
+        "thaumcraft:bannersilver",
+        "thaumcraft:bannerwhite",
+        "thaumcraft:banneryellow"
+      ],
+      "group_member_resolutions": [
+        {
+          "id": "thaumcraft:bannerblack",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_black",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannerblue",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_blue",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannerbrown",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_brown",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannercyan",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_cyan",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannergray",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_gray",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannergreen",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_green",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannerlightblue",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_lightblue",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannerlime",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_lime",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannermagenta",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_magenta",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannerorange",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_orange",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannerpink",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_pink",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannerpurple",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_purple",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannerred",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_red",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannersilver",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_silver",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:bannerwhite",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_white",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:banneryellow",
+          "source": "crafting_registry",
+          "kind": "arcane",
+          "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+          "research": "BASEINFUSION",
+          "group": "thaumcraft:banners",
+          "output": {
+            "item": "thaumcraft:banner_yellow",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "BASEINFUSION",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:bathsalts",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "BATHSALTS",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:bath_salts",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "BATHSALTS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:baubles_stuff",
+      "source": "recipe_group",
+      "kind": "group",
+      "class": "java.util.ArrayList",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [
+        "thaumcraft:babuleamulet",
+        "thaumcraft:babuleamuletfancy",
+        "thaumcraft:babulegirdle",
+        "thaumcraft:babulegirdlefancy",
+        "thaumcraft:babulering",
+        "thaumcraft:babuleringfancy"
+      ],
+      "group_member_resolutions": [
+        {
+          "id": "thaumcraft:babuleamulet",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:baubles_stuff",
+          "output": {
+            "item": "thaumcraft:baubles",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:babuleamuletfancy",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:baubles_stuff",
+          "output": {
+            "item": "thaumcraft:baubles",
+            "metadata": 4,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:babulegirdle",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:baubles_stuff",
+          "output": {
+            "item": "thaumcraft:baubles",
+            "metadata": 2,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:babulegirdlefancy",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:baubles_stuff",
+          "output": {
+            "item": "thaumcraft:baubles",
+            "metadata": 6,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:babulering",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:baubles_stuff",
+          "output": {
+            "item": "thaumcraft:baubles",
+            "metadata": 1,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:babuleringfancy",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:baubles_stuff",
+          "output": {
+            "item": "thaumcraft:baubles",
+            "metadata": 5,
+            "count": 1,
+            "nbt": ""
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "BASEINFUSION",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:bellows",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "BELLOWS",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:bellows",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "BELLOWS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:bootstraveller",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "BOOTSTRAVELLER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:traveller_boots",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "BOOTSTRAVELLER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:bottletaint",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "BOTTLETAINT",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:bottle_taint",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "BOTTLETAINT",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:brass_stuff",
+      "source": "recipe_group",
+      "kind": "group",
+      "class": "java.util.ArrayList",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [
+        "thaumcraft:brassblocktoingots",
+        "thaumcraft:brassingotstoblock",
+        "thaumcraft:brassplate"
+      ],
+      "group_member_resolutions": [
+        {
+          "id": "thaumcraft:brassblocktoingots",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:brass_stuff",
+          "output": {
+            "item": "thaumcraft:ingot",
+            "metadata": 2,
+            "count": 9,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:brassingotstoblock",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:brass_stuff",
+          "output": {
+            "item": "thaumcraft:metal_brass",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:brassplate",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:brass_stuff",
+          "output": {
+            "item": "thaumcraft:plate",
+            "metadata": 0,
+            "count": 3,
+            "nbt": ""
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALLURGY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "METALLURGY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:brassbrace",
+      "source": "crafting_registry",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:jar_brace",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "WARDEDJARS",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:brassingot",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "METALLURGY@1",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:ingot",
+        "metadata": 2,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALLURGY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "METALLURGY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "METALLURGY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:brickarcane",
+      "source": "crafting_registry",
+      "kind": "crafting",
+      "class": "net.minecraft.item.crafting.ShapedRecipes",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:stone_arcane_brick",
+        "metadata": 0,
+        "count": 4,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "FIRSTSTEPS",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:caster_basic",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "UNLOCKAUROMANCY@2",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:caster_basic",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 1
+        },
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        },
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 1
+        },
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKAUROMANCY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        },
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKAUROMANCY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:causalitycollapser",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "RIFTCLOSER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:causality_collapser",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "RIFTCLOSER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:centrifuge",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "CENTRIFUGE",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:centrifuge",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "CENTRIFUGE",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:charmundying",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "CHARMUNDYING",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:charm_undying",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "CHARMUNDYING",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:cloudring",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "CLOUDRING",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:cloud_ring",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "CLOUDRING",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:condenser",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "FLUXCLEANUP",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:condenser",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "FLUXCLEANUP",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:condenserlattice",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "FLUXCLEANUP",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:condenser_lattice",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "FLUXCLEANUP",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:crystalclusterair",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "CRYSTALFARMER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:crystal_aer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "CRYSTALFARMER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:crystalclusterearth",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "CRYSTALFARMER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:crystal_terra",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "CRYSTALFARMER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:crystalclusterentropy",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "CRYSTALFARMER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:crystal_perditio",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "CRYSTALFARMER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 5
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:crystalclusterfire",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "CRYSTALFARMER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:crystal_ignis",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "CRYSTALFARMER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:crystalclusterflux",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "CRYSTALFARMER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:crystal_vitium",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "CRYSTALFARMER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 6
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:crystalclusterorder",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "CRYSTALFARMER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:crystal_ordo",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "CRYSTALFARMER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 4
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:crystalclusterwater",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "CRYSTALFARMER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:crystal_aqua",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "CRYSTALFARMER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:curiosityband",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "CURIOSITYBAND",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:curiosity_band",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "CURIOSITYBAND",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:dioptra",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "DIOPTRA",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:dioptra",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "DIOPTRA",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:eldritchpedestal",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "INFUSIONELDRITCH",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:pedestal_eldritch",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONELDRITCH",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:elementalaxe",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "ELEMENTALTOOLS",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:elemental_axe",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{infench:[{lvl:1s,id:0s},{lvl:1s,id:2s}]}"
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "ELEMENTALTOOLS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:elementalhoe",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "ELEMENTALTOOLS",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:elemental_hoe",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "ELEMENTALTOOLS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 4
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:elementalpick",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "ELEMENTALTOOLS",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:elemental_pick",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{infench:[{lvl:1s,id:4s},{lvl:2s,id:3s}]}"
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "ELEMENTALTOOLS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:elementalshovel",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "ELEMENTALTOOLS",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:elemental_shovel",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{infench:[{lvl:1s,id:1s}]}"
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "ELEMENTALTOOLS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:elementalsword",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "ELEMENTALTOOLS",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:elemental_sword",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{infench:[{lvl:2s,id:5s}]}"
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "ELEMENTALTOOLS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:enchantedfabric",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "UNLOCKINFUSION",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:fabric",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKINFUSION",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:essentiasmelter",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ESSENTIASMELTER@2",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:smelter_basic",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "ESSENTIASMELTER",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 0
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "ESSENTIASMELTER",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:essentiasmelterthaumium",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ESSENTIASMELTERTHAUMIUM",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:smelter_thaumium",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "ESSENTIASMELTERTHAUMIUM",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:essentiasmeltervoid",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ESSENTIASMELTERVOID",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:smelter_void",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "ESSENTIASMELTERVOID",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:essentiatransportin",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ESSENTIATRANSPORT",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:essentia_input",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "ESSENTIATRANSPORT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:essentiatransportout",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ESSENTIATRANSPORT",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:essentia_output",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "ESSENTIATRANSPORT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:everfullurn",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "EVERFULLURN",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:everfull_urn",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "EVERFULLURN",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:filter",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "BASEALCHEMY",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:filter",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "BASEALCHEMY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 4
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:focus_1",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "UNLOCKAUROMANCY",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:focus_1",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 2
+        },
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        },
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:focus_2",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "FOCUSADVANCED@1",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:focus_2",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "FOCUSADVANCED",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "AUROMANCY",
+          "entry": "FOCUSADVANCED",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:focus_3",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "FOCUSGREATER@1",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:focus_3",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "FOCUSGREATER",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "AUROMANCY",
+          "entry": "FOCUSGREATER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:focuspouch",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "FOCUSPOUCH",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:focus_pouch",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "FOCUSPOUCH",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:goggles",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "UNLOCKARTIFICE",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:goggles",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "BASEARTIFICE",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKARTIFICE",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:golembell",
+      "source": "crafting_registry",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:golem_bell",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "CONTROLSEALS",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:golempress",
+      "source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "research": "MINDCLOCKWORK",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:golem_builder",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "MINDCLOCKWORK",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:grapplegun",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "GRAPPLEGUN",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:grapple_gun",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "GRAPPLEGUN",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:grapplegunspool",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "GRAPPLEGUN",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:grapple_gun_spool",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "GRAPPLEGUN",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:grappleguntip",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "GRAPPLEGUN",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:grapple_gun_tip",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "GRAPPLEGUN",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hedge_clay",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "HEDGEALCHEMY@3",
+      "group": "",
+      "output": {
+        "item": "minecraft:clay_ball",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 7
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 7
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hedge_dye",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "HEDGEALCHEMY@2",
+      "group": "",
+      "output": {
+        "item": "minecraft:dye",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 5
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 5
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 5
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hedge_glowstone",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "HEDGEALCHEMY@2",
+      "group": "",
+      "output": {
+        "item": "minecraft:glowstone_dust",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 6
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 6
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 6
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hedge_gunpowder",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "HEDGEALCHEMY@2",
+      "group": "",
+      "output": {
+        "item": "minecraft:gunpowder",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 3
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 3
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hedge_lava",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "HEDGEALCHEMY@3",
+      "group": "",
+      "output": {
+        "item": "minecraft:lava_bucket",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 10
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 10
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hedge_leather",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "HEDGEALCHEMY@1",
+      "group": "",
+      "output": {
+        "item": "minecraft:leather",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 1
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 2
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hedge_slime",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "HEDGEALCHEMY@2",
+      "group": "",
+      "output": {
+        "item": "minecraft:slime_ball",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 4
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 4
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 4
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hedge_string",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "HEDGEALCHEMY@3",
+      "group": "",
+      "output": {
+        "item": "minecraft:string",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 8
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 8
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hedge_tallow",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "HEDGEALCHEMY@1",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:tallow",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 0
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hedge_web",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "HEDGEALCHEMY@3",
+      "group": "",
+      "output": {
+        "item": "minecraft:web",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 9
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 9
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:helmgoggles",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "FORTRESSMASK",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "FORTRESSMASK",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:hungrychest",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "HUNGRYCHEST",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:hungry_chest",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "HUNGRYCHEST",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:iearcingfake",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "research": "INFUSIONENCHANTMENT",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONENCHANTMENT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 5
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:ieburrowingfake",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "research": "INFUSIONENCHANTMENT",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONENCHANTMENT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:iecollectorfake",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "research": "INFUSIONENCHANTMENT",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONENCHANTMENT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:iedestructivefake",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "research": "INFUSIONENCHANTMENT",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONENCHANTMENT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:ieessencefake",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "research": "INFUSIONENCHANTMENT",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONENCHANTMENT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 6
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:ielamplightfake",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "research": "INFUSIONENCHANTMENT",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONENCHANTMENT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 7
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:ierefiningfake",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "research": "INFUSIONENCHANTMENT",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONENCHANTMENT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:iesoundingfake",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "research": "INFUSIONENCHANTMENT",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONENCHANTMENT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 4
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:infernalfurnace",
+      "source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "research": "INFERNALFURNACE",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "INFERNALFURNACE",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:infusionaltar",
+      "source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "research": "INFUSION",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSION",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:infusionaltarancient",
+      "source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "research": "INFUSIONANCIENT",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONANCIENT",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:infusionaltareldritch",
+      "source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "research": "INFUSIONELDRITCH",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONELDRITCH",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:infusionmatrix",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "INFUSION@2",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:infusion_matrix",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSION",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        },
+        {
+          "category": "INFUSION",
+          "entry": "INFUSION",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:inkwell",
+      "source": "recipe_group",
+      "kind": "group",
+      "class": "java.util.ArrayList",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [
+        "thaumcraft:scribingtoolscraft1",
+        "thaumcraft:scribingtoolscraft2",
+        "thaumcraft:scribingtoolsrefill"
+      ],
+      "group_member_resolutions": [
+        {
+          "id": "thaumcraft:scribingtoolscraft1",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:inkwell",
+          "output": {
+            "item": "thaumcraft:scribing_tools",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:scribingtoolscraft2",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:inkwell",
+          "output": {
+            "item": "thaumcraft:scribing_tools",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:scribingtoolsrefill",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:inkwell",
+          "output": {
+            "item": "thaumcraft:scribing_tools",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "THEORYRESEARCH",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 1
+        },
+        {
+          "category": "BASICS",
+          "entry": "THEORYRESEARCH",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:ironplate",
+      "source": "crafting_registry",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:plate",
+        "metadata": 1,
+        "count": 3,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "BASEARTIFICE",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 4
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:jarbrain",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "JARBRAIN",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:jar_brain",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "JARBRAIN",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:jarlabel",
+      "source": "crafting_registry",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "research": "",
+      "group": "thaumcraft:jarlabels",
+      "output": {
+        "item": "thaumcraft:label",
+        "metadata": 0,
+        "count": 4,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "WARDEDJARS",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:jarlabelessence",
+      "source": "missing",
+      "kind": "missing",
+      "class": "",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "WARDEDJARS",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 4
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:jarvoid",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.common.lib.crafting.ShapedArcaneVoidJar",
+      "research": "WARDEDJARS",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:jar_void",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "WARDEDJARS",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:lampfertility",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "LAMPFERTILITY",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:lamp_fertility",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "LAMPFERTILITY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:lampgrowth",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "LAMPGROWTH",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:lamp_growth",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "LAMPGROWTH",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:levitator",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "LEVITATOR",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:levitator",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "LEVITATOR",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:liquiddeath",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "LIQUIDDEATH",
+      "group": "",
+      "output": {
+        "item": "forge:bucketfilled",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{FluidName:\"liquid_death\",Amount:1000}"
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "LIQUIDDEATH",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:maskangryghost",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "FORTRESSMASK",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "FORTRESSMASK",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:maskgrinningdevil",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "FORTRESSMASK",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "FORTRESSMASK",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:masksippingfiend",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "FORTRESSMASK",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "FORTRESSMASK",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:matrixcost",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "INFUSIONBOOST",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:matrix_cost",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONBOOST",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:matrixmotion",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "INFUSIONBOOST",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:matrix_speed",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONBOOST",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:mechanism_complex",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "BASEARTIFICE",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:mechanism_complex",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "BASEARTIFICE",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:mechanism_simple",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "BASEARTIFICE",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:mechanism_simple",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "BASEARTIFICE",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:metal_purification_cinnabar",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "METALPURIFICATION",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:cluster",
+        "metadata": 6,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALPURIFICATION",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:metal_purification_copper",
+      "source": "missing",
+      "kind": "missing",
+      "class": "",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALPURIFICATION",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:metal_purification_gold",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "METALPURIFICATION",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:cluster",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALPURIFICATION",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:metal_purification_iron",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "METALPURIFICATION",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:cluster",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALPURIFICATION",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:metal_purification_lead",
+      "source": "missing",
+      "kind": "missing",
+      "class": "",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALPURIFICATION",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 6
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:metal_purification_silver",
+      "source": "missing",
+      "kind": "missing",
+      "class": "",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALPURIFICATION",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 5
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:metal_purification_tin",
+      "source": "missing",
+      "kind": "missing",
+      "class": "",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALPURIFICATION",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 4
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:mindbiothaumic",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "MINDBIOTHAUMIC",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:mind",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "MINDBIOTHAUMIC",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:mindclockwork",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "MINDCLOCKWORK@2",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:mind",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "MINDCLOCKWORK",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        },
+        {
+          "category": "GOLEMANCY",
+          "entry": "MINDCLOCKWORK",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:mirror",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "MIRROR",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:mirror",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "MIRROR",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:mirroressentia",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "MIRRORESSENTIA",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:mirror_essentia",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "MIRRORESSENTIA",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:mirrorglass",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "research": "BASEARTIFICE",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:mirrored_glass",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "BASEARTIFICE",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:mirrorhand",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "MIRRORHAND",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:hand_mirror",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "MIRRORHAND",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:mnemonicmatrix",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "THAUMATORIUM",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:brain_box",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "THAUMATORIUM",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:modaggression",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "SEALGUARD",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:module",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALGUARD",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:modvision",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "GOLEMVISION",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:module",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "GOLEMVISION",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:morphicresonator",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "BASEALCHEMY",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:morphic_resonator",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "BASEALCHEMY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 5
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:nitor",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "UNLOCKALCHEMY@3",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:nitor_yellow",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "BASEALCHEMY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:nitorcolor",
+      "source": "missing",
+      "kind": "missing",
+      "class": "",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:nitorgroup",
+      "source": "recipe_group",
+      "kind": "group",
+      "class": "java.util.ArrayList",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [
+        "thaumcraft:nitordyeblack",
+        "thaumcraft:nitordyeblue",
+        "thaumcraft:nitordyebrown",
+        "thaumcraft:nitordyecyan",
+        "thaumcraft:nitordyegray",
+        "thaumcraft:nitordyegreen",
+        "thaumcraft:nitordyelightblue",
+        "thaumcraft:nitordyelime",
+        "thaumcraft:nitordyemagenta",
+        "thaumcraft:nitordyeorange",
+        "thaumcraft:nitordyepink",
+        "thaumcraft:nitordyepurple",
+        "thaumcraft:nitordyered",
+        "thaumcraft:nitordyesilver",
+        "thaumcraft:nitordyewhite",
+        "thaumcraft:nitordyeyellow"
+      ],
+      "group_member_resolutions": [
+        {
+          "id": "thaumcraft:nitordyeblack",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_black",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyeblue",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_blue",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyebrown",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_brown",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyecyan",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_cyan",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyegray",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_gray",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyegreen",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_green",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyelightblue",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_lightblue",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyelime",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_lime",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyemagenta",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_magenta",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyeorange",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_orange",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyepink",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_pink",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyepurple",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_purple",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyered",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_red",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyesilver",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_silver",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyewhite",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_white",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:nitordyeyellow",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:nitorgroup",
+          "output": {
+            "item": "thaumcraft:nitor_yellow",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "BASEALCHEMY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:patterncrafter",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "ARCANEPATTERNCRAFTER",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:pattern_crafter",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "ARCANEPATTERNCRAFTER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:pavebarrier",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "PAVINGSTONES",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:paving_stone_barrier",
+        "metadata": 0,
+        "count": 4,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "PAVINGSTONES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:pavetravel",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "PAVINGSTONES",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:paving_stone_travel",
+        "metadata": 0,
+        "count": 4,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "PAVINGSTONES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:phial",
+      "source": "crafting_registry",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:phial",
+        "metadata": 0,
+        "count": 8,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "BASEALCHEMY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:potionsprayer",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "POTIONSPRAYER",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:potion_sprayer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "POTIONSPRAYER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:primalcrusher",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "PRIMALCRUSHER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:primal_crusher",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{infench:[{lvl:1s,id:1s},{lvl:1s,id:4s}]}"
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ELDRITCH",
+          "entry": "PRIMALCRUSHER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:rechargepedestal",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "RECHARGEPEDESTAL",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:recharge_pedestal",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "RECHARGEPEDESTAL",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:redstoneinlay",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "research": "INFUSIONSTABLE",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:inlay",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONSTABLE",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:redstonerelay",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "REDSTONERELAY",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:redstone_relay",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "REDSTONERELAY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:resonator",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "TUBES",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:resonator",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "TUBES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:robeboots",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "UNLOCKINFUSION",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:cloth_boots",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKINFUSION",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:robechest",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "UNLOCKINFUSION",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:cloth_chest",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKINFUSION",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:robelegs",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "UNLOCKINFUSION",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:cloth_legs",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKINFUSION",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:runicarmorfake0",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionRunicAugmentRecipe",
+      "research": "RUNICSHIELDING",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "RUNICSHIELDING",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:runicarmorfake1",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionRunicAugmentRecipe",
+      "research": "RUNICSHIELDING",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "RUNICSHIELDING",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:runicarmorfake2",
+      "source": "fake_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.common.lib.crafting.InfusionRunicAugmentRecipe",
+      "research": "RUNICSHIELDING",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "RUNICSHIELDING",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:salismundusfake",
+      "source": "fake_catalog",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:salis_mundus",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "FIRSTSTEPS",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "BASICS",
+          "entry": "FIRSTSTEPS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        },
+        {
+          "category": "BASICS",
+          "entry": "FIRSTSTEPS",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sanesoap",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SANESOAP",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:sanity_soap",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "SANESOAP",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sanitychecker",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "WARP",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:sanity_checker",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "WARP",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealblank",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "research": "CONTROLSEALS",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 0,
+        "count": 3,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "CONTROLSEALS",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealbreak",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "SEALBREAK",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 12,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALBREAK",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealbreakadv",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALBREAK&&MINDBIOTHAUMIC",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 16,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALBREAK",
+          "section": "addendum",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealbutcher",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "SEALBUTCHER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 8,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALBUTCHER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealcollect",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALCOLLECT",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALCOLLECT",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealcollectadv",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALCOLLECT&&MINDBIOTHAUMIC",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 2,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALCOLLECT",
+          "section": "addendum",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealempty",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALEMPTY",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 5,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALEMPTY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealemptyadv",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALEMPTY&&MINDBIOTHAUMIC",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 6,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALEMPTY",
+          "section": "addendum",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealguard",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALGUARD",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 9,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALGUARD",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealguardadv",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALGUARD&&MINDBIOTHAUMIC",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 10,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALGUARD",
+          "section": "addendum",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealharvest",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "SEALHARVEST",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 7,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALHARVEST",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:seallumber",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALLUMBER",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 11,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALLUMBER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealprovide",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALPROVIDE",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 14,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALPROVIDE",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealstock",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALSTOCK",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 15,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALSTOCK",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealstore",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALSTORE",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 3,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALSTORE",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealstoreadv",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALSTORE&&MINDBIOTHAUMIC",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 4,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALSTORE",
+          "section": "addendum",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:sealuse",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "SEALUSE",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:seal",
+        "metadata": 13,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "GOLEMANCY",
+          "entry": "SEALUSE",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:smelteraux",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "IMPROVEDSMELTING",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:smelter_aux",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "IMPROVEDSMELTING",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:smeltervent",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "IMPROVEDSMELTING2",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:smelter_vent",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "IMPROVEDSMELTING2",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:stabilizer",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "INFUSIONSTABLE",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:stabilizer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "INFUSIONSTABLE",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:stonearcane",
+      "source": "crafting_registry",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:stone_arcane",
+        "metadata": 0,
+        "count": 9,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "FIRSTSTEPS",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:tablestone",
+      "source": "crafting_registry",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:table_stone",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 3
+        },
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:tablewood",
+      "source": "crafting_registry",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:table_wood",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "THEORYRESEARCH",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "BASICS",
+          "entry": "THEORYRESEARCH",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:tallowcandles",
+      "source": "recipe_group",
+      "kind": "group",
+      "class": "java.util.ArrayList",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [
+        "thaumcraft:tallowcandle",
+        "thaumcraft:tallowcandleblack",
+        "thaumcraft:tallowcandleblue",
+        "thaumcraft:tallowcandlebrown",
+        "thaumcraft:tallowcandlecyan",
+        "thaumcraft:tallowcandlegray",
+        "thaumcraft:tallowcandlegreen",
+        "thaumcraft:tallowcandlelightblue",
+        "thaumcraft:tallowcandlelime",
+        "thaumcraft:tallowcandlemagenta",
+        "thaumcraft:tallowcandleorange",
+        "thaumcraft:tallowcandlepink",
+        "thaumcraft:tallowcandlepurple",
+        "thaumcraft:tallowcandlered",
+        "thaumcraft:tallowcandlesilver",
+        "thaumcraft:tallowcandlewhite",
+        "thaumcraft:tallowcandleyellow"
+      ],
+      "group_member_resolutions": [
+        {
+          "id": "thaumcraft:tallowcandle",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_white",
+            "metadata": 0,
+            "count": 3,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandleblack",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_black",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandleblue",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_blue",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlebrown",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_brown",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlecyan",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_cyan",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlegray",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_gray",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlegreen",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_green",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlelightblue",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_lightblue",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlelime",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_lime",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlemagenta",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_magenta",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandleorange",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_orange",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlepink",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_pink",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlepurple",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_purple",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlered",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_red",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlesilver",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_silver",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandlewhite",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_white",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:tallowcandleyellow",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+          "research": "",
+          "group": "thaumcraft:tallowcandles",
+          "output": {
+            "item": "thaumcraft:candle_yellow",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 1
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "HEDGEALCHEMY",
+          "section": "stage",
+          "section_index": 3,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:thaumatorium",
+      "source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "research": "THAUMATORIUM",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "THAUMATORIUM",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:thaumium_stuff",
+      "source": "recipe_group",
+      "kind": "group",
+      "class": "java.util.ArrayList",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [
+        "thaumcraft:thaumiumaxe",
+        "thaumcraft:thaumiumblocktoingots",
+        "thaumcraft:thaumiumboots",
+        "thaumcraft:thaumiumchest",
+        "thaumcraft:thaumiumhelm",
+        "thaumcraft:thaumiumhoe",
+        "thaumcraft:thaumiumingotstoblock",
+        "thaumcraft:thaumiumlegs",
+        "thaumcraft:thaumiumpick",
+        "thaumcraft:thaumiumplate",
+        "thaumcraft:thaumiumshovel",
+        "thaumcraft:thaumiumsword"
+      ],
+      "group_member_resolutions": [
+        {
+          "id": "thaumcraft:thaumiumaxe",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:thaumium_axe",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumblocktoingots",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:ingot",
+            "metadata": 0,
+            "count": 9,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumboots",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:thaumium_boots",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumchest",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:thaumium_chest",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumhelm",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:thaumium_helm",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumhoe",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:thaumium_hoe",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumingotstoblock",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:metal_thaumium",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumlegs",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:thaumium_legs",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumpick",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:thaumium_pick",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumplate",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:plate",
+            "metadata": 2,
+            "count": 3,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumshovel",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:thaumium_shovel",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:thaumiumsword",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:thaumium_stuff",
+          "output": {
+            "item": "thaumcraft:thaumium_sword",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALLURGY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:thaumiumfortresschest",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "ARMORFORTRESS",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:fortress_chest",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "ARMORFORTRESS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:thaumiumfortresshelm",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "ARMORFORTRESS",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:fortress_helm",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "ARMORFORTRESS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:thaumiumfortresslegs",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "ARMORFORTRESS",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:fortress_legs",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "ARMORFORTRESS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:thaumiumingot",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "METALLURGY@2",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:ingot",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "METALLURGY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        },
+        {
+          "category": "ALCHEMY",
+          "entry": "METALLURGY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:thaumometer",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "FIRSTSTEPS@2",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:thaumometer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "BASICS",
+          "entry": "FIRSTSTEPS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        },
+        {
+          "category": "BASICS",
+          "entry": "FIRSTSTEPS",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:triplemeattreatfake",
+      "source": "fake_catalog",
+      "kind": "crafting",
+      "class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "research": "",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:triple_meat_treat",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "INFERNALFURNACE",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:tube",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "TUBES",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:tube",
+        "metadata": 0,
+        "count": 8,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "TUBES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:tubebuffer",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "TUBES",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:tube_buffer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "TUBES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 6
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:tubefilter",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "research": "TUBES",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:tube_filter",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "TUBES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 3
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:tubeoneway",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "research": "TUBES",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:tube_oneway",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "TUBES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 5
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:tuberestrict",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "research": "TUBES",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:tube_restrict",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "TUBES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 4
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:tubevalve",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "research": "TUBES",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:tube_valve",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "TUBES",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:verdantheart",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "VERDANTCHARMS",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:verdant_charm",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "VERDANTCHARMS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:verdantheartlife",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "VERDANTCHARMS",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "VERDANTCHARMS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:verdantheartsustain",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "VERDANTCHARMS",
+      "group": "",
+      "output": null,
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "INFUSION",
+          "entry": "VERDANTCHARMS",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:vis_resonator",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "research": "UNLOCKAUROMANCY@2",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:vis_resonator",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        },
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        },
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 0
+        },
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKAUROMANCY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        },
+        {
+          "category": "BASICS",
+          "entry": "UNLOCKAUROMANCY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:visamulet",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "VISAMULET",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:amulet_vis",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "VISAMULET",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:visbattery",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "VISBATTERY",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:vis_battery",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "VISBATTERY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:viscrystalgroup",
+      "source": "recipe_group",
+      "kind": "group",
+      "class": "java.util.ArrayList",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [
+        "thaumcraft:vis_crystal_aer",
+        "thaumcraft:vis_crystal_alienis",
+        "thaumcraft:vis_crystal_alkimia",
+        "thaumcraft:vis_crystal_aqua",
+        "thaumcraft:vis_crystal_auram",
+        "thaumcraft:vis_crystal_aversio",
+        "thaumcraft:vis_crystal_bestia",
+        "thaumcraft:vis_crystal_cognitio",
+        "thaumcraft:vis_crystal_desiderium",
+        "thaumcraft:vis_crystal_exanimis",
+        "thaumcraft:vis_crystal_fabrico",
+        "thaumcraft:vis_crystal_gelum",
+        "thaumcraft:vis_crystal_herba",
+        "thaumcraft:vis_crystal_humanus",
+        "thaumcraft:vis_crystal_ignis",
+        "thaumcraft:vis_crystal_instrumentum",
+        "thaumcraft:vis_crystal_lux",
+        "thaumcraft:vis_crystal_machina",
+        "thaumcraft:vis_crystal_metallum",
+        "thaumcraft:vis_crystal_mortuus",
+        "thaumcraft:vis_crystal_motus",
+        "thaumcraft:vis_crystal_ordo",
+        "thaumcraft:vis_crystal_perditio",
+        "thaumcraft:vis_crystal_permutatio",
+        "thaumcraft:vis_crystal_potentia",
+        "thaumcraft:vis_crystal_praecantatio",
+        "thaumcraft:vis_crystal_praemunio",
+        "thaumcraft:vis_crystal_sensus",
+        "thaumcraft:vis_crystal_spiritus",
+        "thaumcraft:vis_crystal_tenebrae",
+        "thaumcraft:vis_crystal_terra",
+        "thaumcraft:vis_crystal_vacuos",
+        "thaumcraft:vis_crystal_victus",
+        "thaumcraft:vis_crystal_vinculum",
+        "thaumcraft:vis_crystal_vitium",
+        "thaumcraft:vis_crystal_vitreus",
+        "thaumcraft:vis_crystal_volatus"
+      ],
+      "group_member_resolutions": [
+        {
+          "id": "thaumcraft:vis_crystal_aer",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"aer\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_alienis",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"alienis\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_alkimia",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"alkimia\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_aqua",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"aqua\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_auram",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"auram\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_aversio",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"aversio\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_bestia",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"bestia\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_cognitio",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"cognitio\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_desiderium",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"desiderium\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_exanimis",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"exanimis\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_fabrico",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"fabrico\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_gelum",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"gelum\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_herba",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"herba\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_humanus",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"humanus\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_ignis",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"ignis\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_instrumentum",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"instrumentum\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_lux",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"lux\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_machina",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"machina\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_metallum",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"metallum\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_mortuus",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"mortuus\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_motus",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"motus\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_ordo",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"ordo\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_perditio",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"perditio\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_permutatio",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"permutatio\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_potentia",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"potentia\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_praecantatio",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"praecantatio\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_praemunio",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"praemunio\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_sensus",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"sensus\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_spiritus",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"spiritus\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_tenebrae",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"tenebrae\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_terra",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"terra\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_vacuos",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"vacuos\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_victus",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"victus\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_vinculum",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"vinculum\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_vitium",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"vitium\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_vitreus",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"vitreus\"}]}"
+          }
+        },
+        {
+          "id": "thaumcraft:vis_crystal_volatus",
+          "source": "thaumcraft_catalog",
+          "kind": "crucible",
+          "class": "thaumcraft.api.crafting.CrucibleRecipe",
+          "research": "BASEALCHEMY",
+          "group": "thaumcraft:viscrystalgroup",
+          "output": {
+            "item": "thaumcraft:crystal_essence",
+            "metadata": 0,
+            "count": 1,
+            "nbt": "{Aspects:[{amount:1,key:\"volatus\"}]}"
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "BASEALCHEMY",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:visgenerator",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "VISGENERATOR",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:vis_generator",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ARTIFICE",
+          "entry": "VISGENERATOR",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:void_stuff",
+      "source": "recipe_group",
+      "kind": "group",
+      "class": "java.util.ArrayList",
+      "research": "",
+      "group": "",
+      "output": null,
+      "group_members": [
+        "thaumcraft:voidaxe",
+        "thaumcraft:voidblocktoingots",
+        "thaumcraft:voidboots",
+        "thaumcraft:voidchest",
+        "thaumcraft:voidhelm",
+        "thaumcraft:voidhoe",
+        "thaumcraft:voidingotstoblock",
+        "thaumcraft:voidlegs",
+        "thaumcraft:voidpick",
+        "thaumcraft:voidplate",
+        "thaumcraft:voidshovel",
+        "thaumcraft:voidsword"
+      ],
+      "group_member_resolutions": [
+        {
+          "id": "thaumcraft:voidaxe",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:void_axe",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidblocktoingots",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:ingot",
+            "metadata": 1,
+            "count": 9,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidboots",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:void_boots",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidchest",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:void_chest",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidhelm",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:void_helm",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidhoe",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:void_hoe",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidingotstoblock",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:metal_void",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidlegs",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:void_legs",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidpick",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:void_pick",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidplate",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:plate",
+            "metadata": 3,
+            "count": 3,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidshovel",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:void_shovel",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        },
+        {
+          "id": "thaumcraft:voidsword",
+          "source": "crafting_registry",
+          "kind": "crafting",
+          "class": "net.minecraftforge.oredict.ShapedOreRecipe",
+          "research": "",
+          "group": "thaumcraft:void_stuff",
+          "output": {
+            "item": "thaumcraft:void_sword",
+            "metadata": 0,
+            "count": 1,
+            "nbt": ""
+          }
+        }
+      ],
+      "occurrences": [
+        {
+          "category": "ELDRITCH",
+          "entry": "BASEELDRITCH",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:voidingot",
+      "source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "research": "BASEELDRITCH",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:ingot",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ELDRITCH",
+          "entry": "BASEELDRITCH",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:voidrobechest",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "VOIDROBEARMOR",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:void_robe_chest",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ELDRITCH",
+          "entry": "VOIDROBEARMOR",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 1
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:voidrobehelm",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "VOIDROBEARMOR",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:void_robe_helm",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ELDRITCH",
+          "entry": "VOIDROBEARMOR",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:voidrobelegs",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "VOIDROBEARMOR",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:void_robe_legs",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ELDRITCH",
+          "entry": "VOIDROBEARMOR",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 2
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:voidseerpearl",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "VOIDSEERPEARL",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:voidseer_charm",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ELDRITCH",
+          "entry": "VOIDSEERPEARL",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:voidsiphon",
+      "source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "class": "thaumcraft.api.crafting.InfusionRecipe",
+      "research": "VOIDSIPHON",
+      "group": "",
+      "output": {
+        "item": "thaumcraft:void_siphon",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ELDRITCH",
+          "entry": "VOIDSIPHON",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:wand_workbench",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "BASEAUROMANCY@2",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:wand_workbench",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 4
+        },
+        {
+          "category": "AUROMANCY",
+          "entry": "BASEAUROMANCY",
+          "section": "stage",
+          "section_index": 2,
+          "recipe_index": 4
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:wardedjar",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "WARDEDJARS",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:jar_normal",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "ALCHEMY",
+          "entry": "WARDEDJARS",
+          "section": "stage",
+          "section_index": 0,
+          "recipe_index": 0
+        }
+      ]
+    },
+    {
+      "id": "thaumcraft:workbenchcharger",
+      "source": "crafting_registry",
+      "kind": "arcane",
+      "class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "research": "WORKBENCHCHARGER",
+      "group": "minecraft:",
+      "output": {
+        "item": "thaumcraft:arcane_workbench_charger",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "group_members": [],
+      "group_member_resolutions": [],
+      "occurrences": [
+        {
+          "category": "AUROMANCY",
+          "entry": "WORKBENCHCHARGER",
+          "section": "stage",
+          "section_index": 1,
+          "recipe_index": 0
+        }
+      ]
+    }
+  ]
+}

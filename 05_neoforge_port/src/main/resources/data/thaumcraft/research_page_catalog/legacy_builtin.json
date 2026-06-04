@@ -1,0 +1,5471 @@
+{
+  "schema": 1,
+  "legacy_environment": {
+    "minecraft": "1.12.2",
+    "forge": "14.23.5.2860",
+    "thaumcraft": "6.1.BETA26"
+  },
+  "entries": [
+    {
+      "id": "thaumcraft:activatorrail",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "required_research": "FIRSTSTEPS",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:activator_rail",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:advalchemyconstruct",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ESSENTIASMELTERVOID@1",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:metal_alchemical_advanced",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:advancedcrossbow",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ADVANCEDTURRET",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:turret",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:alchemicalconstruct",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "TUBES",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:metal_alchemical",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:alembic",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ESSENTIASMELTER",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:alembic",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:alumentum",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "ALUMENTUM",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:alumentum",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:ancientpedestal",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "INFUSIONANCIENT",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:pedestal_ancient",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:arcane_brick",
+      "legacy_source": "missing",
+      "kind": "missing",
+      "legacy_class": "",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:arcane_stone",
+      "legacy_source": "missing",
+      "kind": "missing",
+      "legacy_class": "",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:arcanebore",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "ARCANEBORE",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:turret",
+        "metadata": 2,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:arcaneear",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ARCANEEAR",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:arcane_ear",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:arcaneeartoggle",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:arcane_ear_toggle",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:arcanelamp",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ARCANELAMP",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:lamp_arcane",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:arcanepedestal",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "INFUSION",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:pedestal_arcane",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:arcanespa",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ARCANESPA",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:spa",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:automatedcrossbow",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASICTURRET",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:turret",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:babuleamulet",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:baubles_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:baubles",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:babuleamuletfancy",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:baubles_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:baubles",
+        "metadata": 4,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:babulegirdle",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:baubles_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:baubles",
+        "metadata": 2,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:babulegirdlefancy",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:baubles_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:baubles",
+        "metadata": 6,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:babulering",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:baubles_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:baubles",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:babuleringfancy",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:baubles_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:baubles",
+        "metadata": 5,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannerblack",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_black",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannerblue",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_blue",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannerbrown",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_brown",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannercyan",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_cyan",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannergray",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_gray",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannergreen",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_green",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannerlightblue",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_lightblue",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannerlime",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_lime",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannermagenta",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_magenta",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannerorange",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_orange",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannerpink",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_pink",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannerpurple",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_purple",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannerred",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_red",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:banners",
+      "legacy_source": "recipe_group",
+      "kind": "group",
+      "legacy_class": "java.util.ArrayList",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [
+        "thaumcraft:bannerblack",
+        "thaumcraft:bannerblue",
+        "thaumcraft:bannerbrown",
+        "thaumcraft:bannercyan",
+        "thaumcraft:bannergray",
+        "thaumcraft:bannergreen",
+        "thaumcraft:bannerlightblue",
+        "thaumcraft:bannerlime",
+        "thaumcraft:bannermagenta",
+        "thaumcraft:bannerorange",
+        "thaumcraft:bannerpink",
+        "thaumcraft:bannerpurple",
+        "thaumcraft:bannerred",
+        "thaumcraft:bannersilver",
+        "thaumcraft:bannerwhite",
+        "thaumcraft:banneryellow"
+      ],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:bannersilver",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_silver",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bannerwhite",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_white",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:banneryellow",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEINFUSION",
+      "legacy_group": "thaumcraft:banners",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:banner_yellow",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:bathsalts",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BATHSALTS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:bath_salts",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:baubles_stuff",
+      "legacy_source": "recipe_group",
+      "kind": "group",
+      "legacy_class": "java.util.ArrayList",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [
+        "thaumcraft:babuleamulet",
+        "thaumcraft:babuleamuletfancy",
+        "thaumcraft:babulegirdle",
+        "thaumcraft:babulegirdlefancy",
+        "thaumcraft:babulering",
+        "thaumcraft:babuleringfancy"
+      ],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:bellows",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BELLOWS",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:bellows",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:bootstraveller",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "BOOTSTRAVELLER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:traveller_boots",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:bottletaint",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BOTTLETAINT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:bottle_taint",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:brass_stuff",
+      "legacy_source": "recipe_group",
+      "kind": "group",
+      "legacy_class": "java.util.ArrayList",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [
+        "thaumcraft:brassblocktoingots",
+        "thaumcraft:brassingotstoblock",
+        "thaumcraft:brassplate"
+      ],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:brassblocktoingots",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:brass_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:ingot",
+        "metadata": 2,
+        "count": 9,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:brassbrace",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:jar_brace",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:brassingot",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "METALLURGY@1",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:ingot",
+        "metadata": 2,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 3
+    },
+    {
+      "id": "thaumcraft:brassingotstoblock",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:brass_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:metal_brass",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:brassplate",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:brass_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:plate",
+        "metadata": 0,
+        "count": 3,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:brickarcane",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraft.item.crafting.ShapedRecipes",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:stone_arcane_brick",
+        "metadata": 0,
+        "count": 4,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:caster_basic",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "UNLOCKAUROMANCY@2",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:caster_basic",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 5
+    },
+    {
+      "id": "thaumcraft:causalitycollapser",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "RIFTCLOSER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:causality_collapser",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:centrifuge",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "CENTRIFUGE",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:centrifuge",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:charmundying",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "CHARMUNDYING",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:charm_undying",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:cloudring",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "CLOUDRING",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cloud_ring",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:condenser",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "FLUXCLEANUP",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:condenser",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:condenserlattice",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "FLUXCLEANUP",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:condenser_lattice",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterair",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "CRYSTALFARMER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_aer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterearth",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "CRYSTALFARMER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_terra",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterentropy",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "CRYSTALFARMER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_perditio",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterfire",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "CRYSTALFARMER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_ignis",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterflux",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "CRYSTALFARMER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_vitium",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterorder",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "CRYSTALFARMER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_ordo",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterwater",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "CRYSTALFARMER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_aqua",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:curiosityband",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "CURIOSITYBAND",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:curiosity_band",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:dioptra",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "DIOPTRA",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:dioptra",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:eldritchpedestal",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "INFUSIONELDRITCH",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:pedestal_eldritch",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:elementalaxe",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "ELEMENTALTOOLS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:elemental_axe",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{infench:[{lvl:1s,id:0s},{lvl:1s,id:2s}]}"
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:elementalhoe",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "ELEMENTALTOOLS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:elemental_hoe",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:elementalpick",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "ELEMENTALTOOLS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:elemental_pick",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{infench:[{lvl:1s,id:4s},{lvl:2s,id:3s}]}"
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:elementalshovel",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "ELEMENTALTOOLS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:elemental_shovel",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{infench:[{lvl:1s,id:1s}]}"
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:elementalsword",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "ELEMENTALTOOLS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:elemental_sword",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{infench:[{lvl:2s,id:5s}]}"
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:enchantedfabric",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "UNLOCKINFUSION",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:fabric",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:essentiasmelter",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ESSENTIASMELTER@2",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:smelter_basic",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:essentiasmelterthaumium",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ESSENTIASMELTERTHAUMIUM",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:smelter_thaumium",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:essentiasmeltervoid",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ESSENTIASMELTERVOID",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:smelter_void",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:essentiatransportin",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ESSENTIATRANSPORT",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:essentia_input",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:essentiatransportout",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ESSENTIATRANSPORT",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:essentia_output",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:everfullurn",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "EVERFULLURN",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:everfull_urn",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:filter",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:filter",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:focus_1",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "UNLOCKAUROMANCY",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:focus_1",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 3
+    },
+    {
+      "id": "thaumcraft:focus_2",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "FOCUSADVANCED@1",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:focus_2",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:focus_3",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "FOCUSGREATER@1",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:focus_3",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:focuspouch",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "FOCUSPOUCH",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:focus_pouch",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:goggles",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "UNLOCKARTIFICE",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:goggles",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:golembell",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:golem_bell",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:golempress",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "required_research": "MINDCLOCKWORK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:golem_builder",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:grapplegun",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "GRAPPLEGUN",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:grapple_gun",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:grapplegunspool",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "GRAPPLEGUN",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:grapple_gun_spool",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:grappleguntip",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "GRAPPLEGUN",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:grapple_gun_tip",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:hedge_clay",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "HEDGEALCHEMY@3",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "minecraft:clay_ball",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:hedge_dye",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "HEDGEALCHEMY@2",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "minecraft:dye",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 3
+    },
+    {
+      "id": "thaumcraft:hedge_glowstone",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "HEDGEALCHEMY@2",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "minecraft:glowstone_dust",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 3
+    },
+    {
+      "id": "thaumcraft:hedge_gunpowder",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "HEDGEALCHEMY@2",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "minecraft:gunpowder",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 3
+    },
+    {
+      "id": "thaumcraft:hedge_lava",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "HEDGEALCHEMY@3",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "minecraft:lava_bucket",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:hedge_leather",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "HEDGEALCHEMY@1",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "minecraft:leather",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 4
+    },
+    {
+      "id": "thaumcraft:hedge_slime",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "HEDGEALCHEMY@2",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "minecraft:slime_ball",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 3
+    },
+    {
+      "id": "thaumcraft:hedge_string",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "HEDGEALCHEMY@3",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "minecraft:string",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:hedge_tallow",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "HEDGEALCHEMY@1",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:tallow",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 4
+    },
+    {
+      "id": "thaumcraft:hedge_web",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "HEDGEALCHEMY@3",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "minecraft:web",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:helmgoggles",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "FORTRESSMASK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:hungrychest",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "HUNGRYCHEST",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:hungry_chest",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:iearcingfake",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "required_research": "INFUSIONENCHANTMENT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:ieburrowingfake",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "required_research": "INFUSIONENCHANTMENT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:iecollectorfake",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "required_research": "INFUSIONENCHANTMENT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:iedestructivefake",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "required_research": "INFUSIONENCHANTMENT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:ieessencefake",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "required_research": "INFUSIONENCHANTMENT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:ielamplightfake",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "required_research": "INFUSIONENCHANTMENT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:ierefiningfake",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "required_research": "INFUSIONENCHANTMENT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:iesoundingfake",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
+      "required_research": "INFUSIONENCHANTMENT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:infernalfurnace",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "required_research": "INFERNALFURNACE",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:infusionaltar",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "required_research": "INFUSION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:infusionaltarancient",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "required_research": "INFUSIONANCIENT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:infusionaltareldritch",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "required_research": "INFUSIONELDRITCH",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:infusionmatrix",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "INFUSION@2",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:infusion_matrix",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:inkwell",
+      "legacy_source": "recipe_group",
+      "kind": "group",
+      "legacy_class": "java.util.ArrayList",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [
+        "thaumcraft:scribingtoolscraft1",
+        "thaumcraft:scribingtoolscraft2",
+        "thaumcraft:scribingtoolsrefill"
+      ],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:ironplate",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:plate",
+        "metadata": 1,
+        "count": 3,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:jarbrain",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "JARBRAIN",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:jar_brain",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:jarlabel",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:jarlabels",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:label",
+        "metadata": 0,
+        "count": 4,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:jarlabelessence",
+      "legacy_source": "missing",
+      "kind": "missing",
+      "legacy_class": "",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:jarvoid",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.common.lib.crafting.ShapedArcaneVoidJar",
+      "required_research": "WARDEDJARS",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:jar_void",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:lampfertility",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "LAMPFERTILITY",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:lamp_fertility",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:lampgrowth",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "LAMPGROWTH",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:lamp_growth",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:levitator",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "LEVITATOR",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:levitator",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:liquiddeath",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "LIQUIDDEATH",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "forge:bucketfilled",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{FluidName:\"liquid_death\",Amount:1000}"
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:maskangryghost",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "FORTRESSMASK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:maskgrinningdevil",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "FORTRESSMASK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:masksippingfiend",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "FORTRESSMASK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:matrixcost",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "INFUSIONBOOST",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:matrix_cost",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:matrixmotion",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "INFUSIONBOOST",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:matrix_speed",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:mechanism_complex",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEARTIFICE",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:mechanism_complex",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:mechanism_simple",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEARTIFICE",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:mechanism_simple",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_cinnabar",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "METALPURIFICATION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cluster",
+        "metadata": 6,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_copper",
+      "legacy_source": "missing",
+      "kind": "missing",
+      "legacy_class": "",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_gold",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "METALPURIFICATION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cluster",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_iron",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "METALPURIFICATION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cluster",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_lead",
+      "legacy_source": "missing",
+      "kind": "missing",
+      "legacy_class": "",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_silver",
+      "legacy_source": "missing",
+      "kind": "missing",
+      "legacy_class": "",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_tin",
+      "legacy_source": "missing",
+      "kind": "missing",
+      "legacy_class": "",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:mindbiothaumic",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:mind",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:mindclockwork",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "MINDCLOCKWORK@2",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:mind",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:mirror",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "MIRROR",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:mirror",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:mirroressentia",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "MIRRORESSENTIA",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:mirror_essentia",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:mirrorglass",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "required_research": "BASEARTIFICE",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:mirrored_glass",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:mirrorhand",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "MIRRORHAND",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:hand_mirror",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:mnemonicmatrix",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "THAUMATORIUM",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:brain_box",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:modaggression",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "SEALGUARD",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:module",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:modvision",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "GOLEMVISION",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:module",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:morphicresonator",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:morphic_resonator",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:nitor",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "UNLOCKALCHEMY@3",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_yellow",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:nitorcolor",
+      "legacy_source": "missing",
+      "kind": "missing",
+      "legacy_class": "",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:nitordyeblack",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_black",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyeblue",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_blue",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyebrown",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_brown",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyecyan",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_cyan",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyegray",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_gray",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyegreen",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_green",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyelightblue",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_lightblue",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyelime",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_lime",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyemagenta",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_magenta",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyeorange",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_orange",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyepink",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_pink",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyepurple",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_purple",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyered",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_red",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyesilver",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_silver",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyewhite",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_white",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitordyeyellow",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:nitorgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:nitor_yellow",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:nitorgroup",
+      "legacy_source": "recipe_group",
+      "kind": "group",
+      "legacy_class": "java.util.ArrayList",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [
+        "thaumcraft:nitordyeblack",
+        "thaumcraft:nitordyeblue",
+        "thaumcraft:nitordyebrown",
+        "thaumcraft:nitordyecyan",
+        "thaumcraft:nitordyegray",
+        "thaumcraft:nitordyegreen",
+        "thaumcraft:nitordyelightblue",
+        "thaumcraft:nitordyelime",
+        "thaumcraft:nitordyemagenta",
+        "thaumcraft:nitordyeorange",
+        "thaumcraft:nitordyepink",
+        "thaumcraft:nitordyepurple",
+        "thaumcraft:nitordyered",
+        "thaumcraft:nitordyesilver",
+        "thaumcraft:nitordyewhite",
+        "thaumcraft:nitordyeyellow"
+      ],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:patterncrafter",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "ARCANEPATTERNCRAFTER",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:pattern_crafter",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:pavebarrier",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "PAVINGSTONES",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:paving_stone_barrier",
+        "metadata": 0,
+        "count": 4,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:pavetravel",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "PAVINGSTONES",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:paving_stone_travel",
+        "metadata": 0,
+        "count": 4,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:phial",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:phial",
+        "metadata": 0,
+        "count": 8,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:potionsprayer",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "POTIONSPRAYER",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:potion_sprayer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:primalcrusher",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "PRIMALCRUSHER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:primal_crusher",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{infench:[{lvl:1s,id:1s},{lvl:1s,id:4s}]}"
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:rechargepedestal",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "RECHARGEPEDESTAL",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:recharge_pedestal",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:redstoneinlay",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "required_research": "INFUSIONSTABLE",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:inlay",
+        "metadata": 0,
+        "count": 2,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:redstonerelay",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "REDSTONERELAY",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:redstone_relay",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:resonator",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "TUBES",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:resonator",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:robeboots",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "UNLOCKINFUSION",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cloth_boots",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:robechest",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "UNLOCKINFUSION",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cloth_chest",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:robelegs",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "UNLOCKINFUSION",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cloth_legs",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:runicarmorfake0",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionRunicAugmentRecipe",
+      "required_research": "RUNICSHIELDING",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:runicarmorfake1",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionRunicAugmentRecipe",
+      "required_research": "RUNICSHIELDING",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:runicarmorfake2",
+      "legacy_source": "fake_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.common.lib.crafting.InfusionRunicAugmentRecipe",
+      "required_research": "RUNICSHIELDING",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:salismundusfake",
+      "legacy_source": "fake_catalog",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:salis_mundus",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 3
+    },
+    {
+      "id": "thaumcraft:sanesoap",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SANESOAP",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:sanity_soap",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sanitychecker",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "WARP",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:sanity_checker",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:scribingtoolscraft1",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:inkwell",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:scribing_tools",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:scribingtoolscraft2",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:inkwell",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:scribing_tools",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:scribingtoolsrefill",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:inkwell",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:scribing_tools",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:sealblank",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "required_research": "CONTROLSEALS",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 0,
+        "count": 3,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealbreak",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "SEALBREAK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 12,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealbreakadv",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALBREAK&&MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 16,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealbutcher",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "SEALBUTCHER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 8,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealcollect",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALCOLLECT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealcollectadv",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALCOLLECT&&MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 2,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealempty",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALEMPTY",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 5,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealemptyadv",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALEMPTY&&MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 6,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealguard",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALGUARD",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 9,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealguardadv",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALGUARD&&MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 10,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealharvest",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "SEALHARVEST",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 7,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:seallumber",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALLUMBER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 11,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealprovide",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALPROVIDE",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 14,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealstock",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALSTOCK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 15,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealstore",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALSTORE",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 3,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealstoreadv",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALSTORE&&MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 4,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealuse",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "SEALUSE",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal",
+        "metadata": 13,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:smelteraux",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "IMPROVEDSMELTING",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:smelter_aux",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:smeltervent",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "IMPROVEDSMELTING2",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:smelter_vent",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:stabilizer",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "INFUSIONSTABLE",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:stabilizer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:stonearcane",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:stone_arcane",
+        "metadata": 0,
+        "count": 9,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:tablestone",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:table_stone",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:tablewood",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:table_wood",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:tallowcandle",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_white",
+        "metadata": 0,
+        "count": 3,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandleblack",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_black",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandleblue",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_blue",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlebrown",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_brown",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlecyan",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_cyan",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlegray",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_gray",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlegreen",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_green",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlelightblue",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_lightblue",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlelime",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_lime",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlemagenta",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_magenta",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandleorange",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_orange",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlepink",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_pink",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlepurple",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_purple",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlered",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_red",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandles",
+      "legacy_source": "recipe_group",
+      "kind": "group",
+      "legacy_class": "java.util.ArrayList",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [
+        "thaumcraft:tallowcandle",
+        "thaumcraft:tallowcandleblack",
+        "thaumcraft:tallowcandleblue",
+        "thaumcraft:tallowcandlebrown",
+        "thaumcraft:tallowcandlecyan",
+        "thaumcraft:tallowcandlegray",
+        "thaumcraft:tallowcandlegreen",
+        "thaumcraft:tallowcandlelightblue",
+        "thaumcraft:tallowcandlelime",
+        "thaumcraft:tallowcandlemagenta",
+        "thaumcraft:tallowcandleorange",
+        "thaumcraft:tallowcandlepink",
+        "thaumcraft:tallowcandlepurple",
+        "thaumcraft:tallowcandlered",
+        "thaumcraft:tallowcandlesilver",
+        "thaumcraft:tallowcandlewhite",
+        "thaumcraft:tallowcandleyellow"
+      ],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 3
+    },
+    {
+      "id": "thaumcraft:tallowcandlesilver",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_silver",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandlewhite",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_white",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:tallowcandleyellow",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:tallowcandles",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:candle_yellow",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumatorium",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "blueprint",
+      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
+      "required_research": "THAUMATORIUM",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:thaumium_stuff",
+      "legacy_source": "recipe_group",
+      "kind": "group",
+      "legacy_class": "java.util.ArrayList",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [
+        "thaumcraft:thaumiumaxe",
+        "thaumcraft:thaumiumblocktoingots",
+        "thaumcraft:thaumiumboots",
+        "thaumcraft:thaumiumchest",
+        "thaumcraft:thaumiumhelm",
+        "thaumcraft:thaumiumhoe",
+        "thaumcraft:thaumiumingotstoblock",
+        "thaumcraft:thaumiumlegs",
+        "thaumcraft:thaumiumpick",
+        "thaumcraft:thaumiumplate",
+        "thaumcraft:thaumiumshovel",
+        "thaumcraft:thaumiumsword"
+      ],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:thaumiumaxe",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumium_axe",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumblocktoingots",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:ingot",
+        "metadata": 0,
+        "count": 9,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumboots",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumium_boots",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumchest",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumium_chest",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumfortresschest",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "ARMORFORTRESS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:fortress_chest",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:thaumiumfortresshelm",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "ARMORFORTRESS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:fortress_helm",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:thaumiumfortresslegs",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "ARMORFORTRESS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:fortress_legs",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:thaumiumhelm",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumium_helm",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumhoe",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumium_hoe",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumingot",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "METALLURGY@2",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:ingot",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:thaumiumingotstoblock",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:metal_thaumium",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumlegs",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumium_legs",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumpick",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumium_pick",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumplate",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:plate",
+        "metadata": 2,
+        "count": 3,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumshovel",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumium_shovel",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumiumsword",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:thaumium_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumium_sword",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:thaumometer",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "FIRSTSTEPS@2",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumometer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:triplemeattreatfake",
+      "legacy_source": "fake_catalog",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapelessOreRecipe",
+      "required_research": "",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:triple_meat_treat",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:tube",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "TUBES",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:tube",
+        "metadata": 0,
+        "count": 8,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:tubebuffer",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "TUBES",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:tube_buffer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:tubefilter",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "required_research": "TUBES",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:tube_filter",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:tubeoneway",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "required_research": "TUBES",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:tube_oneway",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:tuberestrict",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "required_research": "TUBES",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:tube_restrict",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:tubevalve",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "required_research": "TUBES",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:tube_valve",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:verdantheart",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "VERDANTCHARMS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:verdant_charm",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:verdantheartlife",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "VERDANTCHARMS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:verdantheartsustain",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "VERDANTCHARMS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:vis_crystal_aer",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"aer\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_alienis",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"alienis\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_alkimia",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"alkimia\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_aqua",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"aqua\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_auram",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"auram\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_aversio",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"aversio\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_bestia",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"bestia\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_cognitio",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"cognitio\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_desiderium",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"desiderium\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_exanimis",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"exanimis\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_fabrico",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"fabrico\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_gelum",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"gelum\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_herba",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"herba\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_humanus",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"humanus\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_ignis",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"ignis\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_instrumentum",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"instrumentum\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_lux",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"lux\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_machina",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"machina\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_metallum",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"metallum\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_mortuus",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"mortuus\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_motus",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"motus\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_ordo",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"ordo\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_perditio",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"perditio\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_permutatio",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"permutatio\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_potentia",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"potentia\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_praecantatio",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"praecantatio\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_praemunio",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"praemunio\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_sensus",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"sensus\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_spiritus",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"spiritus\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_tenebrae",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"tenebrae\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_terra",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"terra\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_vacuos",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"vacuos\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_victus",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"victus\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_vinculum",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"vinculum\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_vitium",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"vitium\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_vitreus",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"vitreus\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_crystal_volatus",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEALCHEMY",
+      "legacy_group": "thaumcraft:viscrystalgroup",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_essence",
+        "metadata": 0,
+        "count": 1,
+        "nbt": "{Aspects:[{amount:1,key:\"volatus\"}]}"
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:vis_resonator",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapelessArcaneRecipe",
+      "required_research": "UNLOCKAUROMANCY@2",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:vis_resonator",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 5
+    },
+    {
+      "id": "thaumcraft:visamulet",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "VISAMULET",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:amulet_vis",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:visbattery",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "VISBATTERY",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:vis_battery",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:viscrystalgroup",
+      "legacy_source": "recipe_group",
+      "kind": "group",
+      "legacy_class": "java.util.ArrayList",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [
+        "thaumcraft:vis_crystal_aer",
+        "thaumcraft:vis_crystal_alienis",
+        "thaumcraft:vis_crystal_alkimia",
+        "thaumcraft:vis_crystal_aqua",
+        "thaumcraft:vis_crystal_auram",
+        "thaumcraft:vis_crystal_aversio",
+        "thaumcraft:vis_crystal_bestia",
+        "thaumcraft:vis_crystal_cognitio",
+        "thaumcraft:vis_crystal_desiderium",
+        "thaumcraft:vis_crystal_exanimis",
+        "thaumcraft:vis_crystal_fabrico",
+        "thaumcraft:vis_crystal_gelum",
+        "thaumcraft:vis_crystal_herba",
+        "thaumcraft:vis_crystal_humanus",
+        "thaumcraft:vis_crystal_ignis",
+        "thaumcraft:vis_crystal_instrumentum",
+        "thaumcraft:vis_crystal_lux",
+        "thaumcraft:vis_crystal_machina",
+        "thaumcraft:vis_crystal_metallum",
+        "thaumcraft:vis_crystal_mortuus",
+        "thaumcraft:vis_crystal_motus",
+        "thaumcraft:vis_crystal_ordo",
+        "thaumcraft:vis_crystal_perditio",
+        "thaumcraft:vis_crystal_permutatio",
+        "thaumcraft:vis_crystal_potentia",
+        "thaumcraft:vis_crystal_praecantatio",
+        "thaumcraft:vis_crystal_praemunio",
+        "thaumcraft:vis_crystal_sensus",
+        "thaumcraft:vis_crystal_spiritus",
+        "thaumcraft:vis_crystal_tenebrae",
+        "thaumcraft:vis_crystal_terra",
+        "thaumcraft:vis_crystal_vacuos",
+        "thaumcraft:vis_crystal_victus",
+        "thaumcraft:vis_crystal_vinculum",
+        "thaumcraft:vis_crystal_vitium",
+        "thaumcraft:vis_crystal_vitreus",
+        "thaumcraft:vis_crystal_volatus"
+      ],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:visgenerator",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "VISGENERATOR",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:vis_generator",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:void_stuff",
+      "legacy_source": "recipe_group",
+      "kind": "group",
+      "legacy_class": "java.util.ArrayList",
+      "required_research": "",
+      "legacy_group": "",
+      "targets": [
+        "thaumcraft:voidaxe",
+        "thaumcraft:voidblocktoingots",
+        "thaumcraft:voidboots",
+        "thaumcraft:voidchest",
+        "thaumcraft:voidhelm",
+        "thaumcraft:voidhoe",
+        "thaumcraft:voidingotstoblock",
+        "thaumcraft:voidlegs",
+        "thaumcraft:voidpick",
+        "thaumcraft:voidplate",
+        "thaumcraft:voidshovel",
+        "thaumcraft:voidsword"
+      ],
+      "legacy_output": null,
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:voidaxe",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_axe",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidblocktoingots",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:ingot",
+        "metadata": 1,
+        "count": 9,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidboots",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_boots",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidchest",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_chest",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidhelm",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_helm",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidhoe",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_hoe",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidingot",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "crucible",
+      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
+      "required_research": "BASEELDRITCH",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:ingot",
+        "metadata": 1,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:voidingotstoblock",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:metal_void",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidlegs",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_legs",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidpick",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_pick",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidplate",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:plate",
+        "metadata": 3,
+        "count": 3,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidrobechest",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "VOIDROBEARMOR",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_robe_chest",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:voidrobehelm",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "VOIDROBEARMOR",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_robe_helm",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:voidrobelegs",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "VOIDROBEARMOR",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_robe_legs",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:voidseerpearl",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "VOIDSEERPEARL",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:voidseer_charm",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:voidshovel",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_shovel",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:voidsiphon",
+      "legacy_source": "thaumcraft_catalog",
+      "kind": "infusion",
+      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
+      "required_research": "VOIDSIPHON",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_siphon",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:voidsword",
+      "legacy_source": "crafting_registry",
+      "kind": "crafting",
+      "legacy_class": "net.minecraftforge.oredict.ShapedOreRecipe",
+      "required_research": "",
+      "legacy_group": "thaumcraft:void_stuff",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:void_sword",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": false,
+      "occurrence_count": 0
+    },
+    {
+      "id": "thaumcraft:wand_workbench",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "BASEAUROMANCY@2",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:wand_workbench",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 2
+    },
+    {
+      "id": "thaumcraft:wardedjar",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "WARDEDJARS",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:jar_normal",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:workbenchcharger",
+      "legacy_source": "crafting_registry",
+      "kind": "arcane",
+      "legacy_class": "thaumcraft.api.crafting.ShapedArcaneRecipe",
+      "required_research": "WORKBENCHCHARGER",
+      "legacy_group": "minecraft:",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:arcane_workbench_charger",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}

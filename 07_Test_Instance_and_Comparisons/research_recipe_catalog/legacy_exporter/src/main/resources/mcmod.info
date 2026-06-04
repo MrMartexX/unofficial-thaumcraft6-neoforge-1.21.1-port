@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "tcresearchrecipecatalogexporter",
+    "name": "Thaumcraft Research Recipe Catalog Legacy Exporter",
+    "description": "Diagnostic exporter for Thaumcraft 6 research recipe-page catalog parity.",
+    "version": "0.1.0",
+    "mcversion": "1.12.2",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Thaumcraft parity diagnostics"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": ["thaumcraft"]
+  }
+]

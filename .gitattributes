@@ -6,3 +6,5 @@
 /07_Test_Instance_and_Comparisons/scan_parity/reports/*.json linguist-generated=true -diff
 /07_Test_Instance_and_Comparisons/research_data_parity/research_data_diff.json linguist-generated=true -diff
 /07_Test_Instance_and_Comparisons/research_data_parity/thaumcraft_1_21_research_data.json linguist-generated=true -diff
+/07_Test_Instance_and_Comparisons/research_recipe_catalog/thaumcraft_1_12_research_recipe_catalog.json linguist-generated=true -diff
+/07_Test_Instance_and_Comparisons/research_recipe_catalog/research_recipe_catalog_diff.json linguist-generated=true -diff

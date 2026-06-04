@@ -478,6 +478,42 @@ public final class TCResearchManager {
         return progressed;
     }
 
+    public static boolean startResearchFromBrowser(ServerPlayer player, String key) {
+        String researchKey = canonicalResearchKey(key);
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        if (knowledge.isResearchKnown(researchKey) || !canUnlockResearch(player, researchKey)) {
+            return false;
+        }
+
+        // Legacy GuiResearchBrowser sends first=true, checks=false, noFlags=true.
+        return progressResearch(player, researchKey, true, true);
+    }
+
+    public static boolean acknowledgeResearchEntry(ServerPlayer player, String key) {
+        String researchKey = canonicalResearchKey(key);
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        if (!knowledge.isResearchKnown(researchKey)) {
+            return false;
+        }
+
+        TCResearchEntryDefinition entry = activeData.entries().get(researchKey);
+        int stage = knowledge.getResearchStage(researchKey);
+        knowledge.clearResearchFlag(researchKey, TCResearchFlag.RESEARCH);
+        knowledge.clearResearchFlag(researchKey, TCResearchFlag.PAGE);
+        TCPlayerKnowledgeStore.set(player, knowledge, false);
+
+        // Legacy GuiResearchBrowser clears flags first, then attempts checked final-stage progression.
+        boolean progressed = entry != null
+                && !entry.stages().isEmpty()
+                && stage > 1
+                && stage >= entry.stages().size()
+                && completeCurrentStageWithChecks(player, researchKey, true, false);
+        if (!progressed) {
+            TCPlayerKnowledgeStore.sync(player);
+        }
+        return true;
+    }
+
     public static boolean knowsResearchStrict(TCPlayerKnowledge knowledge, String... references) {
         for (String reference : references) {
             if (reference == null || reference.isBlank()) {
