@@ -10,6 +10,9 @@
 | `research_flags_server_owned` | `PASS` | visible=4 |
 | `visible_entry_view_available` | `PASS` | inspected=4 |
 | `legacy_missing_pages_filtered` | `PASS` | pages=1 |
+| `ready_page_views_have_server_crafting_snapshots` | `PASS` | pages=1 |
+| `non_ready_page_views_have_no_crafting_snapshots` | `PASS` | pages=1 |
+| `ready_crafting_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_crafting_entries=4 |
 | `unknown_entry_rejected` | `PASS` | key=AUDIT_MISSING_RESEARCH |
 | `legacy_resource_location_canonicalization` | `PASS` | uppercase/lowercase lookup |
 | `client_cache_accepts_authoritative_views` | `PASS` | sample_present=true |

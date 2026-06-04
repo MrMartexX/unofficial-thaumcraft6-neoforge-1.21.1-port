@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 final class TCThaumonomiconCodec {
     static final int MAX_KEY_LENGTH = 256;
@@ -18,6 +19,8 @@ final class TCThaumonomiconCodec {
     private static final int MAX_ENTRY_LIST = 512;
     private static final int MAX_BOOKMARKS = 512;
     private static final int MAX_PAGES_PER_BOOKMARK = 512;
+    private static final int MAX_CRAFTING_INGREDIENTS = 9;
+    private static final int MAX_CRAFTING_INGREDIENT_VARIANTS = 1024;
     private static final int MAX_RESEARCH_FLAGS = 32;
 
     private TCThaumonomiconCodec() {
@@ -176,6 +179,8 @@ final class TCThaumonomiconCodec {
         writeString(buffer, page.requiredResearch(), MAX_KEY_LENGTH, "page required research");
         buffer.writeBoolean(page.legacyOutput().isPresent());
         page.legacyOutput().ifPresent(output -> writeLegacyOutput(buffer, output));
+        buffer.writeBoolean(page.craftingRecipe().isPresent());
+        page.craftingRecipe().ifPresent(recipe -> writeCraftingRecipe(buffer, recipe));
     }
 
     private static TCResearchPageView readPage(RegistryFriendlyByteBuf buffer) {
@@ -190,7 +195,52 @@ final class TCThaumonomiconCodec {
         Optional<TCResearchPageLegacyOutput> output = buffer.readBoolean()
                 ? Optional.of(readLegacyOutput(buffer))
                 : Optional.empty();
-        return new TCResearchPageView(id, kind, availability, requiredResearch, output);
+        Optional<TCCraftingRecipePageView> craftingRecipe = buffer.readBoolean()
+                ? Optional.of(readCraftingRecipe(buffer))
+                : Optional.empty();
+        return new TCResearchPageView(id, kind, availability, requiredResearch, output, craftingRecipe);
+    }
+
+    private static void writeCraftingRecipe(RegistryFriendlyByteBuf buffer, TCCraftingRecipePageView recipe) {
+        writeResourceLocation(buffer, recipe.recipeId());
+        buffer.writeBoolean(recipe.shaped());
+        buffer.writeVarInt(recipe.width());
+        buffer.writeVarInt(recipe.height());
+        ItemStack.STREAM_CODEC.encode(buffer, recipe.result());
+        writeList(
+                buffer,
+                recipe.ingredients(),
+                MAX_CRAFTING_INGREDIENTS,
+                "crafting ingredients",
+                (target, variants) -> writeList(
+                        target,
+                        variants,
+                        MAX_CRAFTING_INGREDIENT_VARIANTS,
+                        "crafting ingredient variants",
+                        ItemStack.STREAM_CODEC::encode
+                )
+        );
+    }
+
+    private static TCCraftingRecipePageView readCraftingRecipe(RegistryFriendlyByteBuf buffer) {
+        return new TCCraftingRecipePageView(
+                readResourceLocation(buffer),
+                buffer.readBoolean(),
+                buffer.readVarInt(),
+                buffer.readVarInt(),
+                ItemStack.STREAM_CODEC.decode(buffer),
+                readList(
+                        buffer,
+                        MAX_CRAFTING_INGREDIENTS,
+                        "crafting ingredients",
+                        target -> readList(
+                                target,
+                                MAX_CRAFTING_INGREDIENT_VARIANTS,
+                                "crafting ingredient variants",
+                                ItemStack.STREAM_CODEC::decode
+                        )
+                )
+        );
     }
 
     private static void writeLegacyOutput(RegistryFriendlyByteBuf buffer, TCResearchPageLegacyOutput output) {

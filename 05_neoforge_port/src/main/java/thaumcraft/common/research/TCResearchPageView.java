@@ -8,10 +8,12 @@ public record TCResearchPageView(
         TCResearchPageKind kind,
         TCResearchPageAvailability availability,
         String requiredResearch,
-        Optional<TCResearchPageLegacyOutput> legacyOutput
+        Optional<TCResearchPageLegacyOutput> legacyOutput,
+        Optional<TCCraftingRecipePageView> craftingRecipe
 ) {
     public TCResearchPageView {
         requiredResearch = requiredResearch == null ? "" : requiredResearch;
         legacyOutput = legacyOutput == null ? Optional.empty() : legacyOutput;
+        craftingRecipe = craftingRecipe == null ? Optional.empty() : craftingRecipe;
     }
 }

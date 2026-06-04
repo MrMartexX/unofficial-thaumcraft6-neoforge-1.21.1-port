@@ -90,6 +90,8 @@ final class TCThaumonomiconProtocolAudit {
         int bookmarksInspected = 0;
         int pagesInspected = 0;
         boolean noLegacyMissingPages = true;
+        boolean readyPageViewsHaveSnapshots = true;
+        boolean deferredPageViewsHaveNoSnapshots = true;
         Optional<TCThaumonomiconEntryView> sample = Optional.empty();
         for (TCThaumonomiconResearchView entry : index.entries()) {
             Optional<TCThaumonomiconEntryView> view = TCThaumonomiconService.buildEntry(player, entry.key());
@@ -107,11 +109,61 @@ final class TCThaumonomiconProtocolAudit {
                     if (page.availability() == TCResearchPageAvailability.LEGACY_MISSING) {
                         noLegacyMissingPages = false;
                     }
+                    if (page.availability() == TCResearchPageAvailability.READY
+                            && page.kind() == TCResearchPageKind.CRAFTING
+                            && page.craftingRecipe().isEmpty()) {
+                        readyPageViewsHaveSnapshots = false;
+                    }
+                    if (page.availability() != TCResearchPageAvailability.READY
+                            && page.craftingRecipe().isPresent()) {
+                        deferredPageViewsHaveNoSnapshots = false;
+                    }
                 }
             }
         }
         checks.add(check("visible_entry_view_available", sample.isPresent(), "inspected=" + entryViewsInspected));
         checks.add(check("legacy_missing_pages_filtered", noLegacyMissingPages, "pages=" + pagesInspected));
+        checks.add(check(
+                "ready_page_views_have_server_crafting_snapshots",
+                readyPageViewsHaveSnapshots,
+                "pages=" + pagesInspected
+        ));
+        checks.add(check(
+                "non_ready_page_views_have_no_crafting_snapshots",
+                deferredPageViewsHaveNoSnapshots,
+                "pages=" + pagesInspected
+        ));
+
+        int readyCraftingEntries = 0;
+        boolean readyCatalogSnapshotsValid = true;
+        for (TCResearchPageCatalogEntry catalogEntry : TCResearchPageCatalogManager.entries()) {
+            if (catalogEntry.kind() != TCResearchPageKind.CRAFTING) {
+                continue;
+            }
+            TCResearchPageAvailability availability = TCResearchPageCatalogManager.availability(
+                    catalogEntry.id().toString(),
+                    player.server.getRecipeManager()
+            );
+            Optional<TCCraftingRecipePageView> snapshot = TCResearchPageCatalogManager.buildCraftingPage(
+                    catalogEntry.id(),
+                    player.server.getRecipeManager(),
+                    player.server.registryAccess()
+            );
+            if (availability == TCResearchPageAvailability.READY) {
+                readyCraftingEntries++;
+                readyCatalogSnapshotsValid &= snapshot.isPresent()
+                        && snapshot.get().recipeId().equals(catalogEntry.id())
+                        && !snapshot.get().result().isEmpty()
+                        && snapshot.get().ingredients().size() <= 9;
+            } else if (snapshot.isPresent()) {
+                readyCatalogSnapshotsValid = false;
+            }
+        }
+        checks.add(check(
+                "ready_crafting_catalog_entries_have_valid_server_snapshots",
+                readyCatalogSnapshotsValid && readyCraftingEntries > 0,
+                "ready_crafting_entries=" + readyCraftingEntries
+        ));
 
         boolean rejectedUnknown = TCThaumonomiconService.buildEntry(player, "AUDIT_MISSING_RESEARCH").isEmpty();
         checks.add(check("unknown_entry_rejected", rejectedUnknown, "key=AUDIT_MISSING_RESEARCH"));

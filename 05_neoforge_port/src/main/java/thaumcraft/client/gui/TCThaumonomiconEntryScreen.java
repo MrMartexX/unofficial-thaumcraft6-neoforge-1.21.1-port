@@ -9,9 +9,12 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.lwjgl.glfw.GLFW;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.registry.TCSounds;
+import thaumcraft.common.research.TCCraftingRecipePageView;
 import thaumcraft.common.research.TCResearchPageAvailability;
 import thaumcraft.common.research.TCResearchPageBookmark;
 import thaumcraft.common.research.TCResearchPageView;
@@ -25,8 +28,13 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/gui_researchbook.png");
     private static final ResourceLocation BROWSER =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/gui_research_browser.png");
+    private static final ResourceLocation BOOK_OVERLAY =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/gui_researchbook_overlay.png");
+    private static final ResourceLocation PAPER =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/paper.png");
     private static final int BOOK_WIDTH = 333;
     private static final int BOOK_HEIGHT = 235;
+    private static final int RECIPE_PAGE_SIZE = 256;
     private static final int PAGE_TEXT_WIDTH = 126;
     private static final int LINES_PER_PAGE = 21;
 
@@ -36,6 +44,9 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private boolean pendingAdvance;
     private Component lastResult = Component.empty();
     private TCResearchPageBookmark hoveredBookmark;
+    private List<TCResearchPageView> activeRecipePages = List.of();
+    private int activeRecipeIndex;
+    private ItemStack hoveredRecipeStack = ItemStack.EMPTY;
 
     public TCThaumonomiconEntryScreen(TCThaumonomiconEntryView entry) {
         super(Component.translatable(entry.research().name()));
@@ -58,6 +69,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (result.accepted() && result.entry().isPresent()) {
             entry = result.entry().get();
             spread = 0;
+            closeRecipePage();
             rebuildLines();
         }
     }
@@ -65,6 +77,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         hoveredBookmark = null;
+        hoveredRecipeStack = ItemStack.EMPTY;
         graphics.fill(0, 0, width, height, 0xB0100B16);
         int x = bookX();
         int y = bookY();
@@ -74,6 +87,13 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         renderNavigation(graphics, x, y, mouseX, mouseY);
         renderBookmarks(graphics, x, y, mouseX, mouseY);
         renderResult(graphics, x, y);
+        if (!activeRecipePages.isEmpty()) {
+            renderRecipePage(graphics, mouseX, mouseY);
+            if (!hoveredRecipeStack.isEmpty()) {
+                graphics.renderTooltip(font, hoveredRecipeStack, mouseX, mouseY);
+            }
+            return;
+        }
         if (hoveredBookmark != null) {
             renderBookmarkTooltip(graphics, hoveredBookmark, mouseX, mouseY);
         }
@@ -81,6 +101,17 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (!activeRecipePages.isEmpty()) {
+            if (button == 1) {
+                closeRecipePage();
+                playPage();
+                return true;
+            }
+            if (button == 0 && handleRecipePageClick(mouseX, mouseY)) {
+                return true;
+            }
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
         if (button != 0) {
             return super.mouseClicked(mouseX, mouseY, button);
         }
@@ -111,7 +142,21 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             playWrite();
             return true;
         }
+        if (hoveredBookmark != null) {
+            openBookmark(hoveredBookmark);
+            return true;
+        }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && !activeRecipePages.isEmpty()) {
+            closeRecipePage();
+            playPage();
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
@@ -261,9 +306,139 @@ public final class TCThaumonomiconEntryScreen extends Screen {
                     : ChatFormatting.GRAY;
             lines.add(Component.literal(page.kind() + " - " + page.availability()).withStyle(color));
         }
-        lines.add(Component.translatable("gui.thaumcraft.thaumonomicon.bookmark_deferred")
-                .withStyle(ChatFormatting.DARK_GRAY));
+        boolean renderable = bookmark.pages().stream().anyMatch(page -> page.craftingRecipe().isPresent());
+        lines.add(Component.translatable(renderable
+                        ? "gui.thaumcraft.thaumonomicon.bookmark_open"
+                        : "gui.thaumcraft.thaumonomicon.bookmark_deferred")
+                .withStyle(renderable ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_GRAY));
         graphics.renderComponentTooltip(font, lines, mouseX, mouseY);
+    }
+
+    private void openBookmark(TCResearchPageBookmark bookmark) {
+        List<TCResearchPageView> renderable = bookmark.pages().stream()
+                .filter(page -> page.availability() == TCResearchPageAvailability.READY)
+                .filter(page -> page.craftingRecipe().isPresent())
+                .toList();
+        if (renderable.isEmpty()) {
+            lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.recipe_unavailable");
+            return;
+        }
+        activeRecipePages = renderable;
+        activeRecipeIndex = 0;
+        playPage();
+    }
+
+    private boolean handleRecipePageClick(double mouseX, double mouseY) {
+        int x = recipePageX();
+        int y = recipePageY();
+        if (inside(mouseX, mouseY, x + 96, y + 236, 64, 16)) {
+            closeRecipePage();
+            playPage();
+            return true;
+        }
+        if (inside(mouseX, mouseY, x + 34, y + 226, 36, 24) && activeRecipeIndex > 0) {
+            activeRecipeIndex--;
+            playPageTurn();
+            return true;
+        }
+        if (inside(mouseX, mouseY, x + 186, y + 226, 36, 24)
+                && activeRecipeIndex < activeRecipePages.size() - 1) {
+            activeRecipeIndex++;
+            playPageTurn();
+            return true;
+        }
+        return false;
+    }
+
+    private void closeRecipePage() {
+        activeRecipePages = List.of();
+        activeRecipeIndex = 0;
+        hoveredRecipeStack = ItemStack.EMPTY;
+    }
+
+    private void renderRecipePage(GuiGraphics graphics, int mouseX, int mouseY) {
+        TCResearchPageView page = activeRecipePages.get(activeRecipeIndex);
+        TCCraftingRecipePageView recipe = page.craftingRecipe().orElseThrow();
+        int x = recipePageX();
+        int y = recipePageY();
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, 0.0F, 100.0F);
+        blit(graphics, PAPER, x, y, 0, 0, RECIPE_PAGE_SIZE - 1, RECIPE_PAGE_SIZE - 1, RECIPE_PAGE_SIZE, RECIPE_PAGE_SIZE);
+        renderCraftingRecipe(graphics, recipe, x + 128, y + 128, mouseX, mouseY);
+        renderRecipeNavigation(graphics, x, y, mouseX, mouseY);
+        graphics.pose().popPose();
+    }
+
+    private void renderCraftingRecipe(
+            GuiGraphics graphics,
+            TCCraftingRecipePageView recipe,
+            int centerX,
+            int centerY,
+            int mouseX,
+            int mouseY
+    ) {
+        Component type = Component.translatable(recipe.shaped()
+                ? "recipe.type.workbench"
+                : "recipe.type.workbenchshapeless");
+        graphics.drawCenteredString(font, type, centerX, centerY - 104, 0xFF505050);
+
+        graphics.pose().pushPose();
+        graphics.pose().translate(centerX, centerY, 0.0F);
+        graphics.pose().scale(2.0F, 2.0F, 1.0F);
+        blit(graphics, BOOK_OVERLAY, -26, -26, 60, 15, 51, 52, 512, 512);
+        blit(graphics, BOOK_OVERLAY, -8, -46, 20, 3, 16, 16, 512, 512);
+        graphics.pose().popPose();
+
+        renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
+        for (int slot = 0; slot < recipe.ingredients().size() && slot < 9; slot++) {
+            List<ItemStack> variants = recipe.ingredients().get(slot);
+            if (variants.isEmpty()) {
+                continue;
+            }
+            int column = recipe.shaped() ? slot % recipe.width() : slot % 3;
+            int row = recipe.shaped() ? slot / recipe.width() : slot / 3;
+            if (column >= 3 || row >= 3) {
+                continue;
+            }
+            int variant = (int) ((System.currentTimeMillis() / 1000L + slot) % variants.size());
+            renderRecipeStack(
+                    graphics,
+                    variants.get(variant),
+                    centerX - 40 + column * 32,
+                    centerY - 40 + row * 32,
+                    mouseX,
+                    mouseY
+            );
+        }
+    }
+
+    private void renderRecipeStack(
+            GuiGraphics graphics,
+            ItemStack stack,
+            int x,
+            int y,
+            int mouseX,
+            int mouseY
+    ) {
+        if (stack.isEmpty()) {
+            return;
+        }
+        graphics.renderItem(stack, x, y);
+        graphics.renderItemDecorations(font, stack, x, y);
+        if (inside(mouseX, mouseY, x, y, 16, 16)) {
+            hoveredRecipeStack = stack;
+        }
+    }
+
+    private void renderRecipeNavigation(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
+        if (activeRecipeIndex > 0) {
+            blit(graphics, BROWSER, x + 40, y + 232, 0, 184, 12, 8, 256, 256);
+        }
+        if (activeRecipeIndex < activeRecipePages.size() - 1) {
+            blit(graphics, BROWSER, x + 204, y + 232, 12, 184, 12, 8, 256, 256);
+        }
+        int color = inside(mouseX, mouseY, x + 96, y + 236, 64, 16) ? 0xFF805A24 : 0xFF4B351B;
+        graphics.drawCenteredString(font, Component.translatable("recipe.return"), x + 128, y + 238, color);
     }
 
     private void renderResult(GuiGraphics graphics, int x, int y) {
@@ -290,6 +465,14 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private int bookY() {
         return (height - BOOK_HEIGHT) / 2;
+    }
+
+    private int recipePageX() {
+        return (width - RECIPE_PAGE_SIZE) / 2;
+    }
+
+    private int recipePageY() {
+        return (height - RECIPE_PAGE_SIZE) / 2;
     }
 
     private void playPage() {

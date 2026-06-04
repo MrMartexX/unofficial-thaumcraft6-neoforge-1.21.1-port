@@ -25,6 +25,7 @@ The UI is a client-side `Screen`, not an inventory `Menu`. All visibility, unloc
 | Client open orchestration | `TCThaumonomiconClientCache`, `TCThaumonomiconClientController` |
 | Browser | `TCThaumonomiconBrowserScreen` |
 | Entry page | `TCThaumonomiconEntryScreen` |
+| Vanilla crafting page snapshot | `TCCraftingRecipePageView`, built by `TCResearchPageCatalogManager` |
 | Authoritative state | `TCThaumonomiconService`, `TCResearchManager`, `TCPlayerKnowledgeStore` |
 | Server actions | `TCThaumonomiconActionPayload` |
 
@@ -39,6 +40,8 @@ The server sends `openScreen=true` only for an actual Thaumonomicon item use. Or
 - Unknown unlockable entries send `START_RESEARCH`; known entries send `ACKNOWLEDGE_ENTRY`.
 - The entry screen opens only after the server accepts the action and returns an authoritative entry view.
 - Entry stage text, visible addenda, requirement results, stage state, bookmarks, book asset, page navigation, and checked stage advance are active.
+- Renderable crafting bookmarks open a legacy-style paper recipe page. The server snapshot owns the real result stack, shaped/shapeless kind, shaped dimensions, ingredient slots, and ingredient variants; the client only cycles and renders those values.
+- Four catalog crafting entries currently produce valid server snapshots. Direct-reference live availability remains two `READY` bookmarks because the `inkwell` group correctly remains `DEFERRED` while one original group member is legacy-missing.
 - Thaumonomicon has its exact legacy runtime aspect result from the 1.12 exporter dump.
 - Legacy `research.*` English translations required by the active screen are present in modern `en_us.json`.
 
@@ -47,22 +50,22 @@ The server sends `openScreen=true` only for an actual Thaumonomicon item use. Or
 - Search mode and search-result drilldown.
 - Exact arrow shapes, forbidden/warp marker, category completion percentages, popup animation, and final browser visual parity tuning.
 - Aspect and knowledge side pages.
-- Clickable recipe bookmarks and recipe drilldown history.
-- Crafting, arcane, crucible, infusion, blueprint, fake, and missing recipe-page renderers.
+- Recipe drilldown history.
+- Arcane, crucible, infusion, blueprint, fake, and missing recipe-page renderers.
 - Cheat Thaumonomicon variant.
 
-Deferred recipe pages are shown only as catalog bookmarks with their authoritative kind/availability. The UI does not invent recipe contents.
+Deferred recipe pages are shown only as catalog bookmarks with their authoritative kind/availability. Only `READY` crafting pages carrying a server snapshot are interactive; the UI does not invent recipe contents.
 
 ## Validation
 
-- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, and explicit-open-versus-refresh separation.
-- Latest protocol result: `16/16` checks passed.
+- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, and the `READY` crafting snapshot boundary.
+- Latest protocol result: `19/19` checks passed; all four live crafting catalog entries produce valid server snapshots.
 - `gradlew build` passes.
 - Dedicated-server reload passes with `683` exact aspect assignments and the Thaumonomicon protocol audit.
 
 ## Next boundary
 
-1. Add a server-authoritative recipe-page view model for catalog entries that are actually `READY`.
-2. Implement the first real vanilla crafting page renderer from that view model.
-3. Keep `DEFERRED` and `LEGACY_MISSING` pages non-interactive until their crafting subsystem or mapping is implemented.
-4. Run a focused visual parity pass against the legacy browser and entry page before calling the UI final.
+1. Keep `DEFERRED` and `LEGACY_MISSING` pages non-interactive until their crafting subsystem or mapping is implemented.
+2. Design and implement the first custom recipe type before adding its page renderer; arcane crafting is the next lowest-level dependency.
+3. Add recipe drilldown/history only after server-authoritative page snapshots can represent the referenced recipe family.
+4. Run a focused visual parity pass against the legacy browser, entry page, and crafting paper page before calling the UI final.

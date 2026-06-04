@@ -7,9 +7,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import thaumcraft.Thaumcraft;
 
@@ -92,10 +98,10 @@ public final class TCResearchPageCatalogManager {
             ArrayList<TCResearchPageView> pages = new ArrayList<>();
             if (catalogEntry.kind() == TCResearchPageKind.GROUP) {
                 for (ResourceLocation target : catalogEntry.targets()) {
-                    addVisiblePage(pages, target, recipeManager, knowledge);
+                    addVisiblePage(pages, target, recipeManager, player.server.registryAccess(), knowledge);
                 }
             } else {
-                addVisiblePage(pages, bookmarkId, recipeManager, knowledge);
+                addVisiblePage(pages, bookmarkId, recipeManager, player.server.registryAccess(), knowledge);
             }
             if (!pages.isEmpty()) {
                 bookmarks.add(new TCResearchPageBookmark(bookmarkId, pages));
@@ -160,6 +166,7 @@ public final class TCResearchPageCatalogManager {
             List<TCResearchPageView> pages,
             ResourceLocation pageId,
             RecipeManager recipeManager,
+            HolderLookup.Provider registries,
             TCPlayerKnowledge knowledge
     ) {
         TCResearchPageCatalogEntry entry = activeData.entries().get(pageId);
@@ -170,13 +177,54 @@ public final class TCResearchPageCatalogManager {
                 && !TCResearchManager.knowsResearchStrict(knowledge, entry.requiredResearch())) {
             return;
         }
+        TCResearchPageAvailability availability = availability(entry.id(), recipeManager, new HashSet<>());
+        Optional<TCCraftingRecipePageView> craftingRecipe = availability == TCResearchPageAvailability.READY
+                ? buildCraftingPage(entry.id(), recipeManager, registries)
+                : Optional.empty();
+        if (availability == TCResearchPageAvailability.READY && craftingRecipe.isEmpty()) {
+            availability = TCResearchPageAvailability.DEFERRED;
+        }
         pages.add(new TCResearchPageView(
                 entry.id(),
                 entry.kind(),
-                availability(entry.id(), recipeManager, new HashSet<>()),
+                availability,
                 entry.requiredResearch(),
-                entry.legacyOutput()
+                entry.legacyOutput(),
+                craftingRecipe
         ));
+    }
+
+    static Optional<TCCraftingRecipePageView> buildCraftingPage(
+            ResourceLocation id,
+            RecipeManager recipeManager,
+            HolderLookup.Provider registries
+    ) {
+        return recipeManager.byKey(id)
+                .filter(holder -> holder.value() instanceof CraftingRecipe)
+                .map(holder -> {
+                    CraftingRecipe recipe = (CraftingRecipe) holder.value();
+                    boolean shaped = recipe instanceof ShapedRecipe;
+                    int width = shaped ? ((ShapedRecipe) recipe).getWidth() : 3;
+                    int height = shaped ? ((ShapedRecipe) recipe).getHeight() : 3;
+                    NonNullList<Ingredient> recipeIngredients = recipe.getIngredients();
+                    ArrayList<List<ItemStack>> ingredients = new ArrayList<>(recipeIngredients.size());
+                    for (Ingredient ingredient : recipeIngredients) {
+                        ItemStack[] variants = ingredient.getItems();
+                        ArrayList<ItemStack> copiedVariants = new ArrayList<>(variants.length);
+                        for (ItemStack variant : variants) {
+                            copiedVariants.add(variant.copy());
+                        }
+                        ingredients.add(List.copyOf(copiedVariants));
+                    }
+                    return new TCCraftingRecipePageView(
+                            id,
+                            shaped,
+                            width,
+                            height,
+                            recipe.getResultItem(registries),
+                            ingredients
+                    );
+                });
     }
 
     private static TCResearchPageAvailability availability(
@@ -194,7 +242,9 @@ public final class TCResearchPageCatalogManager {
 
         try {
             if (entry.kind() == TCResearchPageKind.CRAFTING) {
-                return recipeManager.byKey(entry.id()).isPresent()
+                return recipeManager.byKey(entry.id())
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isPresent()
                         ? TCResearchPageAvailability.READY
                         : TCResearchPageAvailability.DEFERRED;
             }
