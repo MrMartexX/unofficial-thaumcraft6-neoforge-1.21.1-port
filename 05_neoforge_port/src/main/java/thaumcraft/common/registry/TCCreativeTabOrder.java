@@ -99,6 +99,7 @@ public final class TCCreativeTabOrder {
         output.accept(TCItems.FABRIC.get());
         output.accept(TCItems.VIS_RESONATOR.get());
         output.accept(TCItems.TALLOW.get());
+        output.accept(TCItems.IRON_PLATE.get());
         output.accept(TCItems.THAUMIUM_PLATE.get());
         output.accept(TCItems.VOID_PLATE.get());
         output.accept(TCItems.SALIS_MUNDUS.get());

@@ -4,6 +4,7 @@ final class TCLegacyMaterialFamilyMappings {
     private static final LegacyMaterialTarget[] CONFIRMED_TARGETS = {
             new LegacyMaterialTarget("thaumcraft:ingot", 0, "thaumium ingot", "thaumcraft:thaumium_ingot"),
             new LegacyMaterialTarget("thaumcraft:ingot", 2, "brass ingot", "thaumcraft:brass_ingot"),
+            new LegacyMaterialTarget("thaumcraft:plate", 1, "iron plate", "thaumcraft:iron_plate"),
             new LegacyMaterialTarget("thaumcraft:plate", 2, "thaumium plate", "thaumcraft:thaumium_plate"),
             new LegacyMaterialTarget("thaumcraft:plate", 3, "void plate", "thaumcraft:void_plate"),
             new LegacyMaterialTarget("thaumcraft:metal", 2, "thaumium metal block", "thaumcraft:metal_thaumium"),

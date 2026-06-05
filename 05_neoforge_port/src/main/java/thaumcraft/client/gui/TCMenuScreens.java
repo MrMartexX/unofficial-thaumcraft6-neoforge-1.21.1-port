@@ -14,5 +14,6 @@ public final class TCMenuScreens {
 
     private static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
         event.register(TCMenus.RESEARCH_TABLE.get(), TCResearchTableScreen::new);
+        event.register(TCMenus.ARCANE_WORKBENCH.get(), TCArcaneWorkbenchScreen::new);
     }
 }

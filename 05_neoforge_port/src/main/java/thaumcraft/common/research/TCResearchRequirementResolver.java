@@ -291,6 +291,7 @@ public final class TCResearchRequirementResolver {
                 default -> null;
             };
             case "thaumcraft:plate" -> switch (damage) {
+                case 1 -> new TCLegacyItemComponent("plate", "iron", 1);
                 case 2 -> new TCLegacyItemComponent("plate", "thaumium", 2);
                 case 3 -> new TCLegacyItemComponent("plate", "void", 3);
                 default -> null;

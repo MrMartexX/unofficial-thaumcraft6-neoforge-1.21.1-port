@@ -20,6 +20,8 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.crafting.arcane.TCArcaneRecipe;
 import thaumcraft.common.crafting.arcane.TCShapedArcaneRecipe;
+import thaumcraft.common.crafting.arcane.TCShapelessArcaneRecipe;
+import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCRecipes;
 
 final class TCArcaneRecipeAudit {
@@ -27,6 +29,10 @@ final class TCArcaneRecipeAudit {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "thaumometer");
     private static final ResourceLocation VIS_RESONATOR =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "vis_resonator");
+    private static final ResourceLocation THAUMOMETER_BRIDGE =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "research_bridge/thaumometer");
+    private static final ResourceLocation VIS_RESONATOR_BRIDGE =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "research_bridge/vis_resonator");
 
     private TCArcaneRecipeAudit() {
     }
@@ -52,7 +58,17 @@ final class TCArcaneRecipeAudit {
     static Report buildReport(RecipeManager recipeManager, HolderLookup.Provider registries) {
         ArrayList<Check> checks = new ArrayList<>();
         int arcaneRecipeCount = recipeManager.getAllRecipesFor(TCRecipes.ARCANE_TYPE.get()).size();
-        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount > 0, "count=" + arcaneRecipeCount));
+        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 2, "count=" + arcaneRecipeCount));
+        checks.add(check(
+                "thaumometer_wrong_vanilla_bridge_removed",
+                recipeManager.byKey(THAUMOMETER_BRIDGE).isEmpty(),
+                THAUMOMETER_BRIDGE.toString()
+        ));
+        checks.add(check(
+                "vis_resonator_wrong_vanilla_bridge_removed",
+                recipeManager.byKey(VIS_RESONATOR_BRIDGE).isEmpty(),
+                VIS_RESONATOR_BRIDGE.toString()
+        ));
 
         Optional<TCArcaneRecipe> thaumometer = recipeManager.byKey(THAUMOMETER)
                 .filter(holder -> holder.value() instanceof TCArcaneRecipe)
@@ -114,16 +130,50 @@ final class TCArcaneRecipeAudit {
                 "availability=" + thaumometerAvailability
         ));
 
+        Optional<TCArcaneRecipe> visResonator = recipeManager.byKey(VIS_RESONATOR)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value());
+        checks.add(check("vis_resonator_arcane_recipe_loaded", visResonator.isPresent(), VIS_RESONATOR.toString()));
+        checks.add(check(
+                "vis_resonator_is_not_vanilla_crafting_recipe",
+                recipeManager.byKey(VIS_RESONATOR)
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isEmpty(),
+                VIS_RESONATOR.toString()
+        ));
+        if (visResonator.isPresent()) {
+            TCArcaneRecipe recipe = visResonator.get();
+            checks.add(check(
+                    "vis_resonator_research_and_vis",
+                    "UNLOCKAUROMANCY@2".equals(recipe.getResearch()) && recipe.getVis() == 50,
+                    "research=" + recipe.getResearch() + ", vis=" + recipe.getVis()
+            ));
+            checks.add(check(
+                    "vis_resonator_ordered_crystal_costs",
+                    crystalSummary(recipe).equals(List.of("aer:1", "aqua:1")),
+                    crystalSummary(recipe).toString()
+            ));
+            checks.add(check(
+                    "vis_resonator_result",
+                    VIS_RESONATOR.equals(BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                            && recipe.getResultItem(registries).getCount() == 1,
+                    recipe.getResultItem(registries).toString()
+            ));
+            checks.add(check(
+                    "vis_resonator_shapeless_plate_iron_quartz",
+                    matchesVisResonatorIngredients(recipe),
+                    "ingredients=" + recipe.getIngredients().size()
+            ));
+        }
+
         TCResearchPageAvailability visResonatorAvailability = TCResearchPageCatalogManager.availability(
                 VIS_RESONATOR.toString(),
                 recipeManager
         );
         checks.add(check(
-                "vis_resonator_deferred_until_plate_iron_bridge",
-                recipeManager.byKey(VIS_RESONATOR)
-                        .filter(holder -> holder.value() instanceof TCArcaneRecipe)
-                        .isEmpty()
-                        && visResonatorAvailability == TCResearchPageAvailability.DEFERRED,
+                "vis_resonator_catalog_arcane_snapshot_ready",
+                visResonatorAvailability == TCResearchPageAvailability.READY
+                        && TCResearchPageCatalogManager.buildArcanePage(VIS_RESONATOR, recipeManager, registries).isPresent(),
                 "availability=" + visResonatorAvailability
         ));
 
@@ -151,6 +201,15 @@ final class TCArcaneRecipeAudit {
                 && ingredients.get(6).isEmpty()
                 && ingredients.get(7).test(new ItemStack(Items.GOLD_INGOT))
                 && ingredients.get(8).isEmpty();
+    }
+
+    private static boolean matchesVisResonatorIngredients(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapelessArcaneRecipe) || recipe.getIngredients().size() != 2) {
+            return false;
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients.get(0).test(new ItemStack(TCItems.IRON_PLATE.get()))
+                && ingredients.get(1).test(new ItemStack(Items.QUARTZ));
     }
 
     private static Check check(String name, boolean passed, String detail) {

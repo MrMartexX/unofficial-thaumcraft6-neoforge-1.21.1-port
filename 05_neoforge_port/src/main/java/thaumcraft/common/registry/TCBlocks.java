@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.blocks.basic.TCTableBlock;
+import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
 
 public final class TCBlocks {
@@ -63,7 +64,7 @@ public final class TCBlocks {
 
     public static final Supplier<Block> TABLE_WOOD = BLOCKS.register("table_wood", () -> tableBlock(true));
     public static final Supplier<Block> TABLE_STONE = BLOCKS.register("table_stone", () -> tableBlock(false));
-    public static final Supplier<Block> ARCANE_WORKBENCH = BLOCKS.register("arcane_workbench", () -> workbenchBlock());
+    public static final Supplier<Block> ARCANE_WORKBENCH = BLOCKS.register("arcane_workbench", () -> arcaneWorkbenchBlock());
     public static final Supplier<Block> RESEARCH_TABLE = BLOCKS.register("research_table", () -> researchTableBlock());
     public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> cauldronLikeBlock());
     public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> furnaceLikeBlock());
@@ -113,6 +114,12 @@ public final class TCBlocks {
     private static Block workbenchBlock() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
                 .strength(2.5F, 2.5F));
+    }
+
+    private static Block arcaneWorkbenchBlock() {
+        return new TCArcaneWorkbenchBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
+                .strength(2.5F, 2.5F)
+                .noOcclusion());
     }
 
     private static Block tableBlock(boolean wood) {

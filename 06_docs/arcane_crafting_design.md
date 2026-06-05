@@ -3,9 +3,10 @@
 ## Scope
 
 This slice establishes the NeoForge 1.21.1 data and serializer boundary for
-Thaumcraft 6 arcane recipes. It deliberately does not implement the Arcane
-Workbench menu, crystal or aura consumption, vis discounts, recipe output
-taking, charger behavior, or recipe-book integration.
+Thaumcraft 6 arcane recipes and the first server-authoritative Arcane
+Workbench crafting path. It deliberately does not implement broad recipe
+import, caster-equipment vis discounts, Workbench Charger 3 x 3 chunk behavior,
+recipe-book integration, or the special void-jar recipe behavior.
 
 ## Authoritative legacy behavior
 
@@ -45,30 +46,79 @@ On output take, the server:
   `thaumcraft:arcane_shapeless` serializers.
 - Store research, base vis, ordered crystal costs, ingredients, and result in
   datapack recipe JSON.
-- Keep workbench validation and atomic consumption in a later server-owned
-  service. Recipe matching in this slice only validates the 3 x 3 matrix.
+- Keep workbench validation and consumption in a server-owned service. Recipe
+  matching validates the 3 x 3 matrix; the workbench service separately gates
+  research, aura vis and crystal slots.
 - Preserve crystal aspect identity through the existing modern aspect stack
   model. Do not infer crystal costs from ingredients or output aspects.
+- Keep vanilla crafting fallback inside the Arcane Workbench, but only against
+  the first nine matrix slots, matching the legacy container.
 
-## First exact fixture
+## Exact fixtures
 
-The first recipe is a direct legacy transcription whose output and ingredients
-already exist in the port:
+Current exact arcane recipe fixtures:
 
 | Recipe id | Shape | Research | Vis | Crystals |
 |---|---|---|---:|---|
 | `thaumcraft:thaumometer` | shaped | `FIRSTSTEPS@2` | 20 | `aer`, `terra`, `aqua`, `ignis`, `ordo`, `perditio`, one each |
+| `thaumcraft:vis_resonator` | shapeless | `UNLOCKAUROMANCY@2` | 50 | `aer`, `aqua`, one each |
 
 Legacy OreDictionary ingredients are translated to current common tags:
 
 - `ingotGold` -> `c:ingots/gold`;
 - glass pane -> `minecraft:glass_pane`.
+- `plateIron` -> `c:plates/iron`, backed by `thaumcraft:iron_plate`;
+- `gemQuartz` -> `c:gems/quartz`.
 
-`thaumcraft:vis_resonator` is intentionally not added yet. Legacy
-`ConfigRecipes` defines it as shapeless `plateIron` + `gemQuartz`, and the
-current port does not have a precise modern iron-plate bridge item/tag. Mapping
-`plateIron` to `c:ingots/iron` would make the first custom recipe page look
-ready while silently changing the legacy recipe.
+The old `research_bridge/thaumometer` and `research_bridge/vis_resonator`
+vanilla recipes are removed once the real arcane recipes exist. Keeping them
+would create incorrect vanilla crafting paths and distort generated-aspect
+recipe audits.
+
+## Arcane Workbench server model
+
+Implemented modern classes:
+
+- `TCArcaneWorkbenchBlock`
+- `TCArcaneWorkbenchBlockEntity`
+- `TCArcaneWorkbenchMenu`
+- `TCArcaneWorkbenchScreen`
+- `TCArcaneWorkbenchCrafting`
+- public marker `thaumcraft.api.crafting.IArcaneWorkbench`
+
+The BlockEntity owns the legacy `5 x 3` inventory shape:
+
+- slots `0..8`: 3 x 3 crafting matrix;
+- slots `9..14`: fixed primal crystal slots in legacy order:
+  `aer`, `ignis`, `aqua`, `terra`, `ordo`, `perditio`.
+
+The menu keeps the legacy slot layout:
+
+- result at `160,64`;
+- crafting matrix at `40 + column * 24`, `40 + row * 24`;
+- crystal slots at legacy `ContainerArcaneWorkbench.xx/yy`;
+- player inventory at `16,151`;
+- hotbar at `16,209`.
+
+Server resolution order:
+
+1. Build a 3 x 3 `CraftingInput` from slots `0..8`.
+2. Find a matching `thaumcraft:arcane` recipe first.
+3. If an arcane recipe matches and vis/crystals are missing, output is blocked.
+4. If vis/crystals are present and research is known, output the arcane result.
+5. If vis/crystals are present but research is not known, fall back to vanilla
+   3 x 3 crafting only if the matrix also matches a vanilla recipe.
+6. If no arcane recipe matches, try vanilla 3 x 3 crafting.
+
+On output take, the server re-resolves the recipe, drains current-chunk vis for
+arcane recipes, consumes one item from each occupied matrix slot, applies
+vanilla remaining items for vanilla fallback recipes, consumes required primal
+crystals, and marks matching `required_craft` research markers.
+
+Current vis behavior uses the existing port `AuraHandler.getVis/drainVis`
+against the workbench's current chunk. This is intentionally narrower than
+legacy Workbench Charger behavior, which sums and drains a 3 x 3 chunk area
+when a charger block is placed above the workbench.
 
 ## First page snapshot
 
@@ -78,17 +128,15 @@ the recipe id, shaped/shapeless flag, compact grid dimensions, resolved
 ingredient variants, result stack, research key, base vis cost, and ordered
 crystal display stacks.
 
-This snapshot is display-only. It does not imply that the Arcane Workbench can
-craft the recipe yet.
+This snapshot is display-only and remains server-authored. It now reflects the
+same recipe data consumed by the first Arcane Workbench server crafting path.
 
 ## Blocked behavior
 
-- Arcane Workbench BlockEntity, menu, slots, and screen.
-- Research-aware recipe matching.
 - Player vis-discount calculation.
-- Aura query/drain and Workbench Charger 3 x 3 chunk behavior.
-- Atomic ingredient, remaining-item, crystal, and aura consumption.
-- Vanilla recipe fallback inside the Arcane Workbench.
+- Workbench Charger 3 x 3 chunk vis query/drain behavior.
+- Exact GUI polish: aura/cost labels, crystal glow overlays, and blocked-output
+  ghost rendering.
 - Special `ShapedArcaneVoidJar` stack-copy behavior.
-- The remaining `72` legacy recipes until their exact outputs and ingredients
+- The remaining `71` legacy recipes until their exact outputs and ingredients
   exist and can be mapped without placeholders.
