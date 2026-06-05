@@ -20,6 +20,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.items.TCAspectVariantStacks;
+import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.research.TCPlayerKnowledge;
@@ -125,6 +126,26 @@ public final class TCArcaneWorkbenchAudit {
                     "vanilla_fallback_ironplate_output_and_consumption",
                     vanillaFallbackIronPlateCrafts(player, level, workbench),
                     "vis=" + AuraHandler.getVis(level, AUDIT_POS)
+            ));
+            checks.add(check(
+                    "menu_feedback_reports_arcane_cost_and_aura",
+                    menuFeedbackReportsArcaneCost(player, level, workbench),
+                    "cost=" + menuFor(player, workbench).visCost()
+            ));
+            checks.add(check(
+                    "menu_feedback_marks_missing_vis",
+                    menuFeedbackMarksMissingVis(player, level, workbench),
+                    "available=" + menuFor(player, workbench).availableVis()
+            ));
+            checks.add(check(
+                    "menu_feedback_marks_missing_crystals",
+                    menuFeedbackMarksMissingCrystals(player, level, workbench),
+                    "mask=" + menuFor(player, workbench).requiredCrystalMask()
+            ));
+            checks.add(check(
+                    "menu_feedback_keeps_vanilla_fallback_costless",
+                    menuFeedbackKeepsVanillaFallbackCostless(player, level, workbench),
+                    "kind=" + menuFor(player, workbench).recipeKind()
             ));
         } finally {
             player.getInventory().clearContent();
@@ -268,6 +289,78 @@ public final class TCArcaneWorkbenchAudit {
                 && (int) AuraHandler.getVis(level, AUDIT_POS) == 100;
     }
 
+    private static boolean menuFeedbackReportsArcaneCost(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        setResearch(player, true);
+        AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
+        prepareVisResonator(workbench, true, true);
+        TCArcaneWorkbenchMenu menu = menuFor(player, workbench);
+        return menu.visCost() == 50
+                && menu.availableVis() == 100
+                && menu.hasArcaneRecipe()
+                && !menu.isBlocked()
+                && menu.hasVis()
+                && menu.hasCrystals()
+                && menu.hasResearch()
+                && menu.requiredCrystalMask() == visResonatorCrystalMask();
+    }
+
+    private static boolean menuFeedbackMarksMissingVis(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        setResearch(player, true);
+        AuraHandler.seedAuraChunk(level, AUDIT_POS, 10);
+        prepareVisResonator(workbench, true, true);
+        TCArcaneWorkbenchMenu menu = menuFor(player, workbench);
+        return menu.visCost() == 50
+                && menu.availableVis() == 10
+                && menu.hasArcaneRecipe()
+                && menu.isBlocked()
+                && !menu.hasVis()
+                && menu.hasCrystals();
+    }
+
+    private static boolean menuFeedbackMarksMissingCrystals(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        setResearch(player, true);
+        AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
+        prepareVisResonator(workbench, false, false);
+        TCArcaneWorkbenchMenu menu = menuFor(player, workbench);
+        return menu.visCost() == 50
+                && menu.availableVis() == 100
+                && menu.hasArcaneRecipe()
+                && menu.isBlocked()
+                && menu.hasVis()
+                && !menu.hasCrystals()
+                && menu.requiredCrystalMask() == visResonatorCrystalMask();
+    }
+
+    private static boolean menuFeedbackKeepsVanillaFallbackCostless(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        setResearch(player, false);
+        AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
+        resetWorkbench(workbench);
+        workbench.setItem(0, new ItemStack(Items.IRON_INGOT));
+        workbench.setItem(1, new ItemStack(Items.IRON_INGOT));
+        workbench.setItem(2, new ItemStack(Items.IRON_INGOT));
+        TCArcaneWorkbenchMenu menu = menuFor(player, workbench);
+        return menu.recipeKind() == TCArcaneWorkbenchCrafting.Kind.VANILLA.ordinal()
+                && menu.visCost() == 0
+                && menu.requiredCrystalMask() == 0
+                && !menu.hasArcaneRecipe();
+    }
+
     private static void prepareVisResonator(
             TCArcaneWorkbenchBlockEntity workbench,
             boolean aerCrystal,
@@ -295,6 +388,17 @@ public final class TCArcaneWorkbenchAudit {
             knowledge.setResearchStage("UNLOCKAUROMANCY", 2);
         }
         TCPlayerKnowledgeStore.set(player, knowledge, false);
+    }
+
+    private static TCArcaneWorkbenchMenu menuFor(ServerPlayer player, TCArcaneWorkbenchBlockEntity workbench) {
+        TCArcaneWorkbenchMenu menu = new TCArcaneWorkbenchMenu(0, player.getInventory(), workbench);
+        menu.broadcastChanges();
+        return menu;
+    }
+
+    private static int visResonatorCrystalMask() {
+        return TCArcaneWorkbenchMenu.crystalMask(TCArcaneWorkbenchCrafting.PRIMAL_ASPECT_ORDER.indexOf("aer"))
+                | TCArcaneWorkbenchMenu.crystalMask(TCArcaneWorkbenchCrafting.PRIMAL_ASPECT_ORDER.indexOf("aqua"));
     }
 
     private static ItemStack crystal(String aspectTag) {

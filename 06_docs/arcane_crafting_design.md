@@ -100,6 +100,12 @@ The menu keeps the legacy slot layout:
 - player inventory at `16,151`;
 - hotbar at `16,209`.
 
+The menu also owns the current GUI feedback data. It syncs the resolved recipe
+kind, discounted-cost placeholder value, available aura vis, requirement flags,
+and required primal-crystal slot mask through menu data slots. The client screen
+only renders that server-owned state: legacy-positioned available/cost text and
+the rotating primal crystal glow overlay around required crystal slots.
+
 Server resolution order:
 
 1. Build a 3 x 3 `CraftingInput` from slots `0..8`.
@@ -141,6 +147,8 @@ Current checks cover:
 - output take consuming matrix ingredients, required crystals, and current-chunk
   vis;
 - vanilla 3 x 3 fallback crafting for the current exact `iron_plate` fixture.
+- server-owned Arcane Workbench menu feedback for resolved cost/aura, missing
+  vis, missing crystals, and vanilla fallback staying costless.
 
 Run from `05_neoforge_port`:
 
@@ -163,8 +171,8 @@ same recipe data consumed by the first Arcane Workbench server crafting path.
 
 - Player vis-discount calculation.
 - Workbench Charger 3 x 3 chunk vis query/drain behavior.
-- Exact GUI polish: aura/cost labels, crystal glow overlays, and blocked-output
-  ghost rendering.
+- Exact GUI polish: blocked-output ghost rendering and final visual tuning
+  beyond the current server-owned aura/cost labels and crystal glow overlays.
 - Special `ShapedArcaneVoidJar` stack-copy behavior.
 - The remaining `71` legacy recipes until their exact outputs and ingredients
   exist and can be mapped without placeholders.

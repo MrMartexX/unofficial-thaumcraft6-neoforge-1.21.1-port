@@ -13,6 +13,10 @@
 | `vis_resonator_resolves_when_requirements_met` | `PASS` | output=1 thaumcraft:vis_resonator |
 | `vis_resonator_craft_consumes_matrix_crystals_and_vis` | `PASS` | vis=50.0 |
 | `vanilla_fallback_ironplate_output_and_consumption` | `PASS` | vis=100.0 |
+| `menu_feedback_reports_arcane_cost_and_aura` | `PASS` | cost=50 |
+| `menu_feedback_marks_missing_vis` | `PASS` | available=10 |
+| `menu_feedback_marks_missing_crystals` | `PASS` | mask=5 |
+| `menu_feedback_keeps_vanilla_fallback_costless` | `PASS` | kind=3 |
 
-- Passed: `11`
+- Passed: `15`
 - Failed: `0`
