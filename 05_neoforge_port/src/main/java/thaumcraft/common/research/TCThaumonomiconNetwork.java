@@ -7,7 +7,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public final class TCThaumonomiconNetwork {
-    private static final String NETWORK_VERSION = "3";
+    private static final String NETWORK_VERSION = "4";
 
     private TCThaumonomiconNetwork() {
     }
@@ -50,7 +50,7 @@ public final class TCThaumonomiconNetwork {
         TCThaumonomiconIndexPayload index = TCThaumonomiconService.buildIndex(player);
         PacketDistributor.sendToPlayer(
                 player,
-                new TCThaumonomiconIndexPayload(index.categories(), index.entries(), true)
+                new TCThaumonomiconIndexPayload(index.categories(), index.entries(), index.revision(), true)
         );
     }
 
@@ -82,6 +82,11 @@ public final class TCThaumonomiconNetwork {
                 return;
             }
             boolean visible = TCResearchManager.isResearchVisible(player, payload.researchKey());
+            if (!TCThaumonomiconService.isRevisionCurrent(player, payload.clientRevision())) {
+                sendIndex(player);
+                sendEntry(player, payload.researchKey(), false, "stale_revision");
+                return;
+            }
             sendEntry(
                     player,
                     payload.researchKey(),
@@ -96,48 +101,48 @@ public final class TCThaumonomiconNetwork {
             if (!(context.player() instanceof ServerPlayer player)) {
                 return;
             }
-            if (!TCResearchManager.isResearchVisible(player, payload.researchKey())) {
-                sendEntry(player, payload.researchKey(), false, "not_visible_or_missing");
-                return;
-            }
-
-            boolean accepted;
-            String resultKey;
-            switch (payload.actionId()) {
-                case TCThaumonomiconActionPayload.ADVANCE_CURRENT_STAGE -> {
-                    // Legacy GuiResearchPage sends first=false, checks=true, noFlags=true.
-                    accepted = TCResearchManager.completeCurrentStageWithChecks(
-                            player,
-                            payload.researchKey(),
-                            true,
-                            true
-                    );
-                    resultKey = accepted ? "stage_advanced" : "requirements_not_met";
-                }
-                case TCThaumonomiconActionPayload.START_RESEARCH -> {
-                    accepted = TCResearchManager.startResearchFromBrowser(player, payload.researchKey());
-                    resultKey = accepted ? "research_started" : "research_not_unlockable";
-                }
-                case TCThaumonomiconActionPayload.ACKNOWLEDGE_ENTRY -> {
-                    accepted = TCResearchManager.acknowledgeResearchEntry(player, payload.researchKey());
-                    resultKey = accepted ? "entry_acknowledged" : "entry_not_known";
-                }
-                default -> {
-                    sendEntry(player, payload.researchKey(), false, "unknown_action");
-                    return;
-                }
-            }
-
-            if (accepted) {
+            ActionResult result = processAction(player, payload);
+            if (result.refreshIndex()) {
                 sendIndex(player);
             }
             sendEntry(
                     player,
                     payload.researchKey(),
-                    accepted,
-                    resultKey
+                    result.accepted(),
+                    result.resultKey()
             );
         });
+    }
+
+    static ActionResult processAction(ServerPlayer player, TCThaumonomiconActionPayload payload) {
+        if (!TCThaumonomiconService.isRevisionCurrent(player, payload.clientRevision())) {
+            return new ActionResult(false, "stale_revision", true);
+        }
+        if (!TCResearchManager.isResearchVisible(player, payload.researchKey())) {
+            return new ActionResult(false, "not_visible_or_missing", false);
+        }
+
+        return switch (payload.actionId()) {
+            case TCThaumonomiconActionPayload.ADVANCE_CURRENT_STAGE -> {
+                // Legacy GuiResearchPage sends first=false, checks=true, noFlags=true.
+                boolean accepted = TCResearchManager.completeCurrentStageWithChecks(
+                        player,
+                        payload.researchKey(),
+                        true,
+                        true
+                );
+                yield new ActionResult(accepted, accepted ? "stage_advanced" : "requirements_not_met", accepted);
+            }
+            case TCThaumonomiconActionPayload.START_RESEARCH -> {
+                boolean accepted = TCResearchManager.startResearchFromBrowser(player, payload.researchKey());
+                yield new ActionResult(accepted, accepted ? "research_started" : "research_not_unlockable", accepted);
+            }
+            case TCThaumonomiconActionPayload.ACKNOWLEDGE_ENTRY -> {
+                boolean accepted = TCResearchManager.acknowledgeResearchEntry(player, payload.researchKey());
+                yield new ActionResult(accepted, accepted ? "entry_acknowledged" : "entry_not_known", accepted);
+            }
+            default -> new ActionResult(false, "unknown_action", false);
+        };
     }
 
     private static void handleIndex(TCThaumonomiconIndexPayload payload, IPayloadContext context) {
@@ -146,5 +151,8 @@ public final class TCThaumonomiconNetwork {
 
     private static void handleEntry(TCThaumonomiconEntryPayload payload, IPayloadContext context) {
         TCThaumonomiconClientCache.accept(payload);
+    }
+
+    record ActionResult(boolean accepted, String resultKey, boolean refreshIndex) {
     }
 }

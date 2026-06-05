@@ -40,6 +40,10 @@ public final class TCThaumonomiconClientCache {
         return index;
     }
 
+    public static int revision() {
+        return index.revision();
+    }
+
     public static Optional<TCThaumonomiconEntryView> entry(String researchKey) {
         return Optional.ofNullable(entries.get(TCPlayerKnowledge.baseResearchKey(researchKey)));
     }

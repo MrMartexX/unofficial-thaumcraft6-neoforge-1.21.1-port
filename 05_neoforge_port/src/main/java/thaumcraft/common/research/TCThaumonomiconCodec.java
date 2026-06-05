@@ -29,15 +29,18 @@ final class TCThaumonomiconCodec {
 
     static void writeIndex(RegistryFriendlyByteBuf buffer, TCThaumonomiconIndexPayload payload) {
         buffer.writeBoolean(payload.openScreen());
+        buffer.writeVarInt(payload.revision());
         writeList(buffer, payload.categories(), MAX_CATEGORIES, "categories", TCThaumonomiconCodec::writeCategory);
         writeList(buffer, payload.entries(), MAX_RESEARCH_ENTRIES, "research entries", TCThaumonomiconCodec::writeResearch);
     }
 
     static TCThaumonomiconIndexPayload readIndex(RegistryFriendlyByteBuf buffer) {
         boolean openScreen = buffer.readBoolean();
+        int revision = buffer.readVarInt();
         return new TCThaumonomiconIndexPayload(
                 readList(buffer, MAX_CATEGORIES, "categories", TCThaumonomiconCodec::readCategory),
                 readList(buffer, MAX_RESEARCH_ENTRIES, "research entries", TCThaumonomiconCodec::readResearch),
+                revision,
                 openScreen
         );
     }

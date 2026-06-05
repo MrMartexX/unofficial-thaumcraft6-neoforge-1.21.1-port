@@ -23,12 +23,14 @@ import thaumcraft.common.crafting.arcane.TCArcaneCrystalCost;
 
 public final class TCResearchPageCatalogManager {
     private static TCResearchPageCatalogData activeData = TCResearchPageCatalogData.empty();
+    private static int dataRevision;
 
     private TCResearchPageCatalogManager() {
     }
 
     public static void bootstrap() {
         activeData = TCResearchPageCatalogData.empty();
+        dataRevision = 0;
     }
 
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
@@ -37,6 +39,7 @@ public final class TCResearchPageCatalogManager {
 
     static void reload(TCResearchPageCatalogData data) {
         activeData = data == null ? TCResearchPageCatalogData.empty() : data;
+        dataRevision++;
         TCResearchPageCatalogValidationReport report = validate();
         if (report.isValid()) {
             Thaumcraft.LOGGER.info(
@@ -57,6 +60,10 @@ public final class TCResearchPageCatalogManager {
 
     public static Collection<TCResearchPageCatalogEntry> entries() {
         return activeData.entries().values();
+    }
+
+    public static int dataRevision() {
+        return dataRevision;
     }
 
     public static Optional<TCResearchPageCatalogEntry> get(String rawId) {

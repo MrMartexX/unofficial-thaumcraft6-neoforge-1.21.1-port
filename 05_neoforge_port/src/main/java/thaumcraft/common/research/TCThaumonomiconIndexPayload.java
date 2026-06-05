@@ -10,6 +10,7 @@ import thaumcraft.Thaumcraft;
 public record TCThaumonomiconIndexPayload(
         List<TCThaumonomiconCategoryView> categories,
         List<TCThaumonomiconResearchView> entries,
+        int revision,
         boolean openScreen
 ) implements CustomPacketPayload {
     public static final Type<TCThaumonomiconIndexPayload> TYPE = new Type<>(
@@ -35,9 +36,25 @@ public record TCThaumonomiconIndexPayload(
 
     public TCThaumonomiconIndexPayload(
             List<TCThaumonomiconCategoryView> categories,
+            List<TCThaumonomiconResearchView> entries,
+            int revision
+    ) {
+        this(categories, entries, revision, false);
+    }
+
+    public TCThaumonomiconIndexPayload(
+            List<TCThaumonomiconCategoryView> categories,
+            List<TCThaumonomiconResearchView> entries,
+            boolean openScreen
+    ) {
+        this(categories, entries, 0, openScreen);
+    }
+
+    public TCThaumonomiconIndexPayload(
+            List<TCThaumonomiconCategoryView> categories,
             List<TCThaumonomiconResearchView> entries
     ) {
-        this(categories, entries, false);
+        this(categories, entries, 0, false);
     }
 
     @Override

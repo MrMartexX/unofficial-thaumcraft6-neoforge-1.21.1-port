@@ -138,7 +138,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.loading");
             PacketDistributor.sendToServer(new TCThaumonomiconActionPayload(
                     TCThaumonomiconActionPayload.ADVANCE_CURRENT_STAGE,
-                    entry.research().key()
+                    entry.research().key(),
+                    TCThaumonomiconClientCache.revision()
             ));
             playWrite();
             return true;

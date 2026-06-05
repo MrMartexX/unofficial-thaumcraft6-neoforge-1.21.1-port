@@ -42,12 +42,14 @@ import thaumcraft.common.warp.TCPlayerWarpStore;
 import thaumcraft.common.warp.TCWarpType;
 public final class TCResearchManager {
     private static TCResearchData activeData = TCResearchData.empty();
+    private static int dataRevision;
 
     private TCResearchManager() {
     }
 
     public static void bootstrap() {
         activeData = TCResearchData.empty();
+        dataRevision = 0;
     }
 
     public static void onAddReloadListeners(AddReloadListenerEvent event) {
@@ -69,6 +71,7 @@ public final class TCResearchManager {
 
     static void reload(TCResearchData data) {
         activeData = data == null ? TCResearchData.empty() : data;
+        dataRevision++;
         Thaumcraft.LOGGER.info(
                 "Thaumcraft research data reloaded: {} categories, {} entries, {} stages, {} addenda.",
                 activeData.categories().size(),
@@ -99,6 +102,10 @@ public final class TCResearchManager {
 
     public static TCResearchData data() {
         return activeData;
+    }
+
+    public static int dataRevision() {
+        return dataRevision;
     }
 
     public static Optional<TCResearchEntryDefinition> getEntry(String key) {

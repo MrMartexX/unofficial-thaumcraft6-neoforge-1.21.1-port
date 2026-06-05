@@ -52,6 +52,11 @@ final class TCThaumonomiconProtocolAudit {
 
         checks.add(check("index_has_visible_category", !index.categories().isEmpty(), "count=" + index.categories().size()));
         checks.add(check("index_has_visible_entry", !index.entries().isEmpty(), "count=" + index.entries().size()));
+        checks.add(check(
+                "index_revision_matches_server_state",
+                index.revision() == TCThaumonomiconService.buildRevision(player),
+                "revision=" + index.revision()
+        ));
 
         boolean categoriesServerFiltered = true;
         for (TCResearchCategoryDefinition category : TCResearchManager.categories()) {
@@ -242,6 +247,14 @@ final class TCThaumonomiconProtocolAudit {
             TCThaumonomiconClientCache.clear();
         }
         checks.add(check("client_cache_accepts_authoritative_views", cacheRoundTrip, "sample_present=" + sample.isPresent()));
+        TCThaumonomiconClientCache.accept(index);
+        boolean clientCacheStoresRevision = TCThaumonomiconClientCache.revision() == index.revision();
+        TCThaumonomiconClientCache.clear();
+        checks.add(check(
+                "client_cache_stores_authoritative_revision",
+                clientCacheStoresRevision,
+                "revision=" + index.revision()
+        ));
         checks.add(check(
                 "index_refresh_invalidates_entry_cache",
                 indexInvalidatesEntryCache,
@@ -251,6 +264,7 @@ final class TCThaumonomiconProtocolAudit {
         TCThaumonomiconClientCache.accept(new TCThaumonomiconIndexPayload(
                 index.categories(),
                 index.entries(),
+                index.revision(),
                 true
         ));
         boolean explicitOpenIntent = TCThaumonomiconClientCache.pollOpenRequested()
@@ -262,6 +276,31 @@ final class TCThaumonomiconProtocolAudit {
                 "explicit_open_intent_is_separate_from_refresh",
                 explicitOpenIntent && refreshDoesNotOpen,
                 "open_once=" + explicitOpenIntent + ", refresh_open=" + !refreshDoesNotOpen
+        ));
+
+        Optional<TCThaumonomiconResearchView> staleCandidate = index.entries().stream().findFirst();
+        boolean staleActionRejectedWithoutMutation = false;
+        if (staleCandidate.isPresent()) {
+            int staleRevision = index.revision() == 0 ? 1 : 0;
+            String beforeKnowledge = TCPlayerKnowledgeStore.get(player).save().toString();
+            TCThaumonomiconNetwork.ActionResult staleResult = TCThaumonomiconNetwork.processAction(
+                    player,
+                    new TCThaumonomiconActionPayload(
+                            TCThaumonomiconActionPayload.START_RESEARCH,
+                            staleCandidate.get().key(),
+                            staleRevision
+                    )
+            );
+            String afterKnowledge = TCPlayerKnowledgeStore.get(player).save().toString();
+            staleActionRejectedWithoutMutation = !staleResult.accepted()
+                    && staleResult.refreshIndex()
+                    && "stale_revision".equals(staleResult.resultKey())
+                    && beforeKnowledge.equals(afterKnowledge);
+        }
+        checks.add(check(
+                "stale_action_revision_rejected_without_mutation",
+                staleActionRejectedWithoutMutation,
+                "candidate=" + staleCandidate.map(TCThaumonomiconResearchView::key).orElse("none")
         ));
 
         Optional<TCThaumonomiconResearchView> startCandidate = index.entries().stream()

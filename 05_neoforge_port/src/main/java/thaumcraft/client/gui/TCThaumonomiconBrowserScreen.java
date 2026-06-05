@@ -99,7 +99,11 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
                     : TCThaumonomiconActionPayload.ACKNOWLEDGE_ENTRY;
             if (hoveredResearch.status() != TCResearchStatus.UNKNOWN || hoveredResearch.unlockable()) {
                 pendingResearch = hoveredResearch.key();
-                PacketDistributor.sendToServer(new TCThaumonomiconActionPayload(action, pendingResearch));
+                PacketDistributor.sendToServer(new TCThaumonomiconActionPayload(
+                        action,
+                        pendingResearch,
+                        TCThaumonomiconClientCache.revision()
+                ));
                 return true;
             }
         }

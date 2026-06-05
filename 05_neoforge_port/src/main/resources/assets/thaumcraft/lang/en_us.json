@@ -262,6 +262,7 @@
   "gui.thaumcraft.thaumonomicon.result.research_not_unlockable": "Research cannot be started",
   "gui.thaumcraft.thaumonomicon.result.entry_not_known": "Research is not known",
   "gui.thaumcraft.thaumonomicon.result.not_visible_or_missing": "Research is not visible",
+  "gui.thaumcraft.thaumonomicon.result.stale_revision": "Research state changed",
   "gui.thaumcraft.thaumonomicon.result.unknown_action": "Unknown action",
   "button.create.theory": "Create Theory",
   "button.complete.theory": "Complete Theory",

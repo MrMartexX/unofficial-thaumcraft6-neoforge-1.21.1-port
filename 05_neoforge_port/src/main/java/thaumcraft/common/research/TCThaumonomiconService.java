@@ -2,6 +2,7 @@ package thaumcraft.common.research;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,7 +31,7 @@ final class TCThaumonomiconService {
                 entries.add(researchView(entry, player, knowledge));
             }
         }
-        return new TCThaumonomiconIndexPayload(categories, entries);
+        return new TCThaumonomiconIndexPayload(categories, entries, buildRevision(player));
     }
 
     static Optional<TCThaumonomiconEntryView> buildEntry(ServerPlayer player, String researchKey) {
@@ -100,5 +101,24 @@ final class TCThaumonomiconService {
 
     private static String location(ResourceLocation location) {
         return location == null ? "" : location.toString();
+    }
+
+    static boolean isRevisionCurrent(ServerPlayer player, int clientRevision) {
+        return buildRevision(player) == clientRevision;
+    }
+
+    static int buildRevision(ServerPlayer player) {
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        int revision = Objects.hash(
+                TCResearchManager.dataRevision(),
+                TCResearchPageCatalogManager.dataRevision(),
+                knowledge.completedResearch(),
+                knowledge.researchStages(),
+                knowledge.researchFlags()
+        );
+        for (TCKnowledgeType type : TCKnowledgeType.values()) {
+            revision = 31 * revision + Objects.hash(type, knowledge.getRawByCategory(type));
+        }
+        return revision;
     }
 }

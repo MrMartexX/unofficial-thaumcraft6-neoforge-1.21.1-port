@@ -21,15 +21,16 @@ The UI is a client-side `Screen`, not an inventory `Menu`. All visibility, unloc
 | Concern | Modern owner |
 |---|---|
 | Item identity and right-click | `ItemThaumonomicon`, `TCItems.THAUMONOMICON` |
-| Explicit open response | `TCThaumonomiconIndexPayload.openScreen` and `TCThaumonomiconNetwork.openFor` |
+| Explicit open response | `TCThaumonomiconIndexPayload.openScreen`, server-built index revision, and `TCThaumonomiconNetwork.openFor` |
 | Client open orchestration | `TCThaumonomiconClientCache`, `TCThaumonomiconClientController` |
 | Browser | `TCThaumonomiconBrowserScreen` |
 | Entry page | `TCThaumonomiconEntryScreen` |
 | Vanilla crafting page snapshot | `TCCraftingRecipePageView`, built by `TCResearchPageCatalogManager` |
 | Authoritative state | `TCThaumonomiconService`, `TCResearchManager`, `TCPlayerKnowledgeStore` |
-| Server actions | `TCThaumonomiconActionPayload` |
+| Server actions | `TCThaumonomiconActionPayload` with client revision echo |
 
 The server sends `openScreen=true` only for an actual Thaumonomicon item use. Ordinary index refreshes after research mutation keep `openScreen=false`, so sync traffic cannot unexpectedly reopen the book.
+Every index also carries a server-built revision over the current research data, page-catalog data and player knowledge state. Client entry/action payloads only echo the last revision they received; stale requests are answered with authoritative state and do not mutate research progression.
 
 ## Implemented legacy behavior
 
@@ -41,7 +42,7 @@ The server sends `openScreen=true` only for an actual Thaumonomicon item use. Or
 - The entry screen opens only after the server accepts the action and returns an authoritative entry view.
 - Entry stage text, visible addenda, requirement results, stage state, bookmarks, book asset, page navigation, and checked stage advance are active.
 - Renderable crafting bookmarks open a legacy-style paper recipe page. The server snapshot owns the real result stack, shaped/shapeless kind, shaped dimensions, ingredient slots, and ingredient variants; the client only cycles and renders those values.
-- Four catalog crafting entries currently produce valid server snapshots. Direct-reference live availability remains two `READY` bookmarks because the `inkwell` group correctly remains `DEFERRED` while one original group member is legacy-missing.
+- Five catalog crafting entries and both current arcane catalog entries produce valid server snapshots. Direct-reference live availability remains catalog-owned; deferred or legacy-missing groups stay non-interactive until their subsystem or mapping exists.
 - Thaumonomicon has its exact legacy runtime aspect result from the 1.12 exporter dump.
 - Legacy `research.*` English translations required by the active screen are present in modern `en_us.json`.
 
@@ -58,8 +59,8 @@ Deferred recipe pages are shown only as catalog bookmarks with their authoritati
 
 ## Validation
 
-- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, and the `READY` crafting snapshot boundary.
-- Latest protocol result: `19/19` checks passed; all four live crafting catalog entries produce valid server snapshots.
+- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, and the `READY` crafting/arcane snapshot boundary.
+- Latest protocol result: `25/25` checks passed; all five live vanilla crafting catalog entries and both live arcane catalog entries produce valid server snapshots.
 - `gradlew build` passes.
 - Dedicated-server reload passes with `683` exact aspect assignments and the Thaumonomicon protocol audit.
 
