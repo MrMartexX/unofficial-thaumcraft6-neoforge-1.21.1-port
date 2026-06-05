@@ -46,6 +46,7 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
     private TCArcaneWorkbenchCrafting.ResolvedCraft currentCraft = TCArcaneWorkbenchCrafting.ResolvedCraft.empty();
     private int syncedKind = TCArcaneWorkbenchCrafting.Kind.EMPTY.ordinal();
     private int syncedVisCost;
+    private int syncedBaseVisCost;
     private int syncedAvailableVis;
     private int syncedFlags = FLAG_HAS_VIS | FLAG_HAS_CRYSTALS | FLAG_HAS_RESEARCH;
     private int syncedCrystalMask;
@@ -111,6 +112,10 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
 
     public int visCost() {
         return syncedVisCost;
+    }
+
+    public int baseVisCost() {
+        return syncedBaseVisCost;
     }
 
     public int availableVis() {
@@ -182,6 +187,10 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
                 value -> syncedVisCost = value
         ));
         addDataSlot(slot(
+                () -> syncedBaseVisCost,
+                value -> syncedBaseVisCost = value
+        ));
+        addDataSlot(slot(
                 () -> syncedAvailableVis,
                 value -> syncedAvailableVis = value
         ));
@@ -226,12 +235,19 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
             resultContainer.setItem(0, currentCraft.output());
             syncedKind = currentCraft.kind().ordinal();
             syncedVisCost = currentCraft.vis();
+            syncedBaseVisCost = currentCraft.baseVis();
             syncedAvailableVis = blockEntity.availableVis();
             syncedFlags = flags(currentCraft);
             syncedCrystalMask = crystalMask(currentCraft);
         } else {
             currentCraft = TCArcaneWorkbenchCrafting.ResolvedCraft.empty();
             resultContainer.setItem(0, ItemStack.EMPTY);
+            syncedKind = currentCraft.kind().ordinal();
+            syncedVisCost = 0;
+            syncedBaseVisCost = 0;
+            syncedAvailableVis = 0;
+            syncedFlags = FLAG_HAS_VIS | FLAG_HAS_CRYSTALS | FLAG_HAS_RESEARCH;
+            syncedCrystalMask = 0;
         }
     }
 

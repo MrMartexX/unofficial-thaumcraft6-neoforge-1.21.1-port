@@ -5,8 +5,10 @@
 This slice establishes the NeoForge 1.21.1 data and serializer boundary for
 Thaumcraft 6 arcane recipes and the first server-authoritative Arcane
 Workbench crafting path. It deliberately does not implement broad recipe
-import, caster-equipment vis discounts, Workbench Charger 3 x 3 chunk behavior,
-recipe-book integration, or the special void-jar recipe behavior.
+import, full caster-equipment/Curios integration, recipe-book integration, or
+the special void-jar recipe behavior. The current slice does include the first
+legacy-style player vis-discount service and Workbench Charger 3 x 3 aura
+query/drain behavior because both directly affect Arcane Workbench correctness.
 
 ## Authoritative legacy behavior
 
@@ -62,6 +64,7 @@ Current exact arcane recipe fixtures:
 |---|---|---|---:|---|
 | `thaumcraft:thaumometer` | shaped | `FIRSTSTEPS@2` | 20 | `aer`, `terra`, `aqua`, `ignis`, `ordo`, `perditio`, one each |
 | `thaumcraft:vis_resonator` | shapeless | `UNLOCKAUROMANCY@2` | 50 | `aer`, `aqua`, one each |
+| `thaumcraft:workbenchcharger` | shaped | `WORKBENCHCHARGER` | 200 | `aer` x2, `ordo` x2 |
 
 Legacy OreDictionary ingredients are translated to current common tags:
 
@@ -69,22 +72,29 @@ Legacy OreDictionary ingredients are translated to current common tags:
 - glass pane -> `minecraft:glass_pane`.
 - `plateIron` -> `c:plates/iron`, backed by `thaumcraft:iron_plate`;
 - `gemQuartz` -> `c:gems/quartz`.
+- `ingotIron` -> `c:ingots/iron`;
+- `plankGreatwood` -> `thaumcraft:plank_greatwood`;
+- `visResonator` -> `thaumcraft:vis_resonator`.
 
 The old `research_bridge/thaumometer` and `research_bridge/vis_resonator`
-vanilla recipes are removed once the real arcane recipes exist. Keeping them
-would create incorrect vanilla crafting paths and distort generated-aspect
-recipe audits.
+vanilla recipes are removed once the real arcane recipes exist. Workbench
+Charger was imported directly as a real arcane recipe and does not use a vanilla
+bridge. Keeping obsolete bridges would create incorrect vanilla crafting paths
+and distort generated-aspect recipe audits.
 
 ## Arcane Workbench server model
 
 Implemented modern classes:
 
 - `TCArcaneWorkbenchBlock`
+- `TCArcaneWorkbenchChargerBlock`
 - `TCArcaneWorkbenchBlockEntity`
 - `TCArcaneWorkbenchMenu`
 - `TCArcaneWorkbenchScreen`
 - `TCArcaneWorkbenchCrafting`
 - public marker `thaumcraft.api.crafting.IArcaneWorkbench`
+- public discount marker `thaumcraft.api.items.IVisDiscountGear`
+- `CasterManager`
 
 The BlockEntity owns the legacy `5 x 3` inventory shape:
 
@@ -101,10 +111,11 @@ The menu keeps the legacy slot layout:
 - hotbar at `16,209`.
 
 The menu also owns the current GUI feedback data. It syncs the resolved recipe
-kind, discounted-cost placeholder value, available aura vis, requirement flags,
+kind, discounted vis cost, base vis cost, available aura vis, requirement flags,
 and required primal-crystal slot mask through menu data slots. The client screen
-only renders that server-owned state: legacy-positioned available/cost text and
-the rotating primal crystal glow overlay around required crystal slots.
+only renders that server-owned state: legacy-positioned available/cost text,
+discount text when base cost is reduced, and the rotating primal crystal glow
+overlay around required crystal slots.
 
 Server resolution order:
 
@@ -116,15 +127,17 @@ Server resolution order:
    3 x 3 crafting only if the matrix also matches a vanilla recipe.
 6. If no arcane recipe matches, try vanilla 3 x 3 crafting.
 
-On output take, the server re-resolves the recipe, drains current-chunk vis for
-arcane recipes, consumes one item from each occupied matrix slot, applies
+On output take, the server re-resolves the recipe, drains discounted aura vis
+for arcane recipes, consumes one item from each occupied matrix slot, applies
 vanilla remaining items for vanilla fallback recipes, consumes required primal
 crystals, and marks matching `required_craft` research markers.
 
-Current vis behavior uses the existing port `AuraHandler.getVis/drainVis`
-against the workbench's current chunk. This is intentionally narrower than
-legacy Workbench Charger behavior, which sums and drains a 3 x 3 chunk area
-when a charger block is placed above the workbench.
+Current vis behavior uses the existing port `AuraHandler.getVis/drainVis`.
+Without a charger it queries and drains the workbench's current chunk. With
+`arcane_workbench_charger` directly above the workbench it sums the center chunk
+plus the surrounding eight chunks and drains from those nine chunks using the
+legacy loop shape. This is intentionally scoped to the Arcane Workbench and
+does not yet imply final Focal Manipulator behavior.
 
 ## Server behavior audit
 
@@ -138,17 +151,21 @@ aura saved-data service. The audit writes:
 Current checks cover:
 
 - `arcane_workbench` and `wand_workbench` staying distinct block identities;
+- `arcane_workbench_charger` surviving above arcane/wand workbenches;
 - empty workbench resolution;
 - fixed primal crystal slot aspect validation in legacy order;
 - `canSpendVis` simulation not draining aura;
+- no-charger current-chunk aura query;
+- Workbench Charger 3 x 3 chunk aura query and drain behavior;
 - `vis_resonator` missing-research fallback to vanilla 3 x 3 crafting;
 - missing crystals, wrong crystal aspect, and missing vis blocking fallback;
 - successful `vis_resonator` resolution with research, crystals, and vis;
 - output take consuming matrix ingredients, required crystals, and current-chunk
   vis;
+- 5% Goggles of Revealing discount reducing the resolved cost and drained aura;
 - vanilla 3 x 3 fallback crafting for the current exact `iron_plate` fixture.
-- server-owned Arcane Workbench menu feedback for resolved cost/aura, missing
-  vis, missing crystals, and vanilla fallback staying costless.
+- server-owned Arcane Workbench menu feedback for resolved cost/aura, discounted
+  cost, missing vis, missing crystals, and vanilla fallback staying costless.
 
 Run from `05_neoforge_port`:
 
@@ -169,10 +186,11 @@ same recipe data consumed by the first Arcane Workbench server crafting path.
 
 ## Blocked behavior
 
-- Player vis-discount calculation.
-- Workbench Charger 3 x 3 chunk vis query/drain behavior.
+- Full equipment integration for robes, goggles variants, Baubles/Curios-style
+  slots, and vis-exhaustion penalties. Current discount support is limited to
+  the first vanilla armor-slot marker service and Goggles fixture.
 - Exact GUI polish: blocked-output ghost rendering and final visual tuning
   beyond the current server-owned aura/cost labels and crystal glow overlays.
 - Special `ShapedArcaneVoidJar` stack-copy behavior.
-- The remaining `71` legacy recipes until their exact outputs and ingredients
+- The remaining `70` legacy recipes until their exact outputs and ingredients
   exist and can be mapped without placeholders.

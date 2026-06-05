@@ -25,6 +25,7 @@ import thaumcraft.api.crafting.IArcaneWorkbench;
 import thaumcraft.common.crafting.arcane.TCArcaneWorkbenchCrafting;
 import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.world.aura.AuraChunk;
 import thaumcraft.common.world.aura.AuraHandler;
 
@@ -53,6 +54,9 @@ public class TCArcaneWorkbenchBlockEntity extends BlockEntity implements Contain
         if (level == null) {
             return 0;
         }
+        if (hasWorkbenchCharger()) {
+            return availableVisInNineChunks();
+        }
         if (level instanceof ServerLevel serverLevel) {
             AuraChunk chunk = AuraHandler.ensureAuraChunk(serverLevel, new ChunkPos(worldPosition));
             return (int) chunk.getVis();
@@ -64,14 +68,63 @@ public class TCArcaneWorkbenchBlockEntity extends BlockEntity implements Contain
         if (amount <= 0) {
             return true;
         }
-        return level instanceof ServerLevel && AuraHandler.drainVis(level, worldPosition, amount, true) >= amount;
+        return level instanceof ServerLevel && availableVis() >= amount;
     }
 
     public boolean spendVis(int amount) {
         if (amount <= 0) {
             return true;
         }
-        return level instanceof ServerLevel && AuraHandler.drainVis(level, worldPosition, amount, false) >= amount;
+        if (!(level instanceof ServerLevel)) {
+            return false;
+        }
+        if (!hasWorkbenchCharger()) {
+            return AuraHandler.drainVis(level, worldPosition, amount, false) >= amount;
+        }
+        return spendVisFromNineChunks(amount);
+    }
+
+    public boolean hasWorkbenchCharger() {
+        return level != null && level.getBlockState(worldPosition.above()).is(TCBlocks.ARCANE_WORKBENCH_CHARGER.get());
+    }
+
+    private int availableVisInNineChunks() {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return 0;
+        }
+        int total = 0;
+        ChunkPos center = new ChunkPos(worldPosition);
+        for (int xx = -1; xx <= 1; xx++) {
+            for (int zz = -1; zz <= 1; zz++) {
+                AuraChunk chunk = AuraHandler.ensureAuraChunk(serverLevel, new ChunkPos(center.x + xx, center.z + zz));
+                total += (int) chunk.getVis();
+            }
+        }
+        return total;
+    }
+
+    private boolean spendVisFromNineChunks(int amount) {
+        if (!canSpendVis(amount)) {
+            return false;
+        }
+        int remaining = amount;
+        int chunkDrain = Math.max(1, amount / 9);
+        int attempts = 0;
+        while (remaining > 0) {
+            attempts++;
+            for (int xx = -1; xx <= 1; xx++) {
+                for (int zz = -1; zz <= 1; zz++) {
+                    if (chunkDrain > remaining) {
+                        chunkDrain = remaining;
+                    }
+                    remaining -= (int) AuraHandler.drainVis(level, worldPosition.offset(xx * 16, 0, zz * 16), chunkDrain, false);
+                    if (remaining <= 0 || attempts > 1000) {
+                        return remaining <= 0;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     @Override

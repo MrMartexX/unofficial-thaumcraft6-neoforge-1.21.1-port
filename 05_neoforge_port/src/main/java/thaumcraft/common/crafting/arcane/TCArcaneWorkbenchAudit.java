@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
@@ -69,6 +70,8 @@ public final class TCArcaneWorkbenchAudit {
                     TCBlocks.ARCANE_WORKBENCH.get().defaultBlockState()
             );
             workbench.setLevel(level);
+            level.setBlock(AUDIT_POS, TCBlocks.ARCANE_WORKBENCH.get().defaultBlockState(), 3);
+            level.setBlock(AUDIT_POS.above(), Blocks.AIR.defaultBlockState(), 3);
 
             checks.add(check(
                     "arcane_and_wand_workbench_blocks_are_distinct",
@@ -76,6 +79,11 @@ public final class TCArcaneWorkbenchAudit {
                             && !(TCBlocks.WAND_WORKBENCH.get() instanceof TCArcaneWorkbenchBlock),
                     "arcane=" + TCBlocks.ARCANE_WORKBENCH.get().getClass().getSimpleName()
                             + ", wand=" + TCBlocks.WAND_WORKBENCH.get().getClass().getSimpleName()
+            ));
+            checks.add(check(
+                    "workbench_charger_block_survives_above_arcane_or_wand_workbench",
+                    chargerSurvivesAboveArcaneOrWandWorkbench(level),
+                    "block=" + TCBlocks.ARCANE_WORKBENCH_CHARGER.get().getClass().getSimpleName()
             ));
             checks.add(check(
                     "empty_workbench_resolves_empty",
@@ -91,6 +99,21 @@ public final class TCArcaneWorkbenchAudit {
                     "can_spend_vis_simulation_does_not_drain",
                     canSpendVisSimulationDoesNotDrain(level, workbench),
                     "vis=" + AuraHandler.getVis(level, AUDIT_POS)
+            ));
+            checks.add(check(
+                    "workbench_without_charger_uses_current_chunk_vis",
+                    workbenchWithoutChargerUsesCurrentChunkVis(level, workbench),
+                    "available=" + workbench.availableVis()
+            ));
+            checks.add(check(
+                    "workbench_charger_sums_nine_chunk_vis",
+                    workbenchChargerSumsNineChunkVis(level, workbench),
+                    "available=" + workbench.availableVis()
+            ));
+            checks.add(check(
+                    "workbench_charger_spends_vis_across_nine_chunks",
+                    workbenchChargerSpendsVisAcrossNineChunks(level, workbench),
+                    "available=" + workbench.availableVis()
             ));
             checks.add(check(
                     "vis_resonator_missing_research_falls_back_to_empty_vanilla",
@@ -123,6 +146,16 @@ public final class TCArcaneWorkbenchAudit {
                     "vis=" + AuraHandler.getVis(level, AUDIT_POS)
             ));
             checks.add(check(
+                    "vis_discount_reduces_arcane_cost",
+                    visDiscountReducesArcaneCost(player, level, workbench),
+                    "cost=" + TCArcaneWorkbenchCrafting.resolve(player, workbench).vis()
+            ));
+            checks.add(check(
+                    "discounted_arcane_craft_drains_discounted_vis",
+                    discountedArcaneCraftDrainsDiscountedVis(player, level, workbench),
+                    "vis=" + AuraHandler.getVis(level, AUDIT_POS)
+            ));
+            checks.add(check(
                     "vanilla_fallback_ironplate_output_and_consumption",
                     vanillaFallbackIronPlateCrafts(player, level, workbench),
                     "vis=" + AuraHandler.getVis(level, AUDIT_POS)
@@ -130,6 +163,11 @@ public final class TCArcaneWorkbenchAudit {
             checks.add(check(
                     "menu_feedback_reports_arcane_cost_and_aura",
                     menuFeedbackReportsArcaneCost(player, level, workbench),
+                    "cost=" + menuFor(player, workbench).visCost()
+            ));
+            checks.add(check(
+                    "menu_feedback_reports_discounted_arcane_cost",
+                    menuFeedbackReportsDiscountedArcaneCost(player, level, workbench),
                     "cost=" + menuFor(player, workbench).visCost()
             ));
             checks.add(check(
@@ -149,9 +187,20 @@ public final class TCArcaneWorkbenchAudit {
             ));
         } finally {
             player.getInventory().clearContent();
+            level.setBlock(AUDIT_POS.above(), Blocks.AIR.defaultBlockState(), 3);
+            level.setBlock(AUDIT_POS, Blocks.AIR.defaultBlockState(), 3);
             TCPlayerKnowledgeStore.set(player, previousKnowledge, false);
         }
         return new Report(checks);
+    }
+
+    private static boolean chargerSurvivesAboveArcaneOrWandWorkbench(ServerLevel level) {
+        level.setBlock(AUDIT_POS, TCBlocks.ARCANE_WORKBENCH.get().defaultBlockState(), 3);
+        boolean aboveArcane = TCBlocks.ARCANE_WORKBENCH_CHARGER.get().defaultBlockState().canSurvive(level, AUDIT_POS.above());
+        level.setBlock(AUDIT_POS, TCBlocks.WAND_WORKBENCH.get().defaultBlockState(), 3);
+        boolean aboveWand = TCBlocks.ARCANE_WORKBENCH_CHARGER.get().defaultBlockState().canSurvive(level, AUDIT_POS.above());
+        level.setBlock(AUDIT_POS, TCBlocks.ARCANE_WORKBENCH.get().defaultBlockState(), 3);
+        return aboveArcane && aboveWand;
     }
 
     private static boolean crystalSlotsAcceptOnlyMatchingAspects(TCArcaneWorkbenchBlockEntity workbench) {
@@ -172,10 +221,42 @@ public final class TCArcaneWorkbenchAudit {
     }
 
     private static boolean canSpendVisSimulationDoesNotDrain(ServerLevel level, TCArcaneWorkbenchBlockEntity workbench) {
+        clearDiscountGear(level, null, workbench);
         resetWorkbench(workbench);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
         boolean canSpend = workbench.canSpendVis(50);
         return canSpend && (int) AuraHandler.getVis(level, AUDIT_POS) == 100;
+    }
+
+    private static boolean workbenchWithoutChargerUsesCurrentChunkVis(
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, null, workbench);
+        seedNineChunks(level, 100);
+        AuraHandler.seedAuraChunk(level, AUDIT_POS, 30);
+        return !workbench.hasWorkbenchCharger() && workbench.availableVis() == 30 && !workbench.canSpendVis(50);
+    }
+
+    private static boolean workbenchChargerSumsNineChunkVis(
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, null, workbench);
+        seedNineChunks(level, 10);
+        setCharger(level, true);
+        return workbench.hasWorkbenchCharger() && workbench.availableVis() == 90 && workbench.canSpendVis(50);
+    }
+
+    private static boolean workbenchChargerSpendsVisAcrossNineChunks(
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, null, workbench);
+        seedNineChunks(level, 10);
+        setCharger(level, true);
+        boolean spent = workbench.spendVis(50);
+        return spent && workbench.availableVis() == 40;
     }
 
     private static boolean missingResearchFallsBackToEmpty(
@@ -183,6 +264,7 @@ public final class TCArcaneWorkbenchAudit {
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, false);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
         prepareVisResonator(workbench, true, true);
@@ -195,6 +277,7 @@ public final class TCArcaneWorkbenchAudit {
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, true);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
         prepareVisResonator(workbench, false, false);
@@ -209,6 +292,7 @@ public final class TCArcaneWorkbenchAudit {
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, true);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
         prepareVisResonator(workbench, true, true);
@@ -224,6 +308,7 @@ public final class TCArcaneWorkbenchAudit {
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, true);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 10);
         prepareVisResonator(workbench, true, true);
@@ -238,6 +323,7 @@ public final class TCArcaneWorkbenchAudit {
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, true);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
         prepareVisResonator(workbench, true, true);
@@ -252,6 +338,7 @@ public final class TCArcaneWorkbenchAudit {
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, true);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
         prepareVisResonator(workbench, true, true);
@@ -265,11 +352,44 @@ public final class TCArcaneWorkbenchAudit {
                 && (int) AuraHandler.getVis(level, AUDIT_POS) == 50;
     }
 
+    private static boolean visDiscountReducesArcaneCost(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, player, workbench);
+        setResearch(player, true);
+        setGogglesInHeadSlot(player);
+        AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
+        prepareVisResonator(workbench, true, true);
+        TCArcaneWorkbenchCrafting.ResolvedCraft craft = TCArcaneWorkbenchCrafting.resolve(player, workbench);
+        return craft.kind() == TCArcaneWorkbenchCrafting.Kind.ARCANE
+                && craft.baseVis() == 50
+                && craft.vis() == 47
+                && craft.hasVis();
+    }
+
+    private static boolean discountedArcaneCraftDrainsDiscountedVis(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, player, workbench);
+        setResearch(player, true);
+        setGogglesInHeadSlot(player);
+        AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
+        prepareVisResonator(workbench, true, true);
+        TCArcaneWorkbenchCrafting.ResolvedCraft craft = TCArcaneWorkbenchCrafting.resolve(player, workbench);
+        boolean crafted = TCArcaneWorkbenchCrafting.craft(player, workbench, craft);
+        return crafted && (int) AuraHandler.getVis(level, AUDIT_POS) == 53;
+    }
+
     private static boolean vanillaFallbackIronPlateCrafts(
             ServerPlayer player,
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, false);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
         resetWorkbench(workbench);
@@ -294,11 +414,13 @@ public final class TCArcaneWorkbenchAudit {
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, true);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
         prepareVisResonator(workbench, true, true);
         TCArcaneWorkbenchMenu menu = menuFor(player, workbench);
         return menu.visCost() == 50
+                && menu.baseVisCost() == 50
                 && menu.availableVis() == 100
                 && menu.hasArcaneRecipe()
                 && !menu.isBlocked()
@@ -308,11 +430,31 @@ public final class TCArcaneWorkbenchAudit {
                 && menu.requiredCrystalMask() == visResonatorCrystalMask();
     }
 
+    private static boolean menuFeedbackReportsDiscountedArcaneCost(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, player, workbench);
+        setResearch(player, true);
+        setGogglesInHeadSlot(player);
+        AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
+        prepareVisResonator(workbench, true, true);
+        TCArcaneWorkbenchMenu menu = menuFor(player, workbench);
+        return menu.visCost() == 47
+                && menu.baseVisCost() == 50
+                && menu.availableVis() == 100
+                && menu.hasArcaneRecipe()
+                && !menu.isBlocked()
+                && menu.hasVis();
+    }
+
     private static boolean menuFeedbackMarksMissingVis(
             ServerPlayer player,
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, true);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 10);
         prepareVisResonator(workbench, true, true);
@@ -330,6 +472,7 @@ public final class TCArcaneWorkbenchAudit {
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, true);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
         prepareVisResonator(workbench, false, false);
@@ -348,6 +491,7 @@ public final class TCArcaneWorkbenchAudit {
             ServerLevel level,
             TCArcaneWorkbenchBlockEntity workbench
     ) {
+        clearDiscountGear(level, player, workbench);
         setResearch(player, false);
         AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
         resetWorkbench(workbench);
@@ -359,6 +503,37 @@ public final class TCArcaneWorkbenchAudit {
                 && menu.visCost() == 0
                 && menu.requiredCrystalMask() == 0
                 && !menu.hasArcaneRecipe();
+    }
+
+    private static void seedNineChunks(ServerLevel level, int vis) {
+        for (int xx = -1; xx <= 1; xx++) {
+            for (int zz = -1; zz <= 1; zz++) {
+                AuraHandler.seedAuraChunk(level, AUDIT_POS.offset(xx * 16, 0, zz * 16), vis);
+            }
+        }
+    }
+
+    private static void setCharger(ServerLevel level, boolean charger) {
+        level.setBlock(AUDIT_POS, TCBlocks.ARCANE_WORKBENCH.get().defaultBlockState(), 3);
+        level.setBlock(AUDIT_POS.above(), charger
+                ? TCBlocks.ARCANE_WORKBENCH_CHARGER.get().defaultBlockState()
+                : Blocks.AIR.defaultBlockState(), 3);
+    }
+
+    private static void clearDiscountGear(
+            ServerLevel level,
+            ServerPlayer player,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        setCharger(level, false);
+        if (player != null) {
+            player.getInventory().armor.set(3, ItemStack.EMPTY);
+        }
+        resetWorkbench(workbench);
+    }
+
+    private static void setGogglesInHeadSlot(ServerPlayer player) {
+        player.getInventory().armor.set(3, new ItemStack(TCItems.GOGGLES.get()));
     }
 
     private static void prepareVisResonator(

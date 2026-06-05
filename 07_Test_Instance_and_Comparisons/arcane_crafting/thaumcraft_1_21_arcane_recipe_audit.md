@@ -2,7 +2,7 @@
 
 | Check | Status | Detail |
 |---|---|---|
-| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=2 |
+| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=3 |
 | `thaumometer_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/thaumometer |
 | `vis_resonator_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/vis_resonator |
 | `thaumometer_arcane_recipe_loaded` | `PASS` | thaumcraft:thaumometer |
@@ -20,5 +20,12 @@
 | `vis_resonator_result` | `PASS` | 1 thaumcraft:vis_resonator |
 | `vis_resonator_shapeless_plate_iron_quartz` | `PASS` | ingredients=2 |
 | `vis_resonator_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `workbenchcharger_arcane_recipe_loaded` | `PASS` | thaumcraft:workbenchcharger |
+| `workbenchcharger_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:workbenchcharger |
+| `workbenchcharger_research_and_vis` | `PASS` | research=WORKBENCHCHARGER, vis=200 |
+| `workbenchcharger_ordered_crystal_costs` | `PASS` | [aer:2, ordo:2] |
+| `workbenchcharger_result` | `PASS` | 1 thaumcraft:arcane_workbench_charger |
+| `workbenchcharger_shaped_pattern` | `PASS` | width=3, height=3 |
+| `workbenchcharger_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 
-- Loaded arcane recipes: `2`
+- Loaded arcane recipes: `3`

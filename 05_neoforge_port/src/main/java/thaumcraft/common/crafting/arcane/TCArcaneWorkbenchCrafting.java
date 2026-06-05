@@ -13,6 +13,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import thaumcraft.common.items.ItemAspectVariant;
+import thaumcraft.common.items.casters.CasterManager;
 import thaumcraft.common.items.components.TCAspectStackComponent;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCRecipes;
@@ -43,7 +44,7 @@ public final class TCArcaneWorkbenchCrafting {
         Optional<RecipeHolder<TCArcaneRecipe>> arcaneRecipe = matchingArcaneRecipe(level.getRecipeManager(), level, input);
         if (arcaneRecipe.isPresent()) {
             TCArcaneRecipe recipe = arcaneRecipe.get().value();
-            int vis = recipe.getVis();
+            int vis = CasterManager.getDiscountedVisCost(recipe.getVis(), player);
             boolean hasVis = workbench.canSpendVis(vis);
             boolean hasCrystals = hasCrystalCosts(workbench, recipe.crystalCosts());
             boolean hasResearch = TCResearchManager.knowsResearchStrict(
@@ -57,6 +58,7 @@ public final class TCArcaneWorkbenchCrafting {
                         arcaneRecipe.get().id(),
                         ItemStack.EMPTY,
                         vis,
+                        recipe.getVis(),
                         recipe.crystalCosts(),
                         hasVis,
                         hasCrystals,
@@ -69,6 +71,7 @@ public final class TCArcaneWorkbenchCrafting {
                         arcaneRecipe.get().id(),
                         recipe.assemble(input, player.server.registryAccess()),
                         vis,
+                        recipe.getVis(),
                         recipe.crystalCosts(),
                         true,
                         true,
@@ -154,6 +157,7 @@ public final class TCArcaneWorkbenchCrafting {
                 recipe.get().id(),
                 output,
                 0,
+                0,
                 List.of(),
                 true,
                 true,
@@ -235,6 +239,7 @@ public final class TCArcaneWorkbenchCrafting {
             ResourceLocation recipeId,
             ItemStack output,
             int vis,
+            int baseVis,
             List<TCArcaneCrystalCost> crystalCosts,
             boolean hasVis,
             boolean hasCrystals,
@@ -242,11 +247,12 @@ public final class TCArcaneWorkbenchCrafting {
     ) {
         public ResolvedCraft {
             output = output.copy();
+            baseVis = Math.max(0, baseVis);
             crystalCosts = List.copyOf(crystalCosts);
         }
 
         public static ResolvedCraft empty() {
-            return new ResolvedCraft(Kind.EMPTY, null, ItemStack.EMPTY, 0, List.of(), true, true, true);
+            return new ResolvedCraft(Kind.EMPTY, null, ItemStack.EMPTY, 0, 0, List.of(), true, true, true);
         }
 
         boolean matchesExpected(ResolvedCraft expected) {

@@ -87,13 +87,24 @@ public class TCArcaneWorkbenchScreen extends AbstractContainerScreen<TCArcaneWor
         );
 
         if (menu.visCost() > 0) {
-            Component cost = Component.translatable(
+            String costText = Component.translatable(
                     "gui.thaumcraft.arcane_workbench.cost",
                     menu.visCost(),
                     Component.translatable("workbench.cost")
-            );
-            drawCenteredHalfScale(guiGraphics, cost.getString(), leftPos + 168, topPos + 38, LEGACY_COST_COLOR);
+            ).getString();
+            int discount = visDiscountPercent();
+            if (discount > 0) {
+                costText = costText + " (" + discount + "% " + Component.translatable("workbench.discount").getString() + ")";
+            }
+            drawCenteredHalfScale(guiGraphics, costText, leftPos + 168, topPos + 38, LEGACY_COST_COLOR);
         }
+    }
+
+    private int visDiscountPercent() {
+        if (menu.baseVisCost() <= 0 || menu.visCost() >= menu.baseVisCost()) {
+            return 0;
+        }
+        return Math.round((1.0F - (float) menu.visCost() / menu.baseVisCost()) * 100.0F);
     }
 
     private void drawCenteredHalfScale(GuiGraphics guiGraphics, String text, int x, int y, int color) {

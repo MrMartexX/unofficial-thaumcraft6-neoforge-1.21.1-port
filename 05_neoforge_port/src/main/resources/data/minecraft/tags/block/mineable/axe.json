@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "thaumcraft:arcane_workbench",
+    "thaumcraft:arcane_workbench_charger",
     "thaumcraft:log_greatwood",
     "thaumcraft:log_silverwood",
     "thaumcraft:plank_greatwood",

@@ -80,6 +80,7 @@ public final class TCCreativeTabOrder {
         output.accept(TCItems.TABLE_WOOD.get());
         output.accept(TCItems.TABLE_STONE.get());
         output.accept(TCItems.ARCANE_WORKBENCH.get());
+        output.accept(TCItems.ARCANE_WORKBENCH_CHARGER.get());
         output.accept(TCItems.RESEARCH_TABLE.get());
         output.accept(TCItems.CRUCIBLE.get());
         output.accept(TCItems.SMELTER_BASIC.get());

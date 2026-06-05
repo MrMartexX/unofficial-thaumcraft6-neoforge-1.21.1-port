@@ -29,6 +29,10 @@ final class TCArcaneRecipeAudit {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "thaumometer");
     private static final ResourceLocation VIS_RESONATOR =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "vis_resonator");
+    private static final ResourceLocation WORKBENCH_CHARGER =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "workbenchcharger");
+    private static final ResourceLocation ARCANE_WORKBENCH_CHARGER =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "arcane_workbench_charger");
     private static final ResourceLocation THAUMOMETER_BRIDGE =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "research_bridge/thaumometer");
     private static final ResourceLocation VIS_RESONATOR_BRIDGE =
@@ -58,7 +62,7 @@ final class TCArcaneRecipeAudit {
     static Report buildReport(RecipeManager recipeManager, HolderLookup.Provider registries) {
         ArrayList<Check> checks = new ArrayList<>();
         int arcaneRecipeCount = recipeManager.getAllRecipesFor(TCRecipes.ARCANE_TYPE.get()).size();
-        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 2, "count=" + arcaneRecipeCount));
+        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 3, "count=" + arcaneRecipeCount));
         checks.add(check(
                 "thaumometer_wrong_vanilla_bridge_removed",
                 recipeManager.byKey(THAUMOMETER_BRIDGE).isEmpty(),
@@ -177,6 +181,53 @@ final class TCArcaneRecipeAudit {
                 "availability=" + visResonatorAvailability
         ));
 
+        Optional<TCArcaneRecipe> workbenchCharger = recipeManager.byKey(WORKBENCH_CHARGER)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value());
+        checks.add(check("workbenchcharger_arcane_recipe_loaded", workbenchCharger.isPresent(), WORKBENCH_CHARGER.toString()));
+        checks.add(check(
+                "workbenchcharger_is_not_vanilla_crafting_recipe",
+                recipeManager.byKey(WORKBENCH_CHARGER)
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isEmpty(),
+                WORKBENCH_CHARGER.toString()
+        ));
+        if (workbenchCharger.isPresent()) {
+            TCArcaneRecipe recipe = workbenchCharger.get();
+            checks.add(check(
+                    "workbenchcharger_research_and_vis",
+                    "WORKBENCHCHARGER".equals(recipe.getResearch()) && recipe.getVis() == 200,
+                    "research=" + recipe.getResearch() + ", vis=" + recipe.getVis()
+            ));
+            checks.add(check(
+                    "workbenchcharger_ordered_crystal_costs",
+                    crystalSummary(recipe).equals(List.of("aer:2", "ordo:2")),
+                    crystalSummary(recipe).toString()
+            ));
+            checks.add(check(
+                    "workbenchcharger_result",
+                    ARCANE_WORKBENCH_CHARGER.equals(BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                            && recipe.getResultItem(registries).getCount() == 1,
+                    recipe.getResultItem(registries).toString()
+            ));
+            checks.add(check(
+                    "workbenchcharger_shaped_pattern",
+                    matchesWorkbenchChargerPattern(recipe),
+                    "width=" + recipe.width() + ", height=" + recipe.height()
+            ));
+        }
+
+        TCResearchPageAvailability workbenchChargerAvailability = TCResearchPageCatalogManager.availability(
+                WORKBENCH_CHARGER.toString(),
+                recipeManager
+        );
+        checks.add(check(
+                "workbenchcharger_catalog_arcane_snapshot_ready",
+                workbenchChargerAvailability == TCResearchPageAvailability.READY
+                        && TCResearchPageCatalogManager.buildArcanePage(WORKBENCH_CHARGER, recipeManager, registries).isPresent(),
+                "availability=" + workbenchChargerAvailability
+        ));
+
         return new Report(checks, arcaneRecipeCount);
     }
 
@@ -210,6 +261,23 @@ final class TCArcaneRecipeAudit {
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
         return ingredients.get(0).test(new ItemStack(TCItems.IRON_PLATE.get()))
                 && ingredients.get(1).test(new ItemStack(Items.QUARTZ));
+    }
+
+    private static boolean matchesWorkbenchChargerPattern(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapedArcaneRecipe) || recipe.width() != 3 || recipe.height() != 3) {
+            return false;
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients.size() == 9
+                && ingredients.get(0).isEmpty()
+                && ingredients.get(1).test(new ItemStack(TCItems.VIS_RESONATOR.get()))
+                && ingredients.get(2).isEmpty()
+                && ingredients.get(3).test(new ItemStack(TCItems.PLANK_GREATWOOD.get()))
+                && ingredients.get(4).isEmpty()
+                && ingredients.get(5).test(new ItemStack(TCItems.PLANK_GREATWOOD.get()))
+                && ingredients.get(6).test(new ItemStack(Items.IRON_INGOT))
+                && ingredients.get(7).isEmpty()
+                && ingredients.get(8).test(new ItemStack(Items.IRON_INGOT));
     }
 
     private static Check check(String name, boolean passed, String detail) {
