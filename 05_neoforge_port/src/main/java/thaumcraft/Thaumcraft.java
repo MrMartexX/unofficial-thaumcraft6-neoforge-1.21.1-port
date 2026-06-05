@@ -19,6 +19,7 @@ import thaumcraft.common.aspects.TCAspectDumpExporter;
 import thaumcraft.common.aspects.TCAspectReloadValidator;
 import thaumcraft.common.aspects.TCGeneratedAspectRecipeGenerator;
 import thaumcraft.common.config.TCConfig;
+import thaumcraft.common.crafting.arcane.TCArcaneWorkbenchAuditExporter;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCCreativeTabs;
@@ -97,6 +98,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCThaumonomiconProtocolAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCArcaneRecipeAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCArcaneWorkbenchAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditExporter::onServerStarted);

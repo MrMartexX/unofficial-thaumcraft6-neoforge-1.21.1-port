@@ -120,6 +120,34 @@ against the workbench's current chunk. This is intentionally narrower than
 legacy Workbench Charger behavior, which sums and drains a 3 x 3 chunk area
 when a charger block is placed above the workbench.
 
+## Server behavior audit
+
+`TCArcaneWorkbenchAudit` is a dedicated server-runtime harness for the first
+Arcane Workbench slice. It uses a real `ServerLevel`, fake server player, loaded
+recipe manager, player knowledge storage, aspect crystal stacks, and the current
+aura saved-data service. The audit writes:
+
+`07_Test_Instance_and_Comparisons/arcane_crafting/thaumcraft_1_21_arcane_workbench_audit.md`
+
+Current checks cover:
+
+- `arcane_workbench` and `wand_workbench` staying distinct block identities;
+- empty workbench resolution;
+- fixed primal crystal slot aspect validation in legacy order;
+- `canSpendVis` simulation not draining aura;
+- `vis_resonator` missing-research fallback to vanilla 3 x 3 crafting;
+- missing crystals, wrong crystal aspect, and missing vis blocking fallback;
+- successful `vis_resonator` resolution with research, crystals, and vis;
+- output take consuming matrix ingredients, required crystals, and current-chunk
+  vis;
+- vanilla 3 x 3 fallback crafting for the current exact `iron_plate` fixture.
+
+Run from `05_neoforge_port`:
+
+```powershell
+.\gradlew.bat runServer --no-daemon -PtcArcaneWorkbenchAudit=true "-PtcArcaneWorkbenchAuditPath=D:\Thaumcraft_6_port_to_1.21.1\07_Test_Instance_and_Comparisons\arcane_crafting\thaumcraft_1_21_arcane_workbench_audit.md"
+```
+
 ## First page snapshot
 
 The Thaumonomicon page renderer now has a server-authored
