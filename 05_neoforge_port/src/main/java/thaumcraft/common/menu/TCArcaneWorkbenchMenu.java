@@ -146,6 +146,10 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
         return (syncedFlags & FLAG_BLOCKED) != 0;
     }
 
+    public boolean shouldShowMissingVisGhost() {
+        return isBlocked() && hasArcaneRecipe() && !hasVis();
+    }
+
     public boolean isCrystalRequired(int crystalIndex) {
         return (syncedCrystalMask & crystalMask(crystalIndex)) != 0;
     }
@@ -282,7 +286,10 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
     }
 
     private void craftResult(Player player, ItemStack crafted) {
-        if (!(player instanceof ServerPlayer serverPlayer) || blockEntity == null || currentCraft.output().isEmpty()) {
+        if (!(player instanceof ServerPlayer serverPlayer)
+                || blockEntity == null
+                || currentCraft.kind() == TCArcaneWorkbenchCrafting.Kind.ARCANE_BLOCKED
+                || currentCraft.output().isEmpty()) {
             return;
         }
         TCArcaneWorkbenchCrafting.craft(serverPlayer, blockEntity, currentCraft);
@@ -305,6 +312,9 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
         ItemStack stackInSlot = slot.getItem();
         ItemStack original = stackInSlot.copy();
         if (index == SLOT_RESULT) {
+            if (shouldShowMissingVisGhost()) {
+                return ItemStack.EMPTY;
+            }
             if (!moveItemStackTo(stackInSlot, PLAYER_INVENTORY_START, PLAYER_HOTBAR_END, true)) {
                 return ItemStack.EMPTY;
             }
@@ -394,6 +404,11 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
         @Override
         public boolean mayPlace(ItemStack stack) {
             return false;
+        }
+
+        @Override
+        public boolean mayPickup(Player player) {
+            return !menu.shouldShowMissingVisGhost() && super.mayPickup(player);
         }
 
         @Override

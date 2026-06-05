@@ -136,6 +136,11 @@ public final class TCArcaneWorkbenchAudit {
                     "kind=" + TCArcaneWorkbenchCrafting.resolve(player, workbench).kind()
             ));
             checks.add(check(
+                    "missing_vis_ghost_output_is_not_craftable",
+                    missingVisGhostOutputIsNotCraftable(player, level, workbench),
+                    "slot=" + menuFor(player, workbench).getSlot(TCArcaneWorkbenchMenu.SLOT_RESULT).getItem()
+            ));
+            checks.add(check(
                     "vis_resonator_resolves_when_requirements_met",
                     visResonatorResolves(player, level, workbench),
                     "output=" + TCArcaneWorkbenchCrafting.resolve(player, workbench).output()
@@ -314,8 +319,29 @@ public final class TCArcaneWorkbenchAudit {
         prepareVisResonator(workbench, true, true);
         TCArcaneWorkbenchCrafting.ResolvedCraft craft = TCArcaneWorkbenchCrafting.resolve(player, workbench);
         return craft.kind() == TCArcaneWorkbenchCrafting.Kind.ARCANE_BLOCKED
-                && craft.output().isEmpty()
+                && stackId(craft.output()).equals(VIS_RESONATOR)
                 && !craft.hasVis();
+    }
+
+    private static boolean missingVisGhostOutputIsNotCraftable(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, player, workbench);
+        setResearch(player, true);
+        AuraHandler.seedAuraChunk(level, AUDIT_POS, 10);
+        prepareVisResonator(workbench, true, true);
+        TCArcaneWorkbenchCrafting.ResolvedCraft craft = TCArcaneWorkbenchCrafting.resolve(player, workbench);
+        TCArcaneWorkbenchMenu menu = menuFor(player, workbench);
+        ItemStack quickMove = menu.quickMoveStack(player, TCArcaneWorkbenchMenu.SLOT_RESULT);
+        return craft.kind() == TCArcaneWorkbenchCrafting.Kind.ARCANE_BLOCKED
+                && stackId(craft.output()).equals(VIS_RESONATOR)
+                && menu.shouldShowMissingVisGhost()
+                && stackId(menu.getSlot(TCArcaneWorkbenchMenu.SLOT_RESULT).getItem()).equals(VIS_RESONATOR)
+                && !menu.getSlot(TCArcaneWorkbenchMenu.SLOT_RESULT).mayPickup(player)
+                && quickMove.isEmpty()
+                && !TCArcaneWorkbenchCrafting.craft(player, workbench, craft);
     }
 
     private static boolean visResonatorResolves(
@@ -463,6 +489,8 @@ public final class TCArcaneWorkbenchAudit {
                 && menu.availableVis() == 10
                 && menu.hasArcaneRecipe()
                 && menu.isBlocked()
+                && menu.shouldShowMissingVisGhost()
+                && stackId(menu.getSlot(TCArcaneWorkbenchMenu.SLOT_RESULT).getItem()).equals(VIS_RESONATOR)
                 && !menu.hasVis()
                 && menu.hasCrystals();
     }

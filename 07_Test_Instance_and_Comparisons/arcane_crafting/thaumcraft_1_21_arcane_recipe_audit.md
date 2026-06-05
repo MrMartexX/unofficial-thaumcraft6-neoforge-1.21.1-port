@@ -2,7 +2,7 @@
 
 | Check | Status | Detail |
 |---|---|---|
-| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=3 |
+| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=4 |
 | `thaumometer_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/thaumometer |
 | `vis_resonator_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/vis_resonator |
 | `thaumometer_arcane_recipe_loaded` | `PASS` | thaumcraft:thaumometer |
@@ -27,5 +27,12 @@
 | `workbenchcharger_result` | `PASS` | 1 thaumcraft:arcane_workbench_charger |
 | `workbenchcharger_shaped_pattern` | `PASS` | width=3, height=3 |
 | `workbenchcharger_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `goggles_arcane_recipe_loaded` | `PASS` | thaumcraft:goggles |
+| `goggles_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:goggles |
+| `goggles_research_and_vis` | `PASS` | research=UNLOCKARTIFICE, vis=50 |
+| `goggles_no_crystal_costs` | `PASS` | [] |
+| `goggles_result` | `PASS` | 1 thaumcraft:goggles |
+| `goggles_shaped_pattern` | `PASS` | width=3, height=3 |
+| `goggles_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 
-- Loaded arcane recipes: `3`
+- Loaded arcane recipes: `4`

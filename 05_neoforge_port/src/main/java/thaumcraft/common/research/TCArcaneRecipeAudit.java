@@ -31,6 +31,8 @@ final class TCArcaneRecipeAudit {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "vis_resonator");
     private static final ResourceLocation WORKBENCH_CHARGER =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "workbenchcharger");
+    private static final ResourceLocation GOGGLES =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "goggles");
     private static final ResourceLocation ARCANE_WORKBENCH_CHARGER =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "arcane_workbench_charger");
     private static final ResourceLocation THAUMOMETER_BRIDGE =
@@ -62,7 +64,7 @@ final class TCArcaneRecipeAudit {
     static Report buildReport(RecipeManager recipeManager, HolderLookup.Provider registries) {
         ArrayList<Check> checks = new ArrayList<>();
         int arcaneRecipeCount = recipeManager.getAllRecipesFor(TCRecipes.ARCANE_TYPE.get()).size();
-        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 3, "count=" + arcaneRecipeCount));
+        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 4, "count=" + arcaneRecipeCount));
         checks.add(check(
                 "thaumometer_wrong_vanilla_bridge_removed",
                 recipeManager.byKey(THAUMOMETER_BRIDGE).isEmpty(),
@@ -228,6 +230,53 @@ final class TCArcaneRecipeAudit {
                 "availability=" + workbenchChargerAvailability
         ));
 
+        Optional<TCArcaneRecipe> goggles = recipeManager.byKey(GOGGLES)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value());
+        checks.add(check("goggles_arcane_recipe_loaded", goggles.isPresent(), GOGGLES.toString()));
+        checks.add(check(
+                "goggles_is_not_vanilla_crafting_recipe",
+                recipeManager.byKey(GOGGLES)
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isEmpty(),
+                GOGGLES.toString()
+        ));
+        if (goggles.isPresent()) {
+            TCArcaneRecipe recipe = goggles.get();
+            checks.add(check(
+                    "goggles_research_and_vis",
+                    "UNLOCKARTIFICE".equals(recipe.getResearch()) && recipe.getVis() == 50,
+                    "research=" + recipe.getResearch() + ", vis=" + recipe.getVis()
+            ));
+            checks.add(check(
+                    "goggles_no_crystal_costs",
+                    crystalSummary(recipe).isEmpty(),
+                    crystalSummary(recipe).toString()
+            ));
+            checks.add(check(
+                    "goggles_result",
+                    GOGGLES.equals(BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                            && recipe.getResultItem(registries).getCount() == 1,
+                    recipe.getResultItem(registries).toString()
+            ));
+            checks.add(check(
+                    "goggles_shaped_pattern",
+                    matchesGogglesPattern(recipe),
+                    "width=" + recipe.width() + ", height=" + recipe.height()
+            ));
+        }
+
+        TCResearchPageAvailability gogglesAvailability = TCResearchPageCatalogManager.availability(
+                GOGGLES.toString(),
+                recipeManager
+        );
+        checks.add(check(
+                "goggles_catalog_arcane_snapshot_ready",
+                gogglesAvailability == TCResearchPageAvailability.READY
+                        && TCResearchPageCatalogManager.buildArcanePage(GOGGLES, recipeManager, registries).isPresent(),
+                "availability=" + gogglesAvailability
+        ));
+
         return new Report(checks, arcaneRecipeCount);
     }
 
@@ -278,6 +327,23 @@ final class TCArcaneRecipeAudit {
                 && ingredients.get(6).test(new ItemStack(Items.IRON_INGOT))
                 && ingredients.get(7).isEmpty()
                 && ingredients.get(8).test(new ItemStack(Items.IRON_INGOT));
+    }
+
+    private static boolean matchesGogglesPattern(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapedArcaneRecipe) || recipe.width() != 3 || recipe.height() != 3) {
+            return false;
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients.size() == 9
+                && ingredients.get(0).test(new ItemStack(Items.LEATHER))
+                && ingredients.get(1).test(new ItemStack(TCItems.BRASS_INGOT.get()))
+                && ingredients.get(2).test(new ItemStack(Items.LEATHER))
+                && ingredients.get(3).test(new ItemStack(Items.LEATHER))
+                && ingredients.get(4).isEmpty()
+                && ingredients.get(5).test(new ItemStack(Items.LEATHER))
+                && ingredients.get(6).test(new ItemStack(TCItems.THAUMOMETER.get()))
+                && ingredients.get(7).test(new ItemStack(TCItems.BRASS_INGOT.get()))
+                && ingredients.get(8).test(new ItemStack(TCItems.THAUMOMETER.get()));
     }
 
     private static Check check(String name, boolean passed, String detail) {

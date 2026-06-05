@@ -14,6 +14,7 @@
 | `vis_resonator_missing_crystals_blocks_fallback` | `PASS` | kind=ARCANE_BLOCKED |
 | `vis_resonator_wrong_crystal_aspect_blocks_recipe` | `PASS` | kind=ARCANE_BLOCKED |
 | `vis_resonator_missing_vis_blocks_fallback` | `PASS` | kind=ARCANE_BLOCKED |
+| `missing_vis_ghost_output_is_not_craftable` | `PASS` | slot=1 thaumcraft:vis_resonator |
 | `vis_resonator_resolves_when_requirements_met` | `PASS` | output=1 thaumcraft:vis_resonator |
 | `vis_resonator_craft_consumes_matrix_crystals_and_vis` | `PASS` | vis=50.0 |
 | `vis_discount_reduces_arcane_cost` | `PASS` | cost=47 |
@@ -25,5 +26,5 @@
 | `menu_feedback_marks_missing_crystals` | `PASS` | mask=5 |
 | `menu_feedback_keeps_vanilla_fallback_costless` | `PASS` | kind=3 |
 
-- Passed: `22`
+- Passed: `23`
 - Failed: `0`

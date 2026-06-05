@@ -9,6 +9,9 @@ import, full caster-equipment/Curios integration, recipe-book integration, or
 the special void-jar recipe behavior. The current slice does include the first
 legacy-style player vis-discount service and Workbench Charger 3 x 3 aura
 query/drain behavior because both directly affect Arcane Workbench correctness.
+It also includes the legacy missing-vis ghost output boundary: the screen may
+show the recipe result as a blocked ghost when only vis is missing, but the
+server result remains non-pickup and non-craftable.
 
 ## Authoritative legacy behavior
 
@@ -65,6 +68,7 @@ Current exact arcane recipe fixtures:
 | `thaumcraft:thaumometer` | shaped | `FIRSTSTEPS@2` | 20 | `aer`, `terra`, `aqua`, `ignis`, `ordo`, `perditio`, one each |
 | `thaumcraft:vis_resonator` | shapeless | `UNLOCKAUROMANCY@2` | 50 | `aer`, `aqua`, one each |
 | `thaumcraft:workbenchcharger` | shaped | `WORKBENCHCHARGER` | 200 | `aer` x2, `ordo` x2 |
+| `thaumcraft:goggles` | shaped | `UNLOCKARTIFICE` | 50 | none |
 
 Legacy OreDictionary ingredients are translated to current common tags:
 
@@ -75,6 +79,9 @@ Legacy OreDictionary ingredients are translated to current common tags:
 - `ingotIron` -> `c:ingots/iron`;
 - `plankGreatwood` -> `thaumcraft:plank_greatwood`;
 - `visResonator` -> `thaumcraft:vis_resonator`.
+- `ingotBrass` -> `c:ingots/brass`, backed by `thaumcraft:brass_ingot`;
+- `leather` -> `minecraft:leather`;
+- `thaumometer` -> `thaumcraft:thaumometer`.
 
 The old `research_bridge/thaumometer` and `research_bridge/vis_resonator`
 vanilla recipes are removed once the real arcane recipes exist. Workbench
@@ -122,6 +129,8 @@ Server resolution order:
 1. Build a 3 x 3 `CraftingInput` from slots `0..8`.
 2. Find a matching `thaumcraft:arcane` recipe first.
 3. If an arcane recipe matches and vis/crystals are missing, output is blocked.
+   If only vis is missing, the menu exposes the arcane output as a non-pickup
+   ghost stack for the client screen, matching the old greyed-output behavior.
 4. If vis/crystals are present and research is known, output the arcane result.
 5. If vis/crystals are present but research is not known, fall back to vanilla
    3 x 3 crafting only if the matrix also matches a vanilla recipe.
@@ -159,6 +168,7 @@ Current checks cover:
 - Workbench Charger 3 x 3 chunk aura query and drain behavior;
 - `vis_resonator` missing-research fallback to vanilla 3 x 3 crafting;
 - missing crystals, wrong crystal aspect, and missing vis blocking fallback;
+- missing-vis ghost output being visible but not pickup/craftable;
 - successful `vis_resonator` resolution with research, crystals, and vis;
 - output take consuming matrix ingredients, required crystals, and current-chunk
   vis;
@@ -189,8 +199,8 @@ same recipe data consumed by the first Arcane Workbench server crafting path.
 - Full equipment integration for robes, goggles variants, Baubles/Curios-style
   slots, and vis-exhaustion penalties. Current discount support is limited to
   the first vanilla armor-slot marker service and Goggles fixture.
-- Exact GUI polish: blocked-output ghost rendering and final visual tuning
-  beyond the current server-owned aura/cost labels and crystal glow overlays.
+- Exact GUI polish: final visual tuning beyond the current server-owned
+  aura/cost labels, missing-vis ghost output and crystal glow overlays.
 - Special `ShapedArcaneVoidJar` stack-copy behavior.
-- The remaining `70` legacy recipes until their exact outputs and ingredients
+- The remaining `69` legacy recipes until their exact outputs and ingredients
   exist and can be mapped without placeholders.

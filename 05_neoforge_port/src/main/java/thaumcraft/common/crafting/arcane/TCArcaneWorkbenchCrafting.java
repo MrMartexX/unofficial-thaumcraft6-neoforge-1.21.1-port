@@ -53,10 +53,11 @@ public final class TCArcaneWorkbenchCrafting {
             );
 
             if (!hasVis || !hasCrystals) {
+                ItemStack ghostOutput = !hasVis ? recipe.assemble(input, player.server.registryAccess()) : ItemStack.EMPTY;
                 return new ResolvedCraft(
                         Kind.ARCANE_BLOCKED,
                         arcaneRecipe.get().id(),
-                        ItemStack.EMPTY,
+                        ghostOutput,
                         vis,
                         recipe.getVis(),
                         recipe.crystalCosts(),
@@ -89,6 +90,9 @@ public final class TCArcaneWorkbenchCrafting {
         }
 
         ResolvedCraft actual = resolve(player, workbench);
+        if (actual.kind() != Kind.ARCANE && actual.kind() != Kind.VANILLA) {
+            return false;
+        }
         if (!actual.matchesExpected(expected)) {
             return false;
         }

@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
@@ -34,6 +35,27 @@ public class TCArcaneWorkbenchScreen extends AbstractContainerScreen<TCArcaneWor
         guiGraphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
         renderRequiredCrystalGlows(guiGraphics, partialTick);
         renderVisFeedback(guiGraphics);
+    }
+
+    @Override
+    protected void renderSlot(GuiGraphics guiGraphics, Slot slot) {
+        if (slot == menu.getSlot(TCArcaneWorkbenchMenu.SLOT_RESULT) && menu.shouldShowMissingVisGhost()) {
+            renderMissingVisGhost(guiGraphics, slot);
+            return;
+        }
+        super.renderSlot(guiGraphics, slot);
+    }
+
+    private void renderMissingVisGhost(GuiGraphics guiGraphics, Slot slot) {
+        if (slot.getItem().isEmpty()) {
+            return;
+        }
+        int x = leftPos + slot.x;
+        int y = topPos + slot.y;
+        RenderSystem.enableBlend();
+        guiGraphics.renderFakeItem(slot.getItem(), x, y);
+        guiGraphics.fill(x, y, x + 16, y + 16, 0x99000000);
+        RenderSystem.disableBlend();
     }
 
     private void renderRequiredCrystalGlows(GuiGraphics guiGraphics, float partialTick) {
