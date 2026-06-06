@@ -70,6 +70,9 @@ Current exact arcane recipe fixtures:
 | `thaumcraft:workbenchcharger` | shaped | `WORKBENCHCHARGER` | 200 | `aer` x2, `ordo` x2 |
 | `thaumcraft:goggles` | shaped | `UNLOCKARTIFICE` | 50 | none |
 | `thaumcraft:wand_workbench` | shaped | `BASEAUROMANCY@2` | 100 | `terra`, `aqua`, one each |
+| `thaumcraft:caster_basic` | shaped | `UNLOCKAUROMANCY@2` | 100 | `aer`, `terra`, `aqua`, `ignis`, `ordo`, `perditio`, one each |
+| `thaumcraft:enchantedfabric` | shaped | `UNLOCKINFUSION` | 5 | none |
+| `thaumcraft:mirrorglass` | shapeless | `BASEARTIFICE` | 50 | `aqua`, `ordo`, one each |
 
 Legacy OreDictionary ingredients are translated to current common tags:
 
@@ -86,12 +89,18 @@ Legacy OreDictionary ingredients are translated to current common tags:
 - `stoneArcane` -> `thaumcraft:stone_arcane`;
 - `slabArcaneStone` -> `thaumcraft:slab_arcane_stone`;
 - `tableStone` -> `thaumcraft:table_stone`.
+- `string` -> `minecraft:string`;
+- wildcard wool -> `minecraft:wool`;
+- `quicksilver` -> `thaumcraft:quicksilver`;
+- `paneGlass` -> `minecraft:glass_pane`.
 
 The old `research_bridge/thaumometer`, `research_bridge/vis_resonator`, and
-`research_bridge/wand_workbench` vanilla recipes are removed once the real
-arcane recipes exist. Workbench Charger was imported directly as a real arcane
-recipe and does not use a vanilla bridge. Keeping obsolete bridges would create
-incorrect vanilla crafting paths and distort generated-aspect recipe audits.
+`research_bridge/wand_workbench`, `research_bridge/caster_basic`, and
+`research_bridge/mirrored_glass` vanilla recipes are removed once the real
+arcane recipes exist. Workbench Charger and Enchanted Fabric were imported
+directly as real arcane recipes and did not use vanilla bridges. Keeping
+obsolete bridges would create incorrect vanilla crafting paths and distort
+generated-aspect recipe audits.
 
 ## Arcane Workbench server model
 
@@ -206,5 +215,5 @@ same recipe data consumed by the first Arcane Workbench server crafting path.
 - Exact GUI polish: final visual tuning beyond the current server-owned
   aura/cost labels, missing-vis ghost output and crystal glow overlays.
 - Special `ShapedArcaneVoidJar` stack-copy behavior.
-- The remaining `68` legacy recipes until their exact outputs and ingredients
+- The remaining `65` legacy recipes until their exact outputs and ingredients
   exist and can be mapped without placeholders.

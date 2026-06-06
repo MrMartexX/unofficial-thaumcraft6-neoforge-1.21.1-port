@@ -2,10 +2,12 @@
 
 | Check | Status | Detail |
 |---|---|---|
-| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=5 |
+| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=8 |
 | `thaumometer_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/thaumometer |
 | `vis_resonator_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/vis_resonator |
 | `wand_workbench_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/wand_workbench |
+| `caster_basic_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/caster_basic |
+| `mirrored_glass_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/mirrored_glass |
 | `thaumometer_arcane_recipe_loaded` | `PASS` | thaumcraft:thaumometer |
 | `thaumometer_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:thaumometer |
 | `thaumometer_custom_type` | `PASS` | thaumcraft:arcane |
@@ -35,6 +37,27 @@
 | `wand_workbench_result` | `PASS` | 1 thaumcraft:wand_workbench |
 | `wand_workbench_shaped_pattern` | `PASS` | width=3, height=3, slots=[true, true, true, true, true, true, true, true, true] |
 | `wand_workbench_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `caster_basic_arcane_recipe_loaded` | `PASS` | thaumcraft:caster_basic |
+| `caster_basic_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:caster_basic |
+| `caster_basic_research_and_vis` | `PASS` | research=UNLOCKAUROMANCY@2, vis=100 |
+| `caster_basic_ordered_crystal_costs` | `PASS` | [aer:1, terra:1, aqua:1, ignis:1, ordo:1, perditio:1] |
+| `caster_basic_result` | `PASS` | 1 thaumcraft:caster_basic |
+| `caster_basic_shaped_pattern` | `PASS` | width=3, height=3 |
+| `caster_basic_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `enchantedfabric_arcane_recipe_loaded` | `PASS` | thaumcraft:enchantedfabric |
+| `enchantedfabric_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:enchantedfabric |
+| `enchantedfabric_research_and_vis` | `PASS` | research=UNLOCKINFUSION, vis=5 |
+| `enchantedfabric_no_crystal_costs` | `PASS` | [] |
+| `enchantedfabric_result` | `PASS` | 1 thaumcraft:fabric |
+| `enchantedfabric_shaped_pattern` | `PASS` | width=3, height=3 |
+| `enchantedfabric_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `mirrorglass_arcane_recipe_loaded` | `PASS` | thaumcraft:mirrorglass |
+| `mirrorglass_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:mirrorglass |
+| `mirrorglass_research_and_vis` | `PASS` | research=BASEARTIFICE, vis=50 |
+| `mirrorglass_ordered_crystal_costs` | `PASS` | [aqua:1, ordo:1] |
+| `mirrorglass_result` | `PASS` | 1 thaumcraft:mirrored_glass |
+| `mirrorglass_shapeless_quicksilver_glass_pane` | `PASS` | ingredients=2 |
+| `mirrorglass_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 | `goggles_arcane_recipe_loaded` | `PASS` | thaumcraft:goggles |
 | `goggles_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:goggles |
 | `goggles_research_and_vis` | `PASS` | research=UNLOCKARTIFICE, vis=50 |
@@ -43,4 +66,4 @@
 | `goggles_shaped_pattern` | `PASS` | width=3, height=3 |
 | `goggles_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 
-- Loaded arcane recipes: `5`
+- Loaded arcane recipes: `8`
