@@ -2,12 +2,26 @@
 
 | Check | Status | Detail |
 |---|---|---|
-| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=8 |
+| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=10 |
 | `thaumometer_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/thaumometer |
 | `vis_resonator_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/vis_resonator |
 | `wand_workbench_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/wand_workbench |
 | `caster_basic_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/caster_basic |
 | `mirrored_glass_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/mirrored_glass |
+| `mechanism_simple_arcane_recipe_loaded` | `PASS` | thaumcraft:mechanism_simple |
+| `mechanism_simple_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:mechanism_simple |
+| `mechanism_simple_research_and_vis` | `PASS` | research=BASEARTIFICE, vis=10 |
+| `mechanism_simple_ordered_crystal_costs` | `PASS` | [ignis:1, aqua:1] |
+| `mechanism_simple_result` | `PASS` | 1 thaumcraft:mechanism_simple |
+| `mechanism_simple_shaped_pattern` | `PASS` | width=3, height=3 |
+| `mechanism_simple_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `mechanism_complex_arcane_recipe_loaded` | `PASS` | thaumcraft:mechanism_complex |
+| `mechanism_complex_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:mechanism_complex |
+| `mechanism_complex_research_and_vis` | `PASS` | research=BASEARTIFICE, vis=50 |
+| `mechanism_complex_ordered_crystal_costs` | `PASS` | [ignis:1, aqua:1] |
+| `mechanism_complex_result` | `PASS` | 1 thaumcraft:mechanism_complex |
+| `mechanism_complex_shaped_pattern` | `PASS` | width=3, height=3 |
+| `mechanism_complex_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 | `thaumometer_arcane_recipe_loaded` | `PASS` | thaumcraft:thaumometer |
 | `thaumometer_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:thaumometer |
 | `thaumometer_custom_type` | `PASS` | thaumcraft:arcane |
@@ -66,4 +80,4 @@
 | `goggles_shaped_pattern` | `PASS` | width=3, height=3 |
 | `goggles_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 
-- Loaded arcane recipes: `8`
+- Loaded arcane recipes: `10`

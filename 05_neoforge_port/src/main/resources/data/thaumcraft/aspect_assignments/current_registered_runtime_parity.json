@@ -85,6 +85,33 @@
       ]
     },
     {
+      "item": "thaumcraft:brass_plate",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 7 },
+        { "aspect": "thaumcraft:instrumentum", "amount": 3 }
+      ]
+    },
+    {
+      "item": "thaumcraft:mechanism_simple",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 27 },
+        { "aspect": "thaumcraft:instrumentum", "amount": 4 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 2 }
+      ]
+    },
+    {
+      "item": "thaumcraft:mechanism_complex",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 65 },
+        { "aspect": "thaumcraft:instrumentum", "amount": 6 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 9 },
+        { "aspect": "thaumcraft:terra", "amount": 12 },
+        { "aspect": "thaumcraft:machina", "amount": 7 },
+        { "aspect": "thaumcraft:motus", "amount": 7 },
+        { "aspect": "thaumcraft:potentia", "amount": 5 }
+      ]
+    },
+    {
       "item": "thaumcraft:goggles",
       "aspects": [
         { "aspect": "thaumcraft:sensus", "amount": 25 },

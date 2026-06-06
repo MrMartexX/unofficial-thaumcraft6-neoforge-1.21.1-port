@@ -77,7 +77,7 @@ These legacy ore dictionary keys are relevant to ids already present in `TCItems
 | `thaumcraft:stone_arcane` | Registered in the current port, but no direct `ConfigAspects` entry found for this id. | Defer until recipe/generated aspects or exact legacy source is identified. |
 | `thaumcraft:stone_arcane_brick` | Registered in the current port, but no direct `ConfigAspects` entry found for this id. | Defer. |
 | `thaumcraft:stairs_*`, `thaumcraft:slab_*` | Registered in the current port; no direct legacy aspect assignment found. | Defer; likely generated from source block recipes. |
-| `thaumcraft:fabric` | Registered in legacy and port; no direct `ConfigAspects` assignment found. | Defer until generated/recipe aspects are ported. |
+| `thaumcraft:fabric` | Registered in legacy and port; current port uses dump-derived final runtime aspects. | Active exact assignment; keep as runtime-parity data until the full recipe-derived aspect path is expanded. |
 
 ## Unregistered Legacy Thaumcraft Keys
 
@@ -87,8 +87,8 @@ These keys appear in `OreDictionaryEntries` but their target items/blocks are no
 |---|---|---|
 | Nitor | `nitor` | Defer until nitor blocks/items are registered and light/render behavior is designed. |
 | Nuggets | `nuggetIron`, `nuggetCopper`, `nuggetTin`, `nuggetSilver`, `nuggetLead`, `nuggetQuicksilver`, `nuggetThaumium`, `nuggetVoid`, `nuggetBrass`, `nuggetQuartz`, `nuggetMeat` | Defer until item metadata variants are split into 1.21 ids or data components. |
-| Ingots and metal blocks | `ingotThaumium`, `ingotVoid`, `ingotBrass`, `blockThaumium`, `blockVoid`, `blockBrass` | Defer until material items/blocks are ported. |
-| Plates | `plateIron`, `plateBrass`, `plateThaumium`, `plateVoid` | Defer until plate item model/id strategy is decided. |
+| Ingots and metal blocks | `ingotThaumium`, `ingotVoid`, `ingotBrass`, `blockThaumium`, `blockVoid`, `blockBrass` | Partially active: `ingotThaumium`, `ingotBrass`, `blockThaumium`, `blockVoid`, and `blockBrass` have current registered-item/block bridges where their ids exist. `ingotVoid` remains deferred until a real void ingot identity exists. |
+| Plates | `plateIron`, `plateBrass`, `plateThaumium`, `plateVoid` | Active bridges for current registered plate ids. `plateBrass` now has a modern item identity and exact normal recipe; `plateThaumium`/`plateVoid` are tag bridges over existing plate ids. |
 | Clusters | `clusterIron`, `clusterGold`, `clusterCopper`, `clusterTin`, `clusterSilver`, `clusterLead`, `clusterCinnabar`, `clusterQuartz` | Defer until cluster items are registered. |
 | Vanilla compatibility | `trapdoorWood` | Defer; not part of current Thaumcraft ids. |
 

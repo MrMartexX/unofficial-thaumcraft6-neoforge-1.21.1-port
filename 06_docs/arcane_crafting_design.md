@@ -69,17 +69,26 @@ Current exact arcane recipe fixtures:
 | `thaumcraft:vis_resonator` | shapeless | `UNLOCKAUROMANCY@2` | 50 | `aer`, `aqua`, one each |
 | `thaumcraft:workbenchcharger` | shaped | `WORKBENCHCHARGER` | 200 | `aer` x2, `ordo` x2 |
 | `thaumcraft:goggles` | shaped | `UNLOCKARTIFICE` | 50 | none |
+| `thaumcraft:mechanism_simple` | shaped | `BASEARTIFICE` | 10 | `ignis`, `aqua`, one each |
+| `thaumcraft:mechanism_complex` | shaped | `BASEARTIFICE` | 50 | `ignis`, `aqua`, one each |
 | `thaumcraft:wand_workbench` | shaped | `BASEAUROMANCY@2` | 100 | `terra`, `aqua`, one each |
 | `thaumcraft:caster_basic` | shaped | `UNLOCKAUROMANCY@2` | 100 | `aer`, `terra`, `aqua`, `ignis`, `ordo`, `perditio`, one each |
 | `thaumcraft:enchantedfabric` | shaped | `UNLOCKINFUSION` | 5 | none |
 | `thaumcraft:mirrorglass` | shapeless | `BASEARTIFICE` | 50 | `aqua`, `ordo`, one each |
+
+Legacy TC6 uses the registry and recipe id `wand_workbench` for the visible
+block named Focal Manipulator. It is not a separate wand workbench subsystem in
+the TC4 sense.
 
 Legacy OreDictionary ingredients are translated to current common tags:
 
 - `ingotGold` -> `c:ingots/gold`;
 - glass pane -> `minecraft:glass_pane`.
 - `plateIron` -> `c:plates/iron`, backed by `thaumcraft:iron_plate`;
+- `plateBrass` -> `c:plates/brass`, backed by `thaumcraft:brass_plate`;
+- `plateThaumium` -> `c:plates/thaumium`, backed by `thaumcraft:thaumium_plate`;
 - `gemQuartz` -> `c:gems/quartz`.
+- `stickWood` -> `c:rods/wooden`, backed by `minecraft:stick`;
 - `ingotIron` -> `c:ingots/iron`;
 - `plankGreatwood` -> `thaumcraft:plank_greatwood`;
 - `visResonator` -> `thaumcraft:vis_resonator`.
@@ -93,6 +102,8 @@ Legacy OreDictionary ingredients are translated to current common tags:
 - wildcard wool -> `minecraft:wool`;
 - `quicksilver` -> `thaumcraft:quicksilver`;
 - `paneGlass` -> `minecraft:glass_pane`.
+- `Blocks.PISTON` -> `minecraft:piston`;
+- `ItemsTC.mechanismSimple` -> `thaumcraft:mechanism_simple`.
 
 The old `research_bridge/thaumometer`, `research_bridge/vis_resonator`, and
 `research_bridge/wand_workbench`, `research_bridge/caster_basic`, and
@@ -172,8 +183,8 @@ aura saved-data service. The audit writes:
 
 Current checks cover:
 
-- `arcane_workbench` and `wand_workbench` staying distinct block identities;
-- `arcane_workbench_charger` surviving above arcane/wand workbenches;
+- `arcane_workbench` and `wand_workbench`/Focal Manipulator staying distinct block identities;
+- `arcane_workbench_charger` surviving above Arcane Workbench and Focal Manipulator blocks;
 - empty workbench resolution;
 - fixed primal crystal slot aspect validation in legacy order;
 - `canSpendVis` simulation not draining aura;
@@ -189,6 +200,11 @@ Current checks cover:
 - vanilla 3 x 3 fallback crafting for the current exact `iron_plate` fixture.
 - server-owned Arcane Workbench menu feedback for resolved cost/aura, discounted
   cost, missing vis, missing crystals, and vanilla fallback staying costless.
+
+Current runtime result: `23/23` Arcane Workbench behavior checks pass. The
+separate arcane recipe audit currently passes `77/77` checks with `10` loaded
+arcane recipes. The research recipe/page catalog reports `13 READY`,
+`182 DEFERRED`, and `8 LEGACY_MISSING` live references.
 
 Run from `05_neoforge_port`:
 
@@ -215,5 +231,5 @@ same recipe data consumed by the first Arcane Workbench server crafting path.
 - Exact GUI polish: final visual tuning beyond the current server-owned
   aura/cost labels, missing-vis ghost output and crystal glow overlays.
 - Special `ShapedArcaneVoidJar` stack-copy behavior.
-- The remaining `65` legacy recipes until their exact outputs and ingredients
+- The remaining `63` legacy recipes until their exact outputs and ingredients
   exist and can be mapped without placeholders.

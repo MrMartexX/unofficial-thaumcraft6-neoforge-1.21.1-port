@@ -41,6 +41,10 @@ final class TCArcaneRecipeAudit {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "enchantedfabric");
     private static final ResourceLocation MIRROR_GLASS =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "mirrorglass");
+    private static final ResourceLocation MECHANISM_SIMPLE =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "mechanism_simple");
+    private static final ResourceLocation MECHANISM_COMPLEX =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "mechanism_complex");
     private static final ResourceLocation ARCANE_WORKBENCH_CHARGER =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "arcane_workbench_charger");
     private static final ResourceLocation FABRIC =
@@ -82,7 +86,7 @@ final class TCArcaneRecipeAudit {
     static Report buildReport(RecipeManager recipeManager, HolderLookup.Provider registries) {
         ArrayList<Check> checks = new ArrayList<>();
         int arcaneRecipeCount = recipeManager.getAllRecipesFor(TCRecipes.ARCANE_TYPE.get()).size();
-        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 8, "count=" + arcaneRecipeCount));
+        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 10, "count=" + arcaneRecipeCount));
         checks.add(check(
                 "thaumometer_wrong_vanilla_bridge_removed",
                 recipeManager.byKey(THAUMOMETER_BRIDGE).isEmpty(),
@@ -107,6 +111,100 @@ final class TCArcaneRecipeAudit {
                 "mirrored_glass_wrong_vanilla_bridge_removed",
                 recipeManager.byKey(MIRRORED_GLASS_BRIDGE).isEmpty(),
                 MIRRORED_GLASS_BRIDGE.toString()
+        ));
+
+        Optional<TCArcaneRecipe> mechanismSimple = recipeManager.byKey(MECHANISM_SIMPLE)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value());
+        checks.add(check("mechanism_simple_arcane_recipe_loaded", mechanismSimple.isPresent(), MECHANISM_SIMPLE.toString()));
+        checks.add(check(
+                "mechanism_simple_is_not_vanilla_crafting_recipe",
+                recipeManager.byKey(MECHANISM_SIMPLE)
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isEmpty(),
+                MECHANISM_SIMPLE.toString()
+        ));
+        if (mechanismSimple.isPresent()) {
+            TCArcaneRecipe recipe = mechanismSimple.get();
+            checks.add(check(
+                    "mechanism_simple_research_and_vis",
+                    "BASEARTIFICE".equals(recipe.getResearch()) && recipe.getVis() == 10,
+                    "research=" + recipe.getResearch() + ", vis=" + recipe.getVis()
+            ));
+            checks.add(check(
+                    "mechanism_simple_ordered_crystal_costs",
+                    crystalSummary(recipe).equals(List.of("ignis:1", "aqua:1")),
+                    crystalSummary(recipe).toString()
+            ));
+            checks.add(check(
+                    "mechanism_simple_result",
+                    MECHANISM_SIMPLE.equals(BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                            && recipe.getResultItem(registries).getCount() == 1,
+                    recipe.getResultItem(registries).toString()
+            ));
+            checks.add(check(
+                    "mechanism_simple_shaped_pattern",
+                    matchesMechanismSimplePattern(recipe),
+                    "width=" + recipe.width() + ", height=" + recipe.height()
+            ));
+        }
+
+        TCResearchPageAvailability mechanismSimpleAvailability = TCResearchPageCatalogManager.availability(
+                MECHANISM_SIMPLE.toString(),
+                recipeManager
+        );
+        checks.add(check(
+                "mechanism_simple_catalog_arcane_snapshot_ready",
+                mechanismSimpleAvailability == TCResearchPageAvailability.READY
+                        && TCResearchPageCatalogManager.buildArcanePage(MECHANISM_SIMPLE, recipeManager, registries).isPresent(),
+                "availability=" + mechanismSimpleAvailability
+        ));
+
+        Optional<TCArcaneRecipe> mechanismComplex = recipeManager.byKey(MECHANISM_COMPLEX)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value());
+        checks.add(check("mechanism_complex_arcane_recipe_loaded", mechanismComplex.isPresent(), MECHANISM_COMPLEX.toString()));
+        checks.add(check(
+                "mechanism_complex_is_not_vanilla_crafting_recipe",
+                recipeManager.byKey(MECHANISM_COMPLEX)
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isEmpty(),
+                MECHANISM_COMPLEX.toString()
+        ));
+        if (mechanismComplex.isPresent()) {
+            TCArcaneRecipe recipe = mechanismComplex.get();
+            checks.add(check(
+                    "mechanism_complex_research_and_vis",
+                    "BASEARTIFICE".equals(recipe.getResearch()) && recipe.getVis() == 50,
+                    "research=" + recipe.getResearch() + ", vis=" + recipe.getVis()
+            ));
+            checks.add(check(
+                    "mechanism_complex_ordered_crystal_costs",
+                    crystalSummary(recipe).equals(List.of("ignis:1", "aqua:1")),
+                    crystalSummary(recipe).toString()
+            ));
+            checks.add(check(
+                    "mechanism_complex_result",
+                    MECHANISM_COMPLEX.equals(BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                            && recipe.getResultItem(registries).getCount() == 1,
+                    recipe.getResultItem(registries).toString()
+            ));
+            checks.add(check(
+                    "mechanism_complex_shaped_pattern",
+                    matchesMechanismComplexPattern(recipe),
+                    "width=" + recipe.width() + ", height=" + recipe.height()
+            ));
+        }
+
+        TCResearchPageAvailability mechanismComplexAvailability = TCResearchPageCatalogManager.availability(
+                MECHANISM_COMPLEX.toString(),
+                recipeManager
+        );
+        checks.add(check(
+                "mechanism_complex_catalog_arcane_snapshot_ready",
+                mechanismComplexAvailability == TCResearchPageAvailability.READY
+                        && TCResearchPageCatalogManager.buildArcanePage(MECHANISM_COMPLEX, recipeManager, registries).isPresent(),
+                "availability=" + mechanismComplexAvailability
         ));
 
         Optional<TCArcaneRecipe> thaumometer = recipeManager.byKey(THAUMOMETER)
@@ -538,6 +636,40 @@ final class TCArcaneRecipeAudit {
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
         return ingredients.get(0).test(new ItemStack(TCItems.IRON_PLATE.get()))
                 && ingredients.get(1).test(new ItemStack(Items.QUARTZ));
+    }
+
+    private static boolean matchesMechanismSimplePattern(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapedArcaneRecipe) || recipe.width() != 3 || recipe.height() != 3) {
+            return false;
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients.size() == 9
+                && ingredients.get(0).isEmpty()
+                && ingredients.get(1).test(new ItemStack(TCItems.BRASS_PLATE.get()))
+                && ingredients.get(2).isEmpty()
+                && ingredients.get(3).test(new ItemStack(TCItems.IRON_PLATE.get()))
+                && ingredients.get(4).test(new ItemStack(Items.STICK))
+                && ingredients.get(5).test(new ItemStack(TCItems.IRON_PLATE.get()))
+                && ingredients.get(6).isEmpty()
+                && ingredients.get(7).test(new ItemStack(TCItems.BRASS_PLATE.get()))
+                && ingredients.get(8).isEmpty();
+    }
+
+    private static boolean matchesMechanismComplexPattern(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapedArcaneRecipe) || recipe.width() != 3 || recipe.height() != 3) {
+            return false;
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients.size() == 9
+                && ingredients.get(0).isEmpty()
+                && ingredients.get(1).test(new ItemStack(TCItems.MECHANISM_SIMPLE.get()))
+                && ingredients.get(2).isEmpty()
+                && ingredients.get(3).test(new ItemStack(TCItems.THAUMIUM_PLATE.get()))
+                && ingredients.get(4).test(new ItemStack(Items.PISTON))
+                && ingredients.get(5).test(new ItemStack(TCItems.THAUMIUM_PLATE.get()))
+                && ingredients.get(6).isEmpty()
+                && ingredients.get(7).test(new ItemStack(TCItems.MECHANISM_SIMPLE.get()))
+                && ingredients.get(8).isEmpty();
     }
 
     private static boolean matchesWorkbenchChargerPattern(TCArcaneRecipe recipe) {

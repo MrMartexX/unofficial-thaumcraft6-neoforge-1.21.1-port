@@ -210,7 +210,7 @@ final class TCAspectParityValidator {
 
     private static void validateDirectAssignments() {
         Map<ResourceLocation, AspectList> tags = TCAspectAssignments.directObjectTags();
-        expectEquals(683, tags.size(), "direct object assignment count");
+        expectEquals(686, tags.size(), "direct object assignment count");
 
         expectDirect(tags, "ore_quartz", amount(Aspect.EARTH, 5), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "ore_cinnabar", amount(Aspect.EARTH, 5), amount(Aspect.METAL, 10), amount(Aspect.ALCHEMY, 5), amount(Aspect.DEATH, 5));
@@ -273,6 +273,19 @@ final class TCAspectParityValidator {
         expectDirect(tags, "nitor_yellow", amount(Aspect.SENSES, 5), amount(Aspect.LIGHT, 13), amount(Aspect.ENERGY, 3), amount(Aspect.FIRE, 3));
         expectDirect(tags, "thaumium_ingot", amount(Aspect.METAL, 15), amount(Aspect.MAGIC, 2), amount(Aspect.EARTH, 2));
         expectDirect(tags, "brass_ingot", amount(Aspect.METAL, 10), amount(Aspect.TOOL, 5));
+        expectDirect(tags, "brass_plate", amount(Aspect.METAL, 7), amount(Aspect.TOOL, 3));
+        expectDirect(tags, "mechanism_simple",
+                amount(Aspect.METAL, 27),
+                amount(Aspect.TOOL, 4),
+                amount(Aspect.MAGIC, 2));
+        expectDirect(tags, "mechanism_complex",
+                amount(Aspect.METAL, 65),
+                amount(Aspect.TOOL, 6),
+                amount(Aspect.MAGIC, 9),
+                amount(Aspect.EARTH, 12),
+                amount(Aspect.MECHANISM, 7),
+                amount(Aspect.MOTION, 7),
+                amount(Aspect.ENERGY, 5));
         expectDirect(tags, "goggles",
                 amount(Aspect.SENSES, 25),
                 amount(Aspect.AURA, 25),
