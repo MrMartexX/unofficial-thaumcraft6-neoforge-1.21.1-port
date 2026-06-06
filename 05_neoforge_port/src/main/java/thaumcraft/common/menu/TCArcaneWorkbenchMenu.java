@@ -91,7 +91,9 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
 
         bindPlayerInventory(playerInventory);
         bindArcaneFeedbackData();
-        updateResult();
+        if (isServerMenu()) {
+            updateResult();
+        }
     }
 
     public TCArcaneWorkbenchBlockEntity blockEntity() {
@@ -100,6 +102,10 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
 
     public BlockPos blockPos() {
         return blockEntity == null ? BlockPos.ZERO : blockEntity.getBlockPos();
+    }
+
+    private boolean isServerMenu() {
+        return blockEntity != null && playerInventory.player instanceof ServerPlayer;
     }
 
     public TCArcaneWorkbenchCrafting.ResolvedCraft currentCraft() {
@@ -225,7 +231,9 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
     @Override
     public void slotsChanged(Container container) {
         super.slotsChanged(container);
-        updateResult();
+        if (isServerMenu()) {
+            updateResult();
+        }
     }
 
     private void updateResult() {
@@ -234,7 +242,8 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
     }
 
     private void refreshCraftState() {
-        if (blockEntity != null && playerInventory.player instanceof ServerPlayer serverPlayer) {
+        if (isServerMenu()) {
+            ServerPlayer serverPlayer = (ServerPlayer) playerInventory.player;
             currentCraft = TCArcaneWorkbenchCrafting.resolve(serverPlayer, blockEntity);
             resultContainer.setItem(0, currentCraft.output());
             syncedKind = currentCraft.kind().ordinal();
@@ -298,7 +307,9 @@ public class TCArcaneWorkbenchMenu extends AbstractContainerMenu {
 
     @Override
     public void broadcastChanges() {
-        refreshCraftState();
+        if (isServerMenu()) {
+            refreshCraftState();
+        }
         super.broadcastChanges();
     }
 

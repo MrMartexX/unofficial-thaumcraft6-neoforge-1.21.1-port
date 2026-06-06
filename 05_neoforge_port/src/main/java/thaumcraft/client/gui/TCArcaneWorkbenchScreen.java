@@ -32,9 +32,14 @@ public class TCArcaneWorkbenchScreen extends AbstractContainerScreen<TCArcaneWor
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         guiGraphics.blit(BACKGROUND, leftPos, topPos, 0, 0, imageWidth, imageHeight, 256, 256);
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         renderRequiredCrystalGlows(guiGraphics, partialTick);
         renderVisFeedback(guiGraphics);
+        guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override
