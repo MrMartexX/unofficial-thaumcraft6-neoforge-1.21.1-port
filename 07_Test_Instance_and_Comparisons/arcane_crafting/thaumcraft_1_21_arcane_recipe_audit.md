@@ -2,9 +2,10 @@
 
 | Check | Status | Detail |
 |---|---|---|
-| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=4 |
+| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=5 |
 | `thaumometer_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/thaumometer |
 | `vis_resonator_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/vis_resonator |
+| `wand_workbench_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/wand_workbench |
 | `thaumometer_arcane_recipe_loaded` | `PASS` | thaumcraft:thaumometer |
 | `thaumometer_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:thaumometer |
 | `thaumometer_custom_type` | `PASS` | thaumcraft:arcane |
@@ -27,6 +28,13 @@
 | `workbenchcharger_result` | `PASS` | 1 thaumcraft:arcane_workbench_charger |
 | `workbenchcharger_shaped_pattern` | `PASS` | width=3, height=3 |
 | `workbenchcharger_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `wand_workbench_arcane_recipe_loaded` | `PASS` | thaumcraft:wand_workbench |
+| `wand_workbench_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:wand_workbench |
+| `wand_workbench_research_and_vis` | `PASS` | research=BASEAUROMANCY@2, vis=100 |
+| `wand_workbench_ordered_crystal_costs` | `PASS` | [terra:1, aqua:1] |
+| `wand_workbench_result` | `PASS` | 1 thaumcraft:wand_workbench |
+| `wand_workbench_shaped_pattern` | `PASS` | width=3, height=3, slots=[true, true, true, true, true, true, true, true, true] |
+| `wand_workbench_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 | `goggles_arcane_recipe_loaded` | `PASS` | thaumcraft:goggles |
 | `goggles_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:goggles |
 | `goggles_research_and_vis` | `PASS` | research=UNLOCKARTIFICE, vis=50 |
@@ -35,4 +43,4 @@
 | `goggles_shaped_pattern` | `PASS` | width=3, height=3 |
 | `goggles_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 
-- Loaded arcane recipes: `4`
+- Loaded arcane recipes: `5`

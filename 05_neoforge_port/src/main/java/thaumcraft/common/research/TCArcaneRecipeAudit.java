@@ -33,12 +33,16 @@ final class TCArcaneRecipeAudit {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "workbenchcharger");
     private static final ResourceLocation GOGGLES =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "goggles");
+    private static final ResourceLocation WAND_WORKBENCH =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "wand_workbench");
     private static final ResourceLocation ARCANE_WORKBENCH_CHARGER =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "arcane_workbench_charger");
     private static final ResourceLocation THAUMOMETER_BRIDGE =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "research_bridge/thaumometer");
     private static final ResourceLocation VIS_RESONATOR_BRIDGE =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "research_bridge/vis_resonator");
+    private static final ResourceLocation WAND_WORKBENCH_BRIDGE =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "research_bridge/wand_workbench");
 
     private TCArcaneRecipeAudit() {
     }
@@ -64,7 +68,7 @@ final class TCArcaneRecipeAudit {
     static Report buildReport(RecipeManager recipeManager, HolderLookup.Provider registries) {
         ArrayList<Check> checks = new ArrayList<>();
         int arcaneRecipeCount = recipeManager.getAllRecipesFor(TCRecipes.ARCANE_TYPE.get()).size();
-        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 4, "count=" + arcaneRecipeCount));
+        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 5, "count=" + arcaneRecipeCount));
         checks.add(check(
                 "thaumometer_wrong_vanilla_bridge_removed",
                 recipeManager.byKey(THAUMOMETER_BRIDGE).isEmpty(),
@@ -74,6 +78,11 @@ final class TCArcaneRecipeAudit {
                 "vis_resonator_wrong_vanilla_bridge_removed",
                 recipeManager.byKey(VIS_RESONATOR_BRIDGE).isEmpty(),
                 VIS_RESONATOR_BRIDGE.toString()
+        ));
+        checks.add(check(
+                "wand_workbench_wrong_vanilla_bridge_removed",
+                recipeManager.byKey(WAND_WORKBENCH_BRIDGE).isEmpty(),
+                WAND_WORKBENCH_BRIDGE.toString()
         ));
 
         Optional<TCArcaneRecipe> thaumometer = recipeManager.byKey(THAUMOMETER)
@@ -230,6 +239,53 @@ final class TCArcaneRecipeAudit {
                 "availability=" + workbenchChargerAvailability
         ));
 
+        Optional<TCArcaneRecipe> wandWorkbench = recipeManager.byKey(WAND_WORKBENCH)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value());
+        checks.add(check("wand_workbench_arcane_recipe_loaded", wandWorkbench.isPresent(), WAND_WORKBENCH.toString()));
+        checks.add(check(
+                "wand_workbench_is_not_vanilla_crafting_recipe",
+                recipeManager.byKey(WAND_WORKBENCH)
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isEmpty(),
+                WAND_WORKBENCH.toString()
+        ));
+        if (wandWorkbench.isPresent()) {
+            TCArcaneRecipe recipe = wandWorkbench.get();
+            checks.add(check(
+                    "wand_workbench_research_and_vis",
+                    "BASEAUROMANCY@2".equals(recipe.getResearch()) && recipe.getVis() == 100,
+                    "research=" + recipe.getResearch() + ", vis=" + recipe.getVis()
+            ));
+            checks.add(check(
+                    "wand_workbench_ordered_crystal_costs",
+                    crystalSummary(recipe).equals(List.of("terra:1", "aqua:1")),
+                    crystalSummary(recipe).toString()
+            ));
+            checks.add(check(
+                    "wand_workbench_result",
+                    WAND_WORKBENCH.equals(BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                            && recipe.getResultItem(registries).getCount() == 1,
+                    recipe.getResultItem(registries).toString()
+            ));
+            checks.add(check(
+                    "wand_workbench_shaped_pattern",
+                    matchesWandWorkbenchPattern(recipe),
+                    wandWorkbenchPatternDetail(recipe)
+            ));
+        }
+
+        TCResearchPageAvailability wandWorkbenchAvailability = TCResearchPageCatalogManager.availability(
+                WAND_WORKBENCH.toString(),
+                recipeManager
+        );
+        checks.add(check(
+                "wand_workbench_catalog_arcane_snapshot_ready",
+                wandWorkbenchAvailability == TCResearchPageAvailability.READY
+                        && TCResearchPageCatalogManager.buildArcanePage(WAND_WORKBENCH, recipeManager, registries).isPresent(),
+                "availability=" + wandWorkbenchAvailability
+        ));
+
         Optional<TCArcaneRecipe> goggles = recipeManager.byKey(GOGGLES)
                 .filter(holder -> holder.value() instanceof TCArcaneRecipe)
                 .map(holder -> (TCArcaneRecipe) holder.value());
@@ -327,6 +383,45 @@ final class TCArcaneRecipeAudit {
                 && ingredients.get(6).test(new ItemStack(Items.IRON_INGOT))
                 && ingredients.get(7).isEmpty()
                 && ingredients.get(8).test(new ItemStack(Items.IRON_INGOT));
+    }
+
+    private static boolean matchesWandWorkbenchPattern(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapedArcaneRecipe) || recipe.width() != 3 || recipe.height() != 3) {
+            return false;
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients.size() == 9
+                && ingredients.get(0).test(new ItemStack(TCItems.IRON_PLATE.get()))
+                && ingredients.get(1).test(new ItemStack(TCItems.SLAB_ARCANE_STONE.get()))
+                && ingredients.get(2).test(new ItemStack(TCItems.IRON_PLATE.get()))
+                && ingredients.get(3).test(new ItemStack(TCItems.STONE_ARCANE.get()))
+                && ingredients.get(4).test(new ItemStack(TCItems.VIS_RESONATOR.get()))
+                && ingredients.get(5).test(new ItemStack(TCItems.STONE_ARCANE.get()))
+                && ingredients.get(6).test(new ItemStack(Items.GOLD_INGOT))
+                && ingredients.get(7).test(new ItemStack(TCItems.TABLE_STONE.get()))
+                && ingredients.get(8).test(new ItemStack(Items.GOLD_INGOT));
+    }
+
+    private static String wandWorkbenchPatternDetail(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapedArcaneRecipe) || recipe.getIngredients().size() != 9) {
+            return "width=" + recipe.width() + ", height=" + recipe.height()
+                    + ", ingredients=" + recipe.getIngredients().size();
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return "width=" + recipe.width()
+                + ", height=" + recipe.height()
+                + ", slots="
+                + List.of(
+                        ingredients.get(0).test(new ItemStack(TCItems.IRON_PLATE.get())),
+                        ingredients.get(1).test(new ItemStack(TCItems.SLAB_ARCANE_STONE.get())),
+                        ingredients.get(2).test(new ItemStack(TCItems.IRON_PLATE.get())),
+                        ingredients.get(3).test(new ItemStack(TCItems.STONE_ARCANE.get())),
+                        ingredients.get(4).test(new ItemStack(TCItems.VIS_RESONATOR.get())),
+                        ingredients.get(5).test(new ItemStack(TCItems.STONE_ARCANE.get())),
+                        ingredients.get(6).test(new ItemStack(Items.GOLD_INGOT)),
+                        ingredients.get(7).test(new ItemStack(TCItems.TABLE_STONE.get())),
+                        ingredients.get(8).test(new ItemStack(Items.GOLD_INGOT))
+                );
     }
 
     private static boolean matchesGogglesPattern(TCArcaneRecipe recipe) {
