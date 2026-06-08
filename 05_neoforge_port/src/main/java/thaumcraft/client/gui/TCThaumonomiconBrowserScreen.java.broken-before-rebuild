@@ -1,0 +1,36 @@
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button != 0) {
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
+        if (hoveredCategory != null) {
+            selectCategory(hoveredCategory.key());
+            playPage();
+            return true;
+        }
+        if (hoveredResearch != null && pendingResearch.isBlank()) {
+            if (hoveredResearch.status() != TCResearchStatus.UNKNOWN) {
+                var cached = TCThaumonomiconClientCache.entry(hoveredResearch.key());
+                if (cached.isPresent() && minecraft != null) {
+                    playPage();
+                    minecraft.setScreen(new TCThaumonomiconEntryScreen(cached.get()));
+                    return true;
+                }
+            }
+
+            int action = hoveredResearch.status() == TCResearchStatus.UNKNOWN
+                    ? TCThaumonomiconActionPayload.START_RESEARCH
+                    : TCThaumonomiconActionPayload.ACKNOWLEDGE_ENTRY;
+            if (hoveredResearch.status() != TCResearchStatus.UNKNOWN || hoveredResearch.unlockable()) {
+                pendingResearch = hoveredResearch.key();
+                PacketDistributor.sendToServer(new TCThaumonomiconActionPayload(
+                        action,
+                        pendingResearch,
+                        TCThaumonomiconClientCache.revision()
+                ));
+                playPage();
+                return true;
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }

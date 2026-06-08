@@ -1,7 +1,7 @@
 {
+  "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "minecraft:item/glass_bottle"
-  },
-  "parent": "minecraft:item/generated"
+    "layer0": "thaumcraft:item/phial",
+    "layer1": "thaumcraft:item/phial_overlay"
+  }
 }
-

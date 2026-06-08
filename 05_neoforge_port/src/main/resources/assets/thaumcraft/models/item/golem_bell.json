@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "thaumcraft:items/golem_bell"
+        "layer0": "thaumcraft:item/golem_bell"
     }
 }

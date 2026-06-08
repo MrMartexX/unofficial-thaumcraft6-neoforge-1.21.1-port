@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.tiles.crafting.TCArcaneWorkbenchBlockEntity;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
+import thaumcraft.common.tiles.misc.TCNitorBlockEntity;
 
 public final class TCBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
@@ -19,6 +20,9 @@ public final class TCBlockEntities {
             BLOCK_ENTITY_TYPES.register("arcane_workbench", () ->
                     BlockEntityType.Builder.of(TCArcaneWorkbenchBlockEntity::new, TCBlocks.ARCANE_WORKBENCH.get()).build(null));
 
+    public static final Supplier<BlockEntityType<TCNitorBlockEntity>> NITOR =
+            BLOCK_ENTITY_TYPES.register("nitor", () ->
+                    BlockEntityType.Builder.of(TCNitorBlockEntity::new, TCBlocks.NITOR_YELLOW.get()).build(null));
     private TCBlockEntities() {
     }
 }

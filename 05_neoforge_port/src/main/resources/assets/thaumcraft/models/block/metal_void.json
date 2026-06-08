@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "minecraft:block/netherite_block"
+    "all": "thaumcraft:block/metal_void"
   }
 }

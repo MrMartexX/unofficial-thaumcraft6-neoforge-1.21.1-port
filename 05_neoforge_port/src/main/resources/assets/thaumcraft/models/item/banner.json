@@ -1,9 +1,9 @@
 {
     "parent": "builtin/generated",
     "textures": {        
-        "layer0": "thaumcraft:items/banner_stand",
-        "layer1": "thaumcraft:items/banner",
-        "layer2": "thaumcraft:items/banner_symbol"
+        "layer0": "thaumcraft:item/banner_stand",
+        "layer1": "thaumcraft:item/banner",
+        "layer2": "thaumcraft:item/banner_symbol"
     },
     "display": {
         "thirdperson": {

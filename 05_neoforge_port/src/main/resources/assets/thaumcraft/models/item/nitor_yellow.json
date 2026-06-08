@@ -1,4 +1,7 @@
 {
-  "parent": "minecraft:block/glowstone"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thaumcraft:block/nitor",
+    "layer1": "thaumcraft:block/nitor_core"
+  }
 }
-

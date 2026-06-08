@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "thaumcraft:items/pech_wand"
+        "layer0": "thaumcraft:item/pech_wand"
     }
 }

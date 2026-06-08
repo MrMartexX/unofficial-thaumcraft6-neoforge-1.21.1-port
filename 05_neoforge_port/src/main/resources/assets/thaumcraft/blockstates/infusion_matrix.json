@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/diamond_block"
+      "model": "thaumcraft:block/infusion_matrix"
     }
   }
 }

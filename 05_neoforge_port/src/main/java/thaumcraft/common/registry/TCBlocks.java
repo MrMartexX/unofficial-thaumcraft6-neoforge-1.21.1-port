@@ -19,6 +19,7 @@ import thaumcraft.common.blocks.basic.TCTableBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
+import thaumcraft.common.blocks.misc.TCNitorBlock;
 
 public final class TCBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Thaumcraft.MODID);
@@ -162,8 +163,9 @@ public final class TCBlocks {
     }
 
     private static Block nitorBlock(int lightLevel) {
-        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLOWSTONE)
-                .strength(0.3F, 0.3F)
+        return new TCNitorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLOWSTONE)
+                .strength(0.1F, 0.1F)
+                .noOcclusion()
                 .lightLevel(state -> lightLevel));
     }
 

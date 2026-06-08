@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "thaumcraft:block/table_wood" }
+    "": {
+      "model": "thaumcraft:block/table_wood"
+    }
   }
 }

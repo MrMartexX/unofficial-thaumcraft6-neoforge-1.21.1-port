@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "thaumcraft:items/cloth_legs",
-        "layer1": "thaumcraft:items/cloth_legs_over"
+        "layer0": "thaumcraft:item/cloth_legs",
+        "layer1": "thaumcraft:item/cloth_legs_over"
     }
 }
