@@ -2,7 +2,7 @@
 
 | Check | Status | Detail |
 |---|---|---|
-| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=10 |
+| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=12 |
 | `thaumometer_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/thaumometer |
 | `vis_resonator_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/vis_resonator |
 | `wand_workbench_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/wand_workbench |
@@ -79,5 +79,19 @@
 | `goggles_result` | `PASS` | 1 thaumcraft:goggles |
 | `goggles_shaped_pattern` | `PASS` | width=3, height=3 |
 | `goggles_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `essentiasmelter_arcane_recipe_loaded` | `PASS` | thaumcraft:essentiasmelter |
+| `essentiasmelter_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:essentiasmelter |
+| `essentiasmelter_research_and_vis` | `PASS` | research=ESSENTIASMELTER@2, vis=50 |
+| `essentiasmelter_ordered_crystal_costs` | `PASS` | [ignis:1] |
+| `essentiasmelter_result` | `PASS` | 1 thaumcraft:smelter_basic |
+| `essentiasmelter_shaped_pattern` | `PASS` | width=3, height=3 |
+| `essentiasmelter_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `infusionmatrix_arcane_recipe_loaded` | `PASS` | thaumcraft:infusionmatrix |
+| `infusionmatrix_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:infusionmatrix |
+| `infusionmatrix_research_and_vis` | `PASS` | research=INFUSION@2, vis=150 |
+| `infusionmatrix_ordered_crystal_costs` | `PASS` | [aer:1, terra:1, aqua:1, ignis:1, ordo:1, perditio:1] |
+| `infusionmatrix_result` | `PASS` | 1 thaumcraft:infusion_matrix |
+| `infusionmatrix_shaped_pattern` | `PASS` | width=3, height=3 |
+| `infusionmatrix_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 
-- Loaded arcane recipes: `10`
+- Loaded arcane recipes: `12`

@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:nitor_black",
+    "thaumcraft:nitor_blue",
+    "thaumcraft:nitor_brown",
+    "thaumcraft:nitor_cyan",
+    "thaumcraft:nitor_gray",
+    "thaumcraft:nitor_green",
+    "thaumcraft:nitor_lightblue",
+    "thaumcraft:nitor_lime",
+    "thaumcraft:nitor_magenta",
+    "thaumcraft:nitor_orange",
+    "thaumcraft:nitor_pink",
+    "thaumcraft:nitor_purple",
+    "thaumcraft:nitor_red",
+    "thaumcraft:nitor_silver",
+    "thaumcraft:nitor_white",
+    "thaumcraft:nitor_yellow"
+  ]
+}

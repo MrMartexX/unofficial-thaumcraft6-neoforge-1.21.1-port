@@ -45,6 +45,10 @@ final class TCArcaneRecipeAudit {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "mechanism_simple");
     private static final ResourceLocation MECHANISM_COMPLEX =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "mechanism_complex");
+    private static final ResourceLocation ESSENTIA_SMELTER =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "essentiasmelter");
+    private static final ResourceLocation INFUSION_MATRIX =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "infusionmatrix");
     private static final ResourceLocation ARCANE_WORKBENCH_CHARGER =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "arcane_workbench_charger");
     private static final ResourceLocation FABRIC =
@@ -86,7 +90,7 @@ final class TCArcaneRecipeAudit {
     static Report buildReport(RecipeManager recipeManager, HolderLookup.Provider registries) {
         ArrayList<Check> checks = new ArrayList<>();
         int arcaneRecipeCount = recipeManager.getAllRecipesFor(TCRecipes.ARCANE_TYPE.get()).size();
-        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 10, "count=" + arcaneRecipeCount));
+        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 12, "count=" + arcaneRecipeCount));
         checks.add(check(
                 "thaumometer_wrong_vanilla_bridge_removed",
                 recipeManager.byKey(THAUMOMETER_BRIDGE).isEmpty(),
@@ -603,6 +607,107 @@ final class TCArcaneRecipeAudit {
                 "availability=" + gogglesAvailability
         ));
 
+        Optional<TCArcaneRecipe> essentiaSmelter = recipeManager.byKey(ESSENTIA_SMELTER)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value());
+        checks.add(check("essentiasmelter_arcane_recipe_loaded", essentiaSmelter.isPresent(), ESSENTIA_SMELTER.toString()));
+        checks.add(check(
+                "essentiasmelter_is_not_vanilla_crafting_recipe",
+                recipeManager.byKey(ESSENTIA_SMELTER)
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isEmpty(),
+                ESSENTIA_SMELTER.toString()
+        ));
+        if (essentiaSmelter.isPresent()) {
+            TCArcaneRecipe recipe = essentiaSmelter.get();
+            checks.add(check(
+                    "essentiasmelter_research_and_vis",
+                    "ESSENTIASMELTER@2".equals(recipe.getResearch()) && recipe.getVis() == 50,
+                    "research=" + recipe.getResearch() + ", vis=" + recipe.getVis()
+            ));
+            checks.add(check(
+                    "essentiasmelter_ordered_crystal_costs",
+                    crystalSummary(recipe).equals(List.of("ignis:1")),
+                    crystalSummary(recipe).toString()
+            ));
+            checks.add(check(
+                    "essentiasmelter_result",
+                    BuiltInRegistries.ITEM.getKey(TCItems.SMELTER_BASIC.get()).equals(BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                            && recipe.getResultItem(registries).getCount() == 1,
+                    recipe.getResultItem(registries).toString()
+            ));
+            checks.add(check(
+                    "essentiasmelter_shaped_pattern",
+                    matchesEssentiaSmelterPattern(recipe),
+                    "width=" + recipe.width() + ", height=" + recipe.height()
+            ));
+        }
+
+        TCResearchPageAvailability essentiaSmelterAvailability = TCResearchPageCatalogManager.availability(
+                ESSENTIA_SMELTER.toString(),
+                recipeManager
+        );
+        checks.add(check(
+                "essentiasmelter_catalog_arcane_snapshot_ready",
+                essentiaSmelterAvailability == TCResearchPageAvailability.READY
+                        && TCResearchPageCatalogManager.buildArcanePage(ESSENTIA_SMELTER, recipeManager, registries).isPresent(),
+                "availability=" + essentiaSmelterAvailability
+        ));
+
+        Optional<TCArcaneRecipe> infusionMatrix = recipeManager.byKey(INFUSION_MATRIX)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value());
+        checks.add(check("infusionmatrix_arcane_recipe_loaded", infusionMatrix.isPresent(), INFUSION_MATRIX.toString()));
+        checks.add(check(
+                "infusionmatrix_is_not_vanilla_crafting_recipe",
+                recipeManager.byKey(INFUSION_MATRIX)
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isEmpty(),
+                INFUSION_MATRIX.toString()
+        ));
+        if (infusionMatrix.isPresent()) {
+            TCArcaneRecipe recipe = infusionMatrix.get();
+            checks.add(check(
+                    "infusionmatrix_research_and_vis",
+                    "INFUSION@2".equals(recipe.getResearch()) && recipe.getVis() == 150,
+                    "research=" + recipe.getResearch() + ", vis=" + recipe.getVis()
+            ));
+            checks.add(check(
+                    "infusionmatrix_ordered_crystal_costs",
+                    crystalSummary(recipe).equals(List.of(
+                            "aer:1",
+                            "terra:1",
+                            "aqua:1",
+                            "ignis:1",
+                            "ordo:1",
+                            "perditio:1"
+                    )),
+                    crystalSummary(recipe).toString()
+            ));
+            checks.add(check(
+                    "infusionmatrix_result",
+                    BuiltInRegistries.ITEM.getKey(TCItems.INFUSION_MATRIX.get()).equals(BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                            && recipe.getResultItem(registries).getCount() == 1,
+                    recipe.getResultItem(registries).toString()
+            ));
+            checks.add(check(
+                    "infusionmatrix_shaped_pattern",
+                    matchesInfusionMatrixPattern(recipe),
+                    "width=" + recipe.width() + ", height=" + recipe.height()
+            ));
+        }
+
+        TCResearchPageAvailability infusionMatrixAvailability = TCResearchPageCatalogManager.availability(
+                INFUSION_MATRIX.toString(),
+                recipeManager
+        );
+        checks.add(check(
+                "infusionmatrix_catalog_arcane_snapshot_ready",
+                infusionMatrixAvailability == TCResearchPageAvailability.READY
+                        && TCResearchPageCatalogManager.buildArcanePage(INFUSION_MATRIX, recipeManager, registries).isPresent(),
+                "availability=" + infusionMatrixAvailability
+        ));
+
         return new Report(checks, arcaneRecipeCount);
     }
 
@@ -787,6 +892,41 @@ final class TCArcaneRecipeAudit {
                 && ingredients.get(6).test(new ItemStack(TCItems.THAUMOMETER.get()))
                 && ingredients.get(7).test(new ItemStack(TCItems.BRASS_INGOT.get()))
                 && ingredients.get(8).test(new ItemStack(TCItems.THAUMOMETER.get()));
+    }
+
+    private static boolean matchesEssentiaSmelterPattern(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapedArcaneRecipe) || recipe.width() != 3 || recipe.height() != 3) {
+            return false;
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients.size() == 9
+                && ingredients.get(0).test(new ItemStack(TCItems.BRASS_PLATE.get()))
+                && ingredients.get(1).test(new ItemStack(TCItems.CRUCIBLE.get()))
+                && ingredients.get(2).test(new ItemStack(TCItems.BRASS_PLATE.get()))
+                && ingredients.get(3).test(new ItemStack(Items.COBBLESTONE))
+                && ingredients.get(4).test(new ItemStack(Items.FURNACE))
+                && ingredients.get(5).test(new ItemStack(Items.COBBLESTONE))
+                && ingredients.get(6).test(new ItemStack(Items.COBBLESTONE))
+                && ingredients.get(7).test(new ItemStack(Items.COBBLESTONE))
+                && ingredients.get(8).test(new ItemStack(Items.COBBLESTONE));
+    }
+
+    private static boolean matchesInfusionMatrixPattern(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapedArcaneRecipe) || recipe.width() != 3 || recipe.height() != 3) {
+            return false;
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients.size() == 9
+                && ingredients.get(0).test(new ItemStack(TCItems.STONE_ARCANE_BRICK.get()))
+                && ingredients.get(1).isEmpty()
+                && ingredients.get(2).test(new ItemStack(TCItems.STONE_ARCANE_BRICK.get()))
+                && ingredients.get(3).isEmpty()
+                && ingredients.get(4).test(new ItemStack(TCItems.NITOR_YELLOW.get()))
+                && ingredients.get(4).test(new ItemStack(TCItems.NITOR_BLACK.get()))
+                && ingredients.get(5).isEmpty()
+                && ingredients.get(6).test(new ItemStack(TCItems.STONE_ARCANE_BRICK.get()))
+                && ingredients.get(7).isEmpty()
+                && ingredients.get(8).test(new ItemStack(TCItems.STONE_ARCANE_BRICK.get()));
     }
 
     private static Check check(String name, boolean passed, String detail) {
