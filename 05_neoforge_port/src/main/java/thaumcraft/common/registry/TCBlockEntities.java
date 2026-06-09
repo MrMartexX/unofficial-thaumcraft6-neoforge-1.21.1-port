@@ -22,7 +22,23 @@ public final class TCBlockEntities {
 
     public static final Supplier<BlockEntityType<TCNitorBlockEntity>> NITOR =
             BLOCK_ENTITY_TYPES.register("nitor", () ->
-                    BlockEntityType.Builder.of(TCNitorBlockEntity::new, TCBlocks.NITOR_YELLOW.get()).build(null));
+                    BlockEntityType.Builder.of(TCNitorBlockEntity::new,
+                            TCBlocks.NITOR_BLACK.get(),
+                            TCBlocks.NITOR_BLUE.get(),
+                            TCBlocks.NITOR_BROWN.get(),
+                            TCBlocks.NITOR_CYAN.get(),
+                            TCBlocks.NITOR_GRAY.get(),
+                            TCBlocks.NITOR_GREEN.get(),
+                            TCBlocks.NITOR_YELLOW.get(),
+                            TCBlocks.NITOR_LIGHTBLUE.get(),
+                            TCBlocks.NITOR_LIME.get(),
+                            TCBlocks.NITOR_MAGENTA.get(),
+                            TCBlocks.NITOR_ORANGE.get(),
+                            TCBlocks.NITOR_PINK.get(),
+                            TCBlocks.NITOR_PURPLE.get(),
+                            TCBlocks.NITOR_RED.get(),
+                            TCBlocks.NITOR_SILVER.get(),
+                            TCBlocks.NITOR_WHITE.get()).build(null));
     private TCBlockEntities() {
     }
 }

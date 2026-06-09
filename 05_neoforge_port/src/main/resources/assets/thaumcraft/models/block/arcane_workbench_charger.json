@@ -1,6 +1,14 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "loader": "neoforge:obj",
+  "model": "thaumcraft:models/block/arcane_workbench_charger.obj",
+  "automatic_culling": false,
+  "shade_quads": true,
+  "flip_v": false,
+  "emissive_ambient": false,
+  "mtl_override": "thaumcraft:models/block/arcane_workbench_charger.mtl",
   "textures": {
-    "all": "thaumcraft:block/arcane_workbench_charger"
+    "particle": "thaumcraft:block/arcane_workbench_charger",
+    "texture": "thaumcraft:block/arcane_workbench_charger",
+    "#texture": "thaumcraft:block/arcane_workbench_charger"
   }
 }

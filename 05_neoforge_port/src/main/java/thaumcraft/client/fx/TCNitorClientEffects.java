@@ -6,6 +6,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.client.fx.legacy.TCLegacyParticleEngine;
 import thaumcraft.common.lib.fx.TCLegacyFXData;
+import thaumcraft.common.registry.TCBlocks;
 
 /**
  * TC6-inspired Nitor client FX. The legacy 1.12 implementation spawned
@@ -28,13 +29,31 @@ public final class TCNitorClientEffects {
         double motionY = random.nextFloat() * 0.06D;
         double motionZ = random.nextGaussian() * 0.0025D;
 
-        spawnFlame(level, x, y, z, motionX, motionY, motionZ, YELLOW_NITOR_COLOR);
+        spawnFlame(level, x, y, z, motionX, motionY, motionZ, nitorColor(state));
 
         if (count % 10 == 0) {
             spawnCore(level, pos.getX() + 0.5D, pos.getY() + 0.49D, pos.getZ() + 0.5D);
         }
     }
-
+    private static int nitorColor(BlockState state) {
+        var block = state.getBlock();
+        if (block == TCBlocks.NITOR_BLACK.get()) return 0x1D1D21;
+        if (block == TCBlocks.NITOR_BLUE.get()) return 0x3C44AA;
+        if (block == TCBlocks.NITOR_BROWN.get()) return 0x835432;
+        if (block == TCBlocks.NITOR_CYAN.get()) return 0x169C9C;
+        if (block == TCBlocks.NITOR_GRAY.get()) return 0x474F52;
+        if (block == TCBlocks.NITOR_GREEN.get()) return 0x5E7C16;
+        if (block == TCBlocks.NITOR_LIGHTBLUE.get()) return 0x3AB3DA;
+        if (block == TCBlocks.NITOR_LIME.get()) return 0x80C71F;
+        if (block == TCBlocks.NITOR_MAGENTA.get()) return 0xC74EBD;
+        if (block == TCBlocks.NITOR_ORANGE.get()) return 0xF9801D;
+        if (block == TCBlocks.NITOR_PINK.get()) return 0xF38BAA;
+        if (block == TCBlocks.NITOR_PURPLE.get()) return 0x8932B8;
+        if (block == TCBlocks.NITOR_RED.get()) return 0xB02E26;
+        if (block == TCBlocks.NITOR_SILVER.get()) return 0x9D9D97;
+        if (block == TCBlocks.NITOR_WHITE.get()) return 0xF9FFFE;
+        return YELLOW_NITOR_COLOR;
+    }
     private static void spawnFlame(
             Level level,
             double x,
