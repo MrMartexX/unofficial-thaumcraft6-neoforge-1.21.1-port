@@ -29,13 +29,21 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build NeoForge module
+      - name: Patch CI Gradle Java path
         working-directory: 05_neoforge_port
         shell: pwsh
         run: |
-          .\gradlew.bat build --no-daemon `
-            -Dorg.gradle.java.installations.auto-download=false `
-            -Dorg.gradle.java.installations.paths="$env:JAVA_HOME"
+          $propsPath = Resolve-Path gradle.properties
+          $props = Get-Content $propsPath -Raw
+          $props = $props -replace '(?m)^org\.gradle\.java\.installations\.auto-download=.*$', 'org.gradle.java.installations.auto-download=false'
+          $escapedJavaHome = $env:JAVA_HOME -replace '\\', '/'
+          $props = $props -replace '(?m)^org\.gradle\.java\.installations\.paths=.*$', "org.gradle.java.installations.paths=$escapedJavaHome"
+          [System.IO.File]::WriteAllText($propsPath, $props, [System.Text.UTF8Encoding]::new($false))
+
+      - name: Build NeoForge module
+        working-directory: 05_neoforge_port
+        shell: pwsh
+        run: .\gradlew.bat build --no-daemon
 
       - name: Upload build outputs
         if: always()
