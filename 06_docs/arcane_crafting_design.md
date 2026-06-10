@@ -75,6 +75,8 @@ Current exact arcane recipe fixtures:
 | `thaumcraft:caster_basic` | shaped | `UNLOCKAUROMANCY@2` | 100 | `aer`, `terra`, `aqua`, `ignis`, `ordo`, `perditio`, one each |
 | `thaumcraft:enchantedfabric` | shaped | `UNLOCKINFUSION` | 5 | none |
 | `thaumcraft:mirrorglass` | shapeless | `BASEARTIFICE` | 50 | `aqua`, `ordo`, one each |
+| `thaumcraft:filter` | shaped | `BASEALCHEMY` | 15 | `aqua` x1 |
+| `thaumcraft:morphicresonator` | shaped | `BASEALCHEMY` | 50 | `aer` x1, `ignis` x1 |
 | `thaumcraft:essentiasmelter` | shaped | `ESSENTIASMELTER@2` | 50 | `ignis` x1 |
 | `thaumcraft:infusionmatrix` | shaped | `INFUSION@2` | 150 | `aer`, `terra`, `aqua`, `ignis`, `ordo`, `perditio`, one each |
 
@@ -109,11 +111,17 @@ Legacy OreDictionary ingredients are translated to current common tags:
 - legacy cobblestone ingredient -> `c:cobblestones`;
 - `nitor` -> `thaumcraft:legacy_ore_dictionary/nitor`, backed by all
   sixteen currently registered nitor block-item ids.
+- `Items.GOLD_INGOT` -> `minecraft:gold_ingot`;
+- `BlocksTC.plankSilverwood` -> `thaumcraft:plank_silverwood`;
+- `ItemsTC.nuggets` metadata `10` -> `thaumcraft:rare_earth`;
+- `ItemsTC.filter` -> `thaumcraft:filter`;
+- `ItemsTC.morphicResonator` -> `thaumcraft:morphic_resonator`.
 
-The `essentiasmelter` and `infusionmatrix` fixtures are exact recipe and
-Thaumonomicon-page fixtures only. The `smelter_basic` machine behavior,
-Infusion Matrix multiblock behavior, and final nitor gameplay/FX behavior
-remain separate subsystem work.
+The `filter`, `morphicresonator`, `essentiasmelter`, and `infusionmatrix`
+fixtures are exact recipe and Thaumonomicon-page fixtures only. Essentia Filter
+and Morphic Resonator behavior, recipe-derived arcane aspect generation,
+`smelter_basic` machine behavior, Infusion Matrix multiblock behavior, and
+final nitor gameplay/FX behavior remain separate subsystem work.
 
 The old `research_bridge/thaumometer`, `research_bridge/vis_resonator`, and
 `research_bridge/wand_workbench`, `research_bridge/caster_basic`, and
@@ -212,9 +220,9 @@ Current checks cover:
   cost, missing vis, missing crystals, and vanilla fallback staying costless.
 
 Current runtime result: `23/23` Arcane Workbench behavior checks pass. The
-separate arcane recipe audit currently passes `91/91` checks with `12` loaded
-arcane recipes. The research recipe/page catalog reports `15 READY`,
-`180 DEFERRED`, and `8 LEGACY_MISSING` live references.
+separate arcane recipe audit currently passes `105/105` checks with `14` loaded
+arcane recipes. The research recipe/page catalog reports `17 READY`,
+`178 DEFERRED`, and `8 LEGACY_MISSING` live references.
 
 Run from `05_neoforge_port`:
 

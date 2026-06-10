@@ -109,6 +109,8 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.IRON_PLATE.get());
         acceptVisible(output, TCItems.THAUMIUM_PLATE.get());
         acceptVisible(output, TCItems.VOID_PLATE.get());
+        acceptVisible(output, TCItems.FILTER.get());
+        acceptVisible(output, TCItems.MORPHIC_RESONATOR.get());
         acceptVisible(output, TCItems.SALIS_MUNDUS.get());
         acceptVisible(output, TCItems.MIRRORED_GLASS.get());
 

@@ -34,6 +34,14 @@
       ]
     },
     {
+      "item": "thaumcraft:rare_earth",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:ordo", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 5 }
+      ]
+    },
+    {
       "item": "thaumcraft:amber",
       "aspects": [
         { "aspect": "thaumcraft:vinculum", "amount": 10 },

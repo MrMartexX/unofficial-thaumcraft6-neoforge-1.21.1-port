@@ -24,7 +24,7 @@ No gameplay behavior is implemented by this document. It is the blocker-clearing
 
 | Area | Status |
 |---|---|
-| Direct aspect assignments | `TCAspectAssignments` loads 686 exact assignments from bundled aspect assignment data: current registered Thaumcraft ids, legacy vanilla seeds, modern exact audit entries, audited 1.21-only vanilla manual entries, dump-derived runtime parity overrides for legacy-equivalent plain vanilla stacks, and dump-derived current registered Thaumcraft parity values. Spawn eggs, firework star/rocket, and infested blocks are excluded for 1.12 parity. |
+| Direct aspect assignments | `TCAspectAssignments` loads 687 exact assignments from bundled aspect assignment data: current registered Thaumcraft ids, legacy vanilla seeds, modern exact audit entries, audited 1.21-only vanilla manual entries, dump-derived runtime parity overrides for legacy-equivalent plain vanilla stacks, and dump-derived current registered Thaumcraft parity values. Spawn eggs, firework star/rocket, and infested blocks are excluded for 1.12 parity. |
 | Parity guard | `TCAspectParityValidator` validates aspect definitions, `AspectList`, helper algorithms, and direct assignments at bootstrap. |
 | Current tag resources | Only vanilla-style `minecraft` item/block tags exist for logs, leaves, saplings, planks, stairs/slabs, and mining requirements. |
 | Current common `c` tags in port resources | Authored for audited ore/gem/material memberships: amber/cinnabar/quartz, vanilla ores/gems/ingots/dusts, and ore-derived raw materials. NeoForge provides common tags too, but the port authors the needed memberships so validation is deterministic. |

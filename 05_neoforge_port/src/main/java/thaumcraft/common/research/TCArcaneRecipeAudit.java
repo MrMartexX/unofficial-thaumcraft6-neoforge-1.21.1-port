@@ -41,6 +41,10 @@ final class TCArcaneRecipeAudit {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "enchantedfabric");
     private static final ResourceLocation MIRROR_GLASS =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "mirrorglass");
+    private static final ResourceLocation FILTER =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "filter");
+    private static final ResourceLocation MORPHIC_RESONATOR =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "morphicresonator");
     private static final ResourceLocation MECHANISM_SIMPLE =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "mechanism_simple");
     private static final ResourceLocation MECHANISM_COMPLEX =
@@ -55,6 +59,8 @@ final class TCArcaneRecipeAudit {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "fabric");
     private static final ResourceLocation MIRRORED_GLASS =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "mirrored_glass");
+    private static final ResourceLocation MORPHIC_RESONATOR_ITEM =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "morphic_resonator");
     private static final ResourceLocation THAUMOMETER_BRIDGE =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "research_bridge/thaumometer");
     private static final ResourceLocation VIS_RESONATOR_BRIDGE =
@@ -90,7 +96,7 @@ final class TCArcaneRecipeAudit {
     static Report buildReport(RecipeManager recipeManager, HolderLookup.Provider registries) {
         ArrayList<Check> checks = new ArrayList<>();
         int arcaneRecipeCount = recipeManager.getAllRecipesFor(TCRecipes.ARCANE_TYPE.get()).size();
-        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 12, "count=" + arcaneRecipeCount));
+        checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 14, "count=" + arcaneRecipeCount));
         checks.add(check(
                 "thaumometer_wrong_vanilla_bridge_removed",
                 recipeManager.byKey(THAUMOMETER_BRIDGE).isEmpty(),
@@ -560,6 +566,104 @@ final class TCArcaneRecipeAudit {
                 "availability=" + mirrorGlassAvailability
         ));
 
+        Optional<TCArcaneRecipe> filter = recipeManager.byKey(FILTER)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value());
+        checks.add(check("filter_arcane_recipe_loaded", filter.isPresent(), FILTER.toString()));
+        checks.add(check(
+                "filter_is_not_vanilla_crafting_recipe",
+                recipeManager.byKey(FILTER)
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isEmpty(),
+                FILTER.toString()
+        ));
+        if (filter.isPresent()) {
+            TCArcaneRecipe recipe = filter.get();
+            checks.add(check(
+                    "filter_research_and_vis",
+                    "BASEALCHEMY".equals(recipe.getResearch()) && recipe.getVis() == 15,
+                    "research=" + recipe.getResearch() + ", vis=" + recipe.getVis()
+            ));
+            checks.add(check(
+                    "filter_ordered_crystal_costs",
+                    crystalSummary(recipe).equals(List.of("aqua:1")),
+                    crystalSummary(recipe).toString()
+            ));
+            checks.add(check(
+                    "filter_result",
+                    FILTER.equals(BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                            && recipe.getResultItem(registries).getCount() == 2,
+                    recipe.getResultItem(registries).toString()
+            ));
+            checks.add(check(
+                    "filter_shaped_pattern",
+                    matchesFilterPattern(recipe),
+                    "width=" + recipe.width() + ", height=" + recipe.height()
+            ));
+        }
+
+        TCResearchPageAvailability filterAvailability = TCResearchPageCatalogManager.availability(
+                FILTER.toString(),
+                recipeManager
+        );
+        checks.add(check(
+                "filter_catalog_arcane_snapshot_ready",
+                filterAvailability == TCResearchPageAvailability.READY
+                        && TCResearchPageCatalogManager.buildArcanePage(FILTER, recipeManager, registries).isPresent(),
+                "availability=" + filterAvailability
+        ));
+
+        Optional<TCArcaneRecipe> morphicResonator = recipeManager.byKey(MORPHIC_RESONATOR)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value());
+        checks.add(check(
+                "morphicresonator_arcane_recipe_loaded",
+                morphicResonator.isPresent(),
+                MORPHIC_RESONATOR.toString()
+        ));
+        checks.add(check(
+                "morphicresonator_is_not_vanilla_crafting_recipe",
+                recipeManager.byKey(MORPHIC_RESONATOR)
+                        .filter(holder -> holder.value() instanceof CraftingRecipe)
+                        .isEmpty(),
+                MORPHIC_RESONATOR.toString()
+        ));
+        if (morphicResonator.isPresent()) {
+            TCArcaneRecipe recipe = morphicResonator.get();
+            checks.add(check(
+                    "morphicresonator_research_and_vis",
+                    "BASEALCHEMY".equals(recipe.getResearch()) && recipe.getVis() == 50,
+                    "research=" + recipe.getResearch() + ", vis=" + recipe.getVis()
+            ));
+            checks.add(check(
+                    "morphicresonator_ordered_crystal_costs",
+                    crystalSummary(recipe).equals(List.of("aer:1", "ignis:1")),
+                    crystalSummary(recipe).toString()
+            ));
+            checks.add(check(
+                    "morphicresonator_result",
+                    MORPHIC_RESONATOR_ITEM.equals(BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                            && recipe.getResultItem(registries).getCount() == 1,
+                    recipe.getResultItem(registries).toString()
+            ));
+            checks.add(check(
+                    "morphicresonator_shaped_pattern",
+                    matchesMorphicResonatorPattern(recipe),
+                    "width=" + recipe.width() + ", height=" + recipe.height()
+            ));
+        }
+
+        TCResearchPageAvailability morphicResonatorAvailability = TCResearchPageCatalogManager.availability(
+                MORPHIC_RESONATOR.toString(),
+                recipeManager
+        );
+        checks.add(check(
+                "morphicresonator_catalog_arcane_snapshot_ready",
+                morphicResonatorAvailability == TCResearchPageAvailability.READY
+                        && TCResearchPageCatalogManager.buildArcanePage(MORPHIC_RESONATOR, recipeManager, registries).isPresent(),
+                "availability=" + morphicResonatorAvailability
+        ));
+
         Optional<TCArcaneRecipe> goggles = recipeManager.byKey(GOGGLES)
                 .filter(holder -> holder.value() instanceof TCArcaneRecipe)
                 .map(holder -> (TCArcaneRecipe) holder.value());
@@ -853,6 +957,34 @@ final class TCArcaneRecipeAudit {
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
         return ingredients.get(0).test(new ItemStack(TCItems.QUICKSILVER.get()))
                 && ingredients.get(1).test(new ItemStack(Items.GLASS_PANE));
+    }
+
+    private static boolean matchesFilterPattern(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapedArcaneRecipe) || recipe.width() != 3 || recipe.height() != 1) {
+            return false;
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients.size() == 3
+                && ingredients.get(0).test(new ItemStack(Items.GOLD_INGOT))
+                && ingredients.get(1).test(new ItemStack(TCItems.PLANK_SILVERWOOD.get()))
+                && ingredients.get(2).test(new ItemStack(Items.GOLD_INGOT));
+    }
+
+    private static boolean matchesMorphicResonatorPattern(TCArcaneRecipe recipe) {
+        if (!(recipe instanceof TCShapedArcaneRecipe) || recipe.width() != 3 || recipe.height() != 3) {
+            return false;
+        }
+        NonNullList<Ingredient> ingredients = recipe.getIngredients();
+        return ingredients.size() == 9
+                && ingredients.get(0).isEmpty()
+                && ingredients.get(1).test(new ItemStack(Items.GLASS_PANE))
+                && ingredients.get(2).isEmpty()
+                && ingredients.get(3).test(new ItemStack(TCItems.BRASS_PLATE.get()))
+                && ingredients.get(4).test(new ItemStack(TCItems.RARE_EARTH.get()))
+                && ingredients.get(5).test(new ItemStack(TCItems.BRASS_PLATE.get()))
+                && ingredients.get(6).isEmpty()
+                && ingredients.get(7).test(new ItemStack(Items.GLASS_PANE))
+                && ingredients.get(8).isEmpty();
     }
 
     private static String wandWorkbenchPatternDetail(TCArcaneRecipe recipe) {

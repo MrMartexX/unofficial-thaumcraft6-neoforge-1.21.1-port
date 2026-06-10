@@ -83,19 +83,23 @@ assets/thaumcraft/textures/items/<item_id>.png
 
 This is acceptable for the initial port because the legacy Thaumcraft asset tree already uses `textures/items`. A later resource cleanup may standardize paths, but it should be done deliberately and consistently across all item models and copied textures.
 
-## Next simple item candidates
+## Simple item candidate status
 
-The next Gate 1 expansion should continue with simple, low-risk resource identity entries only after the current implemented entries pass asset and creative-order audit.
+The Gate 1 candidate list is historical workflow guidance. Some entries below
+are already registered because later research/arcane recipe slices needed their
+stable ids. Future Gate 1 work should continue with low-risk resource identity
+entries only after the current implemented entries pass asset and creative-order
+audit.
 
-| Suggested order | Legacy field | Recommended id | Legacy texture | Gate 1 behavior | Notes |
+| Suggested order | Legacy field | Recommended id | Legacy texture | Gate 1 behavior | Status |
 |---:|---|---|---|---|---|
-| 1 | `ItemsTC.visResonator` | `vis_resonator` | `vis_resonator.png` | Plain item | Behavior later if required |
-| 2 | `ItemsTC.tallow` | `tallow` | `tallow.png` | Plain item | Simple resource |
-| 3 | `ItemsTC.mechanismSimple` | `mechanism_simple` | `mechanism_simple.png` | Plain item | Simple resource |
-| 4 | `ItemsTC.mechanismComplex` | `mechanism_complex` | `mechanism_complex.png` | Plain item | Simple resource |
-| 5 | `ItemsTC.filter` | `filter` | `filter.png` | Plain item | Simple resource |
-| 6 | `ItemsTC.morphicResonator` | `morphic_resonator` | `morphic_resonator.png` | Plain item | Behavior deferred |
-| 7 | `ItemsTC.voidSeed` | `void_seed` | `void_seed.png` | Plain item | Simple resource |
+| 1 | `ItemsTC.visResonator` | `vis_resonator` | `vis_resonator.png` | Plain item | Registered; exact arcane recipe/page fixture exists; behavior later if required |
+| 2 | `ItemsTC.tallow` | `tallow` | `tallow.png` | Plain item | Still a low-risk future candidate |
+| 3 | `ItemsTC.mechanismSimple` | `mechanism_simple` | `mechanism_simple.png` | Plain item | Registered; exact arcane recipe/page fixture exists |
+| 4 | `ItemsTC.mechanismComplex` | `mechanism_complex` | `mechanism_complex.png` | Plain item | Registered; exact arcane recipe/page fixture exists |
+| 5 | `ItemsTC.filter` | `filter` | `filter.png` | Plain item | Registered; exact Basic Alchemy arcane recipe/page fixture exists; essentia behavior deferred |
+| 6 | `ItemsTC.morphicResonator` | `morphic_resonator` | `morphic_resonator.png` | Plain item | Registered; exact Basic Alchemy arcane recipe/page fixture exists; behavior deferred |
+| 7 | `ItemsTC.voidSeed` | `void_seed` | `void_seed.png` | Plain item | Still a low-risk future candidate |
 
 Do not add `salis_mundus` as a normal simple item unless its block interaction behavior is explicitly deferred and documented. In Thaumcraft 6, it participates in block interaction logic through `IDustTrigger`.
 

@@ -2,7 +2,7 @@
 
 | Check | Status | Detail |
 |---|---|---|
-| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=12 |
+| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=14 |
 | `thaumometer_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/thaumometer |
 | `vis_resonator_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/vis_resonator |
 | `wand_workbench_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/wand_workbench |
@@ -72,6 +72,20 @@
 | `mirrorglass_result` | `PASS` | 1 thaumcraft:mirrored_glass |
 | `mirrorglass_shapeless_quicksilver_glass_pane` | `PASS` | ingredients=2 |
 | `mirrorglass_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `filter_arcane_recipe_loaded` | `PASS` | thaumcraft:filter |
+| `filter_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:filter |
+| `filter_research_and_vis` | `PASS` | research=BASEALCHEMY, vis=15 |
+| `filter_ordered_crystal_costs` | `PASS` | [aqua:1] |
+| `filter_result` | `PASS` | 2 thaumcraft:filter |
+| `filter_shaped_pattern` | `PASS` | width=3, height=1 |
+| `filter_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
+| `morphicresonator_arcane_recipe_loaded` | `PASS` | thaumcraft:morphicresonator |
+| `morphicresonator_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:morphicresonator |
+| `morphicresonator_research_and_vis` | `PASS` | research=BASEALCHEMY, vis=50 |
+| `morphicresonator_ordered_crystal_costs` | `PASS` | [aer:1, ignis:1] |
+| `morphicresonator_result` | `PASS` | 1 thaumcraft:morphic_resonator |
+| `morphicresonator_shaped_pattern` | `PASS` | width=3, height=3 |
+| `morphicresonator_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 | `goggles_arcane_recipe_loaded` | `PASS` | thaumcraft:goggles |
 | `goggles_is_not_vanilla_crafting_recipe` | `PASS` | thaumcraft:goggles |
 | `goggles_research_and_vis` | `PASS` | research=UNLOCKARTIFICE, vis=50 |
@@ -94,4 +108,4 @@
 | `infusionmatrix_shaped_pattern` | `PASS` | width=3, height=3 |
 | `infusionmatrix_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 
-- Loaded arcane recipes: `12`
+- Loaded arcane recipes: `14`
