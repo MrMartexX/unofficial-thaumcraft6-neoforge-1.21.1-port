@@ -9,6 +9,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -62,6 +63,7 @@ final class TCAspectParityValidator {
         validateAspectRegistry();
         validateAspectListSemantics();
         validateAspectHelperSemantics();
+        validateEntityAspectAssignments();
         validateDirectAssignments();
         validateTagAssignments();
         validateComplexAssignments();
@@ -196,15 +198,40 @@ final class TCAspectParityValidator {
         expect(AspectHelper.generateTags(ItemStack.EMPTY) == null, "generateTags must remain unavailable until exact legacy generation is ported");
     }
 
+    private static void validateEntityAspectAssignments() {
+        expectEntity(EntityType.SPIDER, amount(Aspect.BEAST, 10), amount(Aspect.ENTROPY, 10), amount(Aspect.TRAP, 10));
+        expectEntity(EntityType.BAT, amount(Aspect.BEAST, 5), amount(Aspect.FLIGHT, 5), amount(Aspect.DARKNESS, 5));
+        expectEntity(EntityType.ENDERMAN, amount(Aspect.ELDRITCH, 10), amount(Aspect.MOTION, 15), amount(Aspect.DESIRE, 5));
+        expectEntity(EntityType.CREEPER, amount(Aspect.PLANT, 15), amount(Aspect.FIRE, 15));
+        expectEntity(EntityType.ELDER_GUARDIAN, amount(Aspect.BEAST, 10), amount(Aspect.ELDRITCH, 15), amount(Aspect.WATER, 15));
+        expectEntity(EntityType.ZOMBIE_VILLAGER, amount(Aspect.UNDEAD, 20), amount(Aspect.MAN, 15), amount(Aspect.EARTH, 5));
+        expectEntity(EntityType.WARDEN, amount(Aspect.BEAST, 30), amount(Aspect.DARKNESS, 30), amount(Aspect.SENSES, 20), amount(Aspect.AVERSION, 30), amount(Aspect.SOUL, 15));
+    }
+
     private static void validateDirectAssignments() {
         Map<ResourceLocation, AspectList> tags = TCAspectAssignments.directObjectTags();
-        expectEquals(672, tags.size(), "direct object assignment count");
+        expectEquals(687, tags.size(), "direct object assignment count");
 
         expectDirect(tags, "ore_quartz", amount(Aspect.EARTH, 5), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "ore_cinnabar", amount(Aspect.EARTH, 5), amount(Aspect.METAL, 10), amount(Aspect.ALCHEMY, 5), amount(Aspect.DEATH, 5));
         expectDirect(tags, "ore_amber", amount(Aspect.EARTH, 5), amount(Aspect.TRAP, 10), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "quicksilver", amount(Aspect.METAL, 10), amount(Aspect.DEATH, 5), amount(Aspect.ALCHEMY, 5));
+        expectDirect(tags, "rare_earth", amount(Aspect.EARTH, 5), amount(Aspect.ORDER, 5), amount(Aspect.METAL, 5));
         expectDirect(tags, "amber", amount(Aspect.TRAP, 10), amount(Aspect.CRYSTAL, 10));
+        expectDirect(tags, "table_wood", amount(Aspect.TOOL, 1), amount(Aspect.PLANT, 6));
+        expectDirect(tags, "table_stone", amount(Aspect.TOOL, 1), amount(Aspect.EARTH, 9));
+        expectDirect(tags, "research_table", amount(Aspect.TOOL, 1), amount(Aspect.PLANT, 6), amount(Aspect.MIND, 5));
+        expectDirect(
+                tags,
+                "thaumonomicon",
+                amount(Aspect.MIND, 17),
+                amount(Aspect.PLANT, 27),
+                amount(Aspect.WATER, 9),
+                amount(Aspect.AIR, 4),
+                amount(Aspect.BEAST, 6),
+                amount(Aspect.PROTECT, 6),
+                amount(Aspect.MAGIC, 10)
+        );
 
         expectDirect(tags, "crystal_aer", amount(Aspect.AIR, 15), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "crystal_ignis", amount(Aspect.FIRE, 15), amount(Aspect.CRYSTAL, 10));
@@ -241,6 +268,25 @@ final class TCAspectParityValidator {
         expectDirect(tags, "stairs_arcane_brick", amount(Aspect.EARTH, 2));
         expectDirect(tags, "amber_brick");
         expectDirect(tags, "fabric", amount(Aspect.BEAST, 26), amount(Aspect.CRAFT, 6), amount(Aspect.MAGIC, 1));
+        expectDirect(tags, "salis_mundus", amount(Aspect.MAGIC, 5), amount(Aspect.ENERGY, 5));
+        expectDirect(tags, "brain", amount(Aspect.LIFE, 5), amount(Aspect.MIND, 20), amount(Aspect.UNDEAD, 10));
+        expectDirect(tags, "alumentum", amount(Aspect.ENERGY, 13), amount(Aspect.FIRE, 13), amount(Aspect.ENTROPY, 2));
+        expectDirect(tags, "nitor_yellow", amount(Aspect.SENSES, 5), amount(Aspect.LIGHT, 13), amount(Aspect.ENERGY, 3), amount(Aspect.FIRE, 3));
+        expectDirect(tags, "thaumium_ingot", amount(Aspect.METAL, 15), amount(Aspect.MAGIC, 2), amount(Aspect.EARTH, 2));
+        expectDirect(tags, "brass_ingot", amount(Aspect.METAL, 10), amount(Aspect.TOOL, 5));
+        expectDirect(tags, "brass_plate", amount(Aspect.METAL, 7), amount(Aspect.TOOL, 3));
+        expectDirect(tags, "mechanism_simple",
+                amount(Aspect.METAL, 27),
+                amount(Aspect.TOOL, 4),
+                amount(Aspect.MAGIC, 2));
+        expectDirect(tags, "mechanism_complex",
+                amount(Aspect.METAL, 65),
+                amount(Aspect.TOOL, 6),
+                amount(Aspect.MAGIC, 9),
+                amount(Aspect.EARTH, 12),
+                amount(Aspect.MECHANISM, 7),
+                amount(Aspect.MOTION, 7),
+                amount(Aspect.ENERGY, 5));
         expectDirect(tags, "goggles",
                 amount(Aspect.SENSES, 25),
                 amount(Aspect.AURA, 25),
@@ -249,6 +295,12 @@ final class TCAspectParityValidator {
                 amount(Aspect.METAL, 60),
                 amount(Aspect.DESIRE, 45),
                 amount(Aspect.MAGIC, 9));
+        expectDirect(tags, "thaumometer",
+                amount(Aspect.SENSES, 10),
+                amount(Aspect.AURA, 10),
+                amount(Aspect.METAL, 30),
+                amount(Aspect.DESIRE, 30),
+                amount(Aspect.MAGIC, 3));
 
         expectDirect(tags, "minecraft", "coal_ore", amount(Aspect.EARTH, 5), amount(Aspect.ENERGY, 15), amount(Aspect.FIRE, 15));
         expectDirect(tags, "minecraft", "coal", amount(Aspect.ENERGY, 10), amount(Aspect.FIRE, 10));
@@ -412,6 +464,22 @@ final class TCAspectParityValidator {
             expectSame(expected[i].aspect(), actualAspects[i], namespace + ":" + path + " aspect order " + i);
             expectEquals(expected[i].amount(), actual.getAmount(expected[i].aspect()), namespace + ":" + path + " amount for " + expected[i].aspect().getTag());
         }
+    }
+
+    private static void expectEntity(EntityType<?> type, Amount... expected) {
+        AspectList actual = TCEntityAspectAssignments.getEntityTypeAspectsForValidation(type);
+        expectNotNull(actual, "missing entity aspect assignment " + EntityType.getKey(type));
+        Aspect[] actualAspects = actual.getAspects();
+        expectEquals(expected.length, actualAspects.length, EntityType.getKey(type) + " aspect count");
+        for (int i = 0; i < expected.length; i++) {
+            expectSame(expected[i].aspect(), actualAspects[i], EntityType.getKey(type) + " aspect order " + i);
+            expectEquals(expected[i].amount(), actual.getAmount(expected[i].aspect()), EntityType.getKey(type) + " amount for " + expected[i].aspect().getTag());
+        }
+    }
+
+    private static void expectNoEntity(EntityType<?> type) {
+        AspectList actual = TCEntityAspectAssignments.getEntityTypeAspectsForValidation(type);
+        expect(actual == null, "unexpected entity aspect assignment " + EntityType.getKey(type));
     }
 
     private static void expectAspectOrder(Aspect[] expected, Aspect[] actual, String message) {

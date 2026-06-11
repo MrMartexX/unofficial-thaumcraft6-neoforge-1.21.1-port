@@ -35,6 +35,7 @@ import thaumcraft.api.aspects.AspectList;
 
 final class TCAspectStackRules {
     private static final ResourceKey<Potion> WATER = potion("water");
+    private static final ResourceKey<Potion> LONG_SLOWNESS = potion("long_slowness");
     private static final Map<PotionKey, AspectList> LEGACY_POTION_OVERRIDES = createLegacyPotionOverrides();
     private static final Map<ResourceKey<Potion>, PotionMix> POTION_MIXES = createPotionMixes();
 
@@ -124,6 +125,35 @@ final class TCAspectStackRules {
         addItemTypeBonuses(stack, out);
         addEnchantmentBonuses(stack, out);
         return finish(out);
+    }
+
+    static AspectList applyLegacyScanAspectQuirks(ItemStack stack, AspectList source) {
+        if (source == null || source.size() == 0 || stack == null || stack.isEmpty()) {
+            return source;
+        }
+
+        if (isLongSlownessScanQuirk(stack)
+                && source.getAmount(Aspect.SENSES) > 0
+                && source.getAmount(Aspect.PROTECT) <= 0) {
+            AspectList out = source.copy();
+            int senses = out.getAmount(Aspect.SENSES);
+            out.remove(Aspect.SENSES);
+            out.add(Aspect.PROTECT, senses);
+            return out;
+        }
+
+        return source;
+    }
+
+    private static boolean isLongSlownessScanQuirk(ItemStack stack) {
+        if (!stack.is(Items.POTION) && !stack.is(Items.LINGERING_POTION) && !stack.is(Items.TIPPED_ARROW)) {
+            return false;
+        }
+
+        PotionContents contents = stack.get(DataComponents.POTION_CONTENTS);
+        return contents != null
+                && contents.potion().isPresent()
+                && LONG_SLOWNESS.equals(contents.potion().get().unwrapKey().orElse(null));
     }
 
     private static void addItemTypeBonuses(ItemStack stack, AspectList out) {

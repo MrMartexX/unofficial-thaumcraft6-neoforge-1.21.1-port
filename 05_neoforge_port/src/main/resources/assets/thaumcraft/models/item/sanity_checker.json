@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "thaumcraft:items/sanity_checker"
+        "layer0": "thaumcraft:item/sanity_checker"
     }
 }

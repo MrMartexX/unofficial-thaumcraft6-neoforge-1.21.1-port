@@ -1,11 +1,7 @@
 {
-    "forge_marker": 1,
-    "defaults":
-    {
-        "transform": "forge:default-block",
-        "model": "cube_all", "textures": {"all": "thaumcraft:blocks/metal_brass"}
-    },
-    "variants": {
-        "normal": [{}], "inventory": [{}]
+  "variants": {
+    "": {
+      "model": "minecraft:block/iron_block"
     }
+  }
 }

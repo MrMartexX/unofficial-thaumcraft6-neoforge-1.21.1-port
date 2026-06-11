@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#c:plates/brass",
+    "#c:plates/iron",
+    "#c:plates/thaumium",
+    "#c:plates/void"
+  ]
+}

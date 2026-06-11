@@ -65,6 +65,10 @@ public final class TCAspectAssignments {
         return TCAspectStackRules.applyStackBonuses(stack, base);
     }
 
+    public static AspectList getScanAspects(ItemStack stack) {
+        return TCAspectStackRules.applyLegacyScanAspectQuirks(stack, getObjectAspects(stack));
+    }
+
     public static AspectList getGeneratedObjectAspects(ItemStack stack) {
         return TCGeneratedAspectCache.get(stack);
     }

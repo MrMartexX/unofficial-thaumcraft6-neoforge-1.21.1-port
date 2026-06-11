@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "thaumcraft:items/bucket_pure"
+        "layer0": "minecraft:item/water_bucket"
     }
 }

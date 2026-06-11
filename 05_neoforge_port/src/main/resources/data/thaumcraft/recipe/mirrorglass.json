@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:arcane_shapeless",
+  "research": "BASEARTIFICE",
+  "vis": 50,
+  "crystals": [
+    {
+      "aspect": "aqua",
+      "amount": 1
+    },
+    {
+      "aspect": "ordo",
+      "amount": 1
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "thaumcraft:quicksilver"
+    },
+    {
+      "item": "minecraft:glass_pane"
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:mirrored_glass",
+    "count": 1
+  }
+}

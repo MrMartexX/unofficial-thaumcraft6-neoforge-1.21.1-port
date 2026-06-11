@@ -1,7 +1,7 @@
 # Vanilla Post-1.12 Aspect Rationale Table
 
 Target module: `05_neoforge_port`
-Last updated: 2026-05-08
+Last updated: 2026-05-14
 
 ## Purpose
 
@@ -24,6 +24,8 @@ Guide constraints applied: old `OreDictionary` categories become explicit tags, 
 | `MODERN_ONLY_POLICY_REVIEW` rows | `383` |
 
 `MODERN_ONLY_POLICY_REVIEW` means the stack has no exact 1.12 comparison target; this document is the written policy/rationale for those values, not proof that the item is broken.
+
+Latest validation: the aspect runtime comparer has `1139/1139` comparable rows identical and leaves these `848` modern-only rows as documented policy, not port gaps. Server reload validation reports `1230/1230` assignable current `minecraft:*` item ids with non-empty aspects; empty plain vanilla rows are limited to intentional legacy-style exclusions.
 
 ## Amount Scale
 

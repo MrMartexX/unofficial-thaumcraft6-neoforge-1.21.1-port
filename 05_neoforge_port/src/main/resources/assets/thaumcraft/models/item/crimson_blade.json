@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "thaumcraft:items/crimson_blade"
+        "layer0": "thaumcraft:item/crimson_blade"
     }
 }

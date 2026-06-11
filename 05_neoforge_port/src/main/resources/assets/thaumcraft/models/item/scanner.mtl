@@ -11,8 +11,8 @@ newmtl body
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka thaumcraft:items\scanner.png
-	map_Kd thaumcraft:items\scanner.png
+	map_Ka #body
+	map_Kd #body
 newmtl pane
 	Ns 10.0000
 	Ni 1.5000
@@ -24,5 +24,5 @@ newmtl pane
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka thaumcraft:items\scanscreen.png
-	map_Kd thaumcraft:items\scanscreen.png
+	map_Ka #pane
+	map_Kd #pane

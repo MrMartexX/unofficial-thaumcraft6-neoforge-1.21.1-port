@@ -1,11 +1,11 @@
 {
     "ambientocclusion": false,
     "textures": {
-        "particle": "thaumcraft:blocks/crucible_side",
-        "top": "thaumcraft:blocks/crucible_top",
-        "side": "thaumcraft:blocks/crucible_side",
-        "inner": "thaumcraft:blocks/crucible_inner",
-        "bottom": "thaumcraft:blocks/crucible_bottom"
+        "particle": "thaumcraft:block/crucible_side",
+        "top": "thaumcraft:block/crucible_top",
+        "side": "thaumcraft:block/crucible_side",
+        "inner": "thaumcraft:block/crucible_inner",
+        "bottom": "thaumcraft:block/crucible_bottom"
     },
     "elements": [
         {   "from": [ 0, 3, 0 ],

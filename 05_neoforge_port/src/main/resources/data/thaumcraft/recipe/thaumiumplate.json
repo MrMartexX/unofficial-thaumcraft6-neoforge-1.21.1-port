@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "thaumcraft",
+  "key": {
+    "B": {
+      "tag": "c:ingots/thaumium"
+    }
+  },
+  "pattern": [
+    "BBB"
+  ],
+  "result": {
+    "count": 3,
+    "id": "thaumcraft:thaumium_plate"
+  }
+}

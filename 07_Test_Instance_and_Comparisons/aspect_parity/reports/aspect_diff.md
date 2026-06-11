@@ -1,11 +1,11 @@
 # Thaumcraft Aspect Dump Diff
 
 - Legacy entries: `1798`
-- Modern entries: `1986`
+- Modern entries: `1987`
 - Legacy comparison keys: `1537`
-- Modern comparison keys: `1986`
-- Comparable keys: `1138`
-- Policy file: `input\legacy_to_modern_stack_map.json`
+- Modern comparison keys: `1987`
+- Comparable keys: `1139`
+- Policy file: `D:\Thaumcraft_6_port_to_1.21.1\07_Test_Instance_and_Comparisons\aspect_parity\input\legacy_to_modern_stack_map.json`
 - Legacy key aliases configured: `82`
 - Legacy stack-key aliases configured: `201`
 - Legacy entries mapped through aliases: `283`
@@ -14,13 +14,13 @@
 
 | Category | Count |
 |---|---:|
-| `IDENTICAL` | 1138 |
+| `IDENTICAL` | 1139 |
 | `ORDER_ONLY_DIFF` | 0 |
 | `AMOUNT_DIFF` | 0 |
 | `ASPECT_SET_DIFF` | 0 |
 | `NULL_EMPTY_DIFF` | 0 |
 | `RESULT_KIND_DIFF` | 0 |
-| `LEGACY_ONLY` | 399 |
+| `LEGACY_ONLY` | 398 |
 | `MODERN_ONLY` | 848 |
 
 ## Classification Summary
@@ -30,17 +30,17 @@
 | `EXPECTED_VERSION_FLATTENED_STACK` | 332 |
 | `EXPECTED_VERSION_MODERN_ADDITION` | 93 |
 | `LEGACY_ONLY_MAPPING_REVIEW` | 3 |
-| `LEGACY_ONLY_THAUMCRAFT_UNPORTED` | 396 |
+| `LEGACY_ONLY_THAUMCRAFT_UNPORTED` | 395 |
 | `MODERN_ONLY_COMPONENT_POLICY_REVIEW` | 40 |
 | `MODERN_ONLY_POLICY_REVIEW` | 383 |
-| `PARITY_OK` | 855 |
+| `PARITY_OK` | 856 |
 | `PARITY_OK_LEGACY_TO_MODERN_MAP` | 283 |
 
 ## Root Cause Buckets
 
 | Classification | Count | Root cause |
 |---|---:|---|
-| `LEGACY_ONLY_THAUMCRAFT_UNPORTED` | 396 | The legacy stack belongs to Thaumcraft content that is not fully registered or flattened in the NeoForge port yet. |
+| `LEGACY_ONLY_THAUMCRAFT_UNPORTED` | 395 | The legacy stack belongs to Thaumcraft content that is not fully registered or flattened in the NeoForge port yet. |
 | `MODERN_ONLY_POLICY_REVIEW` | 383 | The stack exists only in Minecraft 1.21.1 or is exposed by a 1.21-only component/sample manifest. |
 | `PARITY_OK_LEGACY_TO_MODERN_MAP` | 283 | Resolved runtime AspectList matches after an explicit legacy-to-modern id or metadata mapping. |
 | `EXPECTED_VERSION_FLATTENED_STACK` | 252 | The stack is exposed as its own 1.21 id instead of the 1.12 registry-id/meta shape, or it was added after 1.12.2. |

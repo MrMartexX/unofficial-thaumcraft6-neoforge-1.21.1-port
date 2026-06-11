@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "thaumcraft:items/grapple_gun_spool"
+        "layer0": "thaumcraft:item/grapple_gun_spool"
     }
 }

@@ -21,6 +21,23 @@ public final class TCConfig {
             .comment("Automatically initializes Thaumcraft aura data for loaded chunks.")
             .define("generateAura", true);
 
+
+    public static final ModConfigSpec.BooleanValue ENABLE_KNOWLEDGE_DEBUG_COMMANDS = BUILDER
+            .comment("Registers permission-level-2 Thaumcraft knowledge and research debug commands for port validation.")
+            .define("enableKnowledgeDebugCommands", true);
+
+    public static final ModConfigSpec.BooleanValue ENABLE_SCANNING_DEBUG_COMMANDS = BUILDER
+            .comment("Registers permission-level-2 Thaumcraft scanning debug commands for port validation.")
+            .define("enableScanningDebugCommands", true);
+
+    public static final ModConfigSpec.BooleanValue ENABLE_WARP_DEBUG_COMMANDS = BUILDER
+            .comment("Registers permission-level-2 Thaumcraft warp debug commands for port validation.")
+            .define("enableWarpDebugCommands", true);
+
+    public static final ModConfigSpec.BooleanValue WUSS_MODE = BUILDER
+            .comment("Matches the legacy Thaumcraft wussMode option: research progression does not award warp.")
+            .define("wussMode", false);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private TCConfig() {

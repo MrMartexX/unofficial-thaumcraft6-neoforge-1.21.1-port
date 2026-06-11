@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "thaumcraft:items/void_sword"
+        "layer0": "thaumcraft:item/void_sword"
     }
 }

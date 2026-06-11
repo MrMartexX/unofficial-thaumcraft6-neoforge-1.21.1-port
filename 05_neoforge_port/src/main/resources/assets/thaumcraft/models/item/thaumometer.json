@@ -1,0 +1,83 @@
+{
+  "loader": "neoforge:composite",
+  "gui_light": "front",
+  "textures": {
+    "particle": "thaumcraft:item/thaumometer"
+  },
+  "children": {
+    "body": {
+      "loader": "neoforge:obj",
+      "model": "thaumcraft:models/item/scanner.obj",
+      "render_type": "minecraft:solid",
+      "automatic_culling": false,
+      "shade_quads": true,
+      "flip_v": true,
+      "emissive_ambient": true,
+      "textures": {
+        "body": "thaumcraft:item/thaumometer",
+        "pane": "thaumcraft:item/scanscreen",
+        "particle": "thaumcraft:item/thaumometer"
+      },
+      "visibility": {
+        "screen": false,
+        "screen_back": false
+      }
+    },
+    "pane": {
+      "loader": "neoforge:obj",
+      "model": "thaumcraft:models/item/scanner.obj",
+      "render_type": "minecraft:translucent",
+      "automatic_culling": false,
+      "shade_quads": true,
+      "flip_v": true,
+      "emissive_ambient": true,
+      "textures": {
+        "body": "thaumcraft:item/thaumometer",
+        "pane": "thaumcraft:item/scanscreen",
+        "particle": "thaumcraft:item/thaumometer"
+      },
+      "visibility": {
+        "scanner": false,
+        "screen_back": false
+      }
+    }
+  },
+  "item_render_order": ["body", "pane"],
+  "display": {
+    "gui": {
+      "rotation": [90, 0, 0],
+      "translation": [2.6, -2.6, 0],
+      "scale": [0.35, 0.35, 0.35]
+    },
+    "ground": {
+      "rotation": [90, 0, 0],
+      "translation": [1.6, 1.6, 1.6],
+      "scale": [0.2, 0.2, 0.2]
+    },
+    "fixed": {
+      "rotation": [-90, 0, 0],
+      "translation": [3.2, 3.2, -2.7],
+      "scale": [0.4, 0.4, 0.4]
+    },
+    "thirdperson_righthand": {
+      "rotation": [180, 180, 90],
+      "translation": [0.8, -0.6, 1],
+      "scale": [0.2, 0.2, 0.2]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [180,180, 90],
+      "translation": [0.8, 0.2, 1],
+      "scale": [0.2, 0.2, 0.2]
+    },
+    "firstperson_righthand": {
+      "rotation": [90, 0, 0],
+      "translation": [-1, 0.1, -6.4],
+      "scale": [1, 1, 1]
+    },
+    "firstperson_lefthand": {
+      "rotation": [90, 0, 0],
+      "translation": [-17, 0.1, -6.4],
+      "scale": [1, 1, 1]
+    }
+  }
+}

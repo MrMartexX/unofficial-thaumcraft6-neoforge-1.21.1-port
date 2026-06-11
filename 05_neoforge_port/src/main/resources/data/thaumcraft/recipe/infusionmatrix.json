@@ -1,0 +1,48 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "INFUSION@2",
+  "vis": 150,
+  "crystals": [
+    {
+      "aspect": "aer",
+      "amount": 1
+    },
+    {
+      "aspect": "terra",
+      "amount": 1
+    },
+    {
+      "aspect": "aqua",
+      "amount": 1
+    },
+    {
+      "aspect": "ignis",
+      "amount": 1
+    },
+    {
+      "aspect": "ordo",
+      "amount": 1
+    },
+    {
+      "aspect": "perditio",
+      "amount": 1
+    }
+  ],
+  "pattern": [
+    "S S",
+    " N ",
+    "S S"
+  ],
+  "key": {
+    "N": {
+      "tag": "thaumcraft:legacy_ore_dictionary/nitor"
+    },
+    "S": {
+      "item": "thaumcraft:stone_arcane_brick"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:infusion_matrix",
+    "count": 1
+  }
+}

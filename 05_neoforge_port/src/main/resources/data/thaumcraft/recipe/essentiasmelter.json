@@ -1,0 +1,34 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "ESSENTIASMELTER@2",
+  "vis": 50,
+  "crystals": [
+    {
+      "aspect": "ignis",
+      "amount": 1
+    }
+  ],
+  "pattern": [
+    "BCB",
+    "SFS",
+    "SSS"
+  ],
+  "key": {
+    "B": {
+      "tag": "c:plates/brass"
+    },
+    "C": {
+      "item": "thaumcraft:crucible"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    },
+    "S": {
+      "tag": "c:cobblestones"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:smelter_basic",
+    "count": 1
+  }
+}

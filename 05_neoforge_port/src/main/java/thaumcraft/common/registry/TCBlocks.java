@@ -15,6 +15,11 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.blocks.basic.TCTableBlock;
+import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
+import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
+import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
+import thaumcraft.common.blocks.misc.TCNitorBlock;
 
 public final class TCBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Thaumcraft.MODID);
@@ -53,6 +58,41 @@ public final class TCBlocks {
     public static final Supplier<Block> AMBER_BLOCK = BLOCKS.register("amber_block", () -> amberBlock());
     public static final Supplier<Block> AMBER_BRICK = BLOCKS.register("amber_brick", () -> amberBlock());
 
+    public static final Supplier<Block> METAL_BRASS = BLOCKS.register("metal_brass", () -> metalBlock());
+    public static final Supplier<Block> METAL_THAUMIUM = BLOCKS.register("metal_thaumium", () -> metalBlock());
+    public static final Supplier<Block> METAL_VOID = BLOCKS.register("metal_void", () -> metalBlock());
+    public static final Supplier<Block> NITOR_BLACK = BLOCKS.register("nitor_black", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_BLUE = BLOCKS.register("nitor_blue", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_BROWN = BLOCKS.register("nitor_brown", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_CYAN = BLOCKS.register("nitor_cyan", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_GRAY = BLOCKS.register("nitor_gray", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_GREEN = BLOCKS.register("nitor_green", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_YELLOW = BLOCKS.register("nitor_yellow", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_LIGHTBLUE = BLOCKS.register("nitor_lightblue", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_LIME = BLOCKS.register("nitor_lime", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_MAGENTA = BLOCKS.register("nitor_magenta", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_ORANGE = BLOCKS.register("nitor_orange", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_PINK = BLOCKS.register("nitor_pink", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_PURPLE = BLOCKS.register("nitor_purple", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_RED = BLOCKS.register("nitor_red", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_SILVER = BLOCKS.register("nitor_silver", () -> nitorBlock(14));
+    public static final Supplier<Block> NITOR_WHITE = BLOCKS.register("nitor_white", () -> nitorBlock(14));
+
+    public static final Supplier<Block> TABLE_WOOD = BLOCKS.register("table_wood", () -> tableBlock(true));
+    public static final Supplier<Block> TABLE_STONE = BLOCKS.register("table_stone", () -> tableBlock(false));
+    public static final Supplier<Block> ARCANE_WORKBENCH = BLOCKS.register("arcane_workbench", () -> arcaneWorkbenchBlock());
+    public static final Supplier<Block> ARCANE_WORKBENCH_CHARGER = BLOCKS.register("arcane_workbench_charger", () -> arcaneWorkbenchChargerBlock());
+    public static final Supplier<Block> RESEARCH_TABLE = BLOCKS.register("research_table", () -> researchTableBlock());
+    public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> cauldronLikeBlock());
+    public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> furnaceLikeBlock());
+    public static final Supplier<Block> WAND_WORKBENCH = BLOCKS.register("wand_workbench", () -> workbenchBlock());
+    public static final Supplier<Block> INFUSION_MATRIX = BLOCKS.register("infusion_matrix", () ->
+            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                    .strength(5.0F, 1200.0F)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()));
+public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
+
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
 
@@ -90,6 +130,68 @@ public final class TCBlocks {
     private static Block woodBlock() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                 .strength(2.0F, 2.0F));
+    }
+
+    private static Block workbenchBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
+                .strength(2.5F, 2.5F));
+    }
+
+    private static Block arcaneWorkbenchBlock() {
+        return new TCArcaneWorkbenchBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
+                .strength(2.5F, 2.5F)
+                .noOcclusion());
+    }
+
+    private static Block arcaneWorkbenchChargerBlock() {
+        return new TCArcaneWorkbenchChargerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                .strength(1.25F, 10.0F)
+                .noOcclusion());
+    }
+
+    private static Block tableBlock(boolean wood) {
+        BlockBehaviour.Properties properties = BlockBehaviour.Properties.ofFullCopy(wood ? Blocks.OAK_PLANKS : Blocks.STONE)
+                .strength(wood ? 2.0F : 2.5F, wood ? 2.0F : 2.5F)
+                .noOcclusion();
+        return new TCTableBlock(properties, wood);
+    }
+
+    private static Block researchTableBlock() {
+        return new TCResearchTableBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                .strength(2.0F, 2.0F)
+                .noOcclusion());
+    }
+
+    private static Block cauldronLikeBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
+                .strength(2.0F, 6.0F)
+                .requiresCorrectToolForDrops());
+    }
+
+    private static Block furnaceLikeBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(3.5F, 17.5F)
+                .requiresCorrectToolForDrops());
+    }
+
+    private static Block metalBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(5.0F, 10.0F)
+                .requiresCorrectToolForDrops());
+    }
+
+    private static Block nitorBlock(int lightLevel) {
+        return new TCNitorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLOWSTONE)
+                .strength(0.1F, 0.1F)
+                .noOcclusion()
+                .lightLevel(state -> lightLevel));
+    }
+
+    private static Block golemBuilderBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(1.5F, 2.0F)
+                .sound(SoundType.STONE)
+                .noOcclusion());
     }
 
     private static Block amberBlock() {

@@ -1,0 +1,35 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "WORKBENCHCHARGER",
+  "vis": 200,
+  "crystals": [
+    {
+      "amount": 2,
+      "aspect": "aer"
+    },
+    {
+      "amount": 2,
+      "aspect": "ordo"
+    }
+  ],
+  "key": {
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "R": {
+      "item": "thaumcraft:vis_resonator"
+    },
+    "W": {
+      "item": "thaumcraft:plank_greatwood"
+    }
+  },
+  "pattern": [
+    " R ",
+    "W W",
+    "I I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:arcane_workbench_charger"
+  }
+}

@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+
+version = '0.1.0'
+group = 'tcresearchrecipecatalogexporter'
+archivesBaseName = 'tc-research-recipe-catalog-legacy-exporter'
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+minecraft {
+    mappings channel: 'snapshot', version: '20171003-1.12'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+    compileOnly files('../../01_Classic Thaumcraft 1.12.2 Forge/reference-jars/Thaumcraft-1.12.2-6.1.BETA26.jar')
+    compileOnly files('../../01_Classic Thaumcraft 1.12.2 Forge/reference-jars/Baubles-1.12-1.5.2.jar')
+}
+
+jar {
+    manifest {
+        attributes([
+                'Specification-Title'     : 'tc-research-recipe-catalog-legacy-exporter',
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.version,
+                'Implementation-Vendor'   : 'Thaumcraft parity diagnostics',
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')

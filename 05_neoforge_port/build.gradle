@@ -61,11 +61,87 @@ neoForge {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             def aspectDumpEnabled = providers.gradleProperty('tcAspectDump').orNull ?: System.getProperty('tc.aspectDump')
             def aspectDumpPath = providers.gradleProperty('tcAspectDumpPath').orNull ?: System.getProperty('tc.aspectDumpPath')
+            def scanDumpEnabled = providers.gradleProperty('tcScanDump').orNull ?: System.getProperty('tc.scanDump')
+            def scanDumpPath = providers.gradleProperty('tcScanDumpPath').orNull ?: System.getProperty('tc.scanDumpPath')
+            def scanEntityDumpEnabled = providers.gradleProperty('tcScanEntityDump').orNull ?: System.getProperty('tc.scanEntityDump')
+            def scanEntityDumpPath = providers.gradleProperty('tcScanEntityDumpPath').orNull ?: System.getProperty('tc.scanEntityDumpPath')
+            def researchRequirementAuditEnabled = providers.gradleProperty('tcResearchRequirementAudit').orNull ?: System.getProperty('tc.researchRequirementAudit')
+            def researchRequirementAuditPath = providers.gradleProperty('tcResearchRequirementAuditPath').orNull ?: System.getProperty('tc.researchRequirementAuditPath')
+            def researchRequirementAuditDetailLimit = providers.gradleProperty('tcResearchRequirementAuditDetailLimit').orNull ?: System.getProperty('tc.researchRequirementAuditDetailLimit')
+            def researchDataAuditEnabled = providers.gradleProperty('tcResearchDataAudit').orNull ?: System.getProperty('tc.researchDataAudit')
+            def researchDataAuditPath = providers.gradleProperty('tcResearchDataAuditPath').orNull ?: System.getProperty('tc.researchDataAuditPath')
+            def researchPageCatalogAuditEnabled = providers.gradleProperty('tcResearchPageCatalogAudit').orNull ?: System.getProperty('tc.researchPageCatalogAudit')
+            def researchPageCatalogAuditPath = providers.gradleProperty('tcResearchPageCatalogAuditPath').orNull ?: System.getProperty('tc.researchPageCatalogAuditPath')
+            def thaumonomiconProtocolAuditEnabled = providers.gradleProperty('tcThaumonomiconProtocolAudit').orNull ?: System.getProperty('tc.thaumonomiconProtocolAudit')
+            def thaumonomiconProtocolAuditPath = providers.gradleProperty('tcThaumonomiconProtocolAuditPath').orNull ?: System.getProperty('tc.thaumonomiconProtocolAuditPath')
+            def arcaneRecipeAuditEnabled = providers.gradleProperty('tcArcaneRecipeAudit').orNull ?: System.getProperty('tc.arcaneRecipeAudit')
+            def arcaneRecipeAuditPath = providers.gradleProperty('tcArcaneRecipeAuditPath').orNull ?: System.getProperty('tc.arcaneRecipeAuditPath')
+            def arcaneWorkbenchAuditEnabled = providers.gradleProperty('tcArcaneWorkbenchAudit').orNull ?: System.getProperty('tc.arcaneWorkbenchAudit')
+            def arcaneWorkbenchAuditPath = providers.gradleProperty('tcArcaneWorkbenchAuditPath').orNull ?: System.getProperty('tc.arcaneWorkbenchAuditPath')
+            def researchTableAuditEnabled = providers.gradleProperty('tcResearchTableAudit').orNull ?: System.getProperty('tc.researchTableAudit')
+            def researchTableAuditPath = providers.gradleProperty('tcResearchTableAuditPath').orNull ?: System.getProperty('tc.researchTableAuditPath')
             if (aspectDumpEnabled != null) {
                 systemProperty 'tc.aspectDump', aspectDumpEnabled
             }
             if (aspectDumpPath != null) {
                 systemProperty 'tc.aspectDumpPath', aspectDumpPath
+            }
+            if (scanDumpEnabled != null) {
+                systemProperty 'tc.scanDump', scanDumpEnabled
+            }
+            if (scanDumpPath != null) {
+                systemProperty 'tc.scanDumpPath', scanDumpPath
+            }
+            if (scanEntityDumpEnabled != null) {
+                systemProperty 'tc.scanEntityDump', scanEntityDumpEnabled
+            }
+            if (scanEntityDumpPath != null) {
+                systemProperty 'tc.scanEntityDumpPath', scanEntityDumpPath
+            }
+            if (researchRequirementAuditEnabled != null) {
+                systemProperty 'tc.researchRequirementAudit', researchRequirementAuditEnabled
+            }
+            if (researchRequirementAuditPath != null) {
+                systemProperty 'tc.researchRequirementAuditPath', researchRequirementAuditPath
+            }
+            if (researchRequirementAuditDetailLimit != null) {
+                systemProperty 'tc.researchRequirementAuditDetailLimit', researchRequirementAuditDetailLimit
+            }
+            if (researchDataAuditEnabled != null) {
+                systemProperty 'tc.researchDataAudit', researchDataAuditEnabled
+            }
+            if (researchDataAuditPath != null) {
+                systemProperty 'tc.researchDataAuditPath', researchDataAuditPath
+            }
+            if (researchPageCatalogAuditEnabled != null) {
+                systemProperty 'tc.researchPageCatalogAudit', researchPageCatalogAuditEnabled
+            }
+            if (researchPageCatalogAuditPath != null) {
+                systemProperty 'tc.researchPageCatalogAuditPath', researchPageCatalogAuditPath
+            }
+            if (thaumonomiconProtocolAuditEnabled != null) {
+                systemProperty 'tc.thaumonomiconProtocolAudit', thaumonomiconProtocolAuditEnabled
+            }
+            if (thaumonomiconProtocolAuditPath != null) {
+                systemProperty 'tc.thaumonomiconProtocolAuditPath', thaumonomiconProtocolAuditPath
+            }
+            if (arcaneRecipeAuditEnabled != null) {
+                systemProperty 'tc.arcaneRecipeAudit', arcaneRecipeAuditEnabled
+            }
+            if (arcaneRecipeAuditPath != null) {
+                systemProperty 'tc.arcaneRecipeAuditPath', arcaneRecipeAuditPath
+            }
+            if (arcaneWorkbenchAuditEnabled != null) {
+                systemProperty 'tc.arcaneWorkbenchAudit', arcaneWorkbenchAuditEnabled
+            }
+            if (arcaneWorkbenchAuditPath != null) {
+                systemProperty 'tc.arcaneWorkbenchAuditPath', arcaneWorkbenchAuditPath
+            }
+            if (researchTableAuditEnabled != null) {
+                systemProperty 'tc.researchTableAudit', researchTableAuditEnabled
+            }
+            if (researchTableAuditPath != null) {
+                systemProperty 'tc.researchTableAuditPath', researchTableAuditPath
             }
             logLevel = org.slf4j.event.Level.DEBUG
         }

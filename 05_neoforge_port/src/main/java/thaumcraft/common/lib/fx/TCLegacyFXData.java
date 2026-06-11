@@ -161,6 +161,75 @@ public final class TCLegacyFXData {
         );
     }
 
+    public static TCLegacyFXData simpleSparkle(
+            int age,
+            int startParticle,
+            float red,
+            float green,
+            float blue,
+            float scale,
+            float gravity
+    ) {
+        return generic(
+                age,
+                startParticle,
+                16,
+                1,
+                64,
+                true,
+                0,
+                red,
+                green,
+                blue,
+                1.0F,
+                scale
+        ).withAlpha(0.0F, 1.0F, 1.0F, 0.0F)
+                .withScale(scale, scale * 2.0F)
+                .withMotion(
+                        1.0D,
+                        gravity,
+                        5.0E-4D,
+                        0.001D,
+                        5.0E-4D,
+                        5.0E-4D,
+                        0.0D
+                );
+    }
+
+    public static TCLegacyFXData blockRune(
+            int age,
+            int runeParticle,
+            float red,
+            float green,
+            float blue,
+            float scale,
+            float gravity
+    ) {
+        return generic(
+                age * 3,
+                runeParticle,
+                1,
+                1,
+                64,
+                false,
+                0,
+                red,
+                green,
+                blue,
+                0.5F,
+                scale
+        ).withAlpha(0.0F, 0.5F, 0.4F, 0.0F)
+                .withMotion(
+                        LEGACY_DEFAULT_SLOWDOWN,
+                        gravity,
+                        0.0D,
+                        0.0D,
+                        0.0D,
+                        0.0D,
+                        0.0D
+                );
+    }
+
     public TCLegacyFXData withMotion(
             double slowDown,
             float gravity,

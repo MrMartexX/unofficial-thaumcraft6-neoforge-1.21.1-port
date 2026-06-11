@@ -5,6 +5,25 @@ Last reviewed commit: `70ec2f06ff06d53f7119f7db9adb83b792368874`
 Target module: `05_neoforge_port`
 Date: 2026-05-06
 
+## Incremental Update - 2026-06-09
+
+Branch `research-knowledge-scanning-design` now includes the visual parity checkpoint `27d3df6` plus a narrow active-resource cleanup for `smelter_basic`.
+
+Validation:
+
+- `.\gradlew.bat build --no-daemon` passed from `05_neoforge_port` after the cleanup.
+- The existing `run/logs/latest.log` predates checkpoint `27d3df6`, so it is not a fresh visual validation run for the latest item/block model changes.
+- That stale log still exposed an active model warning: `smelter_basic` referenced the old 1.12 texture path `blocks/furnace_top`.
+
+Action:
+
+- Updated active `smelter_basic`, `smelter_basic_off`, and `smelter_basic_on` block models to use `minecraft:block/furnace_top`.
+- Remaining `blocks/...` references found in `infernal_furnace`, `pattern_crafter`, and `redstone_relay` models were left untouched because those ids are not currently registered active blocks/items in `TCBlocks`/`TCItems`.
+
+Next validation:
+
+- Run a fresh `runClient` visual/resource pass before treating the latest charger, nitor, smelter, and creative-tab model work as visually closed.
+
 ## Scope
 
 This audit is limited to startup/runtime warnings for the current NeoForge 1.21.1 port after the legacy asset corpus import. It does not attempt to fully validate unported legacy resources.

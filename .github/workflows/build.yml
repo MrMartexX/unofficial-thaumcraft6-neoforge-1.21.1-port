@@ -1,0 +1,56 @@
+name: Build NeoForge Port
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Patch CI Gradle Java path
+        working-directory: 05_neoforge_port
+        shell: pwsh
+        run: |
+          $propsPath = Resolve-Path gradle.properties
+          $props = Get-Content $propsPath -Raw
+          $props = $props -replace '(?m)^org\.gradle\.java\.installations\.auto-download=.*$', 'org.gradle.java.installations.auto-download=false'
+          $escapedJavaHome = $env:JAVA_HOME -replace '\\', '/'
+          $props = $props -replace '(?m)^org\.gradle\.java\.installations\.paths=.*$', "org.gradle.java.installations.paths=$escapedJavaHome"
+          [System.IO.File]::WriteAllText($propsPath, $props, [System.Text.UTF8Encoding]::new($false))
+
+      - name: Build NeoForge module
+        working-directory: 05_neoforge_port
+        shell: pwsh
+        run: .\gradlew.bat build --no-daemon
+
+      - name: Upload build outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: neoforge-build-outputs
+          path: |
+            05_neoforge_port/build/libs/**
+            05_neoforge_port/build/reports/**
+            05_neoforge_port/build/test-results/**

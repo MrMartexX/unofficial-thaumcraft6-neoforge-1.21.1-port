@@ -1,0 +1,41 @@
+{
+  "legacy_files": [
+    "alchemy.json",
+    "artifice.json",
+    "auromancy.json",
+    "basics.json",
+    "eldritch.json",
+    "golemancy.json",
+    "infusion.json",
+    "scans.json"
+  ],
+  "modern_files": [
+    "alchemy.json",
+    "artifice.json",
+    "auromancy.json",
+    "basics.json",
+    "eldritch.json",
+    "golemancy.json",
+    "infusion.json",
+    "scans.json"
+  ],
+  "legacy_entry_count": 148,
+  "modern_entry_count": 148,
+  "runtime_entry_count": 148,
+  "source_diff": {
+    "missing": [],
+    "extra": [],
+    "changed": {}
+  },
+  "runtime_diff": {
+    "missing": [],
+    "extra": [],
+    "changed": {}
+  },
+  "category_diff": {
+    "missing": [],
+    "extra": [],
+    "changed": {}
+  },
+  "failed_progression_checks": []
+}

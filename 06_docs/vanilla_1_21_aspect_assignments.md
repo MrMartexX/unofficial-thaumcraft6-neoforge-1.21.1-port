@@ -1,13 +1,15 @@
 # Vanilla 1.21 Aspect Assignment Audit
 
 Target module: `05_neoforge_port`
-Last updated: 2026-05-08
+Last updated: 2026-05-14
 
 ## Purpose
 
 This document records every current manual vanilla 1.21 item assignment in `legacy_vanilla_modern_manual.json`. For the broader table of all modern-only, flattened, damage, potion, and stored-enchantment stack samples from the runtime comparer, use `06_docs/vanilla_post_1_12_aspect_rationale.md`.
 
 The parity rule is: legacy 1.12 assignments win first; 1.21-only values are allowed only when they are explicit, documented, and based on a closest Thaumcraft 6 aspect category. No lookup-time name guessing is allowed.
+
+Latest runtime validation: `1230/1230` assignable current `minecraft:*` item ids have non-empty aspects after server data reload. The only plain `minecraft:*` scan rows with empty aspects are intentional 1.12-style exclusions: `80` spawn eggs, `12` legacy special no-aspect ids, and `7` infested blocks; unexpected empty categories: `0`.
 
 ## Automatic Rules
 

@@ -1,8 +1,10 @@
 {
   "replace": false,
   "values": [
+    "#c:ingots/brass",
     "#c:ingots/copper",
     "#c:ingots/gold",
-    "#c:ingots/iron"
+    "#c:ingots/iron",
+    "#c:ingots/thaumium"
   ]
 }

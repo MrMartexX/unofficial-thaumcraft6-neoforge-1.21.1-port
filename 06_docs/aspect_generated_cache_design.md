@@ -69,7 +69,7 @@ Representative recipe-derived entries:
 
 The formula matches the legacy crafting path: sum ingredient aspects, subtract remaining-item aspects, multiply each aspect by `0.75 / outputCount`, floor to integer, lift values in `(0.75, 1.0)` to `1`, remove non-positive aspects, then choose the lowest positive aspect total among matching output recipes. Reload validation now covers both shapeless recipes and remaining-item subtraction with validation-only fixtures.
 
-Current server reload validation rebuilt `475` generated crafting assignments while keeping exact/tag/manual/runtime-parity assignments authoritative. The count dropped because final 1.12 dump values for legacy-equivalent flattened vanilla ids and currently registered Thaumcraft parity overrides now live in exact runtime parity data instead of being left to generated fallback. Assignable current vanilla item-id coverage is enforced separately by `TCAspectReloadValidator`; spawn eggs, firework star/rocket, infested blocks, and empty component-only potion carrier ids are excluded for legacy parity.
+Current server reload validation rebuilt `476` generated crafting assignments while keeping exact/tag/manual/runtime-parity assignments authoritative. Final 1.12 dump values for legacy-equivalent flattened vanilla ids and currently registered Thaumcraft parity overrides now live in exact runtime parity data instead of being left to generated fallback. Assignable current vanilla item-id coverage is enforced separately by `TCAspectReloadValidator`; spawn eggs, firework star/rocket, infested blocks, and empty component-only potion carrier ids are excluded for legacy parity.
 
 ## Stack Key Rules
 

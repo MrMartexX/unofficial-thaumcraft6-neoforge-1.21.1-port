@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "thaumcraft:items/jar_brace"
+        "layer0": "thaumcraft:item/jar_brace"
     }
 }

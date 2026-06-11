@@ -1,0 +1,7 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "thaumcraft:item/golem_builder"
+  },
+  "elements": []
+}

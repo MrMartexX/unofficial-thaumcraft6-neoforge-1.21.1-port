@@ -24,7 +24,7 @@ No gameplay behavior is implemented by this document. It is the blocker-clearing
 
 | Area | Status |
 |---|---|
-| Direct aspect assignments | `TCAspectAssignments` loads 672 exact assignments from bundled aspect assignment data: current registered Thaumcraft ids, legacy vanilla seeds, modern exact audit entries, audited 1.21-only vanilla manual entries, dump-derived runtime parity overrides for legacy-equivalent plain vanilla stacks, and dump-derived current registered Thaumcraft parity values. Spawn eggs, firework star/rocket, and infested blocks are excluded for 1.12 parity. |
+| Direct aspect assignments | `TCAspectAssignments` loads 687 exact assignments from bundled aspect assignment data: current registered Thaumcraft ids, legacy vanilla seeds, modern exact audit entries, audited 1.21-only vanilla manual entries, dump-derived runtime parity overrides for legacy-equivalent plain vanilla stacks, and dump-derived current registered Thaumcraft parity values. Spawn eggs, firework star/rocket, and infested blocks are excluded for 1.12 parity. |
 | Parity guard | `TCAspectParityValidator` validates aspect definitions, `AspectList`, helper algorithms, and direct assignments at bootstrap. |
 | Current tag resources | Only vanilla-style `minecraft` item/block tags exist for logs, leaves, saplings, planks, stairs/slabs, and mining requirements. |
 | Current common `c` tags in port resources | Authored for audited ore/gem/material memberships: amber/cinnabar/quartz, vanilla ores/gems/ingots/dusts, and ore-derived raw materials. NeoForge provides common tags too, but the port authors the needed memberships so validation is deterministic. |
@@ -67,6 +67,7 @@ These legacy ore dictionary keys are relevant to ids already present in `TCItems
 | `treeLeaves` | `OreDictionaryEntries` registers Greatwood and Silverwood leaves wildcard | Generic line 228: `PLANT 5`; direct lines 501-502 match generic value | `thaumcraft:leaves_greatwood`, `thaumcraft:leaves_silverwood` | Existing `minecraft:leaves` plus `thaumcraft:legacy_ore_dictionary/tree_leaves` for item and block membership | Legacy tag resource and generic fallback authored; direct assignment wins | Direct and generic values currently match. |
 | `gemAmber` | `OreDictionaryEntries` registers `ItemsTC.amber` | `ConfigAspects` line 483: `TRAP 10`, `CRYSTAL 10` | `thaumcraft:amber` | `c:gems/amber` plus `thaumcraft:legacy_ore_dictionary/gem_amber` item membership | Tag resources and tag lookup authored | Item tag only; `c:gems` aggregate includes `#c:gems/amber`. No block tag unless amber block gets a separate legacy source. |
 | `quicksilver` | `OreDictionaryEntries` registers `ItemsTC.quicksilver` | `ConfigAspects` line 482: `METAL 10`, `DEATH 5`, `ALCHEMY 5` | `thaumcraft:quicksilver` | `thaumcraft:legacy_ore_dictionary/quicksilver` item membership | Legacy tag resource and tag lookup authored | No guessed common `c:` quicksilver tag was added. |
+| `nitor` | `OreDictionaryEntries` registers all `BlocksTC.nitor.values()` | No direct `ConfigAspects` string-key assignment found; legacy uses the key as an arcane recipe ingredient | `thaumcraft:nitor_black`, `thaumcraft:nitor_blue`, `thaumcraft:nitor_brown`, `thaumcraft:nitor_cyan`, `thaumcraft:nitor_gray`, `thaumcraft:nitor_green`, `thaumcraft:nitor_lightblue`, `thaumcraft:nitor_lime`, `thaumcraft:nitor_magenta`, `thaumcraft:nitor_orange`, `thaumcraft:nitor_pink`, `thaumcraft:nitor_purple`, `thaumcraft:nitor_red`, `thaumcraft:nitor_silver`, `thaumcraft:nitor_white`, `thaumcraft:nitor_yellow` | `thaumcraft:legacy_ore_dictionary/nitor` for item and block membership | Legacy tag resource authored for exact arcane recipe identity | Used by the exact `infusionmatrix` recipe. Do not infer aspect values from this tag; per-item exact/generated aspect behavior remains authoritative. |
 
 ## Registered But Not Directly Aspect-Mapped Yet
 
@@ -77,7 +78,7 @@ These legacy ore dictionary keys are relevant to ids already present in `TCItems
 | `thaumcraft:stone_arcane` | Registered in the current port, but no direct `ConfigAspects` entry found for this id. | Defer until recipe/generated aspects or exact legacy source is identified. |
 | `thaumcraft:stone_arcane_brick` | Registered in the current port, but no direct `ConfigAspects` entry found for this id. | Defer. |
 | `thaumcraft:stairs_*`, `thaumcraft:slab_*` | Registered in the current port; no direct legacy aspect assignment found. | Defer; likely generated from source block recipes. |
-| `thaumcraft:fabric` | Registered in legacy and port; no direct `ConfigAspects` assignment found. | Defer until generated/recipe aspects are ported. |
+| `thaumcraft:fabric` | Registered in legacy and port; current port uses dump-derived final runtime aspects. | Active exact assignment; keep as runtime-parity data until the full recipe-derived aspect path is expanded. |
 
 ## Unregistered Legacy Thaumcraft Keys
 
@@ -85,10 +86,9 @@ These keys appear in `OreDictionaryEntries` but their target items/blocks are no
 
 | Legacy key group | Examples | Decision |
 |---|---|---|
-| Nitor | `nitor` | Defer until nitor blocks/items are registered and light/render behavior is designed. |
 | Nuggets | `nuggetIron`, `nuggetCopper`, `nuggetTin`, `nuggetSilver`, `nuggetLead`, `nuggetQuicksilver`, `nuggetThaumium`, `nuggetVoid`, `nuggetBrass`, `nuggetQuartz`, `nuggetMeat` | Defer until item metadata variants are split into 1.21 ids or data components. |
-| Ingots and metal blocks | `ingotThaumium`, `ingotVoid`, `ingotBrass`, `blockThaumium`, `blockVoid`, `blockBrass` | Defer until material items/blocks are ported. |
-| Plates | `plateIron`, `plateBrass`, `plateThaumium`, `plateVoid` | Defer until plate item model/id strategy is decided. |
+| Ingots and metal blocks | `ingotThaumium`, `ingotVoid`, `ingotBrass`, `blockThaumium`, `blockVoid`, `blockBrass` | Partially active: `ingotThaumium`, `ingotBrass`, `blockThaumium`, `blockVoid`, and `blockBrass` have current registered-item/block bridges where their ids exist. `ingotVoid` remains deferred until a real void ingot identity exists. |
+| Plates | `plateIron`, `plateBrass`, `plateThaumium`, `plateVoid` | Active bridges for current registered plate ids. `plateBrass` now has a modern item identity and exact normal recipe; `plateThaumium`/`plateVoid` are tag bridges over existing plate ids. |
 | Clusters | `clusterIron`, `clusterGold`, `clusterCopper`, `clusterTin`, `clusterSilver`, `clusterLead`, `clusterCinnabar`, `clusterQuartz` | Defer until cluster items are registered. |
 | Vanilla compatibility | `trapdoorWood` | Defer; not part of current Thaumcraft ids. |
 

@@ -8,11 +8,107 @@
       "aspects": []
     },
     {
+      "item": "thaumcraft:table_wood",
+      "aspects": [
+        { "aspect": "thaumcraft:instrumentum", "amount": 1 },
+        { "aspect": "thaumcraft:herba", "amount": 6 }
+      ]
+    },
+    {
+      "item": "thaumcraft:table_stone",
+      "aspects": [
+        { "aspect": "thaumcraft:instrumentum", "amount": 1 },
+        { "aspect": "thaumcraft:terra", "amount": 9 }
+      ]
+    },
+    {
+      "item": "thaumcraft:research_table",
+      "aspects": [
+        { "aspect": "thaumcraft:instrumentum", "amount": 1 },
+        { "aspect": "thaumcraft:herba", "amount": 6 },
+        { "aspect": "thaumcraft:cognitio", "amount": 5 }
+      ]
+    },
+    {
       "item": "thaumcraft:fabric",
       "aspects": [
         { "aspect": "thaumcraft:bestia", "amount": 26 },
         { "aspect": "thaumcraft:fabrico", "amount": 6 },
         { "aspect": "thaumcraft:praecantatio", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:salis_mundus",
+      "aspects": [
+        { "aspect": "thaumcraft:praecantatio", "amount": 5 },
+        { "aspect": "thaumcraft:potentia", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:brain",
+      "aspects": [
+        { "aspect": "thaumcraft:victus", "amount": 5 },
+        { "aspect": "thaumcraft:cognitio", "amount": 20 },
+        { "aspect": "thaumcraft:exanimis", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:alumentum",
+      "aspects": [
+        { "aspect": "thaumcraft:potentia", "amount": 13 },
+        { "aspect": "thaumcraft:ignis", "amount": 13 },
+        { "aspect": "thaumcraft:perditio", "amount": 2 }
+      ]
+    },
+    {
+      "item": "thaumcraft:nitor_yellow",
+      "aspects": [
+        { "aspect": "thaumcraft:sensus", "amount": 5 },
+        { "aspect": "thaumcraft:lux", "amount": 13 },
+        { "aspect": "thaumcraft:potentia", "amount": 3 },
+        { "aspect": "thaumcraft:ignis", "amount": 3 }
+      ]
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 15 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 2 },
+        { "aspect": "thaumcraft:terra", "amount": 2 }
+      ]
+    },
+    {
+      "item": "thaumcraft:brass_ingot",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:instrumentum", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:brass_plate",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 7 },
+        { "aspect": "thaumcraft:instrumentum", "amount": 3 }
+      ]
+    },
+    {
+      "item": "thaumcraft:mechanism_simple",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 27 },
+        { "aspect": "thaumcraft:instrumentum", "amount": 4 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 2 }
+      ]
+    },
+    {
+      "item": "thaumcraft:mechanism_complex",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 65 },
+        { "aspect": "thaumcraft:instrumentum", "amount": 6 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 9 },
+        { "aspect": "thaumcraft:terra", "amount": 12 },
+        { "aspect": "thaumcraft:machina", "amount": 7 },
+        { "aspect": "thaumcraft:motus", "amount": 7 },
+        { "aspect": "thaumcraft:potentia", "amount": 5 }
       ]
     },
     {
@@ -25,6 +121,28 @@
         { "aspect": "thaumcraft:metallum", "amount": 60 },
         { "aspect": "thaumcraft:desiderium", "amount": 45 },
         { "aspect": "thaumcraft:praecantatio", "amount": 9 }
+      ]
+    },
+    {
+      "item": "thaumcraft:thaumonomicon",
+      "aspects": [
+        { "aspect": "thaumcraft:cognitio", "amount": 17 },
+        { "aspect": "thaumcraft:herba", "amount": 27 },
+        { "aspect": "thaumcraft:aqua", "amount": 9 },
+        { "aspect": "thaumcraft:aer", "amount": 4 },
+        { "aspect": "thaumcraft:bestia", "amount": 6 },
+        { "aspect": "thaumcraft:praemunio", "amount": 6 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:thaumometer",
+      "aspects": [
+        { "aspect": "thaumcraft:sensus", "amount": 10 },
+        { "aspect": "thaumcraft:auram", "amount": 10 },
+        { "aspect": "thaumcraft:metallum", "amount": 30 },
+        { "aspect": "thaumcraft:desiderium", "amount": 30 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 3 }
       ]
     },
     {

@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import thaumcraft.common.aspects.TCAspectAssignments;
+import thaumcraft.common.aspects.TCEntityAspectAssignments;
 
 public final class AspectHelper {
     public static AspectList cullTags(AspectList temp) {
@@ -66,6 +67,10 @@ public final class AspectHelper {
         return TCAspectAssignments.getObjectAspects(stack);
     }
 
+    public static AspectList getScanAspects(ItemStack stack) {
+        return TCAspectAssignments.getScanAspects(stack);
+    }
+
     public static AspectList generateTags(ItemStack stack) {
         return TCAspectAssignments.getGeneratedObjectAspects(stack);
     }
@@ -81,7 +86,7 @@ public final class AspectHelper {
             tags.add(posa[rand.nextInt(posa.length)], 15);
             return tags;
         }
-        return null;
+        return TCEntityAspectAssignments.getEntityAspects(entity);
     }
 
     public static Aspect getCombinationResult(Aspect aspect1, Aspect aspect2) {

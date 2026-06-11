@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "thaumcraft:items/focus_pouch"
+        "layer0": "thaumcraft:item/focus_pouch"
     }
 }

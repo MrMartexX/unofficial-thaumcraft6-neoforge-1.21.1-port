@@ -1,66 +1,240 @@
 package thaumcraft.common.registry;
 
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 
 /**
  * Controls the visible Thaumcraft creative tab order.
  *
- * <p>Do not sort this class alphabetically and do not rely on registry declaration order.
- * The visible order should follow the Thaumcraft 6 1.12.2 creative inventory screenshots.</p>
+ * <p>Do not sort this class alphabetically and do not rely on registry declaration order. The visible order follows
+ * the Thaumcraft 6 1.12.2 registration order for the subset currently ported to NeoForge. Missing legacy entries are
+ * intentionally skipped, so the remaining implemented entries keep their relative legacy position.</p>
  */
 public final class TCCreativeTabOrder {
     private TCCreativeTabOrder() {
     }
 
     public static void addThaumcraftItems(CreativeModeTab.Output output) {
-        output.accept(TCItems.ORE_AMBER.get());
-        output.accept(TCItems.ORE_CINNABAR.get());
-        output.accept(TCItems.ORE_QUARTZ.get());
+        addWorldAndDecorativeBlocks(output);
+        addDeviceAndCraftingBlocks(output);
+        addLegacyItemSequence(output);
+    }
 
-        output.accept(TCItems.CRYSTAL_AER.get());
-        output.accept(TCItems.CRYSTAL_IGNIS.get());
-        output.accept(TCItems.CRYSTAL_AQUA.get());
-        output.accept(TCItems.CRYSTAL_TERRA.get());
-        output.accept(TCItems.CRYSTAL_ORDO.get());
-        output.accept(TCItems.CRYSTAL_PERDITIO.get());
-        output.accept(TCItems.CRYSTAL_VITIUM.get());
+    private static void addWorldAndDecorativeBlocks(CreativeModeTab.Output output) {
+        acceptVisible(output, TCItems.ORE_AMBER.get());
+        acceptVisible(output, TCItems.ORE_CINNABAR.get());
+        acceptVisible(output, TCItems.ORE_QUARTZ.get());
 
-        output.accept(TCItems.STONE_ARCANE.get());
-        output.accept(TCItems.STONE_ARCANE_BRICK.get());
-        output.accept(TCItems.STONE_ANCIENT.get());
-        output.accept(TCItems.STONE_ANCIENT_TILE.get());
-        output.accept(TCItems.STONE_ANCIENT_ROCK.get());
-        output.accept(TCItems.STONE_ANCIENT_GLYPHED.get());
-        output.accept(TCItems.STONE_ANCIENT_DOORWAY.get());
-        output.accept(TCItems.STONE_ELDRITCH_TILE.get());
-        output.accept(TCItems.STONE_POROUS.get());
+        acceptVisible(output, TCItems.CRYSTAL_AER.get());
+        acceptVisible(output, TCItems.CRYSTAL_IGNIS.get());
+        acceptVisible(output, TCItems.CRYSTAL_AQUA.get());
+        acceptVisible(output, TCItems.CRYSTAL_TERRA.get());
+        acceptVisible(output, TCItems.CRYSTAL_ORDO.get());
+        acceptVisible(output, TCItems.CRYSTAL_PERDITIO.get());
+        acceptVisible(output, TCItems.CRYSTAL_VITIUM.get());
 
-        output.accept(TCItems.STAIRS_ARCANE.get());
-        output.accept(TCItems.STAIRS_ARCANE_BRICK.get());
-        output.accept(TCItems.STAIRS_ANCIENT.get());
+        acceptVisible(output, TCItems.STONE_ARCANE.get());
+        acceptVisible(output, TCItems.STONE_ARCANE_BRICK.get());
+        acceptVisible(output, TCItems.STONE_ANCIENT.get());
+        acceptVisible(output, TCItems.STONE_ANCIENT_TILE.get());
+        acceptVisible(output, TCItems.STONE_ANCIENT_ROCK.get());
+        acceptVisible(output, TCItems.STONE_ANCIENT_GLYPHED.get());
+        acceptVisible(output, TCItems.STONE_ANCIENT_DOORWAY.get());
+        acceptVisible(output, TCItems.STONE_ELDRITCH_TILE.get());
+        acceptVisible(output, TCItems.STONE_POROUS.get());
 
-        output.accept(TCItems.SLAB_ARCANE_STONE.get());
-        output.accept(TCItems.SLAB_ARCANE_BRICK.get());
-        output.accept(TCItems.SLAB_ANCIENT.get());
-        output.accept(TCItems.SLAB_ELDRITCH.get());
+        acceptVisible(output, TCItems.STAIRS_ARCANE.get());
+        acceptVisible(output, TCItems.STAIRS_ARCANE_BRICK.get());
+        acceptVisible(output, TCItems.STAIRS_ANCIENT.get());
 
-        output.accept(TCItems.SAPLING_GREATWOOD.get());
-        output.accept(TCItems.SAPLING_SILVERWOOD.get());
-        output.accept(TCItems.LOG_GREATWOOD.get());
-        output.accept(TCItems.LOG_SILVERWOOD.get());
-        output.accept(TCItems.LEAVES_GREATWOOD.get());
-        output.accept(TCItems.LEAVES_SILVERWOOD.get());
-        output.accept(TCItems.SHIMMERLEAF.get());
-        output.accept(TCItems.CINDERPEARL.get());
-        output.accept(TCItems.VISHROOM.get());
-        output.accept(TCItems.PLANK_GREATWOOD.get());
-        output.accept(TCItems.PLANK_SILVERWOOD.get());
-        output.accept(TCItems.STAIRS_GREATWOOD.get());
-        output.accept(TCItems.STAIRS_SILVERWOOD.get());
-        output.accept(TCItems.SLAB_GREATWOOD.get());
-        output.accept(TCItems.SLAB_SILVERWOOD.get());
+        acceptVisible(output, TCItems.SLAB_ARCANE_STONE.get());
+        acceptVisible(output, TCItems.SLAB_ARCANE_BRICK.get());
+        acceptVisible(output, TCItems.SLAB_ANCIENT.get());
+        acceptVisible(output, TCItems.SLAB_ELDRITCH.get());
 
-        output.accept(TCItems.AMBER_BLOCK.get());
-        output.accept(TCItems.AMBER_BRICK.get());
+        acceptVisible(output, TCItems.SAPLING_GREATWOOD.get());
+        acceptVisible(output, TCItems.SAPLING_SILVERWOOD.get());
+        acceptVisible(output, TCItems.LOG_GREATWOOD.get());
+        acceptVisible(output, TCItems.LOG_SILVERWOOD.get());
+        acceptVisible(output, TCItems.LEAVES_GREATWOOD.get());
+        acceptVisible(output, TCItems.LEAVES_SILVERWOOD.get());
+        acceptVisible(output, TCItems.SHIMMERLEAF.get());
+        acceptVisible(output, TCItems.CINDERPEARL.get());
+        acceptVisible(output, TCItems.VISHROOM.get());
+        acceptVisible(output, TCItems.PLANK_GREATWOOD.get());
+        acceptVisible(output, TCItems.PLANK_SILVERWOOD.get());
+        acceptVisible(output, TCItems.STAIRS_GREATWOOD.get());
+        acceptVisible(output, TCItems.STAIRS_SILVERWOOD.get());
+        acceptVisible(output, TCItems.SLAB_GREATWOOD.get());
+        acceptVisible(output, TCItems.SLAB_SILVERWOOD.get());
+
+        acceptVisible(output, TCItems.AMBER_BLOCK.get());
+        acceptVisible(output, TCItems.AMBER_BRICK.get());
+
+        acceptVisible(output, TCItems.METAL_BRASS.get());
+        acceptVisible(output, TCItems.METAL_THAUMIUM.get());
+        acceptVisible(output, TCItems.METAL_VOID.get());
+        acceptVisible(output, TCItems.NITOR_YELLOW.get());
+    }
+
+    private static void addDeviceAndCraftingBlocks(CreativeModeTab.Output output) {
+        acceptVisible(output, TCItems.TABLE_WOOD.get());
+        acceptVisible(output, TCItems.TABLE_STONE.get());
+        acceptVisible(output, TCItems.ARCANE_WORKBENCH.get());
+        acceptVisible(output, TCItems.ARCANE_WORKBENCH_CHARGER.get());
+        acceptVisible(output, TCItems.RESEARCH_TABLE.get());
+        acceptVisible(output, TCItems.CRUCIBLE.get());
+        acceptVisible(output, TCItems.SMELTER_BASIC.get());
+        acceptVisible(output, TCItems.WAND_WORKBENCH.get());
+        acceptVisible(output, TCItems.INFUSION_MATRIX.get());
+    }
+
+    private static void addLegacyItemSequence(CreativeModeTab.Output output) {
+        acceptVisible(output, TCItems.THAUMONOMICON.get());
+        acceptVisible(output, TCItems.CURIO_RITES.get());
+
+        acceptVisible(output, TCItems.AMBER.get());
+        acceptVisible(output, TCItems.QUICKSILVER.get());
+        acceptVisible(output, TCItems.THAUMIUM_INGOT.get());
+        acceptVisible(output, TCItems.BRASS_INGOT.get());
+        acceptVisible(output, TCItems.RARE_EARTH.get());
+        acceptVisible(output, TCItems.FABRIC.get());
+        acceptVisible(output, TCItems.VIS_RESONATOR.get());
+        acceptVisible(output, TCItems.TALLOW.get());
+        acceptVisible(output, TCItems.MECHANISM_SIMPLE.get());
+        acceptVisible(output, TCItems.MECHANISM_COMPLEX.get());
+        acceptVisible(output, TCItems.BRASS_PLATE.get());
+        acceptVisible(output, TCItems.IRON_PLATE.get());
+        acceptVisible(output, TCItems.THAUMIUM_PLATE.get());
+        acceptVisible(output, TCItems.VOID_PLATE.get());
+        acceptVisible(output, TCItems.FILTER.get());
+        acceptVisible(output, TCItems.MORPHIC_RESONATOR.get());
+        acceptVisible(output, TCItems.SALIS_MUNDUS.get());
+        acceptVisible(output, TCItems.MIRRORED_GLASS.get());
+
+        addCrystalEssenceVariants(output);
+
+        acceptVisible(output, TCItems.BRAIN.get());
+
+        addPhialVariants(output);
+
+        acceptVisible(output, TCItems.ALUMENTUM.get());
+
+        acceptVisible(output, TCItems.SCRIBING_TOOLS.get());
+        acceptVisible(output, TCItems.THAUMOMETER.get());
+
+        acceptVisible(output, TCItems.THAUMIUM_AXE.get());
+        acceptVisible(output, TCItems.THAUMIUM_SWORD.get());
+        acceptVisible(output, TCItems.THAUMIUM_SHOVEL.get());
+        acceptVisible(output, TCItems.THAUMIUM_PICK.get());
+        acceptVisible(output, TCItems.THAUMIUM_HOE.get());
+
+        acceptVisible(output, TCItems.GOGGLES.get());
+
+        acceptVisible(output, TCItems.ENCHANTED_PLACEHOLDER_PROTECTION_1.get());
+        acceptVisible(output, TCItems.ENCHANTED_PLACEHOLDER_SHARPNESS_1.get());
+        acceptVisible(output, TCItems.ENCHANTED_PLACEHOLDER_SILK_TOUCH_1.get());
+        acceptVisible(output, TCItems.ENCHANTED_PLACEHOLDER_FORTUNE_1.get());
+
+        acceptVisible(output, TCItems.CASTER_BASIC.get());
+        acceptVisible(output, TCItems.FOCUS_1.get());
+        acceptVisible(output, TCItems.FOCUS_2.get());
+        acceptVisible(output, TCItems.FOCUS_3.get());
+    }
+
+    private static void addCrystalEssenceVariants(CreativeModeTab.Output output) {
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_AER.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_TERRA.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_IGNIS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_AQUA.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_ORDO.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_PERDITIO.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_VACUOS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_LUX.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_MOTUS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_GELUM.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_VITREUS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_METALLUM.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_VICTUS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_MORTUUS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_POTENTIA.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_PERMUTATIO.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_PRAECANTATIO.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_AURAM.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_ALKIMIA.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_VITIUM.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_TENEBRAE.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_ALIENIS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_VOLATUS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_HERBA.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_INSTRUMENTUM.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_FABRICO.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_MACHINA.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_VINCULUM.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_SPIRITUS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_COGNITIO.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_SENSUS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_AVERSIO.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_PRAEMUNIO.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_DESIDERIUM.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_EXANIMIS.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_BESTIA.get());
+        acceptVisible(output, TCItems.CRYSTAL_ESSENCE_HUMANUS.get());
+    }
+
+    private static void addPhialVariants(CreativeModeTab.Output output) {
+        acceptVisible(output, TCItems.PHIAL_AER.get());
+        acceptVisible(output, TCItems.PHIAL_TERRA.get());
+        acceptVisible(output, TCItems.PHIAL_IGNIS.get());
+        acceptVisible(output, TCItems.PHIAL_AQUA.get());
+        acceptVisible(output, TCItems.PHIAL_ORDO.get());
+        acceptVisible(output, TCItems.PHIAL_PERDITIO.get());
+        acceptVisible(output, TCItems.PHIAL_VACUOS.get());
+        acceptVisible(output, TCItems.PHIAL_LUX.get());
+        acceptVisible(output, TCItems.PHIAL_MOTUS.get());
+        acceptVisible(output, TCItems.PHIAL_GELUM.get());
+        acceptVisible(output, TCItems.PHIAL_VITREUS.get());
+        acceptVisible(output, TCItems.PHIAL_METALLUM.get());
+        acceptVisible(output, TCItems.PHIAL_VICTUS.get());
+        acceptVisible(output, TCItems.PHIAL_MORTUUS.get());
+        acceptVisible(output, TCItems.PHIAL_POTENTIA.get());
+        acceptVisible(output, TCItems.PHIAL_PERMUTATIO.get());
+        acceptVisible(output, TCItems.PHIAL_PRAECANTATIO.get());
+        acceptVisible(output, TCItems.PHIAL_AURAM.get());
+        acceptVisible(output, TCItems.PHIAL_ALKIMIA.get());
+        acceptVisible(output, TCItems.PHIAL_VITIUM.get());
+        acceptVisible(output, TCItems.PHIAL_TENEBRAE.get());
+        acceptVisible(output, TCItems.PHIAL_ALIENIS.get());
+        acceptVisible(output, TCItems.PHIAL_VOLATUS.get());
+        acceptVisible(output, TCItems.PHIAL_HERBA.get());
+        acceptVisible(output, TCItems.PHIAL_INSTRUMENTUM.get());
+        acceptVisible(output, TCItems.PHIAL_FABRICO.get());
+        acceptVisible(output, TCItems.PHIAL_MACHINA.get());
+        acceptVisible(output, TCItems.PHIAL_VINCULUM.get());
+        acceptVisible(output, TCItems.PHIAL_SPIRITUS.get());
+        acceptVisible(output, TCItems.PHIAL_COGNITIO.get());
+        acceptVisible(output, TCItems.PHIAL_SENSUS.get());
+        acceptVisible(output, TCItems.PHIAL_AVERSIO.get());
+        acceptVisible(output, TCItems.PHIAL_PRAEMUNIO.get());
+        acceptVisible(output, TCItems.PHIAL_DESIDERIUM.get());
+        acceptVisible(output, TCItems.PHIAL_EXANIMIS.get());
+        acceptVisible(output, TCItems.PHIAL_BESTIA.get());
+        acceptVisible(output, TCItems.PHIAL_HUMANUS.get());
+    }
+
+    private static void acceptVisible(CreativeModeTab.Output output, ItemLike item) {
+        if (item.asItem() == Items.ENCHANTED_BOOK) {
+            return;
+        }
+        output.accept(item);
+    }
+
+    private static void acceptVisible(CreativeModeTab.Output output, ItemStack stack) {
+        if (stack.is(Items.ENCHANTED_BOOK)) {
+            return;
+        }
+        output.accept(stack);
     }
 }
