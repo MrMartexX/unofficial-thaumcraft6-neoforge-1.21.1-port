@@ -1,0 +1,49 @@
+name: Asset Reference Audit
+
+on:
+  push:
+    branches:
+      - "**"
+    paths:
+      - "05_neoforge_port/src/main/resources/assets/**"
+      - "tools/audits/assets/**"
+      - ".github/workflows/asset-reference-audit.yml"
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - "05_neoforge_port/src/main/resources/assets/**"
+      - "tools/audits/assets/**"
+      - ".github/workflows/asset-reference-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  asset-reference-audit:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run static asset reference audit
+        shell: pwsh
+        run: |
+          $logDir = "05_neoforge_port/build/ci-logs"
+          New-Item -ItemType Directory -Force -Path $logDir | Out-Null
+          $logPath = Join-Path $logDir "static-asset-reference-audit.log"
+          & .\tools\audits\assets\static-asset-reference-audit.ps1 *> $logPath
+          $exitCode = $LASTEXITCODE
+          Get-Content -LiteralPath $logPath
+          if ($exitCode -ne 0) {
+            exit $exitCode
+          }
+
+      - name: Upload audit log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: asset-reference-audit-log
+          path: 05_neoforge_port/build/ci-logs/static-asset-reference-audit.log
