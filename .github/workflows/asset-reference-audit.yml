@@ -35,10 +35,10 @@ jobs:
           New-Item -ItemType Directory -Force -Path $logDir | Out-Null
           $logPath = Join-Path $logDir "static-asset-reference-audit.log"
           & .\tools\audits\assets\static-asset-reference-audit.ps1 *> $logPath
-          $exitCode = $LASTEXITCODE
+          $scriptSucceeded = $?
           Get-Content -LiteralPath $logPath
-          if ($exitCode -ne 0) {
-            exit $exitCode
+          if (-not $scriptSucceeded) {
+            exit 1
           }
 
       - name: Upload audit log
