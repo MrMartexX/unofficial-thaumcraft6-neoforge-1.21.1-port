@@ -8,18 +8,32 @@ $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
 $moduleRoot = Join-Path $repoRoot '05_neoforge_port'
 $gradleBat = Join-Path $moduleRoot 'gradlew.bat'
 $logDir = Join-Path $moduleRoot 'build\ci-logs'
+$stdoutPath = Join-Path $logDir 'runServer-smoke.stdout.log'
+$stderrPath = Join-Path $logDir 'runServer-smoke.stderr.log'
 $logPath = Join-Path $logDir 'runServer-smoke.log'
+$runDir = Join-Path $moduleRoot 'run'
 
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
-if (Test-Path $logPath) {
-    Remove-Item $logPath -Force
+New-Item -ItemType Directory -Force -Path $runDir | Out-Null
+Set-Content -LiteralPath (Join-Path $runDir 'eula.txt') -Value 'eula=true' -Encoding utf8
+
+foreach ($path in @($stdoutPath, $stderrPath, $logPath)) {
+    if (Test-Path $path) {
+        Remove-Item $path -Force
+    }
 }
 
 $readyPatterns = @(
     'Done \(',
     'For help, type',
-    'Server started',
-    'Starting minecraft server'
+    'Server started'
+)
+
+$earlyProgressPatterns = @(
+    'Starting minecraft server',
+    'Preparing level',
+    'Preparing spawn area',
+    'Loading server properties'
 )
 
 $failurePatterns = @(
@@ -28,99 +42,141 @@ $failurePatterns = @(
     'Crash report',
     'Failed to start',
     'NoClassDefFoundError',
-    'ClassNotFoundException'
+    'ClassNotFoundException',
+    'ModLoadingException',
+    'MixinTransformerError'
 )
 
-$psi = [System.Diagnostics.ProcessStartInfo]::new()
-$psi.FileName = $gradleBat
-$psi.Arguments = 'runServer --no-daemon'
-$psi.WorkingDirectory = $moduleRoot
-$psi.UseShellExecute = $false
-$psi.RedirectStandardOutput = $true
-$psi.RedirectStandardError = $true
-$psi.CreateNoWindow = $true
+function Read-FileShared {
+    param([string]$Path)
 
-$process = [System.Diagnostics.Process]::new()
-$process.StartInfo = $psi
+    if (-not (Test-Path -LiteralPath $Path)) {
+        return ''
+    }
 
-$logWriter = [System.IO.StreamWriter]::new($logPath, $false, [System.Text.UTF8Encoding]::new($false))
-$script:ready = $false
-$script:failedPattern = $null
-
-$outputHandler = [System.Diagnostics.DataReceivedEventHandler]{
-    param($sender, $eventArgs)
-    if ($null -eq $eventArgs.Data) { return }
-    $line = $eventArgs.Data
-    $logWriter.WriteLine($line)
-    $logWriter.Flush()
-    Write-Host $line
-
-    foreach ($pattern in $readyPatterns) {
-        if ($line -match $pattern) {
-            $script:ready = $true
+    try {
+        $stream = [System.IO.File]::Open($Path, [System.IO.FileMode]::Open, [System.IO.FileAccess]::Read, [System.IO.FileShare]::ReadWrite)
+        try {
+            $reader = [System.IO.StreamReader]::new($stream, [System.Text.Encoding]::UTF8, $true)
+            try {
+                return $reader.ReadToEnd()
+            }
+            finally {
+                $reader.Dispose()
+            }
+        }
+        finally {
+            $stream.Dispose()
         }
     }
-    foreach ($pattern in $failurePatterns) {
-        if ($line -match $pattern) {
-            $script:failedPattern = $pattern
-        }
+    catch {
+        return ''
     }
 }
 
-$errorHandler = [System.Diagnostics.DataReceivedEventHandler]{
-    param($sender, $eventArgs)
-    if ($null -eq $eventArgs.Data) { return }
-    $line = $eventArgs.Data
-    $logWriter.WriteLine($line)
-    $logWriter.Flush()
-    Write-Host $line
-
-    foreach ($pattern in $failurePatterns) {
-        if ($line -match $pattern) {
-            $script:failedPattern = $pattern
-        }
-    }
+function Get-CombinedLog {
+    $stdout = Read-FileShared -Path $stdoutPath
+    $stderr = Read-FileShared -Path $stderrPath
+    return ($stdout + "`n" + $stderr)
 }
 
-$process.add_OutputDataReceived($outputHandler)
-$process.add_ErrorDataReceived($errorHandler)
+function Write-CombinedLog {
+    $combined = Get-CombinedLog
+    [System.IO.File]::WriteAllText($logPath, $combined, [System.Text.UTF8Encoding]::new($false))
+    return $combined
+}
+
+function Test-AnyPattern {
+    param(
+        [string]$Text,
+        [string[]]$Patterns
+    )
+
+    foreach ($pattern in $Patterns) {
+        if ($Text -match $pattern) {
+            return $pattern
+        }
+    }
+    return $null
+}
+
+function Get-LogTail {
+    param(
+        [string]$Text,
+        [int]$LineCount = 80
+    )
+
+    $lines = $Text -split "`r?`n"
+    if ($lines.Count -le $LineCount) {
+        return ($lines -join "`n")
+    }
+    return (($lines | Select-Object -Last $LineCount) -join "`n")
+}
+
+Write-Host "Starting dedicated server smoke test with timeout $TimeoutSeconds seconds."
+Write-Host "Module root: $moduleRoot"
+Write-Host "Smoke log: $logPath"
+
+$process = Start-Process `
+    -FilePath $gradleBat `
+    -ArgumentList @('runServer', '--no-daemon') `
+    -WorkingDirectory $moduleRoot `
+    -RedirectStandardOutput $stdoutPath `
+    -RedirectStandardError $stderrPath `
+    -NoNewWindow `
+    -PassThru
 
 try {
-    Write-Host "Starting dedicated server smoke test with timeout $TimeoutSeconds seconds."
-    [void]$process.Start()
-    $process.BeginOutputReadLine()
-    $process.BeginErrorReadLine()
-
     $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+    $lastHeartbeat = Get-Date
+    $sawEarlyProgress = $false
+
     while (-not $process.HasExited -and (Get-Date) -lt $deadline) {
-        if ($script:failedPattern) {
-            throw "Dedicated server smoke test detected failure pattern: $script:failedPattern"
+        Start-Sleep -Seconds 2
+        $combined = Write-CombinedLog
+
+        $failurePattern = Test-AnyPattern -Text $combined -Patterns $failurePatterns
+        if ($failurePattern) {
+            throw "Dedicated server smoke test detected failure pattern: $failurePattern`n`n$(Get-LogTail -Text $combined)"
         }
-        if ($script:ready) {
-            Write-Host 'Dedicated server reached startup marker. Stopping smoke-test process.'
-            $process.Kill($true)
+
+        $readyPattern = Test-AnyPattern -Text $combined -Patterns $readyPatterns
+        if ($readyPattern) {
+            Write-Host "Dedicated server reached startup marker: $readyPattern"
+            Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
             $process.WaitForExit(30000) | Out-Null
             exit 0
         }
-        Start-Sleep -Seconds 2
+
+        if (-not $sawEarlyProgress) {
+            $progressPattern = Test-AnyPattern -Text $combined -Patterns $earlyProgressPatterns
+            if ($progressPattern) {
+                $sawEarlyProgress = $true
+                Write-Host "Dedicated server reached early startup marker: $progressPattern"
+            }
+        }
+
+        if (((Get-Date) - $lastHeartbeat).TotalSeconds -ge 30) {
+            Write-Host 'Dedicated server smoke test is still waiting for a startup marker...'
+            $lastHeartbeat = Get-Date
+        }
     }
+
+    $combined = Write-CombinedLog
 
     if ($process.HasExited) {
         if ($process.ExitCode -ne 0) {
-            throw "Dedicated server smoke test exited early with code $($process.ExitCode)."
+            throw "Dedicated server smoke test exited early with code $($process.ExitCode).`n`n$(Get-LogTail -Text $combined)"
         }
-        if (-not $script:ready) {
-            throw 'Dedicated server smoke test exited before a startup marker was detected.'
-        }
-        exit 0
+        throw "Dedicated server smoke test exited before a startup marker was detected.`n`n$(Get-LogTail -Text $combined)"
     }
 
-    throw "Dedicated server smoke test timed out after $TimeoutSeconds seconds before startup marker was detected."
+    throw "Dedicated server smoke test timed out after $TimeoutSeconds seconds before startup marker was detected.`n`n$(Get-LogTail -Text $combined)"
 }
 finally {
-    if (-not $process.HasExited) {
-        $process.Kill($true)
+    if ($process -and -not $process.HasExited) {
+        Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
         $process.WaitForExit(30000) | Out-Null
     }
-    $logWriter.Dispose()
+    [void](Write-CombinedLog)
 }
