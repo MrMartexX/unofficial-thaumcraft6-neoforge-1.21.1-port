@@ -45,6 +45,10 @@ jobs:
         shell: pwsh
         run: .\gradlew.bat build --no-daemon
 
+      - name: Dedicated server smoke test
+        shell: pwsh
+        run: .\tools\ci\server-smoke.ps1 -TimeoutSeconds 420
+
       - name: Upload build outputs
         if: always()
         uses: actions/upload-artifact@v4
@@ -54,3 +58,4 @@ jobs:
             05_neoforge_port/build/libs/**
             05_neoforge_port/build/reports/**
             05_neoforge_port/build/test-results/**
+            05_neoforge_port/build/ci-logs/**
