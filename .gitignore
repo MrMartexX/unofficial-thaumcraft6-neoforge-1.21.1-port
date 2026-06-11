@@ -1,4 +1,3 @@
-
 script.ps1
 /script.ps1
 /script2.ps1
@@ -8,5 +7,15 @@ __pycache__/
 /temp/
 
 *.bak
+*.broken-before-rebuild
 stop
 /05_neoforge_port/stop
+
+# Local audit output. Commit curated reports under 6_docs/audits/ when they are useful.
+/tools/reports/local/**
+/tools/reports/*.txt
+/tools/reports/*.csv
+/tools/reports/*.log
+*_audit.txt
+*_audit.csv
+*_runtime_audit.txt
