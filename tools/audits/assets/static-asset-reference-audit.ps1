@@ -7,233 +7,153 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..\..')
 $moduleRootPath = Join-Path $repoRoot $ModuleRoot
-$assetsRoot = Join-Path $moduleRootPath 'src\main\resources\assets'
-$namespaceRoot = Join-Path $assetsRoot $Namespace
+$namespaceRoot = Join-Path $moduleRootPath "src\main\resources\assets\$Namespace"
 
-$script:errors = New-Object System.Collections.Generic.List[string]
-$script:warnings = New-Object System.Collections.Generic.List[string]
-$script:checkedModels = 0
-$script:checkedBlockstates = 0
-$script:checkedTextureRefs = 0
-$script:checkedModelRefs = 0
-$script:checkedObjRefs = 0
+$errors = New-Object System.Collections.Generic.List[string]
+$warnings = New-Object System.Collections.Generic.List[string]
+$checkedModels = 0
+$checkedBlockstates = 0
+$checkedModelRefs = 0
+$checkedTextureRefs = 0
+$checkedRawRefs = 0
 
-function Add-AuditError {
-    param([string]$Message)
-    $script:errors.Add($Message) | Out-Null
-}
+function AddError([string]$Message) { $errors.Add($Message) | Out-Null }
+function AddWarning([string]$Message) { $warnings.Add($Message) | Out-Null }
 
-function Add-AuditWarning {
-    param([string]$Message)
-    $script:warnings.Add($Message) | Out-Null
-}
+function ParseResourceLocation([string]$Value) {
+    if ([string]::IsNullOrWhiteSpace($Value)) { return $null }
+    if ($Value.StartsWith('#')) { return $null }
 
-function Get-JsonFiles {
-    param([string]$Path)
-    if (-not (Test-Path -LiteralPath $Path)) {
-        return @()
-    }
-    return @(Get-ChildItem -LiteralPath $Path -Recurse -File -Filter '*.json')
-}
-
-function Split-ResourceLocation {
-    param([string]$Value)
-
-    if ([string]::IsNullOrWhiteSpace($Value)) {
-        return $null
+    $index = $Value.IndexOf(':')
+    if ($index -lt 0) {
+        return [pscustomobject]@{ Namespace = $null; Path = $Value }
     }
 
-    if ($Value.StartsWith('#')) {
-        return $null
+    return [pscustomobject]@{
+        Namespace = $Value.Substring(0, $index)
+        Path = $Value.Substring($index + 1)
     }
-
-    $parts = $Value.Split(':', 2)
-    if ($parts.Count -eq 2) {
-        return [pscustomobject]@{ Namespace = $parts[0]; Path = $parts[1] }
-    }
-
-    return [pscustomobject]@{ Namespace = $Namespace; Path = $Value }
 }
 
-function Normalize-ResourcePath {
-    param([string]$Path)
-
-    $p = $Path -replace '/', [IO.Path]::DirectorySeparatorChar
-    $p = $p.TrimStart([IO.Path]::DirectorySeparatorChar)
-    return $p
+function NormalizePath([string]$Path) {
+    return ($Path -replace '/', [IO.Path]::DirectorySeparatorChar).TrimStart([IO.Path]::DirectorySeparatorChar)
 }
 
-function Resolve-ThaumcraftModelPath {
-    param([string]$Resource)
-
-    $loc = Split-ResourceLocation $Resource
-    if ($null -eq $loc) { return $null }
-    if ($loc.Namespace -ne $Namespace) { return $null }
-    if ($loc.Path.StartsWith('builtin/')) { return $null }
-
-    $relative = Normalize-ResourcePath $loc.Path
-    return Join-Path (Join-Path $namespaceRoot 'models') ($relative + '.json')
+function IsExplicitThaumcraftReference([string]$Value) {
+    $loc = ParseResourceLocation $Value
+    return ($null -ne $loc -and $loc.Namespace -eq $Namespace)
 }
 
-function Resolve-ThaumcraftTexturePath {
-    param([string]$Resource)
-
-    $loc = Split-ResourceLocation $Resource
-    if ($null -eq $loc) { return $null }
-    if ($loc.Namespace -ne $Namespace) { return $null }
-
-    $relative = Normalize-ResourcePath $loc.Path
-    if ($relative.EndsWith('.png')) {
-        return Join-Path (Join-Path $namespaceRoot 'textures') $relative
-    }
-    return Join-Path (Join-Path $namespaceRoot 'textures') ($relative + '.png')
-}
-
-function Resolve-ThaumcraftRawAssetPath {
-    param([string]$Resource)
-
-    $loc = Split-ResourceLocation $Resource
-    if ($null -eq $loc) { return $null }
-    if ($loc.Namespace -ne $Namespace) { return $null }
-
-    return Join-Path $namespaceRoot (Normalize-ResourcePath $loc.Path)
-}
-
-function Test-ModelReference {
-    param(
-        [string]$Resource,
-        [string]$SourceFile,
-        [string]$Context
-    )
-
-    $target = Resolve-ThaumcraftModelPath $Resource
-    if ($null -eq $target) { return }
+function CheckThaumcraftModel([string]$Value, [string]$Source, [string]$Context) {
+    if (-not (IsExplicitThaumcraftReference $Value)) { return }
+    $loc = ParseResourceLocation $Value
+    if ($loc.Path.StartsWith('builtin/')) { return }
 
     $script:checkedModelRefs++
+    $target = Join-Path (Join-Path $namespaceRoot 'models') ((NormalizePath $loc.Path) + '.json')
     if (-not (Test-Path -LiteralPath $target -PathType Leaf)) {
-        Add-AuditError "Missing model reference: $Resource from $SourceFile ($Context). Expected $target"
+        AddError "Missing model reference: $Value from $Source ($Context). Expected $target"
     }
 }
 
-function Test-TextureReference {
-    param(
-        [string]$Resource,
-        [string]$SourceFile,
-        [string]$Context
-    )
-
-    $target = Resolve-ThaumcraftTexturePath $Resource
-    if ($null -eq $target) { return }
+function CheckThaumcraftTexture([string]$Value, [string]$Source, [string]$Context) {
+    if (-not (IsExplicitThaumcraftReference $Value)) { return }
+    $loc = ParseResourceLocation $Value
 
     $script:checkedTextureRefs++
-    $loc = Split-ResourceLocation $Resource
     if ($loc.Path.StartsWith('items/') -or $loc.Path.StartsWith('blocks/')) {
-        Add-AuditWarning "Legacy plural texture path still referenced: $Resource from $SourceFile ($Context). Prefer item/ or block/ when adapting resources."
+        AddWarning "Legacy plural texture path: $Value from $Source ($Context). Prefer item/ or block/."
     }
 
+    $relative = NormalizePath $loc.Path
+    if (-not $relative.EndsWith('.png')) { $relative = $relative + '.png' }
+    $target = Join-Path (Join-Path $namespaceRoot 'textures') $relative
     if (-not (Test-Path -LiteralPath $target -PathType Leaf)) {
-        Add-AuditError "Missing texture reference: $Resource from $SourceFile ($Context). Expected $target"
+        AddError "Missing texture reference: $Value from $Source ($Context). Expected $target"
     }
 }
 
-function Test-RawAssetReference {
-    param(
-        [string]$Resource,
-        [string]$SourceFile,
-        [string]$Context
-    )
+function CheckThaumcraftRawAsset([string]$Value, [string]$Source, [string]$Context) {
+    if (-not (IsExplicitThaumcraftReference $Value)) { return }
+    $loc = ParseResourceLocation $Value
 
-    $target = Resolve-ThaumcraftRawAssetPath $Resource
-    if ($null -eq $target) { return }
-
-    $script:checkedObjRefs++
+    $script:checkedRawRefs++
+    $target = Join-Path $namespaceRoot (NormalizePath $loc.Path)
     if (-not (Test-Path -LiteralPath $target -PathType Leaf)) {
-        Add-AuditError "Missing raw asset reference: $Resource from $SourceFile ($Context). Expected $target"
+        AddError "Missing raw asset reference: $Value from $Source ($Context). Expected $target"
     }
 }
 
-function ConvertFrom-JsonFile {
-    param([System.IO.FileInfo]$File)
-
+function ReadJsonFile([System.IO.FileInfo]$File) {
     try {
         return Get-Content -LiteralPath $File.FullName -Raw | ConvertFrom-Json -Depth 100
     }
     catch {
-        Add-AuditError "Invalid JSON: $($File.FullName): $($_.Exception.Message)"
+        AddError "Invalid JSON: $($File.FullName): $($_.Exception.Message)"
         return $null
     }
 }
 
-function Visit-JsonNode {
-    param(
-        [object]$Node,
-        [scriptblock]$Visitor,
-        [string]$Path = '$'
-    )
-
+function VisitJson($Node, [string]$Path, [string]$Source) {
     if ($null -eq $Node) { return }
 
     if ($Node -is [System.Array]) {
         for ($i = 0; $i -lt $Node.Count; $i++) {
-            Visit-JsonNode -Node $Node[$i] -Visitor $Visitor -Path "$Path[$i]"
+            VisitJson $Node[$i] "$Path[$i]" $Source
         }
         return
     }
 
     if ($Node -is [System.Management.Automation.PSCustomObject]) {
         foreach ($property in $Node.PSObject.Properties) {
-            & $Visitor $property.Name $property.Value "$Path.$($property.Name)"
-            Visit-JsonNode -Node $property.Value -Visitor $Visitor -Path "$Path.$($property.Name)"
+            $name = $property.Name
+            $value = $property.Value
+            $childPath = "$Path.$name"
+
+            if ($name -eq 'model' -and $value -is [string]) {
+                CheckThaumcraftModel $value $Source $childPath
+            }
+
+            VisitJson $value $childPath $Source
         }
     }
 }
 
-function Scan-ModelJson {
-    param([System.IO.FileInfo]$File)
-
+function ScanModelJson([System.IO.FileInfo]$File) {
     $script:checkedModels++
-    $json = ConvertFrom-JsonFile -File $File
+    $json = ReadJsonFile $File
     if ($null -eq $json) { return }
 
     if ($json.PSObject.Properties.Name -contains 'parent') {
-        Test-ModelReference -Resource ([string]$json.parent) -SourceFile $File.FullName -Context 'parent'
+        CheckThaumcraftModel ([string]$json.parent) $File.FullName 'parent'
     }
 
-    if ($json.PSObject.Properties.Name -contains 'loader' -and [string]$json.loader -eq 'neoforge:obj') {
+    if (($json.PSObject.Properties.Name -contains 'loader') -and ([string]$json.loader -eq 'neoforge:obj')) {
         if ($json.PSObject.Properties.Name -contains 'model') {
-            Test-RawAssetReference -Resource ([string]$json.model) -SourceFile $File.FullName -Context 'neoforge:obj model'
+            CheckThaumcraftRawAsset ([string]$json.model) $File.FullName 'neoforge:obj model'
         }
         if ($json.PSObject.Properties.Name -contains 'mtl_override') {
-            Test-RawAssetReference -Resource ([string]$json.mtl_override) -SourceFile $File.FullName -Context 'neoforge:obj mtl_override'
+            CheckThaumcraftRawAsset ([string]$json.mtl_override) $File.FullName 'neoforge:obj mtl_override'
         }
     }
 
     if ($json.PSObject.Properties.Name -contains 'textures') {
-        Visit-JsonNode -Node $json.textures -Path '$.textures' -Visitor {
-            param($Name, $Value, $Path)
-            if ($Value -is [string]) {
-                Test-TextureReference -Resource $Value -SourceFile $File.FullName -Context $Path
+        foreach ($property in $json.textures.PSObject.Properties) {
+            if ($property.Value -is [string]) {
+                CheckThaumcraftTexture ([string]$property.Value) $File.FullName "textures.$($property.Name)"
             }
         }
     }
 }
 
-function Scan-BlockstateJson {
-    param([System.IO.FileInfo]$File)
-
+function ScanBlockstateJson([System.IO.FileInfo]$File) {
     $script:checkedBlockstates++
-    $json = ConvertFrom-JsonFile -File $File
+    $json = ReadJsonFile $File
     if ($null -eq $json) { return }
-
-    Visit-JsonNode -Node $json -Visitor {
-        param($Name, $Value, $Path)
-        if ($Name -eq 'model' -and $Value -is [string]) {
-            Test-ModelReference -Resource $Value -SourceFile $File.FullName -Context $Path
-        }
-    }
+    VisitJson $json '$' $File.FullName
 }
 
-Write-Host "Static asset reference audit"
+Write-Host 'Static asset reference audit'
 Write-Host "Repository root: $repoRoot"
 Write-Host "Module root: $moduleRootPath"
 Write-Host "Namespace root: $namespaceRoot"
@@ -245,35 +165,35 @@ if (-not (Test-Path -LiteralPath $namespaceRoot -PathType Container)) {
 $modelRoot = Join-Path $namespaceRoot 'models'
 $blockstateRoot = Join-Path $namespaceRoot 'blockstates'
 
-foreach ($file in Get-JsonFiles -Path $modelRoot) {
-    Scan-ModelJson -File $file
-}
-
-foreach ($file in Get-JsonFiles -Path $blockstateRoot) {
-    Scan-BlockstateJson -File $file
-}
-
-Write-Host "Checked model JSON files: $script:checkedModels"
-Write-Host "Checked blockstate JSON files: $script:checkedBlockstates"
-Write-Host "Checked model references: $script:checkedModelRefs"
-Write-Host "Checked texture references: $script:checkedTextureRefs"
-Write-Host "Checked OBJ/MTL raw references: $script:checkedObjRefs"
-
-if ($script:warnings.Count -gt 0) {
-    Write-Host ''
-    Write-Host "Warnings: $($script:warnings.Count)"
-    foreach ($warning in $script:warnings) {
-        Write-Host "WARNING: $warning"
+if (Test-Path -LiteralPath $modelRoot) {
+    foreach ($file in Get-ChildItem -LiteralPath $modelRoot -Recurse -File -Filter '*.json') {
+        ScanModelJson $file
     }
 }
 
-if ($script:errors.Count -gt 0) {
-    Write-Host ''
-    Write-Host "Errors: $($script:errors.Count)"
-    foreach ($errorMessage in $script:errors) {
-        Write-Host "ERROR: $errorMessage"
+if (Test-Path -LiteralPath $blockstateRoot) {
+    foreach ($file in Get-ChildItem -LiteralPath $blockstateRoot -Recurse -File -Filter '*.json') {
+        ScanBlockstateJson $file
     }
-    exit 1
+}
+
+Write-Host "Checked model JSON files: $checkedModels"
+Write-Host "Checked blockstate JSON files: $checkedBlockstates"
+Write-Host "Checked model references: $checkedModelRefs"
+Write-Host "Checked texture references: $checkedTextureRefs"
+Write-Host "Checked OBJ/MTL raw references: $checkedRawRefs"
+
+if ($warnings.Count -gt 0) {
+    Write-Host ''
+    Write-Host "Warnings: $($warnings.Count)"
+    foreach ($warning in $warnings) { Write-Host "WARNING: $warning" }
+}
+
+if ($errors.Count -gt 0) {
+    Write-Host ''
+    Write-Host "Errors: $($errors.Count)"
+    foreach ($errorMessage in $errors) { Write-Host "ERROR: $errorMessage" }
+    throw "Static asset reference audit failed with $($errors.Count) error(s)."
 }
 
 Write-Host 'Static asset reference audit passed.'
