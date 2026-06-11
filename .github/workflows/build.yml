@@ -52,7 +52,6 @@ jobs:
         run: .\gradlew.bat build --no-daemon
 
       - name: Dedicated server smoke test
-        working-directory: 05_neoforge_port
         shell: pwsh
         run: .\tools\ci\server-smoke.ps1 -TimeoutSeconds 420
 
