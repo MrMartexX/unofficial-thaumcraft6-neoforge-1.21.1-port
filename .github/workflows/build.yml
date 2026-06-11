@@ -6,12 +6,14 @@ on:
       - "**"
     paths:
       - "05_neoforge_port/**"
+      - "tools/ci/**"
       - ".github/workflows/build.yml"
   pull_request:
     branches:
       - "**"
     paths:
       - "05_neoforge_port/**"
+      - "tools/ci/**"
       - ".github/workflows/build.yml"
   workflow_dispatch:
 
