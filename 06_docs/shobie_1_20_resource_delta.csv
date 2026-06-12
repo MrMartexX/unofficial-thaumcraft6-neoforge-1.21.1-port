@@ -2069,8 +2069,8 @@ data/minecraft/tags/blocks/planks.json,missing,catalog_only_tag_path_review,.jso
 data/minecraft/tags/blocks/saplings.json,missing,catalog_only_tag_path_review,.json
 data/minecraft/tags/blocks/wooden_slabs.json,missing,catalog_only_tag_path_review,.json
 data/minecraft/tags/blocks/wooden_stairs.json,missing,catalog_only_tag_path_review,.json
-data/minecraft/tags/damage_type/bypasses_armor.json,missing,catalog_only_tag_path_review,.json
-data/minecraft/tags/damage_type/witch_resistant_to.json,missing,catalog_only_tag_path_review,.json
+data/minecraft/tags/damage_type/bypasses_armor.json,identical,imported_runtime_phase2,.json
+data/minecraft/tags/damage_type/witch_resistant_to.json,identical,imported_runtime_phase2,.json
 data/thaumcraft/damage_type/dissolve.json,identical,imported_runtime_phase2,.json
 data/thaumcraft/damage_type/swarm.json,identical,imported_runtime_phase2,.json
 data/thaumcraft/damage_type/taint.json,identical,imported_runtime_phase2,.json

@@ -16,6 +16,11 @@ Imported the four Shobie damage type data files into `05_neoforge_port/src/main/
 - `taint.json`
 - `tentacle.json`
 
+Imported matching Minecraft damage type tags into `05_neoforge_port/src/main/resources/data/minecraft/tags/damage_type/`:
+
+- `bypasses_armor.json`
+- `witch_resistant_to.json`
+
 Converted a first safe subset of Shobie vanilla recipes into Minecraft 1.21.1 `data/thaumcraft/recipe` JSON using current legacy-style ids:
 
 - `stone_arcane_brick.json`
@@ -43,9 +48,9 @@ Full catalog: `06_docs/shobie_1_20_resource_delta.csv`.
 | --- | ---: |
 | different, keep_current_1_21_or_legacy_asset | 638 |
 | identical, already_present | 1408 |
-| identical, imported_runtime_phase2 | 4 |
+| identical, imported_runtime_phase2 | 6 |
 | missing, catalog_only_loot_table_singular_path | 13 |
-| missing, catalog_only_tag_path_review | 54 |
+| missing, catalog_only_tag_path_review | 52 |
 | missing, catalog_only_worldgen_later | 54 |
 | missing, recipe_catalog_managed | 270 |
 | missing, review | 2 |
