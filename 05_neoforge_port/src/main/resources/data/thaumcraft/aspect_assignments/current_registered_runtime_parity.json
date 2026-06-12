@@ -85,6 +85,14 @@
       ]
     },
     {
+      "item": "thaumcraft:void_metal_ingot",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:vacuos", "amount": 10 },
+        { "aspect": "thaumcraft:tenebrae", "amount": 5 }
+      ]
+    },
+    {
       "item": "thaumcraft:brass_plate",
       "aspects": [
         { "aspect": "thaumcraft:metallum", "amount": 7 },

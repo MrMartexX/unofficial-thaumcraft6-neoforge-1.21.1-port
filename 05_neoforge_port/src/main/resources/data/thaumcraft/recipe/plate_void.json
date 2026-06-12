@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "III"
+  ],
+  "key": {
+    "I": {
+      "tag": "c:ingots/void"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:void_plate",
+    "count": 3
+  }
+}

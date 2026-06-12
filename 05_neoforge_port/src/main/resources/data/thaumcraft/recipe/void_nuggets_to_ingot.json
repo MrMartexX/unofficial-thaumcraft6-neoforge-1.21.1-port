@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:nuggets/void"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:void_metal_ingot"
+  }
+}

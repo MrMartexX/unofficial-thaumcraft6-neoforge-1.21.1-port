@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:nuggets/thaumium"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:thaumium_ingot"
+  }
+}

@@ -156,10 +156,17 @@ public final class TCItems {
     public static final Supplier<Item> FABRIC = ITEMS.register("fabric", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> THAUMIUM_INGOT = simpleItem("thaumium_ingot");
     public static final Supplier<Item> BRASS_INGOT = simpleItem("brass_ingot");
+    public static final Supplier<Item> VOID_METAL_INGOT = simpleItem("void_metal_ingot");
+    public static final Supplier<Item> THAUMIUM_NUGGET = simpleItem("thaumium_nugget");
+    public static final Supplier<Item> BRASS_NUGGET = simpleItem("brass_nugget");
+    public static final Supplier<Item> VOID_METAL_NUGGET = simpleItem("void_metal_nugget");
+    public static final Supplier<Item> QUICKSILVER_NUGGET = simpleItem("quicksilver_nugget");
+    public static final Supplier<Item> QUARTZ_NUGGET = simpleItem("quartz_nugget");
     public static final Supplier<Item> BRASS_PLATE = simpleItem("brass_plate");
     public static final Supplier<Item> IRON_PLATE = simpleItem("iron_plate");
     public static final Supplier<Item> THAUMIUM_PLATE = simpleItem("thaumium_plate");
     public static final Supplier<Item> VOID_PLATE = simpleItem("void_plate");
+    public static final Supplier<Item> CANDLE_WHITE = simpleItem("candle_white");
     public static final Supplier<Item> FILTER = simpleItem("filter");
     public static final Supplier<Item> MORPHIC_RESONATOR = simpleItem("morphic_resonator");
     public static final Supplier<Item> RARE_EARTH = simpleItem("rare_earth");
@@ -182,6 +189,19 @@ public final class TCItems {
     public static final Supplier<Item> THAUMIUM_PICK = simpleItem("thaumium_pick");
     public static final Supplier<Item> THAUMIUM_SHOVEL = simpleItem("thaumium_shovel");
     public static final Supplier<Item> THAUMIUM_SWORD = simpleItem("thaumium_sword");
+    public static final Supplier<Item> THAUMIUM_HELM = simpleItem("thaumium_helm");
+    public static final Supplier<Item> THAUMIUM_CHEST = simpleItem("thaumium_chest");
+    public static final Supplier<Item> THAUMIUM_LEGS = simpleItem("thaumium_legs");
+    public static final Supplier<Item> THAUMIUM_BOOTS = simpleItem("thaumium_boots");
+    public static final Supplier<Item> VOID_AXE = simpleItem("void_axe");
+    public static final Supplier<Item> VOID_HOE = simpleItem("void_hoe");
+    public static final Supplier<Item> VOID_PICK = simpleItem("void_pick");
+    public static final Supplier<Item> VOID_SHOVEL = simpleItem("void_shovel");
+    public static final Supplier<Item> VOID_SWORD = simpleItem("void_sword");
+    public static final Supplier<Item> VOID_HELM = simpleItem("void_helm");
+    public static final Supplier<Item> VOID_CHEST = simpleItem("void_chest");
+    public static final Supplier<Item> VOID_LEGS = simpleItem("void_legs");
+    public static final Supplier<Item> VOID_BOOTS = simpleItem("void_boots");
     public static final Supplier<Item> BLANK_SEAL = simpleItem("blank_seal");
     public static final Supplier<Item> BRAIN_CLOCKWORK = simpleItem("brain_clockwork");
     public static final Supplier<Item> CASTER_ADVANCED = simpleItem("caster_advanced");
@@ -192,11 +212,13 @@ public final class TCItems {
     public static final Supplier<Item> GRAPPLE_GUN_SPOOL = simpleItem("grapple_gun_spool");
     public static final Supplier<Item> GRAPPLE_GUN_TIP = simpleItem("grapple_gun_tip");
     public static final Supplier<Item> PHIAL_EMPTY = simpleItem("phial_empty");
+    public static final Supplier<Item> JAR_BRACE = simpleItem("jar_brace");
     public static final Supplier<Item> PRIMAL_CHARM = simpleItem("primal_charm");
     public static final Supplier<Item> PRIMORDIAL_PEARL = simpleItem("primordial_pearl");
     public static final Supplier<Item> SANITY_CHECKER = simpleItem("sanity_checker");
     public static final Supplier<Item> TURRET_PLACER_BASIC = simpleItem("turret_placer_basic");
     public static final Supplier<Item> TURRET_PLACER_ADVANCED = simpleItem("turret_placer_advanced");
+    public static final Supplier<Item> GOLEM_BELL = simpleItem("golem_bell");
 
     public static final Supplier<Item> CRYSTAL_ESSENCE_AER = simpleItem("crystal_essence_aer");
     public static final Supplier<Item> CRYSTAL_ESSENCE_TERRA = simpleItem("crystal_essence_terra");
@@ -297,7 +319,13 @@ public final class TCItems {
             case "brain" -> new ItemZombieBrain();
             case "scribing_tools" -> new ItemScribingTools();
             case "thaumium_ingot" -> legacyItem("ingot", "thaumium", 0);
+            case "void_metal_ingot" -> legacyItem("ingot", "void", 1);
             case "brass_ingot" -> legacyItem("ingot", "brass", 2);
+            case "quicksilver_nugget" -> legacyItem("nugget", "quicksilver", 5);
+            case "thaumium_nugget" -> legacyItem("nugget", "thaumium", 6);
+            case "void_metal_nugget" -> legacyItem("nugget", "void", 7);
+            case "brass_nugget" -> legacyItem("nugget", "brass", 8);
+            case "quartz_nugget" -> legacyItem("nugget", "quartz", 9);
             case "brass_plate" -> legacyItem("plate", "brass", 0);
             case "iron_plate" -> legacyItem("plate", "iron", 1);
             case "thaumium_plate" -> legacyItem("plate", "thaumium", 2);
@@ -317,6 +345,19 @@ public final class TCItems {
             case "thaumium_pick" -> new PickaxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(PickaxeItem.createAttributes(TCToolTiers.THAUMIUM, 1.0F, -2.8F)));
             case "thaumium_shovel" -> new ShovelItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(ShovelItem.createAttributes(TCToolTiers.THAUMIUM, 1.5F, -3.0F)));
             case "thaumium_sword" -> new SwordItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(SwordItem.createAttributes(TCToolTiers.THAUMIUM, 3, -2.4F)));
+            case "thaumium_helm", "thaumium_chest", "thaumium_legs", "thaumium_boots" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
+                    "tc.placeholder.armor"
+            );
+            case "void_axe", "void_hoe", "void_pick", "void_shovel", "void_sword",
+                 "void_helm", "void_chest", "void_legs", "void_boots" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
+                    "tc.placeholder.void_equipment"
+            );
+            case "candle_white", "jar_brace", "golem_bell" -> new ItemLegacyPlaceholder(
+                    new Item.Properties(),
+                    "tc.placeholder.material_component"
+            );
             case "caster_basic" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
                     "tc.placeholder.caster_basic"

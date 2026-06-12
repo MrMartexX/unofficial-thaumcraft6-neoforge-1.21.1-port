@@ -142,10 +142,17 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.QUICKSILVER.get());
         acceptVisible(output, TCItems.THAUMIUM_INGOT.get());
         acceptVisible(output, TCItems.BRASS_INGOT.get());
+        acceptVisible(output, TCItems.VOID_METAL_INGOT.get());
+        acceptVisible(output, TCItems.THAUMIUM_NUGGET.get());
+        acceptVisible(output, TCItems.BRASS_NUGGET.get());
+        acceptVisible(output, TCItems.VOID_METAL_NUGGET.get());
+        acceptVisible(output, TCItems.QUICKSILVER_NUGGET.get());
+        acceptVisible(output, TCItems.QUARTZ_NUGGET.get());
         acceptVisible(output, TCItems.RARE_EARTH.get());
         acceptVisible(output, TCItems.FABRIC.get());
         acceptVisible(output, TCItems.VIS_RESONATOR.get());
         acceptVisible(output, TCItems.TALLOW.get());
+        acceptVisible(output, TCItems.CANDLE_WHITE.get());
         acceptVisible(output, TCItems.MECHANISM_SIMPLE.get());
         acceptVisible(output, TCItems.MECHANISM_COMPLEX.get());
         acceptVisible(output, TCItems.BRASS_PLATE.get());
@@ -173,6 +180,19 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.THAUMIUM_SHOVEL.get());
         acceptVisible(output, TCItems.THAUMIUM_PICK.get());
         acceptVisible(output, TCItems.THAUMIUM_HOE.get());
+        acceptVisible(output, TCItems.VOID_AXE.get());
+        acceptVisible(output, TCItems.VOID_SWORD.get());
+        acceptVisible(output, TCItems.VOID_SHOVEL.get());
+        acceptVisible(output, TCItems.VOID_PICK.get());
+        acceptVisible(output, TCItems.VOID_HOE.get());
+        acceptVisible(output, TCItems.THAUMIUM_HELM.get());
+        acceptVisible(output, TCItems.THAUMIUM_CHEST.get());
+        acceptVisible(output, TCItems.THAUMIUM_LEGS.get());
+        acceptVisible(output, TCItems.THAUMIUM_BOOTS.get());
+        acceptVisible(output, TCItems.VOID_HELM.get());
+        acceptVisible(output, TCItems.VOID_CHEST.get());
+        acceptVisible(output, TCItems.VOID_LEGS.get());
+        acceptVisible(output, TCItems.VOID_BOOTS.get());
 
         acceptVisible(output, TCItems.GOGGLES.get());
 
@@ -186,6 +206,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.CLOTH_LEGS.get());
         acceptVisible(output, TCItems.CLOTH_BOOTS.get());
         acceptVisible(output, TCItems.PHIAL_EMPTY.get());
+        acceptVisible(output, TCItems.JAR_BRACE.get());
         acceptVisible(output, TCItems.BLANK_SEAL.get());
         acceptVisible(output, TCItems.BRAIN_CLOCKWORK.get());
         acceptVisible(output, TCItems.GRAPPLE_GUN_TIP.get());
@@ -195,6 +216,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.SANITY_CHECKER.get());
         acceptVisible(output, TCItems.TURRET_PLACER_BASIC.get());
         acceptVisible(output, TCItems.TURRET_PLACER_ADVANCED.get());
+        acceptVisible(output, TCItems.GOLEM_BELL.get());
     }
 
     private static void addCrystalEssenceVariants(CreativeModeTab.Output output) {
