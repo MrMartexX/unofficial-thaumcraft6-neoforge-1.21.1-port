@@ -65,6 +65,16 @@ unregistered ids.
 - `elemental_*`, `crimson_blade`, and other late-game tools: not registered.
 - Worldgen biome tags: not imported until the worldgen/biome layer is designed.
 
+## Vanilla Tag Closure
+
+Shobie includes explicit smelting recipes for Greatwood/Silverwood logs to
+charcoal. In the NeoForge 1.21.1 port this is handled through the vanilla
+integration path instead:
+
+| Vanilla tag | Current values | Reason |
+|---|---|---|
+| `minecraft:logs_that_burn` block/item | `log_greatwood`, `log_silverwood` | Lets vanilla log-to-charcoal and burnable-log behavior apply without adding duplicate Thaumcraft smelting recipes. |
+
 ## Validation
 
 | Check | Result | Notes |
