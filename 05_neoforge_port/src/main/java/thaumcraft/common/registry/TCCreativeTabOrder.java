@@ -133,11 +133,6 @@ public final class TCCreativeTabOrder {
 
         acceptVisible(output, TCItems.GOGGLES.get());
 
-        acceptVisible(output, TCItems.ENCHANTED_PLACEHOLDER_PROTECTION_1.get());
-        acceptVisible(output, TCItems.ENCHANTED_PLACEHOLDER_SHARPNESS_1.get());
-        acceptVisible(output, TCItems.ENCHANTED_PLACEHOLDER_SILK_TOUCH_1.get());
-        acceptVisible(output, TCItems.ENCHANTED_PLACEHOLDER_FORTUNE_1.get());
-
         acceptVisible(output, TCItems.CASTER_BASIC.get());
         acceptVisible(output, TCItems.FOCUS_1.get());
         acceptVisible(output, TCItems.FOCUS_2.get());
