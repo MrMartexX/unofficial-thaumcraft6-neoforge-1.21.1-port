@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:iron_plate",
+    "thaumcraft:brass_plate",
+    "thaumcraft:thaumium_plate",
+    "thaumcraft:void_plate"
+  ]
+}

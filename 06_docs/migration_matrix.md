@@ -21,6 +21,7 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 | Aspect generateTags audit | `06_docs/aspect_generate_tags_audit.md` |
 | Aspect assignment data format | `06_docs/aspect_assignment_data_format.md` |
 | Aspect generated cache design | `06_docs/aspect_generated_cache_design.md` |
+| Shobie tag compatibility import | `06_docs/shobie_1_20_tag_compat_import.md` |
 | Vanilla aspect policy | `06_docs/vanilla_aspect_policy.md` |
 | Vanilla 1.21 aspect assignment audit | `06_docs/vanilla_1_21_aspect_assignments.md` |
 | Vanilla post-1.12 aspect rationale table | `06_docs/vanilla_post_1_12_aspect_rationale.md` |

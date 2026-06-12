@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:stone_ancient",
+    "thaumcraft:stone_ancient_tile",
+    "thaumcraft:stone_ancient_rock",
+    "thaumcraft:stone_ancient_glyphed",
+    "thaumcraft:stone_ancient_doorway",
+    "thaumcraft:slab_ancient",
+    "thaumcraft:stairs_ancient"
+  ]
+}

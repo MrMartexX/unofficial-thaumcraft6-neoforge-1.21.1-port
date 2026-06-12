@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "thaumcraft:metal_brass",
+    "thaumcraft:metal_thaumium",
+    "thaumcraft:metal_void",
+    "thaumcraft:metal_alchemical",
+    "thaumcraft:metal_alchemical_advanced"
+  ]
+}
