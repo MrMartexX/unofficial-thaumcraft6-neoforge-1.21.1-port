@@ -452,6 +452,10 @@ public final class TCAspectReloadValidator {
                 amount(Aspect.BEAST, 26), amount(Aspect.CRAFT, 6), amount(Aspect.MAGIC, 1));
         expectAspects(new ItemStack(TCItems.GOGGLES.get()), "thaumcraft:goggles legacy runtime lookup",
                 amount(Aspect.SENSES, 25), amount(Aspect.AURA, 25), amount(Aspect.BEAST, 15), amount(Aspect.PROTECT, 15), amount(Aspect.METAL, 60), amount(Aspect.DESIRE, 45), amount(Aspect.MAGIC, 9));
+        expectAspects(new ItemStack(TCItems.FILTER.get()), "thaumcraft:filter arcane generated lookup",
+                amount(Aspect.METAL, 7), amount(Aspect.DESIRE, 7), amount(Aspect.PLANT, 1), amount(Aspect.MAGIC, 1));
+        expectAspects(new ItemStack(TCItems.MORPHIC_RESONATOR.get()), "thaumcraft:morphic_resonator arcane generated lookup",
+                amount(Aspect.CRYSTAL, 1), amount(Aspect.METAL, 14), amount(Aspect.TOOL, 4), amount(Aspect.EARTH, 3), amount(Aspect.ORDER, 3), amount(Aspect.MAGIC, 5));
         expectAspects(new ItemStack(TCItems.STONE_ARCANE.get()), "thaumcraft:stone_arcane legacy runtime lookup",
                 amount(Aspect.EARTH, 3));
         expectAspects(new ItemStack(TCItems.STONE_ARCANE_BRICK.get()), "thaumcraft:stone_arcane_brick legacy runtime lookup",
@@ -470,6 +474,10 @@ public final class TCAspectReloadValidator {
                 amount(Aspect.EARTH, 5), amount(Aspect.ELDRITCH, 5));
         expectGeneratedAspects(new ItemStack(TCItems.PLANK_GREATWOOD.get()), "thaumcraft:plank_greatwood generateTags cache lookup",
                 amount(Aspect.PLANT, 3), amount(Aspect.LIFE, 1));
+        expectGeneratedAspects(new ItemStack(TCItems.FILTER.get()), "thaumcraft:filter arcane generateTags cache lookup",
+                amount(Aspect.METAL, 7), amount(Aspect.DESIRE, 7), amount(Aspect.PLANT, 1), amount(Aspect.MAGIC, 1));
+        expectGeneratedAspects(new ItemStack(TCItems.MORPHIC_RESONATOR.get()), "thaumcraft:morphic_resonator arcane generateTags cache lookup",
+                amount(Aspect.CRYSTAL, 1), amount(Aspect.METAL, 14), amount(Aspect.TOOL, 4), amount(Aspect.EARTH, 3), amount(Aspect.ORDER, 3), amount(Aspect.MAGIC, 5));
     }
 
     private static void validateCraftingFormulaFixtures() {

@@ -38,14 +38,14 @@ Guide rule applied: old `OreDictionary` memberships become tags, but recipe-deri
 | Recursion guard | Serialized stack NBT history | Stops cycles and caps history at `< 100`. | Current crafting generator uses `TCAspectStackKey` history and the same `< 100` cap. |
 | Crucible output | `generateTagsFromCrucibleRecipes` | Uses catalyst aspects plus square-root-scaled recipe aspects divided by output count. | Requires crucible recipe type/serializer and catalyst matching. |
 | Infusion output | `generateTagsFromInfusionRecipes` | Uses central input plus components plus square-root-scaled recipe aspects divided by output count. | Requires infusion recipe type/serializer and ingredient model. |
-| Crafting output | `generateTagsFromCraftingRecipes` | Scans every crafting recipe and chooses the lowest positive generated aspect total for matching output item/damage. | Implemented for standard `RecipeType.CRAFTING`; custom Thaumcraft recipes are still deferred. |
-| Ingredient aspects | `getAspectsFromIngredients` | Uses first matching stack from each `Ingredient`, subtracts remaining items, applies `0.75 / output count`, floors to int, and removes non-positive amounts. | Implemented for standard crafting recipes; more parity fixtures are still needed for shapeless and remaining-item cases. |
-| Arcane crafting bonus | `generateTagsFromCraftingRecipes` | Adds `MAGIC` based on `sqrt(1 + vis / 2) / output count` for `IArcaneRecipe`. | Requires arcane recipe design. |
+| Crafting output | `generateTagsFromCraftingRecipes` | Scans every crafting recipe and chooses the lowest positive generated aspect total for matching output item/damage. | Implemented for standard `RecipeType.CRAFTING` and the current `thaumcraft:arcane` recipe type; crucible and infusion remain deferred. |
+| Ingredient aspects | `getAspectsFromIngredients` | Uses first matching stack from each `Ingredient`, subtracts remaining items, applies `0.75 / output count`, floors to int, and removes non-positive amounts. | Implemented for standard and current arcane crafting recipes; validation covers shapeless math, remaining-item subtraction, and current arcane `vis` bonus outputs. |
+| Arcane crafting bonus | `generateTagsFromCraftingRecipes` | Adds `MAGIC` based on `sqrt(1 + vis / 2) / output count` for `IArcaneRecipe`. | Implemented for current data-driven `TCArcaneRecipe` outputs. |
 | Caching side effect | `generateTags` | Registers generated aspects back into `ThaumcraftApi.registerObjectTag`. | Ported as reload-safe `TCGeneratedAspectCache`, rebuilt after server data/tag reload. |
 
 ## Current Port Decision
 
-`AspectHelper.generateTags` now returns cached generated entries for the implemented vanilla crafting slice. It does not scan recipes on lookup. `TCGeneratedAspectRecipeGenerator` rebuilds the generated cache after server data/tag reload, using loaded `RecipeType.CRAFTING` recipes.
+`AspectHelper.generateTags` now returns cached generated entries for the implemented vanilla crafting and current arcane crafting slice. It does not scan recipes on lookup. `TCGeneratedAspectRecipeGenerator` rebuilds the generated cache after server data/tag reload, using loaded `RecipeType.CRAFTING` recipes plus the current `thaumcraft:arcane` recipe type.
 
 Current safety boundary: generated recipe outputs are restricted to the `minecraft` and `thaumcraft` namespaces. Vanilla items can be exact/tag/manual seeds and recipe ingredients, and standard vanilla crafting outputs can be generated after server data/tag reload. Third-party modded recipe outputs are not generated until their policy is audited.
 
@@ -68,7 +68,14 @@ The first named validation slice covers already registered simple Thaumcraft con
 
 This logic is recipe-type based, not UI based. A 2x2 inventory recipe and a 3x3 crafting table recipe both live under `RecipeType.CRAFTING`; the recipe's own dimensions decide where it can actually be crafted. Validation-only fixtures now cover shapeless recipe math and remaining-item subtraction without adding fake gameplay recipes.
 
-The live generated cache now also scans current `minecraft:*` standard crafting outputs. The latest server validation rebuilt `476` generated entries and then enforced `1230/1230` assignable current vanilla item-id coverage. Final 1.12 dump values for legacy-equivalent flattened vanilla ids and currently registered Thaumcraft ids can be promoted into exact runtime parity layers when generated/manual/tag behavior would otherwise resolve differently from 1.12. Spawn eggs, firework star/rocket, infested blocks, and empty component-only potion carrier ids are intentionally excluded for legacy parity.
+Current exact arcane recipe outputs participate in the same cache only when they lack a stronger exact/tag/manual assignment. The first reload-validated arcane-generated outputs are:
+
+| Output | Recipe source | Generated aspects |
+|---|---|---|
+| `filter` | `gold_ingot`, `plank_silverwood`, vis `15`, output count `2` | `metallum 7`, `desiderium 7`, `herba 1`, `praecantatio 1` |
+| `morphic_resonator` | `glass_pane`, `brass_plate`, `rare_earth`, vis `50`, output count `1` | `vitreus 1`, `metallum 14`, `instrumentum 4`, `terra 3`, `ordo 3`, `praecantatio 5` |
+
+The live generated cache now scans current `minecraft:*` standard crafting outputs and current `thaumcraft:*` standard/arcane outputs. The latest server validation rebuilt `501` generated entries and then enforced `1230/1230` assignable current vanilla item-id coverage. Final 1.12 dump values for legacy-equivalent flattened vanilla ids and currently registered Thaumcraft ids can be promoted into exact runtime parity layers when generated/manual/tag behavior would otherwise resolve differently from 1.12. Spawn eggs, firework star/rocket, infested blocks, and empty component-only potion carrier ids are intentionally excluded for legacy parity.
 
 ## Current Tag Expansion Scope
 
@@ -110,7 +117,8 @@ Additional vanilla bridge:
 ## Non-Goals
 
 - No generated aspects for third-party modded namespaces yet.
-- No crucible, infusion, or arcane crafting implementation.
+- No crucible or infusion recipe-derived implementation.
+- No broad remaining arcane recipe import beyond the current audited exact fixtures.
 - No global third-party modded `ConfigAspects` catalog connection.
 - No scanning UI, research unlocks, essentia transport, aura, or gameplay effects.
 
@@ -121,5 +129,5 @@ Additional vanilla bridge:
 3. Keep vanilla item-id coverage validation at `0 missing` before exposing aspects through gameplay consumers.
 4. Port crucible recipe data and catalyst matching.
 5. Port infusion recipe data and component matching.
-6. Port arcane crafting recipe data and `MAGIC` bonus calculation.
-7. Add parity fixtures for known legacy custom recipe-derived outputs before exposing gameplay consumers.
+6. Continue importing arcane recipes only by audited dependency family; current `TCArcaneRecipe` outputs already receive the legacy `MAGIC` bonus.
+7. Add crucible and infusion parity fixtures for known legacy custom recipe-derived outputs before exposing gameplay consumers.

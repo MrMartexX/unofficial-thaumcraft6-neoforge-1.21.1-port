@@ -118,10 +118,10 @@ Legacy OreDictionary ingredients are translated to current common tags:
 - `ItemsTC.morphicResonator` -> `thaumcraft:morphic_resonator`.
 
 The `filter`, `morphicresonator`, `essentiasmelter`, and `infusionmatrix`
-fixtures are exact recipe and Thaumonomicon-page fixtures only. Essentia Filter
-and Morphic Resonator behavior, recipe-derived arcane aspect generation,
-`smelter_basic` machine behavior, Infusion Matrix multiblock behavior, and
-final nitor gameplay/FX behavior remain separate subsystem work.
+fixtures are exact recipe and Thaumonomicon-page fixtures. Essentia Filter and
+Morphic Resonator behavior, `smelter_basic` machine behavior, Infusion Matrix
+multiblock behavior, and final nitor gameplay/FX behavior remain separate
+subsystem work.
 
 The old `research_bridge/thaumometer`, `research_bridge/vis_resonator`, and
 `research_bridge/wand_workbench`, `research_bridge/caster_basic`, and
@@ -130,6 +130,23 @@ arcane recipes exist. Workbench Charger and Enchanted Fabric were imported
 directly as real arcane recipes and did not use vanilla bridges. Keeping
 obsolete bridges would create incorrect vanilla crafting paths and distort
 generated-aspect recipe audits.
+
+## Recipe-derived aspect boundary
+
+Current `TCArcaneRecipe` outputs feed the reload-owned generated aspect cache
+through the same legacy ingredient formula used by normal crafting:
+
+1. take the first matching stack from each ingredient;
+2. subtract remaining items;
+3. multiply by `0.75 / output count`;
+4. floor values and drop non-positive aspects;
+5. add `praecantatio` from `sqrt(1 + vis / 2) / output count`.
+
+Exact/tag/manual/runtime-parity assignments still win before generated values.
+The first reload-validated arcane-generated outputs are `filter` and
+`morphic_resonator`. Broad remaining arcane imports must still be added by
+audited dependency family; crucible and infusion recipe-derived aspect
+generation remain blocked until those serializers and machine models exist.
 
 ## Arcane Workbench server model
 
