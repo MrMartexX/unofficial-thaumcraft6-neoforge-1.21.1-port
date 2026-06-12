@@ -1,0 +1,34 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "ESSENTIASMELTER",
+  "vis": 50,
+  "crystals": [
+    {
+      "aspect": "aqua",
+      "amount": 1
+    }
+  ],
+  "pattern": [
+    "WFW",
+    "SBS",
+    "WFW"
+  ],
+  "key": {
+    "W": {
+      "item": "thaumcraft:plank_greatwood"
+    },
+    "F": {
+      "item": "thaumcraft:filter"
+    },
+    "S": {
+      "item": "thaumcraft:brass_plate"
+    },
+    "B": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:alembic",
+    "count": 1
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "ARCANESPA",
+  "vis": 50,
+  "crystals": [
+    {
+      "aspect": "aqua",
+      "amount": 1
+    }
+  ],
+  "pattern": [
+    "QIQ",
+    "SJS",
+    "SPS"
+  ],
+  "key": {
+    "Q": {
+      "item": "minecraft:quartz_block"
+    },
+    "I": {
+      "item": "minecraft:iron_bars"
+    },
+    "S": {
+      "item": "thaumcraft:stone_arcane"
+    },
+    "J": {
+      "item": "thaumcraft:jar_normal"
+    },
+    "P": {
+      "item": "thaumcraft:mechanism_simple"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:spa",
+    "count": 1
+  }
+}

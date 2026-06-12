@@ -1,0 +1,20 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "UNLOCKINFUSION",
+  "vis": 100,
+  "crystals": [],
+  "pattern": [
+    "I I",
+    "III",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "item": "thaumcraft:fabric"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:cloth_chest",
+    "count": 1
+  }
+}

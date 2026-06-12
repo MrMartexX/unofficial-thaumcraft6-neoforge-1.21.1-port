@@ -61,6 +61,8 @@ public final class TCBlocks {
     public static final Supplier<Block> METAL_BRASS = BLOCKS.register("metal_brass", () -> metalBlock());
     public static final Supplier<Block> METAL_THAUMIUM = BLOCKS.register("metal_thaumium", () -> metalBlock());
     public static final Supplier<Block> METAL_VOID = BLOCKS.register("metal_void", () -> metalBlock());
+    public static final Supplier<Block> METAL_ALCHEMICAL = BLOCKS.register("metal_alchemical", () -> metalBlock());
+    public static final Supplier<Block> METAL_ALCHEMICAL_ADVANCED = BLOCKS.register("metal_alchemical_advanced", () -> metalBlock());
     public static final Supplier<Block> NITOR_BLACK = BLOCKS.register("nitor_black", () -> nitorBlock(14));
     public static final Supplier<Block> NITOR_BLUE = BLOCKS.register("nitor_blue", () -> nitorBlock(14));
     public static final Supplier<Block> NITOR_BROWN = BLOCKS.register("nitor_brown", () -> nitorBlock(14));
@@ -91,7 +93,49 @@ public final class TCBlocks {
                     .strength(5.0F, 1200.0F)
                     .requiresCorrectToolForDrops()
                     .noOcclusion()));
-public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
+    public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
+
+    public static final Supplier<Block> ALEMBIC = BLOCKS.register("alembic", () -> glassDeviceBlock());
+    public static final Supplier<Block> ARCANE_EAR = BLOCKS.register("arcane_ear", () -> woodDeviceBlock());
+    public static final Supplier<Block> BELLOWS = BLOCKS.register("bellows", () -> woodDeviceBlock());
+    public static final Supplier<Block> BRAIN_BOX = BLOCKS.register("brain_box", () -> deviceBlock());
+    public static final Supplier<Block> CENTRIFUGE = BLOCKS.register("centrifuge", () -> deviceBlock());
+    public static final Supplier<Block> CONDENSER = BLOCKS.register("condenser", () -> deviceBlock());
+    public static final Supplier<Block> CONDENSER_LATTICE = BLOCKS.register("condenser_lattice", () -> glassDeviceBlock());
+    public static final Supplier<Block> DIOPTRA = BLOCKS.register("dioptra", () -> deviceBlock());
+    public static final Supplier<Block> ESSENTIA_INPUT = BLOCKS.register("essentia_input", () -> deviceBlock());
+    public static final Supplier<Block> ESSENTIA_OUTPUT = BLOCKS.register("essentia_output", () -> deviceBlock());
+    public static final Supplier<Block> HUNGRY_CHEST = BLOCKS.register("hungry_chest", () -> woodDeviceBlock());
+    public static final Supplier<Block> INLAY = BLOCKS.register("inlay", () -> inlayBlock());
+    public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal", () -> jarBlock());
+    public static final Supplier<Block> JAR_VOID = BLOCKS.register("jar_void", () -> jarBlock());
+    public static final Supplier<Block> LAMP_ARCANE = BLOCKS.register("lamp_arcane", () -> lampBlock());
+    public static final Supplier<Block> LEVITATOR = BLOCKS.register("levitator", () -> deviceBlock());
+    public static final Supplier<Block> MATRIX_COST = BLOCKS.register("matrix_cost", () -> stoneBlock(2.0F, 10.0F));
+    public static final Supplier<Block> MATRIX_SPEED = BLOCKS.register("matrix_speed", () -> stoneBlock(2.0F, 10.0F));
+    public static final Supplier<Block> PATTERN_CRAFTER = BLOCKS.register("pattern_crafter", () -> woodDeviceBlock());
+    public static final Supplier<Block> PAVING_STONE_BARRIER = BLOCKS.register("paving_stone_barrier", () -> stoneBlock(2.0F, 10.0F));
+    public static final Supplier<Block> PAVING_STONE_TRAVEL = BLOCKS.register("paving_stone_travel", () -> stoneBlock(2.0F, 10.0F));
+    public static final Supplier<Block> PEDESTAL_ANCIENT = BLOCKS.register("pedestal_ancient", () -> deviceBlock());
+    public static final Supplier<Block> PEDESTAL_ARCANE = BLOCKS.register("pedestal_arcane", () -> deviceBlock());
+    public static final Supplier<Block> PEDESTAL_ELDRITCH = BLOCKS.register("pedestal_eldritch", () -> deviceBlock());
+    public static final Supplier<Block> POTION_SPRAYER = BLOCKS.register("potion_sprayer", () -> deviceBlock());
+    public static final Supplier<Block> RECHARGE_PEDESTAL = BLOCKS.register("recharge_pedestal", () -> deviceBlock());
+    public static final Supplier<Block> REDSTONE_RELAY = BLOCKS.register("redstone_relay", () -> deviceBlock());
+    public static final Supplier<Block> SMELTER_AUX = BLOCKS.register("smelter_aux", () -> deviceBlock());
+    public static final Supplier<Block> SMELTER_THAUMIUM = BLOCKS.register("smelter_thaumium", () -> furnaceLikeBlock());
+    public static final Supplier<Block> SMELTER_VENT = BLOCKS.register("smelter_vent", () -> deviceBlock());
+    public static final Supplier<Block> SMELTER_VOID = BLOCKS.register("smelter_void", () -> furnaceLikeBlock());
+    public static final Supplier<Block> SPA = BLOCKS.register("spa", () -> deviceBlock());
+    public static final Supplier<Block> STABILIZER = BLOCKS.register("stabilizer", () -> deviceBlock());
+    public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tube_buffer", () -> tubeBlock());
+    public static final Supplier<Block> TUBE_FILTER = BLOCKS.register("tube_filter", () -> tubeBlock());
+    public static final Supplier<Block> TUBE_NORMAL = BLOCKS.register("tube_normal", () -> tubeBlock());
+    public static final Supplier<Block> TUBE_ONEWAY = BLOCKS.register("tube_oneway", () -> tubeBlock());
+    public static final Supplier<Block> TUBE_RESTRICT = BLOCKS.register("tube_restrict", () -> tubeBlock());
+    public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", () -> tubeBlock());
+    public static final Supplier<Block> VIS_BATTERY = BLOCKS.register("vis_battery", () -> deviceBlock());
+    public static final Supplier<Block> VIS_GENERATOR = BLOCKS.register("vis_generator", () -> deviceBlock());
 
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
@@ -172,6 +216,55 @@ public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_build
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                 .strength(3.5F, 17.5F)
                 .requiresCorrectToolForDrops());
+    }
+
+    private static Block deviceBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(2.5F, 10.0F)
+                .requiresCorrectToolForDrops()
+                .noOcclusion());
+    }
+
+    private static Block woodDeviceBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                .strength(2.0F, 5.0F)
+                .noOcclusion());
+    }
+
+    private static Block glassDeviceBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                .strength(0.5F, 2.0F)
+                .sound(SoundType.GLASS)
+                .noOcclusion());
+    }
+
+    private static Block jarBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                .strength(0.5F, 2.0F)
+                .sound(SoundType.GLASS)
+                .noOcclusion());
+    }
+
+    private static Block tubeBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                .strength(0.3F, 1.5F)
+                .sound(SoundType.GLASS)
+                .noOcclusion());
+    }
+
+    private static Block lampBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLOWSTONE)
+                .strength(0.3F, 1.5F)
+                .sound(SoundType.GLASS)
+                .lightLevel(state -> 14)
+                .noOcclusion());
+    }
+
+    private static Block inlayBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.REDSTONE_WIRE)
+                .strength(0.1F)
+                .noCollission()
+                .noOcclusion());
     }
 
     private static Block metalBlock() {

@@ -1,0 +1,35 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "THAUMATORIUM",
+  "vis": 50,
+  "crystals": [
+    {
+      "aspect": "ordo",
+      "amount": 1
+    },
+    {
+      "aspect": "terra",
+      "amount": 1
+    }
+  ],
+  "pattern": [
+    "IAI",
+    "ABA",
+    "IAI"
+  ],
+  "key": {
+    "I": {
+      "tag": "c:plates/iron"
+    },
+    "A": {
+      "tag": "c:gems/amber"
+    },
+    "B": {
+      "item": "thaumcraft:brain_clockwork"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:brain_box",
+    "count": 1
+  }
+}

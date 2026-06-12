@@ -62,6 +62,8 @@ public final class TCItems {
     public static final Supplier<BlockItem> METAL_BRASS = blockItem("metal_brass", TCBlocks.METAL_BRASS);
     public static final Supplier<BlockItem> METAL_THAUMIUM = blockItem("metal_thaumium", TCBlocks.METAL_THAUMIUM);
     public static final Supplier<BlockItem> METAL_VOID = blockItem("metal_void", TCBlocks.METAL_VOID);
+    public static final Supplier<BlockItem> METAL_ALCHEMICAL = blockItem("metal_alchemical", TCBlocks.METAL_ALCHEMICAL);
+    public static final Supplier<BlockItem> METAL_ALCHEMICAL_ADVANCED = blockItem("metal_alchemical_advanced", TCBlocks.METAL_ALCHEMICAL_ADVANCED);
     public static final Supplier<BlockItem> NITOR_BLACK = blockItem("nitor_black", TCBlocks.NITOR_BLACK);
     public static final Supplier<BlockItem> NITOR_BLUE = blockItem("nitor_blue", TCBlocks.NITOR_BLUE);
     public static final Supplier<BlockItem> NITOR_BROWN = blockItem("nitor_brown", TCBlocks.NITOR_BROWN);
@@ -88,6 +90,47 @@ public final class TCItems {
     public static final Supplier<BlockItem> WAND_WORKBENCH = blockItem("wand_workbench", TCBlocks.WAND_WORKBENCH);
     public static final Supplier<BlockItem> INFUSION_MATRIX = blockItem("infusion_matrix", TCBlocks.INFUSION_MATRIX);
     public static final Supplier<BlockItem> GOLEM_BUILDER = blockItem("golem_builder", TCBlocks.GOLEM_BUILDER);
+    public static final Supplier<BlockItem> ALEMBIC = blockItem("alembic", TCBlocks.ALEMBIC);
+    public static final Supplier<BlockItem> ARCANE_EAR = blockItem("arcane_ear", TCBlocks.ARCANE_EAR);
+    public static final Supplier<BlockItem> BELLOWS = blockItem("bellows", TCBlocks.BELLOWS);
+    public static final Supplier<BlockItem> BRAIN_BOX = blockItem("brain_box", TCBlocks.BRAIN_BOX);
+    public static final Supplier<BlockItem> CENTRIFUGE = blockItem("centrifuge", TCBlocks.CENTRIFUGE);
+    public static final Supplier<BlockItem> CONDENSER = blockItem("condenser", TCBlocks.CONDENSER);
+    public static final Supplier<BlockItem> CONDENSER_LATTICE = blockItem("condenser_lattice", TCBlocks.CONDENSER_LATTICE);
+    public static final Supplier<BlockItem> DIOPTRA = blockItem("dioptra", TCBlocks.DIOPTRA);
+    public static final Supplier<BlockItem> ESSENTIA_INPUT = blockItem("essentia_input", TCBlocks.ESSENTIA_INPUT);
+    public static final Supplier<BlockItem> ESSENTIA_OUTPUT = blockItem("essentia_output", TCBlocks.ESSENTIA_OUTPUT);
+    public static final Supplier<BlockItem> HUNGRY_CHEST = blockItem("hungry_chest", TCBlocks.HUNGRY_CHEST);
+    public static final Supplier<BlockItem> INLAY = blockItem("inlay", TCBlocks.INLAY);
+    public static final Supplier<BlockItem> JAR_NORMAL = blockItem("jar_normal", TCBlocks.JAR_NORMAL);
+    public static final Supplier<BlockItem> JAR_VOID = blockItem("jar_void", TCBlocks.JAR_VOID);
+    public static final Supplier<BlockItem> LAMP_ARCANE = blockItem("lamp_arcane", TCBlocks.LAMP_ARCANE);
+    public static final Supplier<BlockItem> LEVITATOR = blockItem("levitator", TCBlocks.LEVITATOR);
+    public static final Supplier<BlockItem> MATRIX_COST = blockItem("matrix_cost", TCBlocks.MATRIX_COST);
+    public static final Supplier<BlockItem> MATRIX_SPEED = blockItem("matrix_speed", TCBlocks.MATRIX_SPEED);
+    public static final Supplier<BlockItem> PATTERN_CRAFTER = blockItem("pattern_crafter", TCBlocks.PATTERN_CRAFTER);
+    public static final Supplier<BlockItem> PAVING_STONE_BARRIER = blockItem("paving_stone_barrier", TCBlocks.PAVING_STONE_BARRIER);
+    public static final Supplier<BlockItem> PAVING_STONE_TRAVEL = blockItem("paving_stone_travel", TCBlocks.PAVING_STONE_TRAVEL);
+    public static final Supplier<BlockItem> PEDESTAL_ANCIENT = blockItem("pedestal_ancient", TCBlocks.PEDESTAL_ANCIENT);
+    public static final Supplier<BlockItem> PEDESTAL_ARCANE = blockItem("pedestal_arcane", TCBlocks.PEDESTAL_ARCANE);
+    public static final Supplier<BlockItem> PEDESTAL_ELDRITCH = blockItem("pedestal_eldritch", TCBlocks.PEDESTAL_ELDRITCH);
+    public static final Supplier<BlockItem> POTION_SPRAYER = blockItem("potion_sprayer", TCBlocks.POTION_SPRAYER);
+    public static final Supplier<BlockItem> RECHARGE_PEDESTAL = blockItem("recharge_pedestal", TCBlocks.RECHARGE_PEDESTAL);
+    public static final Supplier<BlockItem> REDSTONE_RELAY = blockItem("redstone_relay", TCBlocks.REDSTONE_RELAY);
+    public static final Supplier<BlockItem> SMELTER_AUX = blockItem("smelter_aux", TCBlocks.SMELTER_AUX);
+    public static final Supplier<BlockItem> SMELTER_THAUMIUM = blockItem("smelter_thaumium", TCBlocks.SMELTER_THAUMIUM);
+    public static final Supplier<BlockItem> SMELTER_VENT = blockItem("smelter_vent", TCBlocks.SMELTER_VENT);
+    public static final Supplier<BlockItem> SMELTER_VOID = blockItem("smelter_void", TCBlocks.SMELTER_VOID);
+    public static final Supplier<BlockItem> SPA = blockItem("spa", TCBlocks.SPA);
+    public static final Supplier<BlockItem> STABILIZER = blockItem("stabilizer", TCBlocks.STABILIZER);
+    public static final Supplier<BlockItem> TUBE_BUFFER = blockItem("tube_buffer", TCBlocks.TUBE_BUFFER);
+    public static final Supplier<BlockItem> TUBE_FILTER = blockItem("tube_filter", TCBlocks.TUBE_FILTER);
+    public static final Supplier<BlockItem> TUBE_NORMAL = blockItem("tube_normal", TCBlocks.TUBE_NORMAL);
+    public static final Supplier<BlockItem> TUBE_ONEWAY = blockItem("tube_oneway", TCBlocks.TUBE_ONEWAY);
+    public static final Supplier<BlockItem> TUBE_RESTRICT = blockItem("tube_restrict", TCBlocks.TUBE_RESTRICT);
+    public static final Supplier<BlockItem> TUBE_VALVE = blockItem("tube_valve", TCBlocks.TUBE_VALVE);
+    public static final Supplier<BlockItem> VIS_BATTERY = blockItem("vis_battery", TCBlocks.VIS_BATTERY);
+    public static final Supplier<BlockItem> VIS_GENERATOR = blockItem("vis_generator", TCBlocks.VIS_GENERATOR);
     public static final Supplier<BlockItem> LOG_GREATWOOD = blockItem("log_greatwood", TCBlocks.LOG_GREATWOOD);
     public static final Supplier<BlockItem> LOG_SILVERWOOD = blockItem("log_silverwood", TCBlocks.LOG_SILVERWOOD);
     public static final Supplier<BlockItem> LEAVES_GREATWOOD = blockItem("leaves_greatwood", TCBlocks.LEAVES_GREATWOOD);
@@ -139,6 +182,21 @@ public final class TCItems {
     public static final Supplier<Item> THAUMIUM_PICK = simpleItem("thaumium_pick");
     public static final Supplier<Item> THAUMIUM_SHOVEL = simpleItem("thaumium_shovel");
     public static final Supplier<Item> THAUMIUM_SWORD = simpleItem("thaumium_sword");
+    public static final Supplier<Item> BLANK_SEAL = simpleItem("blank_seal");
+    public static final Supplier<Item> BRAIN_CLOCKWORK = simpleItem("brain_clockwork");
+    public static final Supplier<Item> CASTER_ADVANCED = simpleItem("caster_advanced");
+    public static final Supplier<Item> CLOTH_BOOTS = simpleItem("cloth_boots");
+    public static final Supplier<Item> CLOTH_CHEST = simpleItem("cloth_chest");
+    public static final Supplier<Item> CLOTH_LEGS = simpleItem("cloth_legs");
+    public static final Supplier<Item> FOCUS_POUCH = simpleItem("focus_pouch");
+    public static final Supplier<Item> GRAPPLE_GUN_SPOOL = simpleItem("grapple_gun_spool");
+    public static final Supplier<Item> GRAPPLE_GUN_TIP = simpleItem("grapple_gun_tip");
+    public static final Supplier<Item> PHIAL_EMPTY = simpleItem("phial_empty");
+    public static final Supplier<Item> PRIMAL_CHARM = simpleItem("primal_charm");
+    public static final Supplier<Item> PRIMORDIAL_PEARL = simpleItem("primordial_pearl");
+    public static final Supplier<Item> SANITY_CHECKER = simpleItem("sanity_checker");
+    public static final Supplier<Item> TURRET_PLACER_BASIC = simpleItem("turret_placer_basic");
+    public static final Supplier<Item> TURRET_PLACER_ADVANCED = simpleItem("turret_placer_advanced");
 
     public static final Supplier<Item> CRYSTAL_ESSENCE_AER = simpleItem("crystal_essence_aer");
     public static final Supplier<Item> CRYSTAL_ESSENCE_TERRA = simpleItem("crystal_essence_terra");
@@ -263,6 +321,10 @@ public final class TCItems {
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
                     "tc.placeholder.caster_basic"
             );
+            case "caster_advanced" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
+                    "tc.placeholder.caster_advanced"
+            );
             case "focus_1" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
                     "tc.placeholder.focus"
@@ -270,6 +332,14 @@ public final class TCItems {
             case "focus_2", "focus_3" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
                     "tc.placeholder.focus"
+            );
+            case "focus_pouch", "primal_charm", "sanity_checker" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
+                    "tc.placeholder.research_item"
+            );
+            case "turret_placer_basic", "turret_placer_advanced" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1),
+                    "tc.placeholder.entity_placer"
             );
             case "enchanted_placeholder_protection_1" -> legacyMagicPlaceholder("protection");
             case "enchanted_placeholder_sharpness_1" -> legacyMagicPlaceholder("sharpness");
@@ -310,6 +380,14 @@ public final class TCItems {
             case "metal_void" -> new Item.Properties().component(
                     TCDataComponents.LEGACY_ITEM.get(),
                     new TCLegacyItemComponent("metal", "void", 3)
+            );
+            case "metal_alchemical" -> new Item.Properties().component(
+                    TCDataComponents.LEGACY_ITEM.get(),
+                    new TCLegacyItemComponent("metal", "alchemical", 4)
+            );
+            case "metal_alchemical_advanced" -> new Item.Properties().component(
+                    TCDataComponents.LEGACY_ITEM.get(),
+                    new TCLegacyItemComponent("metal", "alchemical_advanced", 5)
             );
             default -> new Item.Properties();
         };

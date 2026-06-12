@@ -1,0 +1,34 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "ESSENTIASMELTERVOID",
+  "vis": 750,
+  "crystals": [
+    {
+      "aspect": "ignis",
+      "amount": 3
+    }
+  ],
+  "pattern": [
+    "BFB",
+    "IGI",
+    "III"
+  ],
+  "key": {
+    "B": {
+      "item": "thaumcraft:brass_plate"
+    },
+    "F": {
+      "item": "thaumcraft:smelter_basic"
+    },
+    "I": {
+      "item": "thaumcraft:void_plate"
+    },
+    "G": {
+      "item": "thaumcraft:metal_alchemical_advanced"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:smelter_void",
+    "count": 1
+  }
+}

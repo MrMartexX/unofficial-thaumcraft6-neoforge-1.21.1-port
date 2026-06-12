@@ -1,11 +1,7 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "thaumcraft:recharge_pedestal",
-        "transform": "forge:default-block"
-    },
-    "variants": {
-        "inventory":[{}], "normal":[{}]
+  "variants": {
+    "": {
+      "model": "thaumcraft:block/recharge_pedestal"
     }
-
+  }
 }

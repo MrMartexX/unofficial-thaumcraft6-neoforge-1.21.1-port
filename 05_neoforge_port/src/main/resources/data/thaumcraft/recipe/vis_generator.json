@@ -1,0 +1,41 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "VISGENERATOR",
+  "vis": 25,
+  "crystals": [
+    {
+      "aspect": "ignis",
+      "amount": 1
+    },
+    {
+      "aspect": "ordo",
+      "amount": 1
+    }
+  ],
+  "pattern": [
+    "WSW",
+    "EPE",
+    "WRW"
+  ],
+  "key": {
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "tag": "c:dusts/redstone"
+    },
+    "E": {
+      "item": "thaumcraft:quicksilver"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "R": {
+      "item": "thaumcraft:vis_resonator"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:vis_generator",
+    "count": 1
+  }
+}

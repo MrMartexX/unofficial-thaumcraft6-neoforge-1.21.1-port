@@ -76,6 +76,8 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.METAL_BRASS.get());
         acceptVisible(output, TCItems.METAL_THAUMIUM.get());
         acceptVisible(output, TCItems.METAL_VOID.get());
+        acceptVisible(output, TCItems.METAL_ALCHEMICAL.get());
+        acceptVisible(output, TCItems.METAL_ALCHEMICAL_ADVANCED.get());
         acceptVisible(output, TCItems.NITOR_YELLOW.get());
     }
 
@@ -89,6 +91,47 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.SMELTER_BASIC.get());
         acceptVisible(output, TCItems.WAND_WORKBENCH.get());
         acceptVisible(output, TCItems.INFUSION_MATRIX.get());
+        acceptVisible(output, TCItems.ALEMBIC.get());
+        acceptVisible(output, TCItems.BELLOWS.get());
+        acceptVisible(output, TCItems.JAR_NORMAL.get());
+        acceptVisible(output, TCItems.JAR_VOID.get());
+        acceptVisible(output, TCItems.TUBE_NORMAL.get());
+        acceptVisible(output, TCItems.TUBE_VALVE.get());
+        acceptVisible(output, TCItems.TUBE_FILTER.get());
+        acceptVisible(output, TCItems.TUBE_RESTRICT.get());
+        acceptVisible(output, TCItems.TUBE_ONEWAY.get());
+        acceptVisible(output, TCItems.TUBE_BUFFER.get());
+        acceptVisible(output, TCItems.SMELTER_THAUMIUM.get());
+        acceptVisible(output, TCItems.SMELTER_VOID.get());
+        acceptVisible(output, TCItems.SMELTER_AUX.get());
+        acceptVisible(output, TCItems.SMELTER_VENT.get());
+        acceptVisible(output, TCItems.CENTRIFUGE.get());
+        acceptVisible(output, TCItems.CONDENSER.get());
+        acceptVisible(output, TCItems.CONDENSER_LATTICE.get());
+        acceptVisible(output, TCItems.ESSENTIA_INPUT.get());
+        acceptVisible(output, TCItems.ESSENTIA_OUTPUT.get());
+        acceptVisible(output, TCItems.PATTERN_CRAFTER.get());
+        acceptVisible(output, TCItems.REDSTONE_RELAY.get());
+        acceptVisible(output, TCItems.ARCANE_EAR.get());
+        acceptVisible(output, TCItems.LEVITATOR.get());
+        acceptVisible(output, TCItems.LAMP_ARCANE.get());
+        acceptVisible(output, TCItems.DIOPTRA.get());
+        acceptVisible(output, TCItems.RECHARGE_PEDESTAL.get());
+        acceptVisible(output, TCItems.HUNGRY_CHEST.get());
+        acceptVisible(output, TCItems.SPA.get());
+        acceptVisible(output, TCItems.BRAIN_BOX.get());
+        acceptVisible(output, TCItems.POTION_SPRAYER.get());
+        acceptVisible(output, TCItems.VIS_GENERATOR.get());
+        acceptVisible(output, TCItems.STABILIZER.get());
+        acceptVisible(output, TCItems.INLAY.get());
+        acceptVisible(output, TCItems.MATRIX_SPEED.get());
+        acceptVisible(output, TCItems.MATRIX_COST.get());
+        acceptVisible(output, TCItems.PEDESTAL_ARCANE.get());
+        acceptVisible(output, TCItems.PEDESTAL_ELDRITCH.get());
+        acceptVisible(output, TCItems.PEDESTAL_ANCIENT.get());
+        acceptVisible(output, TCItems.PAVING_STONE_BARRIER.get());
+        acceptVisible(output, TCItems.PAVING_STONE_TRAVEL.get());
+        acceptVisible(output, TCItems.VIS_BATTERY.get());
     }
 
     private static void addLegacyItemSequence(CreativeModeTab.Output output) {
@@ -134,9 +177,24 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.GOGGLES.get());
 
         acceptVisible(output, TCItems.CASTER_BASIC.get());
+        acceptVisible(output, TCItems.CASTER_ADVANCED.get());
+        acceptVisible(output, TCItems.FOCUS_POUCH.get());
         acceptVisible(output, TCItems.FOCUS_1.get());
         acceptVisible(output, TCItems.FOCUS_2.get());
         acceptVisible(output, TCItems.FOCUS_3.get());
+        acceptVisible(output, TCItems.CLOTH_CHEST.get());
+        acceptVisible(output, TCItems.CLOTH_LEGS.get());
+        acceptVisible(output, TCItems.CLOTH_BOOTS.get());
+        acceptVisible(output, TCItems.PHIAL_EMPTY.get());
+        acceptVisible(output, TCItems.BLANK_SEAL.get());
+        acceptVisible(output, TCItems.BRAIN_CLOCKWORK.get());
+        acceptVisible(output, TCItems.GRAPPLE_GUN_TIP.get());
+        acceptVisible(output, TCItems.GRAPPLE_GUN_SPOOL.get());
+        acceptVisible(output, TCItems.PRIMAL_CHARM.get());
+        acceptVisible(output, TCItems.PRIMORDIAL_PEARL.get());
+        acceptVisible(output, TCItems.SANITY_CHECKER.get());
+        acceptVisible(output, TCItems.TURRET_PLACER_BASIC.get());
+        acceptVisible(output, TCItems.TURRET_PLACER_ADVANCED.get());
     }
 
     private static void addCrystalEssenceVariants(CreativeModeTab.Output output) {

@@ -1,0 +1,37 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "LEVITATOR",
+  "vis": 35,
+  "crystals": [
+    {
+      "aspect": "aer",
+      "amount": 1
+    }
+  ],
+  "pattern": [
+    "WIW",
+    "BNB",
+    "WGW"
+  ],
+  "key": {
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "I": {
+      "item": "thaumcraft:thaumium_plate"
+    },
+    "B": {
+      "item": "thaumcraft:iron_plate"
+    },
+    "N": {
+      "item": "thaumcraft:nitor_yellow"
+    },
+    "G": {
+      "item": "thaumcraft:mechanism_simple"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:levitator",
+    "count": 1
+  }
+}

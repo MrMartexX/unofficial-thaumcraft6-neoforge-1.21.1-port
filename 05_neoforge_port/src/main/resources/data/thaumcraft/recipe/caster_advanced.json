@@ -1,0 +1,51 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "FOCUSADVANCED",
+  "vis": 100,
+  "crystals": [
+    {
+      "aspect": "aer",
+      "amount": 3
+    },
+    {
+      "aspect": "aqua",
+      "amount": 3
+    },
+    {
+      "aspect": "ignis",
+      "amount": 3
+    },
+    {
+      "aspect": "ordo",
+      "amount": 3
+    },
+    {
+      "aspect": "perditio",
+      "amount": 3
+    },
+    {
+      "aspect": "terra",
+      "amount": 3
+    }
+  ],
+  "pattern": [
+    "TGT",
+    "TCT",
+    "T T"
+  ],
+  "key": {
+    "T": {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    "G": {
+      "item": "thaumcraft:vis_resonator"
+    },
+    "C": {
+      "item": "thaumcraft:caster_basic"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:caster_advanced",
+    "count": 1
+  }
+}

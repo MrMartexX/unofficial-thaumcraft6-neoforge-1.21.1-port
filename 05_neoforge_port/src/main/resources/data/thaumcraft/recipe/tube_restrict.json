@@ -1,0 +1,20 @@
+{
+  "type": "thaumcraft:arcane_shapeless",
+  "research": "TUBES",
+  "vis": 10,
+  "crystals": [
+    {
+      "aspect": "terra",
+      "amount": 1
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "thaumcraft:tube_normal"
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:tube_restrict",
+    "count": 1
+  }
+}

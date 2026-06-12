@@ -1,0 +1,38 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "MINDCLOCKWORK",
+  "vis": 25,
+  "crystals": [
+    {
+      "aspect": "ignis",
+      "amount": 1
+    },
+    {
+      "aspect": "ordo",
+      "amount": 1
+    }
+  ],
+  "pattern": [
+    " P ",
+    "PGP",
+    "BCB"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:glass_pane"
+    },
+    "G": {
+      "item": "thaumcraft:mechanism_simple"
+    },
+    "B": {
+      "tag": "c:plates/brass"
+    },
+    "C": {
+      "item": "minecraft:comparator"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:brain_clockwork",
+    "count": 1
+  }
+}
