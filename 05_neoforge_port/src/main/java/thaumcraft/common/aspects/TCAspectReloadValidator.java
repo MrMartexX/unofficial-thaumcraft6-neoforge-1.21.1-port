@@ -480,6 +480,13 @@ public final class TCAspectReloadValidator {
                 amount(Aspect.CRYSTAL, 1), amount(Aspect.METAL, 14), amount(Aspect.TOOL, 4), amount(Aspect.EARTH, 3), amount(Aspect.ORDER, 3), amount(Aspect.MAGIC, 5));
         expectGeneratedAspects(new ItemStack(TCItems.FOCUS_1.get()), "thaumcraft:focus_1 crucible generateTags cache lookup",
                 amount(Aspect.ORDER, 15), amount(Aspect.CRYSTAL, 14), amount(Aspect.MAGIC, 3), amount(Aspect.AURA, 2));
+        expectGeneratedAspects(new ItemStack(TCItems.FOCUS_2.get()), "thaumcraft:focus_2 infusion generateTags cache lookup",
+                amount(Aspect.ORDER, 18), amount(Aspect.CRYSTAL, 21), amount(Aspect.MAGIC, 7), amount(Aspect.AURA, 1), amount(Aspect.METAL, 15),
+                amount(Aspect.DEATH, 7), amount(Aspect.ALCHEMY, 7), amount(Aspect.DESIRE, 11), amount(Aspect.ELDRITCH, 7), amount(Aspect.MOTION, 11));
+        expectGeneratedAspects(new ItemStack(TCItems.FOCUS_3.get()), "thaumcraft:focus_3 infusion generateTags cache lookup",
+                amount(Aspect.ORDER, 35), amount(Aspect.CRYSTAL, 15), amount(Aspect.METAL, 26), amount(Aspect.ALCHEMY, 12), amount(Aspect.DESIRE, 8),
+                amount(Aspect.ELDRITCH, 12), amount(Aspect.MOTION, 8), amount(Aspect.DEATH, 7), amount(Aspect.MAGIC, 20), amount(Aspect.AURA, 7),
+                amount(Aspect.VOID, 10));
         expectGeneratedAspects(new ItemStack(TCItems.CLUSTER_IRON.get()), "thaumcraft:cluster_iron crucible generateTags cache lookup",
                 amount(Aspect.EARTH, 5), amount(Aspect.METAL, 17), amount(Aspect.ORDER, 2));
     }
@@ -583,10 +590,11 @@ public final class TCAspectReloadValidator {
         }
         for (int i = 0; i < expected.length; i++) {
             if (actualAspects[i] != expected[i].aspect()) {
-                throw new IllegalStateException("Aspect tag reload validation failed: " + label + " aspect order mismatch at index " + i);
+                throw new IllegalStateException("Aspect tag reload validation failed: " + label + " aspect order mismatch at index " + i + "; actual " + formatAspects(actual));
             }
             if (actual.getAmount(expected[i].aspect()) != expected[i].amount()) {
-                throw new IllegalStateException("Aspect tag reload validation failed: " + label + " expected " + expected[i].amount() + " " + expected[i].aspect().getTag());
+                throw new IllegalStateException("Aspect tag reload validation failed: " + label + " expected " + expected[i].amount() + " " + expected[i].aspect().getTag()
+                        + ", got " + actual.getAmount(expected[i].aspect()) + "; actual " + formatAspects(actual));
             }
         }
     }
@@ -621,6 +629,19 @@ public final class TCAspectReloadValidator {
 
     private static Amount amount(Aspect aspect, int amount) {
         return new Amount(aspect, amount);
+    }
+
+    private static String formatAspects(AspectList aspects) {
+        if (aspects == null) {
+            return "<null>";
+        }
+        List<String> entries = new ArrayList<>();
+        for (Aspect aspect : aspects.getAspects()) {
+            if (aspect != null) {
+                entries.add(aspect.getTag() + "=" + aspects.getAmount(aspect));
+            }
+        }
+        return entries.toString();
     }
 
     private record Amount(Aspect aspect, int amount) {

@@ -1,6 +1,7 @@
 package thaumcraft.common.aspects;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -24,8 +25,30 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.crafting.arcane.TCArcaneRecipe;
 import thaumcraft.common.crafting.crucible.TCCrucibleRecipe;
+import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
 
 public final class TCGeneratedAspectRecipeGenerator {
+    private static final List<ResourceLocation> LEGACY_PREFERRED_INGREDIENT_ITEMS = List.of(
+            ResourceLocation.withDefaultNamespace("stick"),
+            ResourceLocation.withDefaultNamespace("oak_planks"),
+            ResourceLocation.withDefaultNamespace("cobblestone"),
+            ResourceLocation.withDefaultNamespace("stone"),
+            ResourceLocation.withDefaultNamespace("string"),
+            ResourceLocation.withDefaultNamespace("leather"),
+            ResourceLocation.withDefaultNamespace("white_wool"),
+            ResourceLocation.withDefaultNamespace("iron_ingot"),
+            ResourceLocation.withDefaultNamespace("gold_ingot"),
+            ResourceLocation.withDefaultNamespace("diamond"),
+            ResourceLocation.withDefaultNamespace("emerald"),
+            ResourceLocation.withDefaultNamespace("quartz"),
+            ResourceLocation.withDefaultNamespace("coal"),
+            ResourceLocation.withDefaultNamespace("redstone"),
+            ResourceLocation.withDefaultNamespace("lapis_lazuli"),
+            ResourceLocation.withDefaultNamespace("glass"),
+            ResourceLocation.withDefaultNamespace("paper"),
+            ResourceLocation.withDefaultNamespace("slime_ball")
+    );
+
     private static volatile RecipeManager lastRecipeManager;
 
     public static void captureReloadContext(AddReloadListenerEvent event) {
@@ -44,7 +67,7 @@ public final class TCGeneratedAspectRecipeGenerator {
         }
 
         int count = rebuildCraftingRecipeCache(recipeManager, event.getRegistryAccess());
-        Thaumcraft.LOGGER.info("Thaumcraft generated aspect cache rebuilt from crafting, arcane, and crucible recipes: {} generated object assignments.", count);
+        Thaumcraft.LOGGER.info("Thaumcraft generated aspect cache rebuilt from crafting, arcane, crucible, and infusion recipes: {} generated object assignments.", count);
     }
 
     static int rebuildCraftingRecipeCache(RecipeManager recipeManager, HolderLookup.Provider registries) {
@@ -99,30 +122,30 @@ public final class TCGeneratedAspectRecipeGenerator {
         }
         history.add(key);
 
-        AspectList best = null;
-        int bestValue = Integer.MAX_VALUE;
-        for (RecipeAspectSource source : recipeSources) {
-            ItemStack result = source.result();
-            if (result.isEmpty() || !TCAspectStackKey.from(result).equals(key)) {
-                continue;
-            }
+        AspectList best = firstGeneratedFromCrucibleRecipe(key, recipeSources, registries, generated, history);
+        if (best == null) {
+            best = firstGeneratedFromInfusionRecipe(key, recipeSources, registries, generated, history);
+        }
 
-            AspectList candidate = source.crucibleRecipe() != null
-                    ? getAspectsFromCrucibleRecipe(source.crucibleRecipe(), recipeSources, registries, generated, history)
-                    : getAspectsFromIngredients(source, recipeSources, registries, generated, history);
-            if (candidate == null) {
-                continue;
-            }
-            addArcaneVisBonus(candidate, source.arcaneRecipe(), result);
-            removeNonPositive(candidate);
-            int value = candidate.visSize();
-            if (source.crucibleRecipe() != null && value > 0) {
-                best = candidate;
-                break;
-            }
-            if (value > 0 && value < bestValue) {
-                best = candidate;
-                bestValue = value;
+        if (best == null) {
+            int bestValue = Integer.MAX_VALUE;
+            for (RecipeAspectSource source : recipeSources) {
+                if (!matchesResultKey(source, key) || source.crucibleRecipe() != null || source.infusionRecipe() != null) {
+                    continue;
+                }
+
+                Set<TCAspectStackKey> candidateHistory = new LinkedHashSet<>(history);
+                AspectList candidate = getAspectsFromIngredients(source, recipeSources, registries, generated, candidateHistory);
+                if (candidate == null) {
+                    continue;
+                }
+                addArcaneVisBonus(candidate, source.arcaneRecipe(), source.result());
+                removeNonPositive(candidate);
+                int value = candidate.visSize();
+                if (value > 0 && value < bestValue) {
+                    best = candidate;
+                    bestValue = value;
+                }
             }
         }
 
@@ -144,12 +167,12 @@ public final class TCGeneratedAspectRecipeGenerator {
     }
 
     static AspectList calculateCraftingRecipeAspectsForValidation(CraftingRecipe recipe, ItemStack recipeOut, HolderLookup.Provider registries) {
-        RecipeAspectSource source = new RecipeAspectSource(recipe, recipeOut.copy(), null);
+        RecipeAspectSource source = new RecipeAspectSource(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "validation"), recipe, recipeOut.copy(), null);
         return getAspectsFromIngredients(source, List.of(), registries, new LinkedHashMap<>(), new LinkedHashSet<>());
     }
 
     static AspectList calculateArcaneRecipeAspectsForValidation(TCArcaneRecipe recipe, ItemStack recipeOut, HolderLookup.Provider registries) {
-        RecipeAspectSource source = new RecipeAspectSource(recipe, recipeOut.copy(), recipe);
+        RecipeAspectSource source = new RecipeAspectSource(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "validation"), recipe, recipeOut.copy(), recipe);
         AspectList aspects = getAspectsFromIngredients(source, List.of(), registries, new LinkedHashMap<>(), new LinkedHashSet<>());
         addArcaneVisBonus(aspects, recipe, recipeOut);
         removeNonPositive(aspects);
@@ -160,6 +183,56 @@ public final class TCGeneratedAspectRecipeGenerator {
         AspectList aspects = getAspectsFromCrucibleRecipe(recipe, List.of(), registries, new LinkedHashMap<>(), new LinkedHashSet<>());
         removeNonPositive(aspects);
         return aspects;
+    }
+
+    static AspectList calculateInfusionRecipeAspectsForValidation(TCInfusionRecipe recipe, ItemStack recipeOut, HolderLookup.Provider registries) {
+        AspectList aspects = getAspectsFromInfusionRecipe(recipe, List.of(), registries, new LinkedHashMap<>(), new LinkedHashSet<>());
+        removeNonPositive(aspects);
+        return aspects;
+    }
+
+    private static AspectList firstGeneratedFromCrucibleRecipe(
+            TCAspectStackKey key,
+            List<RecipeAspectSource> recipeSources,
+            HolderLookup.Provider registries,
+            Map<TCAspectStackKey, AspectList> generated,
+            Set<TCAspectStackKey> history) {
+        for (RecipeAspectSource source : recipeSources) {
+            if (!matchesResultKey(source, key) || source.crucibleRecipe() == null) {
+                continue;
+            }
+            Set<TCAspectStackKey> candidateHistory = new LinkedHashSet<>(history);
+            AspectList candidate = getAspectsFromCrucibleRecipe(source.crucibleRecipe(), recipeSources, registries, generated, candidateHistory);
+            if (candidate != null) {
+                removeNonPositive(candidate);
+                if (candidate.visSize() > 0) {
+                    return candidate;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static AspectList firstGeneratedFromInfusionRecipe(
+            TCAspectStackKey key,
+            List<RecipeAspectSource> recipeSources,
+            HolderLookup.Provider registries,
+            Map<TCAspectStackKey, AspectList> generated,
+            Set<TCAspectStackKey> history) {
+        for (RecipeAspectSource source : recipeSources) {
+            if (!matchesResultKey(source, key) || source.infusionRecipe() == null) {
+                continue;
+            }
+            Set<TCAspectStackKey> candidateHistory = new LinkedHashSet<>(history);
+            AspectList candidate = getAspectsFromInfusionRecipe(source.infusionRecipe(), recipeSources, registries, generated, candidateHistory);
+            if (candidate != null) {
+                removeNonPositive(candidate);
+                if (candidate.visSize() > 0) {
+                    return candidate;
+                }
+            }
+        }
+        return null;
     }
 
     private static AspectList getAspectsFromIngredients(
@@ -173,19 +246,7 @@ public final class TCGeneratedAspectRecipeGenerator {
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
 
         for (Ingredient ingredient : ingredients) {
-            ItemStack first = firstMatchingStack(ingredient);
-            if (first.isEmpty()) {
-                continue;
-            }
-
-            AspectList aspects = resolveGeneratedAspects(first, recipeSources, registries, generated, history);
-            if (aspects != null) {
-                for (Aspect aspect : aspects.getAspects()) {
-                    if (aspect != null) {
-                        mid.add(aspect, aspects.getAmount(aspect));
-                    }
-                }
-            }
+            addIngredientAspects(mid, ingredient, recipeSources, registries, generated, history);
         }
 
         NonNullList<ItemStack> remainingItems = getRemainingItems(recipe, ingredients);
@@ -216,6 +277,73 @@ public final class TCGeneratedAspectRecipeGenerator {
         }
         removeNonPositive(out);
         return out;
+    }
+
+    private static AspectList getAspectsFromInfusionRecipe(
+            TCInfusionRecipe recipe,
+            List<RecipeAspectSource> recipeSources,
+            HolderLookup.Provider registries,
+            Map<TCAspectStackKey, AspectList> generated,
+            Set<TCAspectStackKey> history) {
+        NonNullList<Ingredient> ingredients = NonNullList.create();
+        ingredients.add(recipe.central());
+        ingredients.addAll(recipe.components());
+
+        AspectList out = getAspectsFromIngredientList(ingredients, recipe.result(), recipeSources, registries, generated, history);
+        AspectList recipeAspects = recipe.aspects();
+        int outputCount = recipe.result().getCount();
+        for (Aspect aspect : recipeAspects.getAspects()) {
+            if (aspect != null) {
+                int amount = (int)(Math.sqrt(recipeAspects.getAmount(aspect)) / (float)outputCount);
+                out.add(aspect, amount);
+            }
+        }
+        removeNonPositive(out);
+        return out;
+    }
+
+    private static AspectList getAspectsFromIngredientList(
+            NonNullList<Ingredient> ingredients,
+            ItemStack result,
+            List<RecipeAspectSource> recipeSources,
+            HolderLookup.Provider registries,
+            Map<TCAspectStackKey, AspectList> generated,
+            Set<TCAspectStackKey> history) {
+        AspectList mid = new AspectList();
+        for (Ingredient ingredient : ingredients) {
+            addIngredientAspects(mid, ingredient, recipeSources, registries, generated, history);
+        }
+
+        AspectList out = new AspectList();
+        for (Aspect aspect : mid.getAspects()) {
+            if (aspect != null) {
+                float value = mid.getAmount(aspect) * 0.75F / result.getCount();
+                if (value < 1.0F && value > 0.75F) {
+                    value = 1.0F;
+                }
+                out.add(aspect, (int)value);
+            }
+        }
+        removeNonPositive(out);
+        return out;
+    }
+
+    private static void addIngredientAspects(
+            AspectList target,
+            Ingredient ingredient,
+            List<RecipeAspectSource> recipeSources,
+            HolderLookup.Provider registries,
+            Map<TCAspectStackKey, AspectList> generated,
+            Set<TCAspectStackKey> history) {
+        ItemStack first = firstMatchingStack(ingredient);
+        if (first.isEmpty()) {
+            return;
+        }
+
+        AspectList aspects = resolveGeneratedAspects(first, recipeSources, registries, generated, history);
+        if (aspects != null) {
+            addAll(target, aspects);
+        }
     }
 
     private static AspectList getAspectsFromCrucibleRecipe(
@@ -272,21 +400,36 @@ public final class TCGeneratedAspectRecipeGenerator {
         if (stacks.length == 0) {
             return ItemStack.EMPTY;
         }
+        for (ResourceLocation preferred : LEGACY_PREFERRED_INGREDIENT_ITEMS) {
+            for (ItemStack stack : stacks) {
+                if (preferred.equals(BuiltInRegistries.ITEM.getKey(stack.getItem()))) {
+                    return stack.copy();
+                }
+            }
+        }
         return stacks[0].copy();
     }
 
     private static List<RecipeAspectSource> recipeAspectSources(RecipeManager recipeManager, HolderLookup.Provider registries) {
         List<RecipeAspectSource> recipes = new ArrayList<>();
-        for (RecipeHolder<?> holder : recipeManager.getOrderedRecipes()) {
+        for (RecipeHolder<?> holder : recipeManager.getRecipes()) {
             if (holder.value() instanceof CraftingRecipe craftingRecipe) {
-                recipes.add(new RecipeAspectSource(craftingRecipe, craftingRecipe.getResultItem(registries), null));
+                recipes.add(new RecipeAspectSource(holder.id(), craftingRecipe, craftingRecipe.getResultItem(registries), null));
             } else if (holder.value() instanceof TCArcaneRecipe arcaneRecipe) {
-                recipes.add(new RecipeAspectSource(arcaneRecipe, arcaneRecipe.getResultItem(registries), arcaneRecipe));
+                recipes.add(new RecipeAspectSource(holder.id(), arcaneRecipe, arcaneRecipe.getResultItem(registries), arcaneRecipe));
             } else if (holder.value() instanceof TCCrucibleRecipe crucibleRecipe) {
-                recipes.add(new RecipeAspectSource(crucibleRecipe, crucibleRecipe.getResultItem(registries), null, crucibleRecipe));
+                recipes.add(new RecipeAspectSource(holder.id(), crucibleRecipe, crucibleRecipe.getResultItem(registries), null, crucibleRecipe, null));
+            } else if (holder.value() instanceof TCInfusionRecipe infusionRecipe) {
+                recipes.add(new RecipeAspectSource(holder.id(), infusionRecipe, infusionRecipe.getResultItem(registries), null, null, infusionRecipe));
             }
         }
+        recipes.sort(Comparator.comparing(source -> source.id().toString()));
         return recipes;
+    }
+
+    private static boolean matchesResultKey(RecipeAspectSource source, TCAspectStackKey key) {
+        ItemStack result = source.result();
+        return !result.isEmpty() && TCAspectStackKey.from(result).equals(key);
     }
 
     private static void addArcaneVisBonus(AspectList aspects, TCArcaneRecipe recipe, ItemStack result) {
@@ -335,9 +478,9 @@ public final class TCGeneratedAspectRecipeGenerator {
         }
     }
 
-    private record RecipeAspectSource(Recipe<?> recipe, ItemStack result, TCArcaneRecipe arcaneRecipe, TCCrucibleRecipe crucibleRecipe) {
-        private RecipeAspectSource(Recipe<CraftingInput> recipe, ItemStack result, TCArcaneRecipe arcaneRecipe) {
-            this(recipe, result, arcaneRecipe, null);
+    private record RecipeAspectSource(ResourceLocation id, Recipe<?> recipe, ItemStack result, TCArcaneRecipe arcaneRecipe, TCCrucibleRecipe crucibleRecipe, TCInfusionRecipe infusionRecipe) {
+        private RecipeAspectSource(ResourceLocation id, Recipe<CraftingInput> recipe, ItemStack result, TCArcaneRecipe arcaneRecipe) {
+            this(id, recipe, result, arcaneRecipe, null, null);
         }
 
         @SuppressWarnings("unchecked")

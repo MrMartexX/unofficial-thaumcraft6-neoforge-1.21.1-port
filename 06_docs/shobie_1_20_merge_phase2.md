@@ -71,7 +71,8 @@ Full catalog: `06_docs/shobie_1_20_recipe_catalog.csv`.
 | thaumcraft:arcane_workbench_shapeless, defer_until_arcane_serializer_parity | 7 |
 | thaumcraft:crucible, imported_legacy_corrected | 27 |
 | thaumcraft:crucible, defer_behavior_or_unconfirmed_mapping | 30 |
-| thaumcraft:infusion, defer_until_infusion_serializer | 62 |
+| thaumcraft:infusion, imported_legacy_corrected | 2 |
+| thaumcraft:infusion, defer_behavior_or_unconfirmed_mapping | 60 |
 
 ## Legacy Naming Policy
 
@@ -123,7 +124,8 @@ Current port ids remain authoritative. Shobie ids that use newer or renamed form
 - Do not overwrite current assets with Shobie assets. Existing adapted 1.21/legacy assets stay authoritative.
 - Preserve 1.12-style asset and registry names where our port already has them.
 - Crucible recipe JSONs are now handled by the dedicated import note `06_docs/shobie_1_20_crucible_recipe_import.md`; imported recipes are data/serializer coverage only, not complete crucible gameplay.
+- Infusion recipe JSONs are now handled by the dedicated import note `06_docs/shobie_1_20_infusion_recipe_import.md`; imported recipes are data/serializer/aspect-cache coverage only, not complete Infusion Matrix gameplay.
 
 ## Next Large Merge Step
 
-Work through the remaining `candidate_convert_to_1_21` and `defer_unregistered_or_unmapped` rows only after the missing ids are intentionally registered or explicitly rejected. Arcane and the first crucible data layers are started; the next large custom-recipe merge target is infusion serializer/data classification, followed by real behavior slices only after design and validation.
+Work through the remaining `candidate_convert_to_1_21` and `defer_unregistered_or_unmapped` rows only after the missing ids are intentionally registered or explicitly rejected. Arcane, crucible and infusion data layers are started; the next large merge target should be a real behavior slice with its own design and validation, not another blind Shobie data copy.
