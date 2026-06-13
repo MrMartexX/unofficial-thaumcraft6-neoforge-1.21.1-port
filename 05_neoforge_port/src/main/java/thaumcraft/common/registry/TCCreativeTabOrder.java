@@ -140,6 +140,10 @@ public final class TCCreativeTabOrder {
 
         acceptVisible(output, TCItems.AMBER.get());
         acceptVisible(output, TCItems.QUICKSILVER.get());
+        acceptVisible(output, TCItems.CLUSTER_IRON.get());
+        acceptVisible(output, TCItems.CLUSTER_GOLD.get());
+        acceptVisible(output, TCItems.CLUSTER_COPPER.get());
+        acceptVisible(output, TCItems.CLUSTER_CINNABAR.get());
         acceptVisible(output, TCItems.THAUMIUM_INGOT.get());
         acceptVisible(output, TCItems.BRASS_INGOT.get());
         acceptVisible(output, TCItems.VOID_METAL_INGOT.get());
@@ -152,6 +156,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.FABRIC.get());
         acceptVisible(output, TCItems.VIS_RESONATOR.get());
         acceptVisible(output, TCItems.TALLOW.get());
+        acceptVisible(output, TCItems.VOID_SEED.get());
         acceptVisible(output, TCItems.CANDLE_WHITE.get());
         acceptVisible(output, TCItems.MECHANISM_SIMPLE.get());
         acceptVisible(output, TCItems.MECHANISM_COMPLEX.get());
@@ -171,6 +176,9 @@ public final class TCCreativeTabOrder {
         addPhialVariants(output);
 
         acceptVisible(output, TCItems.ALUMENTUM.get());
+        acceptVisible(output, TCItems.BOTTLE_TAINT.get());
+        acceptVisible(output, TCItems.SANITY_SOAP.get());
+        acceptVisible(output, TCItems.BATH_SALTS.get());
 
         acceptVisible(output, TCItems.SCRIBING_TOOLS.get());
         acceptVisible(output, TCItems.THAUMOMETER.get());

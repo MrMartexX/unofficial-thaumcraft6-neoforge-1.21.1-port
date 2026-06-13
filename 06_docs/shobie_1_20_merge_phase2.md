@@ -69,7 +69,8 @@ Full catalog: `06_docs/shobie_1_20_recipe_catalog.csv`.
 | minecraft:smelting, defer_unregistered_or_unmapped | 3 |
 | thaumcraft:arcane_workbench_shaped, defer_until_arcane_serializer_parity | 72 |
 | thaumcraft:arcane_workbench_shapeless, defer_until_arcane_serializer_parity | 7 |
-| thaumcraft:crucible, defer_until_crucible_serializer | 57 |
+| thaumcraft:crucible, imported_legacy_corrected | 27 |
+| thaumcraft:crucible, defer_behavior_or_unconfirmed_mapping | 30 |
 | thaumcraft:infusion, defer_until_infusion_serializer | 62 |
 
 ## Legacy Naming Policy
@@ -121,7 +122,8 @@ Current port ids remain authoritative. Shobie ids that use newer or renamed form
 - Do not import Shobie `worldgen` or `forge/biome_modifier` directly: these need NeoForge 1.21.1 format review.
 - Do not overwrite current assets with Shobie assets. Existing adapted 1.21/legacy assets stay authoritative.
 - Preserve 1.12-style asset and registry names where our port already has them.
+- Crucible recipe JSONs are now handled by the dedicated import note `06_docs/shobie_1_20_crucible_recipe_import.md`; imported recipes are data/serializer coverage only, not complete crucible gameplay.
 
 ## Next Large Merge Step
 
-Work through the remaining `candidate_convert_to_1_21` and `defer_unregistered_or_unmapped` rows only after the missing ids are intentionally registered or explicitly rejected. Then handle Thaumcraft custom recipes by serializer: arcane first, then crucible, then infusion.
+Work through the remaining `candidate_convert_to_1_21` and `defer_unregistered_or_unmapped` rows only after the missing ids are intentionally registered or explicitly rejected. Arcane and the first crucible data layers are started; the next large custom-recipe merge target is infusion serializer/data classification, followed by real behavior slices only after design and validation.

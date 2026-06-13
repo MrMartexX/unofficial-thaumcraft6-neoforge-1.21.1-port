@@ -153,6 +153,10 @@ public final class TCItems {
 
     public static final Supplier<Item> AMBER = ITEMS.register("amber", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> QUICKSILVER = ITEMS.register("quicksilver", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CLUSTER_IRON = simpleItem("cluster_iron");
+    public static final Supplier<Item> CLUSTER_GOLD = simpleItem("cluster_gold");
+    public static final Supplier<Item> CLUSTER_COPPER = simpleItem("cluster_copper");
+    public static final Supplier<Item> CLUSTER_CINNABAR = simpleItem("cluster_cinnabar");
     public static final Supplier<Item> FABRIC = ITEMS.register("fabric", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> THAUMIUM_INGOT = simpleItem("thaumium_ingot");
     public static final Supplier<Item> BRASS_INGOT = simpleItem("brass_ingot");
@@ -172,12 +176,16 @@ public final class TCItems {
     public static final Supplier<Item> RARE_EARTH = simpleItem("rare_earth");
     public static final Supplier<Item> SALIS_MUNDUS = simpleItem("salis_mundus");
     public static final Supplier<Item> TALLOW = simpleItem("tallow");
+    public static final Supplier<Item> VOID_SEED = simpleItem("void_seed");
     public static final Supplier<Item> MECHANISM_SIMPLE = simpleItem("mechanism_simple");
     public static final Supplier<Item> MECHANISM_COMPLEX = simpleItem("mechanism_complex");
     public static final Supplier<Item> VIS_RESONATOR = simpleItem("vis_resonator");
     public static final Supplier<Item> MIRRORED_GLASS = simpleItem("mirrored_glass");
     public static final Supplier<Item> BRAIN = simpleItem("brain");
     public static final Supplier<Item> ALUMENTUM = simpleItem("alumentum");
+    public static final Supplier<Item> BOTTLE_TAINT = simpleItem("bottle_taint");
+    public static final Supplier<Item> SANITY_SOAP = simpleItem("sanity_soap");
+    public static final Supplier<Item> BATH_SALTS = simpleItem("bath_salts");
     public static final Supplier<Item> CURIO_RITES = simpleItem("curio_rites");
     public static final Supplier<Item> SCRIBING_TOOLS = simpleItem("scribing_tools");
     public static final Supplier<Item> CASTER_BASIC = simpleItem("caster_basic");

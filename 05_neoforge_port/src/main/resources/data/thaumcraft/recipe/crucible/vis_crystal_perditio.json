@@ -1,0 +1,14 @@
+{
+  "type": "thaumcraft:crucible",
+  "group": "thaumcraft:viscrystalgroup",
+  "research": "BASEALCHEMY",
+  "catalyst": {
+    "tag": "c:gems/quartz"
+  },
+  "aspects": {
+    "perditio": 2
+  },
+  "result": {
+    "id": "thaumcraft:crystal_perditio"
+  }
+}

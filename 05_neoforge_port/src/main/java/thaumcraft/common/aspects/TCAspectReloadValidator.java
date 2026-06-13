@@ -478,6 +478,10 @@ public final class TCAspectReloadValidator {
                 amount(Aspect.METAL, 7), amount(Aspect.DESIRE, 7), amount(Aspect.PLANT, 1), amount(Aspect.MAGIC, 1));
         expectGeneratedAspects(new ItemStack(TCItems.MORPHIC_RESONATOR.get()), "thaumcraft:morphic_resonator arcane generateTags cache lookup",
                 amount(Aspect.CRYSTAL, 1), amount(Aspect.METAL, 14), amount(Aspect.TOOL, 4), amount(Aspect.EARTH, 3), amount(Aspect.ORDER, 3), amount(Aspect.MAGIC, 5));
+        expectGeneratedAspects(new ItemStack(TCItems.FOCUS_1.get()), "thaumcraft:focus_1 crucible generateTags cache lookup",
+                amount(Aspect.ORDER, 15), amount(Aspect.CRYSTAL, 14), amount(Aspect.MAGIC, 3), amount(Aspect.AURA, 2));
+        expectGeneratedAspects(new ItemStack(TCItems.CLUSTER_IRON.get()), "thaumcraft:cluster_iron crucible generateTags cache lookup",
+                amount(Aspect.EARTH, 5), amount(Aspect.METAL, 17), amount(Aspect.ORDER, 2));
     }
 
     private static void validateCraftingFormulaFixtures() {

@@ -1,0 +1,14 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "HEDGEALCHEMY@2",
+  "catalyst": {
+    "item": "minecraft:bone_meal"
+  },
+  "aspects": {
+    "sensus": 5
+  },
+  "result": {
+    "id": "minecraft:red_dye",
+    "count": 2
+  }
+}
