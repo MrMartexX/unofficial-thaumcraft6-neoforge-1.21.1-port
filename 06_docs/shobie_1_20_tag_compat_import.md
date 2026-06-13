@@ -74,10 +74,29 @@ integration path instead:
 | Vanilla tag | Current values | Reason |
 |---|---|---|
 | `minecraft:logs_that_burn` block/item | `log_greatwood`, `log_silverwood` | Lets vanilla log-to-charcoal and burnable-log behavior apply without adding duplicate Thaumcraft smelting recipes. |
+| `minecraft:planks` block/item | `plank_greatwood`, `plank_silverwood` | Preserves the vanilla wood-family tag role for block and item lookups. |
+| `minecraft:wooden_slabs` block/item | `slab_greatwood`, `slab_silverwood` | Preserves the vanilla wood-family tag role for block and item lookups. |
+| `minecraft:wooden_stairs` block/item | `stairs_greatwood`, `stairs_silverwood` | Preserves the vanilla wood-family tag role for block and item lookups. |
+
+## Common Tag Closure
+
+Shobie still used Forge `forge:` tags. The NeoForge 1.21.1 port translates the
+safe registered-material subset into common `c:` tags and keeps current
+legacy-style ids authoritative.
+
+| Common tag | Current values | Reason |
+|---|---|---|
+| `c:storage_blocks/brass` block/item | `metal_brass` | Safe translation of Shobie `forge:storage_blocks/brass`. |
+| `c:storage_blocks/thaumium` block/item | `metal_thaumium` | Safe translation of Shobie `forge:storage_blocks/thaumium`. |
+| `c:storage_blocks/void` block/item | `metal_void` | Current port's existing short void-metal common tag form. |
+| `c:storage_blocks/void_metal` block/item | `metal_void` | Compatibility alias for Shobie `forge:storage_blocks/void_metal`. |
+| `c:ingots/void_metal` item | `void_metal_ingot` | Compatibility alias for Shobie `forge:ingots/void_metal`; `c:ingots/void` remains available. |
+| `c:nuggets/void_metal` item | `void_metal_nugget` | Compatibility alias for Shobie `forge:nuggets/void_metal`; `c:nuggets/void` remains available. |
+| root `c:ingots`, `c:nuggets`, `c:ores` | includes void/void_metal and quartz sub-tags where applicable | Keeps common root tags complete for recipes, generated aspects and future Shobie recipe translation. |
 
 ## Validation
 
 | Check | Result | Notes |
 |---|---|---|
 | `.\gradlew.bat build --no-daemon` | Passed | Resource processing accepted all generated tag files. |
-| `.\gradlew.bat runServer --no-daemon` | Passed | Dedicated server reached `Done`, loaded `1452` recipes, and rebuilt `576` generated object assignments. No tag/registry parse errors were found in the smoke log. |
+| `.\tools\ci\server-smoke.ps1 -TimeoutSeconds 420` | Passed | Dedicated server reached `Done`, loaded `1479` recipes, rebuilt `581` generated object assignments, and passed aspect tag reload validation. No tag/registry parse errors were found in the smoke log. |

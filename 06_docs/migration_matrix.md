@@ -154,6 +154,16 @@ Active registered content cleanup note: `amber`, `quicksilver`, `fabric`, `scrib
 | Old world generators | Datapack/datagen features and biome modifiers | Design before code. |
 | Baubles API | Optional modern accessory integration | Do not hard require until selected. |
 
+## Shobie 1.20.1 merge policy update
+
+The `codex/experiment-shobie-1-20-merge` branch has completed the safe bulk
+merge of Shobie data/resources that can be translated without changing the
+current port's authoritative ids or subsystem architecture. Shobie Java remains
+reference-only. Any further Shobie-derived work must be a subsystem task with
+its own design and validation, especially crucible gameplay, infusion matrix
+gameplay, worldgen/biome modifiers, custom recipe page renderers and remaining
+variant-heavy item behavior.
+
 ## Immediate next work
 
 1. Read `06_docs/current_port_status.md`, `06_docs/runtime_asset_audit.md`, `06_docs/aspects_design.md`, `06_docs/aspect_legacy_runtime_logic_audit.md`, and `06_docs/aspect_parity_comparison_harness.md`.

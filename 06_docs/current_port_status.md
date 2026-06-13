@@ -177,6 +177,17 @@ Validation proves:
 
 Do not implement or expand aura, research, arcane crafting, crucible, infusion, BlockEntities, menus, networking, worldgen, or large rendering systems by direct legacy class copying. Each one needs a small design document first. Current arcane crafting work is limited to the documented exact-recipe/Arcane Workbench server slice; current crucible and infusion work is limited to the documented serializer/data/aspect-cache slices; current aspect work is limited to the documented data layer and read-only inventory tooltip consumer.
 
+## Shobie 1.20.1 merge closure
+
+The experimental Shobie merge branch has exhausted the safe bulk-merge surface:
+damage types, tag compatibility, all vanilla recipe rows, 53 arcane rows, 27
+crucible rows and 2 infusion rows are imported or confirmed through current
+1.21 ids/serializers. Remaining Shobie material is reference/deferred only:
+6 arcane edge rows, 30 crucible behavior/identity rows, 60 infusion
+behavior/identity rows, worldgen/biome modifiers, old plural loot table paths,
+and Forge 1.20.1 Java. The next work should be a focused behavior subsystem
+with parity validation, not another broad copy pass.
+
 ## Immediate next work
 
 1. Re-run `./gradlew build --no-daemon` after every arcane workbench GUI, discount, charger, or recipe expansion batch.

@@ -55,24 +55,33 @@ Full catalog: `06_docs/shobie_1_20_resource_delta.csv`.
 | missing, recipe_catalog_managed | 270 |
 | missing, review | 2 |
 
+Superseding closure after the later tag/recipe passes is recorded in
+`06_docs/shobie_1_20_full_merge_closure.md`. The resource delta catalog now
+distinguishes translated tag imports, reference-only files, legacy AT reference,
+and unregistered/worldgen deferrals.
+
 ## Recipe Catalog Summary
 
 Full catalog: `06_docs/shobie_1_20_recipe_catalog.csv`.
 
 | Recipe Type / Decision | Count |
 | --- | ---: |
-| minecraft:crafting_shaped, already_present_or_imported | 26 |
-| minecraft:crafting_shaped, defer_unregistered_or_unmapped | 25 |
-| minecraft:crafting_shapeless, already_present_or_imported | 6 |
-| minecraft:crafting_shapeless, defer_unregistered_or_unmapped | 7 |
-| minecraft:smelting, already_present_or_imported | 5 |
-| minecraft:smelting, defer_unregistered_or_unmapped | 3 |
-| thaumcraft:arcane_workbench_shaped, defer_until_arcane_serializer_parity | 72 |
-| thaumcraft:arcane_workbench_shapeless, defer_until_arcane_serializer_parity | 7 |
+| minecraft:crafting_shaped, already_present_or_imported | 51 |
+| minecraft:crafting_shapeless, already_present_or_imported | 13 |
+| minecraft:smelting, already_present_or_imported | 8 |
+| thaumcraft:arcane_workbench_shaped, imported_translated_current_serializer | 48 |
+| thaumcraft:arcane_workbench_shapeless, imported_translated_current_serializer | 5 |
+| thaumcraft:arcane_workbench_shaped, already_present_or_imported | 18 |
+| thaumcraft:arcane_workbench_shapeless, already_present_or_imported | 2 |
+| thaumcraft:arcane_workbench_shaped, defer_behavior_or_unconfirmed_mapping | 6 |
 | thaumcraft:crucible, imported_legacy_corrected | 27 |
 | thaumcraft:crucible, defer_behavior_or_unconfirmed_mapping | 30 |
 | thaumcraft:infusion, imported_legacy_corrected | 2 |
 | thaumcraft:infusion, defer_behavior_or_unconfirmed_mapping | 60 |
+
+No vanilla crafting, shapeless, or smelting Shobie recipe rows remain deferred
+after the closure pass. Remaining deferred rows are custom Thaumcraft behavior
+or identity rows only.
 
 ## Legacy Naming Policy
 
@@ -129,3 +138,7 @@ Current port ids remain authoritative. Shobie ids that use newer or renamed form
 ## Next Large Merge Step
 
 Work through the remaining `candidate_convert_to_1_21` and `defer_unregistered_or_unmapped` rows only after the missing ids are intentionally registered or explicitly rejected. Arcane, crucible and infusion data layers are started; the next large merge target should be a real behavior slice with its own design and validation, not another blind Shobie data copy.
+
+Closure update: broad safe Shobie data/resource merging is complete for this
+branch. See `06_docs/shobie_1_20_full_merge_closure.md` for the final imported
+and deferred counts.
