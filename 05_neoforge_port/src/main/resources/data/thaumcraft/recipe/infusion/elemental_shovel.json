@@ -1,0 +1,29 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ELEMENTALTOOLS",
+  "instability": 1,
+  "central": {
+    "item": "thaumcraft:thaumium_shovel"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:crystal_terra"
+    },
+    {
+      "item": "thaumcraft:crystal_terra"
+    },
+    {
+      "item": "thaumcraft:rare_earth"
+    },
+    {
+      "item": "thaumcraft:plank_greatwood"
+    }
+  ],
+  "aspects": {
+    "terra": 60,
+    "fabrico": 30
+  },
+  "result": {
+    "id": "thaumcraft:elemental_shovel"
+  }
+}

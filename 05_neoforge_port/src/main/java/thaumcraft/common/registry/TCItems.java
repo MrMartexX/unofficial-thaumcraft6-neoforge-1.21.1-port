@@ -104,7 +104,10 @@ public final class TCItems {
     public static final Supplier<BlockItem> INLAY = blockItem("inlay", TCBlocks.INLAY);
     public static final Supplier<BlockItem> JAR_NORMAL = blockItem("jar_normal", TCBlocks.JAR_NORMAL);
     public static final Supplier<BlockItem> JAR_VOID = blockItem("jar_void", TCBlocks.JAR_VOID);
+    public static final Supplier<BlockItem> JAR_BRAIN = blockItem("jar_brain", TCBlocks.JAR_BRAIN);
     public static final Supplier<BlockItem> LAMP_ARCANE = blockItem("lamp_arcane", TCBlocks.LAMP_ARCANE);
+    public static final Supplier<BlockItem> LAMP_GROWTH = blockItem("lamp_growth", TCBlocks.LAMP_GROWTH);
+    public static final Supplier<BlockItem> LAMP_FERTILITY = blockItem("lamp_fertility", TCBlocks.LAMP_FERTILITY);
     public static final Supplier<BlockItem> LEVITATOR = blockItem("levitator", TCBlocks.LEVITATOR);
     public static final Supplier<BlockItem> MATRIX_COST = blockItem("matrix_cost", TCBlocks.MATRIX_COST);
     public static final Supplier<BlockItem> MATRIX_SPEED = blockItem("matrix_speed", TCBlocks.MATRIX_SPEED);
@@ -131,6 +134,12 @@ public final class TCItems {
     public static final Supplier<BlockItem> TUBE_VALVE = blockItem("tube_valve", TCBlocks.TUBE_VALVE);
     public static final Supplier<BlockItem> VIS_BATTERY = blockItem("vis_battery", TCBlocks.VIS_BATTERY);
     public static final Supplier<BlockItem> VIS_GENERATOR = blockItem("vis_generator", TCBlocks.VIS_GENERATOR);
+    public static final Supplier<BlockItem> EVERFULL_URN = blockItem("everfull_urn", TCBlocks.EVERFULL_URN);
+    public static final Supplier<BlockItem> FLESH_BLOCK = blockItem("flesh_block", TCBlocks.FLESH_BLOCK);
+    public static final Supplier<BlockItem> INFERNAL_FURNACE = blockItem("infernal_furnace", TCBlocks.INFERNAL_FURNACE);
+    public static final Supplier<BlockItem> MIRROR_ITEM = blockItem("mirror_item", TCBlocks.MIRROR_ITEM);
+    public static final Supplier<BlockItem> MIRROR_ESSENTIA = blockItem("mirror_essentia", TCBlocks.MIRROR_ESSENTIA);
+    public static final Supplier<BlockItem> VOID_SIPHON = blockItem("void_siphon", TCBlocks.VOID_SIPHON);
     public static final Supplier<BlockItem> LOG_GREATWOOD = blockItem("log_greatwood", TCBlocks.LOG_GREATWOOD);
     public static final Supplier<BlockItem> LOG_SILVERWOOD = blockItem("log_silverwood", TCBlocks.LOG_SILVERWOOD);
     public static final Supplier<BlockItem> LEAVES_GREATWOOD = blockItem("leaves_greatwood", TCBlocks.LEAVES_GREATWOOD);
@@ -183,6 +192,7 @@ public final class TCItems {
     public static final Supplier<Item> RESONATOR = simpleItem("resonator");
     public static final Supplier<Item> MIRRORED_GLASS = simpleItem("mirrored_glass");
     public static final Supplier<Item> BRAIN = simpleItem("brain");
+    public static final Supplier<Item> BRAIN_CURIOUS = simpleItem("brain_curious");
     public static final Supplier<Item> ALUMENTUM = simpleItem("alumentum");
     public static final Supplier<Item> BOTTLE_TAINT = simpleItem("bottle_taint");
     public static final Supplier<Item> SANITY_SOAP = simpleItem("sanity_soap");
@@ -223,11 +233,37 @@ public final class TCItems {
     public static final Supplier<Item> PHIAL_EMPTY = simpleItem("phial_empty");
     public static final Supplier<Item> JAR_BRACE = simpleItem("jar_brace");
     public static final Supplier<Item> PRIMAL_CHARM = simpleItem("primal_charm");
+    public static final Supplier<Item> BALANCED_SHARD = simpleItem("balanced_shard");
     public static final Supplier<Item> PRIMORDIAL_PEARL = simpleItem("primordial_pearl");
     public static final Supplier<Item> SANITY_CHECKER = simpleItem("sanity_checker");
     public static final Supplier<Item> TURRET_PLACER_BASIC = simpleItem("turret_placer_basic");
     public static final Supplier<Item> TURRET_PLACER_ADVANCED = simpleItem("turret_placer_advanced");
+    public static final Supplier<Item> TURRET_PLACER_BORE = simpleItem("turret_placer_bore");
     public static final Supplier<Item> GOLEM_BELL = simpleItem("golem_bell");
+    public static final Supplier<Item> AMULET_VIS_CRAFTED = simpleItem("amulet_vis_crafted");
+    public static final Supplier<Item> CAUSALITY_COLLAPSER = simpleItem("causality_collapser");
+    public static final Supplier<Item> CHARM_UNDYING = simpleItem("charm_undying");
+    public static final Supplier<Item> CLOUD_RING = simpleItem("cloud_ring");
+    public static final Supplier<Item> CURIOSITY_BAND = simpleItem("curiosity_band");
+    public static final Supplier<Item> ELEMENTAL_AXE = simpleItem("elemental_axe");
+    public static final Supplier<Item> ELEMENTAL_HOE = simpleItem("elemental_hoe");
+    public static final Supplier<Item> ELEMENTAL_PICK = simpleItem("elemental_pick");
+    public static final Supplier<Item> ELEMENTAL_SHOVEL = simpleItem("elemental_shovel");
+    public static final Supplier<Item> ELEMENTAL_SWORD = simpleItem("elemental_sword");
+    public static final Supplier<Item> FORTRESS_HELM = simpleItem("fortress_helm");
+    public static final Supplier<Item> FORTRESS_CHEST = simpleItem("fortress_chest");
+    public static final Supplier<Item> FORTRESS_LEGS = simpleItem("fortress_legs");
+    public static final Supplier<Item> GOLEM_MODULE_AGGRESSION = simpleItem("golem_module_aggression");
+    public static final Supplier<Item> GOLEM_MODULE_VISION = simpleItem("golem_module_vision");
+    public static final Supplier<Item> GRAPPLE_GUN = simpleItem("grapple_gun");
+    public static final Supplier<Item> HAND_MIRROR = simpleItem("hand_mirror");
+    public static final Supplier<Item> PRIMAL_CRUSHER = simpleItem("primal_crusher");
+    public static final Supplier<Item> TRAVELLER_BOOTS = simpleItem("traveller_boots");
+    public static final Supplier<Item> VERDANT_CHARM = simpleItem("verdant_charm");
+    public static final Supplier<Item> VOID_ROBE_HELM = simpleItem("void_robe_helm");
+    public static final Supplier<Item> VOID_ROBE_CHEST = simpleItem("void_robe_chest");
+    public static final Supplier<Item> VOID_ROBE_LEGS = simpleItem("void_robe_legs");
+    public static final Supplier<Item> VOIDSEER_CHARM = simpleItem("voidseer_charm");
 
     public static final Supplier<Item> CRYSTAL_ESSENCE_AER = simpleItem("crystal_essence_aer");
     public static final Supplier<Item> CRYSTAL_ESSENCE_TERRA = simpleItem("crystal_essence_terra");
@@ -383,11 +419,21 @@ public final class TCItems {
                     new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
                     "tc.placeholder.focus"
             );
-            case "focus_pouch", "primal_charm", "sanity_checker" -> new ItemLegacyPlaceholder(
+            case "focus_pouch", "primal_charm", "sanity_checker", "balanced_shard",
+                 "brain_curious", "amulet_vis_crafted", "causality_collapser",
+                 "charm_undying", "cloud_ring", "curiosity_band", "hand_mirror",
+                 "verdant_charm", "voidseer_charm" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
                     "tc.placeholder.research_item"
             );
-            case "turret_placer_basic", "turret_placer_advanced" -> new ItemLegacyPlaceholder(
+            case "elemental_axe", "elemental_hoe", "elemental_pick", "elemental_shovel", "elemental_sword",
+                 "fortress_helm", "fortress_chest", "fortress_legs", "primal_crusher",
+                 "traveller_boots", "void_robe_helm", "void_robe_chest", "void_robe_legs" -> new ItemLegacyPlaceholder(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
+                    "tc.placeholder.enchanted_equipment"
+            );
+            case "grapple_gun", "golem_module_aggression", "golem_module_vision",
+                 "turret_placer_basic", "turret_placer_advanced", "turret_placer_bore" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1),
                     "tc.placeholder.entity_placer"
             );

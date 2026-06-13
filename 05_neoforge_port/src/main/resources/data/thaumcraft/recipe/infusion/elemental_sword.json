@@ -1,0 +1,30 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ELEMENTALTOOLS",
+  "instability": 1,
+  "central": {
+    "item": "thaumcraft:thaumium_sword"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:crystal_aer"
+    },
+    {
+      "item": "thaumcraft:crystal_aer"
+    },
+    {
+      "item": "thaumcraft:rare_earth"
+    },
+    {
+      "item": "thaumcraft:plank_greatwood"
+    }
+  ],
+  "aspects": {
+    "aer": 30,
+    "motus": 30,
+    "aversio": 30
+  },
+  "result": {
+    "id": "thaumcraft:elemental_sword"
+  }
+}

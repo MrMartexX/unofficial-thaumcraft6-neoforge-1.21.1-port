@@ -1,0 +1,13 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "ALCHEMY",
+  "catalyst": {
+    "tag": "c:slimeballs"
+  },
+  "aspects": {
+    "vinculum": 5
+  },
+  "result": {
+    "id": "thaumcraft:amber"
+  }
+}

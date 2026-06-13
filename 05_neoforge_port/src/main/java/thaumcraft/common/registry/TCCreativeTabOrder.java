@@ -72,6 +72,7 @@ public final class TCCreativeTabOrder {
 
         acceptVisible(output, TCItems.AMBER_BLOCK.get());
         acceptVisible(output, TCItems.AMBER_BRICK.get());
+        acceptVisible(output, TCItems.FLESH_BLOCK.get());
 
         acceptVisible(output, TCItems.METAL_BRASS.get());
         acceptVisible(output, TCItems.METAL_THAUMIUM.get());
@@ -95,6 +96,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.BELLOWS.get());
         acceptVisible(output, TCItems.JAR_NORMAL.get());
         acceptVisible(output, TCItems.JAR_VOID.get());
+        acceptVisible(output, TCItems.JAR_BRAIN.get());
         acceptVisible(output, TCItems.TUBE_NORMAL.get());
         acceptVisible(output, TCItems.TUBE_VALVE.get());
         acceptVisible(output, TCItems.TUBE_FILTER.get());
@@ -115,6 +117,8 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.ARCANE_EAR.get());
         acceptVisible(output, TCItems.LEVITATOR.get());
         acceptVisible(output, TCItems.LAMP_ARCANE.get());
+        acceptVisible(output, TCItems.LAMP_GROWTH.get());
+        acceptVisible(output, TCItems.LAMP_FERTILITY.get());
         acceptVisible(output, TCItems.DIOPTRA.get());
         acceptVisible(output, TCItems.RECHARGE_PEDESTAL.get());
         acceptVisible(output, TCItems.HUNGRY_CHEST.get());
@@ -122,6 +126,11 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.BRAIN_BOX.get());
         acceptVisible(output, TCItems.POTION_SPRAYER.get());
         acceptVisible(output, TCItems.VIS_GENERATOR.get());
+        acceptVisible(output, TCItems.EVERFULL_URN.get());
+        acceptVisible(output, TCItems.INFERNAL_FURNACE.get());
+        acceptVisible(output, TCItems.MIRROR_ITEM.get());
+        acceptVisible(output, TCItems.MIRROR_ESSENTIA.get());
+        acceptVisible(output, TCItems.VOID_SIPHON.get());
         acceptVisible(output, TCItems.STABILIZER.get());
         acceptVisible(output, TCItems.INLAY.get());
         acceptVisible(output, TCItems.MATRIX_SPEED.get());
@@ -173,6 +182,7 @@ public final class TCCreativeTabOrder {
         addCrystalEssenceVariants(output);
 
         acceptVisible(output, TCItems.BRAIN.get());
+        acceptVisible(output, TCItems.BRAIN_CURIOUS.get());
 
         addPhialVariants(output);
 
@@ -202,6 +212,19 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.VOID_CHEST.get());
         acceptVisible(output, TCItems.VOID_LEGS.get());
         acceptVisible(output, TCItems.VOID_BOOTS.get());
+        acceptVisible(output, TCItems.ELEMENTAL_AXE.get());
+        acceptVisible(output, TCItems.ELEMENTAL_SWORD.get());
+        acceptVisible(output, TCItems.ELEMENTAL_SHOVEL.get());
+        acceptVisible(output, TCItems.ELEMENTAL_PICK.get());
+        acceptVisible(output, TCItems.ELEMENTAL_HOE.get());
+        acceptVisible(output, TCItems.FORTRESS_HELM.get());
+        acceptVisible(output, TCItems.FORTRESS_CHEST.get());
+        acceptVisible(output, TCItems.FORTRESS_LEGS.get());
+        acceptVisible(output, TCItems.PRIMAL_CRUSHER.get());
+        acceptVisible(output, TCItems.TRAVELLER_BOOTS.get());
+        acceptVisible(output, TCItems.VOID_ROBE_HELM.get());
+        acceptVisible(output, TCItems.VOID_ROBE_CHEST.get());
+        acceptVisible(output, TCItems.VOID_ROBE_LEGS.get());
 
         acceptVisible(output, TCItems.GOGGLES.get());
 
@@ -220,11 +243,24 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.BRAIN_CLOCKWORK.get());
         acceptVisible(output, TCItems.GRAPPLE_GUN_TIP.get());
         acceptVisible(output, TCItems.GRAPPLE_GUN_SPOOL.get());
+        acceptVisible(output, TCItems.GRAPPLE_GUN.get());
         acceptVisible(output, TCItems.PRIMAL_CHARM.get());
+        acceptVisible(output, TCItems.BALANCED_SHARD.get());
         acceptVisible(output, TCItems.PRIMORDIAL_PEARL.get());
         acceptVisible(output, TCItems.SANITY_CHECKER.get());
         acceptVisible(output, TCItems.TURRET_PLACER_BASIC.get());
         acceptVisible(output, TCItems.TURRET_PLACER_ADVANCED.get());
+        acceptVisible(output, TCItems.TURRET_PLACER_BORE.get());
+        acceptVisible(output, TCItems.AMULET_VIS_CRAFTED.get());
+        acceptVisible(output, TCItems.CAUSALITY_COLLAPSER.get());
+        acceptVisible(output, TCItems.CHARM_UNDYING.get());
+        acceptVisible(output, TCItems.CLOUD_RING.get());
+        acceptVisible(output, TCItems.CURIOSITY_BAND.get());
+        acceptVisible(output, TCItems.GOLEM_MODULE_AGGRESSION.get());
+        acceptVisible(output, TCItems.GOLEM_MODULE_VISION.get());
+        acceptVisible(output, TCItems.HAND_MIRROR.get());
+        acceptVisible(output, TCItems.VERDANT_CHARM.get());
+        acceptVisible(output, TCItems.VOIDSEER_CHARM.get());
         acceptVisible(output, TCItems.GOLEM_BELL.get());
     }
 

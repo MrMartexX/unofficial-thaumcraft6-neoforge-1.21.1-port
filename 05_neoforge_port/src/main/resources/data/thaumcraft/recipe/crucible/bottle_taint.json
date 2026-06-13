@@ -1,0 +1,14 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "FLUX",
+  "catalyst": {
+    "item": "thaumcraft:phial_vitium"
+  },
+  "aspects": {
+    "vitium": 30,
+    "aqua": 30
+  },
+  "result": {
+    "id": "thaumcraft:bottle_taint"
+  }
+}

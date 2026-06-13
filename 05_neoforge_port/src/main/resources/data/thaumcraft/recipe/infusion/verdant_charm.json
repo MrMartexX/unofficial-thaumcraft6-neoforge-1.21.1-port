@@ -1,0 +1,30 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "VERDANTCHARMS",
+  "instability": 5,
+  "central": {
+    "item": "minecraft:golden_carrot"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:rare_earth"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_victus"
+    },
+    {
+      "item": "minecraft:apple"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_herba"
+    }
+  ],
+  "aspects": {
+    "victus": 60,
+    "ordo": 30,
+    "herba": 60
+  },
+  "result": {
+    "id": "thaumcraft:verdant_charm"
+  }
+}

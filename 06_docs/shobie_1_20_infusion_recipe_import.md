@@ -1,11 +1,11 @@
 # Shobie 1.20.1 Infusion Recipe Import
 
-Date: 2026-06-13
+Date: 2026-06-14
 Branch: `codex/experiment-shobie-1-20-merge`
 
 ## Scope
 
-This document records the first safe infusion data import from the Shobie 1.20.1 port into the current NeoForge 1.21.1 port.
+This document records the safe infusion data import from the Shobie 1.20.1 port into the current NeoForge 1.21.1 port.
 
 The current port stays authoritative. Shobie data is treated as a secondary reference only. The migration guide rule applied here is to port the role and validated data shape, not copy the Forge 1.20.1 implementation or accept mismatched ids.
 
@@ -15,7 +15,7 @@ This pass implements only the recipe serializer/data/aspect-cache boundary:
 - modern JSON recipe loading for simple infusion recipes;
 - server/network recipe serialization;
 - generated-aspect support using the legacy infusion formula;
-- reload validation for the imported safe focus recipes.
+- reload validation for the imported safe focus recipes and the 2026-06-14 expanded registered-identity set.
 
 This pass does not implement Infusion Matrix gameplay. Pedestal scanning, symmetry/stability, essentia/aspect consumption from jars, item motion, instability events, FX, sounds, research page renderers, and actual crafting execution remain deferred.
 
@@ -51,6 +51,27 @@ Current `thaumcraft:infusion` JSON fields:
 
 The obsolete temporary research bridge recipes for `focus_2` and `focus_3` were removed. These ids now resolve through the real infusion recipe type for data loading and generated aspect calculation.
 
+The 2026-06-14 expansion raises the current imported infusion set to `38`
+recipes. Additional imported ids are:
+
+`arcane_bore`, `biothaumic_mind`, `causality_collapser`, `charm_undying`,
+`cloud_ring`, `crystal_cluster_aer`, `crystal_cluster_aqua`,
+`crystal_cluster_ignis`, `crystal_cluster_ordo`, `crystal_cluster_perditio`,
+`crystal_cluster_terra`, `crystal_cluster_vitium`, `curiosity_band`,
+`elemental_axe`, `elemental_hoe`, `elemental_pick`, `elemental_shovel`,
+`elemental_sword`, `fortress_chest`, `fortress_helm`, `fortress_legs`,
+`hand_mirror`, `jar_brain`, `lamp_fertility`, `lamp_growth`, `mirror`,
+`mirror_essentia`, `primal_crusher`, `traveller_boots`, `verdant_charm`,
+`vis_amulet`, `void_robe_chest`, `void_robe_helm`, `void_robe_legs`,
+`void_siphon`, and `voidseer_charm`.
+
+Where Shobie used `input`, `center`, `centerItem`, `ingredients`, or
+`components`, the data is translated to the current serializer's
+`central`/`components` shape. Legacy 1.12.2 `ConfigRecipes` remains
+authoritative for research keys, instability, aspects and component intent when
+Shobie disagrees. Known Shobie-only or conflicting recipe choices are not
+enabled as gameplay data.
+
 ## Generated Aspect Behavior
 
 Legacy `ThaumcraftCraftingManager.generateTagsFromInfusionRecipes` does:
@@ -80,27 +101,27 @@ Reload validation covers:
 
 ## Deferred Shobie Infusion Recipes
 
-Shobie contains `62` infusion JSON files. This pass imports `2` and defers `60`.
+Shobie contains `62` infusion JSON files. The current safe import enables `38`
+and defers `24`.
 
 | Deferred family | Count / examples | Reason |
 |---|---|---|
 | Seal variants | `seal_breaker`, `seal_harvest`, `seal_butcher` | Legacy output is a component/NBT-specific seal stack; current `blank_seal` identity cannot preserve seal subtype yet. |
-| Crystal clusters | `crystal_cluster_air`, `crystal_cluster_fire`, etc. | Current crystal block ids exist, but cluster growth/farm behavior, crystal essence mapping and block behavior need a focused review before data import. |
 | Duplicate or wrong-type entries | `goggles_revealing`, `stabilizer` | Existing authoritative arcane recipes already cover these identities or the Shobie recipe expresses a later behavior path, not the base item recipe. |
 | Base thaumium/void equipment | `thaumium_*`, `void_*` | TC6 legacy uses normal crafting for base equipment; Shobie infusion versions are not legacy-correct for this stage. |
-| Component/variant-heavy outputs | fortress masks/robes, verdant charms, vis amulet, runic-like baubles | Need data components, accessories/Curios decision, armor behavior and exact variant mapping before import. |
-| Unregistered or behavior-heavy machines/items | arcane bore, biothaumic mind, causality collapser, charm undying, cloud ring, curiosity band, elemental tools, grapple gun, hand mirror, infernal furnace, jar brain, lamps, mirrors, primal crusher, traveller boots, vis generator, void siphon, voidseer charm | Output ids, block entities, item behavior, capabilities, or rendering are not ready. Importing these now would create fake gameplay or broken page data. |
+| Component/variant-heavy outputs | seal outputs, mask variants, alternate verdant charm forms, runic-like baubles | Need data components, accessories/Curios decision, armor behavior and exact variant mapping before import. |
+| Behavior-conflicting machines/items | `infernal_furnace`, `vis_generator`, Shobie-only grapple/infernal/stabilizer-style paths | These are not accepted as gameplay data until a focused legacy parity pass confirms they are valid TC6 routes. |
 
 ## Validation
 
 Current checkpoint:
 
 ```powershell
-.\gradlew.bat clean build --no-daemon
-.\tools\ci\server-smoke.ps1 -TimeoutSeconds 420
+.\gradlew.bat build --no-daemon
+.\gradlew.bat runServer --no-daemon
 ```
 
-The dedicated server smoke test reached `Done`, loaded `1479` recipes, rebuilt the generated aspect cache from crafting, arcane, crucible and infusion recipes with `581` generated assignments, and passed aspect tag reload validation.
+The dedicated server smoke test reached `Done`, loaded `1533` recipes, rebuilt the generated aspect cache from crafting, arcane, crucible and infusion recipes with `620` generated assignments, and passed aspect tag reload validation.
 
 ## Next Work
 

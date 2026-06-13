@@ -1,11 +1,7 @@
 {
-    "forge_marker": 1,
-    "variants": { 
-        "inventory":{
-           "model": "thaumcraft:jar_brain_item", "transform": "forge:default-block"
-        }, 
-        "normal": {
-            "model": "thaumcraft:jar_normal"
-        }
+  "variants": {
+    "": {
+      "model": "thaumcraft:block/jar_brain"
     }
+  }
 }

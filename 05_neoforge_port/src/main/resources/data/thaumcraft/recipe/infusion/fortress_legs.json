@@ -1,0 +1,33 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ARMORFORTRESS",
+  "instability": 3,
+  "central": {
+    "item": "thaumcraft:thaumium_legs"
+  },
+  "components": [
+    {
+      "tag": "c:plates/thaumium"
+    },
+    {
+      "tag": "c:plates/thaumium"
+    },
+    {
+      "tag": "c:plates/thaumium"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "tag": "c:leather"
+    }
+  ],
+  "aspects": {
+    "metallum": 50,
+    "praemunio": 25,
+    "potentia": 25
+  },
+  "result": {
+    "id": "thaumcraft:fortress_legs"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ELEMENTALTOOLS",
+  "instability": 1,
+  "central": {
+    "item": "thaumcraft:thaumium_pick"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:crystal_ignis"
+    },
+    {
+      "item": "thaumcraft:crystal_ignis"
+    },
+    {
+      "item": "thaumcraft:rare_earth"
+    },
+    {
+      "item": "thaumcraft:plank_greatwood"
+    }
+  ],
+  "aspects": {
+    "ignis": 30,
+    "metallum": 30,
+    "sensus": 30
+  },
+  "result": {
+    "id": "thaumcraft:elemental_pick"
+  }
+}

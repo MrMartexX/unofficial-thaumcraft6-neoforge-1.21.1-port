@@ -1,6 +1,6 @@
 # Shobie 1.20.1 Crucible Recipe Import
 
-Date: 2026-06-13
+Date: 2026-06-14
 Branch: `codex/experiment-shobie-1-20-merge`
 
 ## Scope
@@ -40,7 +40,7 @@ Exact assignments and tag assignments still win over generated fallback values.
 
 ## Imported Recipes
 
-Imported `27` Shobie-derived recipes after mapping ids back to the current 1.12-style port names and rejecting unsafe behavior-only entries.
+Currently `41` Shobie/legacy-derived recipes load after mapping ids back to the current 1.12-style port names and rejecting unsafe behavior-only entries. The first pass imported `27`; the 2026-06-14 expansion added safe registered identities that now have exact or acceptable bridge mappings.
 
 | Recipe id | Notes |
 |---|---|
@@ -71,22 +71,30 @@ Imported `27` Shobie-derived recipes after mapping ids back to the current 1.12-
 | `vis_crystal_perditio` | Legacy crystal growth path. |
 | `vis_crystal_terra` | Legacy crystal growth path. |
 | `voidingot` | Uses current `void_seed` identity item; void-metal behavior remains deferred. |
+| `amber` | Legacy-style slime/vinculum route for amber identity. |
+| `balanced_shard` | Current registered bridge identity for primal charm and related recipes. |
+| `bottle_taint` | Uses the current `phial_vitium` identity instead of legacy filled-phial NBT. |
+| `everfull_urn` | Registers and drops the placeholder urn block; real behavior is deferred. |
+| `fabric_enchanted` | Current `fabric` identity bridge for recipe/aspect coverage. |
+| `leather_from_flesh` | Hedge conversion route. |
+| `phial_empty` | Current empty phial identity. |
+| `primal_charm` | Crucible bridge using the registered `balanced_shard` identity. |
+| `quicksilver` | Redstone/metallum/permutatio route. |
+| `salis_mundus` | Registered bridge route for current recipe/aspect coverage; final use behavior remains separate. |
+| `sanity_soap_from_tallow` | Registered soap identity path. |
+| `sanity_soap_from_flesh_block` | Registered flesh block catalyst path; real sanity behavior remains deferred. |
+| `void_seed` | Uses current `crystal_vitium` as the flux crystal bridge. |
+| `zombie_brain` | Registered `brain` identity route. |
 
 ## Deferred Shobie Crucible Entries
 
-`30` Shobie crucible entries remain deferred.
+`14` Shobie crucible entries remain deferred.
 
 | Deferred area | Reason |
 |---|---|
-| `salis_mundus` | TC6 uses a dust/cauldron/fake-recipe route, not a normal crucible recipe. |
-| `amber`, `quicksilver`, `phial_empty`, `zombie_brain` | Not confirmed as exact TC6 crucible routes for the current port state. |
-| `fabric_enchanted` | Legacy enchanted fabric is arcane crafting and is already handled there. |
 | `tallow_candles` | Legacy candle path is normal crafting, not this crucible serializer. |
 | Seal recipes | Legacy seal type is data/NBT-specific; current `blank_seal` cannot preserve output subtype yet. |
-| `bottle_taint`, `sanity_soap` | Need filled phial/flesh/taint/sanity behavior before exact recipes are safe. |
-| `void_seed` | Needs flux-crystal behavior and exact catalyst mapping. |
-| `balanced_shard`, `primal_charm` | Shobie entries are not accepted as confirmed TC6 crucible parity without a deeper legacy audit. |
-| Missing-output families | Tin/silver/lead clusters, quartz purification, Everfull Urn, and other outputs require intentionally registered ids or subsystem behavior first. |
+| Behavior-heavy or conflicting entries | Entries that require real crucible BlockEntity behavior, item DataComponents, or conflict with confirmed TC6 legacy semantics are still held back instead of flattened into plain placeholder outputs. |
 
 ## Validation
 
@@ -96,8 +104,8 @@ Current validation after this import:
 |---|---|
 | `.\gradlew.bat build --no-daemon` | Passed. |
 | `.\gradlew.bat runServer --no-daemon` | Reached `Done`. |
-| Recipe count | `1479` loaded recipes. |
-| Generated aspect cache | `581` generated object assignments from crafting, arcane, and crucible recipes. |
+| Recipe count | `1533` loaded recipes. |
+| Generated aspect cache | `620` generated object assignments from crafting, arcane, crucible, and infusion recipes. |
 | Aspect coverage | `1230/1230` assignable current vanilla item ids have aspects. |
 | Reload validation | `Thaumcraft aspect tag reload validation passed.` |
 

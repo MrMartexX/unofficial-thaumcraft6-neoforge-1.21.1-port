@@ -1,0 +1,24 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "CRYSTALFARMER",
+  "instability": 0,
+  "central": {
+    "item": "thaumcraft:crystal_ignis"
+  },
+  "components": [
+    {
+      "item": "minecraft:wheat_seeds"
+    },
+    {
+      "item": "thaumcraft:salis_mundus"
+    }
+  ],
+  "aspects": {
+    "ignis": 10,
+    "vitreus": 10,
+    "vinculum": 5
+  },
+  "result": {
+    "id": "thaumcraft:crystal_ignis"
+  }
+}

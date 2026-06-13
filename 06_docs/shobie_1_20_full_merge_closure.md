@@ -1,6 +1,6 @@
 # Shobie 1.20.1 Full Safe Merge Closure
 
-Date: 2026-06-13
+Date: 2026-06-14
 Branch: `codex/experiment-shobie-1-20-merge`
 
 ## Decision
@@ -29,8 +29,8 @@ guide rule applied here is still role-based migration: do not copy Forge
 | Vanilla wood/common tags | Greatwood/Silverwood block and item planks, slabs, stairs, burnable logs, storage blocks, void-metal aliases and quartz/root tag closure are present. |
 | Vanilla crafting/shapeless/smelting recipes | All Shobie rows are either already present or imported/translated; no vanilla recipe rows remain deferred in the catalog. |
 | Arcane recipes | 56 translated to current `thaumcraft:arcane_shaped` / `thaumcraft:arcane_shapeless`; 22 already covered by existing current recipes; 1 remains deferred. |
-| Crucible recipes | 27 legacy-corrected recipes imported through the current `thaumcraft:crucible` serializer; 30 remain deferred until real crucible behavior or exact identity mapping. |
-| Infusion recipes | 2 legacy-corrected focus recipes imported through the current `thaumcraft:infusion` serializer; 60 remain deferred until Infusion Matrix behavior and variant/component identity are designed. |
+| Crucible recipes | 41 translated recipes now load through the current `thaumcraft:crucible` serializer; 14 remain deferred because they need seal/NBT identity or real crucible behavior. |
+| Infusion recipes | 38 translated recipes now load through the current `thaumcraft:infusion` serializer; 24 remain deferred because they need DataComponent/variant identity, subsystem behavior, or conflict with confirmed TC6 legacy semantics. |
 
 ## Recipe Catalog Status
 
@@ -47,10 +47,11 @@ Full catalog: `06_docs/shobie_1_20_recipe_catalog.csv`.
 | `thaumcraft:arcane_workbench_shaped`, already present or imported | 20 |
 | `thaumcraft:arcane_workbench_shapeless`, already present or imported | 2 |
 | `thaumcraft:arcane_workbench_shaped`, deferred behavior or mapping | 1 |
-| `thaumcraft:crucible`, imported legacy corrected | 27 |
-| `thaumcraft:crucible`, deferred behavior or mapping | 30 |
-| `thaumcraft:infusion`, imported legacy corrected | 2 |
-| `thaumcraft:infusion`, deferred behavior or mapping | 60 |
+| `thaumcraft:crucible`, already present or imported | 2 |
+| `thaumcraft:crucible`, imported legacy corrected | 41 |
+| `thaumcraft:crucible`, deferred behavior or mapping | 14 |
+| `thaumcraft:infusion`, imported legacy corrected | 38 |
+| `thaumcraft:infusion`, deferred behavior or mapping | 24 |
 
 Deferred recipe rows are now only custom Thaumcraft behavior rows. There are no
 remaining deferred vanilla crafting, shapeless or smelting rows.
@@ -86,19 +87,20 @@ deferred until the NeoForge 1.21.1 worldgen design exists.
 | Shobie assets that differ from current assets | Current adapted 1.21 resources and the imported TC6 legacy asset corpus remain authoritative. Do not overwrite by bulk copy. |
 | Old plural `data/thaumcraft/recipes` and `loot_tables` paths | Minecraft 1.21.1 uses singular paths and the current serializers/resources are authoritative. |
 | Worldgen/biome modifiers | Needs a focused NeoForge 1.21.1 design and parity pass. |
-| Remaining crucible/infusion/arcane edge recipes | Need behavior, variant/component identity or legacy confirmation before being enabled. |
+| Remaining crucible/infusion/arcane edge recipes | Need behavior, variant/component identity or legacy confirmation before being enabled. Seal outputs with legacy NBT and variant outputs are intentionally not flattened into plain items. |
 
 ## Remaining Shobie-Derived Work
 
 | Remaining area | Count | Next safe step |
 |---|---:|---|
-| Arcane deferred edge rows | 1 | `primal_charm` still depends on unresolved `balanced_shard` identity. |
-| Crucible deferred rows | 30 | Implement real crucible BlockEntity behavior and exact catalyst/output identity policy. |
-| Infusion deferred rows | 60 | Implement Infusion Matrix/pedestal/component behavior and variant output identity policy. |
+| Arcane deferred edge rows | 1 | `primal_charm` remains deferred in the Shobie arcane serializer path; the current port now has a legacy crucible `primal_charm` bridge using registered `balanced_shard`. |
+| Crucible deferred rows | 14 | Mostly seal/NBT rows and behavior-heavy entries that should wait for real crucible BlockEntity behavior and exact catalyst/output identity policy. |
+| Infusion deferred rows | 24 | Mostly seal/NBT, equipment/variant or Shobie-conflicting rows that should wait for Infusion Matrix/pedestal/component behavior and DataComponent identity policy. |
 | Worldgen/biome data | 54 resource rows plus biome tags | Write worldgen design before converting features/biome modifiers. |
 | Loot table singular-path review | 13 | Convert only for registered blocks that lack modern loot tables. |
 
-This means the next step should not be another broad Shobie copy pass. The next
-productive work is a focused behavior subsystem: crucible, infusion, the
-remaining `primal_charm`/`balanced_shard` identity decision, or worldgen, each
-with its own parity checks.
+This means the next step should not be another broad Shobie copy pass. The safe
+bulk data merge is effectively closed. The productive work is now a focused
+behavior subsystem: real crucible, real infusion matrix/pedestals, seal
+DataComponents, variant equipment/curio behavior, or worldgen, each with its own
+parity checks.

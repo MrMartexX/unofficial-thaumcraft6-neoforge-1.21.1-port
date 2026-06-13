@@ -1,0 +1,33 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ARMORFORTRESS",
+  "instability": 3,
+  "central": {
+    "item": "thaumcraft:thaumium_helm"
+  },
+  "components": [
+    {
+      "tag": "c:plates/thaumium"
+    },
+    {
+      "tag": "c:plates/thaumium"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "tag": "c:gems/emerald"
+    }
+  ],
+  "aspects": {
+    "metallum": 50,
+    "praemunio": 20,
+    "potentia": 25
+  },
+  "result": {
+    "id": "thaumcraft:fortress_helm"
+  }
+}

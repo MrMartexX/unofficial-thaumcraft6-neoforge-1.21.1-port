@@ -1,0 +1,41 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "RIFTCLOSER",
+  "instability": 8,
+  "central": {
+    "item": "minecraft:obsidian"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:morphic_resonator"
+    },
+    {
+      "item": "minecraft:end_crystal"
+    },
+    {
+      "item": "thaumcraft:alumentum"
+    },
+    {
+      "tag": "thaumcraft:nitor"
+    },
+    {
+      "item": "thaumcraft:vis_resonator"
+    },
+    {
+      "item": "minecraft:end_crystal"
+    },
+    {
+      "item": "thaumcraft:alumentum"
+    },
+    {
+      "tag": "thaumcraft:nitor"
+    }
+  ],
+  "aspects": {
+    "alienis": 50,
+    "vitium": 50
+  },
+  "result": {
+    "id": "thaumcraft:causality_collapser"
+  }
+}

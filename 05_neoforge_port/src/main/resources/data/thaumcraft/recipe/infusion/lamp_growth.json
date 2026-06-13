@@ -1,0 +1,37 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "LAMPGROWTH",
+  "instability": 4,
+  "central": {
+    "item": "thaumcraft:lamp_arcane"
+  },
+  "components": [
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "item": "thaumcraft:crystal_terra"
+    },
+    {
+      "tag": "c:ingots/gold"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "item": "thaumcraft:crystal_terra"
+    }
+  ],
+  "aspects": {
+    "herba": 20,
+    "lux": 15,
+    "victus": 15,
+    "instrumentum": 15
+  },
+  "result": {
+    "id": "thaumcraft:lamp_growth"
+  }
+}

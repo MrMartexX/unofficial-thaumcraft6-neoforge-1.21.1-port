@@ -1,0 +1,36 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "VISAMULET",
+  "instability": 6,
+  "central": {
+    "item": "minecraft:gold_ingot"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:vis_resonator"
+    },
+    {
+      "item": "thaumcraft:crystal_aer"
+    },
+    {
+      "item": "thaumcraft:crystal_ignis"
+    },
+    {
+      "item": "thaumcraft:crystal_aqua"
+    },
+    {
+      "item": "thaumcraft:crystal_terra"
+    },
+    {
+      "item": "thaumcraft:crystal_ordo"
+    }
+  ],
+  "aspects": {
+    "auram": 50,
+    "potentia": 100,
+    "vacuos": 50
+  },
+  "result": {
+    "id": "thaumcraft:amulet_vis_crafted"
+  }
+}

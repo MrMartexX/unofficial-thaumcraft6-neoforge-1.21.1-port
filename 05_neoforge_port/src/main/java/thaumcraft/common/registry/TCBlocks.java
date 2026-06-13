@@ -109,7 +109,10 @@ public final class TCBlocks {
     public static final Supplier<Block> INLAY = BLOCKS.register("inlay", () -> inlayBlock());
     public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal", () -> jarBlock());
     public static final Supplier<Block> JAR_VOID = BLOCKS.register("jar_void", () -> jarBlock());
+    public static final Supplier<Block> JAR_BRAIN = BLOCKS.register("jar_brain", () -> jarBlock());
     public static final Supplier<Block> LAMP_ARCANE = BLOCKS.register("lamp_arcane", () -> lampBlock());
+    public static final Supplier<Block> LAMP_GROWTH = BLOCKS.register("lamp_growth", () -> lampBlock());
+    public static final Supplier<Block> LAMP_FERTILITY = BLOCKS.register("lamp_fertility", () -> lampBlock());
     public static final Supplier<Block> LEVITATOR = BLOCKS.register("levitator", () -> deviceBlock());
     public static final Supplier<Block> MATRIX_COST = BLOCKS.register("matrix_cost", () -> stoneBlock(2.0F, 10.0F));
     public static final Supplier<Block> MATRIX_SPEED = BLOCKS.register("matrix_speed", () -> stoneBlock(2.0F, 10.0F));
@@ -136,6 +139,12 @@ public final class TCBlocks {
     public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", () -> tubeBlock());
     public static final Supplier<Block> VIS_BATTERY = BLOCKS.register("vis_battery", () -> deviceBlock());
     public static final Supplier<Block> VIS_GENERATOR = BLOCKS.register("vis_generator", () -> deviceBlock());
+    public static final Supplier<Block> EVERFULL_URN = BLOCKS.register("everfull_urn", () -> deviceBlock());
+    public static final Supplier<Block> FLESH_BLOCK = BLOCKS.register("flesh_block", () -> fleshBlock());
+    public static final Supplier<Block> INFERNAL_FURNACE = BLOCKS.register("infernal_furnace", () -> furnaceLikeBlock());
+    public static final Supplier<Block> MIRROR_ITEM = BLOCKS.register("mirror_item", () -> glassDeviceBlock());
+    public static final Supplier<Block> MIRROR_ESSENTIA = BLOCKS.register("mirror_essentia", () -> glassDeviceBlock());
+    public static final Supplier<Block> VOID_SIPHON = BLOCKS.register("void_siphon", () -> deviceBlock());
 
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
@@ -258,6 +267,12 @@ public final class TCBlocks {
                 .sound(SoundType.GLASS)
                 .lightLevel(state -> 14)
                 .noOcclusion());
+    }
+
+    private static Block fleshBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERRACK)
+                .strength(0.6F, 0.6F)
+                .sound(SoundType.HONEY_BLOCK));
     }
 
     private static Block inlayBlock() {

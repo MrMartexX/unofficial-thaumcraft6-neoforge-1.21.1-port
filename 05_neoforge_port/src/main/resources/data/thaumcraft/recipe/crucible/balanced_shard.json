@@ -1,0 +1,14 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "ALCHEMY",
+  "catalyst": {
+    "item": "thaumcraft:crystal_ordo"
+  },
+  "aspects": {
+    "perditio": 5,
+    "praecantatio": 5
+  },
+  "result": {
+    "id": "thaumcraft:balanced_shard"
+  }
+}

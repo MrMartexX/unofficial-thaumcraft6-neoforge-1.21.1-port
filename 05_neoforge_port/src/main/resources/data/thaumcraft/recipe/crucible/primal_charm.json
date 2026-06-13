@@ -1,0 +1,18 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "PRIMALCHARM",
+  "catalyst": {
+    "item": "thaumcraft:balanced_shard"
+  },
+  "aspects": {
+    "aer": 10,
+    "terra": 10,
+    "ignis": 10,
+    "aqua": 10,
+    "ordo": 10,
+    "perditio": 10
+  },
+  "result": {
+    "id": "thaumcraft:primal_charm"
+  }
+}
