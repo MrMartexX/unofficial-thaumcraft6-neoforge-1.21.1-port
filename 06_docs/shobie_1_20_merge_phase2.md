@@ -71,17 +71,19 @@ Full catalog: `06_docs/shobie_1_20_recipe_catalog.csv`.
 | minecraft:smelting, already_present_or_imported | 8 |
 | thaumcraft:arcane_workbench_shaped, imported_translated_current_serializer | 48 |
 | thaumcraft:arcane_workbench_shapeless, imported_translated_current_serializer | 5 |
-| thaumcraft:arcane_workbench_shaped, already_present_or_imported | 18 |
+| thaumcraft:arcane_workbench_shaped, imported_legacy_corrected | 3 |
+| thaumcraft:arcane_workbench_shaped, already_present_or_imported | 20 |
 | thaumcraft:arcane_workbench_shapeless, already_present_or_imported | 2 |
-| thaumcraft:arcane_workbench_shaped, defer_behavior_or_unconfirmed_mapping | 6 |
+| thaumcraft:arcane_workbench_shaped, defer_behavior_or_unconfirmed_mapping | 1 |
 | thaumcraft:crucible, imported_legacy_corrected | 27 |
 | thaumcraft:crucible, defer_behavior_or_unconfirmed_mapping | 30 |
 | thaumcraft:infusion, imported_legacy_corrected | 2 |
 | thaumcraft:infusion, defer_behavior_or_unconfirmed_mapping | 60 |
 
 No vanilla crafting, shapeless, or smelting Shobie recipe rows remain deferred
-after the closure pass. Remaining deferred rows are custom Thaumcraft behavior
-or identity rows only.
+after the closure pass. The only deferred arcane row is `primal_charm`, blocked
+on the unresolved `balanced_shard` identity; the other remaining deferred rows
+are crucible or infusion behavior/identity rows.
 
 ## Legacy Naming Policy
 

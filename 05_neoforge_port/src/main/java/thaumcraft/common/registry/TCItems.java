@@ -180,6 +180,7 @@ public final class TCItems {
     public static final Supplier<Item> MECHANISM_SIMPLE = simpleItem("mechanism_simple");
     public static final Supplier<Item> MECHANISM_COMPLEX = simpleItem("mechanism_complex");
     public static final Supplier<Item> VIS_RESONATOR = simpleItem("vis_resonator");
+    public static final Supplier<Item> RESONATOR = simpleItem("resonator");
     public static final Supplier<Item> MIRRORED_GLASS = simpleItem("mirrored_glass");
     public static final Supplier<Item> BRAIN = simpleItem("brain");
     public static final Supplier<Item> ALUMENTUM = simpleItem("alumentum");

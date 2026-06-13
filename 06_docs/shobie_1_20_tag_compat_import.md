@@ -92,6 +92,7 @@ legacy-style ids authoritative.
 | `c:storage_blocks/void_metal` block/item | `metal_void` | Compatibility alias for Shobie `forge:storage_blocks/void_metal`. |
 | `c:ingots/void_metal` item | `void_metal_ingot` | Compatibility alias for Shobie `forge:ingots/void_metal`; `c:ingots/void` remains available. |
 | `c:nuggets/void_metal` item | `void_metal_nugget` | Compatibility alias for Shobie `forge:nuggets/void_metal`; `c:nuggets/void` remains available. |
+| `thaumcraft:nuggets/brass` item | `#c:nuggets/brass` | Compatibility alias for Shobie arcane `sanity_checker` data. |
 | root `c:ingots`, `c:nuggets`, `c:ores` | includes void/void_metal and quartz sub-tags where applicable | Keeps common root tags complete for recipes, generated aspects and future Shobie recipe translation. |
 
 ## Validation
@@ -99,4 +100,4 @@ legacy-style ids authoritative.
 | Check | Result | Notes |
 |---|---|---|
 | `.\gradlew.bat build --no-daemon` | Passed | Resource processing accepted all generated tag files. |
-| `.\tools\ci\server-smoke.ps1 -TimeoutSeconds 420` | Passed | Dedicated server reached `Done`, loaded `1479` recipes, rebuilt `581` generated object assignments, and passed aspect tag reload validation. No tag/registry parse errors were found in the smoke log. |
+| `.\tools\ci\server-smoke.ps1 -TimeoutSeconds 420` | Passed | Dedicated server reached `Done`, loaded `1482` recipes, rebuilt `584` generated object assignments, and passed aspect tag reload validation. No tag/registry parse errors were found in the smoke log. |

@@ -28,7 +28,7 @@ guide rule applied here is still role-based migration: do not copy Forge
 | Thaumcraft tag taxonomy | Safe registered subsets translated from old plural paths and `forge:` tags into modern `thaumcraft:` and `c:` tags. |
 | Vanilla wood/common tags | Greatwood/Silverwood block and item planks, slabs, stairs, burnable logs, storage blocks, void-metal aliases and quartz/root tag closure are present. |
 | Vanilla crafting/shapeless/smelting recipes | All Shobie rows are either already present or imported/translated; no vanilla recipe rows remain deferred in the catalog. |
-| Arcane recipes | 53 translated to current `thaumcraft:arcane_shaped` / `thaumcraft:arcane_shapeless`; 20 already covered by existing current recipes; 6 remain deferred. |
+| Arcane recipes | 56 translated to current `thaumcraft:arcane_shaped` / `thaumcraft:arcane_shapeless`; 22 already covered by existing current recipes; 1 remains deferred. |
 | Crucible recipes | 27 legacy-corrected recipes imported through the current `thaumcraft:crucible` serializer; 30 remain deferred until real crucible behavior or exact identity mapping. |
 | Infusion recipes | 2 legacy-corrected focus recipes imported through the current `thaumcraft:infusion` serializer; 60 remain deferred until Infusion Matrix behavior and variant/component identity are designed. |
 
@@ -43,9 +43,10 @@ Full catalog: `06_docs/shobie_1_20_recipe_catalog.csv`.
 | `minecraft:smelting`, already present or imported | 8 |
 | `thaumcraft:arcane_workbench_shaped`, imported translated current serializer | 48 |
 | `thaumcraft:arcane_workbench_shapeless`, imported translated current serializer | 5 |
-| `thaumcraft:arcane_workbench_shaped`, already present or imported | 18 |
+| `thaumcraft:arcane_workbench_shaped`, imported legacy corrected | 3 |
+| `thaumcraft:arcane_workbench_shaped`, already present or imported | 20 |
 | `thaumcraft:arcane_workbench_shapeless`, already present or imported | 2 |
-| `thaumcraft:arcane_workbench_shaped`, deferred behavior or mapping | 6 |
+| `thaumcraft:arcane_workbench_shaped`, deferred behavior or mapping | 1 |
 | `thaumcraft:crucible`, imported legacy corrected | 27 |
 | `thaumcraft:crucible`, deferred behavior or mapping | 30 |
 | `thaumcraft:infusion`, imported legacy corrected | 2 |
@@ -91,12 +92,13 @@ deferred until the NeoForge 1.21.1 worldgen design exists.
 
 | Remaining area | Count | Next safe step |
 |---|---:|---|
-| Arcane deferred edge rows | 6 | Resolve exact legacy id aliases and duplicate/current-recipe policy before enabling. |
+| Arcane deferred edge rows | 1 | `primal_charm` still depends on unresolved `balanced_shard` identity. |
 | Crucible deferred rows | 30 | Implement real crucible BlockEntity behavior and exact catalyst/output identity policy. |
 | Infusion deferred rows | 60 | Implement Infusion Matrix/pedestal/component behavior and variant output identity policy. |
 | Worldgen/biome data | 54 resource rows plus biome tags | Write worldgen design before converting features/biome modifiers. |
 | Loot table singular-path review | 13 | Convert only for registered blocks that lack modern loot tables. |
 
 This means the next step should not be another broad Shobie copy pass. The next
-productive work is a focused behavior subsystem: crucible, infusion, arcane edge
-recipe closure, or worldgen, each with its own parity checks.
+productive work is a focused behavior subsystem: crucible, infusion, the
+remaining `primal_charm`/`balanced_shard` identity decision, or worldgen, each
+with its own parity checks.

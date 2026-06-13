@@ -19,8 +19,9 @@ The migration guide rule used here is role-based migration: Shobie data is treat
 
 | Status | Count |
 | --- | ---: |
-| Imported | 53 |
-| Deferred | 26 |
+| Imported | 56 |
+| Already present | 22 |
+| Deferred | 1 |
 
 Full catalog: `06_docs/shobie_1_20_arcane_recipe_catalog.csv`.
 
@@ -74,13 +75,16 @@ Full catalog: `06_docs/shobie_1_20_arcane_recipe_catalog.csv`.
 - `tube_oneway.json` -> `thaumcraft:tube_oneway`
 - `tube_restrict.json` -> `thaumcraft:tube_restrict`
 - `tube_valve.json` -> `thaumcraft:tube_valve`
+- `resonator.json` -> `thaumcraft:resonator`
+- `sanity_checker.json` -> `thaumcraft:sanity_checker`
+- `tube.json` -> `thaumcraft:tube_normal`
 - `turret_crossbow.json` -> `thaumcraft:turret_placer_basic`
 - `turret_crossbow_advanced.json` -> `thaumcraft:turret_placer_advanced`
 - `vis_battery.json` -> `thaumcraft:vis_battery`
 - `vis_generator.json` -> `thaumcraft:vis_generator`
 - `warded_jar.json` -> `thaumcraft:jar_normal`
 
-## Deferred Recipes
+## Already Present Or Deferred Recipes
 
 - `arcane_workbench.json` -> `thaumcraft:arcane_workbench`: already_has_recipe_for_result:research_bridge/arcane_workbench.json
 - `caster_basic.json` -> `thaumcraft:caster_basic`: already_has_recipe_for_result:caster_basic.json
@@ -95,8 +99,6 @@ Full catalog: `06_docs/shobie_1_20_arcane_recipe_catalog.csv`.
 - `morphic_resonator.json` -> `thaumcraft:morphic_resonator`: already_has_recipe_for_result:morphicresonator.json
 - `primal_charm.json` -> `thaumcraft:primal_charm`: unresolved_legacy_item:thaumcraft:balanced_shard
 - `research_table.json` -> `thaumcraft:research_table`: already_has_recipe_for_result:research_bridge/research_table.json
-- `resonator.json` -> `thaumcraft:vis_resonator`: already_has_recipe_for_result:vis_resonator.json
-- `sanity_checker.json` -> `thaumcraft:sanity_checker`: unmapped_thaumcraft_tag:thaumcraft:nuggets/brass
 - `scribing_tools.json` -> `thaumcraft:scribing_tools`: already_has_recipe_for_result:scribingtoolscraft2.json,scribingtoolsrefill.json,research_bridge/scribing_tools.json;unresolved_legacy_item:thaumcraft:shard_order
 - `smelter_basic.json` -> `thaumcraft:smelter_basic`: already_has_recipe_for_result:essentiasmelter.json,research_bridge/smelter_basic.json
 - `thaumium_axe.json` -> `thaumcraft:thaumium_axe`: already_has_recipe_for_result:thaumium_axe.json
@@ -105,38 +107,12 @@ Full catalog: `06_docs/shobie_1_20_arcane_recipe_catalog.csv`.
 - `thaumium_shovel.json` -> `thaumcraft:thaumium_shovel`: already_has_recipe_for_result:thaumium_shovel.json
 - `thaumium_sword.json` -> `thaumcraft:thaumium_sword`: already_has_recipe_for_result:thaumium_sword.json
 - `thaumometer.json` -> `thaumcraft:thaumometer`: already_has_recipe_for_result:thaumometer.json
-- `tube.json` -> `thaumcraft:tube_normal`: unresolved_legacy_item:thaumcraft:brass_nugget
 - `vis_resonator.json` -> `thaumcraft:vis_resonator`: already_has_recipe_for_result:vis_resonator.json
 - `workbench_charger.json` -> `thaumcraft:arcane_workbench_charger`: already_has_recipe_for_result:workbenchcharger.json
 
-## Deferred Reason Counts
+## Remaining Deferred Reason Counts
 
-- already_has_recipe_for_result:vis_resonator.json: 2
-- already_has_recipe_for_result:research_bridge/arcane_workbench.json: 1
-- already_has_recipe_for_result:caster_basic.json: 1
-- already_has_recipe_for_result:research_bridge/crucible.json: 1
-- already_has_recipe_for_result:enchantedfabric.json: 1
-- already_has_recipe_for_result:filter.json: 1
-- already_has_recipe_for_result:goggles.json: 1
-- already_has_recipe_for_result:infusionmatrix.json,research_bridge/infusion_matrix.json: 1
-- already_has_recipe_for_result:mechanism_complex.json: 1
-- already_has_recipe_for_result:mechanism_simple.json: 1
-- already_has_recipe_for_result:mirrorglass.json: 1
-- already_has_recipe_for_result:morphicresonator.json: 1
 - unresolved_legacy_item:thaumcraft:balanced_shard: 1
-- already_has_recipe_for_result:research_bridge/research_table.json: 1
-- unmapped_thaumcraft_tag:thaumcraft:nuggets/brass: 1
-- already_has_recipe_for_result:scribingtoolscraft2.json,scribingtoolsrefill.json,research_bridge/scribing_tools.json: 1
-- unresolved_legacy_item:thaumcraft:shard_order: 1
-- already_has_recipe_for_result:essentiasmelter.json,research_bridge/smelter_basic.json: 1
-- already_has_recipe_for_result:thaumium_axe.json: 1
-- already_has_recipe_for_result:thaumium_hoe.json: 1
-- already_has_recipe_for_result:thaumium_pick.json: 1
-- already_has_recipe_for_result:thaumium_shovel.json: 1
-- already_has_recipe_for_result:thaumium_sword.json: 1
-- already_has_recipe_for_result:thaumometer.json: 1
-- unresolved_legacy_item:thaumcraft:brass_nugget: 1
-- already_has_recipe_for_result:workbenchcharger.json: 1
 
 ## Notes
 

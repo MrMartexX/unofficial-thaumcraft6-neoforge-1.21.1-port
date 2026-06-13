@@ -155,6 +155,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.RARE_EARTH.get());
         acceptVisible(output, TCItems.FABRIC.get());
         acceptVisible(output, TCItems.VIS_RESONATOR.get());
+        acceptVisible(output, TCItems.RESONATOR.get());
         acceptVisible(output, TCItems.TALLOW.get());
         acceptVisible(output, TCItems.VOID_SEED.get());
         acceptVisible(output, TCItems.CANDLE_WHITE.get());

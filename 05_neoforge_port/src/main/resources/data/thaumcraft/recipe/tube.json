@@ -1,0 +1,29 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "TUBES",
+  "vis": 10,
+  "crystals": [],
+  "pattern": [
+    " Q ",
+    "IGI",
+    " B "
+  ],
+  "key": {
+    "Q": {
+      "tag": "c:nuggets/quicksilver"
+    },
+    "I": {
+      "tag": "c:plates/iron"
+    },
+    "G": {
+      "tag": "thaumcraft:legacy_ore_dictionary/block_glass"
+    },
+    "B": {
+      "tag": "c:nuggets/brass"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:tube_normal",
+    "count": 8
+  }
+}
