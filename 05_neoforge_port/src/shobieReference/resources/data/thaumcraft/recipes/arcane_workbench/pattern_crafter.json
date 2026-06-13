@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "ARCANEPATTERNCRAFTER",
+  "vis": 50,
+  "aspects": {
+    "terra": 1,
+    "aqua": 1,
+    "ordo": 1
+  },
+  "pattern": [
+    "VH ",
+    "GCG",
+    " W "
+  ],
+  "key": {
+    "V": {"item": "thaumcraft:vis_resonator"},
+    "H": {"item": "minecraft:hopper"},
+    "G": {"item": "thaumcraft:mechanism_simple"},
+    "C": {"tag": "forge:workbenches"},
+    "W": {"item": "thaumcraft:greatwood_planks"}
+  },
+  "result": {
+    "item": "thaumcraft:pattern_crafter"
+  }
+}

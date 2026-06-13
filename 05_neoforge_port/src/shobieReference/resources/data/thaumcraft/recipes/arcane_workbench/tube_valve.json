@@ -1,0 +1,16 @@
+{
+  "type": "thaumcraft:arcane_workbench_shapeless",
+  "research": "TUBES",
+  "vis": 10,
+  "ingredients": [
+    {
+      "item": "thaumcraft:tube_normal"
+    },
+    {
+      "item": "minecraft:lever"
+    }
+  ],
+  "result": {
+    "item": "thaumcraft:tube_valve"
+  }
+}

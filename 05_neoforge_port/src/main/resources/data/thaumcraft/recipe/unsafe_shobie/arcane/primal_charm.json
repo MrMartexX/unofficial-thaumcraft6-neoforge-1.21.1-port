@@ -1,0 +1,51 @@
+{
+  "type": "thaumcraft:arcane_shaped",
+  "research": "PRIMPEARL",
+  "vis": 75,
+  "crystals": [
+    {
+      "aspect": "aer",
+      "amount": 5
+    },
+    {
+      "aspect": "aqua",
+      "amount": 5
+    },
+    {
+      "aspect": "ignis",
+      "amount": 5
+    },
+    {
+      "aspect": "terra",
+      "amount": 5
+    },
+    {
+      "aspect": "ordo",
+      "amount": 5
+    },
+    {
+      "aspect": "perditio",
+      "amount": 5
+    }
+  ],
+  "pattern": [
+    "SAS",
+    "AGA",
+    "SAS"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumcraft:balanced_shard"
+    },
+    "A": {
+      "item": "thaumcraft:amber"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:primal_charm"
+  }
+}
+

@@ -1,0 +1,14 @@
+{
+  "type": "thaumcraft:crucible",
+  "ingredient": {
+    "item": "thaumcraft:tallow"
+  },
+  "result": {
+    "item": "thaumcraft:candle_white",
+    "count": 4
+  },
+  "aspects": {
+    "lux": 5
+  },
+  "research": "HEDGEALCHEMY@2"
+}

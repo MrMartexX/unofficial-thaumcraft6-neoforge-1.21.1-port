@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "VISBATTERY",
+  "vis": 50,
+  "aspects": {
+    "aer": 2,
+    "terra": 2,
+    "aqua": 2,
+    "ignis": 2,
+    "ordo": 2,
+    "perditio": 2
+  },
+  "pattern": [
+    "SSS",
+    "SRS",
+    "SSS"
+  ],
+  "key": {
+    "S": {"item": "thaumcraft:arcane_stone_slab"},
+    "R": {"item": "thaumcraft:vis_resonator"}
+  },
+  "result": {
+    "item": "thaumcraft:vis_battery"
+  }
+}

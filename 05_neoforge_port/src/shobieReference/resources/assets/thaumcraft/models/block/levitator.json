@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "thaumcraft:block/levitator_bottom",
+    "top": "thaumcraft:block/levitator_top_off",
+    "side": "thaumcraft:block/levitator_side_off"
+  }
+}

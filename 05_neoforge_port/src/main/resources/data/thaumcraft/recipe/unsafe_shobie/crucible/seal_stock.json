@@ -1,0 +1,16 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "SEALSTOCK",
+  "catalyst": {
+    "item": "thaumcraft:blank_seal"
+  },
+  "aspects": {
+    "cognitio": 10,
+    "desiderium": 10
+  },
+  "result": {
+    "id": "thaumcraft:blank_seal",
+    "count": 1
+  }
+}
+

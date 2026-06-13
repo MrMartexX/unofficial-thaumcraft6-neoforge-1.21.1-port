@@ -1,0 +1,29 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "INFUSIONBOOST",
+  "vis": 500,
+  "aspects": {
+    "aer": 1,
+    "aqua": 1,
+    "perditio": 1
+  },
+  "pattern": [
+    "SAS",
+    "AGA",
+    "SAS"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumcraft:arcane_stone"
+    },
+    "A": {
+      "item": "thaumcraft:alumentum"
+    },
+    "G": {
+      "item": "minecraft:diamond_block"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:matrix_cost"
+  }
+}

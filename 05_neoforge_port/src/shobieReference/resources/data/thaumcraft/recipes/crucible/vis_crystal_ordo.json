@@ -1,0 +1,15 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "BASEALCHEMY",
+  "catalyst": {
+    "tag": "forge:gems/quartz"
+  },
+  "aspects": {
+    "ordo": 2
+  },
+  "result": {
+    "item": "thaumcraft:vis_crystal_order",
+    "count": 1
+  },
+  "group": "thaumcraft:vis_crystal"
+}

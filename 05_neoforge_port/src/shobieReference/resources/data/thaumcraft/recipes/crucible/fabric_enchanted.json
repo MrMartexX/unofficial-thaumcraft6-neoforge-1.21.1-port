@@ -1,0 +1,14 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "BASEARTIFICE",
+  "catalyst": {
+    "tag": "forge:string"
+  },
+  "aspects": {
+    "praecantatio": 5,
+    "bestia": 3
+  },
+  "result": {
+    "item": "thaumcraft:enchanted_fabric"
+  }
+}

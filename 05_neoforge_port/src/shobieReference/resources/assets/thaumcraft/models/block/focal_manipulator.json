@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "thaumcraft:block/arcane_workbench_top",
+    "side": "thaumcraft:block/arcane_workbench_side"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "TUBES",
+  "vis": 50,
+  "pattern": [
+    "I I",
+    "INI",
+    " S "
+  ],
+  "key": {
+    "I": {
+      "item": "thaumcraft:plate_iron"
+    },
+    "N": {
+      "item": "minecraft:quartz"
+    },
+    "S": {
+      "tag": "forge:rods/wooden"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:resonator"
+  }
+}

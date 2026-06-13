@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "thaumcraft:eldritch_obelisk",
+  "step": "surface_structures"
+}

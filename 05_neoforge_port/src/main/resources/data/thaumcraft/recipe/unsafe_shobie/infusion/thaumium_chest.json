@@ -1,0 +1,37 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ARMORFORTRESS",
+  "instability": 1,
+  "central": {
+    "item": "minecraft:iron_chestplate"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    }
+  ],
+  "aspects": {
+    "metallum": 35,
+    "praecantatio": 15,
+    "praemunio": 25
+  },
+  "result": {
+    "id": "thaumcraft:thaumium_chest"
+  }
+}
+

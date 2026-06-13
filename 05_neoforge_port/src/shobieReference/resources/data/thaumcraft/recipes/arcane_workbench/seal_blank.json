@@ -1,0 +1,18 @@
+{
+  "type": "thaumcraft:arcane_workbench_shapeless",
+  "research": "CONTROLSEALS",
+  "vis": 20,
+  "aspects": {
+    "aer": 1
+  },
+  "ingredients": [
+    {"item": "minecraft:clay_ball"},
+    {"item": "thaumcraft:tallow"},
+    {"tag": "forge:dyes/red"},
+    {"tag": "thaumcraft:nitor"}
+  ],
+  "result": {
+    "item": "thaumcraft:blank_seal",
+    "count": 3
+  }
+}

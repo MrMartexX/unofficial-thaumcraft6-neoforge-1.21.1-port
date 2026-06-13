@@ -1,0 +1,17 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "SEALBREAK",
+  "catalyst": {
+    "item": "thaumcraft:blank_seal"
+  },
+  "aspects": {
+    "sensus": 10,
+    "cognitio": 10,
+    "instrumentum": 20
+  },
+  "result": {
+    "id": "thaumcraft:blank_seal",
+    "count": 1
+  }
+}
+

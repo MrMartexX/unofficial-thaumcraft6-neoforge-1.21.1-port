@@ -1,0 +1,24 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "POTIONSPRAYER",
+  "vis": 75,
+  "aspects": {
+    "aqua": 1,
+    "ignis": 1
+  },
+  "pattern": [
+    "BDB",
+    "IAI",
+    "ICI"
+  ],
+  "key": {
+    "B": {"tag": "thaumcraft:plates/brass"},
+    "D": {"item": "minecraft:dispenser"},
+    "I": {"tag": "thaumcraft:plates/iron"},
+    "A": {"item": "minecraft:brewing_stand"},
+    "C": {"item": "thaumcraft:alchemical_brass_block"}
+  },
+  "result": {
+    "item": "thaumcraft:potion_sprayer"
+  }
+}

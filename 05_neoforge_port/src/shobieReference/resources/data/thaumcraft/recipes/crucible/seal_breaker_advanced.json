@@ -1,0 +1,18 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "SEALBREAK",
+  "catalyst": {
+    "item": "thaumcraft:blank_seal",
+    "nbt": "{seal:\"thaumcraft:breaker\"}"
+  },
+  "aspects": {
+    "sensus": 10,
+    "cognitio": 10,
+    "instrumentum": 20
+  },
+  "result": {
+    "item": "thaumcraft:blank_seal",
+    "count": 1,
+    "nbt": "{seal:\"thaumcraft:breaker_advanced\"}"
+  }
+}

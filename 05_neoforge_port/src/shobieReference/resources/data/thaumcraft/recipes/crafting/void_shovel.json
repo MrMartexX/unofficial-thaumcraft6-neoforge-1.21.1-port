@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I",
+    "S",
+    "S"
+  ],
+  "key": {
+    "I": {"item": "thaumcraft:void_metal_ingot"},
+    "S": {"tag": "forge:rods/wooden"}
+  },
+  "result": {
+    "item": "thaumcraft:void_shovel",
+    "count": 1
+  }
+}

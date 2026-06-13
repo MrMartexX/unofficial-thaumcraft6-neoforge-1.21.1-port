@@ -1,0 +1,30 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "GOLEMVISION",
+  "instability": 2,
+  "central": {
+    "item": "thaumcraft:brain_clockwork"
+  },
+  "components": [
+    {
+      "item": "minecraft:ender_eye"
+    },
+    {
+      "item": "minecraft:spyglass"
+    },
+    {
+      "item": "thaumcraft:quicksilver"
+    },
+    {
+      "item": "thaumcraft:amber"
+    }
+  ],
+  "aspects": {
+    "sensus": 40,
+    "praecantatio": 10
+  },
+  "result": {
+    "id": "thaumcraft:golem_module_vision"
+  }
+}
+

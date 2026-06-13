@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "GRAPPLEGUN",
+  "vis": 25,
+  "crystals": {
+    "aqua": 1
+  },
+  "pattern": [
+    "SHS",
+    "SGS",
+    "SSS"
+  ],
+  "key": {
+    "S": {"tag": "forge:string"},
+    "H": {"item": "minecraft:tripwire_hook"},
+    "G": {"item": "thaumcraft:mechanism_simple"}
+  },
+  "result": {
+    "item": "thaumcraft:grapple_gun_spool"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "INFERNALFURNACE",
+  "instability": 3,
+  "central": {
+    "item": "minecraft:blast_furnace"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:crystal_ignis"
+    },
+    {
+      "item": "thaumcraft:crystal_ignis"
+    },
+    {
+      "item": "thaumcraft:crystal_ignis"
+    },
+    {
+      "item": "thaumcraft:crystal_ignis"
+    },
+    {
+      "item": "minecraft:nether_brick"
+    },
+    {
+      "item": "minecraft:nether_brick"
+    }
+  ],
+  "aspects": {
+    "ignis": 50,
+    "fabrico": 30,
+    "praecantatio": 20
+  },
+  "result": {
+    "id": "thaumcraft:infernal_furnace"
+  }
+}
+

@@ -1,0 +1,37 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "GRAPPLEGUN",
+  "instability": 3,
+  "central": {
+    "item": "minecraft:crossbow"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:mechanism_complex"
+    },
+    {
+      "item": "thaumcraft:mechanism_complex"
+    },
+    {
+      "item": "thaumcraft:crystal_aer"
+    },
+    {
+      "item": "thaumcraft:crystal_aer"
+    },
+    {
+      "item": "minecraft:string"
+    },
+    {
+      "item": "minecraft:string"
+    }
+  ],
+  "aspects": {
+    "aer": 40,
+    "motus": 40,
+    "machina": 30
+  },
+  "result": {
+    "id": "thaumcraft:grapple_gun"
+  }
+}
+

@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "RIFTCLOSER",
+  "instability": 8,
+  "aspects": {
+    "alienis": 50,
+    "vitium": 50
+  },
+  "input": {
+    "item": "minecraft:tnt"
+  },
+  "ingredients": [
+    {"item": "thaumcraft:morphic_resonator"},
+    {"item": "minecraft:redstone_block"},
+    {"item": "thaumcraft:alumentum"},
+    {"tag": "thaumcraft:nitor"},
+    {"item": "thaumcraft:vis_resonator"},
+    {"item": "minecraft:redstone_block"},
+    {"item": "thaumcraft:alumentum"},
+    {"tag": "thaumcraft:nitor"}
+  ],
+  "result": {
+    "item": "thaumcraft:causality_collapser"
+  }
+}

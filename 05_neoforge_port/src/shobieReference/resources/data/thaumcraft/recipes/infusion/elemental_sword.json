@@ -1,0 +1,24 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ELEMENTALTOOLS",
+  "instability": 3,
+  "input": {
+    "item": "thaumcraft:thaumium_sword"
+  },
+  "ingredients": [
+    { "item": "thaumcraft:shard_fire" },
+    { "item": "thaumcraft:shard_fire" },
+    { "item": "thaumcraft:shard_entropy" },
+    { "item": "thaumcraft:shard_entropy" },
+    { "item": "minecraft:blaze_powder" },
+    { "item": "minecraft:blaze_powder" }
+  ],
+  "aspects": {
+    "ignis": 30,
+    "perditio": 30,
+    "aversio": 20
+  },
+  "result": {
+    "item": "thaumcraft:elemental_sword"
+  }
+}

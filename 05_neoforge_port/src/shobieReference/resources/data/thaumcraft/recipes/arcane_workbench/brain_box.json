@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "THAUMATORIUM",
+  "vis": 50,
+  "aspects": {
+    "terra": 1,
+    "ordo": 1
+  },
+  "pattern": [
+    "IAI",
+    "ABA",
+    "IAI"
+  ],
+  "key": {
+    "I": {"tag": "thaumcraft:plates/iron"},
+    "A": {"tag": "forge:gems/amber"},
+    "B": {"item": "thaumcraft:brain_clockwork"}
+  },
+  "result": {
+    "item": "thaumcraft:brain_box"
+  }
+}

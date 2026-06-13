@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "UNLOCKARTIFICE",
+  "vis": 50,
+  "crystals": {},
+  "pattern": [
+    "LGL",
+    "L L",
+    "TGT"
+  ],
+  "key": {
+    "T": {
+      "item": "thaumcraft:thaumometer"
+    },
+    "G": {
+      "tag": "forge:ingots/brass"
+    },
+    "L": {
+      "tag": "forge:leather"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:goggles"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "FOCUSADVANCED",
+  "vis": 100,
+  "crystals": {
+    "aer": 3,
+    "aqua": 3,
+    "ignis": 3,
+    "terra": 3,
+    "ordo": 3,
+    "perditio": 3
+  },
+  "pattern": [
+    "TGT",
+    "TCT",
+    "T T"
+  ],
+  "key": {
+    "T": {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    "G": {
+      "item": "thaumcraft:vis_resonator"
+    },
+    "C": {
+      "item": "thaumcraft:caster_basic"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:caster_advanced"
+  }
+}

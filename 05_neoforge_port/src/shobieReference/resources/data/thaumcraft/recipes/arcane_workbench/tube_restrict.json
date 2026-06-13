@@ -1,0 +1,16 @@
+{
+  "type": "thaumcraft:arcane_workbench_shapeless",
+  "research": "TUBES",
+  "vis": 10,
+  "crystals": {
+    "terra": 1
+  },
+  "ingredients": [
+    {
+      "item": "thaumcraft:tube_normal"
+    }
+  ],
+  "result": {
+    "item": "thaumcraft:tube_restricted"
+  }
+}

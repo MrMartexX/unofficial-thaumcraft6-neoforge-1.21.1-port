@@ -1,0 +1,32 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "VOIDROBEARMOR",
+  "instability": 4,
+  "central": {
+    "item": "thaumcraft:thaumium_pick"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:void_metal_ingot"
+    },
+    {
+      "item": "thaumcraft:void_metal_ingot"
+    },
+    {
+      "item": "thaumcraft:void_metal_ingot"
+    },
+    {
+      "item": "thaumcraft:void_seed"
+    }
+  ],
+  "aspects": {
+    "alienis": 20,
+    "vacuos": 15,
+    "instrumentum": 20,
+    "tenebrae": 10
+  },
+  "result": {
+    "id": "thaumcraft:void_pick"
+  }
+}
+

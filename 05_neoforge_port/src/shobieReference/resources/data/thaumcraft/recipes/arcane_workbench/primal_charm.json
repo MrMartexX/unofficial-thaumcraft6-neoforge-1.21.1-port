@@ -1,0 +1,32 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "PRIMPEARL",
+  "vis": 75,
+  "crystals": {
+    "aer": 5,
+    "aqua": 5,
+    "ignis": 5,
+    "terra": 5,
+    "ordo": 5,
+    "perditio": 5
+  },
+  "pattern": [
+    "SAS",
+    "AGA",
+    "SAS"
+  ],
+  "key": {
+    "S": {
+      "item": "thaumcraft:balanced_shard"
+    },
+    "A": {
+      "item": "thaumcraft:amber"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:primal_charm"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "WARP",
+  "vis": 20,
+  "aspects": {
+    "ordo": 1,
+    "perditio": 1
+  },
+  "pattern": [
+    "BN ",
+    "M N",
+    "BN "
+  ],
+  "key": {
+    "B": {
+      "item": "thaumcraft:zombie_brain"
+    },
+    "N": {
+      "tag": "thaumcraft:nuggets/brass"
+    },
+    "M": {
+      "item": "thaumcraft:mirrored_glass"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:sanity_checker"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "FLUXCLEANUP",
+  "vis": 100,
+  "crystals": {
+    "terra": 3,
+    "aer": 3
+  },
+  "pattern": [
+    "QTQ",
+    "QFQ",
+    "QTQ"
+  ],
+  "key": {
+    "Q": {
+      "tag": "forge:gems/quartz"
+    },
+    "T": {
+      "item": "thaumcraft:plate_thaumium"
+    },
+    "F": {
+      "item": "thaumcraft:filter"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:condenser_lattice"
+  }
+}

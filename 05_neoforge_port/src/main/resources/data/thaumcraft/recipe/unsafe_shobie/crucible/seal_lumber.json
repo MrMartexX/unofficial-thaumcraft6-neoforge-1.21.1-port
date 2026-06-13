@@ -1,0 +1,16 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "SEALLUMBER",
+  "catalyst": {
+    "item": "thaumcraft:blank_seal"
+  },
+  "aspects": {
+    "herba": 40,
+    "sensus": 20
+  },
+  "result": {
+    "id": "thaumcraft:blank_seal",
+    "count": 1
+  }
+}
+

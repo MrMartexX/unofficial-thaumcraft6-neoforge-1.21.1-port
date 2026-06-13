@@ -1,0 +1,71 @@
+package thaumcraft.common.blocks.world.plants;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SaplingBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+
+import javax.annotation.Nullable;
+
+/**
+ * Sapling blocks for greatwood and silverwood trees.
+ */
+public class BlockSaplingTC extends SaplingBlock {
+
+    public BlockSaplingTC(AbstractTreeGrower treeGrower, Properties properties) {
+        super(treeGrower, properties);
+    }
+
+    /**
+     * Creates greatwood sapling.
+     */
+    public static BlockSaplingTC createGreatwood() {
+        return new BlockSaplingTC(
+                new AbstractTreeGrower() {
+                    @Nullable
+                    @Override
+                    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource random, boolean hasFlowers) {
+                        // TODO: Return greatwood tree feature when implemented
+                        return null;
+                    }
+                },
+                BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.PLANT)
+                        .noCollission()
+                        .randomTicks()
+                        .instabreak()
+                        .sound(SoundType.GRASS));
+    }
+
+    /**
+     * Creates silverwood sapling.
+     */
+    public static BlockSaplingTC createSilverwood() {
+        return new BlockSaplingTC(
+                new AbstractTreeGrower() {
+                    @Nullable
+                    @Override
+                    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource random, boolean hasFlowers) {
+                        // TODO: Return silverwood tree feature when implemented
+                        return null;
+                    }
+                },
+                BlockBehaviour.Properties.of()
+                        .mapColor(MapColor.QUARTZ)
+                        .noCollission()
+                        .randomTicks()
+                        .instabreak()
+                        .sound(SoundType.GRASS)
+                        .lightLevel(state -> 5));
+    }
+}

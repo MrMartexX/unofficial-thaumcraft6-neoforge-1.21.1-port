@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {"item": "minecraft:quartz"}
+  ],
+  "result": {
+    "item": "thaumcraft:quartz_nugget",
+    "count": 9
+  }
+}

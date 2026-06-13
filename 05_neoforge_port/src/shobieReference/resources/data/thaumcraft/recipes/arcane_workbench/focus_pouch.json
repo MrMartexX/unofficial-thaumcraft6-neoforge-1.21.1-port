@@ -1,0 +1,24 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "FOCUSPOUCH",
+  "vis": 25,
+  "pattern": [
+    "LGL",
+    "LBL",
+    "LLL"
+  ],
+  "key": {
+    "L": {
+      "tag": "forge:leather"
+    },
+    "G": {
+      "tag": "forge:ingots/gold"
+    },
+    "B": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:focus_pouch"
+  }
+}

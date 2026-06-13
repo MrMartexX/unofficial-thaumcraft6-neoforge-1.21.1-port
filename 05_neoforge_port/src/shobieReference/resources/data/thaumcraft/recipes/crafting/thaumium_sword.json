@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I",
+    "I",
+    "S"
+  ],
+  "key": {
+    "I": {"item": "thaumcraft:thaumium_ingot"},
+    "S": {"tag": "forge:rods/wooden"}
+  },
+  "result": {
+    "item": "thaumcraft:thaumium_sword",
+    "count": 1
+  }
+}

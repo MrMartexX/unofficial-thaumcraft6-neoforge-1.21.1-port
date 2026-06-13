@@ -1,0 +1,20 @@
+{
+  "type": "thaumcraft:arcane_workbench_shapeless",
+  "research": "UNLOCKAUROMANCY",
+  "vis": 50,
+  "crystals": {
+    "aer": 1,
+    "aqua": 1
+  },
+  "ingredients": [
+    {
+      "item": "thaumcraft:plate_iron"
+    },
+    {
+      "tag": "forge:gems/quartz"
+    }
+  ],
+  "result": {
+    "item": "thaumcraft:vis_resonator"
+  }
+}

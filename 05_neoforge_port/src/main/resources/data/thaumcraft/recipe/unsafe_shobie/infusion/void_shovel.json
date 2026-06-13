@@ -1,0 +1,26 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "VOIDROBEARMOR",
+  "instability": 3,
+  "central": {
+    "item": "thaumcraft:thaumium_shovel"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:void_metal_ingot"
+    },
+    {
+      "item": "thaumcraft:void_seed"
+    }
+  ],
+  "aspects": {
+    "alienis": 15,
+    "vacuos": 10,
+    "instrumentum": 15,
+    "tenebrae": 8
+  },
+  "result": {
+    "id": "thaumcraft:void_shovel"
+  }
+}
+

@@ -1,0 +1,20 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "GRAPPLEGUN",
+  "vis": 25,
+  "crystals": {
+    "terra": 1
+  },
+  "pattern": [
+    " I ",
+    "IMI",
+    " I "
+  ],
+  "key": {
+    "I": {"tag": "forge:ingots/iron"},
+    "M": {"item": "thaumcraft:mechanism_simple"}
+  },
+  "result": {
+    "item": "thaumcraft:grapple_gun_tip"
+  }
+}

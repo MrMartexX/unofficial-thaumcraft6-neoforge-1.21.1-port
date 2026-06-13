@@ -1,0 +1,19 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "MINDBIOTHAUMIC",
+  "instability": 4,
+  "aspects": {
+    "cognitio": 50,
+    "machina": 25
+  },
+  "input": {
+    "item": "thaumcraft:brain_clockwork"
+  },
+  "ingredients": [
+    {"item": "thaumcraft:zombie_brain"},
+    {"item": "thaumcraft:mechanism_complex"}
+  ],
+  "result": {
+    "item": "thaumcraft:brain_curious"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "INFUSIONSTABLE",
+  "instability": 3,
+  "central": {
+    "item": "thaumcraft:pedestal_arcane"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:crystal_ordo"
+    },
+    {
+      "item": "thaumcraft:crystal_ordo"
+    },
+    {
+      "item": "thaumcraft:crystal_ordo"
+    },
+    {
+      "item": "thaumcraft:crystal_ordo"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  ],
+  "aspects": {
+    "ordo": 50,
+    "praecantatio": 30,
+    "machina": 20
+  },
+  "result": {
+    "id": "thaumcraft:stabilizer"
+  }
+}
+

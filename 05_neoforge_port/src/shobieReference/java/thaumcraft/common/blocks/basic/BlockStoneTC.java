@@ -1,0 +1,77 @@
+package thaumcraft.common.blocks.basic;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.MapColor;
+import thaumcraft.common.blocks.BlockTC;
+
+/**
+ * Stone blocks used in Thaumcraft structures.
+ * Includes arcane stone, ancient stone, eldritch tile, etc.
+ */
+public class BlockStoneTC extends BlockTC {
+
+    private final boolean canSpawnMobs;
+
+    public BlockStoneTC(Properties properties, boolean canSpawnMobs) {
+        super(properties);
+        this.canSpawnMobs = canSpawnMobs;
+    }
+
+    /**
+     * Creates a standard arcane/ancient stone block.
+     */
+    public static BlockStoneTC create(boolean canSpawnMobs) {
+        return new BlockStoneTC(
+            Properties.of()
+                .mapColor(MapColor.STONE)
+                .strength(2.0f, 10.0f)
+                .sound(SoundType.STONE)
+                .requiresCorrectToolForDrops(),
+            canSpawnMobs
+        );
+    }
+
+    /**
+     * Creates an unbreakable stone block (like ancient rock).
+     */
+    public static BlockStoneTC createUnbreakable() {
+        return new BlockStoneTC(
+            Properties.of()
+                .mapColor(MapColor.STONE)
+                .strength(-1.0f, 3600000.0f)
+                .sound(SoundType.STONE)
+                .noLootTable(),
+            false
+        );
+    }
+
+    /**
+     * Creates a reinforced stone block (like eldritch tile).
+     */
+    public static BlockStoneTC createReinforced() {
+        return new BlockStoneTC(
+            Properties.of()
+                .mapColor(MapColor.STONE)
+                .strength(15.0f, 1000.0f)
+                .sound(SoundType.STONE)
+                .requiresCorrectToolForDrops(),
+            true
+        );
+    }
+
+    @Override
+    public boolean isValidSpawn(BlockState state, BlockGetter level, BlockPos pos, 
+                                net.minecraft.world.entity.SpawnPlacements.Type type, 
+                                net.minecraft.world.entity.EntityType<?> entityType) {
+        return canSpawnMobs;
+    }
+
+    /**
+     * This block can be used as a beacon base.
+     */
+    // In 1.20.1, beacon base is determined by tags, but we can override for custom behavior
+}

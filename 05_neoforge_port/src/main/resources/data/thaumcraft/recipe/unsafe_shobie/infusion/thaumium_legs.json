@@ -1,0 +1,34 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ARMORFORTRESS",
+  "instability": 1,
+  "central": {
+    "item": "minecraft:iron_leggings"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    {
+      "item": "thaumcraft:thaumium_ingot"
+    }
+  ],
+  "aspects": {
+    "metallum": 30,
+    "praecantatio": 12,
+    "praemunio": 20
+  },
+  "result": {
+    "id": "thaumcraft:thaumium_legs"
+  }
+}
+

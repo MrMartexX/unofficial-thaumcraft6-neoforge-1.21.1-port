@@ -1,0 +1,24 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "CHARMUNDYING",
+  "instability": 4,
+  "input": {
+    "item": "minecraft:totem_of_undying"
+  },
+  "ingredients": [
+    { "item": "thaumcraft:void_seed" },
+    { "item": "thaumcraft:void_seed" },
+    { "item": "thaumcraft:shard_order" },
+    { "item": "thaumcraft:shard_order" },
+    { "item": "minecraft:golden_apple" },
+    { "item": "minecraft:golden_apple" }
+  ],
+  "aspects": {
+    "victus": 50,
+    "praemunio": 30,
+    "vacuos": 30
+  },
+  "result": {
+    "item": "thaumcraft:charm_undying"
+  }
+}

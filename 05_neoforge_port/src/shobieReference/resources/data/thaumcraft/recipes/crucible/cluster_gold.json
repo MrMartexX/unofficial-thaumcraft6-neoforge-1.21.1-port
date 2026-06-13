@@ -1,0 +1,14 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "METALPURIFICATION",
+  "catalyst": {
+    "tag": "forge:ores/gold"
+  },
+  "aspects": {
+    "metallum": 5,
+    "ordo": 5
+  },
+  "result": {
+    "item": "thaumcraft:cluster_gold"
+  }
+}

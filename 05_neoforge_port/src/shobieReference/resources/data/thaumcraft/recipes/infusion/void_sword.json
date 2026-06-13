@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "VOIDROBEARMOR",
+  "instability": 4,
+  "input": {
+    "item": "thaumcraft:thaumium_sword"
+  },
+  "ingredients": [
+    { "item": "thaumcraft:void_metal_ingot" },
+    { "item": "thaumcraft:void_metal_ingot" },
+    { "item": "thaumcraft:void_seed" }
+  ],
+  "aspects": {
+    "alienis": 20,
+    "vacuos": 15,
+    "aversio": 25,
+    "tenebrae": 10
+  },
+  "result": {
+    "item": "thaumcraft:void_sword"
+  }
+}

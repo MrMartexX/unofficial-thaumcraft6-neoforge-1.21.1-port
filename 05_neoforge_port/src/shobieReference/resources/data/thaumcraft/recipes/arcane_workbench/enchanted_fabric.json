@@ -1,0 +1,22 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "UNLOCKINFUSION",
+  "vis": 5,
+  "crystals": {},
+  "pattern": [
+    " S ",
+    "SCS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "tag": "forge:string"
+    },
+    "C": {
+      "tag": "minecraft:wool"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:enchanted_fabric"
+  }
+}

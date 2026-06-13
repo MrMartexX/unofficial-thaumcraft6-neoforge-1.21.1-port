@@ -1,0 +1,35 @@
+{
+  "type": "thaumcraft:arcane_workbench_shaped",
+  "research": "FLUXCLEANUP",
+  "vis": 500,
+  "crystals": {
+    "aer": 5,
+    "aqua": 5,
+    "perditio": 5
+  },
+  "pattern": [
+    "BCB",
+    "WMW",
+    "BTB"
+  ],
+  "key": {
+    "B": {
+      "item": "thaumcraft:plate_brass"
+    },
+    "C": {
+      "item": "thaumcraft:morphic_resonator"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "M": {
+      "item": "thaumcraft:mechanism_complex"
+    },
+    "T": {
+      "item": "thaumcraft:tube_normal"
+    }
+  },
+  "result": {
+    "item": "thaumcraft:condenser"
+  }
+}

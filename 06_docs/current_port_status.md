@@ -179,14 +179,28 @@ Do not implement or expand aura, research, arcane crafting, crucible, infusion, 
 
 ## Shobie 1.20.1 merge closure
 
-The experimental Shobie merge branch has exhausted the safe bulk-merge surface:
-damage types, tag compatibility, all vanilla recipe rows, 56 arcane rows, 41
-crucible rows and 38 infusion rows are imported or confirmed through current
-1.21 ids/serializers. Remaining Shobie material is reference/deferred only:
-seal/NBT/DataComponent variant recipes, Shobie recipes that conflict with
-confirmed TC6 legacy semantics, worldgen/biome modifiers, old plural loot table
-paths, and Forge 1.20.1 Java. The next work should be a focused behavior
-subsystem with parity validation, not another broad copy pass.
+The experimental Shobie merge branch has exhausted the safe bulk-merge surface
+and now also contains a separate unsafe full-merge pass. Safe runtime data still
+uses current 1.21 ids/serializers. The unsafe pass adds the final 39 Shobie
+recipe rows under `data/thaumcraft/recipe/unsafe_shobie/` without overwriting
+the legacy-correct recipe ids, and copies the full Shobie source/resource corpus
+to `05_neoforge_port/src/shobieReference/` as non-compiled reference content.
+
+Unsafe import boundaries:
+- Seal/NBT/DataComponent variant recipes are flattened to `blank_seal` in the
+  active unsafe recipe layer and remain behavior-incomplete until seal
+  DataComponents exist.
+- Shobie Java, worldgen, biome modifiers, old plural loot tables and raw 1.20
+  datapack/resource paths are reference-only.
+- Validation after the unsafe pass: `build` passes; server reload loaded 1572
+  recipes, generated 623 aspect-cache assignments, and kept research references
+  at 0 unresolved; client smoke produced no ERROR/FATAL/missing-model/missing-
+  texture matches.
+
+The next productive work is still a focused behavior subsystem with parity
+validation: real crucible, real infusion matrix/pedestals, seal DataComponents,
+variant equipment/curio behavior, or worldgen. Do not mass-copy Shobie Java into
+active source.
 
 ## Immediate next work
 
