@@ -1,8 +1,6 @@
 package thaumcraft.common.registry;
 
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
 /**
@@ -76,7 +74,27 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.METAL_BRASS.get());
         acceptVisible(output, TCItems.METAL_THAUMIUM.get());
         acceptVisible(output, TCItems.METAL_VOID.get());
+
+        addNitorVariants(output);
+    }
+
+    private static void addNitorVariants(CreativeModeTab.Output output) {
+        acceptVisible(output, TCItems.NITOR_BLACK.get());
+        acceptVisible(output, TCItems.NITOR_BLUE.get());
+        acceptVisible(output, TCItems.NITOR_BROWN.get());
+        acceptVisible(output, TCItems.NITOR_CYAN.get());
+        acceptVisible(output, TCItems.NITOR_GRAY.get());
+        acceptVisible(output, TCItems.NITOR_GREEN.get());
         acceptVisible(output, TCItems.NITOR_YELLOW.get());
+        acceptVisible(output, TCItems.NITOR_LIGHTBLUE.get());
+        acceptVisible(output, TCItems.NITOR_LIME.get());
+        acceptVisible(output, TCItems.NITOR_MAGENTA.get());
+        acceptVisible(output, TCItems.NITOR_ORANGE.get());
+        acceptVisible(output, TCItems.NITOR_PINK.get());
+        acceptVisible(output, TCItems.NITOR_PURPLE.get());
+        acceptVisible(output, TCItems.NITOR_RED.get());
+        acceptVisible(output, TCItems.NITOR_SILVER.get());
+        acceptVisible(output, TCItems.NITOR_WHITE.get());
     }
 
     private static void addDeviceAndCraftingBlocks(CreativeModeTab.Output output) {
@@ -220,16 +238,6 @@ public final class TCCreativeTabOrder {
     }
 
     private static void acceptVisible(CreativeModeTab.Output output, ItemLike item) {
-        if (item.asItem() == Items.ENCHANTED_BOOK) {
-            return;
-        }
         output.accept(item);
-    }
-
-    private static void acceptVisible(CreativeModeTab.Output output, ItemStack stack) {
-        if (stack.is(Items.ENCHANTED_BOOK)) {
-            return;
-        }
-        output.accept(stack);
     }
 }
