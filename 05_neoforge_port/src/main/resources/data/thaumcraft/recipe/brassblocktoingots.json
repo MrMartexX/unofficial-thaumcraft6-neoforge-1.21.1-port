@@ -1,13 +1,14 @@
 {
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
+  "group": "thaumcraft_brass_block_unpacking",
   "ingredients": [
     {
       "item": "thaumcraft:metal_brass"
     }
   ],
   "result": {
-    "count": 1,
-    "id": "thaumcraft:brass_ingot"
+    "id": "thaumcraft:brass_ingot",
+    "count": 9
   }
 }
