@@ -1,4 +1,4 @@
-package thaumcraft.common.registry;
+﻿package thaumcraft.common.registry;
 
 import java.util.function.Supplier;
 import net.minecraft.world.level.block.Block;
@@ -77,6 +77,23 @@ public final class TCBlocks {
     public static final Supplier<Block> NITOR_RED = BLOCKS.register("nitor_red", () -> nitorBlock(14));
     public static final Supplier<Block> NITOR_SILVER = BLOCKS.register("nitor_silver", () -> nitorBlock(14));
     public static final Supplier<Block> NITOR_WHITE = BLOCKS.register("nitor_white", () -> nitorBlock(14));
+    public static final Supplier<Block> TALLOW_CANDLE = BLOCKS.register("tallow_candle", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_BLACK = BLOCKS.register("tallow_candle_black", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_BLUE = BLOCKS.register("tallow_candle_blue", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_BROWN = BLOCKS.register("tallow_candle_brown", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_CYAN = BLOCKS.register("tallow_candle_cyan", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_GRAY = BLOCKS.register("tallow_candle_gray", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_GREEN = BLOCKS.register("tallow_candle_green", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_LIGHTBLUE = BLOCKS.register("tallow_candle_lightblue", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_LIME = BLOCKS.register("tallow_candle_lime", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_MAGENTA = BLOCKS.register("tallow_candle_magenta", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_ORANGE = BLOCKS.register("tallow_candle_orange", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_PINK = BLOCKS.register("tallow_candle_pink", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_PURPLE = BLOCKS.register("tallow_candle_purple", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_RED = BLOCKS.register("tallow_candle_red", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_SILVER = BLOCKS.register("tallow_candle_silver", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_WHITE = BLOCKS.register("tallow_candle_white", () -> tallowCandleBlock(10));
+    public static final Supplier<Block> TALLOW_CANDLE_YELLOW = BLOCKS.register("tallow_candle_yellow", () -> tallowCandleBlock(10));
 
     public static final Supplier<Block> TABLE_WOOD = BLOCKS.register("table_wood", () -> tableBlock(true));
     public static final Supplier<Block> TABLE_STONE = BLOCKS.register("table_stone", () -> tableBlock(false));
@@ -194,6 +211,13 @@ public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_build
                 .noOcclusion());
     }
 
+    private static Block tallowCandleBlock(int lightLevel) {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.CANDLE)
+                .strength(0.1F, 0.1F)
+                .noOcclusion()
+                .lightLevel(state -> lightLevel));
+    }
+
     private static Block amberBlock() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                 .strength(0.5F, 2.0F)
@@ -275,3 +299,5 @@ public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_build
     private TCBlocks() {
     }
 }
+
+

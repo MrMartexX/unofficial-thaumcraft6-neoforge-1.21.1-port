@@ -1,4 +1,4 @@
-package thaumcraft.common.registry;
+﻿package thaumcraft.common.registry;
 
 import java.util.function.Supplier;
 import net.minecraft.world.item.AxeItem;
@@ -78,6 +78,23 @@ public final class TCItems {
     public static final Supplier<BlockItem> NITOR_RED = blockItem("nitor_red", TCBlocks.NITOR_RED);
     public static final Supplier<BlockItem> NITOR_SILVER = blockItem("nitor_silver", TCBlocks.NITOR_SILVER);
     public static final Supplier<BlockItem> NITOR_WHITE = blockItem("nitor_white", TCBlocks.NITOR_WHITE);
+    public static final Supplier<BlockItem> TALLOW_CANDLE = blockItem("tallow_candle", TCBlocks.TALLOW_CANDLE);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_BLACK = blockItem("tallow_candle_black", TCBlocks.TALLOW_CANDLE_BLACK);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_BLUE = blockItem("tallow_candle_blue", TCBlocks.TALLOW_CANDLE_BLUE);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_BROWN = blockItem("tallow_candle_brown", TCBlocks.TALLOW_CANDLE_BROWN);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_CYAN = blockItem("tallow_candle_cyan", TCBlocks.TALLOW_CANDLE_CYAN);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_GRAY = blockItem("tallow_candle_gray", TCBlocks.TALLOW_CANDLE_GRAY);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_GREEN = blockItem("tallow_candle_green", TCBlocks.TALLOW_CANDLE_GREEN);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_LIGHTBLUE = blockItem("tallow_candle_lightblue", TCBlocks.TALLOW_CANDLE_LIGHTBLUE);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_LIME = blockItem("tallow_candle_lime", TCBlocks.TALLOW_CANDLE_LIME);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_MAGENTA = blockItem("tallow_candle_magenta", TCBlocks.TALLOW_CANDLE_MAGENTA);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_ORANGE = blockItem("tallow_candle_orange", TCBlocks.TALLOW_CANDLE_ORANGE);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_PINK = blockItem("tallow_candle_pink", TCBlocks.TALLOW_CANDLE_PINK);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_PURPLE = blockItem("tallow_candle_purple", TCBlocks.TALLOW_CANDLE_PURPLE);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_RED = blockItem("tallow_candle_red", TCBlocks.TALLOW_CANDLE_RED);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_SILVER = blockItem("tallow_candle_silver", TCBlocks.TALLOW_CANDLE_SILVER);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_WHITE = blockItem("tallow_candle_white", TCBlocks.TALLOW_CANDLE_WHITE);
+    public static final Supplier<BlockItem> TALLOW_CANDLE_YELLOW = blockItem("tallow_candle_yellow", TCBlocks.TALLOW_CANDLE_YELLOW);
     public static final Supplier<BlockItem> TABLE_WOOD = blockItem("table_wood", TCBlocks.TABLE_WOOD);
     public static final Supplier<BlockItem> TABLE_STONE = blockItem("table_stone", TCBlocks.TABLE_STONE);
     public static final Supplier<BlockItem> ARCANE_WORKBENCH = blockItem("arcane_workbench", TCBlocks.ARCANE_WORKBENCH);
@@ -318,3 +335,4 @@ public final class TCItems {
     private TCItems() {
     }
 }
+

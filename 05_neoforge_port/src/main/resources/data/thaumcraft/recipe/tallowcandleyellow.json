@@ -1,0 +1,17 @@
+﻿{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "thaumcraft_tallow_candle_dye",
+  "ingredients": [
+    {
+      "tag": "thaumcraft:tallow_candles"
+    },
+    {
+      "item": "minecraft:yellow_dye"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:tallow_candle_yellow"
+  }
+}
