@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "S": {
+      "item": "minecraft:stone"
+    },
+    "V": {
+      "item": "thaumcraft:vis_resonator"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "SVS",
+    "SSS"
+  ],
+  "result": {
+    "count": 8,
+    "id": "thaumcraft:stone_arcane"
+  }
+}
