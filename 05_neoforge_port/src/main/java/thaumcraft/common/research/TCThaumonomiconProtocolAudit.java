@@ -33,8 +33,24 @@ final class TCThaumonomiconProtocolAudit {
             writer.write("- Entry views inspected: `" + report.entryViewsInspected() + "`\n");
             writer.write("- Bookmarks inspected: `" + report.bookmarksInspected() + "`\n");
             writer.write("- Pages inspected: `" + report.pagesInspected() + "`\n");
+            writer.write("- Ready crafting catalog entries: `" + report.readyCraftingEntries() + "`\n");
+            writer.write("- Deferred crafting catalog entries: `" + report.deferredCraftingCatalogEntries().size() + "`\n");
+            writer.write("- Ready arcane catalog entries: `" + report.readyArcaneEntries() + "`\n");
+            writer.write("- Deferred arcane catalog entries: `" + report.deferredArcaneCatalogEntries().size() + "`\n");
+            writeDeferredList(writer, "Deferred crafting catalog ids", report.deferredCraftingCatalogEntries());
+            writeDeferredList(writer, "Deferred arcane catalog ids", report.deferredArcaneCatalogEntries());
         }
         return report;
+    }
+
+    private static void writeDeferredList(BufferedWriter writer, String title, List<String> ids) throws IOException {
+        if (ids.isEmpty()) {
+            return;
+        }
+        writer.write("\n## " + title + "\n\n");
+        for (String id : ids) {
+            writer.write("- `" + id + "`\n");
+        }
     }
 
     static Report buildReport(ServerPlayer player) {
@@ -161,6 +177,7 @@ final class TCThaumonomiconProtocolAudit {
         ));
 
         int readyCraftingEntries = 0;
+        ArrayList<String> deferredCraftingCatalogEntries = new ArrayList<>();
         boolean readyCatalogSnapshotsValid = true;
         for (TCResearchPageCatalogEntry catalogEntry : TCResearchPageCatalogManager.entries()) {
             if (catalogEntry.kind() != TCResearchPageKind.CRAFTING) {
@@ -181,17 +198,22 @@ final class TCThaumonomiconProtocolAudit {
                         && snapshot.get().recipeId().equals(catalogEntry.id())
                         && !snapshot.get().result().isEmpty()
                         && snapshot.get().ingredients().size() <= 9;
-            } else if (snapshot.isPresent()) {
-                readyCatalogSnapshotsValid = false;
+            } else {
+                deferredCraftingCatalogEntries.add(catalogEntry.id().toString());
+                if (snapshot.isPresent()) {
+                    readyCatalogSnapshotsValid = false;
+                }
             }
         }
         checks.add(check(
                 "ready_crafting_catalog_entries_have_valid_server_snapshots",
                 readyCatalogSnapshotsValid && readyCraftingEntries > 0,
                 "ready_crafting_entries=" + readyCraftingEntries
+                        + ", deferred_crafting_entries=" + deferredCraftingCatalogEntries.size()
         ));
 
         int readyArcaneEntries = 0;
+        ArrayList<String> deferredArcaneCatalogEntries = new ArrayList<>();
         boolean readyArcaneCatalogSnapshotsValid = true;
         for (TCResearchPageCatalogEntry catalogEntry : TCResearchPageCatalogManager.entries()) {
             if (catalogEntry.kind() != TCResearchPageKind.ARCANE) {
@@ -213,14 +235,18 @@ final class TCThaumonomiconProtocolAudit {
                         && !snapshot.get().result().isEmpty()
                         && snapshot.get().ingredients().size() <= 9
                         && !snapshot.get().research().isBlank();
-            } else if (snapshot.isPresent()) {
-                readyArcaneCatalogSnapshotsValid = false;
+            } else {
+                deferredArcaneCatalogEntries.add(catalogEntry.id().toString());
+                if (snapshot.isPresent()) {
+                    readyArcaneCatalogSnapshotsValid = false;
+                }
             }
         }
         checks.add(check(
                 "ready_arcane_catalog_entries_have_valid_server_snapshots",
                 readyArcaneCatalogSnapshotsValid && readyArcaneEntries > 0,
                 "ready_arcane_entries=" + readyArcaneEntries
+                        + ", deferred_arcane_entries=" + deferredArcaneCatalogEntries.size()
         ));
 
         boolean rejectedUnknown = TCThaumonomiconService.buildEntry(player, "AUDIT_MISSING_RESEARCH").isEmpty();
@@ -381,7 +407,11 @@ final class TCThaumonomiconProtocolAudit {
                 index.entries().size(),
                 entryViewsInspected,
                 bookmarksInspected,
-                pagesInspected
+                pagesInspected,
+                readyCraftingEntries,
+                deferredCraftingCatalogEntries,
+                readyArcaneEntries,
+                deferredArcaneCatalogEntries
         );
     }
 
@@ -452,10 +482,16 @@ final class TCThaumonomiconProtocolAudit {
             int entryCount,
             int entryViewsInspected,
             int bookmarksInspected,
-            int pagesInspected
+            int pagesInspected,
+            int readyCraftingEntries,
+            List<String> deferredCraftingCatalogEntries,
+            int readyArcaneEntries,
+            List<String> deferredArcaneCatalogEntries
     ) {
         Report {
             checks = List.copyOf(checks);
+            deferredCraftingCatalogEntries = List.copyOf(deferredCraftingCatalogEntries);
+            deferredArcaneCatalogEntries = List.copyOf(deferredArcaneCatalogEntries);
         }
 
         int passed() {
