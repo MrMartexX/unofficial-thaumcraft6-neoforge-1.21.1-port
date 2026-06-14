@@ -11,11 +11,35 @@ import thaumcraft.common.registry.TCItems;
 public enum TCToolTiers implements Tier {
     THAUMIUM(
             BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
-            400,
+            500,
             7.0F,
-            2.0F,
+            2.5F,
             22,
             () -> Ingredient.of(TCItems.THAUMIUM_INGOT.get())
+    ),
+    VOID(
+            BlockTags.INCORRECT_FOR_NETHERITE_TOOL,
+            150,
+            8.0F,
+            3.0F,
+            10,
+            () -> Ingredient.of(TCItems.VOID_METAL_INGOT.get())
+    ),
+    ELEMENTAL(
+            BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+            1500,
+            9.0F,
+            3.0F,
+            18,
+            () -> Ingredient.of(TCItems.THAUMIUM_INGOT.get())
+    ),
+    PRIMAL_VOID(
+            BlockTags.INCORRECT_FOR_NETHERITE_TOOL,
+            500,
+            8.0F,
+            4.0F,
+            20,
+            () -> Ingredient.of(TCItems.VOID_METAL_INGOT.get())
     );
 
     private final TagKey<Block> incorrectBlocksForDrops;

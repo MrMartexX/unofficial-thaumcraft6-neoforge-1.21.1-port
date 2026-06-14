@@ -186,6 +186,20 @@ recipe rows under `data/thaumcraft/recipe/unsafe_shobie/` without overwriting
 the legacy-correct recipe ids, and copies the full Shobie source/resource corpus
 to `05_neoforge_port/src/shobieReference/` as non-compiled reference content.
 
+Active item/block visual and function audit update:
+- `06_docs/active_item_block_visual_function_audit.md` records the current
+  active registered item/block resource pass.
+- Active registered item ids have item models, active registered block ids have
+  blockstates, and active model texture references use modern `textures/item`
+  or `textures/block` paths.
+- `scribing_tools` now matches legacy/Shobie handheld model parent.
+- Thaumium tool tier values now match legacy `ThaumcraftMaterials`.
+- Void tools, elemental tools, and `primal_crusher` are no longer inert
+  placeholders: they now use real 1.21 tool item classes/tiers. Void tools and
+  `primal_crusher` include the legacy self-repair and Weakness-on-hit behavior.
+- Armor remains intentionally deferred until a proper 1.21 armor material and
+  legacy texture-layer mapping pass is done.
+
 Unsafe import boundaries:
 - Seal/NBT/DataComponent variant recipes are flattened to `blank_seal` in the
   active unsafe recipe layer and remain behavior-incomplete until seal

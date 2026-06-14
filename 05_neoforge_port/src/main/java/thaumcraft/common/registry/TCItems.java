@@ -19,9 +19,11 @@ import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.items.consumables.ItemZombieBrain;
 import thaumcraft.common.items.curios.ItemThaumonomicon;
+import thaumcraft.common.items.tools.TCPrimalCrusherItem;
 import thaumcraft.common.items.tools.ItemScribingTools;
 import thaumcraft.common.items.tools.ItemThaumometer;
 import thaumcraft.common.items.tools.TCToolTiers;
+import thaumcraft.common.items.tools.TCVoidTools;
 
 public final class TCItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Thaumcraft.MODID);
@@ -385,17 +387,27 @@ public final class TCItems {
                     new Item.Properties(),
                     "tc.placeholder.alumentum"
             );
-            case "thaumium_axe" -> new AxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(AxeItem.createAttributes(TCToolTiers.THAUMIUM, 5.0F, -3.0F)));
+            case "thaumium_axe" -> new AxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(AxeItem.createAttributes(TCToolTiers.THAUMIUM, 8.0F, -3.0F)));
             case "thaumium_hoe" -> new HoeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(HoeItem.createAttributes(TCToolTiers.THAUMIUM, -2.0F, -1.0F)));
             case "thaumium_pick" -> new PickaxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(PickaxeItem.createAttributes(TCToolTiers.THAUMIUM, 1.0F, -2.8F)));
             case "thaumium_shovel" -> new ShovelItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(ShovelItem.createAttributes(TCToolTiers.THAUMIUM, 1.5F, -3.0F)));
             case "thaumium_sword" -> new SwordItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(SwordItem.createAttributes(TCToolTiers.THAUMIUM, 3, -2.4F)));
+            case "void_axe" -> new TCVoidTools.Axe(TCToolTiers.VOID, new Item.Properties().rarity(Rarity.RARE).attributes(AxeItem.createAttributes(TCToolTiers.VOID, 8.0F, -3.0F)));
+            case "void_hoe" -> new TCVoidTools.Hoe(TCToolTiers.VOID, new Item.Properties().rarity(Rarity.RARE).attributes(HoeItem.createAttributes(TCToolTiers.VOID, -2.0F, -1.0F)));
+            case "void_pick" -> new TCVoidTools.Pickaxe(TCToolTiers.VOID, new Item.Properties().rarity(Rarity.RARE).attributes(PickaxeItem.createAttributes(TCToolTiers.VOID, 1.0F, -2.8F)));
+            case "void_shovel" -> new TCVoidTools.Shovel(TCToolTiers.VOID, new Item.Properties().rarity(Rarity.RARE).attributes(ShovelItem.createAttributes(TCToolTiers.VOID, 1.5F, -3.0F)));
+            case "void_sword" -> new TCVoidTools.Sword(TCToolTiers.VOID, new Item.Properties().rarity(Rarity.RARE).attributes(SwordItem.createAttributes(TCToolTiers.VOID, 3, -2.4F)));
+            case "elemental_axe" -> new AxeItem(TCToolTiers.ELEMENTAL, new Item.Properties().rarity(Rarity.RARE).attributes(AxeItem.createAttributes(TCToolTiers.ELEMENTAL, 8.0F, -3.0F)));
+            case "elemental_hoe" -> new HoeItem(TCToolTiers.ELEMENTAL, new Item.Properties().rarity(Rarity.RARE).attributes(HoeItem.createAttributes(TCToolTiers.ELEMENTAL, -2.0F, -1.0F)));
+            case "elemental_pick" -> new PickaxeItem(TCToolTiers.ELEMENTAL, new Item.Properties().rarity(Rarity.RARE).attributes(PickaxeItem.createAttributes(TCToolTiers.ELEMENTAL, 1.0F, -2.8F)));
+            case "elemental_shovel" -> new ShovelItem(TCToolTiers.ELEMENTAL, new Item.Properties().rarity(Rarity.RARE).attributes(ShovelItem.createAttributes(TCToolTiers.ELEMENTAL, 1.5F, -3.0F)));
+            case "elemental_sword" -> new SwordItem(TCToolTiers.ELEMENTAL, new Item.Properties().rarity(Rarity.RARE).attributes(SwordItem.createAttributes(TCToolTiers.ELEMENTAL, 3, -2.4F)));
+            case "primal_crusher" -> new TCPrimalCrusherItem(TCToolTiers.PRIMAL_VOID, new Item.Properties().rarity(Rarity.RARE).attributes(TCPrimalCrusherItem.createAttributes(TCToolTiers.PRIMAL_VOID, 3.5F, -2.8F)));
             case "thaumium_helm", "thaumium_chest", "thaumium_legs", "thaumium_boots" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
                     "tc.placeholder.armor"
             );
-            case "void_axe", "void_hoe", "void_pick", "void_shovel", "void_sword",
-                 "void_helm", "void_chest", "void_legs", "void_boots" -> new ItemLegacyPlaceholder(
+            case "void_helm", "void_chest", "void_legs", "void_boots" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
                     "tc.placeholder.void_equipment"
             );
@@ -426,8 +438,7 @@ public final class TCItems {
                     new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
                     "tc.placeholder.research_item"
             );
-            case "elemental_axe", "elemental_hoe", "elemental_pick", "elemental_shovel", "elemental_sword",
-                 "fortress_helm", "fortress_chest", "fortress_legs", "primal_crusher",
+            case "fortress_helm", "fortress_chest", "fortress_legs",
                  "traveller_boots", "void_robe_helm", "void_robe_chest", "void_robe_legs" -> new ItemLegacyPlaceholder(
                     new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
                     "tc.placeholder.enchanted_equipment"
