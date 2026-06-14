@@ -107,6 +107,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.SMELTER_BASIC.get());
         acceptVisible(output, TCItems.WAND_WORKBENCH.get());
         acceptVisible(output, TCItems.INFUSION_MATRIX.get());
+        acceptVisible(output, TCItems.GOLEM_BUILDER.get());
     }
 
     private static void addLegacyItemSequence(CreativeModeTab.Output output) {
