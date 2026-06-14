@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "thaumcraft:nitor_dye",
+  "ingredients": [
+    {
+      "tag": "thaumcraft:legacy_ore_dictionary/nitor"
+    },
+    {
+      "item": "minecraft:black_dye"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:nitor_black"
+  }
+}
