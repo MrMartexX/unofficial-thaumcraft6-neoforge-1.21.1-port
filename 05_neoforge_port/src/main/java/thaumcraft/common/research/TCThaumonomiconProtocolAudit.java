@@ -18,6 +18,55 @@ final class TCThaumonomiconProtocolAudit {
             "thaumcraft:triplemeattreatfake"
     );
 
+    private static final Set<String> ARCANE_DECORATIVE_HINTS = Set.of(
+            "banner",
+            "pedestal",
+            "lamp",
+            "rail",
+            "pavingstone"
+    );
+
+    private static final Set<String> ARCANE_BLOCKENTITY_HINTS = Set.of(
+            "alchemicalconstruct",
+            "advalchemyconstruct",
+            "alembic",
+            "bellows",
+            "centrifuge",
+            "condenser",
+            "furnace",
+            "infusion",
+            "jar",
+            "mirror",
+            "node",
+            "smelter",
+            "stabilizer",
+            "thaumatorium",
+            "workbench"
+    );
+
+    private static final Set<String> ARCANE_GAMEPLAY_HINTS = Set.of(
+            "advancedcrossbow",
+            "arcaneear",
+            "arcanespa",
+            "automatedcrossbow",
+            "crossbow",
+            "focus",
+            "gauntlet",
+            "golem",
+            "seal",
+            "thaumostatic",
+            "turret"
+    );
+
+    private static final Set<String> ARCANE_TRANSPORT_HINTS = Set.of(
+            "buffer",
+            "essentia",
+            "pump",
+            "tube",
+            "transfuser",
+            "valve"
+    );
+
     private TCThaumonomiconProtocolAudit() {
     }
 
@@ -43,8 +92,18 @@ final class TCThaumonomiconProtocolAudit {
             writer.write("- Deferred crafting catalog entries: `" + report.deferredCraftingCatalogEntries().size() + "`\n");
             writer.write("- Ready arcane catalog entries: `" + report.readyArcaneEntries() + "`\n");
             writer.write("- Deferred arcane catalog entries: `" + report.deferredArcaneCatalogEntries().size() + "`\n");
+            writer.write("- Deferred arcane decorative/asset catalog entries: `" + report.deferredArcaneDecorativeCatalogEntries().size() + "`\n");
+            writer.write("- Deferred arcane blockentity catalog entries: `" + report.deferredArcaneBlockEntityCatalogEntries().size() + "`\n");
+            writer.write("- Deferred arcane gameplay catalog entries: `" + report.deferredArcaneGameplayCatalogEntries().size() + "`\n");
+            writer.write("- Deferred arcane transport/essentia catalog entries: `" + report.deferredArcaneTransportCatalogEntries().size() + "`\n");
+            writer.write("- Deferred arcane uncategorized catalog entries: `" + report.deferredArcaneUncategorizedCatalogEntries().size() + "`\n");
             writeDeferredList(writer, "Fake crafting catalog ids", report.fakeCraftingCatalogEntries());
             writeDeferredList(writer, "Deferred crafting catalog ids", report.deferredCraftingCatalogEntries());
+            writeDeferredList(writer, "Deferred arcane decorative/asset catalog ids", report.deferredArcaneDecorativeCatalogEntries());
+            writeDeferredList(writer, "Deferred arcane blockentity catalog ids", report.deferredArcaneBlockEntityCatalogEntries());
+            writeDeferredList(writer, "Deferred arcane gameplay catalog ids", report.deferredArcaneGameplayCatalogEntries());
+            writeDeferredList(writer, "Deferred arcane transport/essentia catalog ids", report.deferredArcaneTransportCatalogEntries());
+            writeDeferredList(writer, "Deferred arcane uncategorized catalog ids", report.deferredArcaneUncategorizedCatalogEntries());
             writeDeferredList(writer, "Deferred arcane catalog ids", report.deferredArcaneCatalogEntries());
         }
         return report;
@@ -235,13 +294,19 @@ final class TCThaumonomiconProtocolAudit {
 
         int readyArcaneEntries = 0;
         ArrayList<String> deferredArcaneCatalogEntries = new ArrayList<>();
+        ArrayList<String> deferredArcaneDecorativeCatalogEntries = new ArrayList<>();
+        ArrayList<String> deferredArcaneBlockEntityCatalogEntries = new ArrayList<>();
+        ArrayList<String> deferredArcaneGameplayCatalogEntries = new ArrayList<>();
+        ArrayList<String> deferredArcaneTransportCatalogEntries = new ArrayList<>();
+        ArrayList<String> deferredArcaneUncategorizedCatalogEntries = new ArrayList<>();
         boolean readyArcaneCatalogSnapshotsValid = true;
         for (TCResearchPageCatalogEntry catalogEntry : TCResearchPageCatalogManager.entries()) {
             if (catalogEntry.kind() != TCResearchPageKind.ARCANE) {
                 continue;
             }
+            String catalogId = catalogEntry.id().toString();
             TCResearchPageAvailability availability = TCResearchPageCatalogManager.availability(
-                    catalogEntry.id().toString(),
+                    catalogId,
                     player.server.getRecipeManager()
             );
             Optional<TCArcaneRecipePageView> snapshot = TCResearchPageCatalogManager.buildArcanePage(
@@ -257,7 +322,14 @@ final class TCThaumonomiconProtocolAudit {
                         && snapshot.get().ingredients().size() <= 9
                         && !snapshot.get().research().isBlank();
             } else {
-                deferredArcaneCatalogEntries.add(catalogEntry.id().toString());
+                deferredArcaneCatalogEntries.add(catalogId);
+                switch (classifyDeferredArcaneCatalogEntry(catalogId)) {
+                    case "decorative" -> deferredArcaneDecorativeCatalogEntries.add(catalogId);
+                    case "blockentity" -> deferredArcaneBlockEntityCatalogEntries.add(catalogId);
+                    case "gameplay" -> deferredArcaneGameplayCatalogEntries.add(catalogId);
+                    case "transport" -> deferredArcaneTransportCatalogEntries.add(catalogId);
+                    default -> deferredArcaneUncategorizedCatalogEntries.add(catalogId);
+                }
                 if (snapshot.isPresent()) {
                     readyArcaneCatalogSnapshotsValid = false;
                 }
@@ -267,6 +339,17 @@ final class TCThaumonomiconProtocolAudit {
                 "ready_arcane_catalog_entries_have_valid_server_snapshots",
                 readyArcaneCatalogSnapshotsValid && readyArcaneEntries > 0,
                 "ready_arcane_entries=" + readyArcaneEntries
+                        + ", deferred_arcane_entries=" + deferredArcaneCatalogEntries.size()
+        ));
+        int classifiedDeferredArcaneEntries = deferredArcaneDecorativeCatalogEntries.size()
+                + deferredArcaneBlockEntityCatalogEntries.size()
+                + deferredArcaneGameplayCatalogEntries.size()
+                + deferredArcaneTransportCatalogEntries.size()
+                + deferredArcaneUncategorizedCatalogEntries.size();
+        checks.add(check(
+                "deferred_arcane_catalog_entries_are_classified",
+                classifiedDeferredArcaneEntries == deferredArcaneCatalogEntries.size(),
+                "classified=" + classifiedDeferredArcaneEntries
                         + ", deferred_arcane_entries=" + deferredArcaneCatalogEntries.size()
         ));
 
@@ -433,8 +516,39 @@ final class TCThaumonomiconProtocolAudit {
                 fakeCraftingCatalogEntries,
                 deferredCraftingCatalogEntries,
                 readyArcaneEntries,
-                deferredArcaneCatalogEntries
+                deferredArcaneCatalogEntries,
+                deferredArcaneDecorativeCatalogEntries,
+                deferredArcaneBlockEntityCatalogEntries,
+                deferredArcaneGameplayCatalogEntries,
+                deferredArcaneTransportCatalogEntries,
+                deferredArcaneUncategorizedCatalogEntries
         );
+    }
+
+    private static String classifyDeferredArcaneCatalogEntry(String catalogId) {
+        String normalized = catalogId == null ? "" : catalogId.toLowerCase();
+        if (containsAny(normalized, ARCANE_TRANSPORT_HINTS)) {
+            return "transport";
+        }
+        if (containsAny(normalized, ARCANE_BLOCKENTITY_HINTS)) {
+            return "blockentity";
+        }
+        if (containsAny(normalized, ARCANE_GAMEPLAY_HINTS)) {
+            return "gameplay";
+        }
+        if (containsAny(normalized, ARCANE_DECORATIVE_HINTS)) {
+            return "decorative";
+        }
+        return "uncategorized";
+    }
+
+    private static boolean containsAny(String text, Set<String> hints) {
+        for (String hint : hints) {
+            if (text.contains(hint)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean prepareUnlockableCandidate(ServerPlayer player, String key, Set<String> visiting) {
@@ -509,13 +623,23 @@ final class TCThaumonomiconProtocolAudit {
             List<String> fakeCraftingCatalogEntries,
             List<String> deferredCraftingCatalogEntries,
             int readyArcaneEntries,
-            List<String> deferredArcaneCatalogEntries
+            List<String> deferredArcaneCatalogEntries,
+            List<String> deferredArcaneDecorativeCatalogEntries,
+            List<String> deferredArcaneBlockEntityCatalogEntries,
+            List<String> deferredArcaneGameplayCatalogEntries,
+            List<String> deferredArcaneTransportCatalogEntries,
+            List<String> deferredArcaneUncategorizedCatalogEntries
     ) {
         Report {
             checks = List.copyOf(checks);
             fakeCraftingCatalogEntries = List.copyOf(fakeCraftingCatalogEntries);
             deferredCraftingCatalogEntries = List.copyOf(deferredCraftingCatalogEntries);
             deferredArcaneCatalogEntries = List.copyOf(deferredArcaneCatalogEntries);
+            deferredArcaneDecorativeCatalogEntries = List.copyOf(deferredArcaneDecorativeCatalogEntries);
+            deferredArcaneBlockEntityCatalogEntries = List.copyOf(deferredArcaneBlockEntityCatalogEntries);
+            deferredArcaneGameplayCatalogEntries = List.copyOf(deferredArcaneGameplayCatalogEntries);
+            deferredArcaneTransportCatalogEntries = List.copyOf(deferredArcaneTransportCatalogEntries);
+            deferredArcaneUncategorizedCatalogEntries = List.copyOf(deferredArcaneUncategorizedCatalogEntries);
         }
 
         int passed() {
