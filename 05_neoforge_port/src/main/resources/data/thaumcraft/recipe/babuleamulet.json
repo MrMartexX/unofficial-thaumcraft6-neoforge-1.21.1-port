@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [{"item":"minecraft:string"},{"item":"thaumcraft:brass_ingot"}],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:bauble_amulet"
+  }
+}

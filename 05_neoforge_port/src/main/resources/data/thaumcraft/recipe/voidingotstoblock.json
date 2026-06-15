@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [{"item":"thaumcraft:void_ingot"},{"item":"thaumcraft:void_ingot"},{"item":"thaumcraft:void_ingot"},{"item":"thaumcraft:void_ingot"},{"item":"thaumcraft:void_ingot"},{"item":"thaumcraft:void_ingot"},{"item":"thaumcraft:void_ingot"},{"item":"thaumcraft:void_ingot"},{"item":"thaumcraft:void_ingot"}],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:metal_void"
+  }
+}

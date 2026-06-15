@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [{"item":"thaumcraft:bauble_girdle"},{"item":"minecraft:gold_ingot"}],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:bauble_girdle_fancy"
+  }
+}

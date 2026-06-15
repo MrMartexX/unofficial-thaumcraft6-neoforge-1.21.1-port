@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [{"item":"minecraft:note_block"},{"item":"minecraft:redstone_torch"},{"item":"thaumcraft:brass_ingot"}],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:arcane_ear_toggle"
+  }
+}

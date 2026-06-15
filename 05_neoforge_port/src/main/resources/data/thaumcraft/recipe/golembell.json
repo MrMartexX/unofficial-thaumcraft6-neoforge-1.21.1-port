@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "tools",
+  "ingredients": [{"item":"minecraft:bell"},{"item":"thaumcraft:brass_ingot"},{"item":"minecraft:redstone"}],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:golem_bell"
+  }
+}

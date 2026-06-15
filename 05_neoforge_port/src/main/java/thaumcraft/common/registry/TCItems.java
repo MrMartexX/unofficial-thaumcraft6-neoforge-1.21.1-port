@@ -1,4 +1,4 @@
-﻿package thaumcraft.common.registry;
+package thaumcraft.common.registry;
 
 import java.util.function.Supplier;
 import net.minecraft.world.item.AxeItem;
@@ -156,6 +156,31 @@ public final class TCItems {
     public static final Supplier<Item> THAUMIUM_PICK = simpleItem("thaumium_pick");
     public static final Supplier<Item> THAUMIUM_SHOVEL = simpleItem("thaumium_shovel");
     public static final Supplier<Item> THAUMIUM_SWORD = simpleItem("thaumium_sword");
+    public static final Supplier<Item> PHIAL = simpleItem("phial");
+    public static final Supplier<Item> JAR_LABEL = simpleItem("jar_label");
+    public static final Supplier<Item> GOLEM_BELL = simpleItem("golem_bell");
+    public static final Supplier<Item> ARCANE_EAR_TOGGLE = simpleItem("arcane_ear_toggle");
+    public static final Supplier<Item> BAUBLE_AMULET = simpleItem("bauble_amulet");
+    public static final Supplier<Item> BAUBLE_AMULET_FANCY = simpleItem("bauble_amulet_fancy");
+    public static final Supplier<Item> BAUBLE_GIRDLE = simpleItem("bauble_girdle");
+    public static final Supplier<Item> BAUBLE_GIRDLE_FANCY = simpleItem("bauble_girdle_fancy");
+    public static final Supplier<Item> BAUBLE_RING = simpleItem("bauble_ring");
+    public static final Supplier<Item> BAUBLE_RING_FANCY = simpleItem("bauble_ring_fancy");
+    public static final Supplier<Item> BRASS_BRACE = simpleItem("brass_brace");
+    public static final Supplier<Item> THAUMIUM_HELM = simpleItem("thaumium_helm");
+    public static final Supplier<Item> THAUMIUM_CHEST = simpleItem("thaumium_chest");
+    public static final Supplier<Item> THAUMIUM_LEGS = simpleItem("thaumium_legs");
+    public static final Supplier<Item> THAUMIUM_BOOTS = simpleItem("thaumium_boots");
+    public static final Supplier<Item> VOID_INGOT = simpleItem("void_ingot");
+    public static final Supplier<Item> VOID_AXE = simpleItem("void_axe");
+    public static final Supplier<Item> VOID_HOE = simpleItem("void_hoe");
+    public static final Supplier<Item> VOID_PICK = simpleItem("void_pick");
+    public static final Supplier<Item> VOID_SHOVEL = simpleItem("void_shovel");
+    public static final Supplier<Item> VOID_SWORD = simpleItem("void_sword");
+    public static final Supplier<Item> VOID_HELM = simpleItem("void_helm");
+    public static final Supplier<Item> VOID_CHEST = simpleItem("void_chest");
+    public static final Supplier<Item> VOID_LEGS = simpleItem("void_legs");
+    public static final Supplier<Item> VOID_BOOTS = simpleItem("void_boots");
 
     public static final Supplier<Item> CRYSTAL_ESSENCE_AER = simpleItem("crystal_essence_aer");
     public static final Supplier<Item> CRYSTAL_ESSENCE_TERRA = simpleItem("crystal_essence_terra");

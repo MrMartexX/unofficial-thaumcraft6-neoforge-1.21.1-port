@@ -1,12 +1,12 @@
-﻿{
+{
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
+    "S": {
+      "item": "minecraft:string"
+    },
     "T": {
       "item": "thaumcraft:tallow"
-    },
-    "S": {
-      "tag": "c:strings"
     }
   },
   "pattern": [

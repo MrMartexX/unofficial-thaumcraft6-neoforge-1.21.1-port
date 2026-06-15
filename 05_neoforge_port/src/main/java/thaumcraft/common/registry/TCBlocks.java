@@ -1,4 +1,4 @@
-﻿package thaumcraft.common.registry;
+package thaumcraft.common.registry;
 
 import java.util.function.Supplier;
 import net.minecraft.world.level.block.Block;

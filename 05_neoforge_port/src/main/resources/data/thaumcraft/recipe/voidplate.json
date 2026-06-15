@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [{"item":"thaumcraft:void_ingot"}],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:void_plate"
+  }
+}

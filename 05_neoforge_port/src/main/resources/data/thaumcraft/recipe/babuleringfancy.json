@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [{"item":"thaumcraft:bauble_ring"},{"item":"minecraft:gold_nugget"}],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:bauble_ring_fancy"
+  }
+}
