@@ -13,6 +13,11 @@ import java.util.Set;
 import net.minecraft.server.level.ServerPlayer;
 
 final class TCThaumonomiconProtocolAudit {
+    private static final Set<String> FAKE_CRAFTING_CATALOG_IDS = Set.of(
+            "thaumcraft:salismundusfake",
+            "thaumcraft:triplemeattreatfake"
+    );
+
     private TCThaumonomiconProtocolAudit() {
     }
 
@@ -34,9 +39,11 @@ final class TCThaumonomiconProtocolAudit {
             writer.write("- Bookmarks inspected: `" + report.bookmarksInspected() + "`\n");
             writer.write("- Pages inspected: `" + report.pagesInspected() + "`\n");
             writer.write("- Ready crafting catalog entries: `" + report.readyCraftingEntries() + "`\n");
+            writer.write("- Fake crafting catalog entries: `" + report.fakeCraftingCatalogEntries().size() + "`\n");
             writer.write("- Deferred crafting catalog entries: `" + report.deferredCraftingCatalogEntries().size() + "`\n");
             writer.write("- Ready arcane catalog entries: `" + report.readyArcaneEntries() + "`\n");
             writer.write("- Deferred arcane catalog entries: `" + report.deferredArcaneCatalogEntries().size() + "`\n");
+            writeDeferredList(writer, "Fake crafting catalog ids", report.fakeCraftingCatalogEntries());
             writeDeferredList(writer, "Deferred crafting catalog ids", report.deferredCraftingCatalogEntries());
             writeDeferredList(writer, "Deferred arcane catalog ids", report.deferredArcaneCatalogEntries());
         }
@@ -177,14 +184,16 @@ final class TCThaumonomiconProtocolAudit {
         ));
 
         int readyCraftingEntries = 0;
+        ArrayList<String> fakeCraftingCatalogEntries = new ArrayList<>();
         ArrayList<String> deferredCraftingCatalogEntries = new ArrayList<>();
         boolean readyCatalogSnapshotsValid = true;
         for (TCResearchPageCatalogEntry catalogEntry : TCResearchPageCatalogManager.entries()) {
             if (catalogEntry.kind() != TCResearchPageKind.CRAFTING) {
                 continue;
             }
+            String catalogId = catalogEntry.id().toString();
             TCResearchPageAvailability availability = TCResearchPageCatalogManager.availability(
-                    catalogEntry.id().toString(),
+                    catalogId,
                     player.server.getRecipeManager()
             );
             Optional<TCCraftingRecipePageView> snapshot = TCResearchPageCatalogManager.buildCraftingPage(
@@ -198,8 +207,13 @@ final class TCThaumonomiconProtocolAudit {
                         && snapshot.get().recipeId().equals(catalogEntry.id())
                         && !snapshot.get().result().isEmpty()
                         && snapshot.get().ingredients().size() <= 9;
+            } else if (FAKE_CRAFTING_CATALOG_IDS.contains(catalogId)) {
+                fakeCraftingCatalogEntries.add(catalogId);
+                if (snapshot.isPresent()) {
+                    readyCatalogSnapshotsValid = false;
+                }
             } else {
-                deferredCraftingCatalogEntries.add(catalogEntry.id().toString());
+                deferredCraftingCatalogEntries.add(catalogId);
                 if (snapshot.isPresent()) {
                     readyCatalogSnapshotsValid = false;
                 }
@@ -209,7 +223,14 @@ final class TCThaumonomiconProtocolAudit {
                 "ready_crafting_catalog_entries_have_valid_server_snapshots",
                 readyCatalogSnapshotsValid && readyCraftingEntries > 0,
                 "ready_crafting_entries=" + readyCraftingEntries
+                        + ", fake_crafting_entries=" + fakeCraftingCatalogEntries.size()
                         + ", deferred_crafting_entries=" + deferredCraftingCatalogEntries.size()
+        ));
+        checks.add(check(
+                "fake_crafting_catalog_entries_are_classified",
+                fakeCraftingCatalogEntries.size() == FAKE_CRAFTING_CATALOG_IDS.size()
+                        && deferredCraftingCatalogEntries.stream().noneMatch(FAKE_CRAFTING_CATALOG_IDS::contains),
+                "fake_crafting_entries=" + fakeCraftingCatalogEntries.size()
         ));
 
         int readyArcaneEntries = 0;
@@ -409,6 +430,7 @@ final class TCThaumonomiconProtocolAudit {
                 bookmarksInspected,
                 pagesInspected,
                 readyCraftingEntries,
+                fakeCraftingCatalogEntries,
                 deferredCraftingCatalogEntries,
                 readyArcaneEntries,
                 deferredArcaneCatalogEntries
@@ -484,12 +506,14 @@ final class TCThaumonomiconProtocolAudit {
             int bookmarksInspected,
             int pagesInspected,
             int readyCraftingEntries,
+            List<String> fakeCraftingCatalogEntries,
             List<String> deferredCraftingCatalogEntries,
             int readyArcaneEntries,
             List<String> deferredArcaneCatalogEntries
     ) {
         Report {
             checks = List.copyOf(checks);
+            fakeCraftingCatalogEntries = List.copyOf(fakeCraftingCatalogEntries);
             deferredCraftingCatalogEntries = List.copyOf(deferredCraftingCatalogEntries);
             deferredArcaneCatalogEntries = List.copyOf(deferredArcaneCatalogEntries);
         }
