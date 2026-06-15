@@ -19,28 +19,48 @@ final class TCThaumonomiconProtocolAudit {
     );
 
     private static final Set<String> ARCANE_DECORATIVE_HINTS = Set.of(
+            "activatorrail",
+            "ancientpedestal",
+            "arcanelamp",
+            "arcanepedestal",
             "banner",
-            "pedestal",
+            "eldritchpedestal",
             "lamp",
+            "pavebarrier",
+            "pavetravel",
+            "pavingstone",
+            "pedestal",
             "rail",
-            "pavingstone"
+            "rechargepedestal",
+            "redstoneinlay"
     );
 
     private static final Set<String> ARCANE_BLOCKENTITY_HINTS = Set.of(
-            "alchemicalconstruct",
             "advalchemyconstruct",
+            "alchemicalconstruct",
             "alembic",
             "bellows",
             "centrifuge",
             "condenser",
+            "dioptra",
             "furnace",
+            "hungrychest",
             "infusion",
             "jar",
+            "levitator",
+            "matrixcost",
+            "matrixmotion",
             "mirror",
+            "mnemonicmatrix",
             "node",
+            "patterncrafter",
+            "redstonerelay",
+            "resonator",
             "smelter",
             "stabilizer",
             "thaumatorium",
+            "visbattery",
+            "visgenerator",
             "workbench"
     );
 
@@ -53,6 +73,15 @@ final class TCThaumonomiconProtocolAudit {
             "focus",
             "gauntlet",
             "golem",
+            "grapplegun",
+            "grapplegunspool",
+            "grappleguntip",
+            "mindclockwork",
+            "modaggression",
+            "modvision",
+            "potionsprayer",
+            "robe",
+            "sanitychecker",
             "seal",
             "thaumostatic",
             "turret"
@@ -61,6 +90,7 @@ final class TCThaumonomiconProtocolAudit {
     private static final Set<String> ARCANE_TRANSPORT_HINTS = Set.of(
             "buffer",
             "essentia",
+            "essentiatransport",
             "pump",
             "tube",
             "transfuser",
