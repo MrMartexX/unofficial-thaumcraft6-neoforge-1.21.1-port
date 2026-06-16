@@ -72,6 +72,22 @@ public final class TCMutableEssentiaStorage implements TCEssentiaStorage {
                 .map(Map.Entry::getKey);
     }
 
+
+    public void clear() {
+        essentia.clear();
+    }
+
+    public void set(String aspect, int amount) {
+        if (aspect == null || aspect.isBlank() || amount <= 0) {
+            return;
+        }
+        int accepted = Math.min(amount, capacity);
+        if (accepted <= 0) {
+            essentia.remove(aspect);
+        } else {
+            essentia.put(aspect, accepted);
+        }
+    }
     @Override
     public Map<String, Integer> snapshot() {
         return Collections.unmodifiableMap(new HashMap<>(essentia));

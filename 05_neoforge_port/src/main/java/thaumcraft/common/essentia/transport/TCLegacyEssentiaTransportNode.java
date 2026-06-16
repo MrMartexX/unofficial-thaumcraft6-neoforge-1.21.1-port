@@ -35,6 +35,10 @@ public class TCLegacyEssentiaTransportNode implements TCEssentiaTransport {
         return storage;
     }
 
+    public TCMutableEssentiaStorage mutableStorage() {
+        return storage;
+    }
+
     public void setOneWayOutputFace(Direction oneWayOutputFace) {
         if (oneWayOutputFace != null) {
             this.oneWayOutputFace = oneWayOutputFace;
