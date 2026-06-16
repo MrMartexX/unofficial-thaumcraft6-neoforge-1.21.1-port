@@ -48,7 +48,7 @@
     }
   },
   "result": {
-    "id": "minecraft:crossbow",
+    "id": "thaumcraft:automatedcrossbow",
     "count": 1
   }
 }

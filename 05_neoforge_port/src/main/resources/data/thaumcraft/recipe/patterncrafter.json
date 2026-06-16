@@ -48,7 +48,7 @@
     }
   },
   "result": {
-    "id": "minecraft:crafting_table",
+    "id": "thaumcraft:patterncrafter",
     "count": 1
   }
 }

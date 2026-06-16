@@ -48,7 +48,7 @@
     }
   },
   "result": {
-    "id": "minecraft:lever",
+    "id": "thaumcraft:tubevalve",
     "count": 1
   }
 }

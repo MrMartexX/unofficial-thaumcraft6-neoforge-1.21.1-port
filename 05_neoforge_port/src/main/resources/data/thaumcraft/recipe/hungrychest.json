@@ -48,7 +48,7 @@
     }
   },
   "result": {
-    "id": "minecraft:chest",
+    "id": "thaumcraft:hungrychest",
     "count": 1
   }
 }

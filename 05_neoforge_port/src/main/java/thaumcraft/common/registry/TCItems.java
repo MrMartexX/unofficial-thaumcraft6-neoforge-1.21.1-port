@@ -357,6 +357,84 @@ public final class TCItems {
         };
     }
 
+
+    // Catalog bridge placeholder output items. These keep Thaumonomicon recipe pages on thaumcraft:* outputs
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ACTIVATORRAIL = ITEMS.register("activatorrail", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ANCIENTPEDESTAL = ITEMS.register("ancientpedestal", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANELAMP = ITEMS.register("arcanelamp", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANEPEDESTAL = ITEMS.register("arcanepedestal", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBLACK = ITEMS.register("bannerblack", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBLUE = ITEMS.register("bannerblue", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBROWN = ITEMS.register("bannerbrown", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERCYAN = ITEMS.register("bannercyan", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERGRAY = ITEMS.register("bannergray", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERGREEN = ITEMS.register("bannergreen", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERLIGHTBLUE = ITEMS.register("bannerlightblue", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERLIME = ITEMS.register("bannerlime", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERMAGENTA = ITEMS.register("bannermagenta", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERORANGE = ITEMS.register("bannerorange", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERPINK = ITEMS.register("bannerpink", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERPURPLE = ITEMS.register("bannerpurple", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERRED = ITEMS.register("bannerred", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERSILVER = ITEMS.register("bannersilver", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERWHITE = ITEMS.register("bannerwhite", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERYELLOW = ITEMS.register("banneryellow", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ELDRITCHPEDESTAL = ITEMS.register("eldritchpedestal", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_PAVEBARRIER = ITEMS.register("pavebarrier", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_PAVETRAVEL = ITEMS.register("pavetravel", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_RECHARGEPEDESTAL = ITEMS.register("rechargepedestal", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_REDSTONEINLAY = ITEMS.register("redstoneinlay", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ADVALCHEMYCONSTRUCT = ITEMS.register("advalchemyconstruct", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ALCHEMICALCONSTRUCT = ITEMS.register("alchemicalconstruct", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ALEMBIC = ITEMS.register("alembic", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BELLOWS = ITEMS.register("bellows", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_CENTRIFUGE = ITEMS.register("centrifuge", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_CONDENSER = ITEMS.register("condenser", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_CONDENSERLATTICE = ITEMS.register("condenserlattice", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_DIOPTRA = ITEMS.register("dioptra", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_HUNGRYCHEST = ITEMS.register("hungrychest", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_JARVOID = ITEMS.register("jarvoid", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_LEVITATOR = ITEMS.register("levitator", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_MATRIXCOST = ITEMS.register("matrixcost", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_MATRIXMOTION = ITEMS.register("matrixmotion", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_MNEMONICMATRIX = ITEMS.register("mnemonicmatrix", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_PATTERNCRAFTER = ITEMS.register("patterncrafter", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_REDSTONERELAY = ITEMS.register("redstonerelay", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_RESONATOR = ITEMS.register("resonator", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_SMELTERAUX = ITEMS.register("smelteraux", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_SMELTERVENT = ITEMS.register("smeltervent", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_STABILIZER = ITEMS.register("stabilizer", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_VISBATTERY = ITEMS.register("visbattery", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_VISGENERATOR = ITEMS.register("visgenerator", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_WARDEDJAR = ITEMS.register("wardedjar", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ADVANCEDCROSSBOW = ITEMS.register("advancedcrossbow", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANEEAR = ITEMS.register("arcaneear", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANESPA = ITEMS.register("arcanespa", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_AUTOMATEDCROSSBOW = ITEMS.register("automatedcrossbow", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_FOCUSPOUCH = ITEMS.register("focuspouch", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_GRAPPLEGUN = ITEMS.register("grapplegun", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_GRAPPLEGUNSPOOL = ITEMS.register("grapplegunspool", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_GRAPPLEGUNTIP = ITEMS.register("grappleguntip", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_MINDCLOCKWORK = ITEMS.register("mindclockwork", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_MODAGGRESSION = ITEMS.register("modaggression", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_MODVISION = ITEMS.register("modvision", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_POTIONSPRAYER = ITEMS.register("potionsprayer", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBEBOOTS = ITEMS.register("robeboots", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBECHEST = ITEMS.register("robechest", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBELEGS = ITEMS.register("robelegs", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_SANITYCHECKER = ITEMS.register("sanitychecker", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_SEALBLANK = ITEMS.register("sealblank", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIASMELTERTHAUMIUM = ITEMS.register("essentiasmelterthaumium", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIASMELTERVOID = ITEMS.register("essentiasmeltervoid", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTIN = ITEMS.register("essentiatransportin", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTOUT = ITEMS.register("essentiatransportout", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBE = ITEMS.register("tube", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBEBUFFER = ITEMS.register("tubebuffer", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBEFILTER = ITEMS.register("tubefilter", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBEONEWAY = ITEMS.register("tubeoneway", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBERESTRICT = ITEMS.register("tuberestrict", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBEVALVE = ITEMS.register("tubevalve", () -> new Item(new Item.Properties()));
+
     private TCItems() {
     }
 }
