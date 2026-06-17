@@ -19,18 +19,17 @@ This note documents the small set of arcane recipe JSONs that still match the or
 ## Deferred, not safe for recipe-only cleanup yet
 
 - `advancedcrossbow.json`
-  - Legacy input requires `ItemsTC.mind` metadata `1`.
-  - Current recipe cleanup only bridged `mindclockwork`, corresponding to legacy `ItemsTC.mind` metadata `0`.
-  - Do not rewrite this recipe until the metadata `1` identity is explicitly bridged.
+  - Status: resolved as bridge recipe data.
+  - Added `thaumcraft:mindclockwork_advanced` as explicit bridge identity for legacy `ItemsTC.mind` metadata `1`.
+  - Recipe now uses `thaumcraft:automatedcrossbow`, `c:plates/iron`, and `thaumcraft:mindclockwork_advanced`.
 
 - `advalchemyconstruct.json`
-  - Legacy recipe output is `BlocksTC.metalAlchemicalAdvanced`, not a standalone `advalchemyconstruct` block/item.
-  - Legacy input requires `ItemsTC.primordialPearl`.
-  - Do not rewrite this recipe until the primordial pearl item identity and output mapping are explicitly audited/bridged.
+  - Status: resolved as bridge recipe data.
+  - Added `thaumcraft:primordial_pearl` as explicit bridge identity for legacy `ItemsTC.primordialPearl`.
+  - Recipe output is mapped to `thaumcraft:metal_alchemical_advanced`, matching legacy `BlocksTC.metalAlchemicalAdvanced`.
 
 ## Recommended next implementation step
 
-1. Add or verify explicit bridge identity for legacy `ItemsTC.mind` metadata `1`.
-2. Add or verify explicit bridge identity for legacy `ItemsTC.primordialPearl`.
-3. Then repair `advancedcrossbow.json` and `advalchemyconstruct.json`.
-4. Keep `caster_basic.json` unchanged.
+1. Re-run `tools/audits/audit-arcane-recipe-placeholders.ps1`.
+2. The only expected ignored match should be `caster_basic.json`.
+3. Keep `caster_basic.json` unchanged.

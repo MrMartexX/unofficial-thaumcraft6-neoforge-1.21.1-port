@@ -142,6 +142,7 @@ public final class TCItems {
     public static final Supplier<Item> FILTER = simpleItem("filter");
     public static final Supplier<Item> MORPHIC_RESONATOR = simpleItem("morphic_resonator");
     public static final Supplier<Item> RARE_EARTH = simpleItem("rare_earth");
+    public static final Supplier<Item> PRIMORDIAL_PEARL = simpleItem("primordial_pearl");
     public static final Supplier<Item> SALIS_MUNDUS = simpleItem("salis_mundus");
     public static final Supplier<Item> TALLOW = simpleItem("tallow");
     public static final Supplier<Item> MECHANISM_SIMPLE = simpleItem("mechanism_simple");
@@ -164,6 +165,7 @@ public final class TCItems {
     public static final Supplier<Item> PHIAL = simpleItem("phial");
     public static final Supplier<Item> JAR_LABEL = simpleItem("jar_label");
     public static final Supplier<Item> GOLEM_BELL = simpleItem("golem_bell");
+    public static final Supplier<Item> MIND_CLOCKWORK_ADVANCED = simpleItem("mindclockwork_advanced");
     public static final Supplier<Item> ARCANE_EAR_TOGGLE = simpleItem("arcane_ear_toggle");
     public static final Supplier<Item> BAUBLE_AMULET = simpleItem("bauble_amulet");
     public static final Supplier<Item> BAUBLE_AMULET_FANCY = simpleItem("bauble_amulet_fancy");
@@ -293,7 +295,9 @@ public final class TCItems {
             case "thaumium_plate" -> legacyItem("plate", "thaumium", 2);
             case "void_plate" -> legacyItem("plate", "void", 3);
             case "rare_earth" -> legacyItem("nugget", "rare_earth", 10);
+            case "primordial_pearl" -> legacyItem("primordial_pearl", "normal", 0);
             case "quicksilver_nugget" -> legacyItem("nugget", "quicksilver", 5);
+            case "mindclockwork_advanced" -> legacyItem("mind", "advanced", 1);
             case "curio_rites" -> legacyItem("curio", "rites", 6);
             case "salis_mundus" -> new ItemLegacyPlaceholder(
                     new Item.Properties(),
