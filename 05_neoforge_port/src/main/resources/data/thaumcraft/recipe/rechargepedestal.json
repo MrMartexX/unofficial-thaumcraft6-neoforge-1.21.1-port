@@ -1,6 +1,6 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
+  "research": "RECHARGEPEDESTAL",
   "vis": 100,
   "crystals": [
     {
@@ -8,43 +8,27 @@
       "amount": 1
     },
     {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
       "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
       "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    " R ",
+    "DID",
+    "SSS"
   ],
   "key": {
     "I": {
-      "tag": "c:ingots/iron"
+      "tag": "c:ingots/gold"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "D": {
+      "tag": "c:gems/diamond"
     },
     "R": {
       "item": "thaumcraft:vis_resonator"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "S": {
+      "item": "minecraft:stone"
     }
   },
   "result": {

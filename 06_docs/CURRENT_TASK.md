@@ -24,7 +24,7 @@ Last updated: 2026-06-17
 
 ## Near-term tasks
 
-1. Continue exact arcane recipe expansion by audited dependency family; prefer bridge-only recipe cleanups where outputs already exist but gameplay is deferred, and avoid custom behavior until the owning subsystem is implemented; keep utility recipes bridge-only until block behavior is ported.
+1. Continue exact arcane recipe expansion by audited dependency family; prefer bridge-only recipe cleanups where outputs already exist but gameplay is deferred, and avoid custom behavior until the owning subsystem is implemented; keep utility recipes bridge-only until block behavior is ported; handle non-arcane legacy recipe conversions separately from arcane recipe batches.
 2. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
 3. Keep reusable audit scripts under `tools/audits/`.
 4. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.
