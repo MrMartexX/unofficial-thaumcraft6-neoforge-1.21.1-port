@@ -424,16 +424,16 @@ public final class TCItems {
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBELEGS = ITEMS.register("robelegs", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_SANITYCHECKER = ITEMS.register("sanitychecker", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_SEALBLANK = ITEMS.register("sealblank", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIASMELTERTHAUMIUM = ITEMS.register("essentiasmelterthaumium", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIASMELTERVOID = ITEMS.register("essentiasmeltervoid", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERTHAUMIUM = blockItem("essentiasmelterthaumium", TCBlocks.ESSENTIA_SMELTER_THAUMIUM);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERVOID = blockItem("essentiasmeltervoid", TCBlocks.ESSENTIA_SMELTER_VOID);
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTIN = ITEMS.register("essentiatransportin", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTOUT = ITEMS.register("essentiatransportout", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBE = ITEMS.register("tube", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBEBUFFER = ITEMS.register("tubebuffer", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBEFILTER = ITEMS.register("tubefilter", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBEONEWAY = ITEMS.register("tubeoneway", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBERESTRICT = ITEMS.register("tuberestrict", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_TUBEVALVE = ITEMS.register("tubevalve", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBE = blockItem("tube", TCBlocks.TUBE);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEBUFFER = blockItem("tubebuffer", TCBlocks.TUBE_BUFFER);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEFILTER = blockItem("tubefilter", TCBlocks.TUBE_FILTER);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEONEWAY = blockItem("tubeoneway", TCBlocks.TUBE_ONEWAY);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBERESTRICT = blockItem("tuberestrict", TCBlocks.TUBE_RESTRICT);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEVALVE = blockItem("tubevalve", TCBlocks.TUBE_VALVE);
 
     private TCItems() {
     }

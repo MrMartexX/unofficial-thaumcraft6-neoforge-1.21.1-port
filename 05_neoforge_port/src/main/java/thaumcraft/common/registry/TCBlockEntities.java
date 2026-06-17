@@ -1,5 +1,17 @@
 package thaumcraft.common.registry;
 
+import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;
+
+import thaumcraft.common.essentia.transport.blockentity.TCLegacySmelterEndpointBlockEntity;
+
+import thaumcraft.common.essentia.transport.block.TCLegacyTubeVariant;
+
+import thaumcraft.common.essentia.transport.block.TCLegacySmelterEndpoint;
+
+import net.minecraft.world.level.block.state.BlockState;
+
+import net.minecraft.core.BlockPos;
+
 import java.util.function.Supplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -39,6 +51,66 @@ public final class TCBlockEntities {
                             TCBlocks.NITOR_RED.get(),
                             TCBlocks.NITOR_SILVER.get(),
                             TCBlocks.NITOR_WHITE.get()).build(null));
+
+    // Legacy-aligned transport/essentia block entities.
+    public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE =
+            BLOCK_ENTITY_TYPES.register("tube", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE.get(), pos, state, TCLegacyTubeVariant.TUBE),
+                            TCBlocks.TUBE.get()).build(null));
+    public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_BUFFER =
+            BLOCK_ENTITY_TYPES.register("tubebuffer", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_BUFFER.get(), pos, state, TCLegacyTubeVariant.BUFFER),
+                            TCBlocks.TUBE_BUFFER.get()).build(null));
+    public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_FILTER =
+            BLOCK_ENTITY_TYPES.register("tubefilter", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_FILTER.get(), pos, state, TCLegacyTubeVariant.FILTER),
+                            TCBlocks.TUBE_FILTER.get()).build(null));
+    public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_ONEWAY =
+            BLOCK_ENTITY_TYPES.register("tubeoneway", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_ONEWAY.get(), pos, state, TCLegacyTubeVariant.ONEWAY),
+                            TCBlocks.TUBE_ONEWAY.get()).build(null));
+    public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_RESTRICT =
+            BLOCK_ENTITY_TYPES.register("tuberestrict", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_RESTRICT.get(), pos, state, TCLegacyTubeVariant.RESTRICT),
+                            TCBlocks.TUBE_RESTRICT.get()).build(null));
+    public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_VALVE =
+            BLOCK_ENTITY_TYPES.register("tubevalve", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_VALVE.get(), pos, state, TCLegacyTubeVariant.VALVE),
+                            TCBlocks.TUBE_VALVE.get()).build(null));
+    public static final Supplier<BlockEntityType<TCLegacySmelterEndpointBlockEntity>> ESSENTIA_SMELTER_THAUMIUM =
+            BLOCK_ENTITY_TYPES.register("essentiasmelterthaumium", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCLegacySmelterEndpointBlockEntity(TCBlockEntities.ESSENTIA_SMELTER_THAUMIUM.get(), pos, state, TCLegacySmelterEndpoint.THAUMIUM),
+                            TCBlocks.ESSENTIA_SMELTER_THAUMIUM.get()).build(null));
+    public static final Supplier<BlockEntityType<TCLegacySmelterEndpointBlockEntity>> ESSENTIA_SMELTER_VOID =
+            BLOCK_ENTITY_TYPES.register("essentiasmeltervoid", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCLegacySmelterEndpointBlockEntity(TCBlockEntities.ESSENTIA_SMELTER_VOID.get(), pos, state, TCLegacySmelterEndpoint.VOID),
+                            TCBlocks.ESSENTIA_SMELTER_VOID.get()).build(null));
+
+    public static TCLegacyTubeBlockEntity createTubeBlockEntity(TCLegacyTubeVariant variant, BlockPos pos, BlockState state) {
+        return switch (variant) {
+            case TUBE -> new TCLegacyTubeBlockEntity(TUBE.get(), pos, state, variant);
+            case BUFFER -> new TCLegacyTubeBlockEntity(TUBE_BUFFER.get(), pos, state, variant);
+            case FILTER -> new TCLegacyTubeBlockEntity(TUBE_FILTER.get(), pos, state, variant);
+            case ONEWAY -> new TCLegacyTubeBlockEntity(TUBE_ONEWAY.get(), pos, state, variant);
+            case RESTRICT -> new TCLegacyTubeBlockEntity(TUBE_RESTRICT.get(), pos, state, variant);
+            case VALVE -> new TCLegacyTubeBlockEntity(TUBE_VALVE.get(), pos, state, variant);
+        };
+    }
+
+    public static TCLegacySmelterEndpointBlockEntity createSmelterEndpointBlockEntity(TCLegacySmelterEndpoint endpoint, BlockPos pos, BlockState state) {
+        return switch (endpoint) {
+            case THAUMIUM -> new TCLegacySmelterEndpointBlockEntity(ESSENTIA_SMELTER_THAUMIUM.get(), pos, state, endpoint);
+            case VOID -> new TCLegacySmelterEndpointBlockEntity(ESSENTIA_SMELTER_VOID.get(), pos, state, endpoint);
+        };
+    }
     private TCBlockEntities() {
     }
 }

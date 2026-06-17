@@ -1,5 +1,13 @@
 package thaumcraft.common.registry;
 
+import thaumcraft.common.essentia.transport.block.TCLegacyTubeVariant;
+
+import thaumcraft.common.essentia.transport.block.TCLegacyTubeBlock;
+
+import thaumcraft.common.essentia.transport.block.TCLegacySmelterEndpointBlock;
+
+import thaumcraft.common.essentia.transport.block.TCLegacySmelterEndpoint;
+
 import java.util.function.Supplier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -102,6 +110,15 @@ public final class TCBlocks {
     public static final Supplier<Block> RESEARCH_TABLE = BLOCKS.register("research_table", () -> researchTableBlock());
     public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> cauldronLikeBlock());
     public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> furnaceLikeBlock());
+    // Legacy-aligned transport/essentia blocks.
+    public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));
+    public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tubebuffer", () -> tubeBlock(TCLegacyTubeVariant.BUFFER));
+    public static final Supplier<Block> TUBE_FILTER = BLOCKS.register("tubefilter", () -> tubeBlock(TCLegacyTubeVariant.FILTER));
+    public static final Supplier<Block> TUBE_ONEWAY = BLOCKS.register("tubeoneway", () -> tubeBlock(TCLegacyTubeVariant.ONEWAY));
+    public static final Supplier<Block> TUBE_RESTRICT = BLOCKS.register("tuberestrict", () -> tubeBlock(TCLegacyTubeVariant.RESTRICT));
+    public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tubevalve", () -> tubeBlock(TCLegacyTubeVariant.VALVE));
+    public static final Supplier<Block> ESSENTIA_SMELTER_THAUMIUM = BLOCKS.register("essentiasmelterthaumium", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.THAUMIUM));
+    public static final Supplier<Block> ESSENTIA_SMELTER_VOID = BLOCKS.register("essentiasmeltervoid", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.VOID));
     public static final Supplier<Block> WAND_WORKBENCH = BLOCKS.register("wand_workbench", () -> workbenchBlock());
     public static final Supplier<Block> INFUSION_MATRIX = BLOCKS.register("infusion_matrix", () ->
             new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
@@ -296,6 +313,18 @@ public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_build
                 .lightLevel(state -> 1));
     }
 
+
+    private static Block tubeBlock(TCLegacyTubeVariant variant) {
+        return new TCLegacyTubeBlock(variant, BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                .strength(0.3F, 0.3F)
+                .noOcclusion());
+    }
+
+    private static Block smelterEndpointBlock(TCLegacySmelterEndpoint endpoint) {
+        return new TCLegacySmelterEndpointBlock(endpoint, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
+                .strength(3.5F, 17.5F)
+                .requiresCorrectToolForDrops());
+    }
     private TCBlocks() {
     }
 }
