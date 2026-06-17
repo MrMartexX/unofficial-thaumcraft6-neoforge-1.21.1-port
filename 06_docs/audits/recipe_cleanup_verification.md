@@ -19,3 +19,6 @@ pwsh -ExecutionPolicy Bypass -File .\tools\audits\audit-recipe-registry-ids.ps1 
 ## Scope
 
 This verification proves recipe JSON structure and local registry/tag identity resolution. It does not claim final gameplay behavior for placeholder bridge items, inventory items, turrets, focus pouch, mnemonic matrix, primordial pearl behavior, or advanced alchemical construct behavior.
+## Follow-up server smoke correction
+
+A follow-up dedicated server smoke exposed uppercase legacy tag paths that are invalid ResourceLocations in Minecraft 1.21.1. The affected tag IDs were rewritten to lowercase/snake_case and the recipe registry audit was extended to validate ResourceLocation syntax.

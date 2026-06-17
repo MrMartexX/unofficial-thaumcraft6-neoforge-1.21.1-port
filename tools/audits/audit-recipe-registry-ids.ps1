@@ -136,9 +136,17 @@ foreach ($file in (Get-ChildItem -LiteralPath $recipeRoot -Filter '*.json' | Sor
 $missingThaumcraft = @()
 $externalTags = @()
 $localTagMissing = @()
+$invalidResourceLocations = @()
+
+$resourceLocationPattern = '^[a-z0-9_.-]+:[a-z0-9/._-]+$'
 
 foreach ($ref in $refs) {
     $id = [string]$ref.Id
+
+    if ($id -notmatch $resourceLocationPattern) {
+        $invalidResourceLocations += $ref
+        continue
+    }
 
     if ($ref.Kind -eq 'tag') {
         if ($id.StartsWith('thaumcraft:')) {
@@ -175,6 +183,14 @@ if ($localTagMissing.Count -gt 0) {
         Format-Table Recipe, Kind, JsonPath, Id -AutoSize
 }
 
+if ($invalidResourceLocations.Count -gt 0) {
+    Write-Host ''
+    Write-Host "Invalid recipe resource locations: $($invalidResourceLocations.Count)"
+    $invalidResourceLocations |
+        Sort-Object Id, Recipe, JsonPath |
+        Format-Table Recipe, Kind, JsonPath, Id -AutoSize
+}
+
 if ($IncludeExternalTags -and $externalTags.Count -gt 0) {
     Write-Host ''
     Write-Host "External/non-local tags referenced. These may be valid if provided by NeoForge/common tags or another data source: $($externalTags.Count)"
@@ -183,6 +199,6 @@ if ($IncludeExternalTags -and $externalTags.Count -gt 0) {
         Format-Table Recipe, Kind, JsonPath, Id -AutoSize
 }
 
-if ($FailOnMissing -and ($missingThaumcraft.Count -gt 0 -or $localTagMissing.Count -gt 0)) {
+if ($FailOnMissing -and ($missingThaumcraft.Count -gt 0 -or $localTagMissing.Count -gt 0 -or $invalidResourceLocations.Count -gt 0)) {
     exit 1
 }

@@ -38,3 +38,18 @@ Added local Thaumcraft item tags for `thaumcraft:candle_whites` and `thaumcraft:
 
 - `thaumcraft:candle_whites` is used by colored tallow candle recoloring recipes and intentionally points to `thaumcraft:candle_white`.
 - `thaumcraft:legacy_ore_dictionary/blockGlass` bridges the legacy `blockGlass` OreDictionary input used by the Tube recipe to vanilla glass and stained glass item forms.
+## ResourceLocation casing cleanup
+
+Dedicated server datapack loading revealed invalid recipe tag resource locations with uppercase characters:
+
+- `thaumcraft:legacy_ore_dictionary/blockGlass`
+- `thaumcraft:legacy_ore_dictionary/nuggetBrass`
+- `thaumcraft:legacy_ore_dictionary/nuggetQuicksilver`
+
+These were rewritten to lowercase/snake_case tag IDs:
+
+- `thaumcraft:legacy_ore_dictionary/block_glass`
+- `thaumcraft:legacy_ore_dictionary/nugget_brass`
+- `thaumcraft:legacy_ore_dictionary/nugget_quicksilver`
+
+The recipe registry audit now validates ResourceLocation syntax for nested recipe `item`, `tag`, and `result.id` references.
