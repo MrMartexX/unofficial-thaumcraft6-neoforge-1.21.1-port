@@ -32,3 +32,9 @@ Use `-IncludeExternalTags` to list non-local external tags such as `c:` tags. Th
 ## Parser correction
 
 The first version of this audit did not include `TCItems.simpleItem("...")` calls, so it over-reported active simple item IDs such as `vis_resonator`, `mechanism_simple`, plates, ingots, baubles, and bridge items as missing. The parser now includes `simpleItem(...)` registrations.
+## Local tag cleanup
+
+Added local Thaumcraft item tags for `thaumcraft:candle_whites` and `thaumcraft:legacy_ore_dictionary/blockGlass`.
+
+- `thaumcraft:candle_whites` is used by colored tallow candle recoloring recipes and intentionally points to `thaumcraft:candle_white`.
+- `thaumcraft:legacy_ore_dictionary/blockGlass` bridges the legacy `blockGlass` OreDictionary input used by the Tube recipe to vanilla glass and stained glass item forms.
