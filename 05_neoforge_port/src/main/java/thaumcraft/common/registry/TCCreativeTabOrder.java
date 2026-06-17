@@ -74,6 +74,8 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.METAL_BRASS.get());
         acceptVisible(output, TCItems.METAL_THAUMIUM.get());
         acceptVisible(output, TCItems.METAL_VOID.get());
+        acceptVisible(output, TCItems.METAL_ALCHEMICAL.get());
+        acceptVisible(output, TCItems.METAL_ALCHEMICAL_ADVANCED.get());
 
         addNitorVariants(output);
     }
@@ -105,6 +107,8 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.RESEARCH_TABLE.get());
         acceptVisible(output, TCItems.CRUCIBLE.get());
         acceptVisible(output, TCItems.SMELTER_BASIC.get());
+        acceptVisible(output, TCItems.SMELTER_THAUMIUM.get());
+        acceptVisible(output, TCItems.SMELTER_VOID.get());
         acceptVisible(output, TCItems.WAND_WORKBENCH.get());
         acceptVisible(output, TCItems.INFUSION_MATRIX.get());
         acceptVisible(output, TCItems.GOLEM_BUILDER.get());

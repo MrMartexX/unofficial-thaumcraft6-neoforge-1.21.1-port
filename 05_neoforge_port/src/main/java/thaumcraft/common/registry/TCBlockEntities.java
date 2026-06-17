@@ -83,16 +83,16 @@ public final class TCBlockEntities {
                     BlockEntityType.Builder.of(
                             (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_VALVE.get(), pos, state, TCLegacyTubeVariant.VALVE),
                             TCBlocks.TUBE_VALVE.get()).build(null));
-    public static final Supplier<BlockEntityType<TCLegacySmelterEndpointBlockEntity>> ESSENTIA_SMELTER_THAUMIUM =
-            BLOCK_ENTITY_TYPES.register("essentiasmelterthaumium", () ->
+    public static final Supplier<BlockEntityType<TCLegacySmelterEndpointBlockEntity>> SMELTER_THAUMIUM =
+            BLOCK_ENTITY_TYPES.register("smelter_thaumium", () ->
                     BlockEntityType.Builder.of(
-                            (pos, state) -> new TCLegacySmelterEndpointBlockEntity(TCBlockEntities.ESSENTIA_SMELTER_THAUMIUM.get(), pos, state, TCLegacySmelterEndpoint.THAUMIUM),
-                            TCBlocks.ESSENTIA_SMELTER_THAUMIUM.get()).build(null));
-    public static final Supplier<BlockEntityType<TCLegacySmelterEndpointBlockEntity>> ESSENTIA_SMELTER_VOID =
-            BLOCK_ENTITY_TYPES.register("essentiasmeltervoid", () ->
+                            (pos, state) -> new TCLegacySmelterEndpointBlockEntity(TCBlockEntities.SMELTER_THAUMIUM.get(), pos, state, TCLegacySmelterEndpoint.THAUMIUM),
+                            TCBlocks.SMELTER_THAUMIUM.get()).build(null));
+    public static final Supplier<BlockEntityType<TCLegacySmelterEndpointBlockEntity>> SMELTER_VOID =
+            BLOCK_ENTITY_TYPES.register("smelter_void", () ->
                     BlockEntityType.Builder.of(
-                            (pos, state) -> new TCLegacySmelterEndpointBlockEntity(TCBlockEntities.ESSENTIA_SMELTER_VOID.get(), pos, state, TCLegacySmelterEndpoint.VOID),
-                            TCBlocks.ESSENTIA_SMELTER_VOID.get()).build(null));
+                            (pos, state) -> new TCLegacySmelterEndpointBlockEntity(TCBlockEntities.SMELTER_VOID.get(), pos, state, TCLegacySmelterEndpoint.VOID),
+                            TCBlocks.SMELTER_VOID.get()).build(null));
 
     public static TCLegacyTubeBlockEntity createTubeBlockEntity(TCLegacyTubeVariant variant, BlockPos pos, BlockState state) {
         return switch (variant) {
@@ -107,8 +107,8 @@ public final class TCBlockEntities {
 
     public static TCLegacySmelterEndpointBlockEntity createSmelterEndpointBlockEntity(TCLegacySmelterEndpoint endpoint, BlockPos pos, BlockState state) {
         return switch (endpoint) {
-            case THAUMIUM -> new TCLegacySmelterEndpointBlockEntity(ESSENTIA_SMELTER_THAUMIUM.get(), pos, state, endpoint);
-            case VOID -> new TCLegacySmelterEndpointBlockEntity(ESSENTIA_SMELTER_VOID.get(), pos, state, endpoint);
+            case THAUMIUM -> new TCLegacySmelterEndpointBlockEntity(SMELTER_THAUMIUM.get(), pos, state, endpoint);
+            case VOID -> new TCLegacySmelterEndpointBlockEntity(SMELTER_VOID.get(), pos, state, endpoint);
         };
     }
     private TCBlockEntities() {

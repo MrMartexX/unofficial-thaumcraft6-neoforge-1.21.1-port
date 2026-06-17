@@ -6,8 +6,8 @@ import java.util.Locale;
 import java.util.Optional;
 
 public enum TCLegacySmelterEndpoint {
-    THAUMIUM("essentiasmelterthaumium", TCEssentiaTubeMode.SMELTER_THAUMIUM, 64),
-    VOID("essentiasmeltervoid", TCEssentiaTubeMode.SMELTER_VOID, 64);
+    THAUMIUM("smelter_thaumium", TCEssentiaTubeMode.SMELTER_THAUMIUM, 64),
+    VOID("smelter_void", TCEssentiaTubeMode.SMELTER_VOID, 64);
 
     private final String catalogId;
     private final TCEssentiaTubeMode mode;

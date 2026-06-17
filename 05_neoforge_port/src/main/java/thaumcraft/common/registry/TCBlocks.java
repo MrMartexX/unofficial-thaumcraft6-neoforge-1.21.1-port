@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.blocks.basic.TCTableBlock;
+import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
@@ -69,6 +70,8 @@ public final class TCBlocks {
     public static final Supplier<Block> METAL_BRASS = BLOCKS.register("metal_brass", () -> metalBlock());
     public static final Supplier<Block> METAL_THAUMIUM = BLOCKS.register("metal_thaumium", () -> metalBlock());
     public static final Supplier<Block> METAL_VOID = BLOCKS.register("metal_void", () -> metalBlock());
+    public static final Supplier<Block> METAL_ALCHEMICAL = BLOCKS.register("metal_alchemical", () -> metalBlock());
+    public static final Supplier<Block> METAL_ALCHEMICAL_ADVANCED = BLOCKS.register("metal_alchemical_advanced", () -> metalBlock());
     public static final Supplier<Block> NITOR_BLACK = BLOCKS.register("nitor_black", () -> nitorBlock(14));
     public static final Supplier<Block> NITOR_BLUE = BLOCKS.register("nitor_blue", () -> nitorBlock(14));
     public static final Supplier<Block> NITOR_BROWN = BLOCKS.register("nitor_brown", () -> nitorBlock(14));
@@ -109,7 +112,7 @@ public final class TCBlocks {
     public static final Supplier<Block> ARCANE_WORKBENCH_CHARGER = BLOCKS.register("arcane_workbench_charger", () -> arcaneWorkbenchChargerBlock());
     public static final Supplier<Block> RESEARCH_TABLE = BLOCKS.register("research_table", () -> researchTableBlock());
     public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> cauldronLikeBlock());
-    public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> furnaceLikeBlock());
+    public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> smelterBlock());
     // Legacy-aligned transport/essentia blocks.
     public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));
     public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tubebuffer", () -> tubeBlock(TCLegacyTubeVariant.BUFFER));
@@ -117,8 +120,8 @@ public final class TCBlocks {
     public static final Supplier<Block> TUBE_ONEWAY = BLOCKS.register("tubeoneway", () -> tubeBlock(TCLegacyTubeVariant.ONEWAY));
     public static final Supplier<Block> TUBE_RESTRICT = BLOCKS.register("tuberestrict", () -> tubeBlock(TCLegacyTubeVariant.RESTRICT));
     public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tubevalve", () -> tubeBlock(TCLegacyTubeVariant.VALVE));
-    public static final Supplier<Block> ESSENTIA_SMELTER_THAUMIUM = BLOCKS.register("essentiasmelterthaumium", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.THAUMIUM));
-    public static final Supplier<Block> ESSENTIA_SMELTER_VOID = BLOCKS.register("essentiasmeltervoid", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.VOID));
+    public static final Supplier<Block> SMELTER_THAUMIUM = BLOCKS.register("smelter_thaumium", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.THAUMIUM));
+    public static final Supplier<Block> SMELTER_VOID = BLOCKS.register("smelter_void", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.VOID));
     public static final Supplier<Block> WAND_WORKBENCH = BLOCKS.register("wand_workbench", () -> workbenchBlock());
     public static final Supplier<Block> INFUSION_MATRIX = BLOCKS.register("infusion_matrix", () ->
             new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
@@ -206,6 +209,17 @@ public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_build
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                 .strength(3.5F, 17.5F)
                 .requiresCorrectToolForDrops());
+    }
+
+    private static Block smelterBlock() {
+        return new TCSmelterBlock(smelterProperties());
+    }
+
+    private static BlockBehaviour.Properties smelterProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
+                .strength(3.5F, 17.5F)
+                .requiresCorrectToolForDrops()
+                .lightLevel(state -> state.getValue(TCSmelterBlock.ENABLED) ? 13 : 0);
     }
 
     private static Block metalBlock() {
@@ -321,9 +335,7 @@ public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_build
     }
 
     private static Block smelterEndpointBlock(TCLegacySmelterEndpoint endpoint) {
-        return new TCLegacySmelterEndpointBlock(endpoint, BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
-                .strength(3.5F, 17.5F)
-                .requiresCorrectToolForDrops());
+        return new TCLegacySmelterEndpointBlock(endpoint, smelterProperties());
     }
     private TCBlocks() {
     }

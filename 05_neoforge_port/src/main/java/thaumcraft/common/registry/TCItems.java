@@ -62,6 +62,8 @@ public final class TCItems {
     public static final Supplier<BlockItem> METAL_BRASS = blockItem("metal_brass", TCBlocks.METAL_BRASS);
     public static final Supplier<BlockItem> METAL_THAUMIUM = blockItem("metal_thaumium", TCBlocks.METAL_THAUMIUM);
     public static final Supplier<BlockItem> METAL_VOID = blockItem("metal_void", TCBlocks.METAL_VOID);
+    public static final Supplier<BlockItem> METAL_ALCHEMICAL = blockItem("metal_alchemical", TCBlocks.METAL_ALCHEMICAL);
+    public static final Supplier<BlockItem> METAL_ALCHEMICAL_ADVANCED = blockItem("metal_alchemical_advanced", TCBlocks.METAL_ALCHEMICAL_ADVANCED);
     public static final Supplier<BlockItem> NITOR_BLACK = blockItem("nitor_black", TCBlocks.NITOR_BLACK);
     public static final Supplier<BlockItem> NITOR_BLUE = blockItem("nitor_blue", TCBlocks.NITOR_BLUE);
     public static final Supplier<BlockItem> NITOR_BROWN = blockItem("nitor_brown", TCBlocks.NITOR_BROWN);
@@ -102,6 +104,8 @@ public final class TCItems {
     public static final Supplier<BlockItem> RESEARCH_TABLE = blockItem("research_table", TCBlocks.RESEARCH_TABLE);
     public static final Supplier<BlockItem> CRUCIBLE = blockItem("crucible", TCBlocks.CRUCIBLE);
     public static final Supplier<BlockItem> SMELTER_BASIC = blockItem("smelter_basic", TCBlocks.SMELTER_BASIC);
+    public static final Supplier<BlockItem> SMELTER_THAUMIUM = blockItem("smelter_thaumium", TCBlocks.SMELTER_THAUMIUM);
+    public static final Supplier<BlockItem> SMELTER_VOID = blockItem("smelter_void", TCBlocks.SMELTER_VOID);
     public static final Supplier<BlockItem> WAND_WORKBENCH = blockItem("wand_workbench", TCBlocks.WAND_WORKBENCH);
     public static final Supplier<BlockItem> INFUSION_MATRIX = blockItem("infusion_matrix", TCBlocks.INFUSION_MATRIX);
     public static final Supplier<BlockItem> GOLEM_BUILDER = blockItem("golem_builder", TCBlocks.GOLEM_BUILDER);
@@ -424,8 +428,8 @@ public final class TCItems {
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBELEGS = ITEMS.register("robelegs", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_SANITYCHECKER = ITEMS.register("sanitychecker", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_SEALBLANK = ITEMS.register("sealblank", () -> new Item(new Item.Properties()));
-    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERTHAUMIUM = blockItem("essentiasmelterthaumium", TCBlocks.ESSENTIA_SMELTER_THAUMIUM);
-    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERVOID = blockItem("essentiasmeltervoid", TCBlocks.ESSENTIA_SMELTER_VOID);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERTHAUMIUM = SMELTER_THAUMIUM;
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERVOID = SMELTER_VOID;
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTIN = ITEMS.register("essentiatransportin", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTOUT = ITEMS.register("essentiatransportout", () -> new Item(new Item.Properties()));
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBE = blockItem("tube", TCBlocks.TUBE);

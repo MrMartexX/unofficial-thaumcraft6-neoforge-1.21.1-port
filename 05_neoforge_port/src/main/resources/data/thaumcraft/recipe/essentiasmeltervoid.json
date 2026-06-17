@@ -1,54 +1,34 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "ESSENTIASMELTERVOID",
+  "vis": 750,
   "crystals": [
     {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
       "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
+      "amount": 3
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "BFB",
+    "IGI",
+    "III"
   ],
   "key": {
     "I": {
-      "tag": "c:ingots/iron"
+      "tag": "c:plates/void"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "B": {
+      "tag": "c:plates/brass"
     },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
+    "F": {
+      "item": "thaumcraft:smelter_basic"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "G": {
+      "item": "thaumcraft:metal_alchemical_advanced"
     }
   },
   "result": {
-    "id": "thaumcraft:essentiasmeltervoid",
+    "id": "thaumcraft:smelter_void",
     "count": 1
   }
 }

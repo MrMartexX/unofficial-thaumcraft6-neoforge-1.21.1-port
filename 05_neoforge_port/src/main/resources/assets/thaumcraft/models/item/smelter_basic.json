@@ -1,5 +1,5 @@
 {
-  "parent": "thaumcraft:block/smelter_basic",
+  "parent": "thaumcraft:block/smelter_basic_off",
   "display": {
     "gui": {
       "rotation": [30, 225, 0],
