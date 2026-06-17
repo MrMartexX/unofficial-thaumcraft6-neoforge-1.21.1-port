@@ -1,50 +1,27 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "GRAPPLEGUN",
+  "vis": 25,
   "crystals": [
     {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
       "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
       "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "BRB",
+    "RHR",
+    "BRB"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
+    "B": {
+      "tag": "c:plates/brass"
     },
     "R": {
-      "item": "thaumcraft:vis_resonator"
+      "item": "thaumcraft:rare_earth"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "H": {
+      "item": "minecraft:tripwire_hook"
     }
   },
   "result": {
