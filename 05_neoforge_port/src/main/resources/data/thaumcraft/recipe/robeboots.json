@@ -1,50 +1,14 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
+  "research": "UNLOCKINFUSION",
   "vis": 100,
-  "crystals": [
-    {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
-    }
-  ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "I I",
+    "I I"
   ],
   "key": {
     "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
-    },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+      "item": "thaumcraft:fabric"
     }
   },
   "result": {

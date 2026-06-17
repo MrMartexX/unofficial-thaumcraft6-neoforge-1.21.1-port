@@ -1,24 +1,8 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "WARP",
+  "vis": 20,
   "crystals": [
-    {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
     {
       "aspect": "ordo",
       "amount": 1
@@ -29,22 +13,19 @@
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "BN ",
+    "M N",
+    "BN "
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
+    "N": {
+      "tag": "thaumcraft:legacy_ore_dictionary/nuggetBrass"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "B": {
+      "item": "thaumcraft:brain"
     },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
-    },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "M": {
+      "item": "thaumcraft:mirrored_glass"
     }
   },
   "result": {
