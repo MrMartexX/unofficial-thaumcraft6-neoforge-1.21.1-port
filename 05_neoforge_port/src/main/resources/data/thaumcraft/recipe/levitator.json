@@ -1,50 +1,33 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "LEVITATOR",
+  "vis": 35,
   "crystals": [
     {
       "aspect": "aer",
       "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "WIW",
+    "BNB",
+    "WGW"
   ],
   "key": {
     "I": {
-      "tag": "c:ingots/iron"
+      "tag": "c:plates/thaumium"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "N": {
+      "tag": "thaumcraft:legacy_ore_dictionary/nitor"
     },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
+    "W": {
+      "tag": "minecraft:planks"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "B": {
+      "tag": "c:plates/iron"
+    },
+    "G": {
+      "item": "thaumcraft:mechanism_simple"
     }
   },
   "result": {
