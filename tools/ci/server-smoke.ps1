@@ -1,5 +1,6 @@
 param(
-    [int]$TimeoutSeconds = 420
+    [int]$TimeoutSeconds = 420,
+    [switch]$FailOnWarnings
 )
 
 $ErrorActionPreference = 'Stop'
@@ -8,20 +9,16 @@ $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
 $moduleRoot = Join-Path $repoRoot '05_neoforge_port'
 $gradleBat = Join-Path $moduleRoot 'gradlew.bat'
 $logDir = Join-Path $moduleRoot 'build\ci-logs'
-$stdoutPath = Join-Path $logDir 'runServer-smoke.stdout.log'
-$stderrPath = Join-Path $logDir 'runServer-smoke.stderr.log'
-$logPath = Join-Path $logDir 'runServer-smoke.log'
+$runId = Get-Date -Format 'yyyyMMdd-HHmmss-ffff'
+$stdoutPath = Join-Path $logDir "runServer-smoke.$runId.stdout.log"
+$stderrPath = Join-Path $logDir "runServer-smoke.$runId.stderr.log"
+$logPath = Join-Path $logDir "runServer-smoke.$runId.log"
+$latestLogPath = Join-Path $logDir 'runServer-smoke.log'
 $runDir = Join-Path $moduleRoot 'run'
 
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 New-Item -ItemType Directory -Force -Path $runDir | Out-Null
 Set-Content -LiteralPath (Join-Path $runDir 'eula.txt') -Value 'eula=true' -Encoding utf8
-
-foreach ($path in @($stdoutPath, $stderrPath, $logPath)) {
-    if (Test-Path $path) {
-        Remove-Item $path -Force
-    }
-}
 
 $readyPatterns = @(
     'Done \(',
@@ -36,7 +33,7 @@ $earlyProgressPatterns = @(
     'Loading server properties'
 )
 
-$failurePatterns = @(
+$hardFailurePatterns = @(
     'BUILD FAILED',
     'Exception in thread',
     'Crash report',
@@ -45,6 +42,26 @@ $failurePatterns = @(
     'ClassNotFoundException',
     'ModLoadingException',
     'MixinTransformerError'
+)
+
+$logQualityFailurePatterns = @(
+    '\[[^\]]+/ERROR\]',
+    'Invalid path in pack',
+    'Parsing error loading recipe',
+    'Failed to parse recipe',
+    'Failed to load tag',
+    'Couldn''t load tag',
+    'Failed to load datapacks',
+    'Failed to validate datapack',
+    'Registry entry .* does not exist',
+    'Unknown registry key',
+    'Unknown item',
+    'Unknown block'
+)
+
+$warningPatterns = @(
+    '\[[^\]]+/WARN\]',
+    '(?m)^\s*WARNING[:\s]'
 )
 
 function Read-FileShared {
@@ -83,6 +100,14 @@ function Get-CombinedLog {
 function Write-CombinedLog {
     $combined = Get-CombinedLog
     [System.IO.File]::WriteAllText($logPath, $combined, [System.Text.UTF8Encoding]::new($false))
+
+    try {
+        [System.IO.File]::WriteAllText($latestLogPath, $combined, [System.Text.UTF8Encoding]::new($false))
+    }
+    catch {
+        Write-Warning "Could not update latest smoke log '$latestLogPath': $($_.Exception.Message)"
+    }
+
     return $combined
 }
 
@@ -93,7 +118,7 @@ function Test-AnyPattern {
     )
 
     foreach ($pattern in $Patterns) {
-        if ($Text -match $pattern) {
+        if ($Text -cmatch $pattern) {
             return $pattern
         }
     }
@@ -103,7 +128,7 @@ function Test-AnyPattern {
 function Get-LogTail {
     param(
         [string]$Text,
-        [int]$LineCount = 80
+        [int]$LineCount = 120
     )
 
     $lines = $Text -split "`r?`n"
@@ -113,9 +138,31 @@ function Get-LogTail {
     return (($lines | Select-Object -Last $LineCount) -join "`n")
 }
 
+function Assert-SmokeLogQuality {
+    param([string]$Text)
+
+    $hardFailurePattern = Test-AnyPattern -Text $Text -Patterns $hardFailurePatterns
+    if ($hardFailurePattern) {
+        throw "Dedicated server smoke test detected hard failure pattern: $hardFailurePattern`n`n$(Get-LogTail -Text $Text)"
+    }
+
+    $qualityFailurePattern = Test-AnyPattern -Text $Text -Patterns $logQualityFailurePatterns
+    if ($qualityFailurePattern) {
+        throw "Dedicated server smoke test detected log quality failure pattern: $qualityFailurePattern`n`n$(Get-LogTail -Text $Text)"
+    }
+
+    if ($FailOnWarnings) {
+        $warningPattern = Test-AnyPattern -Text $Text -Patterns $warningPatterns
+        if ($warningPattern) {
+            throw "Dedicated server smoke test detected warning pattern because -FailOnWarnings was enabled: $warningPattern`n`n$(Get-LogTail -Text $Text)"
+        }
+    }
+}
+
 Write-Host "Starting dedicated server smoke test with timeout $TimeoutSeconds seconds."
 Write-Host "Module root: $moduleRoot"
 Write-Host "Smoke log: $logPath"
+Write-Host "Latest smoke log alias: $latestLogPath"
 
 $process = Start-Process `
     -FilePath $gradleBat `
@@ -135,16 +182,19 @@ try {
         Start-Sleep -Seconds 2
         $combined = Write-CombinedLog
 
-        $failurePattern = Test-AnyPattern -Text $combined -Patterns $failurePatterns
-        if ($failurePattern) {
-            throw "Dedicated server smoke test detected failure pattern: $failurePattern`n`n$(Get-LogTail -Text $combined)"
-        }
+        Assert-SmokeLogQuality -Text $combined
 
         $readyPattern = Test-AnyPattern -Text $combined -Patterns $readyPatterns
         if ($readyPattern) {
+            $combined = Write-CombinedLog
+            Assert-SmokeLogQuality -Text $combined
+
             Write-Host "Dedicated server reached startup marker: $readyPattern"
             Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
             $process.WaitForExit(30000) | Out-Null
+
+            $combined = Write-CombinedLog
+            Assert-SmokeLogQuality -Text $combined
             exit 0
         }
 
@@ -163,6 +213,7 @@ try {
     }
 
     $combined = Write-CombinedLog
+    Assert-SmokeLogQuality -Text $combined
 
     if ($process.HasExited) {
         if ($process.ExitCode -ne 0) {
