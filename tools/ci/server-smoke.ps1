@@ -21,6 +21,20 @@ New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 New-Item -ItemType Directory -Force -Path $runDir | Out-Null
 Set-Content -LiteralPath (Join-Path $runDir 'eula.txt') -Value 'eula=true' -Encoding utf8
 
+$serverPropertiesPath = Join-Path $runDir 'server.properties'
+if (-not (Test-Path -LiteralPath $serverPropertiesPath)) {
+    $serverProperties = @(
+        'online-mode=false',
+        'spawn-protection=0',
+        'motd=Thaumcraft CI smoke',
+        'enable-command-block=false',
+        'allow-flight=true',
+        'view-distance=6',
+        'simulation-distance=4'
+    )
+    Set-Content -LiteralPath $serverPropertiesPath -Value $serverProperties -Encoding utf8
+}
+
 $readyPatterns = @(
     'Done \(',
     'For help, type',

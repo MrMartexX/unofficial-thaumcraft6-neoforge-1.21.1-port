@@ -282,3 +282,9 @@ Next:
 - Dedicated server smoke now supports -KillStaleRunServer for local runs.
 - With that switch, smoke stops only matching Java or Gradle runServer and NeoForge devlaunch processes from this repository before retrying the world session-lock check.
 - CI remains conservative by default; the switch is intended for local developer runs where a previous smoke left run/world/session.lock held.
+
+### Latest CI server smoke properties update
+
+- Dedicated server smoke now pre-seeds run/server.properties before launching runServer.
+- This prevents the clean CI workspace first-run message Failed to load properties from file: server.properties from being logged as a Minecraft ERROR and tripping the strict log-quality gate.
+- Build workflow artifact upload already includes 05_neoforge_port/build/ci-logs/** for smoke diagnostics.

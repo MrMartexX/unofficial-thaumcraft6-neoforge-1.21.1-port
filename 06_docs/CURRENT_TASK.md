@@ -40,3 +40,7 @@ Last updated: 2026-06-17
 ## CI smoke local cleanup note
 
 - Local server smoke can be run with -KillStaleRunServer to clean up stale repo runServer Java or Gradle processes before testing.
+
+## CI smoke clean-workspace note
+
+- Server smoke pre-seeds run/server.properties so CI clean-workspace first startup does not create a benign Minecraft Settings ERROR.
