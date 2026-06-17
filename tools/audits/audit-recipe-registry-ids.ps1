@@ -71,6 +71,10 @@ function Get-RegisteredThaumcraftItemIds([string]$ModuleRoot) {
         [void]$ids.Add("thaumcraft:$($match.Groups[1].Value)")
     }
 
+    foreach ($match in [regex]::Matches($itemsText, 'simpleItem\("([^"]+)"')) {
+        [void]$ids.Add("thaumcraft:$($match.Groups[1].Value)")
+    }
+
     foreach ($match in [regex]::Matches($itemsText, 'blockItem\("([^"]+)"')) {
         [void]$ids.Add("thaumcraft:$($match.Groups[1].Value)")
     }
