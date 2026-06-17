@@ -1,26 +1,14 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "INFUSIONBOOST",
+  "vis": 500,
   "crystals": [
     {
       "aspect": "aer",
       "amount": 1
     },
     {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
       "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
       "amount": 1
     },
     {
@@ -29,22 +17,19 @@
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "SAS",
+    "AGA",
+    "SAS"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
+    "S": {
+      "item": "thaumcraft:stone_arcane"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "A": {
+      "item": "thaumcraft:alumentum"
     },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
-    },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "G": {
+      "item": "minecraft:diamond_block"
     }
   },
   "result": {

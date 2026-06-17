@@ -1,50 +1,34 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "DIOPTRA",
+  "vis": 50,
   "crystals": [
     {
       "aspect": "aer",
       "amount": 1
     },
     {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
       "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
       "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "APA",
+    "IGI",
+    "AAA"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
+    "A": {
+      "item": "thaumcraft:stone_arcane"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "G": {
+      "item": "thaumcraft:thaumometer"
     },
-    "R": {
+    "P": {
       "item": "thaumcraft:vis_resonator"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "I": {
+      "tag": "c:plates/iron"
     }
   },
   "result": {
