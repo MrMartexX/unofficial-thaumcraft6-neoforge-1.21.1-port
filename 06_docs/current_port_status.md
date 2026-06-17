@@ -294,3 +294,9 @@ Next:
 - Added tools/audits/audit-custom-recipe-boundary.ps1 and 06_docs/audits/custom_recipe_boundary_audit.md.
 - The audit scans current recipe JSON, research recipe-like references, missing recipe references, and custom recipe keywords to separate READY data recipes from custom behavior that still needs a serializer, page, or behavior design slice.
 - Next custom recipe work should use this audit to pick the largest safe target without copying legacy crucible, infusion, fake, blueprint or special recipe classes directly.
+
+### Latest research recipe page gap audit update
+
+- Added tools/audits/audit-research-recipe-page-gaps.ps1 and 06_docs/audits/research_recipe_page_gap_audit.md.
+- This audit narrows the broad custom recipe boundary scan to actual Thaumonomicon stage/addendum recipe page references and separates them from icons, required_item, and required_craft gates.
+- Use the missing recipe page class distribution to choose the next large serializer/page implementation slice without conflating item requirements with recipe pages.

@@ -48,3 +48,7 @@ Last updated: 2026-06-17
 ## Custom recipe boundary note
 
 - Use 06_docs/audits/custom_recipe_boundary_audit.md before implementing the next non-arcane custom recipe serializer/page/behavior slice.
+
+## Research recipe page gap note
+
+- Use 06_docs/audits/research_recipe_page_gap_audit.md to pick the next serializer/page implementation slice from actual stage/addendum recipe page gaps.
