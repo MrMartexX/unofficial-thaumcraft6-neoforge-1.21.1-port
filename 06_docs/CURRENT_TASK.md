@@ -32,3 +32,11 @@ Last updated: 2026-06-17
 ## CI smoke note
 
 - Keep CI/server smoke strict for datapack/recipe/log-quality failures while avoiding false positives from DEBUG dependency names.
+
+## CI smoke stale-lock note
+
+- Server smoke should fail early on a locked local run/world/session.lock and print stale runServer process hints.
+
+## CI smoke local cleanup note
+
+- Local server smoke can be run with -KillStaleRunServer to clean up stale repo runServer Java or Gradle processes before testing.

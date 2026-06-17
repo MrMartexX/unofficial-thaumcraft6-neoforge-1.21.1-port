@@ -1,6 +1,7 @@
 param(
     [int]$TimeoutSeconds = 420,
-    [switch]$FailOnWarnings
+    [switch]$FailOnWarnings,
+    [switch]$KillStaleRunServer
 )
 
 $ErrorActionPreference = 'Stop'
@@ -158,6 +159,110 @@ function Assert-SmokeLogQuality {
         }
     }
 }
+
+function Get-RepoRunServerProcesses {
+    if (-not $IsWindows -or -not (Get-Command Get-CimInstance -ErrorAction SilentlyContinue)) {
+        return @()
+    }
+
+    $repoPattern = [regex]::Escape([string]$repoRoot)
+    $modulePattern = [regex]::Escape([string]$moduleRoot)
+
+    @(Get-CimInstance Win32_Process |
+        Where-Object {
+            $_.Name -match '^(java|javaw|gradle).*\.exe$' -and
+            $_.CommandLine -and
+            (
+                $_.CommandLine -match $repoPattern -or
+                $_.CommandLine -match $modulePattern
+            ) -and
+            (
+                $_.CommandLine -match 'GradleWrapperMain runServer' -or
+                $_.CommandLine -match 'NeoForgeServerDevLaunchHandler' -or
+                $_.CommandLine -match 'serverRunProgramArgs\.txt' -or
+                $_.CommandLine -match 'net\.neoforged\.devlaunch\.Main'
+            )
+        })
+}
+
+function Get-RepoRunServerProcessSummary {
+    @(Get-RepoRunServerProcesses |
+        ForEach-Object {
+            "PID $($_.ProcessId) $($_.Name): $($_.CommandLine)"
+        })
+}
+
+function Test-FileLocked {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        return $false
+    }
+
+    $stream = $null
+    try {
+        $stream = [System.IO.File]::Open(
+            $Path,
+            [System.IO.FileMode]::Open,
+            [System.IO.FileAccess]::ReadWrite,
+            [System.IO.FileShare]::None
+        )
+        return $false
+    }
+    catch [System.IO.IOException] {
+        return $true
+    }
+    finally {
+        if ($stream) {
+            $stream.Dispose()
+        }
+    }
+}
+
+function Assert-WorldSessionLockAvailable {
+    $lockPath = Join-Path $runDir 'world\session.lock'
+    if (-not (Test-FileLocked -Path $lockPath)) {
+        return
+    }
+
+    $processes = @(Get-RepoRunServerProcesses)
+    $processHint = if ($processes.Count -gt 0) {
+        "Likely local stale runServer/Java processes:`n" + ((Get-RepoRunServerProcessSummary) -join "`n")
+    } else {
+        "No matching Java process was found automatically. Check Task Manager for a stale runServer/java.exe process."
+    }
+
+    if (-not $KillStaleRunServer) {
+        throw "Dedicated server run directory is already locked before smoke start: $lockPath`nStop the stale server process and rerun smoke, or rerun with -KillStaleRunServer.`n`n$processHint"
+    }
+
+    if ($processes.Count -eq 0) {
+        throw "Dedicated server run directory is already locked before smoke start: $lockPath`n-KillStaleRunServer was set, but no matching repo runServer process was found.`n$processHint"
+    }
+
+    Write-Warning "Dedicated server run directory is locked before smoke start. Stopping stale repo runServer processes because -KillStaleRunServer was set."
+    foreach ($process in $processes) {
+        Write-Warning "Stopping PID $($process.ProcessId): $($process.Name)"
+        Stop-Process -Id $process.ProcessId -Force -ErrorAction SilentlyContinue
+    }
+
+    Start-Sleep -Seconds 3
+
+    if (Test-FileLocked -Path $lockPath) {
+        $remaining = @(Get-RepoRunServerProcessSummary)
+        $remainingHint = if ($remaining.Count -gt 0) {
+            "Remaining matching processes:`n" + ($remaining -join "`n")
+        } else {
+            "No matching Java process remains, but the lock is still held. Close related terminals or inspect the file handle manually."
+        }
+
+        throw "Dedicated server run directory is still locked after attempting stale process cleanup: $lockPath`n$remainingHint"
+    }
+
+    Write-Host "Stale runServer lock cleared."
+}
+
+Assert-WorldSessionLockAvailable
 
 Write-Host "Starting dedicated server smoke test with timeout $TimeoutSeconds seconds."
 Write-Host "Module root: $moduleRoot"

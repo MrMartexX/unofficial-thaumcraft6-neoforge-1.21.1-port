@@ -271,3 +271,14 @@ Next:
 
 - The dedicated server smoke log-quality gate now uses case-sensitive log severity markers instead of a broad generic ERROR regex, avoiding false positives from DEBUG dependency paths such as rror_prone_annotations.
 - Datapack, recipe, tag, invalid resource path, crash and startup failure markers remain hard failures. -FailOnWarnings remains opt-in for exact WARN-level markers.
+
+### Latest server smoke stale-lock preflight update
+
+- Dedicated server smoke checks run/world/session.lock before starting runServer.
+- If a local stale Java or Gradle process still owns the world lock, smoke fails early with matching process hints instead of a long Minecraft DirectoryLock stacktrace.
+
+### Latest server smoke stale-process cleanup update
+
+- Dedicated server smoke now supports -KillStaleRunServer for local runs.
+- With that switch, smoke stops only matching Java or Gradle runServer and NeoForge devlaunch processes from this repository before retrying the world session-lock check.
+- CI remains conservative by default; the switch is intended for local developer runs where a previous smoke left run/world/session.lock held.
