@@ -1,52 +1,15 @@
 {
-  "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
-  "crystals": [
+  "type": "thaumcraft:arcane_shapeless",
+  "research": "TUBES",
+  "vis": 10,
+  "ingredients": [
     {
-      "aspect": "aer",
-      "amount": 1
+      "item": "thaumcraft:tube"
     },
     {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
+      "item": "minecraft:lever"
     }
   ],
-  "pattern": [
-    "III",
-    "LRL",
-    "LTL"
-  ],
-  "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
-    },
-    "T": {
-      "item": "thaumcraft:thaumometer"
-    }
-  },
   "result": {
     "id": "thaumcraft:tube_valve",
     "count": 1

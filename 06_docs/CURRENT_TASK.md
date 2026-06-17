@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-06-10
+Last updated: 2026-06-17
 
 ## Current branch
 
@@ -24,7 +24,7 @@ Last updated: 2026-06-10
 
 ## Near-term tasks
 
-1. Verify the next GitHub Actions result after the workflow path and smoke-test path fixes.
-2. Keep reusable audit scripts under `tools/audits/`.
-3. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.
-4. Continue next asset/visual parity fixes after local client screenshots or runtime reports.
+1. Continue exact arcane recipe expansion by audited dependency family.
+2. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
+3. Keep reusable audit scripts under `tools/audits/`.
+4. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.

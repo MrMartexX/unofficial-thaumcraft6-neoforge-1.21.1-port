@@ -130,9 +130,11 @@ public final class TCItems {
 
     public static final Supplier<Item> AMBER = ITEMS.register("amber", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> QUICKSILVER = ITEMS.register("quicksilver", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> QUICKSILVER_NUGGET = simpleItem("quicksilver_nugget");
     public static final Supplier<Item> FABRIC = ITEMS.register("fabric", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> THAUMIUM_INGOT = simpleItem("thaumium_ingot");
     public static final Supplier<Item> BRASS_INGOT = simpleItem("brass_ingot");
+    public static final Supplier<Item> BRASS_NUGGET = simpleItem("brass_nugget");
     public static final Supplier<Item> BRASS_PLATE = simpleItem("brass_plate");
     public static final Supplier<Item> IRON_PLATE = simpleItem("iron_plate");
     public static final Supplier<Item> THAUMIUM_PLATE = simpleItem("thaumium_plate");
@@ -285,11 +287,13 @@ public final class TCItems {
             case "scribing_tools" -> new ItemScribingTools();
             case "thaumium_ingot" -> legacyItem("ingot", "thaumium", 0);
             case "brass_ingot" -> legacyItem("ingot", "brass", 2);
+            case "brass_nugget" -> legacyItem("nugget", "brass", 8);
             case "brass_plate" -> legacyItem("plate", "brass", 0);
             case "iron_plate" -> legacyItem("plate", "iron", 1);
             case "thaumium_plate" -> legacyItem("plate", "thaumium", 2);
             case "void_plate" -> legacyItem("plate", "void", 3);
             case "rare_earth" -> legacyItem("nugget", "rare_earth", 10);
+            case "quicksilver_nugget" -> legacyItem("nugget", "quicksilver", 5);
             case "curio_rites" -> legacyItem("curio", "rites", 6);
             case "salis_mundus" -> new ItemLegacyPlaceholder(
                     new Item.Properties(),
