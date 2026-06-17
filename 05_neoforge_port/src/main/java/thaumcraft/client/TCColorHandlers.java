@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -29,6 +30,23 @@ public final class TCColorHandlers {
     private static final int ORDER = 0xD5D4EC;
     private static final int ENTROPY = 0x404040;
     private static final int FLUX = 0x800080;
+
+    private static final int DYE_BLACK = 0x1D1D21;
+    private static final int DYE_BLUE = 0x3C44AA;
+    private static final int DYE_BROWN = 0x835432;
+    private static final int DYE_CYAN = 0x169C9C;
+    private static final int DYE_GRAY = 0x474F52;
+    private static final int DYE_GREEN = 0x5E7C16;
+    private static final int DYE_LIGHT_BLUE = 0x3AB3DA;
+    private static final int DYE_LIME = 0x80C71F;
+    private static final int DYE_MAGENTA = 0xC74EBD;
+    private static final int DYE_ORANGE = 0xF9801D;
+    private static final int DYE_PINK = 0xF38BAA;
+    private static final int DYE_PURPLE = 0x8932B8;
+    private static final int DYE_RED = 0xB02E26;
+    private static final int DYE_SILVER = 0x9D9D97;
+    private static final int DYE_WHITE = 0xF9FFFE;
+    private static final int DYE_YELLOW = 0xFED83D;
 
     private TCColorHandlers() {
     }
@@ -59,6 +77,24 @@ public final class TCColorHandlers {
                 TCBlocks.CRYSTAL_ORDO.get(),
                 TCBlocks.CRYSTAL_PERDITIO.get(),
                 TCBlocks.CRYSTAL_VITIUM.get());
+
+        event.register((state, level, pos, tintIndex) -> candleColor(state.getBlock(), tintIndex),
+                TCBlocks.CANDLE_BLACK.get(),
+                TCBlocks.CANDLE_BLUE.get(),
+                TCBlocks.CANDLE_BROWN.get(),
+                TCBlocks.CANDLE_CYAN.get(),
+                TCBlocks.CANDLE_GRAY.get(),
+                TCBlocks.CANDLE_GREEN.get(),
+                TCBlocks.CANDLE_LIGHTBLUE.get(),
+                TCBlocks.CANDLE_LIME.get(),
+                TCBlocks.CANDLE_MAGENTA.get(),
+                TCBlocks.CANDLE_ORANGE.get(),
+                TCBlocks.CANDLE_PINK.get(),
+                TCBlocks.CANDLE_PURPLE.get(),
+                TCBlocks.CANDLE_RED.get(),
+                TCBlocks.CANDLE_SILVER.get(),
+                TCBlocks.CANDLE_WHITE.get(),
+                TCBlocks.CANDLE_YELLOW.get());
     }
 
     @SubscribeEvent
@@ -92,6 +128,23 @@ public final class TCColorHandlers {
         event.register((stack, tintIndex) -> 0xFFB02E26, TCBlocks.NITOR_RED.get());
         event.register((stack, tintIndex) -> 0xFF9D9D97, TCBlocks.NITOR_SILVER.get());
         event.register((stack, tintIndex) -> 0xFFF9FFFE, TCBlocks.NITOR_WHITE.get());
+        event.register((stack, tintIndex) -> candleColor(Block.byItem(stack.getItem()), tintIndex),
+                TCBlocks.CANDLE_BLACK.get(),
+                TCBlocks.CANDLE_BLUE.get(),
+                TCBlocks.CANDLE_BROWN.get(),
+                TCBlocks.CANDLE_CYAN.get(),
+                TCBlocks.CANDLE_GRAY.get(),
+                TCBlocks.CANDLE_GREEN.get(),
+                TCBlocks.CANDLE_LIGHTBLUE.get(),
+                TCBlocks.CANDLE_LIME.get(),
+                TCBlocks.CANDLE_MAGENTA.get(),
+                TCBlocks.CANDLE_ORANGE.get(),
+                TCBlocks.CANDLE_PINK.get(),
+                TCBlocks.CANDLE_PURPLE.get(),
+                TCBlocks.CANDLE_RED.get(),
+                TCBlocks.CANDLE_SILVER.get(),
+                TCBlocks.CANDLE_WHITE.get(),
+                TCBlocks.CANDLE_YELLOW.get());
         ItemColor aspectVariantColor = TCColorHandlers::aspectVariantColor;
         for (var entry : TCItems.ITEMS.getEntries()) {
             Item item = entry.get();
@@ -126,7 +179,7 @@ public final class TCColorHandlers {
         return Aspect.getAspect(aspectTag);
     }
 
-    private static int crystalColor(net.minecraft.world.level.block.Block block) {
+    private static int crystalColor(Block block) {
         if (block == TCBlocks.CRYSTAL_AER.get()) {
             return AIR;
         }
@@ -147,6 +200,62 @@ public final class TCColorHandlers {
         }
         if (block == TCBlocks.CRYSTAL_VITIUM.get()) {
             return FLUX;
+        }
+
+        return 0xFFFFFFFF;
+    }
+
+    private static int candleColor(Block block, int tintIndex) {
+        if (tintIndex != 0) {
+            return 0xFFFFFFFF;
+        }
+        if (block == TCBlocks.CANDLE_BLACK.get()) {
+            return DYE_BLACK;
+        }
+        if (block == TCBlocks.CANDLE_BLUE.get()) {
+            return DYE_BLUE;
+        }
+        if (block == TCBlocks.CANDLE_BROWN.get()) {
+            return DYE_BROWN;
+        }
+        if (block == TCBlocks.CANDLE_CYAN.get()) {
+            return DYE_CYAN;
+        }
+        if (block == TCBlocks.CANDLE_GRAY.get()) {
+            return DYE_GRAY;
+        }
+        if (block == TCBlocks.CANDLE_GREEN.get()) {
+            return DYE_GREEN;
+        }
+        if (block == TCBlocks.CANDLE_LIGHTBLUE.get()) {
+            return DYE_LIGHT_BLUE;
+        }
+        if (block == TCBlocks.CANDLE_LIME.get()) {
+            return DYE_LIME;
+        }
+        if (block == TCBlocks.CANDLE_MAGENTA.get()) {
+            return DYE_MAGENTA;
+        }
+        if (block == TCBlocks.CANDLE_ORANGE.get()) {
+            return DYE_ORANGE;
+        }
+        if (block == TCBlocks.CANDLE_PINK.get()) {
+            return DYE_PINK;
+        }
+        if (block == TCBlocks.CANDLE_PURPLE.get()) {
+            return DYE_PURPLE;
+        }
+        if (block == TCBlocks.CANDLE_RED.get()) {
+            return DYE_RED;
+        }
+        if (block == TCBlocks.CANDLE_SILVER.get()) {
+            return DYE_SILVER;
+        }
+        if (block == TCBlocks.CANDLE_WHITE.get()) {
+            return DYE_WHITE;
+        }
+        if (block == TCBlocks.CANDLE_YELLOW.get()) {
+            return DYE_YELLOW;
         }
 
         return 0xFFFFFFFF;

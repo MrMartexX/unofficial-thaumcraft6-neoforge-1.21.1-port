@@ -5,11 +5,11 @@ This batch converts the transport/essentia catalog ids from item-only placeholde
 ## Wired ids
 
 - `thaumcraft:tube`
-- `thaumcraft:tubebuffer`
-- `thaumcraft:tubefilter`
-- `thaumcraft:tubeoneway`
-- `thaumcraft:tuberestrict`
-- `thaumcraft:tubevalve`
+- `thaumcraft:tube_buffer`
+- `thaumcraft:tube_filter`
+- `thaumcraft:tube_oneway`
+- `thaumcraft:tube_restrict`
+- `thaumcraft:tube_valve`
 - `thaumcraft:essentiasmelterthaumium`
 - `thaumcraft:essentiasmeltervoid`
 

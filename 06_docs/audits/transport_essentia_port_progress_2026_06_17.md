@@ -11,11 +11,11 @@ Latest pushed implementation checkpoint:
 The current registry wiring batch moves the transport/essentia entries from item-only catalog placeholders toward real block/blockentity-backed entries:
 
 - `tube`
-- `tubebuffer`
-- `tubefilter`
-- `tubeoneway`
-- `tuberestrict`
-- `tubevalve`
+- `tube_buffer`
+- `tube_filter`
+- `tube_oneway`
+- `tube_restrict`
+- `tube_valve`
 - `essentiasmelterthaumium`
 - `essentiasmeltervoid`
 

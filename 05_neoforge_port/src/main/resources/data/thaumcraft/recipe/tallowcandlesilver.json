@@ -4,7 +4,7 @@
   "group": "thaumcraft_tallow_candle_dye",
   "ingredients": [
     {
-      "tag": "thaumcraft:tallow_candles"
+      "tag": "thaumcraft:candle_whites"
     },
     {
       "item": "minecraft:light_gray_dye"
@@ -12,6 +12,6 @@
   ],
   "result": {
     "count": 1,
-    "id": "thaumcraft:tallow_candle_silver"
+    "id": "thaumcraft:candle_silver"
   }
 }

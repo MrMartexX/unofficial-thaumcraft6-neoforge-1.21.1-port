@@ -80,23 +80,22 @@ public final class TCItems {
     public static final Supplier<BlockItem> NITOR_RED = blockItem("nitor_red", TCBlocks.NITOR_RED);
     public static final Supplier<BlockItem> NITOR_SILVER = blockItem("nitor_silver", TCBlocks.NITOR_SILVER);
     public static final Supplier<BlockItem> NITOR_WHITE = blockItem("nitor_white", TCBlocks.NITOR_WHITE);
-    public static final Supplier<BlockItem> TALLOW_CANDLE = blockItem("tallow_candle", TCBlocks.TALLOW_CANDLE);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_BLACK = blockItem("tallow_candle_black", TCBlocks.TALLOW_CANDLE_BLACK);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_BLUE = blockItem("tallow_candle_blue", TCBlocks.TALLOW_CANDLE_BLUE);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_BROWN = blockItem("tallow_candle_brown", TCBlocks.TALLOW_CANDLE_BROWN);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_CYAN = blockItem("tallow_candle_cyan", TCBlocks.TALLOW_CANDLE_CYAN);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_GRAY = blockItem("tallow_candle_gray", TCBlocks.TALLOW_CANDLE_GRAY);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_GREEN = blockItem("tallow_candle_green", TCBlocks.TALLOW_CANDLE_GREEN);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_LIGHTBLUE = blockItem("tallow_candle_lightblue", TCBlocks.TALLOW_CANDLE_LIGHTBLUE);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_LIME = blockItem("tallow_candle_lime", TCBlocks.TALLOW_CANDLE_LIME);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_MAGENTA = blockItem("tallow_candle_magenta", TCBlocks.TALLOW_CANDLE_MAGENTA);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_ORANGE = blockItem("tallow_candle_orange", TCBlocks.TALLOW_CANDLE_ORANGE);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_PINK = blockItem("tallow_candle_pink", TCBlocks.TALLOW_CANDLE_PINK);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_PURPLE = blockItem("tallow_candle_purple", TCBlocks.TALLOW_CANDLE_PURPLE);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_RED = blockItem("tallow_candle_red", TCBlocks.TALLOW_CANDLE_RED);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_SILVER = blockItem("tallow_candle_silver", TCBlocks.TALLOW_CANDLE_SILVER);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_WHITE = blockItem("tallow_candle_white", TCBlocks.TALLOW_CANDLE_WHITE);
-    public static final Supplier<BlockItem> TALLOW_CANDLE_YELLOW = blockItem("tallow_candle_yellow", TCBlocks.TALLOW_CANDLE_YELLOW);
+    public static final Supplier<BlockItem> CANDLE_BLACK = blockItem("candle_black", TCBlocks.CANDLE_BLACK);
+    public static final Supplier<BlockItem> CANDLE_BLUE = blockItem("candle_blue", TCBlocks.CANDLE_BLUE);
+    public static final Supplier<BlockItem> CANDLE_BROWN = blockItem("candle_brown", TCBlocks.CANDLE_BROWN);
+    public static final Supplier<BlockItem> CANDLE_CYAN = blockItem("candle_cyan", TCBlocks.CANDLE_CYAN);
+    public static final Supplier<BlockItem> CANDLE_GRAY = blockItem("candle_gray", TCBlocks.CANDLE_GRAY);
+    public static final Supplier<BlockItem> CANDLE_GREEN = blockItem("candle_green", TCBlocks.CANDLE_GREEN);
+    public static final Supplier<BlockItem> CANDLE_LIGHTBLUE = blockItem("candle_lightblue", TCBlocks.CANDLE_LIGHTBLUE);
+    public static final Supplier<BlockItem> CANDLE_LIME = blockItem("candle_lime", TCBlocks.CANDLE_LIME);
+    public static final Supplier<BlockItem> CANDLE_MAGENTA = blockItem("candle_magenta", TCBlocks.CANDLE_MAGENTA);
+    public static final Supplier<BlockItem> CANDLE_ORANGE = blockItem("candle_orange", TCBlocks.CANDLE_ORANGE);
+    public static final Supplier<BlockItem> CANDLE_PINK = blockItem("candle_pink", TCBlocks.CANDLE_PINK);
+    public static final Supplier<BlockItem> CANDLE_PURPLE = blockItem("candle_purple", TCBlocks.CANDLE_PURPLE);
+    public static final Supplier<BlockItem> CANDLE_RED = blockItem("candle_red", TCBlocks.CANDLE_RED);
+    public static final Supplier<BlockItem> CANDLE_SILVER = blockItem("candle_silver", TCBlocks.CANDLE_SILVER);
+    public static final Supplier<BlockItem> CANDLE_WHITE = blockItem("candle_white", TCBlocks.CANDLE_WHITE);
+    public static final Supplier<BlockItem> CANDLE_YELLOW = blockItem("candle_yellow", TCBlocks.CANDLE_YELLOW);
     public static final Supplier<BlockItem> TABLE_WOOD = blockItem("table_wood", TCBlocks.TABLE_WOOD);
     public static final Supplier<BlockItem> TABLE_STONE = blockItem("table_stone", TCBlocks.TABLE_STONE);
     public static final Supplier<BlockItem> ARCANE_WORKBENCH = blockItem("arcane_workbench", TCBlocks.ARCANE_WORKBENCH);
@@ -405,8 +404,8 @@ public final class TCItems {
     public static final Supplier<Item> CATALOG_PLACEHOLDER_PATTERNCRAFTER = ITEMS.register("patterncrafter", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_REDSTONERELAY = ITEMS.register("redstonerelay", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_RESONATOR = ITEMS.register("resonator", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_SMELTERAUX = ITEMS.register("smelteraux", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_SMELTERVENT = ITEMS.register("smeltervent", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_SMELTERAUX = ITEMS.register("smelter_aux", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_SMELTERVENT = ITEMS.register("smelter_vent", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_STABILIZER = ITEMS.register("stabilizer", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_VISBATTERY = ITEMS.register("visbattery", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_VISGENERATOR = ITEMS.register("visgenerator", () -> new Item(new Item.Properties()));
@@ -433,11 +432,11 @@ public final class TCItems {
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTIN = ITEMS.register("essentiatransportin", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTOUT = ITEMS.register("essentiatransportout", () -> new Item(new Item.Properties()));
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBE = blockItem("tube", TCBlocks.TUBE);
-    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEBUFFER = blockItem("tubebuffer", TCBlocks.TUBE_BUFFER);
-    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEFILTER = blockItem("tubefilter", TCBlocks.TUBE_FILTER);
-    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEONEWAY = blockItem("tubeoneway", TCBlocks.TUBE_ONEWAY);
-    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBERESTRICT = blockItem("tuberestrict", TCBlocks.TUBE_RESTRICT);
-    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEVALVE = blockItem("tubevalve", TCBlocks.TUBE_VALVE);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEBUFFER = blockItem("tube_buffer", TCBlocks.TUBE_BUFFER);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEFILTER = blockItem("tube_filter", TCBlocks.TUBE_FILTER);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEONEWAY = blockItem("tube_oneway", TCBlocks.TUBE_ONEWAY);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBERESTRICT = blockItem("tube_restrict", TCBlocks.TUBE_RESTRICT);
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEVALVE = blockItem("tube_valve", TCBlocks.TUBE_VALVE);
 
     private TCItems() {
     }

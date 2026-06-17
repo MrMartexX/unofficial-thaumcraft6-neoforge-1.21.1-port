@@ -80,16 +80,16 @@ Do not add recipes/pages for these as isolated JSON-only fixes. They need their 
   - `thaumcraft:essentiatransportin`
   - `thaumcraft:essentiatransportout`
   - `thaumcraft:tube`
-  - `thaumcraft:tubebuffer`
-  - `thaumcraft:tubefilter`
-  - `thaumcraft:tubeoneway`
-  - `thaumcraft:tuberestrict`
-  - `thaumcraft:tubevalve`
+  - `thaumcraft:tube_buffer`
+  - `thaumcraft:tube_filter`
+  - `thaumcraft:tube_oneway`
+  - `thaumcraft:tube_restrict`
+  - `thaumcraft:tube_valve`
 - Smelter upgrades and auxiliaries:
   - `thaumcraft:essentiasmelterthaumium`
   - `thaumcraft:essentiasmeltervoid`
-  - `thaumcraft:smelteraux`
-  - `thaumcraft:smeltervent`
+  - `thaumcraft:smelter_aux`
+  - `thaumcraft:smelter_vent`
 - Devices with missing or incomplete block/menu/gameplay systems:
   - `thaumcraft:alchemicalconstruct`
   - `thaumcraft:advalchemyconstruct`

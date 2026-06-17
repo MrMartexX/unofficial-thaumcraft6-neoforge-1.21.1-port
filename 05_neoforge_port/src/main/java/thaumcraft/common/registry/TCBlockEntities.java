@@ -59,27 +59,27 @@ public final class TCBlockEntities {
                             (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE.get(), pos, state, TCLegacyTubeVariant.TUBE),
                             TCBlocks.TUBE.get()).build(null));
     public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_BUFFER =
-            BLOCK_ENTITY_TYPES.register("tubebuffer", () ->
+            BLOCK_ENTITY_TYPES.register("tube_buffer", () ->
                     BlockEntityType.Builder.of(
                             (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_BUFFER.get(), pos, state, TCLegacyTubeVariant.BUFFER),
                             TCBlocks.TUBE_BUFFER.get()).build(null));
     public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_FILTER =
-            BLOCK_ENTITY_TYPES.register("tubefilter", () ->
+            BLOCK_ENTITY_TYPES.register("tube_filter", () ->
                     BlockEntityType.Builder.of(
                             (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_FILTER.get(), pos, state, TCLegacyTubeVariant.FILTER),
                             TCBlocks.TUBE_FILTER.get()).build(null));
     public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_ONEWAY =
-            BLOCK_ENTITY_TYPES.register("tubeoneway", () ->
+            BLOCK_ENTITY_TYPES.register("tube_oneway", () ->
                     BlockEntityType.Builder.of(
                             (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_ONEWAY.get(), pos, state, TCLegacyTubeVariant.ONEWAY),
                             TCBlocks.TUBE_ONEWAY.get()).build(null));
     public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_RESTRICT =
-            BLOCK_ENTITY_TYPES.register("tuberestrict", () ->
+            BLOCK_ENTITY_TYPES.register("tube_restrict", () ->
                     BlockEntityType.Builder.of(
                             (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_RESTRICT.get(), pos, state, TCLegacyTubeVariant.RESTRICT),
                             TCBlocks.TUBE_RESTRICT.get()).build(null));
     public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_VALVE =
-            BLOCK_ENTITY_TYPES.register("tubevalve", () ->
+            BLOCK_ENTITY_TYPES.register("tube_valve", () ->
                     BlockEntityType.Builder.of(
                             (pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_VALVE.get(), pos, state, TCLegacyTubeVariant.VALVE),
                             TCBlocks.TUBE_VALVE.get()).build(null));

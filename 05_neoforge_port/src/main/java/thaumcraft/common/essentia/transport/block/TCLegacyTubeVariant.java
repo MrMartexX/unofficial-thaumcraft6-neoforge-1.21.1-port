@@ -10,11 +10,11 @@ import java.util.Optional;
  */
 public enum TCLegacyTubeVariant {
     TUBE("tube", TCEssentiaTubeMode.NORMAL, 16),
-    BUFFER("tubebuffer", TCEssentiaTubeMode.BUFFER, 128),
-    FILTER("tubefilter", TCEssentiaTubeMode.FILTER, 16),
-    ONEWAY("tubeoneway", TCEssentiaTubeMode.ONEWAY, 16),
-    RESTRICT("tuberestrict", TCEssentiaTubeMode.RESTRICT, 16),
-    VALVE("tubevalve", TCEssentiaTubeMode.VALVE, 16);
+    BUFFER("tube_buffer", TCEssentiaTubeMode.BUFFER, 128),
+    FILTER("tube_filter", TCEssentiaTubeMode.FILTER, 16),
+    ONEWAY("tube_oneway", TCEssentiaTubeMode.ONEWAY, 16),
+    RESTRICT("tube_restrict", TCEssentiaTubeMode.RESTRICT, 16),
+    VALVE("tube_valve", TCEssentiaTubeMode.VALVE, 16);
 
     private final String catalogId;
     private final TCEssentiaTubeMode mode;
@@ -41,6 +41,14 @@ public enum TCLegacyTubeVariant {
     public static Optional<TCLegacyTubeVariant> fromCatalogId(String catalogId) {
         if (catalogId == null || catalogId.isBlank()) return Optional.empty();
         String normalized = catalogId.toLowerCase(Locale.ROOT).replace("thaumcraft:", "");
+        normalized = switch (normalized) {
+            case "tubebuffer" -> "tube_buffer";
+            case "tubefilter" -> "tube_filter";
+            case "tubeoneway" -> "tube_oneway";
+            case "tuberestrict" -> "tube_restrict";
+            case "tubevalve" -> "tube_valve";
+            default -> normalized;
+        };
         for (TCLegacyTubeVariant variant : values()) {
             if (variant.catalogId.equals(normalized)) {
                 return Optional.of(variant);
