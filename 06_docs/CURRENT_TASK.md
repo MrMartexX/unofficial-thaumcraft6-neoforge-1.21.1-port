@@ -56,3 +56,7 @@ Last updated: 2026-06-17
 ## Legacy alchemy recipe source note
 
 - Use 06_docs/audits/legacy_alchemy_recipe_source_audit.md to choose the first alchemy/crucible/special recipe page serializer slice from legacy source evidence.
+
+## Hedge alchemy recipe extraction note
+
+- Use 06_docs/audits/hedge_alchemy_legacy_recipe_blocks.md as the source of truth for the first crucible recipe data/page boundary batch.

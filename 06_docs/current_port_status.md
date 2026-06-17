@@ -306,3 +306,9 @@ Next:
 - Added tools/audits/audit-legacy-alchemy-recipe-sources.ps1 and 06_docs/audits/legacy_alchemy_recipe_source_audit.md.
 - This audit traces the dominant alchemy/crucible/special recipe page gaps back to the local legacy source corpus before implementation.
 - Next alchemy work should implement only a recipe data model, serializer, loader audit, and Thaumonomicon page snapshot for the selected family before any crucible or machine behavior.
+
+### Latest hedge alchemy recipe extraction update
+
+- Added tools/audits/extract-legacy-hedge-alchemy-recipes.ps1 and 06_docs/audits/hedge_alchemy_legacy_recipe_blocks.md.
+- This extraction captures exact legacy CrucibleRecipe source blocks for the dominant HEDGE_ALCHEMY page-gap family before writing any new NeoForge serializer or page renderer.
+- The next implementation slice can use this document to add the first crucible recipe data/page boundary while keeping in-world crucible behavior deferred.
