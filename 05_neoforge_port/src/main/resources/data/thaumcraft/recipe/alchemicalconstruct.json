@@ -1,22 +1,10 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "TUBES",
+  "vis": 75,
   "crystals": [
     {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
       "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
       "amount": 1
     },
     {
@@ -29,26 +17,26 @@
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "IVI",
+    "TWT",
+    "IVI"
   ],
   "key": {
     "I": {
-      "tag": "c:ingots/iron"
+      "tag": "c:plates/iron"
     },
-    "L": {
-      "item": "minecraft:leather"
-    },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
+    "V": {
+      "item": "thaumcraft:tube_valve"
     },
     "T": {
-      "item": "thaumcraft:thaumometer"
+      "item": "thaumcraft:tube"
+    },
+    "W": {
+      "item": "thaumcraft:plank_greatwood"
     }
   },
   "result": {
-    "id": "thaumcraft:alchemicalconstruct",
-    "count": 1
+    "id": "thaumcraft:metal_alchemical",
+    "count": 2
   }
 }

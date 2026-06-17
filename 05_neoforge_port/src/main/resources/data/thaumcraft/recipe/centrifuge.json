@@ -1,24 +1,8 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
+  "research": "CENTRIFUGE",
   "vis": 100,
   "crystals": [
-    {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
     {
       "aspect": "ordo",
       "amount": 1
@@ -29,22 +13,22 @@
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    " T ",
+    "RCP",
+    " T "
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
+    "T": {
+      "item": "thaumcraft:tube"
     },
     "R": {
-      "item": "thaumcraft:vis_resonator"
+      "item": "thaumcraft:morphic_resonator"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "C": {
+      "item": "thaumcraft:metal_alchemical"
+    },
+    "P": {
+      "item": "thaumcraft:mechanism_simple"
     }
   },
   "result": {

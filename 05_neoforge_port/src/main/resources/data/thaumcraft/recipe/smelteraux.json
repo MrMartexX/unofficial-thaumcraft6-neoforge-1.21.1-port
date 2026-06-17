@@ -1,6 +1,6 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
+  "research": "IMPROVEDSMELTING",
   "vis": 100,
   "crystals": [
     {
@@ -10,41 +10,31 @@
     {
       "aspect": "terra",
       "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "WTW",
+    "RGR",
+    "IBI"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
+    "W": {
+      "item": "thaumcraft:plank_greatwood"
     },
     "T": {
-      "item": "thaumcraft:thaumometer"
+      "item": "thaumcraft:tube_filter"
+    },
+    "R": {
+      "tag": "c:plates/brass"
+    },
+    "G": {
+      "item": "thaumcraft:metal_alchemical"
+    },
+    "I": {
+      "tag": "c:plates/iron"
+    },
+    "B": {
+      "item": "thaumcraft:bellows"
     }
   },
   "result": {

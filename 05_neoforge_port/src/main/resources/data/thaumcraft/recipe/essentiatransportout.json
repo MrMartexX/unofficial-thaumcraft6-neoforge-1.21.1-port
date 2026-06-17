@@ -1,6 +1,6 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
+  "research": "ESSENTIATRANSPORT",
   "vis": 100,
   "crystals": [
     {
@@ -8,43 +8,27 @@
       "amount": 1
     },
     {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
       "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
       "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "   ",
+    "BQB",
+    "IGI"
   ],
   "key": {
     "I": {
-      "tag": "c:ingots/iron"
+      "tag": "c:plates/iron"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "B": {
+      "tag": "c:plates/brass"
     },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
+    "Q": {
+      "item": "minecraft:hopper"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "G": {
+      "item": "thaumcraft:metal_alchemical"
     }
   },
   "result": {
