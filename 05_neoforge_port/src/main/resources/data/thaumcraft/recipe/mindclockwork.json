@@ -1,20 +1,8 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "MINDCLOCKWORK@2",
+  "vis": 25,
   "crystals": [
-    {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
     {
       "aspect": "ignis",
       "amount": 1
@@ -22,29 +10,25 @@
     {
       "aspect": "ordo",
       "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    " P ",
+    "PGP",
+    "BCB"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
+    "G": {
+      "item": "thaumcraft:mechanism_simple"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "B": {
+      "tag": "c:plates/brass"
     },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
+    "P": {
+      "tag": "minecraft:glass_panes"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "C": {
+      "item": "minecraft:comparator"
     }
   },
   "result": {
