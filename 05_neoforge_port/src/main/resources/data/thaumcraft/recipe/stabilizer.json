@@ -1,12 +1,8 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "INFUSIONSTABLE",
+  "vis": 250,
   "crystals": [
-    {
-      "aspect": "aer",
-      "amount": 1
-    },
     {
       "aspect": "terra",
       "amount": 1
@@ -16,35 +12,33 @@
       "amount": 1
     },
     {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
       "aspect": "perditio",
       "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "SRS",
+    "BVB",
+    "IMI"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
     "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "S": {
+      "item": "thaumcraft:slab_arcane_stone"
+    },
+    "B": {
+      "item": "thaumcraft:stone_arcane"
+    },
+    "M": {
+      "item": "thaumcraft:mechanism_complex"
+    },
+    "V": {
       "item": "thaumcraft:vis_resonator"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "I": {
+      "item": "thaumcraft:redstoneinlay"
     }
   },
   "result": {

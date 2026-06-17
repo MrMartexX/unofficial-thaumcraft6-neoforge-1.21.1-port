@@ -1,50 +1,31 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
+  "research": "FLUXCLEANUP",
   "vis": 100,
   "crystals": [
     {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
       "aspect": "terra",
-      "amount": 1
+      "amount": 3
     },
     {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
+      "aspect": "aer",
+      "amount": 3
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "QTQ",
+    "QFQ",
+    "QTQ"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
-    },
     "T": {
-      "item": "thaumcraft:thaumometer"
+      "tag": "c:plates/thaumium"
+    },
+    "F": {
+      "item": "thaumcraft:filter"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
     }
   },
   "result": {

@@ -1,50 +1,44 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "VISBATTERY",
+  "vis": 50,
   "crystals": [
     {
       "aspect": "aer",
-      "amount": 1
+      "amount": 2
     },
     {
       "aspect": "terra",
-      "amount": 1
+      "amount": 2
     },
     {
       "aspect": "aqua",
-      "amount": 1
+      "amount": 2
     },
     {
       "aspect": "ignis",
-      "amount": 1
+      "amount": 2
     },
     {
       "aspect": "ordo",
-      "amount": 1
+      "amount": 2
     },
     {
       "aspect": "perditio",
-      "amount": 1
+      "amount": 2
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "SSS",
+    "SRS",
+    "SSS"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
     "R": {
       "item": "thaumcraft:vis_resonator"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "S": {
+      "item": "thaumcraft:slab_arcane_stone"
     }
   },
   "result": {

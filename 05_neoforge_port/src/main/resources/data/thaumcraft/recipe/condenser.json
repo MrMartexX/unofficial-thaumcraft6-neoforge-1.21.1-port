@@ -1,50 +1,41 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "FLUXCLEANUP",
+  "vis": 500,
   "crystals": [
     {
       "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
+      "amount": 5
     },
     {
       "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
+      "amount": 5
     },
     {
       "aspect": "perditio",
-      "amount": 1
+      "amount": 5
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "BCB",
+    "WMW",
+    "BTB"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
-    },
     "T": {
-      "item": "thaumcraft:thaumometer"
+      "item": "thaumcraft:tube"
+    },
+    "C": {
+      "item": "thaumcraft:morphic_resonator"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "M": {
+      "item": "thaumcraft:mechanism_complex"
+    },
+    "B": {
+      "tag": "c:plates/brass"
     }
   },
   "result": {
