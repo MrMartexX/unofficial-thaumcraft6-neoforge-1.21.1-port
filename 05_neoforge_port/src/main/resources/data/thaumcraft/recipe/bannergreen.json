@@ -1,50 +1,22 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
-  "crystals": [
-    {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
-    }
-  ],
+  "group": "thaumcraft:banners",
+  "research": "BASEINFUSION",
+  "vis": 10,
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "WS",
+    "WS",
+    "WB"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
+    "W": {
+      "item": "minecraft:green_wool"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "S": {
+      "item": "minecraft:stick"
     },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
-    },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "B": {
+      "tag": "minecraft:wooden_slabs"
     }
   },
   "result": {
