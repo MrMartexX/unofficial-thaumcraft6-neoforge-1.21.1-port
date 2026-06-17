@@ -1,20 +1,8 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "VISGENERATOR",
+  "vis": 25,
   "crystals": [
-    {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
     {
       "aspect": "ignis",
       "amount": 1
@@ -22,29 +10,28 @@
     {
       "aspect": "ordo",
       "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "WSW",
+    "EPE",
+    "WRW"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
     "R": {
       "item": "thaumcraft:vis_resonator"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "E": {
+      "item": "thaumcraft:rare_earth"
+    },
+    "S": {
+      "item": "minecraft:redstone"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "W": {
+      "tag": "minecraft:planks"
     }
   },
   "result": {
