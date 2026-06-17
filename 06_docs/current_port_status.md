@@ -288,3 +288,9 @@ Next:
 - Dedicated server smoke now pre-seeds run/server.properties before launching runServer.
 - This prevents the clean CI workspace first-run message Failed to load properties from file: server.properties from being logged as a Minecraft ERROR and tripping the strict log-quality gate.
 - Build workflow artifact upload already includes 05_neoforge_port/build/ci-logs/** for smoke diagnostics.
+
+### Latest custom recipe boundary audit update
+
+- Added tools/audits/audit-custom-recipe-boundary.ps1 and 06_docs/audits/custom_recipe_boundary_audit.md.
+- The audit scans current recipe JSON, research recipe-like references, missing recipe references, and custom recipe keywords to separate READY data recipes from custom behavior that still needs a serializer, page, or behavior design slice.
+- Next custom recipe work should use this audit to pick the largest safe target without copying legacy crucible, infusion, fake, blueprint or special recipe classes directly.

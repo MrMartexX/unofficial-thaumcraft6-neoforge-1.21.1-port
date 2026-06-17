@@ -44,3 +44,7 @@ Last updated: 2026-06-17
 ## CI smoke clean-workspace note
 
 - Server smoke pre-seeds run/server.properties so CI clean-workspace first startup does not create a benign Minecraft Settings ERROR.
+
+## Custom recipe boundary note
+
+- Use 06_docs/audits/custom_recipe_boundary_audit.md before implementing the next non-arcane custom recipe serializer/page/behavior slice.
