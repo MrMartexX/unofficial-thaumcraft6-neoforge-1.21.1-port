@@ -17,7 +17,7 @@ This folder is the main documentation area for the Thaumcraft 6 -> NeoForge 1.21
 - [Migration matrix](migration_matrix.md)
 - [Porting order](porting_order.md)
 - [Subsystem inventory](subsystem_inventory.md)
-- `NeoForge_legacy_migration_guide_expanded_v3.docx`
+- [Legacy migration guide] (NeoForge_legacy_migration_guide.md)
 
 ## Data and aspect references
 
