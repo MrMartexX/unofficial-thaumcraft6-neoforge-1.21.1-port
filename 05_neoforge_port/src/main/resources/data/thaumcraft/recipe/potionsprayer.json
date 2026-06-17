@@ -1,16 +1,8 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "POTIONSPRAYER",
+  "vis": 75,
   "crystals": [
-    {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
     {
       "aspect": "aqua",
       "amount": 1
@@ -18,33 +10,28 @@
     {
       "aspect": "ignis",
       "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "BDB",
+    "IAI",
+    "ICI"
   ],
   "key": {
+    "B": {
+      "tag": "c:plates/brass"
+    },
     "I": {
-      "tag": "c:ingots/iron"
+      "tag": "c:plates/iron"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "A": {
+      "item": "minecraft:brewing_stand"
     },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
+    "D": {
+      "item": "minecraft:dispenser"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "C": {
+      "item": "thaumcraft:metal_alchemical"
     }
   },
   "result": {

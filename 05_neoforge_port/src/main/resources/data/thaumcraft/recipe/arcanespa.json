@@ -1,50 +1,33 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "ARCANESPA",
+  "vis": 50,
   "crystals": [
     {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
       "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
       "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "QIQ",
+    "SJS",
+    "SPS"
   ],
   "key": {
+    "P": {
+      "item": "thaumcraft:mechanism_simple"
+    },
+    "J": {
+      "item": "thaumcraft:wardedjar"
+    },
+    "S": {
+      "item": "thaumcraft:stone_arcane"
+    },
+    "Q": {
+      "item": "minecraft:quartz_block"
+    },
     "I": {
-      "tag": "c:ingots/iron"
-    },
-    "L": {
-      "item": "minecraft:leather"
-    },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
-    },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+      "item": "minecraft:iron_bars"
     }
   },
   "result": {

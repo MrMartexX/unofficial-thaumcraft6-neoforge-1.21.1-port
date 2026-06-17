@@ -1,12 +1,8 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
+  "research": "ARCANEPATTERNCRAFTER",
+  "vis": 50,
   "crystals": [
-    {
-      "aspect": "aer",
-      "amount": 1
-    },
     {
       "aspect": "terra",
       "amount": 1
@@ -16,35 +12,30 @@
       "amount": 1
     },
     {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
       "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
       "amount": 1
     }
   ],
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "VH ",
+    "GCG",
+    " W "
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
+    "H": {
+      "item": "minecraft:hopper"
     },
-    "L": {
-      "item": "minecraft:leather"
+    "W": {
+      "item": "thaumcraft:plank_greatwood"
     },
-    "R": {
+    "G": {
+      "item": "thaumcraft:mechanism_simple"
+    },
+    "V": {
       "item": "thaumcraft:vis_resonator"
     },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "C": {
+      "item": "minecraft:crafting_table"
     }
   },
   "result": {
