@@ -52,3 +52,7 @@ Last updated: 2026-06-17
 ## Research recipe page gap note
 
 - Use 06_docs/audits/research_recipe_page_gap_audit.md to pick the next serializer/page implementation slice from actual stage/addendum recipe page gaps.
+
+## Legacy alchemy recipe source note
+
+- Use 06_docs/audits/legacy_alchemy_recipe_source_audit.md to choose the first alchemy/crucible/special recipe page serializer slice from legacy source evidence.

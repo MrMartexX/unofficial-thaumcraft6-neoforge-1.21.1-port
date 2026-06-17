@@ -300,3 +300,9 @@ Next:
 - Added tools/audits/audit-research-recipe-page-gaps.ps1 and 06_docs/audits/research_recipe_page_gap_audit.md.
 - This audit narrows the broad custom recipe boundary scan to actual Thaumonomicon stage/addendum recipe page references and separates them from icons, required_item, and required_craft gates.
 - Use the missing recipe page class distribution to choose the next large serializer/page implementation slice without conflating item requirements with recipe pages.
+
+### Latest legacy alchemy recipe source audit update
+
+- Added tools/audits/audit-legacy-alchemy-recipe-sources.ps1 and 06_docs/audits/legacy_alchemy_recipe_source_audit.md.
+- This audit traces the dominant alchemy/crucible/special recipe page gaps back to the local legacy source corpus before implementation.
+- Next alchemy work should implement only a recipe data model, serializer, loader audit, and Thaumonomicon page snapshot for the selected family before any crucible or machine behavior.
