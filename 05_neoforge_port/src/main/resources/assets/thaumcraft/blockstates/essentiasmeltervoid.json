@@ -1,5 +1,6 @@
 {
   "variants": {
-    "": { "model": "thaumcraft:block/essentiasmeltervoid" }
+    "enabled=false": { "model": "thaumcraft:block/essentiasmeltervoid" },
+    "enabled=true": { "model": "thaumcraft:block/essentiasmeltervoid" }
   }
 }

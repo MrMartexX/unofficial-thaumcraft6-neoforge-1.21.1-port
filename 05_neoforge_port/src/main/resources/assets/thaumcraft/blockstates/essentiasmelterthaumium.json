@@ -1,5 +1,6 @@
 {
   "variants": {
-    "": { "model": "thaumcraft:block/essentiasmelterthaumium" }
+    "enabled=false": { "model": "thaumcraft:block/essentiasmelterthaumium" },
+    "enabled=true": { "model": "thaumcraft:block/essentiasmelterthaumium" }
   }
 }
