@@ -1,50 +1,18 @@
 {
   "type": "thaumcraft:arcane_shaped",
-  "research": "UNLOCKAUROMANCY@2",
-  "vis": 100,
-  "crystals": [
-    {
-      "aspect": "aer",
-      "amount": 1
-    },
-    {
-      "aspect": "terra",
-      "amount": 1
-    },
-    {
-      "aspect": "aqua",
-      "amount": 1
-    },
-    {
-      "aspect": "ignis",
-      "amount": 1
-    },
-    {
-      "aspect": "ordo",
-      "amount": 1
-    },
-    {
-      "aspect": "perditio",
-      "amount": 1
-    }
-  ],
+  "research": "WARDEDJARS",
+  "vis": 5,
   "pattern": [
-    "III",
-    "LRL",
-    "LTL"
+    "GWG",
+    "G G",
+    "GGG"
   ],
   "key": {
-    "I": {
-      "tag": "c:ingots/iron"
+    "W": {
+      "tag": "minecraft:wooden_slabs"
     },
-    "L": {
-      "item": "minecraft:leather"
-    },
-    "R": {
-      "item": "thaumcraft:vis_resonator"
-    },
-    "T": {
-      "item": "thaumcraft:thaumometer"
+    "G": {
+      "tag": "minecraft:glass_panes"
     }
   },
   "result": {
