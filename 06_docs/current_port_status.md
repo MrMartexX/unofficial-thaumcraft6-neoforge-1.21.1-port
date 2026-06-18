@@ -416,3 +416,8 @@ The sections below are historical update notes. They should not be read as the c
 - Added a dedicated source audit for current GOLEMANCY_PAGE_DEFERRED references.
 - This audit is analysis-only and is meant to separate real recipe/page work from seal, machine, and behavior boundaries before implementation.
 - Next golemancy work should choose a narrow family from this audit instead of implementing all deferred references as recipes.
+
+### Latest golemancy boundary source audit repair
+
+- Rebuilt `golemancy_page_boundary_source_audit.md` with a stricter extractor that fails if no GOLEMANCY_PAGE_DEFERRED references are found or if the output is unexpectedly small.
+- Use the repaired audit to select the next narrow golemancy implementation batch.

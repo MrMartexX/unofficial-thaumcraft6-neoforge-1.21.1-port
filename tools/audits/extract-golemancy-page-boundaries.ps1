@@ -13,7 +13,7 @@ function Escape-Md {
     return ($Value -replace '\|', '\|' -replace "`r?`n", '<br>')
 }
 
-function Get-RelativePathSafe {
+function Relative-Path {
     param([string]$Base, [string]$Path)
     try {
         return [System.IO.Path]::GetRelativePath($Base, $Path).Replace('\', '/')
@@ -22,70 +22,38 @@ function Get-RelativePathSafe {
     }
 }
 
-function Get-Classification {
+function Classify-Reference {
     param([string]$Reference)
     $key = $Reference -replace '^thaumcraft:', ''
-    if ($key -match '^Seal') { return 'SEAL_BEHAVIOR_OR_RECIPE_BOUNDARY' }
-    if ($key -eq 'GolemPress') { return 'GOLEM_MACHINE_BLOCK_BOUNDARY' }
-    if ($key -eq 'JarBrain') { return 'JAR_OR_BRAIN_BLOCK_BOUNDARY' }
+    if ($key -like 'Seal*') { return 'SEAL_BOUNDARY' }
+    if ($key -eq 'GolemPress') { return 'GOLEM_MACHINE_BOUNDARY' }
+    if ($key -eq 'JarBrain') { return 'JAR_BRAIN_BOUNDARY' }
     if ($key -eq 'MindBiothaumic') { return 'MIND_COMPONENT_BOUNDARY' }
-    return 'GOLEMANCY_DEFERRED_BOUNDARY'
+    return 'GOLEMANCY_BOUNDARY'
 }
 
-function Get-HitKind {
+function Hit-Kind {
     param([string]$Text)
-
     if ($Text -match 'addArcaneCraftingRecipe|ShapedArcaneRecipe|ShapelessArcaneRecipe') { return 'ARCANE_RECIPE_SOURCE' }
     if ($Text -match 'addInfusionCraftingRecipe|InfusionRecipe') { return 'INFUSION_RECIPE_SOURCE' }
-    if ($Text -match 'addCrucibleRecipe|CrucibleRecipe') { return 'CRUCIBLE_RECIPE_SOURCE' }
-    if ($Text -match 'Seal[A-Z]|new\s+Seal|registerSeal|SealManager|SealHandler') { return 'SEAL_BEHAVIOR_SOURCE' }
-    if ($Text -match 'Golem|golem|Brain|brain|Jar|jar') { return 'GOLEM_BLOCK_OR_ITEM_SOURCE' }
+    if ($Text -match 'Seal[A-Z]|SealManager|SealHandler|new\s+Seal') { return 'SEAL_BEHAVIOR_SOURCE' }
+    if ($Text -match 'Golem|golem|Brain|brain|Jar|jar|Press|press') { return 'GOLEM_BLOCK_OR_ITEM_SOURCE' }
     return 'TEXT_HIT'
 }
 
-function Get-ContextBlock {
-    param([string[]]$Lines, [int]$HitIndex, [int]$Radius = 5)
+function Context-Block {
+    param([string[]]$Lines, [int]$Index, [int]$Radius = 4)
 
-    $start = [Math]::Max(0, $HitIndex - $Radius)
-    $end = [Math]::Min($Lines.Count - 1, $HitIndex + $Radius)
-
-    # If the hit is inside a likely recipe call, try to expand to the full statement.
-    $scanStart = $HitIndex
-    while ($scanStart -gt 0 -and $Lines[$scanStart] -notmatch 'addArcaneCraftingRecipe|addInfusionCraftingRecipe|addCrucibleRecipe|new\s+InfusionRecipe|new\s+CrucibleRecipe') {
-        $scanStart--
-        if (($HitIndex - $scanStart) -gt 20) {
-            $scanStart = $start
-            break
-        }
-    }
-
-    if ($Lines[$scanStart] -match 'addArcaneCraftingRecipe|addInfusionCraftingRecipe|addCrucibleRecipe|new\s+InfusionRecipe|new\s+CrucibleRecipe') {
-        $depth = 0
-        $started = $false
-        $block = New-Object System.Collections.Generic.List[string]
-        for ($i = $scanStart; $i -lt $Lines.Count; $i++) {
-            $line = $Lines[$i]
-            [void]$block.Add($line.TrimEnd())
-            foreach ($ch in $line.ToCharArray()) {
-                if ($ch -eq '(') { $depth++; $started = $true }
-                elseif ($ch -eq ')') { $depth-- }
-            }
-            if ($started -and $depth -le 0 -and $line -match ';\s*$') { break }
-            if (($i - $scanStart) -gt 80) { break }
-        }
-        return [pscustomobject]@{
-            StartLine = $scanStart + 1
-            Text = ($block -join "`n")
-        }
-    }
-
-    $blockLines = New-Object System.Collections.Generic.List[string]
+    $start = [Math]::Max(0, $Index - $Radius)
+    $end = [Math]::Min($Lines.Count - 1, $Index + $Radius)
+    $out = New-Object System.Collections.Generic.List[string]
     for ($i = $start; $i -le $end; $i++) {
-        [void]$blockLines.Add($Lines[$i].TrimEnd())
+        [void]$out.Add($Lines[$i].TrimEnd())
     }
+
     return [pscustomobject]@{
         StartLine = $start + 1
-        Text = ($blockLines -join "`n")
+        Text = ($out -join "`n")
     }
 }
 
@@ -103,24 +71,32 @@ if ([string]::IsNullOrWhiteSpace($OutputPath)) {
 $legacy = Resolve-Path -LiteralPath $LegacySourceRoot
 $audit = Resolve-Path -LiteralPath $PageGapAuditPath
 $outputFullPath = [System.IO.Path]::GetFullPath($OutputPath)
-New-Item -ItemType Directory -Force -Path (Split-Path -Parent $outputFullPath) | Out-Null
 
 $auditLines = Get-Content -LiteralPath $audit -Encoding UTF8
 $refs = New-Object System.Collections.Generic.List[object]
 
 foreach ($line in $auditLines) {
-    if ($line -match '^\| GOLEMANCY_PAGE_DEFERRED \| (?<ref>thaumcraft:[^| ]+) \| (?<file>[^|]+) \| (?<path>[^|]+) \|') {
-        $reference = $matches['ref'].Trim()
-        if (-not ($refs | Where-Object { $_.Reference -eq $reference })) {
-            [void]$refs.Add([pscustomobject]@{
-                Reference = $reference
-                Key = ($reference -replace '^thaumcraft:', '')
-                ResearchFile = $matches['file'].Trim()
-                JsonPath = $matches['path'].Trim()
-                Classification = Get-Classification -Reference $reference
-            })
-        }
+    if (-not $line.Contains('| GOLEMANCY_PAGE_DEFERRED |')) { continue }
+
+    $cells = $line.Trim().Trim('|').Split('|') | ForEach-Object { $_.Trim() }
+    if ($cells.Count -lt 4) { continue }
+
+    $reference = $cells[1]
+    if (-not $reference.StartsWith('thaumcraft:')) { continue }
+
+    if (-not ($refs | Where-Object { $_.Reference -eq $reference })) {
+        [void]$refs.Add([pscustomobject]@{
+            Reference = $reference
+            Key = ($reference -replace '^thaumcraft:', '')
+            Classification = Classify-Reference -Reference $reference
+            ResearchFile = $cells[2]
+            JsonPath = $cells[3]
+        })
     }
+}
+
+if ($refs.Count -eq 0) {
+    throw "No GOLEMANCY_PAGE_DEFERRED references found in $PageGapAuditPath"
 }
 
 $javaFiles = @(Get-ChildItem -LiteralPath $legacy -Recurse -File -Filter '*.java')
@@ -131,8 +107,8 @@ foreach ($ref in $refs) {
     [void]$terms.Add($ref.Reference)
     [void]$terms.Add($ref.Key)
     [void]$terms.Add($ref.Key.ToLowerInvariant())
-    if ($ref.Key -match '^Seal(.+)$') {
-        [void]$terms.Add($matches[1])
+    if ($ref.Key -like 'Seal*') {
+        [void]$terms.Add($ref.Key.Substring(4))
     }
 
     foreach ($file in $javaFiles) {
@@ -147,17 +123,16 @@ foreach ($ref in $refs) {
                     break
                 }
             }
+
             if ([string]::IsNullOrWhiteSpace($matchedTerm)) { continue }
 
-            $context = Get-ContextBlock -Lines $lines -HitIndex $i
-            $kind = Get-HitKind -Text $context.Text
-
+            $context = Context-Block -Lines $lines -Index $i
             [void]$hits.Add([pscustomobject]@{
                 Reference = $ref.Reference
                 Classification = $ref.Classification
-                HitKind = $kind
+                HitKind = Hit-Kind -Text $context.Text
                 MatchedTerm = $matchedTerm
-                File = Get-RelativePathSafe -Base $legacy -Path $file.FullName
+                File = Relative-Path -Base $legacy -Path $file.FullName
                 Line = $i + 1
                 ContextStartLine = $context.StartLine
                 Context = $context.Text
@@ -169,16 +144,16 @@ foreach ($ref in $refs) {
 $uniqueHitRefs = @($hits | Select-Object -ExpandProperty Reference -Unique)
 $unresolved = @($refs | Where-Object { $uniqueHitRefs -notcontains $_.Reference })
 
-$hitKindCounts = @{}
-foreach ($hit in $hits) {
-    if (-not $hitKindCounts.ContainsKey($hit.HitKind)) { $hitKindCounts[$hit.HitKind] = 0 }
-    $hitKindCounts[$hit.HitKind]++
-}
-
 $classCounts = @{}
 foreach ($ref in $refs) {
     if (-not $classCounts.ContainsKey($ref.Classification)) { $classCounts[$ref.Classification] = 0 }
     $classCounts[$ref.Classification]++
+}
+
+$hitKindCounts = @{}
+foreach ($hit in $hits) {
+    if (-not $hitKindCounts.ContainsKey($hit.HitKind)) { $hitKindCounts[$hit.HitKind] = 0 }
+    $hitKindCounts[$hit.HitKind]++
 }
 
 $sb = New-Object System.Text.StringBuilder
@@ -260,10 +235,14 @@ if ($unresolved.Count -gt 0) {
 [void]$sb.AppendLine('## Next implementation guidance')
 [void]$sb.AppendLine()
 [void]$sb.AppendLine('1. Do not implement all golemancy deferred references as recipes blindly.')
-[void]$sb.AppendLine('2. Separate seal behavior/page placeholders from actual crafting or infusion recipes.')
-[void]$sb.AppendLine('3. Treat `GolemPress`, `JarBrain`, and `MindBiothaumic` as block/item/machine boundaries until verified against legacy source.')
-[void]$sb.AppendLine('4. After choosing a family, create a narrow recipe/page or placeholder-boundary batch and re-run this audit.')
+[void]$sb.AppendLine('2. Separate seal behavior placeholders from actual crafting/arcane recipes.')
+[void]$sb.AppendLine('3. Treat `GolemPress`, `JarBrain`, and `MindBiothaumic` as block/item/machine boundaries until verified against exact source.')
+[void]$sb.AppendLine('4. Choose one narrow family per batch, then re-run research recipe page gap audit.')
 
-$Utf8NoBom = [System.Text.UTF8Encoding]::new($false)
-[System.IO.File]::WriteAllText($outputFullPath, $sb.ToString(), $Utf8NoBom)
+[System.IO.File]::WriteAllText($outputFullPath, $sb.ToString(), [System.Text.UTF8Encoding]::new($false))
+
+if ((Get-Item -LiteralPath $outputFullPath).Length -lt 200) {
+    throw "Generated golemancy audit is unexpectedly small: $outputFullPath"
+}
+
 Write-Host "Wrote $outputFullPath"
