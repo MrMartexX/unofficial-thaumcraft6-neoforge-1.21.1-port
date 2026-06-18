@@ -445,3 +445,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added `focused_infusion_recipe_source_candidates.md`, extracting legacy `addInfusionCraftingRecipe` blocks for missing infusion-related research page references.
 - This prepares the next architecture slice: a modern infusion recipe/page boundary without in-world infusion crafting behavior.
+### Latest infusion recipe page boundary slice
+
+- Added 	haumcraft:infusion recipe type/serializer and Thaumonomicon recipe-page view plumbing.
+- This is a data/page boundary only; in-world infusion altar gameplay remains deferred.
+- No infusion JSON recipe batch is added in this slice.

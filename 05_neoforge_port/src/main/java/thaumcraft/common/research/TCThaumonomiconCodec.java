@@ -24,6 +24,10 @@ final class TCThaumonomiconCodec {
     private static final int MAX_ARCANE_CRYSTALS = 64;
     private static final int MAX_CRUCIBLE_ASPECTS = 64;
     private static final int MAX_CRUCIBLE_CATALYST_VARIANTS = 1024;
+    private static final int MAX_INFUSION_ASPECTS = 64;
+    private static final int MAX_INFUSION_CATALYST_VARIANTS = 1024;
+    private static final int MAX_INFUSION_COMPONENTS = 64;
+    private static final int MAX_INFUSION_COMPONENT_VARIANTS = 1024;
     private static final int MAX_RESEARCH_FLAGS = 32;
 
     private TCThaumonomiconCodec() {
@@ -191,6 +195,8 @@ final class TCThaumonomiconCodec {
         page.arcaneRecipe().ifPresent(recipe -> writeArcaneRecipe(buffer, recipe));
         buffer.writeBoolean(page.crucibleRecipe().isPresent());
         page.crucibleRecipe().ifPresent(recipe -> writeCrucibleRecipe(buffer, recipe));
+        buffer.writeBoolean(page.infusionRecipe().isPresent());
+        page.infusionRecipe().ifPresent(recipe -> writeInfusionRecipe(buffer, recipe));
     }
 
     private static TCResearchPageView readPage(RegistryFriendlyByteBuf buffer) {
@@ -214,6 +220,9 @@ final class TCThaumonomiconCodec {
         Optional<TCCrucibleRecipePageView> crucibleRecipe = buffer.readBoolean()
                 ? Optional.of(readCrucibleRecipe(buffer))
                 : Optional.empty();
+        Optional<TCInfusionRecipePageView> infusionRecipe = buffer.readBoolean()
+                ? Optional.of(readInfusionRecipe(buffer))
+                : Optional.empty();
         return new TCResearchPageView(
                 id,
                 kind,
@@ -222,7 +231,8 @@ final class TCThaumonomiconCodec {
                 output,
                 craftingRecipe,
                 arcaneRecipe,
-                crucibleRecipe
+                crucibleRecipe,
+                infusionRecipe
         );
     }
 
@@ -352,6 +362,62 @@ final class TCThaumonomiconCodec {
                 readString(buffer, MAX_KEY_LENGTH)
         );
     }
+    private static void writeInfusionRecipe(RegistryFriendlyByteBuf buffer, TCInfusionRecipePageView recipe) {
+        writeResourceLocation(buffer, recipe.recipeId());
+        ItemStack.STREAM_CODEC.encode(buffer, recipe.result());
+        writeList(
+                buffer,
+                recipe.catalystVariants(),
+                MAX_INFUSION_CATALYST_VARIANTS,
+                "infusion catalyst variants",
+                ItemStack.STREAM_CODEC::encode
+        );
+        writeList(
+                buffer,
+                recipe.componentVariants(),
+                MAX_INFUSION_COMPONENTS,
+                "infusion components",
+                (target, variants) -> writeList(
+                        target,
+                        variants,
+                        MAX_INFUSION_COMPONENT_VARIANTS,
+                        "infusion component variants",
+                        ItemStack.STREAM_CODEC::encode
+                )
+        );
+        writeList(
+                buffer,
+                recipe.aspectStacks(),
+                MAX_INFUSION_ASPECTS,
+                "infusion aspects",
+                ItemStack.STREAM_CODEC::encode
+        );
+        writeString(buffer, recipe.research(), MAX_KEY_LENGTH, "infusion research");
+        buffer.writeVarInt(recipe.instability());
+    }
+
+    private static TCInfusionRecipePageView readInfusionRecipe(RegistryFriendlyByteBuf buffer) {
+        return new TCInfusionRecipePageView(
+                readResourceLocation(buffer),
+                ItemStack.STREAM_CODEC.decode(buffer),
+                readList(buffer, MAX_INFUSION_CATALYST_VARIANTS, "infusion catalyst variants", ItemStack.STREAM_CODEC::decode),
+                readList(
+                        buffer,
+                        MAX_INFUSION_COMPONENTS,
+                        "infusion components",
+                        target -> readList(
+                                target,
+                                MAX_INFUSION_COMPONENT_VARIANTS,
+                                "infusion component variants",
+                                ItemStack.STREAM_CODEC::decode
+                        )
+                ),
+                readList(buffer, MAX_INFUSION_ASPECTS, "infusion aspects", ItemStack.STREAM_CODEC::decode),
+                readString(buffer, MAX_KEY_LENGTH),
+                buffer.readVarInt()
+        );
+    }
+
     private static void writeLegacyOutput(RegistryFriendlyByteBuf buffer, TCResearchPageLegacyOutput output) {
         writeResourceLocation(buffer, output.item());
         buffer.writeInt(output.metadata());

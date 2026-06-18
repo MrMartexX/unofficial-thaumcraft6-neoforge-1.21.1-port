@@ -11,7 +11,8 @@ public record TCResearchPageView(
         Optional<TCResearchPageLegacyOutput> legacyOutput,
         Optional<TCCraftingRecipePageView> craftingRecipe,
         Optional<TCArcaneRecipePageView> arcaneRecipe,
-        Optional<TCCrucibleRecipePageView> crucibleRecipe
+        Optional<TCCrucibleRecipePageView> crucibleRecipe,
+        Optional<TCInfusionRecipePageView> infusionRecipe
 ) {
     public TCResearchPageView(
             ResourceLocation id,
@@ -22,7 +23,7 @@ public record TCResearchPageView(
             Optional<TCCraftingRecipePageView> craftingRecipe,
             Optional<TCArcaneRecipePageView> arcaneRecipe
     ) {
-        this(id, kind, availability, requiredResearch, legacyOutput, craftingRecipe, arcaneRecipe, Optional.empty());
+        this(id, kind, availability, requiredResearch, legacyOutput, craftingRecipe, arcaneRecipe, Optional.empty(), Optional.empty());
     }
 
     public TCResearchPageView {
@@ -31,5 +32,6 @@ public record TCResearchPageView(
         craftingRecipe = craftingRecipe == null ? Optional.empty() : craftingRecipe;
         arcaneRecipe = arcaneRecipe == null ? Optional.empty() : arcaneRecipe;
         crucibleRecipe = crucibleRecipe == null ? Optional.empty() : crucibleRecipe;
+        infusionRecipe = infusionRecipe == null ? Optional.empty() : infusionRecipe;
     }
 }

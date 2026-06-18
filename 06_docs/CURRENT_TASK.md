@@ -140,3 +140,8 @@ Last updated: 2026-06-18
 
 - Use `06_docs/audits/focused_infusion_recipe_source_candidates.md` before implementing an infusion recipe/page boundary.
 - Scope for the first infusion slice should be serializer/catalog/page display only, not in-world infusion altar behavior.
+## Infusion recipe page boundary slice note
+
+- 	haumcraft:infusion is now intended to load data-driven infusion recipes and expose them to Thaumonomicon pages.
+- Keep in-world infusion altar crafting behavior deferred until a separate stateful gameplay slice.
+- Next safe batch should add a small number of infusion JSON recipes and refresh audits.

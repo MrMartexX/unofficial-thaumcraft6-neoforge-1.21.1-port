@@ -22,6 +22,7 @@ import thaumcraft.common.crafting.arcane.TCArcaneCrystalCost;
 import thaumcraft.common.crafting.arcane.TCArcaneRecipe;
 import thaumcraft.common.crafting.crucible.TCCrucibleAspectCost;
 import thaumcraft.common.crafting.crucible.TCCrucibleRecipe;
+import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
 
 public final class TCResearchPageCatalogManager {
     private static TCResearchPageCatalogData activeData = TCResearchPageCatalogData.empty();
@@ -192,6 +193,7 @@ public final class TCResearchPageCatalogManager {
         Optional<TCCraftingRecipePageView> craftingRecipe = Optional.empty();
         Optional<TCArcaneRecipePageView> arcaneRecipe = Optional.empty();
         Optional<TCCrucibleRecipePageView> crucibleRecipe = Optional.empty();
+        Optional<TCInfusionRecipePageView> infusionRecipe = Optional.empty();
         if (availability == TCResearchPageAvailability.READY) {
             if (entry.kind() == TCResearchPageKind.CRAFTING) {
                 craftingRecipe = buildCraftingPage(entry.id(), recipeManager, registries);
@@ -199,12 +201,15 @@ public final class TCResearchPageCatalogManager {
                 arcaneRecipe = buildArcanePage(entry.id(), recipeManager, registries);
             } else if (entry.kind() == TCResearchPageKind.CRUCIBLE) {
                 crucibleRecipe = buildCruciblePage(entry.id(), recipeManager, registries);
+            } else if (entry.kind() == TCResearchPageKind.INFUSION) {
+                infusionRecipe = buildInfusionPage(entry.id(), recipeManager, registries);
             }
         }
         if (availability == TCResearchPageAvailability.READY
                 && craftingRecipe.isEmpty()
                 && arcaneRecipe.isEmpty()
-                && crucibleRecipe.isEmpty()) {
+                && crucibleRecipe.isEmpty()
+                && infusionRecipe.isEmpty()) {
             availability = TCResearchPageAvailability.DEFERRED;
         }
         pages.add(new TCResearchPageView(
@@ -215,7 +220,8 @@ public final class TCResearchPageCatalogManager {
                 entry.legacyOutput(),
                 craftingRecipe,
                 arcaneRecipe,
-                crucibleRecipe
+                crucibleRecipe,
+                infusionRecipe
         ));
     }
 
@@ -316,6 +322,44 @@ public final class TCResearchPageCatalogManager {
                 });
     }
 
+    static Optional<TCInfusionRecipePageView> buildInfusionPage(
+            ResourceLocation id,
+            RecipeManager recipeManager,
+            HolderLookup.Provider registries
+    ) {
+        return recipeManager.byKey(id)
+                .filter(holder -> holder.value() instanceof TCInfusionRecipe)
+                .map(holder -> {
+                    TCInfusionRecipe recipe = (TCInfusionRecipe) holder.value();
+                    ArrayList<ItemStack> catalystVariants = new ArrayList<>();
+                    for (ItemStack variant : recipe.catalyst().getItems()) {
+                        catalystVariants.add(variant.copy());
+                    }
+                    ArrayList<List<ItemStack>> components = new ArrayList<>(recipe.components().size());
+                    for (Ingredient ingredient : recipe.components()) {
+                        ItemStack[] variants = ingredient.getItems();
+                        ArrayList<ItemStack> copiedVariants = new ArrayList<>(variants.length);
+                        for (ItemStack variant : variants) {
+                            copiedVariants.add(variant.copy());
+                        }
+                        components.add(List.copyOf(copiedVariants));
+                    }
+                    ArrayList<ItemStack> aspects = new ArrayList<>(recipe.aspectCosts().size());
+                    for (TCCrucibleAspectCost cost : recipe.aspectCosts()) {
+                        aspects.add(cost.displayStack());
+                    }
+                    return new TCInfusionRecipePageView(
+                            id,
+                            recipe.getResultItem(registries),
+                            catalystVariants,
+                            components,
+                            aspects,
+                            recipe.getResearch(),
+                            recipe.instability()
+                    );
+                });
+    }
+
     private static TCResearchPageAvailability availability(
             ResourceLocation id,
             RecipeManager recipeManager,
@@ -347,6 +391,13 @@ public final class TCResearchPageCatalogManager {
             if (entry.kind() == TCResearchPageKind.CRUCIBLE) {
                 return recipeManager.byKey(entry.id())
                         .filter(holder -> holder.value() instanceof TCCrucibleRecipe)
+                        .isPresent()
+                        ? TCResearchPageAvailability.READY
+                        : TCResearchPageAvailability.DEFERRED;
+            }
+            if (entry.kind() == TCResearchPageKind.INFUSION) {
+                return recipeManager.byKey(entry.id())
+                        .filter(holder -> holder.value() instanceof TCInfusionRecipe)
                         .isPresent()
                         ? TCResearchPageAvailability.READY
                         : TCResearchPageAvailability.DEFERRED;
