@@ -1,18 +1,18 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 02:19:01 +03:00
+Generated: 2026-06-18 03:23:32 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 210 |
+| Recipe JSON files scanned | 220 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 116 |
-| Missing recipe references | 307 |
-| Custom/review recipe files | 0 |
-| Blocked/review research recipe references | 0 |
+| Resolved recipe references | 144 |
+| Missing recipe references | 279 |
+| Custom/review recipe files | 10 |
+| Blocked/review research recipe references | 28 |
 | JSON parse errors | 0 |
 
 ## Boundary rule
@@ -28,6 +28,7 @@ Generated: 2026-06-18 02:19:01 +03:00
 |---|---:|
 | VANILLA_OR_STANDARD_READY | 121 |
 | ARCANE_READY | 89 |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | 10 |
 
 ## Recipe type distribution
 
@@ -36,15 +37,56 @@ Generated: 2026-06-18 02:19:01 +03:00
 | thaumcraft:arcane_shaped | 80 |
 | minecraft:crafting_shapeless | 70 |
 | minecraft:crafting_shaped | 51 |
+| thaumcraft:crucible | 10 |
 | thaumcraft:arcane_shapeless | 9 |
 
 ## Custom or review recipe files
 
-No custom/review recipe JSON files were found in current data resources.
+| Class | Recipe id | Type | File |
+|---|---|---|---|
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_clay | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_clay.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_dye | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_dye.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_glowstone | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_glowstone.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_gunpowder | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_gunpowder.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_lava | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_lava.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_leather | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_leather.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_slime | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_slime.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_string | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_string.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_tallow | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_tallow.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_web | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_web.json |
 
 ## Blocked or review research recipe references
 
-No research recipe references currently resolve to blocked/review custom recipe JSON files.
+| Class | Reference | Recipe type | Research file | JSON path |
+|---|---|---|---|---|
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_clay | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[7] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_clay | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[7] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_dye | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[5] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_dye | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[5] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_dye | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[5] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_glowstone | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[6] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_glowstone | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[6] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_glowstone | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[6] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_gunpowder | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[3] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_gunpowder | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[3] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_gunpowder | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[3] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_lava | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[10] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_lava | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[10] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_leather | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[2] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_leather | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[2] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_leather | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[2] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_leather | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[0].recipes[1] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_slime | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[4] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_slime | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[4] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_slime | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[4] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_string | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[8] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_string | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[8] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_tallow | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_tallow | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_tallow | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_tallow | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[0].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_web | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[9] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:hedge_web | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[9] |
 
 ## Missing recipe-like research references
 
@@ -133,34 +175,6 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | thaumcraft:GolemPress | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[8].stages[2].recipes[1] |
 | thaumcraft:grapple_gun | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[18].icons[0] |
 | thaumcraft:hand_mirror | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[9].icons[0] |
-| thaumcraft:hedge_clay | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[7] |
-| thaumcraft:hedge_clay | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[7] |
-| thaumcraft:hedge_dye | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[5] |
-| thaumcraft:hedge_dye | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[5] |
-| thaumcraft:hedge_dye | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[5] |
-| thaumcraft:hedge_glowstone | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[6] |
-| thaumcraft:hedge_glowstone | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[6] |
-| thaumcraft:hedge_glowstone | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[6] |
-| thaumcraft:hedge_gunpowder | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[3] |
-| thaumcraft:hedge_gunpowder | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[3] |
-| thaumcraft:hedge_gunpowder | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[3] |
-| thaumcraft:hedge_lava | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[10] |
-| thaumcraft:hedge_lava | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[10] |
-| thaumcraft:hedge_leather | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[0].recipes[1] |
-| thaumcraft:hedge_leather | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[2] |
-| thaumcraft:hedge_leather | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[2] |
-| thaumcraft:hedge_leather | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[2] |
-| thaumcraft:hedge_slime | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[4] |
-| thaumcraft:hedge_slime | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[4] |
-| thaumcraft:hedge_slime | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[4] |
-| thaumcraft:hedge_string | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[8] |
-| thaumcraft:hedge_string | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[8] |
-| thaumcraft:hedge_tallow | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[0].recipes[0] |
-| thaumcraft:hedge_tallow | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[0] |
-| thaumcraft:hedge_tallow | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[0] |
-| thaumcraft:hedge_tallow | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[0] |
-| thaumcraft:hedge_web | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[9] |
-| thaumcraft:hedge_web | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[9] |
 | thaumcraft:HelmGoggles | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[0] |
 | thaumcraft:hungry_chest | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[1].icons[0] |
 | thaumcraft:IEARCINGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[5] |
@@ -366,9 +380,21 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | crucible | 05_neoforge_port/src/main/resources/data/minecraft/tags/block/mineable/pickaxe.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/loot_table/blocks/crucible.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/essentiasmelter.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_clay.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_dye.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_glowstone.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_gunpowder.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_lava.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_leather.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_slime.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_string.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_tallow.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_web.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/research_bridge/crucible.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/hedge_alchemy.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json |
+| CrucibleRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/hedge_alchemy.json |
 | CrucibleRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | fake | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | fake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json |

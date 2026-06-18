@@ -64,3 +64,7 @@ Last updated: 2026-06-17
 ## Crucible recipe page boundary note
 
 - Re-run research recipe page gap and page catalog audits after the HEDGE_ALCHEMY crucible recipe page boundary batch.
+
+## Post-HEDGE audit refresh note
+
+- Use refreshed post-HEDGE research_recipe_page_gap_audit.md counts to choose the next family-level recipe/page batch.

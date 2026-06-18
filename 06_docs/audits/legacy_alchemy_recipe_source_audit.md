@@ -1,13 +1,13 @@
 # Legacy Alchemy Recipe Source Audit
 
-Generated: 2026-06-18 02:26:56 +03:00
+Generated: 2026-06-18 03:24:32 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Alchemy missing recipe-page references from current audit | 57 |
-| References with at least one legacy source hit | 57 |
+| Alchemy missing recipe-page references from current audit | 29 |
+| References with at least one legacy source hit | 29 |
 | References without direct source hit | 0 |
 | Legacy Java files scanned | 902 |
 | Legacy API/pattern source hits | 361 |
@@ -16,7 +16,6 @@ Generated: 2026-06-18 02:26:56 +03:00
 
 | Family | Count |
 |---|---:|
-| HEDGE_ALCHEMY | 28 |
 | ALCHEMY_OTHER | 7 |
 | METAL_PURIFICATION | 7 |
 | BRASS_ALCHEMY | 5 |
@@ -57,34 +56,6 @@ Generated: 2026-06-18 02:26:56 +03:00
 | BRASS_ALCHEMY | thaumcraft:brassingot | 15 | $.entries[2].stages[0].recipes[0] |
 | BRASS_ALCHEMY | thaumcraft:brassingot | 15 | $.entries[2].stages[1].recipes[0] |
 | BRASS_ALCHEMY | thaumcraft:brassingot | 15 | $.entries[2].stages[2].recipes[0] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_clay | 6 | $.entries[4].stages[2].recipes[7] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_clay | 6 | $.entries[4].stages[3].recipes[7] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_dye | 12 | $.entries[4].stages[1].recipes[5] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_dye | 12 | $.entries[4].stages[2].recipes[5] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_dye | 12 | $.entries[4].stages[3].recipes[5] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_glowstone | 12 | $.entries[4].stages[1].recipes[6] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_glowstone | 12 | $.entries[4].stages[2].recipes[6] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_glowstone | 12 | $.entries[4].stages[3].recipes[6] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_gunpowder | 12 | $.entries[4].stages[1].recipes[3] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_gunpowder | 12 | $.entries[4].stages[2].recipes[3] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_gunpowder | 12 | $.entries[4].stages[3].recipes[3] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_lava | 6 | $.entries[4].stages[2].recipes[10] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_lava | 6 | $.entries[4].stages[3].recipes[10] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_leather | 20 | $.entries[4].stages[0].recipes[1] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_leather | 20 | $.entries[4].stages[1].recipes[2] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_leather | 20 | $.entries[4].stages[2].recipes[2] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_leather | 20 | $.entries[4].stages[3].recipes[2] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_slime | 12 | $.entries[4].stages[1].recipes[4] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_slime | 12 | $.entries[4].stages[2].recipes[4] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_slime | 12 | $.entries[4].stages[3].recipes[4] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_string | 6 | $.entries[4].stages[2].recipes[8] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_string | 6 | $.entries[4].stages[3].recipes[8] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_tallow | 20 | $.entries[4].stages[0].recipes[0] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_tallow | 20 | $.entries[4].stages[1].recipes[0] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_tallow | 20 | $.entries[4].stages[2].recipes[0] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_tallow | 20 | $.entries[4].stages[3].recipes[0] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_web | 6 | $.entries[4].stages[2].recipes[9] |
-| HEDGE_ALCHEMY | thaumcraft:hedge_web | 6 | $.entries[4].stages[3].recipes[9] |
 | METAL_PURIFICATION | thaumcraft:metal_purification_cinnabar | 2 | $.entries[3].stages[0].recipes[2] |
 | METAL_PURIFICATION | thaumcraft:metal_purification_copper | 2 | $.entries[3].stages[0].recipes[3] |
 | METAL_PURIFICATION | thaumcraft:metal_purification_gold | 2 | $.entries[3].stages[0].recipes[1] |
@@ -354,7 +325,7 @@ Generated: 2026-06-18 02:26:56 +03:00
 | thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/entities/projectile/EntityAlumentum.java | 33 | FXDispatcher.INSTANCE.drawAlumentum((float)(prevPosX + (posX - prevPosX) * coeff), (float)(prevPosY + (posY - prevPosY) * coeff) + height / 2.0f, (float)(prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() ... |
 | thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/entities/projectile/EntityCausalityCollapser.java | 37 | FXDispatcher.INSTANCE.drawAlumentum((float)(prevPosX + (posX - prevPosX) * coeff), (float)(prevPosY + (posY - prevPosY) * coeff) + height / 2.0f, (float)(prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() ... |
 
-Representative table truncated to first 250 source hits out of 916.
+Representative table truncated to first 250 source hits out of 804.
 
 ## Legacy recipe API/pattern hit samples
 

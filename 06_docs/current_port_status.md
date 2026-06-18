@@ -318,3 +318,9 @@ Next:
 - Added a first loader/page boundary for thaumcraft:crucible recipes without implementing in-world crucible behavior.
 - Added the HEDGE_ALCHEMY legacy crucible recipe family as data recipes and research-page catalog entries using the extracted legacy ResourceLocation ids.
 - The first crucible Thaumonomicon page snapshot carries result, catalyst variants, research key, and explicit aspect display stacks where the legacy recipe used explicit AspectList values. Dynamic AspectList-derived legacy costs are intentionally data-loaded with an empty explicit aspect list until generated-aspect parity is designed for crucible recipes.
+
+### Latest post-HEDGE recipe page audit refresh
+
+- Refreshed custom recipe boundary, research recipe page gap, and legacy alchemy source audits after the HEDGE_ALCHEMY crucible recipe page boundary landed.
+- Use the refreshed missing recipe page class and research-file distributions as the source of truth for the next large family-level recipe/page batch.
+- The next batch should target the largest remaining family, not individual recipe ids, unless an audit shows a family needs a separate data-model boundary.
