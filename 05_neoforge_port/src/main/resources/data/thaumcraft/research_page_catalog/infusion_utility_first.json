@@ -1,0 +1,55 @@
+{
+  "entries": [
+    {
+      "id": "thaumcraft:bootstraveller",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "BOOTSTRAVELLER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:traveller_boots",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:cloudring",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "CLOUDRING",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cloud_ring",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:charmundying",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "CHARMUNDYING",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:charm_undying",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}

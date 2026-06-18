@@ -194,6 +194,9 @@ public final class TCItems {
     public static final Supplier<Item> JAR_BRAIN = simpleItem("jar_brain");
     public static final Supplier<Item> SEAL_BUTCHER = simpleItem("seal_butcher");
     public static final Supplier<Item> SEAL_HARVEST = simpleItem("seal_harvest");
+    public static final Supplier<Item> TRAVELLER_BOOTS = simpleItem("traveller_boots");
+    public static final Supplier<Item> CLOUD_RING = simpleItem("cloud_ring");
+    public static final Supplier<Item> CHARM_UNDYING = simpleItem("charm_undying");
     public static final Supplier<Item> MIND_CLOCKWORK_ADVANCED = simpleItem("mindclockwork_advanced");
     public static final Supplier<Item> ARCANE_EAR_TOGGLE = simpleItem("arcane_ear_toggle");
     public static final Supplier<Item> BAUBLE_AMULET = simpleItem("bauble_amulet");

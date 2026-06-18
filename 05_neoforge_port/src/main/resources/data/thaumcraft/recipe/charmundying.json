@@ -1,0 +1,23 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "CHARMUNDYING",
+  "instability": 2,
+  "catalyst": {
+    "item": "minecraft:totem_of_undying"
+  },
+  "components": [
+    {
+      "tag": "c:plates/brass"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "life",
+      "amount": 25
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:charm_undying",
+    "count": 1
+  }
+}

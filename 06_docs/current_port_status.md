@@ -461,3 +461,7 @@ The sections below are historical update notes. They should not be read as the c
 - Refreshed recipe/page and alchemy source audits after the FIRST_GOLEMANCY_INFUSION recipe/page batch.
 - Use the refreshed counts to confirm the first golemancy infusion page gap reduction and select the next safe batch.
 - If first golemancy infusion gaps are closed, GolemPress should remain separated as a machine/block boundary.
+### Latest utility infusion recipe page batch
+
+- Added first non-golem utility infusion recipe/page entries: BootsTraveller, CLOUDRING, and CHARMUNDYING.
+- These remain data/page boundaries only; in-world infusion altar behavior is still deferred.
