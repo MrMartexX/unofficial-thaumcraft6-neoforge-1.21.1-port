@@ -145,3 +145,8 @@ Last updated: 2026-06-18
 - 	haumcraft:infusion is now intended to load data-driven infusion recipes and expose them to Thaumonomicon pages.
 - Keep in-world infusion altar crafting behavior deferred until a separate stateful gameplay slice.
 - Next safe batch should add a small number of infusion JSON recipes and refresh audits.
+## Golemancy first infusion recipe page note
+
+- Added first data-driven infusion recipe/page entries for remaining golemancy infusion candidates.
+- Re-run recipe/page audits after push to confirm GOLEMANCY_PAGE_DEFERRED reduction.
+- Keep GolemPress separate as a machine/block boundary.

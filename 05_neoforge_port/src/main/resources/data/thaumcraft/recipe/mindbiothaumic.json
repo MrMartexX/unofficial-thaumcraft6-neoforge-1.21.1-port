@@ -1,0 +1,30 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "MINDBIOTHAUMIC",
+  "instability": 1,
+  "catalyst": {
+    "item": "thaumcraft:mindclockwork"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:brain"
+    },
+    {
+      "item": "thaumcraft:mechanism_complex"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "mind",
+      "amount": 50
+    },
+    {
+      "aspect": "mechanism",
+      "amount": 25
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:mindclockwork_advanced",
+    "count": 1
+  }
+}

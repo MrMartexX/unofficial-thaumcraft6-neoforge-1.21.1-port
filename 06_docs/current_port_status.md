@@ -450,3 +450,8 @@ The sections below are historical update notes. They should not be read as the c
 - Added 	haumcraft:infusion recipe type/serializer and Thaumonomicon recipe-page view plumbing.
 - This is a data/page boundary only; in-world infusion altar gameplay remains deferred.
 - No infusion JSON recipe batch is added in this slice.
+### Latest golemancy first infusion recipe page batch
+
+- Added the first small infusion recipe/page JSON batch after introducing the 	haumcraft:infusion boundary.
+- Covered JarBrain, MindBiothaumic, SealBreak, SealButcher, and SealHarvest as data/page entries only.
+- Real infusion altar gameplay and golem seal behavior remain deferred.

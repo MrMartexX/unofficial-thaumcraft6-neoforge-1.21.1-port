@@ -1,0 +1,37 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "SEALBREAK",
+  "instability": 1,
+  "catalyst": {
+    "item": "thaumcraft:sealblank"
+  },
+  "components": [
+    {
+      "item": "minecraft:golden_axe"
+    },
+    {
+      "item": "minecraft:golden_pickaxe"
+    },
+    {
+      "item": "minecraft:golden_shovel"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "tool",
+      "amount": 10
+    },
+    {
+      "aspect": "entropy",
+      "amount": 10
+    },
+    {
+      "aspect": "man",
+      "amount": 10
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:seal_breaker",
+    "count": 1
+  }
+}

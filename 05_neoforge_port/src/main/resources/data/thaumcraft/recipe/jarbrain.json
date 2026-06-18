@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "JARBRAIN",
+  "instability": 4,
+  "catalyst": {
+    "item": "thaumcraft:wardedjar"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:brain"
+    },
+    {
+      "item": "minecraft:spider_eye"
+    },
+    {
+      "item": "minecraft:water_bucket"
+    },
+    {
+      "item": "minecraft:spider_eye"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "mind",
+      "amount": 25
+    },
+    {
+      "aspect": "senses",
+      "amount": 25
+    },
+    {
+      "aspect": "undead",
+      "amount": 25
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:jar_brain",
+    "count": 1
+  }
+}
