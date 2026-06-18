@@ -60,3 +60,7 @@ Last updated: 2026-06-17
 ## Hedge alchemy recipe extraction note
 
 - Use 06_docs/audits/hedge_alchemy_legacy_recipe_blocks.md as the source of truth for the first crucible recipe data/page boundary batch.
+
+## Crucible recipe page boundary note
+
+- Re-run research recipe page gap and page catalog audits after the HEDGE_ALCHEMY crucible recipe page boundary batch.

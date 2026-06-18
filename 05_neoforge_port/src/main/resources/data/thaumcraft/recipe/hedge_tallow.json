@@ -1,0 +1,17 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "HEDGEALCHEMY@1",
+  "catalyst": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "aspects": [
+    {
+      "aspect": "fire",
+      "amount": 1
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:tallow",
+    "count": 1
+  }
+}

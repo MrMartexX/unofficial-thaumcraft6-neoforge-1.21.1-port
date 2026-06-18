@@ -10,6 +10,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.crafting.arcane.TCArcaneRecipe;
 import thaumcraft.common.crafting.arcane.TCShapedArcaneRecipe;
 import thaumcraft.common.crafting.arcane.TCShapelessArcaneRecipe;
+import thaumcraft.common.crafting.crucible.TCCrucibleRecipe;
 
 public final class TCRecipes {
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES =
@@ -21,11 +22,17 @@ public final class TCRecipes {
             "arcane",
             () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "arcane"))
     );
+    public static final Supplier<RecipeType<TCCrucibleRecipe>> CRUCIBLE_TYPE = RECIPE_TYPES.register(
+            "crucible",
+            () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "crucible"))
+    );
 
     public static final Supplier<RecipeSerializer<TCShapedArcaneRecipe>> ARCANE_SHAPED_SERIALIZER =
             RECIPE_SERIALIZERS.register("arcane_shaped", TCShapedArcaneRecipe.Serializer::new);
     public static final Supplier<RecipeSerializer<TCShapelessArcaneRecipe>> ARCANE_SHAPELESS_SERIALIZER =
             RECIPE_SERIALIZERS.register("arcane_shapeless", TCShapelessArcaneRecipe.Serializer::new);
+    public static final Supplier<RecipeSerializer<TCCrucibleRecipe>> CRUCIBLE_SERIALIZER =
+            RECIPE_SERIALIZERS.register("crucible", TCCrucibleRecipe.Serializer::new);
 
     private TCRecipes() {
     }

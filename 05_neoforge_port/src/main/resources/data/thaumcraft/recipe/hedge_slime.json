@@ -1,0 +1,12 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "HEDGEALCHEMY@2",
+  "catalyst": {
+    "item": "minecraft:slime_ball"
+  },
+  "aspects": [],
+  "result": {
+    "id": "minecraft:slime_ball",
+    "count": 2
+  }
+}

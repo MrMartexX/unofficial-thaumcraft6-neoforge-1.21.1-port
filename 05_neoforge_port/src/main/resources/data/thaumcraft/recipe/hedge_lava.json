@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "HEDGEALCHEMY@3",
+  "catalyst": {
+    "item": "minecraft:bucket"
+  },
+  "aspects": [
+    {
+      "aspect": "fire",
+      "amount": 15
+    },
+    {
+      "aspect": "earth",
+      "amount": 5
+    }
+  ],
+  "result": {
+    "id": "minecraft:lava_bucket",
+    "count": 1
+  }
+}

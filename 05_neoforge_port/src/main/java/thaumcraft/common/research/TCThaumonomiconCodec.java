@@ -22,6 +22,8 @@ final class TCThaumonomiconCodec {
     private static final int MAX_CRAFTING_INGREDIENTS = 9;
     private static final int MAX_CRAFTING_INGREDIENT_VARIANTS = 1024;
     private static final int MAX_ARCANE_CRYSTALS = 64;
+    private static final int MAX_CRUCIBLE_ASPECTS = 64;
+    private static final int MAX_CRUCIBLE_CATALYST_VARIANTS = 1024;
     private static final int MAX_RESEARCH_FLAGS = 32;
 
     private TCThaumonomiconCodec() {
@@ -187,6 +189,8 @@ final class TCThaumonomiconCodec {
         page.craftingRecipe().ifPresent(recipe -> writeCraftingRecipe(buffer, recipe));
         buffer.writeBoolean(page.arcaneRecipe().isPresent());
         page.arcaneRecipe().ifPresent(recipe -> writeArcaneRecipe(buffer, recipe));
+        buffer.writeBoolean(page.crucibleRecipe().isPresent());
+        page.crucibleRecipe().ifPresent(recipe -> writeCrucibleRecipe(buffer, recipe));
     }
 
     private static TCResearchPageView readPage(RegistryFriendlyByteBuf buffer) {
@@ -207,7 +211,19 @@ final class TCThaumonomiconCodec {
         Optional<TCArcaneRecipePageView> arcaneRecipe = buffer.readBoolean()
                 ? Optional.of(readArcaneRecipe(buffer))
                 : Optional.empty();
-        return new TCResearchPageView(id, kind, availability, requiredResearch, output, craftingRecipe, arcaneRecipe);
+        Optional<TCCrucibleRecipePageView> crucibleRecipe = buffer.readBoolean()
+                ? Optional.of(readCrucibleRecipe(buffer))
+                : Optional.empty();
+        return new TCResearchPageView(
+                id,
+                kind,
+                availability,
+                requiredResearch,
+                output,
+                craftingRecipe,
+                arcaneRecipe,
+                crucibleRecipe
+        );
     }
 
     private static void writeCraftingRecipe(RegistryFriendlyByteBuf buffer, TCCraftingRecipePageView recipe) {
@@ -306,6 +322,36 @@ final class TCThaumonomiconCodec {
         );
     }
 
+
+    private static void writeCrucibleRecipe(RegistryFriendlyByteBuf buffer, TCCrucibleRecipePageView recipe) {
+        writeResourceLocation(buffer, recipe.recipeId());
+        ItemStack.STREAM_CODEC.encode(buffer, recipe.result());
+        writeList(
+                buffer,
+                recipe.catalystVariants(),
+                MAX_CRUCIBLE_CATALYST_VARIANTS,
+                "crucible catalyst variants",
+                ItemStack.STREAM_CODEC::encode
+        );
+        writeList(
+                buffer,
+                recipe.aspectStacks(),
+                MAX_CRUCIBLE_ASPECTS,
+                "crucible aspects",
+                ItemStack.STREAM_CODEC::encode
+        );
+        writeString(buffer, recipe.research(), MAX_KEY_LENGTH, "crucible research");
+    }
+
+    private static TCCrucibleRecipePageView readCrucibleRecipe(RegistryFriendlyByteBuf buffer) {
+        return new TCCrucibleRecipePageView(
+                readResourceLocation(buffer),
+                ItemStack.STREAM_CODEC.decode(buffer),
+                readList(buffer, MAX_CRUCIBLE_CATALYST_VARIANTS, "crucible catalyst variants", ItemStack.STREAM_CODEC::decode),
+                readList(buffer, MAX_CRUCIBLE_ASPECTS, "crucible aspects", ItemStack.STREAM_CODEC::decode),
+                readString(buffer, MAX_KEY_LENGTH)
+        );
+    }
     private static void writeLegacyOutput(RegistryFriendlyByteBuf buffer, TCResearchPageLegacyOutput output) {
         writeResourceLocation(buffer, output.item());
         buffer.writeInt(output.metadata());

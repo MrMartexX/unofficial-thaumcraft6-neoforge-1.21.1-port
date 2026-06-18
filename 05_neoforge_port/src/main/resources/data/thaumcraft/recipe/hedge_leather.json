@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "HEDGEALCHEMY@1",
+  "catalyst": {
+    "item": "minecraft:rotten_flesh"
+  },
+  "aspects": [
+    {
+      "aspect": "air",
+      "amount": 3
+    },
+    {
+      "aspect": "beast",
+      "amount": 3
+    }
+  ],
+  "result": {
+    "id": "minecraft:leather",
+    "count": 1
+  }
+}

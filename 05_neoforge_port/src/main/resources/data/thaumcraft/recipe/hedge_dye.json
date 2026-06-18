@@ -1,0 +1,12 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "HEDGEALCHEMY@2",
+  "catalyst": {
+    "item": "minecraft:ink_sac"
+  },
+  "aspects": [],
+  "result": {
+    "id": "minecraft:ink_sac",
+    "count": 2
+  }
+}

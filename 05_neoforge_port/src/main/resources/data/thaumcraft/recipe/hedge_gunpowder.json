@@ -1,0 +1,12 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "HEDGEALCHEMY@2",
+  "catalyst": {
+    "item": "minecraft:gunpowder"
+  },
+  "aspects": [],
+  "result": {
+    "id": "minecraft:gunpowder",
+    "count": 2
+  }
+}

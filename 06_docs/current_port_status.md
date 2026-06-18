@@ -312,3 +312,9 @@ Next:
 - Added tools/audits/extract-legacy-hedge-alchemy-recipes.ps1 and 06_docs/audits/hedge_alchemy_legacy_recipe_blocks.md.
 - This extraction captures exact legacy CrucibleRecipe source blocks for the dominant HEDGE_ALCHEMY page-gap family before writing any new NeoForge serializer or page renderer.
 - The next implementation slice can use this document to add the first crucible recipe data/page boundary while keeping in-world crucible behavior deferred.
+
+### Latest crucible recipe page boundary update
+
+- Added a first loader/page boundary for thaumcraft:crucible recipes without implementing in-world crucible behavior.
+- Added the HEDGE_ALCHEMY legacy crucible recipe family as data recipes and research-page catalog entries using the extracted legacy ResourceLocation ids.
+- The first crucible Thaumonomicon page snapshot carries result, catalyst variants, research key, and explicit aspect display stacks where the legacy recipe used explicit AspectList values. Dynamic AspectList-derived legacy costs are intentionally data-loaded with an empty explicit aspect list until generated-aspect parity is designed for crucible recipes.
