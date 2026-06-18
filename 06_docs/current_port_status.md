@@ -435,3 +435,9 @@ The sections below are historical update notes. They should not be read as the c
 
 - Repaired the first golemancy seal crucible batch after dedicated server smoke failed during TCItems static initialization.
 - The repair removes duplicate item registrations from the added seal bridge block when an item id was already registered earlier.
+
+### Latest post-golemancy-seals audit refresh
+
+- Refreshed recipe/page and alchemy source audits after the GOLEMANCY_SEAL_CRUCIBLE recipe/page batch.
+- Use the refreshed counts to confirm the golemancy seal crucible page gap reduction and select the next safe batch.
+- If golemancy seal crucible gaps are closed, keep infusion-based seals, JarBrain, MindBiothaumic, and GolemPress separated into their own boundary batches.

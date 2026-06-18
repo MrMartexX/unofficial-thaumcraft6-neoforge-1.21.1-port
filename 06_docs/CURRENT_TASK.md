@@ -132,3 +132,7 @@ Last updated: 2026-06-18
 
 - If dedicated server smoke fails in TCItems.<clinit> after adding seal bridge items, check for duplicate DeferredRegister item ids.
 - The current repair removes duplicate added seal registrations while keeping the existing registry identity.
+
+## Post-metal-purification audit note
+
+- Use refreshed post-GOLEMANCY_SEALS audits to confirm how many GOLEMANCY_PAGE_DEFERRED entries remain before choosing the next batch.

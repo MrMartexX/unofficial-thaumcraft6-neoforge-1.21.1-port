@@ -1,16 +1,16 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 14:43:13 +03:00
+Generated: 2026-06-18 16:01:56 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 272 |
+| Recipe JSON files scanned | 285 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 163 |
-| Missing recipe references | 260 |
+| Resolved recipe references | 176 |
+| Missing recipe references | 247 |
 | Custom/review recipe files | 0 |
 | Blocked/review research recipe references | 0 |
 | JSON parse errors | 0 |
@@ -29,15 +29,15 @@ Generated: 2026-06-18 14:43:13 +03:00
 |---|---:|
 | VANILLA_OR_STANDARD_READY | 121 |
 | ARCANE_READY | 89 |
-| CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 62 |
+| CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 75 |
 
 ## Recipe type distribution
 
 | Type | Count |
 |---|---:|
 | thaumcraft:arcane_shaped | 80 |
+| thaumcraft:crucible | 75 |
 | minecraft:crafting_shapeless | 70 |
-| thaumcraft:crucible | 62 |
 | minecraft:crafting_shaped | 51 |
 | thaumcraft:arcane_shapeless | 9 |
 
@@ -199,21 +199,8 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | thaumcraft:scribing_tools | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[2].stages[0].required_craft[0] |
 | thaumcraft:seal | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[9].icons[0] |
 | thaumcraft:SealBreak | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[22].stages[1].recipes[0] |
-| thaumcraft:SealBreakAdv | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[22].addenda[0].recipes[0] |
 | thaumcraft:SealButcher | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[19].stages[1].recipes[0] |
-| thaumcraft:SealCollect | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[13].stages[0].recipes[0] |
-| thaumcraft:SealCollectAdv | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[13].addenda[0].recipes[0] |
-| thaumcraft:SealEmpty | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[15].stages[1].recipes[0] |
-| thaumcraft:SealEmptyAdv | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[15].addenda[0].recipes[0] |
-| thaumcraft:SealGuard | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[18].stages[1].recipes[0] |
-| thaumcraft:SealGuardAdv | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[18].addenda[0].recipes[0] |
 | thaumcraft:SealHarvest | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[21].stages[1].recipes[0] |
-| thaumcraft:SealLumber | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[23].stages[1].recipes[0] |
-| thaumcraft:SealProvide | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[16].stages[1].recipes[0] |
-| thaumcraft:SealStock | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[17].stages[1].recipes[0] |
-| thaumcraft:SealStore | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[14].stages[0].recipes[0] |
-| thaumcraft:SealStoreAdv | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[14].addenda[0].recipes[0] |
-| thaumcraft:SealUse | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[20].stages[1].recipes[0] |
 | thaumcraft:smelter_aux | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[15].icons[0] |
 | thaumcraft:smelter_basic | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[10].icons[0] |
 | thaumcraft:smelter_basic | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[10].stages[2].required_craft[0] |
@@ -347,6 +334,19 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/nitor.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/research_bridge/crucible.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sanesoap.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbreakadv.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealcollect.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealcollectadv.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealempty.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealemptyadv.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealguard.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealguardadv.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/seallumber.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealprovide.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealstock.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealstore.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealstoreadv.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealuse.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumingot.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/vis_crystal_aer.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/vis_crystal_alienis.json |
@@ -385,11 +385,13 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/vis_crystal_vitium.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/vis_crystal_vitreus.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/vis_crystal_volatus.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_seal_crucible.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/hedge_alchemy.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/metal_purification.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/special_alchemy.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json |
+| CrucibleRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_seal_crucible.json |
 | CrucibleRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/hedge_alchemy.json |
 | CrucibleRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | CrucibleRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/metal_purification.json |
