@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "UNLOCKAUROMANCY",
+  "catalyst": {
+    "item": "thaumcraft:brass_plate"
+  },
+  "aspects": [
+    {
+      "aspect": "magic",
+      "amount": 25
+    },
+    {
+      "aspect": "aura",
+      "amount": 10
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:focus_1",
+    "count": 1
+  }
+}

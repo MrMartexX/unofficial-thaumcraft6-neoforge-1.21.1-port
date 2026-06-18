@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "FOCUSGREATER@1",
+  "instability": 5,
+  "catalyst": {
+    "item": "thaumcraft:focus_2"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:quicksilver"
+    },
+    {
+      "item": "thaumcraft:primordial_pearl"
+    },
+    {
+      "item": "thaumcraft:quicksilver"
+    },
+    {
+      "item": "minecraft:nether_star"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "magic",
+      "amount": 25
+    },
+    {
+      "aspect": "order",
+      "amount": 50
+    },
+    {
+      "aspect": "void",
+      "amount": 100
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:focus_3",
+    "count": 1
+  }
+}

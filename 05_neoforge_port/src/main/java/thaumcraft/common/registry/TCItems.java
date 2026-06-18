@@ -216,6 +216,7 @@ public final class TCItems {
     public static final Supplier<Item> MIND_CLOCKWORK_ADVANCED = simpleItem("mindclockwork_advanced");
     public static final Supplier<Item> ARCANE_EAR_TOGGLE = simpleItem("arcane_ear_toggle");
     public static final Supplier<Item> BAUBLE_AMULET = simpleItem("bauble_amulet");
+    public static final Supplier<Item> VIS_AMULET = simpleItem("vis_amulet");
     public static final Supplier<Item> BAUBLE_AMULET_FANCY = simpleItem("bauble_amulet_fancy");
     public static final Supplier<Item> BAUBLE_GIRDLE = simpleItem("bauble_girdle");
     public static final Supplier<Item> BAUBLE_GIRDLE_FANCY = simpleItem("bauble_girdle_fancy");

@@ -1,0 +1,36 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "FOCUSADVANCED@1",
+  "instability": 3,
+  "catalyst": {
+    "item": "thaumcraft:focus_1"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:quicksilver"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "thaumcraft:quicksilver"
+    },
+    {
+      "item": "minecraft:ender_pearl"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "magic",
+      "amount": 25
+    },
+    {
+      "aspect": "order",
+      "amount": 50
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:focus_2",
+    "count": 1
+  }
+}

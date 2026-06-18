@@ -1057,57 +1057,6 @@
       "occurrence_count": 1
     },
     {
-      "id": "thaumcraft:focus_1",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "crucible",
-      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
-      "required_research": "UNLOCKAUROMANCY",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:focus_1",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 3
-    },
-    {
-      "id": "thaumcraft:focus_2",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "FOCUSADVANCED@1",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:focus_2",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 2
-    },
-    {
-      "id": "thaumcraft:focus_3",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "FOCUSGREATER@1",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:focus_3",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 2
-    },
-    {
       "id": "thaumcraft:focuspouch",
       "legacy_source": "crafting_registry",
       "kind": "arcane",
@@ -3904,23 +3853,6 @@
       },
       "direct_reference": true,
       "occurrence_count": 5
-    },
-    {
-      "id": "thaumcraft:visamulet",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "VISAMULET",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:amulet_vis",
-        "metadata": 1,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
     },
     {
       "id": "thaumcraft:visbattery",

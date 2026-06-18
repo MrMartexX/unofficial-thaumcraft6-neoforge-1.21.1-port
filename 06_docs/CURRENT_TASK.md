@@ -194,3 +194,7 @@ Last updated: 2026-06-18
 
 - Added arcane stone/brick crafting entries plus CuriosityBand and HelmGoggles infusion entries.
 - This script integrates audit refresh after successful build/smoke.
+## Auromancy focus recipe page note
+
+- Added focus_1, focus_2, focus_3, and VisAmulet recipe/page entries in one larger batch.
+- This leaves caster/altar/fake/machine behavior boundaries for later targeted work.

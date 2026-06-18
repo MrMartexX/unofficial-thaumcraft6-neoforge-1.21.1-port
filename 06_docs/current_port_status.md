@@ -508,3 +508,8 @@ The sections below are historical update notes. They should not be read as the c
 - Added larger mixed recipe/catalog batch for arcane stone, arcane brick, Curiosity Band, and Helm Goggles.
 - This targets the remaining simple INFUSION_RESEARCH_LEGACY_PAGE_KEY items without touching altar/block behavior.
 - Audit refresh is integrated after build/smoke.
+### Latest auromancy focus recipe page batch
+
+- Added data-driven recipe/catalog entries for focus_1, focus_2, focus_3, and VisAmulet.
+- focus_1 is a conservative crucible page boundary because focused legacy source extraction has no direct source block for it yet.
+- This script integrates audit refresh after successful build/smoke.
