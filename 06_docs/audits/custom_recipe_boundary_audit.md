@@ -1,18 +1,18 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 16:01:56 +03:00
+Generated: 2026-06-18 16:15:30 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 285 |
+| Recipe JSON files scanned | 290 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 176 |
-| Missing recipe references | 247 |
-| Custom/review recipe files | 0 |
-| Blocked/review research recipe references | 0 |
+| Resolved recipe references | 181 |
+| Missing recipe references | 242 |
+| Custom/review recipe files | 5 |
+| Blocked/review research recipe references | 5 |
 | JSON parse errors | 0 |
 
 ## Boundary rule
@@ -30,6 +30,7 @@ Generated: 2026-06-18 16:01:56 +03:00
 | VANILLA_OR_STANDARD_READY | 121 |
 | ARCANE_READY | 89 |
 | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 75 |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | 5 |
 
 ## Recipe type distribution
 
@@ -40,14 +41,27 @@ Generated: 2026-06-18 16:01:56 +03:00
 | minecraft:crafting_shapeless | 70 |
 | minecraft:crafting_shaped | 51 |
 | thaumcraft:arcane_shapeless | 9 |
+| thaumcraft:infusion | 5 |
 
 ## Custom or review recipe files
 
-No custom/review recipe JSON files were found in current data resources.
+| Class | Recipe id | Type | File |
+|---|---|---|---|
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:jarbrain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/jarbrain.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:mindbiothaumic | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mindbiothaumic.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealbreak | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbreak.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealbutcher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbutcher.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealharvest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealharvest.json |
 
 ## Blocked or review research recipe references
 
-No research recipe references currently resolve to blocked/review custom recipe JSON files.
+| Class | Reference | Recipe type | Research file | JSON path |
+|---|---|---|---|---|
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:JarBrain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[1].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MindBiothaumic | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[12].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealBreak | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[22].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealButcher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[19].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealHarvest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[21].stages[1].recipes[0] |
 
 ## Missing recipe-like research references
 
@@ -151,7 +165,6 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | thaumcraft:inkwell | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[2].stages[1].recipes[1] |
 | thaumcraft:jar_brain | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[1].icons[0] |
 | thaumcraft:jar_normal | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[11].icons[0] |
-| thaumcraft:JarBrain | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[1].stages[1].recipes[0] |
 | thaumcraft:JarLabelEssence | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[11].stages[0].recipes[4] |
 | thaumcraft:lamp_arcane | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[11].icons[0] |
 | thaumcraft:lamp_fertility | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[13].icons[0] |
@@ -166,7 +179,6 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | thaumcraft:matrix_cost | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[3].icons[0] |
 | thaumcraft:matrix_speed | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[3].icons[1] |
 | thaumcraft:mind | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[8].icons[0] |
-| thaumcraft:MindBiothaumic | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[12].stages[1].recipes[0] |
 | thaumcraft:mirror | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[8].icons[0] |
 | thaumcraft:Mirror | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[8].stages[1].recipes[0] |
 | thaumcraft:mirror_essentia | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[10].icons[0] |
@@ -198,9 +210,6 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | thaumcraft:sapling_silverwood | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[6].icons[1] |
 | thaumcraft:scribing_tools | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[2].stages[0].required_craft[0] |
 | thaumcraft:seal | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[9].icons[0] |
-| thaumcraft:SealBreak | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[22].stages[1].recipes[0] |
-| thaumcraft:SealButcher | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[19].stages[1].recipes[0] |
-| thaumcraft:SealHarvest | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[21].stages[1].recipes[0] |
 | thaumcraft:smelter_aux | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[15].icons[0] |
 | thaumcraft:smelter_basic | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[10].icons[0] |
 | thaumcraft:smelter_basic | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[10].stages[2].required_craft[0] |
@@ -423,14 +432,20 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/eldritchpedestal.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/enchantedfabric.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/infusionmatrix.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/jarbrain.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/matrixcost.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/matrixmotion.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mindbiothaumic.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/redstoneinlay.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/research_bridge/infusion_matrix.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/robeboots.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/robechest.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/robelegs.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbreak.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbutcher.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealharvest.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/stabilizer.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json |
@@ -439,6 +454,7 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json |
+| InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | ShapedArcane | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 

@@ -455,3 +455,9 @@ The sections below are historical update notes. They should not be read as the c
 - Added the first small infusion recipe/page JSON batch after introducing the 	haumcraft:infusion boundary.
 - Covered JarBrain, MindBiothaumic, SealBreak, SealButcher, and SealHarvest as data/page entries only.
 - Real infusion altar gameplay and golem seal behavior remain deferred.
+
+### Latest post-golemancy-infusion audit refresh
+
+- Refreshed recipe/page and alchemy source audits after the FIRST_GOLEMANCY_INFUSION recipe/page batch.
+- Use the refreshed counts to confirm the first golemancy infusion page gap reduction and select the next safe batch.
+- If first golemancy infusion gaps are closed, GolemPress should remain separated as a machine/block boundary.

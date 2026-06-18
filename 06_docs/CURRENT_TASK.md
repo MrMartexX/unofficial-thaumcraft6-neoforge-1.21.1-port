@@ -150,3 +150,7 @@ Last updated: 2026-06-18
 - Added first data-driven infusion recipe/page entries for remaining golemancy infusion candidates.
 - Re-run recipe/page audits after push to confirm GOLEMANCY_PAGE_DEFERRED reduction.
 - Keep GolemPress separate as a machine/block boundary.
+
+## Post-metal-purification audit note
+
+- Use refreshed post-GOLEMANCY_INFUSION audits to confirm how many GOLEMANCY_PAGE_DEFERRED entries remain before choosing the next batch.
