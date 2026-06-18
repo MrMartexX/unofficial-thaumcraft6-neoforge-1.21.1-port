@@ -342,3 +342,9 @@ Next:
 - Added the METAL_PURIFICATION alchemy family as crucible recipe/page data for iron, gold, copper, tin, silver, lead and cinnabar.
 - Added legacy cluster bridge item identities for the old ItemsTC.clusters metadata outputs.
 - Added optional legacy ore dictionary catalyst tags so current vanilla/Thaumcraft ores resolve where available while absent legacy-only metal ores remain safe placeholders.
+
+### Latest post-metal-purification audit refresh
+
+- Refreshed recipe/page and alchemy source audits after the METAL_PURIFICATION crucible recipe/page batch.
+- Use the refreshed counts to select the next safe alchemy family-level batch.
+- Prefer small pure crucible families next, and avoid mixed ALCHEMY_OTHER entries until their false positives and machine/page boundaries are separated.

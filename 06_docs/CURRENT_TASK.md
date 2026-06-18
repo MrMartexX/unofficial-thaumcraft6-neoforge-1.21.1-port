@@ -80,3 +80,7 @@ Last updated: 2026-06-17
 ## Metal purification crucible note
 
 - Re-run recipe page gap and registry/tag audits after the METAL_PURIFICATION crucible recipe/page batch.
+
+## Post-metal-purification audit note
+
+- Use refreshed post-METAL_PURIFICATION audits to choose the next small pure crucible alchemy batch.

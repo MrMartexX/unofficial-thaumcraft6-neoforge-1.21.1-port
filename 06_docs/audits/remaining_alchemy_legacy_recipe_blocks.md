@@ -1,6 +1,6 @@
 # Remaining Alchemy Legacy Recipe Blocks
 
-Generated: 2026-06-18 03:32:13 +03:00
+Generated: 2026-06-18 04:51:26 +03:00
 
 ## Purpose
 
@@ -10,15 +10,14 @@ This document extracts exact legacy recipe source blocks for the remaining non-H
 
 | Metric | Count |
 |---|---:|
-| Unique remaining alchemy references | 23 |
-| Extracted legacy blocks | 45 |
+| Unique remaining alchemy references | 16 |
+| Extracted legacy blocks | 38 |
 | References without extracted block | 2 |
 
 ## Remaining family distribution
 
 | Family | Count |
 |---|---:|
-| METAL_PURIFICATION | 7 |
 | ALCHEMY_OTHER | 6 |
 | SPECIAL_ALCHEMY | 4 |
 | BRASS_ALCHEMY | 2 |
@@ -30,7 +29,7 @@ This document extracts exact legacy recipe source blocks for the remaining non-H
 
 | API kind | Count |
 |---|---:|
-| CRUCIBLE | 36 |
+| CRUCIBLE | 29 |
 | INFUSION | 9 |
 
 ## Extracted recipe overview
@@ -63,13 +62,6 @@ This document extracts exact legacy recipe source blocks for the remaining non-H
 | BRASS_ALCHEMY | thaumcraft:brass_stuff | INFUSION | thaumcraft:VoidseerPearl | VOIDSEERPEARL | mind=150, void=150, magic=100 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 370 |
 | BRASS_ALCHEMY | thaumcraft:brassingot | CRUCIBLE | thaumcraft:brassingot | METALLURGY@1 | tool=5 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 141 |
 | BRASS_ALCHEMY | thaumcraft:brassingot | INFUSION | thaumcraft:VoidseerPearl | VOIDSEERPEARL | mind=150, void=150, magic=100 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 370 |
-| METAL_PURIFICATION | thaumcraft:metal_purification_cinnabar | CRUCIBLE | thaumcraft:metal_purification_cinnabar | METALPURIFICATION | metal=5, order=5 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 150 |
-| METAL_PURIFICATION | thaumcraft:metal_purification_copper | CRUCIBLE | thaumcraft:metal_purification_copper | METALPURIFICATION | metal=5, order=5 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 152 |
-| METAL_PURIFICATION | thaumcraft:metal_purification_gold | CRUCIBLE | thaumcraft:metal_purification_gold | METALPURIFICATION | metal=5, order=5 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 149 |
-| METAL_PURIFICATION | thaumcraft:metal_purification_iron | CRUCIBLE | thaumcraft:metal_purification_iron | METALPURIFICATION | metal=5, order=5 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 148 |
-| METAL_PURIFICATION | thaumcraft:metal_purification_lead | CRUCIBLE | thaumcraft:metal_purification_lead | METALPURIFICATION | metal=5, order=5 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 161 |
-| METAL_PURIFICATION | thaumcraft:metal_purification_silver | CRUCIBLE | thaumcraft:metal_purification_silver | METALPURIFICATION | metal=5, order=5 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 158 |
-| METAL_PURIFICATION | thaumcraft:metal_purification_tin | CRUCIBLE | thaumcraft:metal_purification_tin | METALPURIFICATION | metal=5, order=5 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 155 |
 | NITOR | thaumcraft:nitor | CRUCIBLE |  | BASEALCHEMY |  | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 131 |
 | NITOR | thaumcraft:nitor | CRUCIBLE | thaumcraft:nitor | UNLOCKALCHEMY@3 | energy=10, fire=10, light=10 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 134 |
 | NITOR | thaumcraft:nitor | CRUCIBLE | thaumcraft:nitor | UNLOCKALCHEMY@3 | energy=10, fire=10, light=10 | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 134 |
@@ -612,97 +604,6 @@ public class TileThaumatorium extends TileThaumcraftInventory implements IAspect
 
 ```java
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:VoidseerPearl"), new InfusionRecipe("VOIDSEERPEARL", new ItemStack(ItemsTC.charmVoidseer), 8, new AspectList().add(Aspect.MIND, 150).add(Aspect.VOID, 150).add(Aspect.MAGIC, 100), new ItemStack(ItemsTC.baubles, 1, 4), new ItemStack(ItemsTC.brain), new ItemStack(ItemsTC.voidSeed), new ItemStack(ItemsTC.brain), Ingredient.fromItem(ItemsTC.primordialPearl)));
-```
-
-### thaumcraft:metal_purification_cinnabar
-
-- Family: METAL_PURIFICATION
-- API kind: CRUCIBLE
-- File: src/main/java/thaumcraft/common/config/ConfigRecipes.java
-- Start line: 150
-- Research: METALPURIFICATION
-- Aspects: metal=5, order=5
-
-```java
-        ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:metal_purification_cinnabar"), new CrucibleRecipe("METALPURIFICATION", new ItemStack(ItemsTC.clusters, 1, 6), "oreCinnabar", new AspectList().merge(Aspect.METAL, 5).merge(Aspect.ORDER, 5)));
-```
-
-### thaumcraft:metal_purification_copper
-
-- Family: METAL_PURIFICATION
-- API kind: CRUCIBLE
-- File: src/main/java/thaumcraft/common/config/ConfigRecipes.java
-- Start line: 152
-- Research: METALPURIFICATION
-- Aspects: metal=5, order=5
-
-```java
-            ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:metal_purification_copper"), new CrucibleRecipe("METALPURIFICATION", new ItemStack(ItemsTC.clusters, 1, 2), "oreCopper", new AspectList().merge(Aspect.METAL, 5).merge(Aspect.ORDER, 5)));
-```
-
-### thaumcraft:metal_purification_gold
-
-- Family: METAL_PURIFICATION
-- API kind: CRUCIBLE
-- File: src/main/java/thaumcraft/common/config/ConfigRecipes.java
-- Start line: 149
-- Research: METALPURIFICATION
-- Aspects: metal=5, order=5
-
-```java
-        ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:metal_purification_gold"), new CrucibleRecipe("METALPURIFICATION", new ItemStack(ItemsTC.clusters, 1, 1), "oreGold", new AspectList().merge(Aspect.METAL, 5).merge(Aspect.ORDER, 5)));
-```
-
-### thaumcraft:metal_purification_iron
-
-- Family: METAL_PURIFICATION
-- API kind: CRUCIBLE
-- File: src/main/java/thaumcraft/common/config/ConfigRecipes.java
-- Start line: 148
-- Research: METALPURIFICATION
-- Aspects: metal=5, order=5
-
-```java
-        ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:metal_purification_iron"), new CrucibleRecipe("METALPURIFICATION", new ItemStack(ItemsTC.clusters, 1, 0), "oreIron", new AspectList().merge(Aspect.METAL, 5).merge(Aspect.ORDER, 5)));
-```
-
-### thaumcraft:metal_purification_lead
-
-- Family: METAL_PURIFICATION
-- API kind: CRUCIBLE
-- File: src/main/java/thaumcraft/common/config/ConfigRecipes.java
-- Start line: 161
-- Research: METALPURIFICATION
-- Aspects: metal=5, order=5
-
-```java
-            ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:metal_purification_lead"), new CrucibleRecipe("METALPURIFICATION", new ItemStack(ItemsTC.clusters, 1, 5), "oreLead", new AspectList().merge(Aspect.METAL, 5).merge(Aspect.ORDER, 5)));
-```
-
-### thaumcraft:metal_purification_silver
-
-- Family: METAL_PURIFICATION
-- API kind: CRUCIBLE
-- File: src/main/java/thaumcraft/common/config/ConfigRecipes.java
-- Start line: 158
-- Research: METALPURIFICATION
-- Aspects: metal=5, order=5
-
-```java
-            ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:metal_purification_silver"), new CrucibleRecipe("METALPURIFICATION", new ItemStack(ItemsTC.clusters, 1, 4), "oreSilver", new AspectList().merge(Aspect.METAL, 5).merge(Aspect.ORDER, 5)));
-```
-
-### thaumcraft:metal_purification_tin
-
-- Family: METAL_PURIFICATION
-- API kind: CRUCIBLE
-- File: src/main/java/thaumcraft/common/config/ConfigRecipes.java
-- Start line: 155
-- Research: METALPURIFICATION
-- Aspects: metal=5, order=5
-
-```java
-            ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:metal_purification_tin"), new CrucibleRecipe("METALPURIFICATION", new ItemStack(ItemsTC.clusters, 1, 3), "oreTin", new AspectList().merge(Aspect.METAL, 5).merge(Aspect.ORDER, 5)));
 ```
 
 ### thaumcraft:nitor

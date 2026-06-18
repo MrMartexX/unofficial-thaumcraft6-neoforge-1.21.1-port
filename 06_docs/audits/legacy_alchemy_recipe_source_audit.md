@@ -1,13 +1,13 @@
 # Legacy Alchemy Recipe Source Audit
 
-Generated: 2026-06-18 03:24:32 +03:00
+Generated: 2026-06-18 04:51:02 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Alchemy missing recipe-page references from current audit | 29 |
-| References with at least one legacy source hit | 29 |
+| Alchemy missing recipe-page references from current audit | 22 |
+| References with at least one legacy source hit | 22 |
 | References without direct source hit | 0 |
 | Legacy Java files scanned | 902 |
 | Legacy API/pattern source hits | 361 |
@@ -17,7 +17,6 @@ Generated: 2026-06-18 03:24:32 +03:00
 | Family | Count |
 |---|---:|
 | ALCHEMY_OTHER | 7 |
-| METAL_PURIFICATION | 7 |
 | BRASS_ALCHEMY | 5 |
 | SPECIAL_ALCHEMY | 4 |
 | BASIC_ALCHEMY | 3 |
@@ -56,13 +55,6 @@ Generated: 2026-06-18 03:24:32 +03:00
 | BRASS_ALCHEMY | thaumcraft:brassingot | 15 | $.entries[2].stages[0].recipes[0] |
 | BRASS_ALCHEMY | thaumcraft:brassingot | 15 | $.entries[2].stages[1].recipes[0] |
 | BRASS_ALCHEMY | thaumcraft:brassingot | 15 | $.entries[2].stages[2].recipes[0] |
-| METAL_PURIFICATION | thaumcraft:metal_purification_cinnabar | 2 | $.entries[3].stages[0].recipes[2] |
-| METAL_PURIFICATION | thaumcraft:metal_purification_copper | 2 | $.entries[3].stages[0].recipes[3] |
-| METAL_PURIFICATION | thaumcraft:metal_purification_gold | 2 | $.entries[3].stages[0].recipes[1] |
-| METAL_PURIFICATION | thaumcraft:metal_purification_iron | 2 | $.entries[3].stages[0].recipes[0] |
-| METAL_PURIFICATION | thaumcraft:metal_purification_lead | 2 | $.entries[3].stages[0].recipes[6] |
-| METAL_PURIFICATION | thaumcraft:metal_purification_silver | 2 | $.entries[3].stages[0].recipes[5] |
-| METAL_PURIFICATION | thaumcraft:metal_purification_tin | 2 | $.entries[3].stages[0].recipes[4] |
 | NITOR | thaumcraft:nitor | 249 | $.entries[0].stages[0].recipes[0] |
 | NITOR | thaumcraft:nitorgroup | 3 | $.entries[0].stages[0].recipes[1] |
 | SPECIAL_ALCHEMY | thaumcraft:BathSalts | 50 | $.entries[7].stages[1].recipes[0] |
@@ -325,7 +317,7 @@ Generated: 2026-06-18 03:24:32 +03:00
 | thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/entities/projectile/EntityAlumentum.java | 33 | FXDispatcher.INSTANCE.drawAlumentum((float)(prevPosX + (posX - prevPosX) * coeff), (float)(prevPosY + (posY - prevPosY) * coeff) + height / 2.0f, (float)(prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() ... |
 | thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/entities/projectile/EntityCausalityCollapser.java | 37 | FXDispatcher.INSTANCE.drawAlumentum((float)(prevPosX + (posX - prevPosX) * coeff), (float)(prevPosY + (posY - prevPosY) * coeff) + height / 2.0f, (float)(prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() ... |
 
-Representative table truncated to first 250 source hits out of 804.
+Representative table truncated to first 250 source hits out of 790.
 
 ## Legacy recipe API/pattern hit samples
 
