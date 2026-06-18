@@ -476,3 +476,8 @@ The sections below are historical update notes. They should not be read as the c
 - Added elemental tool infusion recipe/page entries for axe, pick, sword, shovel, and hoe.
 - Audit refresh is integrated into this batch script by default, after build/smoke and before commit.
 - These remain data/page boundaries only; in-world infusion altar behavior is still deferred.
+### Latest fortress mask infusion recipe page batch
+
+- Added fortress mask infusion recipe/page entries for Grinning Devil, Angry Ghost, and Sipping Fiend masks.
+- Added a bridge item identity for the Thaumium Fortress Helm catalyst; full fortress armor behavior remains deferred.
+- Audit refresh is integrated into this batch script by default, after build/smoke and before commit.

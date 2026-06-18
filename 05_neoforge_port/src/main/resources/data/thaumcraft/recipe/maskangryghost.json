@@ -1,0 +1,46 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "FORTRESSMASK",
+  "instability": 8,
+  "catalyst": {
+    "item": "thaumcraft:thaumium_fortress_helm"
+  },
+  "components": [
+    {
+      "item": "minecraft:white_dye"
+    },
+    {
+      "tag": "c:plates/iron"
+    },
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "item": "minecraft:poisonous_potato"
+    },
+    {
+      "item": "minecraft:wither_skeleton_skull"
+    },
+    {
+      "tag": "c:plates/iron"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "entropy",
+      "amount": 80
+    },
+    {
+      "aspect": "death",
+      "amount": 80
+    },
+    {
+      "aspect": "protect",
+      "amount": 20
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:mask_angry_ghost",
+    "count": 1
+  }
+}

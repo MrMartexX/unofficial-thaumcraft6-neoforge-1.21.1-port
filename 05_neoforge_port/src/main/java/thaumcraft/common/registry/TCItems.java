@@ -202,6 +202,10 @@ public final class TCItems {
     public static final Supplier<Item> ELEMENTAL_SWORD = simpleItem("elemental_sword");
     public static final Supplier<Item> ELEMENTAL_SHOVEL = simpleItem("elemental_shovel");
     public static final Supplier<Item> ELEMENTAL_HOE = simpleItem("elemental_hoe");
+    public static final Supplier<Item> THAUMIUM_FORTRESS_HELM = simpleItem("thaumium_fortress_helm");
+    public static final Supplier<Item> MASK_GRINNING_DEVIL = simpleItem("mask_grinning_devil");
+    public static final Supplier<Item> MASK_ANGRY_GHOST = simpleItem("mask_angry_ghost");
+    public static final Supplier<Item> MASK_SIPPING_FIEND = simpleItem("mask_sipping_fiend");
     public static final Supplier<Item> MIND_CLOCKWORK_ADVANCED = simpleItem("mindclockwork_advanced");
     public static final Supplier<Item> ARCANE_EAR_TOGGLE = simpleItem("arcane_ear_toggle");
     public static final Supplier<Item> BAUBLE_AMULET = simpleItem("bauble_amulet");

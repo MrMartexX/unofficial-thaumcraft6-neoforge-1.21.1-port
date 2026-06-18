@@ -1,0 +1,46 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "FORTRESSMASK",
+  "instability": 8,
+  "catalyst": {
+    "item": "thaumcraft:thaumium_fortress_helm"
+  },
+  "components": [
+    {
+      "item": "minecraft:black_dye"
+    },
+    {
+      "tag": "c:plates/iron"
+    },
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "item": "thaumcraft:shimmerleaf"
+    },
+    {
+      "item": "thaumcraft:brain"
+    },
+    {
+      "tag": "c:plates/iron"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "mind",
+      "amount": 80
+    },
+    {
+      "aspect": "life",
+      "amount": 80
+    },
+    {
+      "aspect": "protect",
+      "amount": 20
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:mask_grinning_devil",
+    "count": 1
+  }
+}

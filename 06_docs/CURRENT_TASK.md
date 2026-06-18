@@ -166,3 +166,7 @@ Last updated: 2026-06-18
 
 - Added a data-driven infusion JSON/catalog batch for ElementalAxe, ElementalPick, ElementalSword, ElementalShovel, and ElementalHoe.
 - This script integrates audit refresh after successful build/smoke.
+## Fortress mask infusion recipe page note
+
+- Added data-driven infusion JSON/catalog entries for MaskGrinningDevil, MaskAngryGhost, and MaskSippingFiend.
+- This script integrates audit refresh after successful build/smoke.

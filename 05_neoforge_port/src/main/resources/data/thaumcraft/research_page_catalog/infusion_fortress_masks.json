@@ -1,0 +1,55 @@
+{
+  "entries": [
+    {
+      "id": "thaumcraft:maskgrinningdevil",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "FORTRESSMASK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:mask_grinning_devil",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:maskangryghost",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "FORTRESSMASK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:mask_angry_ghost",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:masksippingfiend",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "FORTRESSMASK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:mask_sipping_fiend",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}

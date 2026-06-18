@@ -1,0 +1,46 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "FORTRESSMASK",
+  "instability": 8,
+  "catalyst": {
+    "item": "thaumcraft:thaumium_fortress_helm"
+  },
+  "components": [
+    {
+      "item": "minecraft:red_dye"
+    },
+    {
+      "tag": "c:plates/iron"
+    },
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "item": "minecraft:ghast_tear"
+    },
+    {
+      "item": "minecraft:milk_bucket"
+    },
+    {
+      "tag": "c:plates/iron"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "undead",
+      "amount": 80
+    },
+    {
+      "aspect": "life",
+      "amount": 80
+    },
+    {
+      "aspect": "protect",
+      "amount": 20
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:mask_sipping_fiend",
+    "count": 1
+  }
+}
