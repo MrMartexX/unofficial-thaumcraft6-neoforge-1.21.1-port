@@ -76,3 +76,7 @@ Last updated: 2026-06-17
 ## Crucible aspect alias note
 
 - Crucible recipe aspect costs now accept legacy Aspect enum aliases; keep generated crucible JSON in legacy-source terms when useful and let the serializer canonicalize.
+
+## Metal purification crucible note
+
+- Re-run recipe page gap and registry/tag audits after the METAL_PURIFICATION crucible recipe/page batch.

@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "METALPURIFICATION",
+  "catalyst": {
+    "tag": "thaumcraft:legacy_ore_dictionary/ore_lead"
+  },
+  "aspects": [
+    {
+      "aspect": "metal",
+      "amount": 5
+    },
+    {
+      "aspect": "order",
+      "amount": 5
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:cluster_lead",
+    "count": 1
+  }
+}

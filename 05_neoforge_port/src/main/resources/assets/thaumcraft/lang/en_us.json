@@ -851,5 +851,12 @@
   "research.PRIMALCRUSHER.stage.2": "Success! I have created a tool I am calling the Primal Crusher. It has the essential nature of both a pickaxe and a shovel. It does not look like either of those tools, but it defintely functions like them. Better in fact. It is also surprisingly effective against Taint.<BR>It is slightly unpleasant to hold however - it seems to vibrate in one's hand and the feeling becomes quite uncomfortable after a while. A little discomfort will not stop me from using it however.",
   "research.m_hellandback.text": "Visit a hellish place.",
   "research.m_endoftheworld.text": "Find the end of everything.",
-  "recipe.type.crucible": "Crucible"
+  "recipe.type.crucible": "Crucible",
+  "item.thaumcraft.cluster_iron": "Native Iron Cluster",
+  "item.thaumcraft.cluster_gold": "Native Gold Cluster",
+  "item.thaumcraft.cluster_copper": "Native Copper Cluster",
+  "item.thaumcraft.cluster_tin": "Native Tin Cluster",
+  "item.thaumcraft.cluster_silver": "Native Silver Cluster",
+  "item.thaumcraft.cluster_lead": "Native Lead Cluster",
+  "item.thaumcraft.cluster_cinnabar": "Native Cinnabar Cluster"
 }

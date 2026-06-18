@@ -336,3 +336,9 @@ Next:
 - Fixed the first crucible recipe boundary to accept legacy Aspect enum names in recipe JSON by canonicalizing them to the port's active aspect tags.
 - This maps legacy names such as fire, air, earth, beast, magic, order and entropy to modern tags such as ignis, aer, terra, bestia, praecantatio, ordo and perditio.
 - This keeps current HEDGE_ALCHEMY JSON compatible and reduces future generated alchemy recipe batch risk because legacy source extraction reports Aspect enum names.
+
+### Latest metal purification crucible recipe page update
+
+- Added the METAL_PURIFICATION alchemy family as crucible recipe/page data for iron, gold, copper, tin, silver, lead and cinnabar.
+- Added legacy cluster bridge item identities for the old ItemsTC.clusters metadata outputs.
+- Added optional legacy ore dictionary catalyst tags so current vanilla/Thaumcraft ores resolve where available while absent legacy-only metal ores remain safe placeholders.

@@ -145,6 +145,13 @@ public final class TCItems {
     public static final Supplier<Item> PRIMORDIAL_PEARL = simpleItem("primordial_pearl");
     public static final Supplier<Item> SALIS_MUNDUS = simpleItem("salis_mundus");
     public static final Supplier<Item> TALLOW = simpleItem("tallow");
+    public static final Supplier<Item> CLUSTER_IRON = simpleItem("cluster_iron");
+    public static final Supplier<Item> CLUSTER_GOLD = simpleItem("cluster_gold");
+    public static final Supplier<Item> CLUSTER_COPPER = simpleItem("cluster_copper");
+    public static final Supplier<Item> CLUSTER_TIN = simpleItem("cluster_tin");
+    public static final Supplier<Item> CLUSTER_SILVER = simpleItem("cluster_silver");
+    public static final Supplier<Item> CLUSTER_LEAD = simpleItem("cluster_lead");
+    public static final Supplier<Item> CLUSTER_CINNABAR = simpleItem("cluster_cinnabar");
     public static final Supplier<Item> MECHANISM_SIMPLE = simpleItem("mechanism_simple");
     public static final Supplier<Item> MECHANISM_COMPLEX = simpleItem("mechanism_complex");
     public static final Supplier<Item> VIS_RESONATOR = simpleItem("vis_resonator");

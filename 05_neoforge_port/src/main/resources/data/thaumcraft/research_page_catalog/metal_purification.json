@@ -1,0 +1,123 @@
+{
+  "entries": [
+    {
+      "id": "thaumcraft:metal_purification_iron",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "METALPURIFICATION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cluster_iron",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_gold",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "METALPURIFICATION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cluster_gold",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_copper",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "METALPURIFICATION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cluster_copper",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_tin",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "METALPURIFICATION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cluster_tin",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_silver",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "METALPURIFICATION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cluster_silver",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_lead",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "METALPURIFICATION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cluster_lead",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:metal_purification_cinnabar",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "METALPURIFICATION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:cluster_cinnabar",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}
