@@ -158,3 +158,7 @@ Last updated: 2026-06-18
 
 - Added a small utility infusion JSON/catalog batch for BootsTraveller, CLOUDRING, and CHARMUNDYING.
 - Re-run recipe/page audits after push to measure INFUSION_PAGE_DEFERRED reduction.
+
+## Post-metal-purification audit note
+
+- Use refreshed post-UTILITY_INFUSION audits to confirm how many GOLEMANCY_PAGE_DEFERRED entries remain before choosing the next batch.

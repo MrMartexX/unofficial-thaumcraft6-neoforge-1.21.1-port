@@ -1,16 +1,16 @@
 # Research Recipe Page Gap Audit
 
-Generated: 2026-06-18 16:15:32 +03:00
+Generated: 2026-06-18 16:21:36 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 290 |
+| Recipe JSON files scanned | 293 |
 | Research JSON files scanned | 8 |
 | Stage/addendum recipe page references | 253 |
-| Resolved recipe page references | 178 |
-| Missing recipe page references | 75 |
+| Resolved recipe page references | 181 |
+| Missing recipe page references | 72 |
 | Required craft references | 29 |
 | Required item references | 30 |
 | Icon references | 156 |
@@ -20,7 +20,7 @@ Generated: 2026-06-18 16:15:32 +03:00
 | Class | Count |
 |---|---:|
 | FAKE_OR_SYNTHETIC_PAGE | 15 |
-| INFUSION_PAGE_DEFERRED | 14 |
+| INFUSION_PAGE_DEFERRED | 11 |
 | INFUSION_RESEARCH_LEGACY_PAGE_KEY | 11 |
 | LEGACY_PAGE_KEY_OR_MISSING_RECIPE | 9 |
 | AUROMANCY_FOCUS_OR_CASTER_PAGE_DEFERRED | 8 |
@@ -33,7 +33,7 @@ Generated: 2026-06-18 16:15:32 +03:00
 
 | Research file | Count |
 |---|---:|
-| 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | 36 |
+| 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | 33 |
 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | 12 |
 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | 8 |
 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | 8 |
@@ -46,8 +46,8 @@ Generated: 2026-06-18 16:15:32 +03:00
 | Reference | Recipe type | Class | Research file | JSON path |
 |---|---|---|---|---|
 | thaumcraft:activatorrail | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[15].stages[1].recipes[1] |
-| thaumcraft:AdvAlchemyConstruct | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[14].stages[1].recipes[0] |
 | thaumcraft:AdvAlchemyConstruct | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[14].stages[0].recipes[0] |
+| thaumcraft:AdvAlchemyConstruct | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[14].stages[1].recipes[0] |
 | thaumcraft:AdvancedCrossbow | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[16].stages[1].recipes[0] |
 | thaumcraft:AlchemicalConstruct | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[12].stages[1].recipes[7] |
 | thaumcraft:Alembic | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[10].stages[3].recipes[1] |
@@ -58,33 +58,33 @@ Generated: 2026-06-18 16:15:32 +03:00
 | thaumcraft:ArcaneSpa | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[9].stages[1].recipes[0] |
 | thaumcraft:AutomatedCrossbow | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[15].stages[1].recipes[0] |
 | thaumcraft:Bellows | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[4].stages[1].recipes[0] |
-| thaumcraft:caster_basic | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[0].recipes[1] |
 | thaumcraft:caster_basic | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[10].stages[2].recipes[1] |
-| thaumcraft:caster_basic | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[2].recipes[1] |
 | thaumcraft:caster_basic | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[10].stages[1].recipes[1] |
+| thaumcraft:caster_basic | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[2].recipes[1] |
 | thaumcraft:caster_basic | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[1].recipes[1] |
+| thaumcraft:caster_basic | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[0].recipes[1] |
 | thaumcraft:Centrifuge | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[17].stages[1].recipes[0] |
 | thaumcraft:Condenser | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[17].stages[1].recipes[0] |
 | thaumcraft:CondenserLattice | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[17].stages[1].recipes[1] |
 | thaumcraft:dioptra | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[7].stages[1].recipes[0] |
 | thaumcraft:EldritchPedestal | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[5].stages[1].recipes[0] |
 | thaumcraft:EnchantedFabric | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[12].stages[1].recipes[0] |
-| thaumcraft:EssentiaSmelter | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[10].stages[2].recipes[0] |
 | thaumcraft:EssentiaSmelter | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[10].stages[3].recipes[0] |
+| thaumcraft:EssentiaSmelter | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[10].stages[2].recipes[0] |
 | thaumcraft:EssentiaSmelterThaumium | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[13].stages[1].recipes[0] |
 | thaumcraft:EssentiaSmelterVoid | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[14].stages[1].recipes[1] |
 | thaumcraft:EssentiaTransportIn | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[19].stages[1].recipes[0] |
 | thaumcraft:EssentiaTransportOut | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[19].stages[1].recipes[1] |
 | thaumcraft:Filter | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[0].stages[0].recipes[4] |
 | thaumcraft:FocusPouch | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[21].stages[1].recipes[0] |
-| thaumcraft:Goggles | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[0].stages[0].recipes[0] |
 | thaumcraft:Goggles | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[11].stages[1].recipes[0] |
+| thaumcraft:Goggles | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[0].stages[0].recipes[0] |
 | thaumcraft:GrappleGun | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[18].stages[1].recipes[2] |
 | thaumcraft:GrappleGunSpool | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[18].stages[1].recipes[1] |
 | thaumcraft:GrappleGunTip | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[18].stages[1].recipes[0] |
 | thaumcraft:HungryChest | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[1].stages[1].recipes[0] |
-| thaumcraft:InfusionMatrix | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[1].stages[2].recipes[0] |
 | thaumcraft:InfusionMatrix | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[1].stages[1].recipes[0] |
+| thaumcraft:InfusionMatrix | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[1].stages[2].recipes[0] |
 | thaumcraft:JarVoid | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[11].stages[0].recipes[1] |
 | thaumcraft:Levitator | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[2].stages[1].recipes[0] |
 | thaumcraft:MatrixCost | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[3].stages[1].recipes[1] |
@@ -114,29 +114,29 @@ Generated: 2026-06-18 16:15:32 +03:00
 | thaumcraft:SmelterAux | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[15].stages[1].recipes[0] |
 | thaumcraft:SmelterVent | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[16].stages[1].recipes[0] |
 | thaumcraft:Stabilizer | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[2].stages[1].recipes[1] |
-| thaumcraft:thaumometer | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[1].recipes[0] |
 | thaumcraft:thaumometer | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[2].recipes[0] |
+| thaumcraft:thaumometer | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[1].recipes[0] |
 | thaumcraft:Tube | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[12].stages[1].recipes[1] |
 | thaumcraft:TubeBuffer | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[12].stages[1].recipes[6] |
 | thaumcraft:TubeFilter | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[12].stages[1].recipes[3] |
 | thaumcraft:TubeOneway | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[12].stages[1].recipes[5] |
 | thaumcraft:TubeRestrict | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[12].stages[1].recipes[4] |
 | thaumcraft:TubeValve | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[12].stages[1].recipes[2] |
-| thaumcraft:vis_resonator | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[10].stages[2].recipes[0] |
-| thaumcraft:vis_resonator | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[1].recipes[0] |
-| thaumcraft:vis_resonator | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[10].stages[1].recipes[0] |
-| thaumcraft:vis_resonator | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[2].recipes[0] |
 | thaumcraft:vis_resonator | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[0].recipes[0] |
+| thaumcraft:vis_resonator | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[1].recipes[0] |
+| thaumcraft:vis_resonator | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[2].recipes[0] |
+| thaumcraft:vis_resonator | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[10].stages[1].recipes[0] |
+| thaumcraft:vis_resonator | thaumcraft:arcane_shapeless | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[10].stages[2].recipes[0] |
 | thaumcraft:VisBattery | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[22].stages[1].recipes[0] |
 | thaumcraft:VisGenerator | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[19].stages[1].recipes[0] |
-| thaumcraft:wand_workbench | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[1].recipes[4] |
 | thaumcraft:wand_workbench | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[2].recipes[4] |
+| thaumcraft:wand_workbench | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[1].recipes[4] |
 | thaumcraft:WardedJar | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[11].stages[0].recipes[0] |
 | thaumcraft:workbenchcharger | thaumcraft:arcane_shaped | ARCANE_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[20].stages[1].recipes[0] |
 | thaumcraft:Banners | research_page_catalog:group | CATALOG_GROUP_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[0].stages[0].recipes[0] |
 | thaumcraft:baubles_stuff | research_page_catalog:group | CATALOG_GROUP_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[0].stages[0].recipes[1] |
-| thaumcraft:brass_stuff | research_page_catalog:group | CATALOG_GROUP_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[1].recipes[1] |
 | thaumcraft:brass_stuff | research_page_catalog:group | CATALOG_GROUP_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[2].recipes[1] |
+| thaumcraft:brass_stuff | research_page_catalog:group | CATALOG_GROUP_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[1].recipes[1] |
 | thaumcraft:inkwell | research_page_catalog:group | CATALOG_GROUP_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[2].stages[1].recipes[1] |
 | thaumcraft:inkwell | research_page_catalog:group | CATALOG_GROUP_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[2].stages[0].recipes[1] |
 | thaumcraft:nitorgroup | research_page_catalog:group | CATALOG_GROUP_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[0].stages[0].recipes[1] |
@@ -149,35 +149,35 @@ Generated: 2026-06-18 16:15:32 +03:00
 | thaumcraft:alumentum | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[1].stages[1].recipes[0] |
 | thaumcraft:BathSalts | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[7].stages[1].recipes[0] |
 | thaumcraft:BottleTaint | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[6].stages[0].recipes[0] |
-| thaumcraft:brassingot | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[2].recipes[0] |
 | thaumcraft:brassingot | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[1].recipes[0] |
 | thaumcraft:brassingot | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[0].recipes[0] |
+| thaumcraft:brassingot | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[2].recipes[0] |
 | thaumcraft:hedge_clay | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[7] |
 | thaumcraft:hedge_clay | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[7] |
-| thaumcraft:hedge_dye | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[5] |
 | thaumcraft:hedge_dye | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[5] |
+| thaumcraft:hedge_dye | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[5] |
 | thaumcraft:hedge_dye | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[5] |
+| thaumcraft:hedge_glowstone | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[6] |
 | thaumcraft:hedge_glowstone | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[6] |
 | thaumcraft:hedge_glowstone | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[6] |
-| thaumcraft:hedge_glowstone | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[6] |
-| thaumcraft:hedge_gunpowder | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[3] |
-| thaumcraft:hedge_gunpowder | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[3] |
 | thaumcraft:hedge_gunpowder | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[3] |
-| thaumcraft:hedge_lava | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[10] |
+| thaumcraft:hedge_gunpowder | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[3] |
+| thaumcraft:hedge_gunpowder | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[3] |
 | thaumcraft:hedge_lava | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[10] |
-| thaumcraft:hedge_leather | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[2] |
-| thaumcraft:hedge_leather | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[2] |
-| thaumcraft:hedge_leather | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[0].recipes[1] |
+| thaumcraft:hedge_lava | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[10] |
 | thaumcraft:hedge_leather | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[2] |
-| thaumcraft:hedge_slime | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[4] |
+| thaumcraft:hedge_leather | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[0].recipes[1] |
+| thaumcraft:hedge_leather | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[2] |
+| thaumcraft:hedge_leather | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[2] |
 | thaumcraft:hedge_slime | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[4] |
+| thaumcraft:hedge_slime | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[4] |
 | thaumcraft:hedge_slime | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[4] |
 | thaumcraft:hedge_string | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[8] |
 | thaumcraft:hedge_string | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[8] |
-| thaumcraft:hedge_tallow | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[0] |
-| thaumcraft:hedge_tallow | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[0] |
-| thaumcraft:hedge_tallow | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[0].recipes[0] |
 | thaumcraft:hedge_tallow | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[0] |
+| thaumcraft:hedge_tallow | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[0].recipes[0] |
+| thaumcraft:hedge_tallow | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[0] |
+| thaumcraft:hedge_tallow | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[1].recipes[0] |
 | thaumcraft:hedge_web | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[2].recipes[9] |
 | thaumcraft:hedge_web | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[3].recipes[9] |
 | thaumcraft:LiquidDeath | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[5].stages[1].recipes[0] |
@@ -206,6 +206,9 @@ Generated: 2026-06-18 16:15:32 +03:00
 | thaumcraft:SealUse | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[20].stages[1].recipes[0] |
 | thaumcraft:thaumiumingot | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[1].recipes[2] |
 | thaumcraft:thaumiumingot | thaumcraft:crucible | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[2].recipes[2] |
+| thaumcraft:BootsTraveller | thaumcraft:infusion | THAUMCRAFT_CUSTOM_OR_REVIEW | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[7].stages[1].recipes[0] |
+| thaumcraft:CHARMUNDYING | thaumcraft:infusion | THAUMCRAFT_CUSTOM_OR_REVIEW | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[16].stages[1].recipes[0] |
+| thaumcraft:CLOUDRING | thaumcraft:infusion | THAUMCRAFT_CUSTOM_OR_REVIEW | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[13].stages[1].recipes[0] |
 | thaumcraft:JarBrain | thaumcraft:infusion | THAUMCRAFT_CUSTOM_OR_REVIEW | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[1].stages[1].recipes[0] |
 | thaumcraft:MindBiothaumic | thaumcraft:infusion | THAUMCRAFT_CUSTOM_OR_REVIEW | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[12].stages[1].recipes[0] |
 | thaumcraft:SealBreak | thaumcraft:infusion | THAUMCRAFT_CUSTOM_OR_REVIEW | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[22].stages[1].recipes[0] |
@@ -219,10 +222,10 @@ Generated: 2026-06-18 16:15:32 +03:00
 | thaumcraft:JarLabel | minecraft:crafting_shapeless | VANILLA_OR_STANDARD_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[11].stages[0].recipes[3] |
 | thaumcraft:phial | minecraft:crafting_shapeless | VANILLA_OR_STANDARD_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[0].stages[0].recipes[3] |
 | thaumcraft:StoneArcane | minecraft:crafting_shaped | VANILLA_OR_STANDARD_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[2].recipes[2] |
-| thaumcraft:tablestone | minecraft:crafting_shaped | VANILLA_OR_STANDARD_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[2].recipes[3] |
 | thaumcraft:tablestone | minecraft:crafting_shaped | VANILLA_OR_STANDARD_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[1].recipes[3] |
-| thaumcraft:tablewood | minecraft:crafting_shaped | VANILLA_OR_STANDARD_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[2].stages[0].recipes[0] |
+| thaumcraft:tablestone | minecraft:crafting_shaped | VANILLA_OR_STANDARD_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[0].stages[2].recipes[3] |
 | thaumcraft:tablewood | minecraft:crafting_shaped | VANILLA_OR_STANDARD_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[2].stages[1].recipes[0] |
+| thaumcraft:tablewood | minecraft:crafting_shaped | VANILLA_OR_STANDARD_READY | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[2].stages[0].recipes[0] |
 
 ## Missing recipe page references
 
@@ -254,8 +257,8 @@ Generated: 2026-06-18 16:15:32 +03:00
 | ELDRITCH_PAGE_DEFERRED | thaumcraft:VoidseerPearl | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[2].stages[1].recipes[0] |
 | ELDRITCH_PAGE_DEFERRED | thaumcraft:VoidSiphon | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[1].stages[1].recipes[0] |
 | FAKE_OR_SYNTHETIC_PAGE | thaumcraft:triplemeattreatfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[3].stages[1].recipes[1] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[0].recipes[0] |
 | FAKE_OR_SYNTHETIC_PAGE | thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[1].recipes[1] |
+| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[0].recipes[0] |
 | FAKE_OR_SYNTHETIC_PAGE | thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[2].recipes[1] |
 | FAKE_OR_SYNTHETIC_PAGE | thaumcraft:IEARCINGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[5] |
 | FAKE_OR_SYNTHETIC_PAGE | thaumcraft:IEBURROWINGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[0] |
@@ -269,9 +272,6 @@ Generated: 2026-06-18 16:15:32 +03:00
 | FAKE_OR_SYNTHETIC_PAGE | thaumcraft:RunicArmorFake1 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[10].stages[1].recipes[1] |
 | FAKE_OR_SYNTHETIC_PAGE | thaumcraft:RunicArmorFake2 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[10].stages[1].recipes[2] |
 | GOLEMANCY_PAGE_DEFERRED | thaumcraft:GolemPress | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[8].stages[2].recipes[1] |
-| INFUSION_PAGE_DEFERRED | thaumcraft:BootsTraveller | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[7].stages[1].recipes[0] |
-| INFUSION_PAGE_DEFERRED | thaumcraft:CHARMUNDYING | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[16].stages[1].recipes[0] |
-| INFUSION_PAGE_DEFERRED | thaumcraft:CLOUDRING | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[13].stages[1].recipes[0] |
 | INFUSION_PAGE_DEFERRED | thaumcraft:ElementalAxe | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[8].stages[1].recipes[0] |
 | INFUSION_PAGE_DEFERRED | thaumcraft:ElementalHoe | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[8].stages[1].recipes[4] |
 | INFUSION_PAGE_DEFERRED | thaumcraft:ElementalPick | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[8].stages[1].recipes[2] |
@@ -284,8 +284,8 @@ Generated: 2026-06-18 16:15:32 +03:00
 | INFUSION_PAGE_DEFERRED | thaumcraft:MaskGrinningDevil | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[1] |
 | INFUSION_PAGE_DEFERRED | thaumcraft:MaskSippingFiend | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[3] |
 | INFUSION_RESEARCH_LEGACY_PAGE_KEY | thaumcraft:arcane_brick | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[6].stages[1].recipes[3] |
-| INFUSION_RESEARCH_LEGACY_PAGE_KEY | thaumcraft:arcane_stone | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[6].stages[0].recipes[0] |
 | INFUSION_RESEARCH_LEGACY_PAGE_KEY | thaumcraft:arcane_stone | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[6].stages[1].recipes[2] |
+| INFUSION_RESEARCH_LEGACY_PAGE_KEY | thaumcraft:arcane_stone | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[6].stages[0].recipes[0] |
 | INFUSION_RESEARCH_LEGACY_PAGE_KEY | thaumcraft:CuriosityBand | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[14].stages[1].recipes[0] |
 | INFUSION_RESEARCH_LEGACY_PAGE_KEY | thaumcraft:HelmGoggles | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[0] |
 | INFUSION_RESEARCH_LEGACY_PAGE_KEY | thaumcraft:ThaumiumFortressChest | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[11].stages[1].recipes[1] |

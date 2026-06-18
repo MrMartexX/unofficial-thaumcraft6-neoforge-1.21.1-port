@@ -465,3 +465,9 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added first non-golem utility infusion recipe/page entries: BootsTraveller, CLOUDRING, and CHARMUNDYING.
 - These remain data/page boundaries only; in-world infusion altar behavior is still deferred.
+
+### Latest post-utility-infusion audit refresh
+
+- Refreshed recipe/page and alchemy source audits after the FIRST_UTILITY_INFUSION recipe/page batch.
+- Use the refreshed counts to confirm the first utility infusion page gap reduction and select the next safe batch.
+- If first utility infusion gaps are closed, continue with another small infusion JSON batch instead of broad fake/synthetic pages.

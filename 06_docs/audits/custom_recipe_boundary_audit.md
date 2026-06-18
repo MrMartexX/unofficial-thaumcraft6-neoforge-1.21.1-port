@@ -1,18 +1,18 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 16:15:30 +03:00
+Generated: 2026-06-18 16:21:34 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 290 |
+| Recipe JSON files scanned | 293 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 181 |
-| Missing recipe references | 242 |
-| Custom/review recipe files | 5 |
-| Blocked/review research recipe references | 5 |
+| Resolved recipe references | 184 |
+| Missing recipe references | 239 |
+| Custom/review recipe files | 8 |
+| Blocked/review research recipe references | 8 |
 | JSON parse errors | 0 |
 
 ## Boundary rule
@@ -30,7 +30,7 @@ Generated: 2026-06-18 16:15:30 +03:00
 | VANILLA_OR_STANDARD_READY | 121 |
 | ARCANE_READY | 89 |
 | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 75 |
-| CUSTOM_BLOCKED_REQUIRES_DESIGN | 5 |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | 8 |
 
 ## Recipe type distribution
 
@@ -41,12 +41,15 @@ Generated: 2026-06-18 16:15:30 +03:00
 | minecraft:crafting_shapeless | 70 |
 | minecraft:crafting_shaped | 51 |
 | thaumcraft:arcane_shapeless | 9 |
-| thaumcraft:infusion | 5 |
+| thaumcraft:infusion | 8 |
 
 ## Custom or review recipe files
 
 | Class | Recipe id | Type | File |
 |---|---|---|---|
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:bootstraveller | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bootstraveller.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:charmundying | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/charmundying.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:cloudring | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/cloudring.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:jarbrain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/jarbrain.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:mindbiothaumic | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mindbiothaumic.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealbreak | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbreak.json |
@@ -57,6 +60,9 @@ Generated: 2026-06-18 16:15:30 +03:00
 
 | Class | Reference | Recipe type | Research file | JSON path |
 |---|---|---|---|---|
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:BootsTraveller | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[7].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:CHARMUNDYING | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[16].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:CLOUDRING | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[13].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:JarBrain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[1].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MindBiothaumic | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[12].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealBreak | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[22].stages[1].recipes[0] |
@@ -87,7 +93,6 @@ Generated: 2026-06-18 16:15:30 +03:00
 | thaumcraft:Banners | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[0].stages[0].recipes[0] |
 | thaumcraft:bath_salts | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[7].icons[0] |
 | thaumcraft:baubles_stuff | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[0].stages[0].recipes[1] |
-| thaumcraft:BootsTraveller | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[7].stages[1].recipes[0] |
 | thaumcraft:bottle_taint | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[6].icons[0] |
 | thaumcraft:brain | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[1].stages[0].required_item[0] |
 | thaumcraft:brass_stuff | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[1].recipes[1] |
@@ -95,9 +100,7 @@ Generated: 2026-06-18 16:15:30 +03:00
 | thaumcraft:causality_collapser | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[19].icons[0] |
 | thaumcraft:CausalityCollapser | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[19].stages[1].recipes[0] |
 | thaumcraft:charm_undying | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[16].icons[0] |
-| thaumcraft:CHARMUNDYING | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[16].stages[1].recipes[0] |
 | thaumcraft:cloud_ring | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[13].icons[0] |
-| thaumcraft:CLOUDRING | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[13].stages[1].recipes[0] |
 | thaumcraft:crystal_aer | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[0] |
 | thaumcraft:crystal_aqua | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[2] |
 | thaumcraft:crystal_ignis | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[1] |
@@ -429,6 +432,9 @@ Generated: 2026-06-18 16:15:30 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannerred.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannersilver.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannerwhite.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bootstraveller.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/charmundying.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/cloudring.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/eldritchpedestal.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/enchantedfabric.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/infusionmatrix.json |
@@ -446,6 +452,7 @@ Generated: 2026-06-18 16:15:30 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealharvest.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/stabilizer.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_utility_first.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json |
@@ -455,6 +462,7 @@ Generated: 2026-06-18 16:15:30 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |
+| InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_utility_first.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | ShapedArcane | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 
