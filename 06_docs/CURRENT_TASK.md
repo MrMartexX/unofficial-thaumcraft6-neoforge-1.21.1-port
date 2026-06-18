@@ -19,7 +19,7 @@ Last updated: 2026-06-18
 - Dedicated server smoke test script exists under `tools/ci/server-smoke.ps1`.
 - The active migration guide is now `06_docs/migration/NeoForge_legacy_migration_guide.md`; older `.docx` references were removed from current docs.
 - The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
-- The first in-world crucible behavior slice has a design boundary in `06_docs/gameplay/crucible_in_world_behavior_design.md`.
+- The in-world crucible behavior slices have a design boundary in `06_docs/gameplay/crucible_in_world_behavior_design.md`.
 - The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
 
 ## Do not change without explicit request
@@ -31,9 +31,9 @@ Last updated: 2026-06-18
 
 ## Near-term tasks
 
-1. Continue the crucible/alchemy work from the first in-world behavior slice:
-   - Keep the current scope limited to server-owned water/heat/aspect pool, manual top-side item insertion, recipe lookup, research-gated crafting, and result ejection.
-   - Keep item-entity suction, flux/taint pollution, special alchemy effects, Thaumatorium, alembic/jar/tube integration, client particles, and recipe-derived aspect generation deferred.
+1. Continue the crucible/alchemy work from the documented in-world behavior slices:
+   - Current implemented scope includes server-owned water/heat/aspect pool, manual top-side item insertion, item-entity collision absorption, hot living-entity contact damage, periodic/overflow spill pollution, recipe lookup, research-gated crafting, result ejection, and modern special-item reabsorption protection.
+   - Keep flux rifts, taint spread, liquid death, special alchemy effects, Thaumatorium, alembic/jar/tube integration, client particles, automation, item pulling radius, and recipe-derived aspect generation deferred.
    - Re-run build, dedicated server smoke, crucible recipe-data audit, crucible behavior audit, research page catalog audit, and protocol audit after the batch.
    - Use legacy `BlockCrucible`, `TileCrucible`, `CrucibleRecipe`, and `ThaumcraftCraftingManager.findMatchingCrucibleRecipe` as behavior references, not direct copy sources.
 2. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
@@ -102,7 +102,7 @@ Last updated: 2026-06-18
 - `thaumcraft:crucible` page-data now covers Alumentum, Nitor, Brass Ingot, Thaumium Ingot and 37 vis-crystal recipes.
 - Current catalog audit result: `113 READY`, `86 DEFERRED`, `4 LEGACY_MISSING`.
 - Current protocol audit result: `27/27`.
-- Full in-world crucible behavior, special alchemy side effects, and crucible-derived aspect generation remain deferred beyond the documented first manual server slice.
+- Full alchemy side effects, automation, FX, and crucible-derived aspect generation remain deferred beyond the documented manual/collision server slices.
 ## Special alchemy crucible page note
 
 - Added special alchemy crucible recipe/page boundary entries for Bath Salts, Bottled Taint, Liquid Death, and Sane Soap.
@@ -240,6 +240,6 @@ Last updated: 2026-06-18
 ## Current crucible behavior boundary
 
 - Recipe/page actionable gaps are closed.
-- The first in-world crucible behavior slice is gated by `06_docs/gameplay/crucible_in_world_behavior_design.md`, `tools/audits/audit-crucible-recipe-data.ps1`, and `tools/audits/audit-crucible-behavior.ps1`.
+- The current in-world crucible behavior slices are gated by `06_docs/gameplay/crucible_in_world_behavior_design.md`, `tools/audits/audit-crucible-recipe-data.ps1`, and `tools/audits/audit-crucible-behavior.ps1`.
 - `tools/audits/audit-crucible-behavior.ps1` runs against an isolated world/port by default to avoid false failures from an already open local dev server.
-- Do not expand this into flux, essentia networks, automation, item-entity suction or special alchemy side effects without a new focused slice.
+- Do not expand this into flux rifts, taint spread, essentia networks, automation, item pulling radius, client particles or special alchemy side effects without a new focused slice.

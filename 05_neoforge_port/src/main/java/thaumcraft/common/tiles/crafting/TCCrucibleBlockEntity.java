@@ -10,6 +10,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -24,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectHelper;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
 import thaumcraft.common.crafting.crucible.TCCrucibleRecipe;
 import thaumcraft.common.crafting.crucible.TCCrucibleRecipeMatcher;
@@ -36,9 +38,11 @@ public class TCCrucibleBlockEntity extends BlockEntity {
     public static final int BOILING_HEAT = 151;
     public static final int MAX_HEAT = 200;
     public static final int LEGACY_ASPECT_CAP = 500;
+    public static final String SPECIAL_ITEM_MARKER = "thaumcraft:crucible_special_item";
 
     private int waterAmount;
     private short heat;
+    private long spillCounter = -100L;
     private AspectList aspects = new AspectList();
 
     public TCCrucibleBlockEntity(BlockPos pos, BlockState blockState) {
@@ -50,6 +54,7 @@ public class TCCrucibleBlockEntity extends BlockEntity {
             return;
         }
 
+        crucible.spillCounter++;
         short previousHeat = crucible.heat;
         if (crucible.waterAmount > 0 && isHeatSource(level.getBlockState(pos.below()))) {
             if (crucible.heat < MAX_HEAT) {
@@ -65,9 +70,17 @@ public class TCCrucibleBlockEntity extends BlockEntity {
                 crucible.markChangedAndSync();
             }
         }
+
+        if (crucible.aspects.visSize() > LEGACY_ASPECT_CAP) {
+            crucible.spillRandom();
+        }
+        if (crucible.spillCounter >= 100L) {
+            crucible.spillRandom();
+            crucible.spillCounter = 0L;
+        }
     }
 
-    public CrucibleUseResult useCatalystOrDissolve(ServerPlayer player, ItemStack stack) {
+    public CrucibleUseResult useCatalystOrDissolve(@Nullable ServerPlayer player, ItemStack stack) {
         if (level == null || level.isClientSide || stack == null || stack.isEmpty()) {
             return CrucibleUseResult.IGNORED;
         }
@@ -75,28 +88,38 @@ public class TCCrucibleBlockEntity extends BlockEntity {
             return CrucibleUseResult.NOT_BOILING;
         }
 
-        ItemStack singleItem = stack.copy();
-        singleItem.setCount(1);
-        Optional<RecipeHolder<TCCrucibleRecipe>> matchingRecipe = TCCrucibleRecipeMatcher.findMatchingRecipe(
-                level.getRecipeManager(),
-                player,
-                aspects,
-                singleItem
-        );
-        if (matchingRecipe.isPresent()) {
-            craft(matchingRecipe.get().value());
-            return CrucibleUseResult.CRAFTED;
+        ItemStack singleItem = singleItem(stack);
+        SmeltStackResult result = attemptSmeltStack(player, singleItem);
+        applySmeltResultEffects(result);
+        return result.useResult();
+    }
+
+    public CrucibleUseResult absorbItemEntity(ItemEntity entity) {
+        if (level == null || level.isClientSide || entity == null || entity.isRemoved() || isSpecialCrucibleItem(entity)) {
+            return CrucibleUseResult.IGNORED;
+        }
+        ItemStack stack = entity.getItem();
+        if (stack.isEmpty()) {
+            return CrucibleUseResult.IGNORED;
+        }
+        if (!isBoiling()) {
+            return CrucibleUseResult.NOT_BOILING;
         }
 
-        AspectList objectAspects = AspectHelper.getObjectAspects(singleItem);
-        if (objectAspects == null || objectAspects.size() == 0) {
-            return CrucibleUseResult.NO_ASPECTS;
+        SmeltStackResult result = attemptSmeltStack(resolveThrower(entity), stack.copy());
+        applySmeltResultEffects(result);
+        int remaining = result.remainingCount();
+        if (remaining <= 0) {
+            entity.discard();
+        } else if (remaining < stack.getCount()) {
+            stack.setCount(remaining);
+            entity.setItem(stack);
         }
+        return result.useResult();
+    }
 
-        aspects.add(objectAspects);
-        playBubbleSound();
-        markChangedAndSync();
-        return CrucibleUseResult.DISSOLVED_ASPECTS;
+    public static boolean isSpecialCrucibleItem(ItemEntity entity) {
+        return entity != null && entity.getPersistentData().getBoolean(SPECIAL_ITEM_MARKER);
     }
 
     public void addAspectForValidation(Aspect aspect, int amount) {
@@ -155,11 +178,12 @@ public class TCCrucibleBlockEntity extends BlockEntity {
     }
 
     public void spillRemnants() {
-        if (waterAmount <= 0 && aspects.visSize() <= 0) {
+        int totalAspects = aspects.visSize();
+        if (waterAmount <= 0 && totalAspects <= 0) {
             return;
         }
         waterAmount = 0;
-        heat = 0;
+        polluteSpillRemnants(totalAspects, aspects.getAmount(Aspect.FLUX));
         aspects = new AspectList();
         if (level != null) {
             level.playSound(null, worldPosition, TCSounds.SPILL.get(), SoundSource.BLOCKS, 0.2F, 1.0F);
@@ -175,12 +199,78 @@ public class TCCrucibleBlockEntity extends BlockEntity {
         return Math.min(15, (int) Math.floor(amount / (float) LEGACY_ASPECT_CAP * 14.0F) + 1);
     }
 
-    private void craft(TCCrucibleRecipe recipe) {
+    private SmeltStackResult attemptSmeltStack(@Nullable ServerPlayer player, ItemStack stack) {
+        int remaining = stack.getCount();
+        boolean crafted = false;
+        boolean dissolved = false;
+        boolean sawNoAspects = false;
+
+        for (int index = 0; index < remaining; index++) {
+            CrucibleUseResult result = attemptSmeltSingle(player, stack);
+            if (result == CrucibleUseResult.CRAFTED) {
+                crafted = true;
+                remaining--;
+            } else if (result == CrucibleUseResult.DISSOLVED_ASPECTS) {
+                dissolved = true;
+                remaining--;
+            } else if (result == CrucibleUseResult.NO_ASPECTS) {
+                sawNoAspects = true;
+                break;
+            } else {
+                break;
+            }
+        }
+
+        return new SmeltStackResult(remaining, crafted, dissolved, sawNoAspects);
+    }
+
+    private CrucibleUseResult attemptSmeltSingle(@Nullable ServerPlayer player, ItemStack stack) {
+        ItemStack singleItem = singleItem(stack);
+        Optional<RecipeHolder<TCCrucibleRecipe>> matchingRecipe = TCCrucibleRecipeMatcher.findMatchingRecipe(
+                level.getRecipeManager(),
+                player,
+                aspects,
+                singleItem
+        );
+        if (matchingRecipe.isPresent() && waterAmount > 0) {
+            craftWithoutPostEffects(matchingRecipe.get().value());
+            spillCounter = -250L;
+            return CrucibleUseResult.CRAFTED;
+        }
+
+        AspectList objectAspects = AspectHelper.getObjectAspects(singleItem);
+        if (objectAspects == null || objectAspects.size() == 0) {
+            return CrucibleUseResult.NO_ASPECTS;
+        }
+
+        aspects.add(objectAspects);
+        spillCounter = -150L;
+        return CrucibleUseResult.DISSOLVED_ASPECTS;
+    }
+
+    private void spillRandom() {
+        Aspect[] presentAspects = aspects.getAspects();
+        if (presentAspects.length > 0) {
+            Aspect aspect = presentAspects[level.random.nextInt(presentAspects.length)];
+            aspects.remove(aspect, 1);
+            polluteAura(aspect == Aspect.FLUX ? 1.0F : 0.25F, true);
+        }
+        markChangedAndSync();
+    }
+
+    private void polluteSpillRemnants(int totalAspects, int fluxAspects) {
+        if (totalAspects > 0) {
+            polluteAura(totalAspects * 0.25F, true);
+        }
+        if (fluxAspects > 0) {
+            polluteAura(fluxAspects * 0.75F, false);
+        }
+    }
+
+    private void craftWithoutPostEffects(TCCrucibleRecipe recipe) {
         aspects = TCCrucibleRecipeMatcher.removeRequiredAspects(recipe, aspects);
         waterAmount = Math.max(0, waterAmount - WATER_PER_CRAFT);
         ejectItem(recipe.result());
-        playBubbleSound();
-        markChangedAndSync();
     }
 
     private void ejectItem(ItemStack stack) {
@@ -194,14 +284,53 @@ public class TCCrucibleBlockEntity extends BlockEntity {
                 worldPosition.getZ() + 0.5D,
                 stack.copy()
         );
+        entity.getPersistentData().putBoolean(SPECIAL_ITEM_MARKER, true);
         entity.setDeltaMovement(0.0D, 0.075D, 0.0D);
         level.addFreshEntity(entity);
+    }
+
+    private void applySmeltResultEffects(SmeltStackResult result) {
+        if (!result.mutated()) {
+            setChanged();
+            return;
+        }
+        if (result.dissolved()) {
+            playBubbleSound();
+        }
+        if (result.crafted()) {
+            playCraftSound();
+        }
+        markChangedAndSync();
     }
 
     private void playBubbleSound() {
         if (level != null) {
             level.playSound(null, worldPosition, TCSounds.BUBBLE.get(), SoundSource.BLOCKS, 0.2F, 1.0F + level.random.nextFloat() * 0.4F);
         }
+    }
+
+    private void playCraftSound() {
+        if (level != null) {
+            level.playSound(null, worldPosition, TCSounds.SPILL.get(), SoundSource.BLOCKS, 0.2F, 1.0F);
+        }
+    }
+
+    private void polluteAura(float amount, boolean showEffect) {
+        if (level != null && !level.isClientSide) {
+            AuraHelper.polluteAura(level, worldPosition, amount, showEffect);
+        }
+    }
+
+    private static ItemStack singleItem(ItemStack stack) {
+        ItemStack singleItem = stack.copy();
+        singleItem.setCount(1);
+        return singleItem;
+    }
+
+    @Nullable
+    private static ServerPlayer resolveThrower(ItemEntity entity) {
+        Entity owner = entity.getOwner();
+        return owner instanceof ServerPlayer player ? player : null;
     }
 
     private void markChangedAndSync() {
@@ -263,6 +392,25 @@ public class TCCrucibleBlockEntity extends BlockEntity {
 
         public boolean consumesCatalyst() {
             return consumesCatalyst;
+        }
+    }
+
+    private record SmeltStackResult(int remainingCount, boolean crafted, boolean dissolved, boolean sawNoAspects) {
+        boolean mutated() {
+            return crafted || dissolved;
+        }
+
+        CrucibleUseResult useResult() {
+            if (crafted) {
+                return CrucibleUseResult.CRAFTED;
+            }
+            if (dissolved) {
+                return CrucibleUseResult.DISSOLVED_ASPECTS;
+            }
+            if (sawNoAspects) {
+                return CrucibleUseResult.NO_ASPECTS;
+            }
+            return CrucibleUseResult.IGNORED;
         }
     }
 }

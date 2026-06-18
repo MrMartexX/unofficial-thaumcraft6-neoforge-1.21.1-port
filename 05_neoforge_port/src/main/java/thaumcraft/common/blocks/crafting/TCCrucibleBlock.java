@@ -8,6 +8,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -30,6 +33,8 @@ import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.tiles.crafting.TCCrucibleBlockEntity;
 
 public class TCCrucibleBlock extends Block implements EntityBlock {
+    private int livingContactDelay;
+
     private static final VoxelShape SHAPE = Shapes.or(
             box(0.0D, 0.0D, 0.0D, 16.0D, 5.0D, 16.0D),
             box(0.0D, 0.0D, 0.0D, 2.0D, 16.0D, 16.0D),
@@ -57,6 +62,34 @@ public class TCCrucibleBlock extends Block implements EntityBlock {
         }
         return (tickerLevel, pos, tickerState, blockEntity) ->
                 TCCrucibleBlockEntity.serverTick(tickerLevel, pos, tickerState, (TCCrucibleBlockEntity) blockEntity);
+    }
+
+    @Override
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (!level.isClientSide && level.getBlockEntity(pos) instanceof TCCrucibleBlockEntity crucible) {
+            if (entity instanceof ItemEntity itemEntity) {
+                crucible.absorbItemEntity(itemEntity);
+            } else {
+                livingContactDelay++;
+                if (livingContactDelay >= 10) {
+                    livingContactDelay = 0;
+                    if (entity instanceof LivingEntity && crucible.isBoiling()) {
+                        entity.hurt(level.damageSources().inFire(), 1.0F);
+                        level.playSound(
+                                null,
+                                pos.getX() + 0.5D,
+                                pos.getY() + 0.5D,
+                                pos.getZ() + 0.5D,
+                                SoundEvents.LAVA_EXTINGUISH,
+                                SoundSource.BLOCKS,
+                                0.4F,
+                                2.0F + level.random.nextFloat() * 0.4F
+                        );
+                    }
+                }
+            }
+        }
+        super.entityInside(state, level, pos, entity);
     }
 
     @Override

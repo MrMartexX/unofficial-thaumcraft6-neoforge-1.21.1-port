@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -17,8 +18,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.tiles.crafting.TCCrucibleBlockEntity;
+import thaumcraft.common.world.aura.AuraHandler;
 
 public final class TCCrucibleBehaviorAudit {
     private TCCrucibleBehaviorAudit() {
@@ -50,8 +53,9 @@ public final class TCCrucibleBehaviorAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- This validates the first server-owned crucible behavior slice only.");
-        lines.add("- It does not validate item-entity suction, flux, particles, Thaumatorium, jars, tubes, alembics or special alchemy effects.");
+        lines.add("- This validates the server-owned crucible behavior slices currently wired into the block entity.");
+        lines.add("- It validates manual item use, item-entity absorption boundaries, special-item ignore marking and server-side spill pollution.");
+        lines.add("- It does not validate particles, Thaumatorium, jars, tubes, alembics, liquid death or special alchemy effects.");
 
         Files.write(output, lines);
         return report;
@@ -132,7 +136,85 @@ public final class TCCrucibleBehaviorAudit {
                 "result=" + result + ", beforeAspects=" + before + ", afterAspects=" + crucible.getAspects().visSize()
         ));
 
+        TCCrucibleBlockEntity entityCrucible = validationCrucible(level, pos.offset(1, 0, 0));
+        ItemEntity sugarEntity = new ItemEntity(level, 1.5D, pos.getY() + 1.0D, 0.5D, new ItemStack(Items.SUGAR, 4));
+        int sugarBefore = entityCrucible.getAspects().visSize();
+        TCCrucibleBlockEntity.CrucibleUseResult sugarResult = entityCrucible.absorbItemEntity(sugarEntity);
+        int sugarRemaining = sugarEntity.isRemoved() ? 0 : sugarEntity.getItem().getCount();
+        checks.add(new Check(
+                "item_entity_absorption_uses_legacy_stack_loop",
+                sugarResult == TCCrucibleBlockEntity.CrucibleUseResult.DISSOLVED_ASPECTS
+                        && sugarRemaining == 2
+                        && entityCrucible.getAspects().visSize() > sugarBefore,
+                "legacy loop decrements the mutable stack counter during iteration; count 4 leaves " + sugarRemaining
+        ));
+
+        TCCrucibleBlockEntity coldCrucible = validationCrucible(level, pos.offset(2, 0, 0));
+        coldCrucible.setHeatForValidation(TCCrucibleBlockEntity.BOILING_HEAT - 1);
+        ItemEntity coldEntity = new ItemEntity(level, 2.5D, pos.getY() + 1.0D, 0.5D, new ItemStack(Items.SUGAR, 1));
+        TCCrucibleBlockEntity.CrucibleUseResult coldResult = coldCrucible.absorbItemEntity(coldEntity);
+        checks.add(new Check(
+                "item_entity_absorption_requires_boiling_water",
+                coldResult == TCCrucibleBlockEntity.CrucibleUseResult.NOT_BOILING && coldEntity.getItem().getCount() == 1,
+                "result=" + coldResult + ", remaining=" + coldEntity.getItem().getCount()
+        ));
+
+        TCCrucibleBlockEntity specialCrucible = validationCrucible(level, pos.offset(3, 0, 0));
+        ItemEntity specialEntity = new ItemEntity(level, 3.5D, pos.getY() + 1.0D, 0.5D, new ItemStack(Items.SUGAR, 1));
+        specialEntity.getPersistentData().putBoolean(TCCrucibleBlockEntity.SPECIAL_ITEM_MARKER, true);
+        TCCrucibleBlockEntity.CrucibleUseResult specialResult = specialCrucible.absorbItemEntity(specialEntity);
+        checks.add(new Check(
+                "special_crucible_item_marker_prevents_reabsorption",
+                specialResult == TCCrucibleBlockEntity.CrucibleUseResult.IGNORED && specialEntity.getItem().getCount() == 1,
+                "modern replacement for legacy EntitySpecialItem exclusion"
+        ));
+
+        BlockPos spillPos = pos.offset(4, 0, 0);
+        AuraHandler.seedAuraChunk(level, spillPos, 200);
+        TCCrucibleBlockEntity spillCrucible = validationCrucible(level, spillPos);
+        spillCrucible.addAspectForValidation(Aspect.FIRE, 4);
+        spillCrucible.addAspectForValidation(Aspect.FLUX, 2);
+        short heatBeforeSpill = spillCrucible.getHeat();
+        float fluxBeforeSpill = AuraHelper.getFlux(level, spillPos);
+        spillCrucible.spillRemnants();
+        float fluxAfterSpill = AuraHelper.getFlux(level, spillPos);
+        checks.add(new Check(
+                "spill_remnants_pollutes_aura_like_legacy",
+                closeEnough(fluxAfterSpill - fluxBeforeSpill, 3.0F)
+                        && spillCrucible.getWaterAmount() == 0
+                        && spillCrucible.getAspects().visSize() == 0
+                        && spillCrucible.getHeat() == heatBeforeSpill,
+                "deltaFlux=" + (fluxAfterSpill - fluxBeforeSpill) + ", heatBefore=" + heatBeforeSpill + ", heatAfter=" + spillCrucible.getHeat()
+        ));
+
+        BlockPos overflowPos = pos.offset(5, 0, 0);
+        AuraHandler.seedAuraChunk(level, overflowPos, 200);
+        TCCrucibleBlockEntity overflowCrucible = validationCrucible(level, overflowPos);
+        overflowCrucible.addAspectForValidation(Aspect.FIRE, TCCrucibleBlockEntity.LEGACY_ASPECT_CAP + 1);
+        float fluxBeforeOverflow = AuraHelper.getFlux(level, overflowPos);
+        TCCrucibleBlockEntity.serverTick(level, overflowPos, state, overflowCrucible);
+        float fluxAfterOverflow = AuraHelper.getFlux(level, overflowPos);
+        checks.add(new Check(
+                "overflow_spill_random_removes_one_aspect_and_pollutes",
+                overflowCrucible.getAspects().visSize() == TCCrucibleBlockEntity.LEGACY_ASPECT_CAP
+                        && closeEnough(fluxAfterOverflow - fluxBeforeOverflow, 0.25F),
+                "aspects=" + overflowCrucible.getAspects().visSize() + ", deltaFlux=" + (fluxAfterOverflow - fluxBeforeOverflow)
+        ));
+
         return new Report(List.copyOf(checks));
+    }
+
+    private static TCCrucibleBlockEntity validationCrucible(ServerLevel level, BlockPos pos) {
+        BlockState state = TCBlocks.CRUCIBLE.get().defaultBlockState();
+        TCCrucibleBlockEntity crucible = new TCCrucibleBlockEntity(pos, state);
+        crucible.setLevel(level);
+        crucible.setWaterForValidation(TCCrucibleBlockEntity.WATER_CAPACITY);
+        crucible.setHeatForValidation(TCCrucibleBlockEntity.BOILING_HEAT);
+        return crucible;
+    }
+
+    private static boolean closeEnough(float actual, float expected) {
+        return Math.abs(actual - expected) < 0.0001F;
     }
 
     public record Report(List<Check> checks) {
