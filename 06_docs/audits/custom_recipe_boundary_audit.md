@@ -1,18 +1,18 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 16:29:09 +03:00
+Generated: 2026-06-18 16:33:10 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 301 |
+| Recipe JSON files scanned | 304 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 192 |
-| Missing recipe references | 231 |
-| Custom/review recipe files | 16 |
-| Blocked/review research recipe references | 16 |
+| Resolved recipe references | 195 |
+| Missing recipe references | 228 |
+| Custom/review recipe files | 19 |
+| Blocked/review research recipe references | 19 |
 | JSON parse errors | 0 |
 
 ## Boundary rule
@@ -30,7 +30,7 @@ Generated: 2026-06-18 16:29:09 +03:00
 | VANILLA_OR_STANDARD_READY | 121 |
 | ARCANE_READY | 89 |
 | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 75 |
-| CUSTOM_BLOCKED_REQUIRES_DESIGN | 16 |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | 19 |
 
 ## Recipe type distribution
 
@@ -40,7 +40,7 @@ Generated: 2026-06-18 16:29:09 +03:00
 | thaumcraft:crucible | 75 |
 | minecraft:crafting_shapeless | 70 |
 | minecraft:crafting_shaped | 51 |
-| thaumcraft:infusion | 16 |
+| thaumcraft:infusion | 19 |
 | thaumcraft:arcane_shapeless | 9 |
 
 ## Custom or review recipe files
@@ -63,6 +63,9 @@ Generated: 2026-06-18 16:29:09 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealbreak | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbreak.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealbutcher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbutcher.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealharvest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealharvest.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:thaumiumfortresschest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresschest.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:thaumiumfortresshelm | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresshelm.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:thaumiumfortresslegs | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresslegs.json |
 
 ## Blocked or review research recipe references
 
@@ -84,6 +87,9 @@ Generated: 2026-06-18 16:29:09 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealBreak | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[22].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealButcher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[19].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealHarvest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[21].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:ThaumiumFortressChest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[11].stages[1].recipes[1] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:ThaumiumFortressHelm | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[11].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:ThaumiumFortressLegs | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[11].stages[1].recipes[2] |
 
 ## Missing recipe-like research references
 
@@ -296,9 +302,6 @@ Generated: 2026-06-18 16:29:09 +03:00
 | thaumcraft:thaumatorium | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[18].icons[0] |
 | thaumcraft:Thaumatorium | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[18].stages[1].recipes[0] |
 | thaumcraft:thaumium_stuff | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[2].recipes[3] |
-| thaumcraft:ThaumiumFortressChest | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[11].stages[1].recipes[1] |
-| thaumcraft:ThaumiumFortressHelm | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[11].stages[1].recipes[0] |
-| thaumcraft:ThaumiumFortressLegs | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[11].stages[1].recipes[2] |
 | thaumcraft:traveller_boots | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[7].icons[0] |
 | thaumcraft:triplemeattreatfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[3].stages[1].recipes[1] |
 | thaumcraft:verdant_charm | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[15].icons[0] |
@@ -467,8 +470,12 @@ Generated: 2026-06-18 16:29:09 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbutcher.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealharvest.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/stabilizer.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresschest.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresshelm.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresslegs.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_elemental_tools.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_fortress_armor.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_fortress_masks.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_utility_first.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
@@ -481,6 +488,7 @@ Generated: 2026-06-18 16:29:09 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_elemental_tools.json |
+| InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_fortress_armor.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_fortress_masks.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_utility_first.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |

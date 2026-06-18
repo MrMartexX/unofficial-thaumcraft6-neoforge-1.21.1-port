@@ -481,3 +481,8 @@ The sections below are historical update notes. They should not be read as the c
 - Added fortress mask infusion recipe/page entries for Grinning Devil, Angry Ghost, and Sipping Fiend masks.
 - Added a bridge item identity for the Thaumium Fortress Helm catalyst; full fortress armor behavior remains deferred.
 - Audit refresh is integrated into this batch script by default, after build/smoke and before commit.
+### Latest fortress armor infusion recipe page batch
+
+- Added Thaumium Fortress helm, chestplate, and leggings infusion recipe/page entries.
+- Added bridge item identities for thaumium armor catalysts where needed.
+- Audit refresh is integrated into this batch script by default, after build/smoke and before commit.

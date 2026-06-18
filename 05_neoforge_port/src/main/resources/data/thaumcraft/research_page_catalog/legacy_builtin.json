@@ -3143,57 +3143,6 @@
       "occurrence_count": 0
     },
     {
-      "id": "thaumcraft:thaumiumfortresschest",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "ARMORFORTRESS",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:fortress_chest",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:thaumiumfortresshelm",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "ARMORFORTRESS",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:fortress_helm",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:thaumiumfortresslegs",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "ARMORFORTRESS",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:fortress_legs",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:thaumiumhelm",
       "legacy_source": "crafting_registry",
       "kind": "crafting",
