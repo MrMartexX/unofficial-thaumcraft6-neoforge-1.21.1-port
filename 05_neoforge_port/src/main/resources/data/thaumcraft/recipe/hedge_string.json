@@ -4,7 +4,16 @@
   "catalyst": {
     "item": "minecraft:wheat"
   },
-  "aspects": [],
+  "aspects": [
+    {
+      "aspect": "bestia",
+      "amount": 5
+    },
+    {
+      "aspect": "fabrico",
+      "amount": 1
+    }
+  ],
   "result": {
     "id": "minecraft:string",
     "count": 1

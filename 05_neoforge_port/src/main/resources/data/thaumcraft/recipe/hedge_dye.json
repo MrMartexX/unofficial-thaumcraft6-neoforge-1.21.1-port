@@ -4,7 +4,20 @@
   "catalyst": {
     "item": "minecraft:ink_sac"
   },
-  "aspects": [],
+  "aspects": [
+    {
+      "aspect": "aqua",
+      "amount": 2
+    },
+    {
+      "aspect": "bestia",
+      "amount": 2
+    },
+    {
+      "aspect": "sensus",
+      "amount": 5
+    }
+  ],
   "result": {
     "id": "minecraft:ink_sac",
     "count": 2

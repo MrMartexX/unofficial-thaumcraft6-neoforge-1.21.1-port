@@ -1,5 +1,7 @@
 param(
     [int]$TimeoutSeconds = 420,
+    [string]$WorldName = '',
+    [int]$ServerPort = -1,
     [switch]$FailOnWarnings,
     [switch]$KillStaleRunServer
 )
@@ -206,6 +208,27 @@ function Get-RepoRunServerProcessSummary {
         })
 }
 
+$smokeStartTime = $null
+
+function Get-SmokeStartedRunServerProcesses {
+    if ($null -eq $smokeStartTime) {
+        return @()
+    }
+
+    $cutoff = $smokeStartTime.AddSeconds(-2)
+    @(Get-RepoRunServerProcesses |
+        Where-Object {
+            $_.CreationDate -and $_.CreationDate -ge $cutoff
+        })
+}
+
+function Stop-SmokeStartedRunServerProcesses {
+    $processes = @(Get-SmokeStartedRunServerProcesses)
+    foreach ($process in $processes) {
+        Stop-Process -Id $process.ProcessId -Force -ErrorAction SilentlyContinue
+    }
+}
+
 function Test-FileLocked {
     param([string]$Path)
 
@@ -234,7 +257,8 @@ function Test-FileLocked {
 }
 
 function Assert-WorldSessionLockAvailable {
-    $lockPath = Join-Path $runDir 'world\session.lock'
+    $worldDirName = if ([string]::IsNullOrWhiteSpace($WorldName)) { 'world' } else { $WorldName }
+    $lockPath = Join-Path (Join-Path $runDir $worldDirName) 'session.lock'
     if (-not (Test-FileLocked -Path $lockPath)) {
         return
     }
@@ -283,9 +307,18 @@ Write-Host "Module root: $moduleRoot"
 Write-Host "Smoke log: $logPath"
 Write-Host "Latest smoke log alias: $latestLogPath"
 
+$gradleArgs = @('runServer', '--no-daemon')
+if (-not [string]::IsNullOrWhiteSpace($WorldName)) {
+    $gradleArgs += "-PtcRunServerWorld=$WorldName"
+}
+if ($ServerPort -ge 0) {
+    $gradleArgs += "-PtcRunServerPort=$ServerPort"
+}
+
+$smokeStartTime = Get-Date
 $process = Start-Process `
     -FilePath $gradleBat `
-    -ArgumentList @('runServer', '--no-daemon') `
+    -ArgumentList $gradleArgs `
     -WorkingDirectory $moduleRoot `
     -RedirectStandardOutput $stdoutPath `
     -RedirectStandardError $stderrPath `
@@ -310,6 +343,7 @@ try {
 
             Write-Host "Dedicated server reached startup marker: $readyPattern"
             Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
+            Stop-SmokeStartedRunServerProcesses
             $process.WaitForExit(30000) | Out-Null
 
             $combined = Write-CombinedLog
@@ -348,5 +382,6 @@ finally {
         Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
         $process.WaitForExit(30000) | Out-Null
     }
+    Stop-SmokeStartedRunServerProcesses
     [void](Write-CombinedLog)
 }

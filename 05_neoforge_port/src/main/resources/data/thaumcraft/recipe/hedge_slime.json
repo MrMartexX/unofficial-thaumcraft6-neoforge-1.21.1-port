@@ -4,7 +4,20 @@
   "catalyst": {
     "item": "minecraft:slime_ball"
   },
-  "aspects": [],
+  "aspects": [
+    {
+      "aspect": "aqua",
+      "amount": 5
+    },
+    {
+      "aspect": "victus",
+      "amount": 5
+    },
+    {
+      "aspect": "alkimia",
+      "amount": 1
+    }
+  ],
   "result": {
     "id": "minecraft:slime_ball",
     "count": 2

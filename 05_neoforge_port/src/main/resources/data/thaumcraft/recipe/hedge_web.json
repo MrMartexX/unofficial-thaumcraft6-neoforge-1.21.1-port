@@ -4,7 +4,12 @@
   "catalyst": {
     "item": "minecraft:string"
   },
-  "aspects": [],
+  "aspects": [
+    {
+      "aspect": "vinculum",
+      "amount": 5
+    }
+  ],
   "result": {
     "id": "minecraft:cobweb",
     "count": 1

@@ -26,7 +26,9 @@ if ([string]::IsNullOrWhiteSpace($OutputPath)) { $OutputPath = Join-Path $repo '
 $outputFullPath = [System.IO.Path]::GetFullPath($OutputPath)
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $outputFullPath) | Out-Null
 
-$recipeFiles = @(Get-ChildItem -LiteralPath $dataRoot -Recurse -File -Filter '*.json' | Where-Object { $_.FullName -match '[\/](recipe|recipes)[\/]' })
+$recipeFiles = @(Get-ChildItem -LiteralPath $dataRoot -Recurse -File -Filter '*.json' | Where-Object {
+    ($_.FullName.Replace('\', '/')) -match '/(recipe|recipes)/'
+})
 $rows = New-Object System.Collections.Generic.List[object]
 $issues = New-Object System.Collections.Generic.List[object]
 

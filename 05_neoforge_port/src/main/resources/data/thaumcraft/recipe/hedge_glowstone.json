@@ -4,7 +4,16 @@
   "catalyst": {
     "item": "minecraft:glowstone_dust"
   },
-  "aspects": [],
+  "aspects": [
+    {
+      "aspect": "sensus",
+      "amount": 5
+    },
+    {
+      "aspect": "lux",
+      "amount": 10
+    }
+  ],
   "result": {
     "id": "minecraft:glowstone_dust",
     "count": 2

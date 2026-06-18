@@ -27,6 +27,7 @@ import thaumcraft.common.blocks.basic.TCTableBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
+import thaumcraft.common.blocks.crafting.TCCrucibleBlock;
 import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
 
@@ -110,7 +111,7 @@ public final class TCBlocks {
     public static final Supplier<Block> ARCANE_WORKBENCH = BLOCKS.register("arcane_workbench", () -> arcaneWorkbenchBlock());
     public static final Supplier<Block> ARCANE_WORKBENCH_CHARGER = BLOCKS.register("arcane_workbench_charger", () -> arcaneWorkbenchChargerBlock());
     public static final Supplier<Block> RESEARCH_TABLE = BLOCKS.register("research_table", () -> researchTableBlock());
-    public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> cauldronLikeBlock());
+    public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> crucibleBlock());
     public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> smelterBlock());
     // Legacy-aligned transport/essentia blocks.
     public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));
@@ -198,10 +199,11 @@ public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_build
                 .noOcclusion());
     }
 
-    private static Block cauldronLikeBlock() {
-        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
+    private static Block crucibleBlock() {
+        return new TCCrucibleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
                 .strength(2.0F, 6.0F)
-                .requiresCorrectToolForDrops());
+                .requiresCorrectToolForDrops()
+                .noOcclusion());
     }
 
     private static Block furnaceLikeBlock() {

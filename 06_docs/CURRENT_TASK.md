@@ -19,21 +19,23 @@ Last updated: 2026-06-18
 - Dedicated server smoke test script exists under `tools/ci/server-smoke.ps1`.
 - The active migration guide is now `06_docs/migration/NeoForge_legacy_migration_guide.md`; older `.docx` references were removed from current docs.
 - The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
+- The first in-world crucible behavior slice has a design boundary in `06_docs/gameplay/crucible_in_world_behavior_design.md`.
+- The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
 
 ## Do not change without explicit request
 
 - Do not move or delete large legacy/audit documents until references are checked and the move is recorded in `06_docs/documentation_index.md`.
 - Do not treat `thaumcraft:crucible` recipe/page data as in-world crucible gameplay.
-- Do not start in-world crucible, infusion, essentia transport, broad worldgen, or broad rendering systems without a focused design note and validation path.
+- Do not expand the current in-world crucible slice, infusion, essentia transport, broad worldgen, or broad rendering systems without a focused design note and validation path.
 - Do not commit generated local reports unless they are intentionally curated under `06_docs/audits/`.
 
 ## Near-term tasks
 
-1. Continue recipe/page work by audited dependency family:
-   - Current `thaumcraft:crucible` serializer/page-data boundary covers HEDGE_ALCHEMY, METAL_PURIFICATION, Alumentum, Nitor, Brass/Thaumium Ingots, and all vis-crystal recipes.
-   - Do not treat this as in-world crucible gameplay.
-   - Next safe batch should either classify/port another pure recipe-page family or start a focused in-world crucible/alchemy design slice before behavior.
-   - Keep build, server smoke, page-catalog audit, and protocol audit green after the batch.
+1. Continue the crucible/alchemy work from the first in-world behavior slice:
+   - Keep the current scope limited to server-owned water/heat/aspect pool, manual top-side item insertion, recipe lookup, research-gated crafting, and result ejection.
+   - Keep item-entity suction, flux/taint pollution, special alchemy effects, Thaumatorium, alembic/jar/tube integration, client particles, and recipe-derived aspect generation deferred.
+   - Re-run build, dedicated server smoke, crucible recipe-data audit, crucible behavior audit, research page catalog audit, and protocol audit after the batch.
+   - Use legacy `BlockCrucible`, `TileCrucible`, `CrucibleRecipe`, and `ThaumcraftCraftingManager.findMatchingCrucibleRecipe` as behavior references, not direct copy sources.
 2. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
 3. Keep reusable audit scripts under `tools/audits/`.
 4. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.
@@ -45,6 +47,7 @@ Last updated: 2026-06-18
 ## CI smoke stale-lock note
 
 - Server smoke should fail early on a locked local run/world/session.lock and print stale runServer process hints.
+- For local work while another dev client/server is open, prefer an isolated smoke run such as `tools/ci/server-smoke.ps1 -TimeoutSeconds 420 -WorldName tc_server_smoke -ServerPort 0`.
 
 ## CI smoke local cleanup note
 
@@ -99,7 +102,7 @@ Last updated: 2026-06-18
 - `thaumcraft:crucible` page-data now covers Alumentum, Nitor, Brass Ingot, Thaumium Ingot and 37 vis-crystal recipes.
 - Current catalog audit result: `113 READY`, `86 DEFERRED`, `4 LEGACY_MISSING`.
 - Current protocol audit result: `27/27`.
-- In-world crucible behavior, special alchemy side effects, and crucible-derived aspect generation remain deferred.
+- Full in-world crucible behavior, special alchemy side effects, and crucible-derived aspect generation remain deferred beyond the documented first manual server slice.
 ## Special alchemy crucible page note
 
 - Added special alchemy crucible recipe/page boundary entries for Bath Salts, Bottled Taint, Liquid Death, and Sane Soap.
@@ -234,8 +237,9 @@ Last updated: 2026-06-18
 
 - Custom recipe boundary audit now treats thaumcraft:infusion as INFUSION_PAGE_READY_NO_GAMEPLAY.
 - This reflects the implemented infusion serializer/page snapshot boundary while keeping in-world infusion altar behavior deferred.
-## Next gameplay slice candidate
+## Current crucible behavior boundary
 
 - Recipe/page actionable gaps are closed.
-- Next safe gameplay candidate is the first in-world crucible behavior slice, gated by `06_docs/gameplay/crucible_in_world_behavior_design.md` and `tools/audits/audit-crucible-recipe-data.ps1`.
-- Do not include flux, essentia networks, automation or special alchemy side effects in the first crucible behavior pass.
+- The first in-world crucible behavior slice is gated by `06_docs/gameplay/crucible_in_world_behavior_design.md`, `tools/audits/audit-crucible-recipe-data.ps1`, and `tools/audits/audit-crucible-behavior.ps1`.
+- `tools/audits/audit-crucible-behavior.ps1` runs against an isolated world/port by default to avoid false failures from an already open local dev server.
+- Do not expand this into flux, essentia networks, automation, item-entity suction or special alchemy side effects without a new focused slice.

@@ -4,7 +4,20 @@
   "catalyst": {
     "item": "minecraft:gunpowder"
   },
-  "aspects": [],
+  "aspects": [
+    {
+      "aspect": "ignis",
+      "amount": 10
+    },
+    {
+      "aspect": "perditio",
+      "amount": 10
+    },
+    {
+      "aspect": "alkimia",
+      "amount": 5
+    }
+  ],
   "result": {
     "id": "minecraft:gunpowder",
     "count": 2

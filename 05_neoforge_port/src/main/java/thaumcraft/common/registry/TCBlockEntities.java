@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.tiles.crafting.TCArcaneWorkbenchBlockEntity;
+import thaumcraft.common.tiles.crafting.TCCrucibleBlockEntity;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 import thaumcraft.common.tiles.misc.TCNitorBlockEntity;
 
@@ -31,6 +32,9 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCArcaneWorkbenchBlockEntity>> ARCANE_WORKBENCH =
             BLOCK_ENTITY_TYPES.register("arcane_workbench", () ->
                     BlockEntityType.Builder.of(TCArcaneWorkbenchBlockEntity::new, TCBlocks.ARCANE_WORKBENCH.get()).build(null));
+    public static final Supplier<BlockEntityType<TCCrucibleBlockEntity>> CRUCIBLE =
+            BLOCK_ENTITY_TYPES.register("crucible", () ->
+                    BlockEntityType.Builder.of(TCCrucibleBlockEntity::new, TCBlocks.CRUCIBLE.get()).build(null));
 
     public static final Supplier<BlockEntityType<TCNitorBlockEntity>> NITOR =
             BLOCK_ENTITY_TYPES.register("nitor", () ->

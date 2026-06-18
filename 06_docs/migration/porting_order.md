@@ -27,8 +27,8 @@ This table is a roadmap snapshot, not the live task queue. Use `06_docs/CURRENT_
 | Stage 4. Aspects | In progress | Core aspect model, item/entity assignments, parity harnesses and current generated cache are active; gameplay-heavy consumers remain staged. |
 | Stage 5. Aura | In progress | Server-side saved data, chunk initialization, update loop, debug commands and Workbench Charger aura usage exist; HUD/FX/rifts/consumers remain deferred. |
 | Stage 6. Research | In progress | Data/progression/page-catalog core, scan knowledge, research table slice and first Thaumonomicon flow exist; full UI/search/warp polish remains blocked. |
-| Stage 7. Crafting | In progress | Vanilla fixtures, exact arcane recipes, Arcane Workbench behavior, and crucible recipe/page data are active; in-world crucible, infusion and remaining recipe families are deferred. |
-| Stage 8. Tile Entities | In progress | Research Table and Arcane Workbench BlockEntity slices exist; broad machine ticking and essentia-capable machines remain deferred. |
+| Stage 7. Crafting | In progress | Vanilla fixtures, exact arcane recipes, Arcane Workbench behavior, crucible recipe/page data, and the first manual in-world crucible recipe-consumption slice are active; flux/special alchemy, item-entity suction, infusion and remaining recipe families are deferred. |
+| Stage 8. Tile Entities | In progress | Research Table, Arcane Workbench, and first Crucible BlockEntity slices exist; broad machine ticking and essentia-capable machines remain deferred. |
 | Stage 9. GUI | In progress | Research Table, Arcane Workbench and first Thaumonomicon screens exist as functional slices; final visual parity and recipe drilldown remain incomplete. |
 | Stage 10. Networking | In progress | Aura, knowledge, research table and Thaumonomicon payloads exist with server validation; future gameplay payloads need subsystem-specific design. |
 | Stage 11. Entities / Golems | Deferred | Vanilla/entity scan parity is handled; custom Thaumcraft entities, golems, AI and renderers are not started. |
