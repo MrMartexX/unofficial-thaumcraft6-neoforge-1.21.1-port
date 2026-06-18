@@ -330,3 +330,9 @@ Next:
 - Added tools/audits/extract-remaining-alchemy-recipes.ps1 and 06_docs/audits/remaining_alchemy_legacy_recipe_blocks.md.
 - This extraction captures exact legacy recipe source blocks for remaining non-HEDGE alchemy recipe-page gaps after the first crucible boundary batch.
 - Use the extracted API kind and family distribution to choose the next broad alchemy batch without mixing crucible page recipes with infusion or machine behavior.
+
+### Latest crucible aspect alias fix
+
+- Fixed the first crucible recipe boundary to accept legacy Aspect enum names in recipe JSON by canonicalizing them to the port's active aspect tags.
+- This maps legacy names such as fire, air, earth, beast, magic, order and entropy to modern tags such as ignis, aer, terra, bestia, praecantatio, ordo and perditio.
+- This keeps current HEDGE_ALCHEMY JSON compatible and reduces future generated alchemy recipe batch risk because legacy source extraction reports Aspect enum names.

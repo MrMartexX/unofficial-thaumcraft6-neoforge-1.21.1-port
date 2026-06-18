@@ -69,6 +69,46 @@ public record TCCrucibleAspectCost(String aspect, int amount) {
     }
 
     private static String canonicalAspect(String rawAspect) {
-        return rawAspect == null ? "" : rawAspect.trim().toLowerCase(Locale.ROOT);
+        String normalized = rawAspect == null ? "" : rawAspect.trim().toLowerCase(Locale.ROOT);
+        return switch (normalized) {
+            case "air" -> Aspect.AIR.getTag();
+            case "earth" -> Aspect.EARTH.getTag();
+            case "fire" -> Aspect.FIRE.getTag();
+            case "water" -> Aspect.WATER.getTag();
+            case "order" -> Aspect.ORDER.getTag();
+            case "entropy" -> Aspect.ENTROPY.getTag();
+            case "void" -> Aspect.VOID.getTag();
+            case "light" -> Aspect.LIGHT.getTag();
+            case "motion" -> Aspect.MOTION.getTag();
+            case "cold" -> Aspect.COLD.getTag();
+            case "crystal" -> Aspect.CRYSTAL.getTag();
+            case "metal" -> Aspect.METAL.getTag();
+            case "life" -> Aspect.LIFE.getTag();
+            case "death" -> Aspect.DEATH.getTag();
+            case "energy" -> Aspect.ENERGY.getTag();
+            case "exchange" -> Aspect.EXCHANGE.getTag();
+            case "magic" -> Aspect.MAGIC.getTag();
+            case "aura" -> Aspect.AURA.getTag();
+            case "alchemy" -> Aspect.ALCHEMY.getTag();
+            case "flux" -> Aspect.FLUX.getTag();
+            case "darkness" -> Aspect.DARKNESS.getTag();
+            case "eldritch" -> Aspect.ELDRITCH.getTag();
+            case "flight" -> Aspect.FLIGHT.getTag();
+            case "plant" -> Aspect.PLANT.getTag();
+            case "tool" -> Aspect.TOOL.getTag();
+            case "craft" -> Aspect.CRAFT.getTag();
+            case "mechanism" -> Aspect.MECHANISM.getTag();
+            case "trap" -> Aspect.TRAP.getTag();
+            case "soul" -> Aspect.SOUL.getTag();
+            case "mind" -> Aspect.MIND.getTag();
+            case "senses" -> Aspect.SENSES.getTag();
+            case "aversion" -> Aspect.AVERSION.getTag();
+            case "protect" -> Aspect.PROTECT.getTag();
+            case "desire" -> Aspect.DESIRE.getTag();
+            case "undead" -> Aspect.UNDEAD.getTag();
+            case "beast" -> Aspect.BEAST.getTag();
+            case "man" -> Aspect.MAN.getTag();
+            default -> normalized;
+        };
     }
 }

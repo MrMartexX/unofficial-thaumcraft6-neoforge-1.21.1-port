@@ -72,3 +72,7 @@ Last updated: 2026-06-17
 ## Remaining alchemy recipe extraction note
 
 - Use 06_docs/audits/remaining_alchemy_legacy_recipe_blocks.md to select the next remaining alchemy family-level recipe/page batch.
+
+## Crucible aspect alias note
+
+- Crucible recipe aspect costs now accept legacy Aspect enum aliases; keep generated crucible JSON in legacy-source terms when useful and let the serializer canonicalize.
