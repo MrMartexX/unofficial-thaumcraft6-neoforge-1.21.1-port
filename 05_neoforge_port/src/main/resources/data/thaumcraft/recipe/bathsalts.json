@@ -1,0 +1,29 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "BATHSALTS",
+  "catalyst": {
+    "item": "thaumcraft:salis_mundus"
+  },
+  "aspects": [
+    {
+      "aspect": "mind",
+      "amount": 40
+    },
+    {
+      "aspect": "air",
+      "amount": 40
+    },
+    {
+      "aspect": "order",
+      "amount": 40
+    },
+    {
+      "aspect": "life",
+      "amount": 40
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:bath_salts",
+    "count": 1
+  }
+}

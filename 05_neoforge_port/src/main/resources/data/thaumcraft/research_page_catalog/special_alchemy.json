@@ -1,0 +1,72 @@
+{
+  "entries": [
+    {
+      "id": "thaumcraft:bathsalts",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "BATHSALTS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:bath_salts",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:bottletaint",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "BOTTLETAINT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:bottle_taint",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:liquiddeath",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "LIQUIDDEATH",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:liquid_death_bucket",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sanesoap",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SANESOAP",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:sane_soap",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}

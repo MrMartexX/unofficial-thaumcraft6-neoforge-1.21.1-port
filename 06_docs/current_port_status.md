@@ -399,3 +399,8 @@ The sections below are historical update notes. They should not be read as the c
 - Refreshed research recipe page and custom recipe boundary audits. Current catalog audit now reports `113 READY`, `86 DEFERRED`, `4 LEGACY_MISSING`; the Thaumonomicon protocol audit passes `27/27`.
 - Fixed a malformed generated `brassingot` aspect list before accepting the batch; dedicated server smoke now reaches `Done` and reloads `1558` recipes without datapack/recipe errors.
 - In-world crucible behavior, essentia/alchemy side effects, and crucible-derived generated aspect behavior remain deferred until their own design/validation slice.
+### Latest special alchemy crucible page batch
+
+- Added bridge identities and crucible recipe/page entries for Bath Salts, Bottled Taint, Liquid Death, and Sane Soap.
+- These recipes preserve the legacy research/page ids as canonical lowercase recipe ids and keep full gameplay/fluid/block behavior deferred.
+- liquid_death_bucket and lesh_block are bridge item identities for recipe/page display until their dedicated gameplay blocks/fluids are ported.

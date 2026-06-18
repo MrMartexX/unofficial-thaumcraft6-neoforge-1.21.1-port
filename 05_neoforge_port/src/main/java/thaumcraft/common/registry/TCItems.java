@@ -158,6 +158,11 @@ public final class TCItems {
     public static final Supplier<Item> MIRRORED_GLASS = simpleItem("mirrored_glass");
     public static final Supplier<Item> BRAIN = simpleItem("brain");
     public static final Supplier<Item> ALUMENTUM = simpleItem("alumentum");
+    public static final Supplier<Item> BATH_SALTS = simpleItem("bath_salts");
+    public static final Supplier<Item> BOTTLE_TAINT = simpleItem("bottle_taint");
+    public static final Supplier<Item> LIQUID_DEATH_BUCKET = simpleItem("liquid_death_bucket");
+    public static final Supplier<Item> SANE_SOAP = simpleItem("sane_soap");
+    public static final Supplier<Item> FLESH_BLOCK = simpleItem("flesh_block");
     public static final Supplier<Item> CURIO_RITES = simpleItem("curio_rites");
     public static final Supplier<Item> SCRIBING_TOOLS = simpleItem("scribing_tools");
     public static final Supplier<Item> CASTER_BASIC = simpleItem("caster_basic");

@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "LIQUIDDEATH",
+  "catalyst": {
+    "item": "minecraft:bucket"
+  },
+  "aspects": [
+    {
+      "aspect": "death",
+      "amount": 100
+    },
+    {
+      "aspect": "alchemy",
+      "amount": 20
+    },
+    {
+      "aspect": "entropy",
+      "amount": 50
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:liquid_death_bucket",
+    "count": 1
+  }
+}

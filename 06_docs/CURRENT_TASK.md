@@ -100,3 +100,7 @@ Last updated: 2026-06-18
 - Current catalog audit result: `113 READY`, `86 DEFERRED`, `4 LEGACY_MISSING`.
 - Current protocol audit result: `27/27`.
 - In-world crucible behavior, special alchemy side effects, and crucible-derived aspect generation remain deferred.
+## Special alchemy crucible page note
+
+- Added special alchemy crucible recipe/page boundary entries for Bath Salts, Bottled Taint, Liquid Death, and Sane Soap.
+- Keep their real gameplay/fluids/consumable behavior deferred; current scope is recipe identity and Thaumonomicon page availability.
