@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ELEMENTALTOOLS",
+  "instability": 1,
+  "catalyst": {
+    "item": "thaumcraft:thaumium_hoe"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:crystal_essence_ordo"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_perditio"
+    },
+    {
+      "item": "thaumcraft:rare_earth"
+    },
+    {
+      "item": "thaumcraft:plank_greatwood"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "order",
+      "amount": 30
+    },
+    {
+      "aspect": "plant",
+      "amount": 30
+    },
+    {
+      "aspect": "entropy",
+      "amount": 30
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:elemental_hoe",
+    "count": 1
+  }
+}

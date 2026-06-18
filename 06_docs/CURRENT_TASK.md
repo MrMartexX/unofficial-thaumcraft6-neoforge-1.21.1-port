@@ -162,3 +162,7 @@ Last updated: 2026-06-18
 ## Post-metal-purification audit note
 
 - Use refreshed post-UTILITY_INFUSION audits to confirm how many GOLEMANCY_PAGE_DEFERRED entries remain before choosing the next batch.
+## Elemental tool infusion recipe page note
+
+- Added a data-driven infusion JSON/catalog batch for ElementalAxe, ElementalPick, ElementalSword, ElementalShovel, and ElementalHoe.
+- This script integrates audit refresh after successful build/smoke.

@@ -1,0 +1,89 @@
+{
+  "entries": [
+    {
+      "id": "thaumcraft:elementalaxe",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "ELEMENTALTOOLS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:elemental_axe",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:elementalpick",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "ELEMENTALTOOLS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:elemental_pick",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:elementalsword",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "ELEMENTALTOOLS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:elemental_sword",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:elementalshovel",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "ELEMENTALTOOLS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:elemental_shovel",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:elementalhoe",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "ELEMENTALTOOLS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:elemental_hoe",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}

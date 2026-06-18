@@ -471,3 +471,8 @@ The sections below are historical update notes. They should not be read as the c
 - Refreshed recipe/page and alchemy source audits after the FIRST_UTILITY_INFUSION recipe/page batch.
 - Use the refreshed counts to confirm the first utility infusion page gap reduction and select the next safe batch.
 - If first utility infusion gaps are closed, continue with another small infusion JSON batch instead of broad fake/synthetic pages.
+### Latest elemental tool infusion recipe page batch
+
+- Added elemental tool infusion recipe/page entries for axe, pick, sword, shovel, and hoe.
+- Audit refresh is integrated into this batch script by default, after build/smoke and before commit.
+- These remain data/page boundaries only; in-world infusion altar behavior is still deferred.

@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ELEMENTALTOOLS",
+  "instability": 1,
+  "catalyst": {
+    "item": "thaumcraft:thaumium_sword"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:crystal_essence_aer"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_aer"
+    },
+    {
+      "item": "thaumcraft:rare_earth"
+    },
+    {
+      "item": "thaumcraft:plank_greatwood"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "air",
+      "amount": 30
+    },
+    {
+      "aspect": "motion",
+      "amount": 30
+    },
+    {
+      "aspect": "aversion",
+      "amount": 30
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:elemental_sword",
+    "count": 1
+  }
+}

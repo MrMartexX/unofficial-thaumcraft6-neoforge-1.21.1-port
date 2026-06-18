@@ -197,6 +197,11 @@ public final class TCItems {
     public static final Supplier<Item> TRAVELLER_BOOTS = simpleItem("traveller_boots");
     public static final Supplier<Item> CLOUD_RING = simpleItem("cloud_ring");
     public static final Supplier<Item> CHARM_UNDYING = simpleItem("charm_undying");
+    public static final Supplier<Item> ELEMENTAL_AXE = simpleItem("elemental_axe");
+    public static final Supplier<Item> ELEMENTAL_PICK = simpleItem("elemental_pick");
+    public static final Supplier<Item> ELEMENTAL_SWORD = simpleItem("elemental_sword");
+    public static final Supplier<Item> ELEMENTAL_SHOVEL = simpleItem("elemental_shovel");
+    public static final Supplier<Item> ELEMENTAL_HOE = simpleItem("elemental_hoe");
     public static final Supplier<Item> MIND_CLOCKWORK_ADVANCED = simpleItem("mindclockwork_advanced");
     public static final Supplier<Item> ARCANE_EAR_TOGGLE = simpleItem("arcane_ear_toggle");
     public static final Supplier<Item> BAUBLE_AMULET = simpleItem("bauble_amulet");

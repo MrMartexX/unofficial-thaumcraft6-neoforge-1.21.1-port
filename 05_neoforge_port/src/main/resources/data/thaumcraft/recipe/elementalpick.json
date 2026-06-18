@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ELEMENTALTOOLS",
+  "instability": 1,
+  "catalyst": {
+    "item": "thaumcraft:thaumium_pick"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:crystal_essence_ignis"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_ignis"
+    },
+    {
+      "item": "thaumcraft:rare_earth"
+    },
+    {
+      "item": "thaumcraft:plank_greatwood"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "fire",
+      "amount": 30
+    },
+    {
+      "aspect": "metal",
+      "amount": 30
+    },
+    {
+      "aspect": "senses",
+      "amount": 30
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:elemental_pick",
+    "count": 1
+  }
+}

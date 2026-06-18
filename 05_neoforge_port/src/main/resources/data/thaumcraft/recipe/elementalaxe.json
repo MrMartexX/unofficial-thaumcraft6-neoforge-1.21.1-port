@@ -1,0 +1,36 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ELEMENTALTOOLS",
+  "instability": 1,
+  "catalyst": {
+    "item": "thaumcraft:thaumium_axe"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:crystal_essence_aqua"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_aqua"
+    },
+    {
+      "item": "thaumcraft:rare_earth"
+    },
+    {
+      "item": "thaumcraft:plank_greatwood"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "water",
+      "amount": 60
+    },
+    {
+      "aspect": "plant",
+      "amount": 30
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:elemental_axe",
+    "count": 1
+  }
+}
