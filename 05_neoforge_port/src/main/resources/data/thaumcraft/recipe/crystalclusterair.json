@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CC",
+    "CC"
+  ],
+  "key": {
+    "C": {
+      "item": "thaumcraft:crystal_essence_aer"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:crystal_aer",
+    "count": 1
+  }
+}

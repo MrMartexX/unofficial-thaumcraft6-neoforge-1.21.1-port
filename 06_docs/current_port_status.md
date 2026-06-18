@@ -495,3 +495,11 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added the missing auble_charm bridge item used by the VerdantHeart infusion catalyst.
 - This fixes the server smoke datapack parse error for 	haumcraft:verdantheart.
+### Latest crystal cluster recipe page batch
+
+- Added 7 crystal cluster crafting recipe/page entries for primal and flux crystal clusters.
+- This is a larger integrated batch and includes audit refresh after build/smoke.
+### Crystal cluster recipe repair
+
+- Rewrote crystal cluster recipe JSONs to use explicit non-empty item ids.
+- The previous generated files accidentally used blank item values because of PowerShell hashtable property access.

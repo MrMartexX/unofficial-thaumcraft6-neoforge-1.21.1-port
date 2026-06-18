@@ -182,3 +182,11 @@ Last updated: 2026-06-18
 
 - 	haumcraft:bauble_charm is now explicitly registered because VerdantHeart uses it as a catalyst.
 - Keep future recipe batch scripts checking all custom item ids before smoke.
+## Crystal cluster recipe page note
+
+- Added larger integrated recipe/catalog batch for CrystalClusterAir, Fire, Water, Earth, Order, Entropy, and Flux.
+- This script integrates audit refresh after successful build/smoke.
+## Crystal cluster repair note
+
+- Fixed blank ingredient item ids in generated CrystalCluster recipe JSONs.
+- Future batch scripts should use hashtable index access such as $cluster["Input"], not $cluster.Input.

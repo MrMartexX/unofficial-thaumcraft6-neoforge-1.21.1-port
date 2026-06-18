@@ -1,16 +1,16 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 16:42:14 +03:00
+Generated: 2026-06-18 16:54:58 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 307 |
+| Recipe JSON files scanned | 314 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 198 |
-| Missing recipe references | 225 |
+| Resolved recipe references | 205 |
+| Missing recipe references | 218 |
 | Custom/review recipe files | 22 |
 | Blocked/review research recipe references | 22 |
 | JSON parse errors | 0 |
@@ -27,7 +27,7 @@ Generated: 2026-06-18 16:42:14 +03:00
 
 | Class | Count |
 |---|---:|
-| VANILLA_OR_STANDARD_READY | 121 |
+| VANILLA_OR_STANDARD_READY | 128 |
 | ARCANE_READY | 89 |
 | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 75 |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | 22 |
@@ -39,7 +39,7 @@ Generated: 2026-06-18 16:42:14 +03:00
 | thaumcraft:arcane_shaped | 80 |
 | thaumcraft:crucible | 75 |
 | minecraft:crafting_shapeless | 70 |
-| minecraft:crafting_shaped | 51 |
+| minecraft:crafting_shaped | 58 |
 | thaumcraft:infusion | 22 |
 | thaumcraft:arcane_shapeless | 9 |
 
@@ -135,13 +135,6 @@ Generated: 2026-06-18 16:42:14 +03:00
 | thaumcraft:crystal_ordo | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[4] |
 | thaumcraft:crystal_perditio | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[5] |
 | thaumcraft:crystal_terra | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[3] |
-| thaumcraft:CrystalClusterAir | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].stages[1].recipes[0] |
-| thaumcraft:CrystalClusterEarth | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].stages[1].recipes[3] |
-| thaumcraft:CrystalClusterEntropy | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].stages[1].recipes[5] |
-| thaumcraft:CrystalClusterFire | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].stages[1].recipes[1] |
-| thaumcraft:CrystalClusterFlux | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].stages[1].recipes[6] |
-| thaumcraft:CrystalClusterOrder | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].stages[1].recipes[4] |
-| thaumcraft:CrystalClusterWater | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].stages[1].recipes[2] |
 | thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[9].stages[1].required_craft[0] |
 | thaumcraft:curiosity_band | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[14].icons[0] |
 | thaumcraft:CuriosityBand | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[14].stages[1].recipes[0] |

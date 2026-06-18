@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CC",
+    "CC"
+  ],
+  "key": {
+    "C": {
+      "item": "thaumcraft:crystal_essence_vitium"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:crystal_vitium",
+    "count": 1
+  }
+}

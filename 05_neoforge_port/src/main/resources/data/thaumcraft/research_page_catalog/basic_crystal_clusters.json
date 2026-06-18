@@ -1,0 +1,123 @@
+{
+  "entries": [
+    {
+      "id": "thaumcraft:crystalclusterair",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "ShapedRecipes",
+      "required_research": "CRYSTALS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_aer",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterfire",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "ShapedRecipes",
+      "required_research": "CRYSTALS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_ignis",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterwater",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "ShapedRecipes",
+      "required_research": "CRYSTALS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_aqua",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterearth",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "ShapedRecipes",
+      "required_research": "CRYSTALS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_terra",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterorder",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "ShapedRecipes",
+      "required_research": "CRYSTALS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_ordo",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterentropy",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "ShapedRecipes",
+      "required_research": "CRYSTALS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_perditio",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:crystalclusterflux",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "ShapedRecipes",
+      "required_research": "CRYSTALS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:crystal_vitium",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}
