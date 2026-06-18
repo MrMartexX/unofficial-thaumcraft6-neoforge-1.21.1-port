@@ -2,7 +2,7 @@
 
 Scope: why legacy Thaumcraft 6 item/block/entity models do not directly survive the Forge 1.12.2 -> NeoForge 1.21.1 port, and how to triage the current resource problems without overwriting adapted 1.21 assets.
 
-This document follows `NeoForge_legacy_migration_guide_expanded_v3.docx`: keep static JSON assets, dynamic renderers and client-only registration separated; do not port old `TileEntitySpecialRenderer`, `IIcon/registerIcons`, `forge_marker` blockstates, or raw GL state directly.
+This document follows `NeoForge_legacy_migration_guide.md`: keep static JSON assets, dynamic renderers and client-only registration separated; do not port old `TileEntitySpecialRenderer`, `IIcon/registerIcons`, `forge_marker` blockstates, or raw GL state directly.
 
 ## Official NeoForge 1.21.1 Rules That Matter
 

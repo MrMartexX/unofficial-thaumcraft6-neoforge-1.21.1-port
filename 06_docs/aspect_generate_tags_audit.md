@@ -9,7 +9,7 @@ Legacy references:
 - `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/InternalMethodHandler.java`
 - `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/config/ConfigAspects.java`
 - `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/api/OreDictionaryEntries.java`
-- `06_docs/NeoForge_legacy_migration_guide_expanded_v3.docx`
+- `06_docs/NeoForge_legacy_migration_guide.md`
 
 ## Purpose
 
@@ -75,7 +75,7 @@ Current exact arcane recipe outputs participate in the same cache only when they
 | `filter` | `gold_ingot`, `plank_silverwood`, vis `15`, output count `2` | `metallum 7`, `desiderium 7`, `herba 1`, `praecantatio 1` |
 | `morphic_resonator` | `glass_pane`, `brass_plate`, `rare_earth`, vis `50`, output count `1` | `vitreus 1`, `metallum 14`, `instrumentum 4`, `terra 3`, `ordo 3`, `praecantatio 5` |
 
-The live generated cache now scans current `minecraft:*` standard crafting outputs and current `thaumcraft:*` standard/arcane outputs. The latest server validation rebuilt `501` generated entries and then enforced `1230/1230` assignable current vanilla item-id coverage. Final 1.12 dump values for legacy-equivalent flattened vanilla ids and currently registered Thaumcraft ids can be promoted into exact runtime parity layers when generated/manual/tag behavior would otherwise resolve differently from 1.12. Spawn eggs, firework star/rocket, infested blocks, and empty component-only potion carrier ids are intentionally excluded for legacy parity.
+The live generated cache now scans current `minecraft:*` standard crafting outputs and current `thaumcraft:*` standard/arcane outputs. The latest server validation rebuilt `634` generated entries and then enforced `1230/1230` assignable current vanilla item-id coverage. Crucible recipe page data is intentionally not part of generated aspect fallback yet. Final 1.12 dump values for legacy-equivalent flattened vanilla ids and currently registered Thaumcraft ids can be promoted into exact runtime parity layers when generated/manual/tag behavior would otherwise resolve differently from 1.12. Spawn eggs, firework star/rocket, infested blocks, and empty component-only potion carrier ids are intentionally excluded for legacy parity.
 
 ## Current Tag Expansion Scope
 

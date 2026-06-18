@@ -2,7 +2,7 @@
 
 Source basis:
 
-- `06_docs/NeoForge_legacy_migration_guide_expanded_v3.docx`
+- `06_docs/NeoForge_legacy_migration_guide.md`
 - `06_docs/subsystem_inventory.md`
 - `06_docs/porting_order.md`
 - Legacy `thaumcraft.api.aura.AuraHelper`

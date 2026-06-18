@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "METALLURGY@2",
+  "catalyst": {
+    "tag": "thaumcraft:legacy_ore_dictionary/ingot_iron"
+  },
+  "aspects": [
+    {
+      "aspect": "magic",
+      "amount": 5
+    },
+    {
+      "aspect": "earth",
+      "amount": 5
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:thaumium_ingot",
+    "count": 1
+  }
+}

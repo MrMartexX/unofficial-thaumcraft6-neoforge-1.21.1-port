@@ -94,7 +94,7 @@ Latest validation:
   `325` total entries including group members, `0` field differences;
 - runtime structural validation: `0` missing catalog references, unresolved
   group targets, or cycles;
-- Thaumonomicon protocol audit: `25/25` checks passed. The first real item/open/browser/entry flow, server-snapshot-backed vanilla crafting page renderer, first exact arcane page renderer, server-built index revision, and stale-action rejection without mutation are active; remaining custom recipe-page rendering remains catalog-gated.
+- Thaumonomicon protocol audit: `27/27` checks passed. The first real item/open/browser/entry flow, server-snapshot-backed vanilla crafting page renderer, first exact arcane page renderer, first crucible page renderer, server-built index revision, and stale-action rejection without mutation are active; remaining infusion, blueprint, fake and special recipe-page rendering remains catalog-gated.
 
 ## Remaining boundary
 
@@ -102,6 +102,7 @@ Latest validation:
 - Keep vanilla crafting page contents server-resolved through
   `TCCraftingRecipePageView`; do not resolve recipes independently on the client.
 - Keep arcane page contents server-resolved through `TCArcaneRecipePageView`;
+- Keep crucible page contents server-resolved through `TCCrucibleRecipePageView`; do not treat this as in-world crucible behavior.
   do not let the client infer vis, crystals, research, result, or ingredient
   variants.
 - Keep remaining arcane recipes plus crucible, infusion, blueprint,

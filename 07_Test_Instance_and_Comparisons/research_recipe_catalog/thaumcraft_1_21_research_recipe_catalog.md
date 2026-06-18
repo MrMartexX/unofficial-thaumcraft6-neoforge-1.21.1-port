@@ -14,28 +14,28 @@
 
 | Value | Count |
 |---|---:|
-| `RECIPE_GROUP` | `9` |
+| `THAUMCRAFT_CATALOG` | `94` |
 | `CRAFTING_REGISTRY` | `83` |
-| `THAUMCRAFT_CATALOG` | `90` |
-| `MISSING` | `8` |
+| `RECIPE_GROUP` | `9` |
+| `MISSING` | `4` |
 | `FAKE_CATALOG` | `13` |
 
 ## Direct-reference page kinds
 
 | Value | Count |
 |---|---:|
+| `MISSING` | `4` |
+| `CRAFTING` | `12` |
+| `ARCANE` | `73` |
 | `INFUSION` | `58` |
+| `CRUCIBLE` | `41` |
 | `BLUEPRINT` | `6` |
 | `GROUP` | `9` |
-| `CRUCIBLE` | `37` |
-| `CRAFTING` | `12` |
-| `MISSING` | `8` |
-| `ARCANE` | `73` |
 
 ## Direct-reference live availability
 
 | Value | Count |
 |---|---:|
-| `LEGACY_MISSING` | `8` |
-| `READY` | `17` |
-| `DEFERRED` | `178` |
+| `READY` | `113` |
+| `DEFERRED` | `86` |
+| `LEGACY_MISSING` | `4` |

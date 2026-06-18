@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "UNLOCKALCHEMY@3",
+  "catalyst": {
+    "tag": "thaumcraft:legacy_ore_dictionary/dust_glowstone"
+  },
+  "aspects": [
+    {
+      "aspect": "energy",
+      "amount": 10
+    },
+    {
+      "aspect": "fire",
+      "amount": 10
+    },
+    {
+      "aspect": "light",
+      "amount": 10
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:nitor_yellow",
+    "count": 1
+  }
+}

@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-06-17
+Last updated: 2026-06-18
 
 ## Current branch
 
@@ -17,6 +17,8 @@ Last updated: 2026-06-17
 - GitHub Actions build workflow exists and runs on GitHub-hosted Windows runner.
 - Build workflow is now path-filtered to `05_neoforge_port/**` and `.github/workflows/build.yml`.
 - Dedicated server smoke test script exists under `tools/ci/server-smoke.ps1`.
+- The active migration guide is now `06_docs/NeoForge_legacy_migration_guide.md`; older `.docx` references were removed from current docs.
+- The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
 
 ## Do not change without explicit request
 
@@ -24,7 +26,7 @@ Last updated: 2026-06-17
 
 ## Near-term tasks
 
-1. Continue exact arcane recipe expansion by audited dependency family; prefer bridge-only recipe cleanups where outputs already exist but gameplay is deferred, and avoid custom behavior until the owning subsystem is implemented; keep utility recipes bridge-only until block behavior is ported; handle non-arcane legacy recipe conversions separately from arcane recipe batches; keep infusion-support outputs bridge-only until block behavior is ported; verify block item identity before touching ancient/eldritch variants; keep special recipe behavior noted when represented by bridge JSON; continue bridge recipe cleanup only when dependencies are already registered; Vis Generator now uses the existing rare_earth bridge item for legacy nugget meta 10; keep future meta-variant mappings explicit; recipe identity is not gameplay implementation for Grapple Gun behavior; banner recipes are decorative bridge data only; Focus Pouch recipe is bridge identity only until item behavior/inventory is ported; Automated Crossbow and Mnemonic Matrix recipe identity is bridge data only until turret/brainbox behavior is ported; remaining arcane placeholder audit should now only report caster_basic as an ignored exact legacy match; recipe cleanup audits require a final server-smoke recheck with the hardened log quality gate; next work should move from data identity cleanup only after that server smoke is clean.
+1. Continue recipe/page work by audited dependency family. Current `thaumcraft:crucible` serializer/page-data boundary covers HEDGE_ALCHEMY, METAL_PURIFICATION, Alumentum, Nitor, Brass/Thaumium Ingots, and all vis-crystal recipes. Do not treat this as in-world crucible gameplay. Next safe batch should either classify/port another pure recipe-page family or start a focused in-world crucible/alchemy design slice before behavior.
 2. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
 3. Keep reusable audit scripts under `tools/audits/`.
 4. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.
@@ -84,3 +86,10 @@ Last updated: 2026-06-17
 ## Post-metal-purification audit note
 
 - Use refreshed post-METAL_PURIFICATION audits to choose the next small pure crucible alchemy batch.
+
+## Base alchemy/metallurgy crucible page note
+
+- `thaumcraft:crucible` page-data now covers Alumentum, Nitor, Brass Ingot, Thaumium Ingot and 37 vis-crystal recipes.
+- Current catalog audit result: `113 READY`, `86 DEFERRED`, `4 LEGACY_MISSING`.
+- Current protocol audit result: `27/27`.
+- In-world crucible behavior, special alchemy side effects, and crucible-derived aspect generation remain deferred.

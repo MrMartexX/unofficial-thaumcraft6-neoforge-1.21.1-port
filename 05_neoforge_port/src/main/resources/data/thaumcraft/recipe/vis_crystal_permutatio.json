@@ -1,0 +1,17 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "BASEALCHEMY",
+  "catalyst": {
+    "tag": "thaumcraft:legacy_ore_dictionary/nugget_quartz"
+  },
+  "aspects": [
+    {
+      "aspect": "permutatio",
+      "amount": 2
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:crystal_essence_permutatio",
+    "count": 1
+  }
+}

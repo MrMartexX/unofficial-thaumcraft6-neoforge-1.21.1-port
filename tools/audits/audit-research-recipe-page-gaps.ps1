@@ -49,6 +49,9 @@ function Get-RecipeTypeClass {
     if ($Type -match '^thaumcraft:.*arcane') {
         return 'ARCANE_READY'
     }
+    if ($Type -eq 'thaumcraft:crucible') {
+        return 'CRUCIBLE_PAGE_READY_NO_GAMEPLAY'
+    }
     if ($Type -match '^thaumcraft:') {
         return 'THAUMCRAFT_CUSTOM_OR_REVIEW'
     }
@@ -241,6 +244,29 @@ foreach ($file in $recipeFiles) {
     $recipeRows.Add($row)
 }
 
+$catalogEntries = @{}
+$catalogRoot = Join-Path $dataRoot 'thaumcraft/research_page_catalog'
+$catalogFiles = @(Get-ChildItem -LiteralPath $catalogRoot -Recurse -File -Filter '*.json' -ErrorAction SilentlyContinue)
+foreach ($file in $catalogFiles) {
+    $json = Read-JsonFile -File $file
+    if ($null -eq $json -or -not ($json.PSObject.Properties.Name -contains 'entries')) {
+        continue
+    }
+    foreach ($entry in $json.entries) {
+        if ($null -eq $entry -or -not ($entry.PSObject.Properties.Name -contains 'id')) {
+            continue
+        }
+        $targets = @()
+        if ($entry.PSObject.Properties.Name -contains 'targets' -and $null -ne $entry.targets) {
+            $targets = @($entry.targets)
+        }
+        $catalogEntries[[string]$entry.id] = [pscustomobject]@{
+            Kind = [string]$entry.kind
+            Targets = $targets
+        }
+    }
+}
+
 $researchFiles = @(Get-ChildItem -LiteralPath (Join-Path $dataRoot 'thaumcraft/research') -Recurse -File -Filter '*.json' -ErrorAction SilentlyContinue)
 $refs = New-Object System.Collections.Generic.List[object]
 
@@ -266,8 +292,23 @@ foreach ($ref in $refs) {
     }
 
     $missingClass = ''
+    if (-not $resolved -and $ref.Kind -eq 'RECIPE_PAGE' -and $catalogEntries.ContainsKey($ref.Reference)) {
+        $catalogEntry = $catalogEntries[$ref.Reference]
+        if ($catalogEntry.Kind -eq 'group' -and $catalogEntry.Targets.Count -gt 0) {
+            $missingTargets = @($catalogEntry.Targets | Where-Object { -not $recipes.ContainsKey([string]$_) })
+            if ($missingTargets.Count -eq 0) {
+                $resolved = $true
+                $recipeType = 'research_page_catalog:group'
+                $recipeClass = 'CATALOG_GROUP_READY'
+            } else {
+                $missingClass = 'CATALOG_GROUP_INCOMPLETE'
+            }
+        }
+    }
     if (-not $resolved -and $ref.Kind -eq 'RECIPE_PAGE') {
-        $missingClass = Get-MissingRecipePageClass -Reference $ref.Reference -ResearchFile $ref.File
+        if ([string]::IsNullOrWhiteSpace($missingClass)) {
+            $missingClass = Get-MissingRecipePageClass -Reference $ref.Reference -ResearchFile $ref.File
+        }
     }
 
     $classified.Add([pscustomobject]@{

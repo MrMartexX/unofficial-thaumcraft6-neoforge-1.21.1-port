@@ -1,0 +1,17 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "BASEALCHEMY",
+  "catalyst": {
+    "tag": "thaumcraft:legacy_ore_dictionary/nugget_quartz"
+  },
+  "aspects": [
+    {
+      "aspect": "machina",
+      "amount": 2
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:crystal_essence_machina",
+    "count": 1
+  }
+}

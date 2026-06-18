@@ -1,6 +1,6 @@
 # Thaumometer Visual Parity Audit
 
-Scope: authoritative legacy data and modern port mapping for the Thaumometer item model. This follows `NeoForge_legacy_migration_guide_expanded_v3.docx`: static assets stay in model JSON/texture resources, while dynamic client-only rendering should be added only when static model data cannot reproduce legacy behavior.
+Scope: authoritative legacy data and modern port mapping for the Thaumometer item model. This follows `NeoForge_legacy_migration_guide.md`: static assets stay in model JSON/texture resources, while dynamic client-only rendering should be added only when static model data cannot reproduce legacy behavior.
 
 ## Legacy Sources
 

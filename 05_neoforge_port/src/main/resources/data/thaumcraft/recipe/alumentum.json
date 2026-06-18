@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "ALUMENTUM",
+  "catalyst": {
+    "tag": "thaumcraft:legacy_ore_dictionary/coal"
+  },
+  "aspects": [
+    {
+      "aspect": "energy",
+      "amount": 10
+    },
+    {
+      "aspect": "fire",
+      "amount": 10
+    },
+    {
+      "aspect": "entropy",
+      "amount": 5
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:alumentum",
+    "count": 1
+  }
+}

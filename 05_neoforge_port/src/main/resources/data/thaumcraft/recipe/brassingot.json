@@ -1,0 +1,17 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "METALLURGY@1",
+  "catalyst": {
+    "tag": "thaumcraft:legacy_ore_dictionary/ingot_iron"
+  },
+  "aspects": [
+    {
+      "aspect": "tool",
+      "amount": 5
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:brass_ingot",
+    "count": 1
+  }
+}

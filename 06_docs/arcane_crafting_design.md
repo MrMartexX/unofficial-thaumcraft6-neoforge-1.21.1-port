@@ -238,8 +238,10 @@ Current checks cover:
 
 Current runtime result: `23/23` Arcane Workbench behavior checks pass. The
 separate arcane recipe audit currently passes `105/105` checks with `14` loaded
-arcane recipes. The research recipe/page catalog reports `17 READY`,
-`178 DEFERRED`, and `8 LEGACY_MISSING` live references.
+arcane recipes. The research recipe/page catalog reports `113 READY`,
+`86 DEFERRED`, and `4 LEGACY_MISSING` live references after the first
+crucible page-data boundary; this does not make in-world crucible behavior part
+of the arcane workbench slice.
 
 Run from `05_neoforge_port`:
 

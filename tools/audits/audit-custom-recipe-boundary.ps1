@@ -56,7 +56,11 @@ function Get-RecipeBoundaryClass {
         return 'ARCANE_READY'
     }
 
-    if ($Type -match '^thaumcraft:.*(crucible|infusion|blueprint|fake|special|compound|void|enchant)') {
+    if ($Type -eq 'thaumcraft:crucible') {
+        return 'CRUCIBLE_PAGE_READY_NO_GAMEPLAY'
+    }
+
+    if ($Type -match '^thaumcraft:.*(infusion|blueprint|fake|special|compound|void|enchant)') {
         return 'CUSTOM_BLOCKED_REQUIRES_DESIGN'
     }
 
@@ -281,7 +285,8 @@ $lines.Add('## Boundary rule')
 $lines.Add('')
 $lines.Add('- VANILLA_OR_STANDARD_READY means a normal Minecraft recipe type is already a data-only recipe.')
 $lines.Add('- ARCANE_READY means the current Thaumcraft arcane recipe boundary is already implemented and audited.')
-$lines.Add('- CUSTOM_BLOCKED_REQUIRES_DESIGN means crucible, infusion, fake, blueprint, special or similar custom behavior must not be copied directly from legacy classes. It needs a small serializer/page/behavior design slice first.')
+$lines.Add('- CRUCIBLE_PAGE_READY_NO_GAMEPLAY means the current Thaumcraft crucible recipe serializer/page snapshot boundary exists, but in-world crucible block behavior is still deferred.')
+$lines.Add('- CUSTOM_BLOCKED_REQUIRES_DESIGN means infusion, fake, blueprint, special or similar custom behavior must not be copied directly from legacy classes. It needs a small serializer/page/behavior design slice first.')
 $lines.Add('- THAUMCRAFT_CUSTOM_REVIEW means the recipe uses a Thaumcraft namespace type that is not recognized as the current arcane type and must be explicitly reviewed.')
 $lines.Add('')
 $lines.Add('## Recipe class distribution')

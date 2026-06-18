@@ -59,14 +59,14 @@ Deferred recipe pages are shown only as catalog bookmarks with their authoritati
 
 ## Validation
 
-- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, and the `READY` crafting/arcane snapshot boundary.
-- Latest protocol result: `25/25` checks passed; all five live vanilla crafting catalog entries and both live arcane catalog entries produce valid server snapshots.
+- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, and the `READY` crafting/arcane/crucible snapshot boundary.
+- Latest protocol result: `27/27` checks passed; live vanilla crafting, arcane and crucible catalog entries produce valid server snapshots.
 - `gradlew build` passes.
-- Dedicated-server reload passes with `683` exact aspect assignments and the Thaumonomicon protocol audit.
+- Dedicated-server reload passes with `687` exact aspect assignments and the Thaumonomicon protocol audit.
 
 ## Next boundary
 
 1. Keep `DEFERRED` and `LEGACY_MISSING` pages non-interactive until their crafting subsystem or mapping is implemented.
-2. Design and implement the first custom recipe type before adding its page renderer; arcane crafting is the next lowest-level dependency.
+2. Keep further custom recipe pages catalog-gated. Arcane and crucible page snapshots have first-pass boundaries; infusion, blueprint, fake and special pages still need focused design slices before rendering.
 3. Add recipe drilldown/history only after server-authoritative page snapshots can represent the referenced recipe family.
 4. Run a focused visual parity pass against the legacy browser, entry page, and crafting paper page before calling the UI final.

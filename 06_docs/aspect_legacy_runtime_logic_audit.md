@@ -19,7 +19,7 @@ Guide rule applied: old metadata, `ItemStack` NBT, `OreDictionary`, Forge events
 | `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/config/ConfigAspects.java` | Main built-in aspect data | Registers vanilla, Thaumcraft, ore dictionary, potion, and entity aspects during post-init. |
 | `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/crafting/ThaumcraftCraftingManager.java` | Object lookup and generated aspect logic | Contains the real lookup order, bonus rules, potion reagent recursion, and generated recipe formulas. |
 | `03_self_decompiled_check/vineflower_thaumcraft6` | Original jar self-decompile check | Used to confirm key behavior against `01_original_jar/Thaumcraft-1.12.2-6.1.BETA26.jar`. |
-| `06_docs/NeoForge_legacy_migration_guide_expanded_v3.docx` | Porting constraints | Confirms tag replacement for `OreDictionary`, Data Components for old stack NBT, and reload-safe data/service boundaries. |
+| `06_docs/NeoForge_legacy_migration_guide.md` | Porting constraints | Confirms tag replacement for `OreDictionary`, Data Components for old stack NBT, and reload-safe data/service boundaries. |
 
 ## Critical Findings
 
