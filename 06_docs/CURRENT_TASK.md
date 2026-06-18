@@ -118,3 +118,8 @@ Last updated: 2026-06-18
 
 - The first golemancy extraction commit produced an empty audit file; this was corrected by rebuilding `tools/audits/extract-golemancy-page-boundaries.ps1`.
 - Use the repaired `06_docs/audits/golemancy_page_boundary_source_audit.md` before implementing golemancy page references.
+
+## Focused golemancy recipe candidate note
+
+- Use `06_docs/audits/golemancy_recipe_source_candidates.md` to choose the first golemancy recipe/page implementation batch.
+- Avoid implementing broad seal behavior directly from the noisy boundary audit.

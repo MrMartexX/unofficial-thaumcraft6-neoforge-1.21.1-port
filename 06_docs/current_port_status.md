@@ -421,3 +421,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Rebuilt `golemancy_page_boundary_source_audit.md` with a stricter extractor that fails if no GOLEMANCY_PAGE_DEFERRED references are found or if the output is unexpectedly small.
 - Use the repaired audit to select the next narrow golemancy implementation batch.
+
+### Latest focused golemancy recipe source candidate audit
+
+- Added `golemancy_recipe_source_candidates.md`, a filtered audit that extracts likely `ConfigRecipes.java` recipe blocks for current GOLEMANCY_PAGE_DEFERRED references.
+- Use this before selecting the first golemancy implementation batch; avoid broad seal behavior until recipe candidates are exhausted.
