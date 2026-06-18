@@ -403,4 +403,4 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added bridge identities and crucible recipe/page entries for Bath Salts, Bottled Taint, Liquid Death, and Sane Soap.
 - These recipes preserve the legacy research/page ids as canonical lowercase recipe ids and keep full gameplay/fluid/block behavior deferred.
-- liquid_death_bucket and lesh_block are bridge item identities for recipe/page display until their dedicated gameplay blocks/fluids are ported.
+- `liquid_death_bucket` and `flesh_block` are bridge item identities for recipe/page display until their dedicated gameplay blocks/fluids are ported.
