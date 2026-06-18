@@ -410,3 +410,9 @@ The sections below are historical update notes. They should not be read as the c
 - Refreshed recipe/page and alchemy source audits after the SPECIAL_ALCHEMY crucible recipe/page batch.
 - Use the refreshed counts to confirm the special alchemy gap is closed and select the next safe batch.
 - If alchemy crucible/special gaps are closed, avoid mixed ALCHEMY_OTHER entries until EverfullUrn, JarLabelEssence, and Thaumatorium are separated into proper item/page/machine boundaries.
+
+### Latest golemancy boundary source audit
+
+- Added a dedicated source audit for current GOLEMANCY_PAGE_DEFERRED references.
+- This audit is analysis-only and is meant to separate real recipe/page work from seal, machine, and behavior boundaries before implementation.
+- Next golemancy work should choose a narrow family from this audit instead of implementing all deferred references as recipes.

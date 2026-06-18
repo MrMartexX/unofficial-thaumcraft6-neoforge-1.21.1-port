@@ -108,3 +108,8 @@ Last updated: 2026-06-18
 ## Post-metal-purification audit note
 
 - Use refreshed post-SPECIAL_ALCHEMY audits to confirm whether ALCHEMY_CRUCIBLE_OR_SPECIAL_PAGE is closed before choosing the next batch.
+
+## Golemancy boundary source audit note
+
+- Use `06_docs/audits/golemancy_page_boundary_source_audit.md` before implementing GOLEMANCY_PAGE_DEFERRED references.
+- Separate seal behavior placeholders, golem machine/block boundaries, and actual recipes into different batches.
