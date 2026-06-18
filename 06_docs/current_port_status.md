@@ -549,3 +549,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - FAKE_OR_SYNTHETIC_PAGE references are now reported separately from actionable missing recipe pages.
 - This preserves the list of synthetic teaching/UI placeholders while allowing actionable recipe page gaps to reach zero.
+## Infusion page boundary audit classification
+
+- Custom recipe boundary audit now treats thaumcraft:infusion as INFUSION_PAGE_READY_NO_GAMEPLAY.
+- This reflects the implemented infusion serializer/page snapshot boundary while keeping in-world infusion altar behavior deferred.

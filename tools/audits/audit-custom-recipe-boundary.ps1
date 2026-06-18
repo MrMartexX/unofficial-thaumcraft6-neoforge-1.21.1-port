@@ -60,6 +60,10 @@ function Get-RecipeBoundaryClass {
         return 'CRUCIBLE_PAGE_READY_NO_GAMEPLAY'
     }
 
+    if ($Type -eq 'thaumcraft:infusion') {
+        return 'INFUSION_PAGE_READY_NO_GAMEPLAY'
+    }
+
     if ($Type -match '^thaumcraft:.*(infusion|blueprint|fake|special|compound|void|enchant)') {
         return 'CUSTOM_BLOCKED_REQUIRES_DESIGN'
     }
@@ -286,7 +290,8 @@ $lines.Add('')
 $lines.Add('- VANILLA_OR_STANDARD_READY means a normal Minecraft recipe type is already a data-only recipe.')
 $lines.Add('- ARCANE_READY means the current Thaumcraft arcane recipe boundary is already implemented and audited.')
 $lines.Add('- CRUCIBLE_PAGE_READY_NO_GAMEPLAY means the current Thaumcraft crucible recipe serializer/page snapshot boundary exists, but in-world crucible block behavior is still deferred.')
-$lines.Add('- CUSTOM_BLOCKED_REQUIRES_DESIGN means infusion, fake, blueprint, special or similar custom behavior must not be copied directly from legacy classes. It needs a small serializer/page/behavior design slice first.')
+$lines.Add('- INFUSION_PAGE_READY_NO_GAMEPLAY means the current Thaumcraft infusion recipe serializer/page snapshot boundary exists, but in-world infusion altar behavior is still deferred.')
+$lines.Add('- CUSTOM_BLOCKED_REQUIRES_DESIGN means fake, blueprint, special or similar custom behavior must not be copied directly from legacy classes. It needs a small serializer/page/behavior design slice first.')
 $lines.Add('- THAUMCRAFT_CUSTOM_REVIEW means the recipe uses a Thaumcraft namespace type that is not recognized as the current arcane type and must be explicitly reviewed.')
 $lines.Add('')
 $lines.Add('## Recipe class distribution')
@@ -356,7 +361,7 @@ if ($keywordHits.Count -eq 0) {
 $lines.Add('')
 $lines.Add('## Next implementation guidance')
 $lines.Add('')
-$lines.Add('1. Do not implement crucible, infusion, fake, blueprint or special recipe behavior by copying legacy recipe classes directly.')
+$lines.Add('1. Do not implement fake, blueprint, special or remaining custom recipe behavior by copying legacy recipe classes directly; crucible and infusion currently have serializer/page boundaries only.')
 $lines.Add('2. Pick the most referenced blocked custom type from this audit as the next serializer/page snapshot slice.')
 $lines.Add('3. Keep machine behavior, inventory behavior, essentia networks and rendering deferred until the serializer/page boundary has its own audit coverage.')
 $lines.Add('4. Keep server smoke and build green after every expansion.')
