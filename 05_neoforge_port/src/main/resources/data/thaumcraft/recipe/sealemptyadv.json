@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "SEALEMPTY&&MINDBIOTHAUMIC",
+  "catalyst": {
+    "item": "thaumcraft:seal_empty"
+  },
+  "aspects": [
+    {
+      "aspect": "senses",
+      "amount": 10
+    },
+    {
+      "aspect": "mind",
+      "amount": 10
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:seal_empty_advanced",
+    "count": 1
+  }
+}

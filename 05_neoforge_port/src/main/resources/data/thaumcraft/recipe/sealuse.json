@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "SEALUSE",
+  "catalyst": {
+    "item": "thaumcraft:sealblank"
+  },
+  "aspects": [
+    {
+      "aspect": "craft",
+      "amount": 20
+    },
+    {
+      "aspect": "senses",
+      "amount": 10
+    },
+    {
+      "aspect": "mind",
+      "amount": 20
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:seal_use",
+    "count": 1
+  }
+}

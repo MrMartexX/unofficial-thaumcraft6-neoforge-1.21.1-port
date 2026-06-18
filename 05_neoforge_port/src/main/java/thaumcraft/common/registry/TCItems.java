@@ -177,6 +177,20 @@ public final class TCItems {
     public static final Supplier<Item> PHIAL = simpleItem("phial");
     public static final Supplier<Item> JAR_LABEL = simpleItem("jar_label");
     public static final Supplier<Item> GOLEM_BELL = simpleItem("golem_bell");
+    public static final Supplier<Item> SEAL_PICKUP = simpleItem("seal_pickup");
+    public static final Supplier<Item> SEAL_PICKUP_ADVANCED = simpleItem("seal_pickup_advanced");
+    public static final Supplier<Item> SEAL_FILL = simpleItem("seal_fill");
+    public static final Supplier<Item> SEAL_FILL_ADVANCED = simpleItem("seal_fill_advanced");
+    public static final Supplier<Item> SEAL_EMPTY = simpleItem("seal_empty");
+    public static final Supplier<Item> SEAL_EMPTY_ADVANCED = simpleItem("seal_empty_advanced");
+    public static final Supplier<Item> SEAL_GUARD = simpleItem("seal_guard");
+    public static final Supplier<Item> SEAL_GUARD_ADVANCED = simpleItem("seal_guard_advanced");
+    public static final Supplier<Item> SEAL_BREAKER = simpleItem("seal_breaker");
+    public static final Supplier<Item> SEAL_BREAKER_ADVANCED = simpleItem("seal_breaker_advanced");
+    public static final Supplier<Item> SEAL_LUMBER = simpleItem("seal_lumber");
+    public static final Supplier<Item> SEAL_PROVIDER = simpleItem("seal_provider");
+    public static final Supplier<Item> SEAL_STOCK = simpleItem("seal_stock");
+    public static final Supplier<Item> SEAL_USE = simpleItem("seal_use");
     public static final Supplier<Item> MIND_CLOCKWORK_ADVANCED = simpleItem("mindclockwork_advanced");
     public static final Supplier<Item> ARCANE_EAR_TOGGLE = simpleItem("arcane_ear_toggle");
     public static final Supplier<Item> BAUBLE_AMULET = simpleItem("bauble_amulet");
@@ -461,4 +475,3 @@ public final class TCItems {
     private TCItems() {
     }
 }
-

@@ -123,3 +123,12 @@ Last updated: 2026-06-18
 
 - Use `06_docs/audits/golemancy_recipe_source_candidates.md` to choose the first golemancy recipe/page implementation batch.
 - Avoid implementing broad seal behavior directly from the noisy boundary audit.
+## Golemancy seal crucible page note
+
+- Added crucible recipe/page boundary entries for base and advanced golem seals.
+- Do not treat these bridge items as full seal behavior implementations; actual seal AI/placement behavior is deferred.
+- Re-run research recipe page gap audit after push to verify how many GOLEMANCY_PAGE_DEFERRED entries remain.
+## Golemancy seal crucible repair note
+
+- If dedicated server smoke fails in TCItems.<clinit> after adding seal bridge items, check for duplicate DeferredRegister item ids.
+- The current repair removes duplicate added seal registrations while keeping the existing registry identity.

@@ -1,0 +1,225 @@
+{
+  "entries": [
+    {
+      "id": "thaumcraft:sealcollect",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALCOLLECT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_pickup",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealcollectadv",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALCOLLECT&&MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_pickup_advanced",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealstore",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALSTORE",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_fill",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealstoreadv",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALSTORE&&MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_fill_advanced",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealempty",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALEMPTY",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_empty",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealemptyadv",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALEMPTY&&MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_empty_advanced",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealguard",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALGUARD",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_guard",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealguardadv",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALGUARD&&MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_guard_advanced",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:seallumber",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALLUMBER",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_lumber",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealprovide",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALPROVIDE",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_provider",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealstock",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALSTOCK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_stock",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealuse",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALUSE",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_use",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:sealbreakadv",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
+      "required_research": "SEALBREAK&&MINDBIOTHAUMIC",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:seal_breaker_advanced",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}

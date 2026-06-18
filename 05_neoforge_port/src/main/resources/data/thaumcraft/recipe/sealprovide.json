@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "SEALPROVIDE",
+  "catalyst": {
+    "item": "thaumcraft:seal_empty_advanced"
+  },
+  "aspects": [
+    {
+      "aspect": "exchange",
+      "amount": 10
+    },
+    {
+      "aspect": "desire",
+      "amount": 10
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:seal_provider",
+    "count": 1
+  }
+}

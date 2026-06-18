@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "SEALGUARD",
+  "catalyst": {
+    "item": "thaumcraft:sealblank"
+  },
+  "aspects": [
+    {
+      "aspect": "aversion",
+      "amount": 20
+    },
+    {
+      "aspect": "protect",
+      "amount": 20
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:seal_guard",
+    "count": 1
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "SEALLUMBER",
+  "catalyst": {
+    "item": "thaumcraft:seal_breaker"
+  },
+  "aspects": [
+    {
+      "aspect": "plant",
+      "amount": 40
+    },
+    {
+      "aspect": "senses",
+      "amount": 20
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:seal_lumber",
+    "count": 1
+  }
+}

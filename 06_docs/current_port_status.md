@@ -426,3 +426,12 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added `golemancy_recipe_source_candidates.md`, a filtered audit that extracts likely `ConfigRecipes.java` recipe blocks for current GOLEMANCY_PAGE_DEFERRED references.
 - Use this before selecting the first golemancy implementation batch; avoid broad seal behavior until recipe candidates are exhausted.
+### Latest golemancy seal crucible page batch
+
+- Added bridge item identities and crucible recipe/page entries for base and advanced golem seals that are data-driven in legacy crucible recipes.
+- Real golem seal behavior remains deferred; this batch only makes the recipe/page identities visible and loadable.
+- Infusion-based seals, JarBrain, MindBiothaumic, and GolemPress remain out of scope for this batch.
+### Latest golemancy seal crucible repair note
+
+- Repaired the first golemancy seal crucible batch after dedicated server smoke failed during TCItems static initialization.
+- The repair removes duplicate item registrations from the added seal bridge block when an item id was already registered earlier.

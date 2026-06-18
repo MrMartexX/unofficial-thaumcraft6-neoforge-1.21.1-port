@@ -1,0 +1,21 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "SEALSTOCK",
+  "catalyst": {
+    "item": "thaumcraft:seal_fill"
+  },
+  "aspects": [
+    {
+      "aspect": "mind",
+      "amount": 10
+    },
+    {
+      "aspect": "desire",
+      "amount": 10
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:seal_stock",
+    "count": 1
+  }
+}
