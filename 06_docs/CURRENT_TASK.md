@@ -234,3 +234,8 @@ Last updated: 2026-06-18
 
 - Custom recipe boundary audit now treats thaumcraft:infusion as INFUSION_PAGE_READY_NO_GAMEPLAY.
 - This reflects the implemented infusion serializer/page snapshot boundary while keeping in-world infusion altar behavior deferred.
+## Next gameplay slice candidate
+
+- Recipe/page actionable gaps are closed.
+- Next safe gameplay candidate is the first in-world crucible behavior slice, gated by `06_docs/gameplay/crucible_in_world_behavior_design.md` and `tools/audits/audit-crucible-recipe-data.ps1`.
+- Do not include flux, essentia networks, automation or special alchemy side effects in the first crucible behavior pass.

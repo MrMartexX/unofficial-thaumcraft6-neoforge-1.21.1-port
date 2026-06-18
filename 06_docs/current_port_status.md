@@ -553,3 +553,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Custom recipe boundary audit now treats thaumcraft:infusion as INFUSION_PAGE_READY_NO_GAMEPLAY.
 - This reflects the implemented infusion serializer/page snapshot boundary while keeping in-world infusion altar behavior deferred.
+## Crucible gameplay boundary design note
+
+- Added a focused design document for the first in-world crucible behavior slice.
+- Added a crucible recipe data audit to validate catalyst/aspects/result shape before gameplay activation.
+- In-world crucible behavior remains deferred until the design checklist is implemented.
