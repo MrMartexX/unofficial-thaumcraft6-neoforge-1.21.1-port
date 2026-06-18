@@ -198,3 +198,7 @@ Last updated: 2026-06-18
 
 - Added focus_1, focus_2, focus_3, and VisAmulet recipe/page entries in one larger batch.
 - This leaves caster/altar/fake/machine behavior boundaries for later targeted work.
+## Eldritch infusion recipe page note
+
+- Added a five-recipe Eldritch infusion page batch: PrimalCrusher, VoidRobeHelm, VoidRobeChest, VoidRobeLegs, and VoidseerPearl.
+- voidingot and VoidSiphon remain deferred for separate source/block-boundary handling.

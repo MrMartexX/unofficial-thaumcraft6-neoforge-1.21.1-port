@@ -1,18 +1,18 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 17:15:08 +03:00
+Generated: 2026-06-18 17:48:24 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 322 |
+| Recipe JSON files scanned | 327 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 224 |
-| Missing recipe references | 199 |
-| Custom/review recipe files | 27 |
-| Blocked/review research recipe references | 33 |
+| Resolved recipe references | 229 |
+| Missing recipe references | 194 |
+| Custom/review recipe files | 32 |
+| Blocked/review research recipe references | 38 |
 | JSON parse errors | 0 |
 
 ## Boundary rule
@@ -30,7 +30,7 @@ Generated: 2026-06-18 17:15:08 +03:00
 | VANILLA_OR_STANDARD_READY | 130 |
 | ARCANE_READY | 89 |
 | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 76 |
-| CUSTOM_BLOCKED_REQUIRES_DESIGN | 27 |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | 32 |
 
 ## Recipe type distribution
 
@@ -40,7 +40,7 @@ Generated: 2026-06-18 17:15:08 +03:00
 | thaumcraft:crucible | 76 |
 | minecraft:crafting_shapeless | 70 |
 | minecraft:crafting_shaped | 60 |
-| thaumcraft:infusion | 27 |
+| thaumcraft:infusion | 32 |
 | thaumcraft:arcane_shapeless | 9 |
 
 ## Custom or review recipe files
@@ -64,6 +64,7 @@ Generated: 2026-06-18 17:15:08 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:maskgrinningdevil | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/maskgrinningdevil.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:masksippingfiend | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/masksippingfiend.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:mindbiothaumic | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mindbiothaumic.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:primalcrusher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/primalcrusher.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealbreak | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbreak.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealbutcher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbutcher.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealharvest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealharvest.json |
@@ -74,6 +75,10 @@ Generated: 2026-06-18 17:15:08 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:verdantheartlife | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartlife.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:verdantheartsustain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartsustain.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:visamulet | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/visamulet.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:voidrobechest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidrobechest.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:voidrobehelm | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidrobehelm.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:voidrobelegs | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidrobelegs.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:voidseerpearl | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidseerpearl.json |
 
 ## Blocked or review research recipe references
 
@@ -92,9 +97,9 @@ Generated: 2026-06-18 17:15:08 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_2 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[1].stages[0].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_2 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[1].stages[0].required_craft[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_2 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[1].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].icons[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].stages[0].required_craft[0] |
-| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].icons[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].stages[0].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:HelmGoggles | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:JarBrain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[1].stages[1].recipes[0] |
@@ -102,6 +107,7 @@ Generated: 2026-06-18 17:15:08 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MaskGrinningDevil | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[1] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MaskSippingFiend | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[3] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MindBiothaumic | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[12].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:PrimalCrusher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[4].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealBreak | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[22].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealButcher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[19].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealHarvest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[21].stages[1].recipes[0] |
@@ -112,6 +118,10 @@ Generated: 2026-06-18 17:15:08 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:VerdantHeartLife | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[15].stages[1].recipes[1] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:VerdantHeartSustain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[15].stages[1].recipes[2] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:VisAmulet | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[19].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:VoidRobeChest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[3].stages[1].recipes[1] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:VoidRobeHelm | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[3].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:VoidRobeLegs | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[3].stages[1].recipes[2] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:VoidseerPearl | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[2].stages[1].recipes[0] |
 
 ## Missing recipe-like research references
 
@@ -208,7 +218,6 @@ Generated: 2026-06-18 17:15:08 +03:00
 | thaumcraft:plate | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[5].icons[0] |
 | thaumcraft:potion_sprayer | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[21].icons[0] |
 | thaumcraft:primal_crusher | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[4].icons[0] |
-| thaumcraft:PrimalCrusher | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[4].stages[1].recipes[0] |
 | thaumcraft:primordial_pearl | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[8].icons[0] |
 | thaumcraft:recharge_pedestal | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[18].icons[0] |
 | thaumcraft:redstone_relay | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[5].icons[0] |
@@ -310,11 +319,7 @@ Generated: 2026-06-18 17:15:08 +03:00
 | thaumcraft:void_siphon | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[1].icons[0] |
 | thaumcraft:void_stuff | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[0].stages[1].recipes[1] |
 | thaumcraft:voidingot | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[0].stages[1].recipes[0] |
-| thaumcraft:VoidRobeChest | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[3].stages[1].recipes[1] |
-| thaumcraft:VoidRobeHelm | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[3].stages[1].recipes[0] |
-| thaumcraft:VoidRobeLegs | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[3].stages[1].recipes[2] |
 | thaumcraft:voidseer_charm | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[2].icons[0] |
-| thaumcraft:VoidseerPearl | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[2].stages[1].recipes[0] |
 | thaumcraft:VoidSiphon | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[1].stages[1].recipes[0] |
 
 ## Custom recipe keyword hits in data resources
@@ -461,6 +466,7 @@ Generated: 2026-06-18 17:15:08 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/matrixcost.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/matrixmotion.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mindbiothaumic.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/primalcrusher.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/redstoneinlay.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/research_bridge/infusion_matrix.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/robeboots.json |
@@ -477,7 +483,12 @@ Generated: 2026-06-18 17:15:08 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartlife.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartsustain.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/visamulet.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidrobechest.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidrobehelm.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidrobelegs.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidseerpearl.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/auromancy_focus_recipes.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/eldritch_infusion_recipes.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_elemental_tools.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_fortress_armor.json |
@@ -494,6 +505,7 @@ Generated: 2026-06-18 17:15:08 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/auromancy_focus_recipes.json |
+| InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/eldritch_infusion_recipes.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_elemental_tools.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_fortress_armor.json |

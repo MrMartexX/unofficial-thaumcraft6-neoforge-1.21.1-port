@@ -513,3 +513,8 @@ The sections below are historical update notes. They should not be read as the c
 - Added data-driven recipe/catalog entries for focus_1, focus_2, focus_3, and VisAmulet.
 - focus_1 is a conservative crucible page boundary because focused legacy source extraction has no direct source block for it yet.
 - This script integrates audit refresh after successful build/smoke.
+### Latest eldritch infusion recipe page batch
+
+- Added data-driven infusion JSON/catalog entries for PrimalCrusher, VoidRobeHelm, VoidRobeChest, VoidRobeLegs, and VoidseerPearl.
+- Deliberately left voidingot and VoidSiphon for separate follow-up because source classification is ambiguous/block-oriented.
+- This script integrates audit refresh after successful build/smoke.

@@ -2120,23 +2120,6 @@
       "occurrence_count": 1
     },
     {
-      "id": "thaumcraft:primalcrusher",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "PRIMALCRUSHER",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:primal_crusher",
-        "metadata": 0,
-        "count": 1,
-        "nbt": "{infench:[{lvl:1s,id:1s},{lvl:1s,id:4s}]}"
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:rechargepedestal",
       "legacy_source": "crafting_registry",
       "kind": "arcane",
@@ -4149,74 +4132,6 @@
       },
       "direct_reference": false,
       "occurrence_count": 0
-    },
-    {
-      "id": "thaumcraft:voidrobechest",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "VOIDROBEARMOR",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:void_robe_chest",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:voidrobehelm",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "VOIDROBEARMOR",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:void_robe_helm",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:voidrobelegs",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "VOIDROBEARMOR",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:void_robe_legs",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:voidseerpearl",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "VOIDSEERPEARL",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:voidseer_charm",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
     },
     {
       "id": "thaumcraft:voidshovel",

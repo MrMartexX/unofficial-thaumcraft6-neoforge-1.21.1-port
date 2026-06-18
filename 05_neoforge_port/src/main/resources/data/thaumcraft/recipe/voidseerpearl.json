@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "VOIDSEERPEARL",
+  "instability": 8,
+  "catalyst": {
+    "item": "thaumcraft:bauble_charm"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:brain"
+    },
+    {
+      "item": "thaumcraft:void_seed"
+    },
+    {
+      "item": "thaumcraft:brain"
+    },
+    {
+      "item": "thaumcraft:primordial_pearl"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "mind",
+      "amount": 150
+    },
+    {
+      "aspect": "void",
+      "amount": 150
+    },
+    {
+      "aspect": "magic",
+      "amount": 100
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:voidseer_pearl",
+    "count": 1
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "PRIMALCRUSHER",
+  "instability": 6,
+  "catalyst": {
+    "item": "thaumcraft:primordial_pearl"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:void_pick"
+    },
+    {
+      "item": "thaumcraft:void_shovel"
+    },
+    {
+      "item": "thaumcraft:elemental_pick"
+    },
+    {
+      "item": "thaumcraft:elemental_shovel"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "earth",
+      "amount": 75
+    },
+    {
+      "aspect": "tool",
+      "amount": 75
+    },
+    {
+      "aspect": "entropy",
+      "amount": 50
+    },
+    {
+      "aspect": "void",
+      "amount": 50
+    },
+    {
+      "aspect": "aversion",
+      "amount": 50
+    },
+    {
+      "aspect": "eldritch",
+      "amount": 50
+    },
+    {
+      "aspect": "desire",
+      "amount": 50
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:primal_crusher",
+    "count": 1
+  }
+}
