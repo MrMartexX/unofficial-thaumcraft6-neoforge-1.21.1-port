@@ -1,18 +1,18 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 17:48:24 +03:00
+Generated: 2026-06-18 19:08:37 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 327 |
+| Recipe JSON files scanned | 334 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 229 |
-| Missing recipe references | 194 |
-| Custom/review recipe files | 32 |
-| Blocked/review research recipe references | 38 |
+| Resolved recipe references | 237 |
+| Missing recipe references | 186 |
+| Custom/review recipe files | 38 |
+| Blocked/review research recipe references | 45 |
 | JSON parse errors | 0 |
 
 ## Boundary rule
@@ -27,10 +27,10 @@ Generated: 2026-06-18 17:48:24 +03:00
 
 | Class | Count |
 |---|---:|
-| VANILLA_OR_STANDARD_READY | 130 |
+| VANILLA_OR_STANDARD_READY | 131 |
 | ARCANE_READY | 89 |
 | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 76 |
-| CUSTOM_BLOCKED_REQUIRES_DESIGN | 32 |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | 38 |
 
 ## Recipe type distribution
 
@@ -39,14 +39,15 @@ Generated: 2026-06-18 17:48:24 +03:00
 | thaumcraft:arcane_shaped | 80 |
 | thaumcraft:crucible | 76 |
 | minecraft:crafting_shapeless | 70 |
-| minecraft:crafting_shaped | 60 |
-| thaumcraft:infusion | 32 |
+| minecraft:crafting_shaped | 61 |
+| thaumcraft:infusion | 38 |
 | thaumcraft:arcane_shapeless | 9 |
 
 ## Custom or review recipe files
 
 | Class | Recipe id | Type | File |
 |---|---|---|---|
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:arcanebore | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/arcanebore.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:bootstraveller | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bootstraveller.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:charmundying | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/charmundying.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:cloudring | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/cloudring.json |
@@ -60,10 +61,15 @@ Generated: 2026-06-18 17:48:24 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/focus_3.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:helmgoggles | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/helmgoggles.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:jarbrain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/jarbrain.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:lampfertility | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/lampfertility.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:lampgrowth | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/lampgrowth.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:maskangryghost | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/maskangryghost.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:maskgrinningdevil | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/maskgrinningdevil.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:masksippingfiend | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/masksippingfiend.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:mindbiothaumic | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mindbiothaumic.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:mirror | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mirror.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:mirroressentia | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mirroressentia.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:mirrorhand | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mirrorhand.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:primalcrusher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/primalcrusher.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealbreak | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbreak.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:sealbutcher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbutcher.json |
@@ -84,6 +90,7 @@ Generated: 2026-06-18 17:48:24 +03:00
 
 | Class | Reference | Recipe type | Research file | JSON path |
 |---|---|---|---|---|
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:ArcaneBore | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[17].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:BootsTraveller | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[7].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:CHARMUNDYING | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[16].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:CLOUDRING | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[13].stages[1].recipes[0] |
@@ -97,16 +104,22 @@ Generated: 2026-06-18 17:48:24 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_2 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[1].stages[0].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_2 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[1].stages[0].required_craft[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_2 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[1].stages[1].recipes[0] |
-| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].icons[0] |
-| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].stages[0].required_craft[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].stages[0].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:focus_3 | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[2].icons[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:HelmGoggles | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:JarBrain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[1].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:LampFertility | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[13].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:LampGrowth | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[12].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MaskAngryGhost | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[2] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MaskGrinningDevil | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[1] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MaskSippingFiend | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[3] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MindBiothaumic | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[12].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:mirror | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[8].icons[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:Mirror | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[8].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MirrorEssentia | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[10].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:MirrorHand | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[9].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:PrimalCrusher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json | $.entries[4].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealBreak | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[22].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:SealButcher | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[19].stages[1].recipes[0] |
@@ -139,7 +152,6 @@ Generated: 2026-06-18 17:48:24 +03:00
 | thaumcraft:arcane_ear | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[6].icons[0] |
 | thaumcraft:arcane_workbench | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[0].required_craft[0] |
 | thaumcraft:arcane_workbench_charger | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[20].icons[0] |
-| thaumcraft:ArcaneBore | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[17].stages[1].recipes[0] |
 | thaumcraft:Banners | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[0].stages[0].recipes[0] |
 | thaumcraft:bath_salts | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[7].icons[0] |
 | thaumcraft:baubles_stuff | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[0].stages[0].recipes[1] |
@@ -182,7 +194,6 @@ Generated: 2026-06-18 17:48:24 +03:00
 | thaumcraft:IEREFININGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[3] |
 | thaumcraft:IESOUNDINGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[4] |
 | thaumcraft:infernal_furnace | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[3].icons[0] |
-| thaumcraft:infernalfurnace | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[3].stages[1].recipes[0] |
 | thaumcraft:infusion_matrix | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[1].icons[0] |
 | thaumcraft:infusion_matrix | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[1].stages[1].required_craft[0] |
 | thaumcraft:infusionaltar | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[1].stages[2].recipes[2] |
@@ -196,19 +207,13 @@ Generated: 2026-06-18 17:48:24 +03:00
 | thaumcraft:lamp_arcane | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[11].icons[0] |
 | thaumcraft:lamp_fertility | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[13].icons[0] |
 | thaumcraft:lamp_growth | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[12].icons[0] |
-| thaumcraft:LampFertility | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[13].stages[1].recipes[0] |
-| thaumcraft:LampGrowth | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[12].stages[1].recipes[0] |
 | thaumcraft:leather | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[0].required_craft[1] |
 | thaumcraft:log_greatwood | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[2].icons[0] |
 | thaumcraft:matrix_cost | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[3].icons[0] |
 | thaumcraft:matrix_speed | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[3].icons[1] |
 | thaumcraft:mind | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[8].icons[0] |
-| thaumcraft:mirror | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[8].icons[0] |
-| thaumcraft:Mirror | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[8].stages[1].recipes[0] |
 | thaumcraft:mirror_essentia | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[10].icons[0] |
 | thaumcraft:mirrored_glass | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[8].stages[0].required_item[1] |
-| thaumcraft:MirrorEssentia | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[10].stages[1].recipes[0] |
-| thaumcraft:MirrorHand | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[9].stages[1].recipes[0] |
 | thaumcraft:module | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[24].icons[0] |
 | thaumcraft:nitorcolor | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[9].stages[2].recipes[1] |
 | thaumcraft:nitorgroup | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[0].stages[0].recipes[1] |
@@ -326,6 +331,7 @@ Generated: 2026-06-18 17:48:24 +03:00
 
 | Keyword | File |
 |---|---|
+| blueprint | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/artifice_behavior_page_recipes.json |
 | blueprint | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | crucible | 05_neoforge_port/src/main/resources/data/minecraft/tags/block/mineable/pickaxe.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/loot_table/blocks/crucible.json |
@@ -427,6 +433,7 @@ Generated: 2026-06-18 17:48:24 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/minecraft/tags/block/mineable/pickaxe.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/loot_table/blocks/infusion_matrix.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/ancientpedestal.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/arcanebore.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/arcanepedestal.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannerblack.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannerblue.json |
@@ -460,12 +467,17 @@ Generated: 2026-06-18 17:48:24 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/helmgoggles.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/infusionmatrix.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/jarbrain.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/lampfertility.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/lampgrowth.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/maskangryghost.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/maskgrinningdevil.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/masksippingfiend.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/matrixcost.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/matrixmotion.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mindbiothaumic.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mirror.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mirroressentia.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/mirrorhand.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/primalcrusher.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/redstoneinlay.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/research_bridge/infusion_matrix.json |
@@ -487,6 +499,7 @@ Generated: 2026-06-18 17:48:24 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidrobehelm.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidrobelegs.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/voidseerpearl.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/artifice_behavior_page_recipes.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/auromancy_focus_recipes.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/eldritch_infusion_recipes.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |
@@ -504,6 +517,7 @@ Generated: 2026-06-18 17:48:24 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/eldritch.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json |
+| InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/artifice_behavior_page_recipes.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/auromancy_focus_recipes.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/eldritch_infusion_recipes.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |

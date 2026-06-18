@@ -1,0 +1,47 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "ARCANEBORE",
+  "instability": 4,
+  "catalyst": {
+    "item": "thaumcraft:mechanism_complex"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:elemental_pick"
+    },
+    {
+      "item": "thaumcraft:vis_resonator"
+    },
+    {
+      "item": "thaumcraft:thaumium_plate"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "thaumcraft:arcane_lamp"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "tool",
+      "amount": 75
+    },
+    {
+      "aspect": "motion",
+      "amount": 50
+    },
+    {
+      "aspect": "earth",
+      "amount": 50
+    },
+    {
+      "aspect": "mechanism",
+      "amount": 50
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:arcane_bore",
+    "count": 1
+  }
+}

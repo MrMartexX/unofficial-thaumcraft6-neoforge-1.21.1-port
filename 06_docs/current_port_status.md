@@ -518,3 +518,8 @@ The sections below are historical update notes. They should not be read as the c
 - Added data-driven infusion JSON/catalog entries for PrimalCrusher, VoidRobeHelm, VoidRobeChest, VoidRobeLegs, and VoidseerPearl.
 - Deliberately left voidingot and VoidSiphon for separate follow-up because source classification is ambiguous/block-oriented.
 - This script integrates audit refresh after successful build/smoke.
+### Latest artifice behavior page recipe batch
+
+- Added recipe/page boundary entries for ArcaneBore, InfernalFurnace, LampFertility, LampGrowth, Mirror, MirrorEssentia, and MirrorHand.
+- This is still page/data boundary only; actual machine/block behavior remains deferred.
+- This script integrates audit refresh after successful build/smoke.

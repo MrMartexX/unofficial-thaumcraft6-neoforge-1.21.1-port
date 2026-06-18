@@ -214,6 +214,14 @@ public final class TCItems {
     public static final Supplier<Item> MASK_ANGRY_GHOST = simpleItem("mask_angry_ghost");
     public static final Supplier<Item> MASK_SIPPING_FIEND = simpleItem("mask_sipping_fiend");
     public static final Supplier<Item> MIND_CLOCKWORK_ADVANCED = simpleItem("mindclockwork_advanced");
+    public static final Supplier<Item> ARCANE_LAMP = simpleItem("arcane_lamp");
+    public static final Supplier<Item> HAND_MIRROR = simpleItem("hand_mirror");
+    public static final Supplier<Item> MIRROR_ESSENTIA = simpleItem("mirror_essentia");
+    public static final Supplier<Item> MIRROR = simpleItem("mirror");
+    public static final Supplier<Item> LAMP_FERTILITY = simpleItem("lamp_fertility");
+    public static final Supplier<Item> LAMP_GROWTH = simpleItem("lamp_growth");
+    public static final Supplier<Item> INFERNAL_FURNACE = simpleItem("infernal_furnace");
+    public static final Supplier<Item> ARCANE_BORE = simpleItem("arcane_bore");
     public static final Supplier<Item> PRIMAL_CRUSHER = simpleItem("primal_crusher");
     public static final Supplier<Item> VOIDSEER_PEARL = simpleItem("voidseer_pearl");
     public static final Supplier<Item> VOID_ROBE_LEGS = simpleItem("void_robe_legs");

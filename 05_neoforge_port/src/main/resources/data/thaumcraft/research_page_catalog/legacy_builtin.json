@@ -126,23 +126,6 @@
       "occurrence_count": 1
     },
     {
-      "id": "thaumcraft:arcanebore",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "ARCANEBORE",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:turret",
-        "metadata": 2,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:arcaneear",
       "legacy_source": "crafting_registry",
       "kind": "arcane",
@@ -1289,18 +1272,6 @@
       "occurrence_count": 1
     },
     {
-      "id": "thaumcraft:infernalfurnace",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "blueprint",
-      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
-      "required_research": "INFERNALFURNACE",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:infusionaltar",
       "legacy_source": "thaumcraft_catalog",
       "kind": "blueprint",
@@ -1433,40 +1404,6 @@
       "occurrence_count": 1
     },
     {
-      "id": "thaumcraft:lampfertility",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "LAMPFERTILITY",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:lamp_fertility",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:lampgrowth",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "LAMPGROWTH",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:lamp_growth",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:levitator",
       "legacy_source": "crafting_registry",
       "kind": "arcane",
@@ -1569,40 +1506,6 @@
       "occurrence_count": 2
     },
     {
-      "id": "thaumcraft:mirror",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "MIRROR",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:mirror",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:mirroressentia",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "MIRRORESSENTIA",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:mirror_essentia",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:mirrorglass",
       "legacy_source": "crafting_registry",
       "kind": "arcane",
@@ -1612,23 +1515,6 @@
       "targets": [],
       "legacy_output": {
         "item": "thaumcraft:mirrored_glass",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:mirrorhand",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "MIRRORHAND",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:hand_mirror",
         "metadata": 0,
         "count": 1,
         "nbt": ""

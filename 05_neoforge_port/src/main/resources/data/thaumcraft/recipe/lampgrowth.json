@@ -1,0 +1,43 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "LAMPGROWTH",
+  "instability": 3,
+  "catalyst": {
+    "item": "thaumcraft:arcane_lamp"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:nitor_green"
+    },
+    {
+      "item": "minecraft:wheat_seeds"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    },
+    {
+      "item": "thaumcraft:sapling_greatwood"
+    },
+    {
+      "item": "minecraft:bone_meal"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "plant",
+      "amount": 75
+    },
+    {
+      "aspect": "life",
+      "amount": 50
+    },
+    {
+      "aspect": "energy",
+      "amount": 25
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:lamp_growth",
+    "count": 1
+  }
+}

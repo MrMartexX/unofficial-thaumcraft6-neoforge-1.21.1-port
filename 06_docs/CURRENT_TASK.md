@@ -202,3 +202,7 @@ Last updated: 2026-06-18
 
 - Added a five-recipe Eldritch infusion page batch: PrimalCrusher, VoidRobeHelm, VoidRobeChest, VoidRobeLegs, and VoidseerPearl.
 - voidingot and VoidSiphon remain deferred for separate source/block-boundary handling.
+## Artifice behavior recipe page note
+
+- Added seven artifice behavior page recipes as data/page boundary only.
+- Machine/block functionality remains intentionally deferred.

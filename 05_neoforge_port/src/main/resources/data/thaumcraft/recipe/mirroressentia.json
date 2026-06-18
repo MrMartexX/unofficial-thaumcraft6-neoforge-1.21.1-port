@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "MIRRORESSENTIA",
+  "instability": 2,
+  "catalyst": {
+    "item": "thaumcraft:mirrored_glass"
+  },
+  "components": [
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:ender_pearl"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "motion",
+      "amount": 25
+    },
+    {
+      "aspect": "water",
+      "amount": 25
+    },
+    {
+      "aspect": "exchange",
+      "amount": 25
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:mirror_essentia",
+    "count": 1
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "MIRRORHAND",
+  "instability": 3,
+  "catalyst": {
+    "item": "thaumcraft:mirror"
+  },
+  "components": [
+    {
+      "item": "minecraft:leather"
+    },
+    {
+      "item": "thaumcraft:quicksilver"
+    },
+    {
+      "item": "minecraft:ender_pearl"
+    },
+    {
+      "item": "thaumcraft:mirrored_glass"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "motion",
+      "amount": 50
+    },
+    {
+      "aspect": "exchange",
+      "amount": 50
+    },
+    {
+      "aspect": "man",
+      "amount": 25
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:hand_mirror",
+    "count": 1
+  }
+}
