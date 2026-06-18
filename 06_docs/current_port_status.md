@@ -532,3 +532,16 @@ The sections below are historical update notes. They should not be read as the c
 
 - Registered alchemical_construct, essentia_importer, and essentia_exporter bridge item ids used by thaumatorium.json.
 - This repairs the previous server smoke datapack parse failure and keeps the same batch commit target.
+### Latest blueprint page placeholder batch
+
+- Added explicit blueprint/page placeholder recipes and catalog entries for infusion altar variants and GolemPress.
+- These are not gameplay multiblock/machine implementations; they only close recipe page references.
+- This script integrates audit refresh after successful build/smoke.
+## Blueprint page placeholder repair note
+
+- Registered arcane_pedestal, ancient_pedestal, and eldritch_pedestal bridge item ids used by infusion altar placeholder recipes.
+- This repairs the previous server smoke datapack parse failure and keeps the same batch commit target.
+## Blueprint placeholder audit finalize note
+
+- The blueprint placeholder batch removed the last GOLEMANCY_PAGE_DEFERRED reference.
+- The golemancy page-boundary extractor is now skipped when that class is absent from the page-gap audit.

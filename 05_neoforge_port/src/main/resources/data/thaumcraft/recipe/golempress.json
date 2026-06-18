@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IMI",
+    "SWS",
+    "IDI"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "M": {
+      "item": "thaumcraft:mindclockwork_advanced"
+    },
+    "S": {
+      "item": "thaumcraft:stone_arcane"
+    },
+    "W": {
+      "item": "thaumcraft:arcane_workbench"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:golem_press_blueprint",
+    "count": 1
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SIS",
+    "PMP",
+    "SIS"
+  ],
+  "key": {
+    "I": {
+      "item": "thaumcraft:void_ingot"
+    },
+    "M": {
+      "item": "thaumcraft:infusion_matrix"
+    },
+    "P": {
+      "item": "thaumcraft:eldritch_pedestal"
+    },
+    "S": {
+      "item": "thaumcraft:stone_eldritch_tile"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:infusion_altar_eldritch_blueprint",
+    "count": 1
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "entries": [
+    {
+      "id": "thaumcraft:infusionaltar",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "BlueprintPageBoundary",
+      "required_research": "INFUSION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:infusion_altar_blueprint",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:infusionaltarancient",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "BlueprintPageBoundary",
+      "required_research": "INFUSIONANCIENT",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:infusion_altar_ancient_blueprint",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:infusionaltareldritch",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "BlueprintPageBoundary",
+      "required_research": "INFUSIONELDRITCH",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:infusion_altar_eldritch_blueprint",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:golempress",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "BlueprintPageBoundary",
+      "required_research": "MINDCLOCKWORK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:golem_press_blueprint",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}

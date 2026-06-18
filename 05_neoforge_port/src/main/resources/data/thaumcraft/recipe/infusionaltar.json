@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SIS",
+    "PMP",
+    "SIS"
+  ],
+  "key": {
+    "I": {
+      "item": "thaumcraft:thaumium_ingot"
+    },
+    "M": {
+      "item": "thaumcraft:infusion_matrix"
+    },
+    "P": {
+      "item": "thaumcraft:arcane_pedestal"
+    },
+    "S": {
+      "item": "thaumcraft:stone_arcane"
+    }
+  },
+  "result": {
+    "id": "thaumcraft:infusion_altar_blueprint",
+    "count": 1
+  }
+}

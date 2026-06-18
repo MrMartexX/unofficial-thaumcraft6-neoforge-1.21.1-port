@@ -1057,23 +1057,6 @@
       "occurrence_count": 1
     },
     {
-      "id": "thaumcraft:golempress",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "blueprint",
-      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
-      "required_research": "MINDCLOCKWORK",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:golem_builder",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:grapplegun",
       "legacy_source": "crafting_registry",
       "kind": "arcane",
@@ -1231,42 +1214,6 @@
       "kind": "infusion",
       "legacy_class": "thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe",
       "required_research": "INFUSIONENCHANTMENT",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:infusionaltar",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "blueprint",
-      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
-      "required_research": "INFUSION",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:infusionaltarancient",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "blueprint",
-      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
-      "required_research": "INFUSIONANCIENT",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:infusionaltareldritch",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "blueprint",
-      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
-      "required_research": "INFUSIONELDRITCH",
       "legacy_group": "",
       "targets": [],
       "legacy_output": null,
