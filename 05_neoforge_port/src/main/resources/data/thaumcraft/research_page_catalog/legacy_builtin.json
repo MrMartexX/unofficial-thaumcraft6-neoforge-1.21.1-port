@@ -126,30 +126,6 @@
       "occurrence_count": 1
     },
     {
-      "id": "thaumcraft:arcane_brick",
-      "legacy_source": "missing",
-      "kind": "missing",
-      "legacy_class": "",
-      "required_research": "",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:arcane_stone",
-      "legacy_source": "missing",
-      "kind": "missing",
-      "legacy_class": "",
-      "required_research": "",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 2
-    },
-    {
       "id": "thaumcraft:arcanebore",
       "legacy_source": "thaumcraft_catalog",
       "kind": "infusion",
@@ -911,23 +887,6 @@
       "occurrence_count": 1
     },
     {
-      "id": "thaumcraft:curiosityband",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "CURIOSITYBAND",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:curiosity_band",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:dioptra",
       "legacy_source": "crafting_registry",
       "kind": "arcane",
@@ -1264,18 +1223,6 @@
         "count": 1,
         "nbt": ""
       },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:helmgoggles",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "FORTRESSMASK",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
       "direct_reference": true,
       "occurrence_count": 1
     },

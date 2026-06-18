@@ -1,0 +1,34 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "FORTRESSMASK",
+  "instability": 5,
+  "catalyst": {
+    "item": "thaumcraft:thaumium_fortress_helm"
+  },
+  "components": [
+    {
+      "item": "minecraft:slime_ball"
+    },
+    {
+      "item": "thaumcraft:goggles"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "senses",
+      "amount": 40
+    },
+    {
+      "aspect": "aura",
+      "amount": 20
+    },
+    {
+      "aspect": "protect",
+      "amount": 20
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:thaumium_fortress_helm_goggles",
+    "count": 1
+  }
+}

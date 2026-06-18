@@ -1,0 +1,52 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "CURIOSITYBAND",
+  "instability": 5,
+  "catalyst": {
+    "item": "thaumcraft:bauble_ring"
+  },
+  "components": [
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "minecraft:writable_book"
+    },
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "minecraft:writable_book"
+    },
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "minecraft:writable_book"
+    },
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "minecraft:writable_book"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "mind",
+      "amount": 150
+    },
+    {
+      "aspect": "void",
+      "amount": 50
+    },
+    {
+      "aspect": "trap",
+      "amount": 100
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:curiosity_band",
+    "count": 1
+  }
+}

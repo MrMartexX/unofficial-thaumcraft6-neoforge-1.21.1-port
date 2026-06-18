@@ -190,3 +190,7 @@ Last updated: 2026-06-18
 
 - Fixed blank ingredient item ids in generated CrystalCluster recipe JSONs.
 - Future batch scripts should use hashtable index access such as $cluster["Input"], not $cluster.Input.
+## Simple legacy page recipe note
+
+- Added arcane stone/brick crafting entries plus CuriosityBand and HelmGoggles infusion entries.
+- This script integrates audit refresh after successful build/smoke.

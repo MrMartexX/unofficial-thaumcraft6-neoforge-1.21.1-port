@@ -503,3 +503,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Rewrote crystal cluster recipe JSONs to use explicit non-empty item ids.
 - The previous generated files accidentally used blank item values because of PowerShell hashtable property access.
+### Latest simple legacy page recipe batch
+
+- Added larger mixed recipe/catalog batch for arcane stone, arcane brick, Curiosity Band, and Helm Goggles.
+- This targets the remaining simple INFUSION_RESEARCH_LEGACY_PAGE_KEY items without touching altar/block behavior.
+- Audit refresh is integrated after build/smoke.

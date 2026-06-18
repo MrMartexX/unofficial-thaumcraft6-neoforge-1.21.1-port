@@ -203,6 +203,7 @@ public final class TCItems {
     public static final Supplier<Item> ELEMENTAL_SHOVEL = simpleItem("elemental_shovel");
     public static final Supplier<Item> ELEMENTAL_HOE = simpleItem("elemental_hoe");
     public static final Supplier<Item> THAUMIUM_FORTRESS_HELM = simpleItem("thaumium_fortress_helm");
+    public static final Supplier<Item> THAUMIUM_FORTRESS_HELM_GOGGLES = simpleItem("thaumium_fortress_helm_goggles");
     public static final Supplier<Item> THAUMIUM_FORTRESS_CHEST = simpleItem("thaumium_fortress_chest");
     public static final Supplier<Item> THAUMIUM_FORTRESS_LEGS = simpleItem("thaumium_fortress_legs");
     public static final Supplier<Item> VERDANT_HEART = simpleItem("verdant_heart");
@@ -221,6 +222,7 @@ public final class TCItems {
     public static final Supplier<Item> BAUBLE_RING = simpleItem("bauble_ring");
     public static final Supplier<Item> BAUBLE_CHARM = simpleItem("bauble_charm");
     public static final Supplier<Item> BAUBLE_RING_FANCY = simpleItem("bauble_ring_fancy");
+    public static final Supplier<Item> CURIOSITY_BAND = simpleItem("curiosity_band");
     public static final Supplier<Item> BRASS_BRACE = simpleItem("brass_brace");
     public static final Supplier<Item> THAUMIUM_HELM = simpleItem("thaumium_helm");
     public static final Supplier<Item> THAUMIUM_CHEST = simpleItem("thaumium_chest");

@@ -1,0 +1,72 @@
+{
+  "entries": [
+    {
+      "id": "thaumcraft:arcane_stone",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "ShapedRecipes",
+      "required_research": "INFUSION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:stone_arcane",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:arcane_brick",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "CRAFTING",
+      "legacy_class": "ShapedRecipes",
+      "required_research": "INFUSION",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:stone_arcane_brick",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:curiosityband",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "CURIOSITYBAND",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:curiosity_band",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:helmgoggles",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "FORTRESSMASK",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:thaumium_fortress_helm_goggles",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}
