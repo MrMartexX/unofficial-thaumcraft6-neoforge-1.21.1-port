@@ -1,0 +1,36 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "VERDANTCHARMS",
+  "instability": 5,
+  "catalyst": {
+    "item": "thaumcraft:verdant_heart"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:triple_meat_treat"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_desiderium"
+    },
+    {
+      "item": "minecraft:potion"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_aer"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "desire",
+      "amount": 80
+    },
+    {
+      "aspect": "air",
+      "amount": 80
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:verdant_heart_sustain",
+    "count": 1
+  }
+}

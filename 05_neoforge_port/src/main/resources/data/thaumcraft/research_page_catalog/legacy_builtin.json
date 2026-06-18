@@ -3432,47 +3432,6 @@
       "occurrence_count": 1
     },
     {
-      "id": "thaumcraft:verdantheart",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "VERDANTCHARMS",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:verdant_charm",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:verdantheartlife",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "VERDANTCHARMS",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:verdantheartsustain",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "VERDANTCHARMS",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:vis_crystal_aer",
       "legacy_source": "thaumcraft_catalog",
       "kind": "crucible",

@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "VERDANTCHARMS",
+  "instability": 5,
+  "catalyst": {
+    "item": "thaumcraft:bauble_charm"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:rare_earth"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_victus"
+    },
+    {
+      "item": "minecraft:milk_bucket"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_herba"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "life",
+      "amount": 60
+    },
+    {
+      "aspect": "order",
+      "amount": 30
+    },
+    {
+      "aspect": "plant",
+      "amount": 60
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:verdant_heart",
+    "count": 1
+  }
+}

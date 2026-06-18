@@ -174,3 +174,11 @@ Last updated: 2026-06-18
 
 - Added data-driven infusion JSON/catalog entries for ThaumiumFortressHelm, ThaumiumFortressChest, and ThaumiumFortressLegs.
 - This script integrates audit refresh after successful build/smoke.
+## Verdant charm infusion recipe page note
+
+- Added data-driven infusion JSON/catalog entries for VerdantHeart, VerdantHeartLife, and VerdantHeartSustain.
+- This script integrates audit refresh after successful build/smoke.
+## Verdant charm repair note
+
+- 	haumcraft:bauble_charm is now explicitly registered because VerdantHeart uses it as a catalyst.
+- Keep future recipe batch scripts checking all custom item ids before smoke.

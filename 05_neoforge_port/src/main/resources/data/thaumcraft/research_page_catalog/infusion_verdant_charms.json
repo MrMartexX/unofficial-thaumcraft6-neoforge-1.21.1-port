@@ -1,0 +1,55 @@
+{
+  "entries": [
+    {
+      "id": "thaumcraft:verdantheart",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "VERDANTCHARMS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:verdant_heart",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:verdantheartlife",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "VERDANTCHARMS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:verdant_heart_life",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    },
+    {
+      "id": "thaumcraft:verdantheartsustain",
+      "legacy_source": "THAUMCRAFT_CATALOG",
+      "kind": "INFUSION",
+      "legacy_class": "InfusionRecipe",
+      "required_research": "VERDANTCHARMS",
+      "legacy_group": "",
+      "targets": [],
+      "legacy_output": {
+        "item": "thaumcraft:verdant_heart_sustain",
+        "metadata": 0,
+        "count": 1,
+        "nbt": ""
+      },
+      "direct_reference": true,
+      "occurrence_count": 1
+    }
+  ]
+}

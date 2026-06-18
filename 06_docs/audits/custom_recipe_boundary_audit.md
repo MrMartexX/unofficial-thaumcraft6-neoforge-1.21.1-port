@@ -1,18 +1,18 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 16:33:10 +03:00
+Generated: 2026-06-18 16:42:14 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 304 |
+| Recipe JSON files scanned | 307 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 195 |
-| Missing recipe references | 228 |
-| Custom/review recipe files | 19 |
-| Blocked/review research recipe references | 19 |
+| Resolved recipe references | 198 |
+| Missing recipe references | 225 |
+| Custom/review recipe files | 22 |
+| Blocked/review research recipe references | 22 |
 | JSON parse errors | 0 |
 
 ## Boundary rule
@@ -30,7 +30,7 @@ Generated: 2026-06-18 16:33:10 +03:00
 | VANILLA_OR_STANDARD_READY | 121 |
 | ARCANE_READY | 89 |
 | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 75 |
-| CUSTOM_BLOCKED_REQUIRES_DESIGN | 19 |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | 22 |
 
 ## Recipe type distribution
 
@@ -40,7 +40,7 @@ Generated: 2026-06-18 16:33:10 +03:00
 | thaumcraft:crucible | 75 |
 | minecraft:crafting_shapeless | 70 |
 | minecraft:crafting_shaped | 51 |
-| thaumcraft:infusion | 19 |
+| thaumcraft:infusion | 22 |
 | thaumcraft:arcane_shapeless | 9 |
 
 ## Custom or review recipe files
@@ -66,6 +66,9 @@ Generated: 2026-06-18 16:33:10 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:thaumiumfortresschest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresschest.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:thaumiumfortresshelm | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresshelm.json |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:thaumiumfortresslegs | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresslegs.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:verdantheart | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheart.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:verdantheartlife | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartlife.json |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:verdantheartsustain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartsustain.json |
 
 ## Blocked or review research recipe references
 
@@ -90,6 +93,9 @@ Generated: 2026-06-18 16:33:10 +03:00
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:ThaumiumFortressChest | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[11].stages[1].recipes[1] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:ThaumiumFortressHelm | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[11].stages[1].recipes[0] |
 | CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:ThaumiumFortressLegs | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[11].stages[1].recipes[2] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:VerdantHeart | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[15].stages[1].recipes[0] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:VerdantHeartLife | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[15].stages[1].recipes[1] |
+| CUSTOM_BLOCKED_REQUIRES_DESIGN | thaumcraft:VerdantHeartSustain | thaumcraft:infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[15].stages[1].recipes[2] |
 
 ## Missing recipe-like research references
 
@@ -305,9 +311,6 @@ Generated: 2026-06-18 16:33:10 +03:00
 | thaumcraft:traveller_boots | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[7].icons[0] |
 | thaumcraft:triplemeattreatfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[3].stages[1].recipes[1] |
 | thaumcraft:verdant_charm | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[15].icons[0] |
-| thaumcraft:VerdantHeart | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[15].stages[1].recipes[0] |
-| thaumcraft:VerdantHeartLife | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[15].stages[1].recipes[1] |
-| thaumcraft:VerdantHeartSustain | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[15].stages[1].recipes[2] |
 | thaumcraft:vis_battery | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[22].icons[0] |
 | thaumcraft:vis_generator | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[19].icons[0] |
 | thaumcraft:VisAmulet | 05_neoforge_port/src/main/resources/data/thaumcraft/research/auromancy.json | $.entries[19].stages[1].recipes[0] |
@@ -473,11 +476,15 @@ Generated: 2026-06-18 16:33:10 +03:00
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresschest.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresshelm.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresslegs.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheart.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartlife.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartsustain.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/golemancy_infusion_first.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_elemental_tools.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_fortress_armor.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_fortress_masks.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_utility_first.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_verdant_charms.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json |
@@ -491,6 +498,7 @@ Generated: 2026-06-18 16:33:10 +03:00
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_fortress_armor.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_fortress_masks.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_utility_first.json |
+| InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/infusion_verdant_charms.json |
 | InfusionRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | ShapedArcane | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 

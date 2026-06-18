@@ -1,0 +1,36 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "VERDANTCHARMS",
+  "instability": 5,
+  "catalyst": {
+    "item": "thaumcraft:verdant_heart"
+  },
+  "components": [
+    {
+      "item": "minecraft:golden_apple"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_victus"
+    },
+    {
+      "item": "minecraft:potion"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_humanus"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "life",
+      "amount": 80
+    },
+    {
+      "aspect": "man",
+      "amount": 80
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:verdant_heart_life",
+    "count": 1
+  }
+}

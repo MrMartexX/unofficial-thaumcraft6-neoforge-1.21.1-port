@@ -205,6 +205,10 @@ public final class TCItems {
     public static final Supplier<Item> THAUMIUM_FORTRESS_HELM = simpleItem("thaumium_fortress_helm");
     public static final Supplier<Item> THAUMIUM_FORTRESS_CHEST = simpleItem("thaumium_fortress_chest");
     public static final Supplier<Item> THAUMIUM_FORTRESS_LEGS = simpleItem("thaumium_fortress_legs");
+    public static final Supplier<Item> VERDANT_HEART = simpleItem("verdant_heart");
+    public static final Supplier<Item> VERDANT_HEART_LIFE = simpleItem("verdant_heart_life");
+    public static final Supplier<Item> VERDANT_HEART_SUSTAIN = simpleItem("verdant_heart_sustain");
+    public static final Supplier<Item> TRIPLE_MEAT_TREAT = simpleItem("triple_meat_treat");
     public static final Supplier<Item> MASK_GRINNING_DEVIL = simpleItem("mask_grinning_devil");
     public static final Supplier<Item> MASK_ANGRY_GHOST = simpleItem("mask_angry_ghost");
     public static final Supplier<Item> MASK_SIPPING_FIEND = simpleItem("mask_sipping_fiend");
@@ -215,6 +219,7 @@ public final class TCItems {
     public static final Supplier<Item> BAUBLE_GIRDLE = simpleItem("bauble_girdle");
     public static final Supplier<Item> BAUBLE_GIRDLE_FANCY = simpleItem("bauble_girdle_fancy");
     public static final Supplier<Item> BAUBLE_RING = simpleItem("bauble_ring");
+    public static final Supplier<Item> BAUBLE_CHARM = simpleItem("bauble_charm");
     public static final Supplier<Item> BAUBLE_RING_FANCY = simpleItem("bauble_ring_fancy");
     public static final Supplier<Item> BRASS_BRACE = simpleItem("brass_brace");
     public static final Supplier<Item> THAUMIUM_HELM = simpleItem("thaumium_helm");

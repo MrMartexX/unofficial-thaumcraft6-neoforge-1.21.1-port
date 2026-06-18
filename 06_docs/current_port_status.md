@@ -486,3 +486,12 @@ The sections below are historical update notes. They should not be read as the c
 - Added Thaumium Fortress helm, chestplate, and leggings infusion recipe/page entries.
 - Added bridge item identities for thaumium armor catalysts where needed.
 - Audit refresh is integrated into this batch script by default, after build/smoke and before commit.
+### Latest verdant charm infusion recipe page batch
+
+- Added Verdant Heart, Verdant Heart of Life, and Verdant Heart of Sustenance infusion recipe/page entries.
+- Potion-specific legacy ingredients are represented by broad potion item placeholders until richer item/NBT ingredient handling is implemented.
+- Audit refresh is integrated into this batch script by default, after build/smoke and before commit.
+### Verdant charm infusion repair
+
+- Added the missing auble_charm bridge item used by the VerdantHeart infusion catalyst.
+- This fixes the server smoke datapack parse error for 	haumcraft:verdantheart.
