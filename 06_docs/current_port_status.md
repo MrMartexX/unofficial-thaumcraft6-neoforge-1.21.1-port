@@ -565,3 +565,7 @@ The sections below are historical update notes. They should not be read as the c
 - `audit-crucible-recipe-data.ps1` now validates `77/77` crucible JSON files.
 - `audit-crucible-behavior.ps1` and `server-smoke.ps1` can run against isolated world/port settings, avoiding false local failures when another dev server or client is open; server smoke now also cleans up child runServer processes started by that smoke run.
 - The current crucible behavior audit passes `12/12`, including item-entity absorption, special-result reabsorption protection, living contact damage boundaries, spill-remnants aura pollution and overflow `spillRandom`.
+## Crucible contact cooldown scope note
+
+- Moved the living-entity crucible contact damage cooldown from the singleton block instance to TCCrucibleBlockEntity.
+- This prevents one crucible position from throttling or advancing another crucible's contact damage cadence.

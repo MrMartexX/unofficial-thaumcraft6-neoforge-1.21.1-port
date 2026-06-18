@@ -201,6 +201,19 @@ public final class TCCrucibleBehaviorAudit {
                 "aspects=" + overflowCrucible.getAspects().visSize() + ", deltaFlux=" + (fluxAfterOverflow - fluxBeforeOverflow)
         ));
 
+        TCCrucibleBlockEntity contactCrucibleA = validationCrucible(level, pos.offset(6, 0, 0));
+        TCCrucibleBlockEntity contactCrucibleB = validationCrucible(level, pos.offset(7, 0, 0));
+        boolean aDamagedBeforeTenth = false;
+        for (int i = 0; i < 9; i++) {
+            aDamagedBeforeTenth |= contactCrucibleA.shouldDamageLivingContact();
+        }
+        boolean bDamagedOnFirst = contactCrucibleB.shouldDamageLivingContact();
+        boolean aDamagedOnTenth = contactCrucibleA.shouldDamageLivingContact();
+        checks.add(new Check(
+                "living_contact_delay_is_per_crucible",
+                !aDamagedBeforeTenth && !bDamagedOnFirst && aDamagedOnTenth,
+                "contact delay is stored on each TCCrucibleBlockEntity instead of the singleton block"
+        ));
         return new Report(List.copyOf(checks));
     }
 

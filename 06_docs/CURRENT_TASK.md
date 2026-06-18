@@ -243,3 +243,7 @@ Last updated: 2026-06-18
 - The current in-world crucible behavior slices are gated by `06_docs/gameplay/crucible_in_world_behavior_design.md`, `tools/audits/audit-crucible-recipe-data.ps1`, and `tools/audits/audit-crucible-behavior.ps1`.
 - `tools/audits/audit-crucible-behavior.ps1` runs against an isolated world/port by default to avoid false failures from an already open local dev server.
 - Do not expand this into flux rifts, taint spread, essentia networks, automation, item pulling radius, client particles or special alchemy side effects without a new focused slice.
+## Crucible contact cooldown scope note
+
+- Moved the living-entity crucible contact damage cooldown from the singleton block instance to TCCrucibleBlockEntity.
+- This prevents one crucible position from throttling or advancing another crucible's contact damage cadence.

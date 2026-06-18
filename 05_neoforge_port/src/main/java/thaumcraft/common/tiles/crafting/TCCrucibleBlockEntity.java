@@ -42,7 +42,8 @@ public class TCCrucibleBlockEntity extends BlockEntity {
 
     private int waterAmount;
     private short heat;
-    private long spillCounter = -100L;
+        private int livingContactDelay;
+private long spillCounter = -100L;
     private AspectList aspects = new AspectList();
 
     public TCCrucibleBlockEntity(BlockPos pos, BlockState blockState) {
@@ -122,6 +123,14 @@ public class TCCrucibleBlockEntity extends BlockEntity {
         return entity != null && entity.getPersistentData().getBoolean(SPECIAL_ITEM_MARKER);
     }
 
+    public boolean shouldDamageLivingContact() {
+        livingContactDelay++;
+        if (livingContactDelay < 10) {
+            return false;
+        }
+        livingContactDelay = 0;
+        return isBoiling();
+    }
     public void addAspectForValidation(Aspect aspect, int amount) {
         if (aspect != null && amount > 0) {
             aspects.add(aspect, amount);

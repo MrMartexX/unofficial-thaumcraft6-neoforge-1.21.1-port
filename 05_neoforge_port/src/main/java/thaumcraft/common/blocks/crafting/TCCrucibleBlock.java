@@ -33,7 +33,6 @@ import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.tiles.crafting.TCCrucibleBlockEntity;
 
 public class TCCrucibleBlock extends Block implements EntityBlock {
-    private int livingContactDelay;
 
     private static final VoxelShape SHAPE = Shapes.or(
             box(0.0D, 0.0D, 0.0D, 16.0D, 5.0D, 16.0D),
@@ -69,11 +68,7 @@ public class TCCrucibleBlock extends Block implements EntityBlock {
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof TCCrucibleBlockEntity crucible) {
             if (entity instanceof ItemEntity itemEntity) {
                 crucible.absorbItemEntity(itemEntity);
-            } else {
-                livingContactDelay++;
-                if (livingContactDelay >= 10) {
-                    livingContactDelay = 0;
-                    if (entity instanceof LivingEntity && crucible.isBoiling()) {
+            } else if (entity instanceof LivingEntity && crucible.shouldDamageLivingContact()) {
                         entity.hurt(level.damageSources().inFire(), 1.0F);
                         level.playSound(
                                 null,
@@ -85,8 +80,6 @@ public class TCCrucibleBlock extends Block implements EntityBlock {
                                 0.4F,
                                 2.0F + level.random.nextFloat() * 0.4F
                         );
-                    }
-                }
             }
         }
         super.entityInside(state, level, pos, entity);
