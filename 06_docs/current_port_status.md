@@ -404,3 +404,9 @@ The sections below are historical update notes. They should not be read as the c
 - Added bridge identities and crucible recipe/page entries for Bath Salts, Bottled Taint, Liquid Death, and Sane Soap.
 - These recipes preserve the legacy research/page ids as canonical lowercase recipe ids and keep full gameplay/fluid/block behavior deferred.
 - `liquid_death_bucket` and `flesh_block` are bridge item identities for recipe/page display until their dedicated gameplay blocks/fluids are ported.
+
+### Latest post-special-alchemy audit refresh
+
+- Refreshed recipe/page and alchemy source audits after the SPECIAL_ALCHEMY crucible recipe/page batch.
+- Use the refreshed counts to confirm the special alchemy gap is closed and select the next safe batch.
+- If alchemy crucible/special gaps are closed, avoid mixed ALCHEMY_OTHER entries until EverfullUrn, JarLabelEssence, and Thaumatorium are separated into proper item/page/machine boundaries.

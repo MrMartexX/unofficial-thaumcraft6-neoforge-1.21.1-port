@@ -1,16 +1,16 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 05:14:36 +03:00
+Generated: 2026-06-18 14:43:13 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 268 |
+| Recipe JSON files scanned | 272 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 159 |
-| Missing recipe references | 264 |
+| Resolved recipe references | 163 |
+| Missing recipe references | 260 |
 | Custom/review recipe files | 0 |
 | Blocked/review research recipe references | 0 |
 | JSON parse errors | 0 |
@@ -29,7 +29,7 @@ Generated: 2026-06-18 05:14:36 +03:00
 |---|---:|
 | VANILLA_OR_STANDARD_READY | 121 |
 | ARCANE_READY | 89 |
-| CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 58 |
+| CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 62 |
 
 ## Recipe type distribution
 
@@ -37,7 +37,7 @@ Generated: 2026-06-18 05:14:36 +03:00
 |---|---:|
 | thaumcraft:arcane_shaped | 80 |
 | minecraft:crafting_shapeless | 70 |
-| thaumcraft:crucible | 58 |
+| thaumcraft:crucible | 62 |
 | minecraft:crafting_shaped | 51 |
 | thaumcraft:arcane_shapeless | 9 |
 
@@ -72,11 +72,9 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | thaumcraft:ArcaneBore | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[17].stages[1].recipes[0] |
 | thaumcraft:Banners | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[0].stages[0].recipes[0] |
 | thaumcraft:bath_salts | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[7].icons[0] |
-| thaumcraft:BathSalts | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[7].stages[1].recipes[0] |
 | thaumcraft:baubles_stuff | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[0].stages[0].recipes[1] |
 | thaumcraft:BootsTraveller | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[7].stages[1].recipes[0] |
 | thaumcraft:bottle_taint | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[6].icons[0] |
-| thaumcraft:BottleTaint | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[6].stages[0].recipes[0] |
 | thaumcraft:brain | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[1].stages[0].required_item[0] |
 | thaumcraft:brass_stuff | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[1].recipes[1] |
 | thaumcraft:brass_stuff | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[2].recipes[1] |
@@ -161,7 +159,6 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | thaumcraft:LampFertility | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[13].stages[1].recipes[0] |
 | thaumcraft:LampGrowth | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[12].stages[1].recipes[0] |
 | thaumcraft:leather | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[4].stages[0].required_craft[1] |
-| thaumcraft:LiquidDeath | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[5].stages[1].recipes[0] |
 | thaumcraft:log_greatwood | 05_neoforge_port/src/main/resources/data/thaumcraft/research/golemancy.json | $.entries[2].icons[0] |
 | thaumcraft:MaskAngryGhost | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[2] |
 | thaumcraft:MaskGrinningDevil | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[12].stages[1].recipes[1] |
@@ -196,7 +193,6 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[0].recipes[0] |
 | thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[1].recipes[1] |
 | thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[2].recipes[1] |
-| thaumcraft:SaneSoap | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[8].stages[1].recipes[0] |
 | thaumcraft:sanity_soap | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[8].icons[0] |
 | thaumcraft:sapling_greatwood | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[6].icons[0] |
 | thaumcraft:sapling_silverwood | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[6].icons[1] |
@@ -326,6 +322,8 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | crucible | 05_neoforge_port/src/main/resources/data/minecraft/tags/block/mineable/pickaxe.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/loot_table/blocks/crucible.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/alumentum.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bathsalts.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bottletaint.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/brassingot.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/essentiasmelter.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_clay.json |
@@ -338,6 +336,7 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_string.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_tallow.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_web.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/liquiddeath.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/metal_purification_cinnabar.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/metal_purification_copper.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/metal_purification_gold.json |
@@ -347,6 +346,7 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/metal_purification_tin.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/nitor.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/research_bridge/crucible.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sanesoap.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumingot.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/vis_crystal_aer.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/vis_crystal_alienis.json |
@@ -388,10 +388,12 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/hedge_alchemy.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/metal_purification.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/special_alchemy.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json |
 | CrucibleRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/hedge_alchemy.json |
 | CrucibleRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | CrucibleRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/metal_purification.json |
+| CrucibleRecipe | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/special_alchemy.json |
 | fake | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/legacy_builtin.json |
 | fake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json |
 | fake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json |

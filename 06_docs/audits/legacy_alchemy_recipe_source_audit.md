@@ -1,13 +1,13 @@
 # Legacy Alchemy Recipe Source Audit
 
-Generated: 2026-06-18 04:51:02 +03:00
+Generated: 2026-06-18 14:43:27 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Alchemy missing recipe-page references from current audit | 22 |
-| References with at least one legacy source hit | 22 |
+| Alchemy missing recipe-page references from current audit | 3 |
+| References with at least one legacy source hit | 3 |
 | References without direct source hit | 0 |
 | Legacy Java files scanned | 902 |
 | Legacy API/pattern source hits | 361 |
@@ -16,12 +16,7 @@ Generated: 2026-06-18 04:51:02 +03:00
 
 | Family | Count |
 |---|---:|
-| ALCHEMY_OTHER | 7 |
-| BRASS_ALCHEMY | 5 |
-| SPECIAL_ALCHEMY | 4 |
-| BASIC_ALCHEMY | 3 |
-| NITOR | 2 |
-| ALUMENTUM | 1 |
+| ALCHEMY_OTHER | 3 |
 
 ## Legacy recipe API/pattern hit distribution
 
@@ -42,25 +37,6 @@ Generated: 2026-06-18 04:51:02 +03:00
 | ALCHEMY_OTHER | thaumcraft:EverfullUrn | 35 | $.entries[20].stages[1].recipes[0] |
 | ALCHEMY_OTHER | thaumcraft:JarLabelEssence | 1 | $.entries[11].stages[0].recipes[4] |
 | ALCHEMY_OTHER | thaumcraft:Thaumatorium | 186 | $.entries[18].stages[1].recipes[0] |
-| ALCHEMY_OTHER | thaumcraft:thaumium_stuff | 2 | $.entries[2].stages[2].recipes[3] |
-| ALCHEMY_OTHER | thaumcraft:thaumiumingot | 8 | $.entries[2].stages[1].recipes[2] |
-| ALCHEMY_OTHER | thaumcraft:thaumiumingot | 8 | $.entries[2].stages[2].recipes[2] |
-| ALCHEMY_OTHER | thaumcraft:viscrystalgroup | 3 | $.entries[0].stages[0].recipes[2] |
-| ALUMENTUM | thaumcraft:alumentum | 97 | $.entries[1].stages[1].recipes[0] |
-| BASIC_ALCHEMY | thaumcraft:tallowcandles | 12 | $.entries[4].stages[1].recipes[1] |
-| BASIC_ALCHEMY | thaumcraft:tallowcandles | 12 | $.entries[4].stages[2].recipes[1] |
-| BASIC_ALCHEMY | thaumcraft:tallowcandles | 12 | $.entries[4].stages[3].recipes[1] |
-| BRASS_ALCHEMY | thaumcraft:brass_stuff | 6 | $.entries[2].stages[1].recipes[1] |
-| BRASS_ALCHEMY | thaumcraft:brass_stuff | 6 | $.entries[2].stages[2].recipes[1] |
-| BRASS_ALCHEMY | thaumcraft:brassingot | 15 | $.entries[2].stages[0].recipes[0] |
-| BRASS_ALCHEMY | thaumcraft:brassingot | 15 | $.entries[2].stages[1].recipes[0] |
-| BRASS_ALCHEMY | thaumcraft:brassingot | 15 | $.entries[2].stages[2].recipes[0] |
-| NITOR | thaumcraft:nitor | 249 | $.entries[0].stages[0].recipes[0] |
-| NITOR | thaumcraft:nitorgroup | 3 | $.entries[0].stages[0].recipes[1] |
-| SPECIAL_ALCHEMY | thaumcraft:BathSalts | 50 | $.entries[7].stages[1].recipes[0] |
-| SPECIAL_ALCHEMY | thaumcraft:BottleTaint | 51 | $.entries[6].stages[0].recipes[0] |
-| SPECIAL_ALCHEMY | thaumcraft:LiquidDeath | 39 | $.entries[5].stages[1].recipes[0] |
-| SPECIAL_ALCHEMY | thaumcraft:SaneSoap | 33 | $.entries[8].stages[1].recipes[0] |
 
 ## Representative legacy source hits
 
@@ -288,36 +264,6 @@ Generated: 2026-06-18 04:51:02 +03:00
 | thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/changelog.txt | 69 | - improved thaumatorium GUI |
 | thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/changelog.txt | 156 | - fixed thaumatorium crafting that involves the same catalyst being able to craft multiple different results (for example vis crystal recipes) |
 | thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/changelog.txt | 164 | - fix thaumatorium, infusion crafting and golem builder not working |
-| thaumcraft:thaumium_stuff | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 375 | ResourceLocation thaumiumGroup = new ResourceLocation("thaumcraft", "thaumium_stuff"); |
-| thaumcraft:thaumium_stuff | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 57 | "thaumcraft:thaumiumingot","thaumcraft:thaumium_stuff"] |
-| thaumcraft:thaumiumingot | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 142 | ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:thaumiumingot"), new CrucibleRecipe("METALLURGY@2", new ItemStack(ItemsTC.ingots, 1, 0), "ingotIron", new AspectList().merge(Aspect.MAGIC, 5).merge(Aspect. ... |
-| thaumcraft:thaumiumingot | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 142 | ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:thaumiumingot"), new CrucibleRecipe("METALLURGY@2", new ItemStack(ItemsTC.ingots, 1, 0), "ingotIron", new AspectList().merge(Aspect.MAGIC, 5).merge(Aspect. ... |
-| thaumcraft:thaumiumingot | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 390 | oreDictRecipe("thaumiumingotstoblock", thaumiumGroup, new ItemStack(BlocksTC.metalBlockThaumium), new Object[] { "###", "###", "###", '#', new ItemStack(ItemsTC.ingots, 1, 0) }); |
-| thaumcraft:thaumiumingot | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 390 | oreDictRecipe("thaumiumingotstoblock", thaumiumGroup, new ItemStack(BlocksTC.metalBlockThaumium), new Object[] { "###", "###", "###", '#', new ItemStack(ItemsTC.ingots, 1, 0) }); |
-| thaumcraft:thaumiumingot | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 51 | "recipes": ["thaumcraft:brassingot","thaumcraft:brass_stuff","thaumcraft:thaumiumingot"], |
-| thaumcraft:thaumiumingot | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 51 | "recipes": ["thaumcraft:brassingot","thaumcraft:brass_stuff","thaumcraft:thaumiumingot"], |
-| thaumcraft:thaumiumingot | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 57 | "thaumcraft:thaumiumingot","thaumcraft:thaumium_stuff"] |
-| thaumcraft:thaumiumingot | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 57 | "thaumcraft:thaumiumingot","thaumcraft:thaumium_stuff"] |
-| thaumcraft:viscrystalgroup | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 128 | ResourceLocation visCrystalGroup = new ResourceLocation("thaumcraft:viscrystalgroup"); |
-| thaumcraft:viscrystalgroup | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 131 | ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:vis_crystal_" + aspect.getTag()), new CrucibleRecipe("BASEALCHEMY", ThaumcraftApiHelper.makeCrystal(aspect), "nuggetQuartz", new AspectList().add(aspect, 2 ... |
-| thaumcraft:viscrystalgroup | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 13 | "recipes": ["thaumcraft:nitor","thaumcraft:nitorgroup","thaumcraft:viscrystalgroup", |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/api/items/ItemsTC.java | 21 | public static Item alumentum; |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/client/fx/FXDispatcher.java | 71 | public void drawAlumentum(float x, float y, float z, float vx, float vy, float vz, float r, float g, float b, float alpha, float scale) { |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/config/ConfigEntities.java | 63 | import thaumcraft.common.entities.projectile.EntityAlumentum; |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/config/ConfigEntities.java | 88 | EntityRegistry.registerModEntity(new ResourceLocation("thaumcraft", "Alumentum"), EntityAlumentum.class, "Alumentum", id++, Thaumcraft.instance, 64, 20, true); |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/config/ConfigItems.java | 95 | import thaumcraft.common.items.consumables.ItemAlumentum; |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/config/ConfigItems.java | 205 | iForgeRegistry.register((ItemsTC.alumentum = new ItemAlumentum())); |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 140 | ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:alumentum"), new CrucibleRecipe("ALUMENTUM", new ItemStack(ItemsTC.alumentum), new ItemStack(Items.COAL, 1, 32767), new AspectList().merge(Aspect.ENERGY, 1 ... |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 229 | ThaumcraftApi.addArcaneCraftingRecipe(new ResourceLocation("thaumcraft:MatrixCost"), new ShapedArcaneRecipe(ConfigRecipes.defaultGroup, "INFUSIONBOOST", 500, new AspectList().add(Aspect.AIR, 1).add(Aspect.WATER, 1).add(A ... |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 368 | ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:CausalityCollapser"), new InfusionRecipe("RIFTCLOSER", new ItemStack(ItemsTC.causalityCollapser), 8, new AspectList().add(Aspect.ELDRITCH, 50).add( ... |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/entities/projectile/EntityAlumentum.java | 10 | public class EntityAlumentum extends EntityThrowable |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/entities/projectile/EntityAlumentum.java | 12 | public EntityAlumentum(World par1World) { |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/entities/projectile/EntityAlumentum.java | 16 | public EntityAlumentum(World par1World, EntityLivingBase par2EntityLiving) { |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/entities/projectile/EntityAlumentum.java | 20 | public EntityAlumentum(World par1World, double par2, double par4, double par6) { |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/entities/projectile/EntityAlumentum.java | 33 | FXDispatcher.INSTANCE.drawAlumentum((float)(prevPosX + (posX - prevPosX) * coeff), (float)(prevPosY + (posY - prevPosY) * coeff) + height / 2.0f, (float)(prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() ... |
-| thaumcraft:alumentum | ALUMENTUM | src/main/java/thaumcraft/common/entities/projectile/EntityCausalityCollapser.java | 37 | FXDispatcher.INSTANCE.drawAlumentum((float)(prevPosX + (posX - prevPosX) * coeff), (float)(prevPosY + (posY - prevPosY) * coeff) + height / 2.0f, (float)(prevPosZ + (posZ - prevPosZ) * coeff), 0.0125f * (rand.nextFloat() ... |
-
-Representative table truncated to first 250 source hits out of 790.
 
 ## Legacy recipe API/pattern hit samples
 
