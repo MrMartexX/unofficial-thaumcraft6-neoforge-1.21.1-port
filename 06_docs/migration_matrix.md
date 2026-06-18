@@ -2,7 +2,7 @@
 
 This document maps the Thaumcraft 6 Forge 1.12.2 codebase to the staged NeoForge 1.21.1 port.
 
-For current implementation status, always read `06_docs/current_port_status.md` together with this matrix. This matrix defines scope, sequencing, and risk. The status document records what the repository currently contains.
+For current implementation status, always read `06_docs/current_port_status.md` together with this matrix. For the active task queue, read `06_docs/CURRENT_TASK.md`. This matrix defines scope, sequencing, and risk. The status document records what the repository currently contains.
 
 ## Source baseline
 
@@ -13,7 +13,9 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 | API reference | `04_api_reference/thaumcraft-api-master` |
 | NeoForge target project | `05_neoforge_port` |
 | Main migration guide | `06_docs/NeoForge_legacy_migration_guide.md` |
+| Current task queue | `06_docs/CURRENT_TASK.md` |
 | Current implementation status | `06_docs/current_port_status.md` |
+| Documentation index | `06_docs/documentation_index.md` |
 | Subsystem inventory | `06_docs/subsystem_inventory.md` |
 | Porting order | `06_docs/porting_order.md` |
 | Creative tab reference | `06_docs/creative_tab_order_reference.md` |
@@ -41,7 +43,20 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 | NeoForge | `21.1.228` |
 | Java | `21` |
 | Mod id | `thaumcraft` |
-| Project state | Gate 0 complete enough to continue; Gate 1 and early Gate 2 identity work are in progress; active resources have been runtime-audited; original legacy asset corpus is imported as reference/base material; active candle ids are now legacy `candle_<color>` ids, active tube ids are now legacy `tube_*` underscore ids, and smelter auxiliary placeholder ids are now legacy `smelter_aux`/`smelter_vent` ids. Gate 3 aspect core/API slice has started with parity validation, OreDictionary-to-tag audit, generateTags audit, detailed legacy runtime logic audit, mapped runtime parity dump harness, safe current common tag resources, exact legacy compatibility tags, conservative vanilla seeds, vanilla material tag bridges, ore-derived 1.21 raw materials, reload-safe data-driven exact/tag/manual assignments, generated cache for current `minecraft:*`/`thaumcraft:*` standard crafting outputs plus current exact arcane recipe outputs, legacy stack-sensitive bonus rules, component-aware potion/enchanted-book behavior, spawn-egg/firework/infested no-aspect parity, documented elder-guardian/zombie-villager living-mob policy corrections, audited tag-backed fallback, exact `rare_earth` seed for current arcane ingredients, and server-data-load tag validation. Current comparable aspect parity is `1139/1139`; current comparable item-level scan parity is `1139/1139`; current comparable entity-level scan report has `83/85` parity-ok rows plus `2` expected modern entity policy rows. Gate 4 has a narrow research table BlockEntity/menu/screen/action-result boundary, GUI-ready player knowledge sync, the first vanilla theorycraft-aid family for bookshelves, enchanting tables and beacons, safe Eldritch aids for glyphed stone plus vanilla Nether/End portals, first basic block aids for crucible/arcane workbench/infusion matrix/Focal Manipulator/golem press, first Artifice, Basic Auromancy, Basic Golemancy and safe Eldritch item/progression cards, `CardInfuse`, `CardAwareness`, `CardScripting`, and legacy-model-backed table-top renderer; full theorycraft gameplay is still incomplete. Gate 6 has started with a dedicated arcane recipe type/serializers, exact `thaumometer`, `vis_resonator`, `workbenchcharger`, `goggles`, `mechanism_simple`, `mechanism_complex`, `wand_workbench`/Focal Manipulator, `caster_basic`, `enchantedfabric`, `mirrorglass`, `filter`, `morphicresonator`, `essentiasmelter`, and `infusionmatrix` arcane fixtures, exact `plateIron`, `plateBrass`, `plateThaumium`, `ingotGold`, `ingotBrass`, `ingotThaumium`, `stickWood`, and `nitor` tag bridges, exact normal `brassplate`/`thaumiumplate` fixtures, server-authored arcane Thaumonomicon page snapshots, the first Arcane Workbench BlockEntity/menu/server crafting path, server-owned base/discounted cost, aura and crystal-slot GUI feedback, missing-vis ghost output, first player vis-discount service, Workbench Charger 3 x 3 aura query/drain behavior, server behavior audit coverage for matrix, crystals, vis, fallback, consumption, discount, Charger, ghost output and menu feedback, and current arcane recipe-derived aspect generation; filter/resonator behavior, final Workbench visual parity, full equipment/Curios discount integration, and remaining recipe imports remain blocked. Brain-in-a-Jar, Crimson portal, Basic Eldritch and Dragon Egg theorycraft paths remain deferred/reference-only according to their legacy registration and missing subsystem dependencies. |
+| Project state | See "Current Project State Snapshot" below. |
+
+## Current Project State Snapshot
+
+This snapshot is extracted from the old long `Project state` table cell so the target baseline remains readable. Detailed status still lives in `06_docs/current_port_status.md`.
+
+- Gate 0 is complete enough to continue: the NeoForge module, mod id, Java 21 setup, and client/server bootstrap exist.
+- Gate 1 and early Gate 2 identity work are in progress: active resources are runtime-audited, legacy asset corpus is imported as reference/base material, and public ids for candles, tubes, and smelter auxiliary placeholders have been realigned to legacy names.
+- Gate 3 is in progress: aspects have parity validation, OreDictionary-to-tag audit coverage, runtime parity dumps, data-driven assignments, stack-sensitive bonuses, component-aware potion/enchanted-book behavior, spawn-egg/firework/infested parity exclusions, and current generated cache support for standard plus current exact arcane outputs.
+- Current comparable parity baseline: item aspects `1139/1139`, item-level scans `1139/1139`, and entity scans `83/85` parity-ok plus `2` documented expected modern-policy rows.
+- Gate 4 is in progress: research table BlockEntity/menu/screen/action-result boundary, GUI-ready knowledge sync, early theorycraft aids/cards, minimal warp storage bridge, and legacy-model-backed table renderer exist; full theorycraft gameplay is still incomplete.
+- Gate 6 is in progress: arcane recipe type/serializers, selected exact arcane fixtures, tag bridges, normal plate fixtures, Arcane Workbench server crafting/menu feedback, Workbench Charger aura behavior, server behavior audit coverage, and current arcane recipe-derived aspect generation exist.
+- The `thaumcraft:crucible` serializer/page-data boundary exists for HEDGE_ALCHEMY, METAL_PURIFICATION, Alumentum, Nitor, Brass/Thaumium Ingots, and vis crystals, but in-world crucible behavior remains deferred.
+- Brain-in-a-Jar, Crimson portal, Basic Eldritch, Dragon Egg theorycraft, remaining custom entities, full essentia/infusion behavior, and broad render/worldgen systems remain deferred/reference-only until their dependencies are designed.
 
 ## Purpose
 
@@ -153,11 +168,11 @@ Active registered content cleanup note: `amber`, `quicksilver`, `fabric`, `scrib
 
 ## Immediate next work
 
-1. Read `06_docs/current_port_status.md`, `06_docs/runtime_asset_audit.md`, `06_docs/aspects_design.md`, `06_docs/aspect_legacy_runtime_logic_audit.md`, and `06_docs/aspect_parity_comparison_harness.md`.
-2. Re-run local build from `05_neoforge_port` after each change batch.
-3. Keep the mapped dump-based aspect parity harness at `0` real `PORT_GAP_*` buckets before treating current aspect coverage as safe for gameplay consumers.
-4. Keep the scan dump comparers at `1139/1139` comparable item rows and keep entity scan diffs at `0` actionable gaps before wiring Thaumometer gameplay mutation.
-5. Use the next client visual pass to confirm the fixed active item texture paths and review creative tab order.
-6. Define the policy for broad 1.21.1 vanilla/modded recipe-derived aspects before generating values for unrelated new content.
-7. Continue vanilla aspect changes only from exact `ConfigAspects` assignments, audited legacy OreDictionary-to-tag bridges, validated crafting generation, or documented 1.21-only manual categories.
-8. Do not expand aura beyond the current saved-data/query/debug-command/autogenerated chunk state core, or expand research, custom recipes, BlockEntities, networking, GUI, in-world crucible/alchemy, or worldgen without a design note and a focused validation path.
+This matrix is not the live task queue. For current priorities, read `06_docs/CURRENT_TASK.md`.
+
+Current rule of thumb:
+
+1. Keep build, dedicated server smoke, page catalog audits, protocol audits, and relevant parity exporters green after each batch.
+2. Pick the next implementation slice by audited dependency family, not by copying whole legacy packages.
+3. Keep bridge/placeholder behavior explicitly marked until the owning subsystem is implemented.
+4. Do not expand in-world crucible, infusion, essentia transport, broad worldgen, broad rendering, or integrations without a focused design note and validation path.

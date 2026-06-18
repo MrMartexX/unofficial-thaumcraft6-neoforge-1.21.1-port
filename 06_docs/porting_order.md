@@ -15,6 +15,27 @@ This document defines a staged porting order. It is not an implementation plan f
 - Avoid porting GUI/rendering/worldgen early; they depend on stable registries, data models, and sync.
 - Some requested stages are intentionally split into skeleton and completion work. For example, GUI can be scaffolded before final networking, but cannot be considered complete until payloads are stable.
 
+## Stage Status Snapshot
+
+This table is a roadmap snapshot, not the live task queue. Use `06_docs/CURRENT_TASK.md` for current priorities and `06_docs/current_port_status.md` for detailed implementation state.
+
+| Stage | Status | Current note |
+|---|---|---|
+| Stage 1. Minimal Launch | Done | Client and dedicated server bootstrap exist and remain guarded by build/server smoke checks. |
+| Stage 2. Items / Materials | In progress | Identity, bridge items, selected materials, models, lang, tags and creative ordering are active; many item behaviors remain deferred. |
+| Stage 3. Blocks / Basic Resources | In progress | Basic blocks, candles, tubes, smelter identities, tables, Arcane Workbench and resource coverage are started; broad machine behavior is not complete. |
+| Stage 4. Aspects | In progress | Core aspect model, item/entity assignments, parity harnesses and current generated cache are active; gameplay-heavy consumers remain staged. |
+| Stage 5. Aura | In progress | Server-side saved data, chunk initialization, update loop, debug commands and Workbench Charger aura usage exist; HUD/FX/rifts/consumers remain deferred. |
+| Stage 6. Research | In progress | Data/progression/page-catalog core, scan knowledge, research table slice and first Thaumonomicon flow exist; full UI/search/warp polish remains blocked. |
+| Stage 7. Crafting | In progress | Vanilla fixtures, exact arcane recipes, Arcane Workbench behavior, and crucible recipe/page data are active; in-world crucible, infusion and remaining recipe families are deferred. |
+| Stage 8. Tile Entities | In progress | Research Table and Arcane Workbench BlockEntity slices exist; broad machine ticking and essentia-capable machines remain deferred. |
+| Stage 9. GUI | In progress | Research Table, Arcane Workbench and first Thaumonomicon screens exist as functional slices; final visual parity and recipe drilldown remain incomplete. |
+| Stage 10. Networking | In progress | Aura, knowledge, research table and Thaumonomicon payloads exist with server validation; future gameplay payloads need subsystem-specific design. |
+| Stage 11. Entities / Golems | Deferred | Vanilla/entity scan parity is handled; custom Thaumcraft entities, golems, AI and renderers are not started. |
+| Stage 12. Worldgen | In progress | Sapling-grown Greatwood/Silverwood behavior exists; biome/world placement and structures are not started. |
+| Stage 13. Rendering / Particles | In progress | Thaumometer effects, selected FX scaffolding and narrow table renderer exist; broad render system/BEWLR/shader work remains high risk. |
+| Stage 14. Integrations | Deferred | Optional accessory/recipe-viewer integrations are intentionally held until core systems stabilize. |
+
 ## Stage 1. Minimal Launch
 
 **Goal**

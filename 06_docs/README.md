@@ -9,15 +9,17 @@ This folder is the main documentation area for the Thaumcraft 6 -> NeoForge 1.21
 3. [Current port status](current_port_status.md) - current implementation status and document priority list.
 4. [Migration matrix](migration_matrix.md) - staged gates, subsystem scope and risk rules.
 5. [Porting order](porting_order.md) - staged roadmap.
-6. [Legacy FX engine notes](legacy_fx_engine.md) - legacy FX/rendering notes.
+6. [Documentation index](documentation_index.md) - document roles, cleanup rules and future folder structure.
+7. [Legacy FX engine notes](legacy_fx_engine.md) - legacy FX/rendering notes.
 
 ## Core migration references
 
 - [Current port status](current_port_status.md)
 - [Migration matrix](migration_matrix.md)
 - [Porting order](porting_order.md)
+- [Documentation index](documentation_index.md)
 - [Subsystem inventory](subsystem_inventory.md)
-- [Legacy migration guide] (NeoForge_legacy_migration_guide.md)
+- [Legacy migration guide](NeoForge_legacy_migration_guide.md)
 
 ## Data and aspect references
 
@@ -54,6 +56,9 @@ This folder is the main documentation area for the Thaumcraft 6 -> NeoForge 1.21
 
 ## How to keep this folder usable
 
+- Treat [Current task](CURRENT_TASK.md) as the only live task queue.
+- Treat [Current port status](current_port_status.md) as the state snapshot plus changelog.
+- Treat [Documentation index](documentation_index.md) as the file-role map and cleanup plan.
 - Keep stable planning, decisions, migration notes and curated audits here.
 - Keep reusable scripts under `../tools/`.
 - Keep generated/local reports under `../tools/reports/local/` unless they are intentionally curated.
@@ -63,8 +68,12 @@ This folder is the main documentation area for the Thaumcraft 6 -> NeoForge 1.21
 
 ```text
 06_docs/
-  audits/      Curated audit summaries worth keeping.
-  decisions/   Short architecture or parity decisions.
-  migration/   Focused migration/API notes.
-  references/  Small reference notes.
+  audits/      Curated audit summaries worth keeping. Already active.
+  data/        Future home for aspects/tags/generated-cache docs.
+  research/    Future home for research/scanning/Thaumonomicon docs.
+  crafting/    Future home for recipe/page/crafting docs.
+  rendering/   Future home for FX/model/overlay visual parity docs.
+  raw_legacy/  Future home for large raw extracts and CSV/text evidence.
 ```
+
+Do not move existing files into these proposed folders until references are checked and the move is recorded in [Documentation index](documentation_index.md).

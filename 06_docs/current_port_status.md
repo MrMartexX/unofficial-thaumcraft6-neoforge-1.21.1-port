@@ -3,39 +3,78 @@
 Last reviewed branch: `main`
 Last reviewed checkpoint: `2026-06-18` base alchemy/metallurgy crucible recipe-page boundary
 Reviewed target module: `05_neoforge_port`
-Working tree note: scanning/knowledge work is in progress; aspect, item-level scan, and entity-level scan parity dumps are clean for all comparable runtime keys. Thaumometer scan-key mutation and legacy-shaped client highlight/overlay behavior are active for the current predicate layer. The research-table/scribing-tools slice now includes storage, conversion, the first modern menu/screen boundary, server-owned theory data, validated table action payloads, server action-result screen refresh, legacy-asset card-sheet choice rendering, the first vanilla research-aid family for bookshelves, enchanting tables and beacons, safe Eldritch aids for glyphed stone plus vanilla Nether/End portals, the first basic block aids for crucible/arcane workbench/infusion matrix/Focal Manipulator/golem press, the first Artifice, Basic Auromancy, Basic Golemancy and safe Eldritch theory cards, `CardInfuse`, `CardScripting`, `CardAwareness`, a minimal server-side warp storage bridge for current warp-side-effect cards, research bridge recipes for currently resolvable legacy requirements, current active resource/mining-tag cleanup, a legacy-model-backed table-top renderer for scroll/inkwell/quill, and the first server-authoritative Arcane Workbench crafting path plus server-owned base/discounted cost, aura, crystal GUI feedback, missing-vis ghost output, first player vis-discount service, Workbench Charger 3 x 3 aura behavior, and exact `thaumometer`, `vis_resonator`, `workbenchcharger`, `goggles`, `mechanism_simple`, `mechanism_complex`, `wand_workbench` (Focal Manipulator), `caster_basic`, `enchantedfabric`, `mirrorglass`, `filter`, `morphicresonator`, `essentiasmelter`, and `infusionmatrix` recipes with passing server runtime audits. Current arcane recipe-derived aspect generation is active for the imported `TCArcaneRecipe` family and reload-validates `filter` and `morphic_resonator` generated values including the legacy `praecantatio` vis bonus. Latest transport recipe work replaces duplicated caster-shaped placeholder JSONs for the `TUBES` family. Latest alchemy/essentia bridge recipe cleanup replaces duplicated caster-shaped placeholder JSONs for Alembic, Alchemical Construct, Bellows, auxiliary smelter parts, essentia transport endpoints, and Centrifuge. Latest utility bridge recipe cleanup replaces duplicated caster-shaped placeholder JSONs for Paving Stones, Arcane Lamp, Levitator, Redstone Relay, and Arcane Ear. Latest early utility recipe cleanup replaces duplicated caster-shaped placeholder JSONs for Activator Rail, Recharge Pedestal, Seal Blank, and fixes Arcane Ear Toggle to the legacy Arcane Ear plus lever conversion. Latest infusion-support recipe cleanup replaces duplicated caster-shaped placeholder JSONs for Dioptra, Hungry Chest, Matrix Motion, Matrix Cost, and Arcane Pedestal. Latest pedestal bridge recipe cleanup replaces duplicated caster-shaped placeholder JSONs for Ancient Pedestal and Eldritch Pedestal after confirming the modern slab/stone block item IDs. Latest WARDEDJARS bridge recipe cleanup replaces duplicated caster-shaped placeholder JSONs for Warded Jar and Void Jar; Void Jar special legacy recipe behavior remains deferred. Latest artifice utility recipe cleanup replaces duplicated caster-shaped placeholder JSONs for Arcane Spa, Potion Sprayer, and Pattern Crafter. Latest vis/flux/stability bridge recipe cleanup replaces duplicated caster-shaped placeholder JSONs for Vis Battery, Condenser, Condenser Lattice, Redstone Inlay, and Stabilizer. Latest Vis Generator bridge recipe cleanup replaces the duplicated caster-shaped placeholder JSON, mapping legacy nugget meta 10 to the existing `thaumcraft:rare_earth` bridge item. Latest Grapple Gun bridge recipe cleanup replaces duplicated caster-shaped placeholder JSONs for Grapple Gun Tip, Spool, and final Grapple Gun, reusing the existing rare_earth bridge item for legacy nugget meta 10. Latest banner bridge recipe cleanup replaces duplicated caster-shaped placeholder JSONs for all 16 Thaumcraft banner color variants using the legacy BASEINFUSION pattern and modern wool IDs. Latest Focus Pouch bridge recipe cleanup replaces the duplicated caster-shaped placeholder JSON, mapping legacy baubles metadata 2 to the existing bauble_girdle bridge item. Latest mind/turret bridge recipe cleanup replaces duplicated caster-shaped placeholders for Mind Clockwork, Mnemonic Matrix, and Automated Crossbow; Advanced Crossbow remains deferred until the legacy mind metadata 1 identity is bridged. Remaining arcane recipe placeholder audit now excludes caster_basic as a known exact legacy false positive and documents advancedcrossbow/advalchemyconstruct as deferred until missing legacy metadata identities are bridged. Latest bridge identity cleanup adds explicit mind metadata 1 and primordial pearl bridge items, then resolves Advanced Crossbow and Advanced Alchemical Construct recipe placeholders. Added recipe registry ID audit tooling to verify recipe JSON item/result references against local Thaumcraft item and block registry identities. Recipe registry ID audit parser now includes TCItems.simpleItem registrations, eliminating false missing reports for active simple item IDs. Recipe registry ID audit tag cleanup adds local candle_whites and legacy blockGlass item tags so recipe tag references resolve locally. Recipe cleanup verification is now documented as clean for arcane placeholder recipes and local recipe registry/tag ID resolution. Dedicated server smoke found invalid uppercase legacy tag ResourceLocations; blockGlass, nuggetBrass, and nuggetQuicksilver were rewritten to lowercase snake_case tags and audit validation was extended. Latest bridge recipe cleanup replaces duplicated caster-shaped placeholder JSONs for robe, sanity checker, and golem module recipe outputs with legacy-derived `Resonator`, `Tube`, `TubeValve`, `TubeFilter`, `TubeRestrict`, `TubeOneway`, and `TubeBuffer` arcane recipes. It also adds flattened `brass_nugget` and `quicksilver_nugget` bridge identities for legacy `nuggetBrass` and `nuggetQuicksilver` recipe inputs. Latest visual work adjusted charger/nitor/creative-tab resources and cleaned the active `smelter_basic` model texture path; fresh in-game visual review remains separate from this recipe cleanup. Latest base alchemy/metallurgy batch expands the `thaumcraft:crucible` data/page boundary with Alumentum, Nitor, Brass Ingot, Thaumium Ingot and all 37 vis-crystal recipes, plus lowercase legacy OreDictionary catalyst tag bridges; in-world crucible behavior remains deferred.
+
+## State Snapshot
+
+This section records the current repository state. The lower "Changelog Notes" section records how the project reached this state.
+
+### Active parity baseline
+
+- Aspect, item-level scan, and entity-level scan parity dumps are clean for all comparable runtime keys.
+- Thaumometer scan-key mutation and legacy-shaped client highlight/overlay behavior are active for the current predicate layer.
+- Current comparable item aspect parity is `1139/1139`; item-level scan parity is `1139/1139`; entity scan parity has `83/85` parity-ok rows plus `2` documented expected modern entity-policy rows.
+
+### Research, scanning and theorycraft
+
+- The research-table/scribing-tools slice includes storage, conversion, the first modern menu/screen boundary, server-owned theory data, validated table action payloads, server action-result screen refresh, and legacy-asset card-sheet choice rendering.
+- Current research aids/cards include the first vanilla bookshelf/enchanting-table/beacon family, safe Eldritch glyphed-stone/Nether-portal/End-portal aids, basic block aids for crucible/arcane workbench/infusion matrix/Focal Manipulator/golem press, first Artifice, Basic Auromancy, Basic Golemancy, safe Eldritch theory cards, `CardInfuse`, `CardScripting`, and `CardAwareness`.
+- Minimal server-side warp storage exists only as a bridge for current warp-side-effect cards.
+
+### Crafting, recipes and page data
+
+- The first server-authoritative Arcane Workbench crafting path exists with server-owned base/discounted cost, aura, crystal GUI feedback, missing-vis ghost output, first player vis-discount service, and Workbench Charger 3 x 3 aura behavior.
+- Exact active arcane recipes include `thaumometer`, `vis_resonator`, `workbenchcharger`, `goggles`, `mechanism_simple`, `mechanism_complex`, `wand_workbench`/Focal Manipulator, `caster_basic`, `enchantedfabric`, `mirrorglass`, `filter`, `morphicresonator`, `essentiasmelter`, and `infusionmatrix`, with passing server runtime audits.
+- Arcane recipe-derived aspect generation is active for the current `TCArcaneRecipe` family and reload-validates `filter` plus `morphic_resonator`, including the legacy `praecantatio` vis bonus.
+- The `thaumcraft:crucible` serializer/page-data boundary covers HEDGE_ALCHEMY, METAL_PURIFICATION, Alumentum, Nitor, Brass Ingot, Thaumium Ingot, all 37 vis-crystal recipes, and lowercase legacy OreDictionary catalyst tag bridges.
+
+### Bridge recipe cleanup and identity alignment
+
+- Recent bridge cleanup replaced duplicated caster-shaped placeholder JSONs across transport, alchemy/essentia, utilities, infusion support, pedestal/jar/artifice/vis/stability/grapple/banner/focus-pouch/mind/turret, robe, sanity checker, and golem-module recipe families.
+- Explicit bridge identities now cover legacy mind metadata 1, primordial pearl, `brass_nugget`, and `quicksilver_nugget`; Advanced Crossbow and Advanced Alchemical Construct placeholders are resolved.
+- Recipe registry/tag audit tooling verifies local Thaumcraft item/block identities, simple item registrations, and lowercase legacy tag bridges.
+
+### Assets and visuals
+
+- Active resource/mining-tag cleanup and legacy-id alignment are current for registered candle, tube, smelter auxiliary, charger, nitor, creative-tab, and `smelter_basic` model paths.
+- Fresh in-game visual review is still separate from recipe cleanup and should be performed before treating visual parity as final.
+
+### Deferred boundaries
+
+- In-world crucible behavior, special alchemy side effects, crucible-derived aspect generation, infusion, essentia transport, full custom entity/golem systems, broad worldgen, broad rendering polish, full equipment/Curios discount integration, and remaining dependency-heavy recipe/page families remain deferred.
 
 ## Purpose
 
-This is the current implementation status document. Use it together with the migration guide before starting new work. Older planning files remain useful, but some status sections are behind the actual code.
+This is the current implementation status document. Use it together with the migration guide before starting new work. The `State Snapshot` and `High-level status` sections record current state; `Changelog Notes` records historical updates. Older planning files remain useful, but some status sections are behind the actual code.
 
 ## Document priority
 
 1. `06_docs/NeoForge_legacy_migration_guide.md` - main architecture guide.
 2. `06_docs/current_port_status.md` - current repository status.
-3. `06_docs/migration_matrix.md` - subsystem matrix and gate rules.
-4. `06_docs/porting_order.md` - staged roadmap.
-5. `06_docs/creative_tab_order_reference.md` - creative tab order rules.
-6. `06_docs/subsystem_inventory.md` - legacy subsystem audit.
-7. `06_docs/aspect_assignment_tag_audit.md` - exact OreDictionary-to-tag audit for aspect assignments.
-8. `06_docs/aspect_generate_tags_audit.md` - exact legacy recipe-derived aspect generation audit and blockers.
-9. `06_docs/aspect_assignment_data_format.md` - current data-driven aspect assignment format.
-10. `06_docs/vanilla_aspect_policy.md` - policy for exact vanilla seeds, legacy OreDictionary tag bridges, and 1.21-only content.
-11. `06_docs/vanilla_1_21_aspect_assignments.md` - complete current manual 1.21 vanilla assignment table and rationale.
-12. `06_docs/vanilla_post_1_12_aspect_rationale.md` - complete modern-only/flattened/component stack table with aspect amounts and rationale.
-13. `06_docs/aspect_legacy_gap_audit.md` - gap audit against 1.12 legacy and the rough 1.20.1 attempt.
-14. `06_docs/aspect_generated_cache_design.md` - generated aspect stack key/cache scaffold and invalidation rules.
-15. `06_docs/aspect_legacy_runtime_logic_audit.md` - detailed 1.12 runtime aspect lookup/bonus/generation/scanning audit.
-16. `06_docs/aspect_parity_comparison_harness.md` - runtime dump and comparison method for 1.12.2 vs 1.21.1 aspect parity.
-17. `06_docs/aura_design.md` - server-side aura storage/query/tick design for the first aura slice.
-18. `06_docs/research_knowledge_scanning_design.md` - current research/knowledge/scanning design slice.
-19. `06_docs/research_table_scribing_tools_design.md` - first research table/scribing tools BlockEntity slice boundary.
-20. `06_docs/research_progression_parity_audit.md` - exact research progression, warp, reward, addendum, and data-parity checkpoint.
-21. `06_docs/thaumonomicon_ui_design.md` - server-authoritative item/open/browser/entry UI boundary and deferred recipe-page scope.
-22. `06_docs/scanning_parity_validation.md` - runtime dump and comparison method for scan predicate parity.
-23. `06_docs/entity_aspect_assignment_audit.md` - entity aspect assignment parity/policy audit for scanning.
-24. `06_docs/rendering_model_pipeline_audit.md` - model/resource/rendering pipeline audit for 1.12 -> NeoForge 1.21.1.
-25. `06_docs/gate1_items_plan.md` - historical Gate 1 workflow, not a full current inventory.
+3. `06_docs/CURRENT_TASK.md` - live task queue and immediate guardrails.
+4. `06_docs/documentation_index.md` - docs folder navigation and cleanup rules.
+5. `06_docs/migration_matrix.md` - subsystem matrix and gate rules.
+6. `06_docs/porting_order.md` - staged roadmap.
+7. `06_docs/creative_tab_order_reference.md` - creative tab order rules.
+8. `06_docs/subsystem_inventory.md` - legacy subsystem audit.
+9. `06_docs/aspect_assignment_tag_audit.md` - exact OreDictionary-to-tag audit for aspect assignments.
+10. `06_docs/aspect_generate_tags_audit.md` - exact legacy recipe-derived aspect generation audit and blockers.
+11. `06_docs/aspect_assignment_data_format.md` - current data-driven aspect assignment format.
+12. `06_docs/vanilla_aspect_policy.md` - policy for exact vanilla seeds, legacy OreDictionary tag bridges, and 1.21-only content.
+13. `06_docs/vanilla_1_21_aspect_assignments.md` - complete current manual 1.21 vanilla assignment table and rationale.
+14. `06_docs/vanilla_post_1_12_aspect_rationale.md` - complete modern-only/flattened/component stack table with aspect amounts and rationale.
+15. `06_docs/aspect_legacy_gap_audit.md` - gap audit against 1.12 legacy and the rough 1.20.1 attempt.
+16. `06_docs/aspect_generated_cache_design.md` - generated aspect stack key/cache scaffold and invalidation rules.
+17. `06_docs/aspect_legacy_runtime_logic_audit.md` - detailed 1.12 runtime aspect lookup/bonus/generation/scanning audit.
+18. `06_docs/aspect_parity_comparison_harness.md` - runtime dump and comparison method for 1.12.2 vs 1.21.1 aspect parity.
+19. `06_docs/aura_design.md` - server-side aura storage/query/tick design for the first aura slice.
+20. `06_docs/research_knowledge_scanning_design.md` - current research/knowledge/scanning design slice.
+21. `06_docs/research_table_scribing_tools_design.md` - first research table/scribing tools BlockEntity slice boundary.
+22. `06_docs/research_progression_parity_audit.md` - exact research progression, warp, reward, addendum, and data-parity checkpoint.
+23. `06_docs/thaumonomicon_ui_design.md` - server-authoritative item/open/browser/entry UI boundary and deferred recipe-page scope.
+24. `06_docs/scanning_parity_validation.md` - runtime dump and comparison method for scan predicate parity.
+25. `06_docs/entity_aspect_assignment_audit.md` - entity aspect assignment parity/policy audit for scanning.
+26. `06_docs/rendering_model_pipeline_audit.md` - model/resource/rendering pipeline audit for 1.12 -> NeoForge 1.21.1.
+27. `06_docs/gate1_items_plan.md` - historical Gate 1 workflow, not a full current inventory.
 
 ## High-level status
 
@@ -266,6 +305,10 @@ Next:
 - Keep checking scan observation rewards against real Thaumonomicon knowledge costs once the page UI exists.
 - Add `ScanSky` celestial-note side effects after celestial notes and scribing tools exist.
 - Design and implement the first real custom recipe type before its authoritative page snapshot/renderer; do not duplicate recipe, visibility, requirement, or page-catalog decisions on the client.
+
+## Changelog Notes
+
+The sections below are historical update notes. They should not be read as the current task queue; use `06_docs/CURRENT_TASK.md` for current priorities and the `State Snapshot` plus `High-level status` sections above for current state.
 
 ### Latest server smoke hardening update
 

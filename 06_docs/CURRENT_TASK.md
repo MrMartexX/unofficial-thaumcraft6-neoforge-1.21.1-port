@@ -22,11 +22,18 @@ Last updated: 2026-06-18
 
 ## Do not change without explicit request
 
-
+- Do not move or delete large legacy/audit documents until references are checked and the move is recorded in `06_docs/documentation_index.md`.
+- Do not treat `thaumcraft:crucible` recipe/page data as in-world crucible gameplay.
+- Do not start in-world crucible, infusion, essentia transport, broad worldgen, or broad rendering systems without a focused design note and validation path.
+- Do not commit generated local reports unless they are intentionally curated under `06_docs/audits/`.
 
 ## Near-term tasks
 
-1. Continue recipe/page work by audited dependency family. Current `thaumcraft:crucible` serializer/page-data boundary covers HEDGE_ALCHEMY, METAL_PURIFICATION, Alumentum, Nitor, Brass/Thaumium Ingots, and all vis-crystal recipes. Do not treat this as in-world crucible gameplay. Next safe batch should either classify/port another pure recipe-page family or start a focused in-world crucible/alchemy design slice before behavior.
+1. Continue recipe/page work by audited dependency family:
+   - Current `thaumcraft:crucible` serializer/page-data boundary covers HEDGE_ALCHEMY, METAL_PURIFICATION, Alumentum, Nitor, Brass/Thaumium Ingots, and all vis-crystal recipes.
+   - Do not treat this as in-world crucible gameplay.
+   - Next safe batch should either classify/port another pure recipe-page family or start a focused in-world crucible/alchemy design slice before behavior.
+   - Keep build, server smoke, page-catalog audit, and protocol audit green after the batch.
 2. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
 3. Keep reusable audit scripts under `tools/audits/`.
 4. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.
