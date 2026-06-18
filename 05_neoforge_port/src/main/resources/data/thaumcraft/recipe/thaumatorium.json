@@ -1,0 +1,43 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "THAUMATORIUM",
+  "instability": 5,
+  "catalyst": {
+    "item": "thaumcraft:alchemical_construct"
+  },
+  "components": [
+    {
+      "item": "thaumcraft:alembic"
+    },
+    {
+      "item": "thaumcraft:essentia_importer"
+    },
+    {
+      "item": "thaumcraft:essentia_exporter"
+    },
+    {
+      "item": "thaumcraft:mechanism_complex"
+    },
+    {
+      "item": "thaumcraft:vis_resonator"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "alchemy",
+      "amount": 75
+    },
+    {
+      "aspect": "craft",
+      "amount": 50
+    },
+    {
+      "aspect": "mechanism",
+      "amount": 50
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:thaumatorium",
+    "count": 1
+  }
+}

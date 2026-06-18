@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "EVERFULLURN",
+  "instability": 4,
+  "catalyst": {
+    "item": "minecraft:bucket"
+  },
+  "components": [
+    {
+      "item": "minecraft:clay"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_aqua"
+    },
+    {
+      "item": "thaumcraft:phial_aqua"
+    },
+    {
+      "item": "thaumcraft:nitor_blue"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "water",
+      "amount": 100
+    },
+    {
+      "aspect": "void",
+      "amount": 25
+    },
+    {
+      "aspect": "motion",
+      "amount": 25
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:everfull_urn",
+    "count": 1
+  }
+}

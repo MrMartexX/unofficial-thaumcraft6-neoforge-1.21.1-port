@@ -802,23 +802,6 @@
       "occurrence_count": 5
     },
     {
-      "id": "thaumcraft:causalitycollapser",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "RIFTCLOSER",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:causality_collapser",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:centrifuge",
       "legacy_source": "crafting_registry",
       "kind": "arcane",
@@ -998,23 +981,6 @@
       "targets": [],
       "legacy_output": {
         "item": "thaumcraft:essentia_output",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
-      "id": "thaumcraft:everfullurn",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "crucible",
-      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
-      "required_research": "EVERFULLURN",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:everfull_urn",
         "metadata": 0,
         "count": 1,
         "nbt": ""
@@ -1375,18 +1341,6 @@
       "occurrence_count": 1
     },
     {
-      "id": "thaumcraft:jarlabelessence",
-      "legacy_source": "missing",
-      "kind": "missing",
-      "legacy_class": "",
-      "required_research": "",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:jarvoid",
       "legacy_source": "crafting_registry",
       "kind": "arcane",
@@ -1606,18 +1560,6 @@
       },
       "direct_reference": true,
       "occurrence_count": 2
-    },
-    {
-      "id": "thaumcraft:nitorcolor",
-      "legacy_source": "missing",
-      "kind": "missing",
-      "legacy_class": "",
-      "required_research": "",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 1
     },
     {
       "id": "thaumcraft:nitordyeblack",
@@ -2682,18 +2624,6 @@
       },
       "direct_reference": false,
       "occurrence_count": 0
-    },
-    {
-      "id": "thaumcraft:thaumatorium",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "blueprint",
-      "legacy_class": "thaumcraft.api.ThaumcraftApi$BluePrint",
-      "required_research": "THAUMATORIUM",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": null,
-      "direct_reference": true,
-      "occurrence_count": 1
     },
     {
       "id": "thaumcraft:thaumium_stuff",
@@ -3935,23 +3865,6 @@
       "occurrence_count": 0
     },
     {
-      "id": "thaumcraft:voidingot",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "crucible",
-      "legacy_class": "thaumcraft.api.crafting.CrucibleRecipe",
-      "required_research": "BASEELDRITCH",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:ingot",
-        "metadata": 1,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
-    },
-    {
       "id": "thaumcraft:voidingotstoblock",
       "legacy_source": "crafting_registry",
       "kind": "crafting",
@@ -4035,23 +3948,6 @@
       },
       "direct_reference": false,
       "occurrence_count": 0
-    },
-    {
-      "id": "thaumcraft:voidsiphon",
-      "legacy_source": "thaumcraft_catalog",
-      "kind": "infusion",
-      "legacy_class": "thaumcraft.api.crafting.InfusionRecipe",
-      "required_research": "VOIDSIPHON",
-      "legacy_group": "",
-      "targets": [],
-      "legacy_output": {
-        "item": "thaumcraft:void_siphon",
-        "metadata": 0,
-        "count": 1,
-        "nbt": ""
-      },
-      "direct_reference": true,
-      "occurrence_count": 1
     },
     {
       "id": "thaumcraft:voidsword",

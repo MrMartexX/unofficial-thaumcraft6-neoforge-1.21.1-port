@@ -523,3 +523,12 @@ The sections below are historical update notes. They should not be read as the c
 - Added recipe/page boundary entries for ArcaneBore, InfernalFurnace, LampFertility, LampGrowth, Mirror, MirrorEssentia, and MirrorHand.
 - This is still page/data boundary only; actual machine/block behavior remains deferred.
 - This script integrates audit refresh after successful build/smoke.
+### Latest remaining non-fake recipe page batch
+
+- Added page-boundary recipes/catalog entries for EverfullUrn, JarLabelEssence, Thaumatorium, voidingot, VoidSiphon, CausalityCollapser, and nitorcolor.
+- These are conservative recipe/page placeholders for remaining non-fake missing references; gameplay behavior remains deferred where appropriate.
+- This script integrates audit refresh after successful build/smoke.
+## Remaining non-fake page recipe repair note
+
+- Registered alchemical_construct, essentia_importer, and essentia_exporter bridge item ids used by thaumatorium.json.
+- This repairs the previous server smoke datapack parse failure and keeps the same batch commit target.

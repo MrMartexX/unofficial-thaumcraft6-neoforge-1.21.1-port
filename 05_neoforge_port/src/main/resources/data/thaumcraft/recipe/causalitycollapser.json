@@ -1,0 +1,40 @@
+{
+  "type": "thaumcraft:infusion",
+  "research": "CAUSALITYCOLLAPSER",
+  "instability": 6,
+  "catalyst": {
+    "item": "minecraft:clock"
+  },
+  "components": [
+    {
+      "item": "minecraft:ender_pearl"
+    },
+    {
+      "item": "thaumcraft:primordial_pearl"
+    },
+    {
+      "item": "thaumcraft:vis_resonator"
+    },
+    {
+      "item": "thaumcraft:mechanism_complex"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "void",
+      "amount": 75
+    },
+    {
+      "aspect": "motion",
+      "amount": 75
+    },
+    {
+      "aspect": "entropy",
+      "amount": 50
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:causality_collapser",
+    "count": 1
+  }
+}

@@ -206,3 +206,11 @@ Last updated: 2026-06-18
 
 - Added seven artifice behavior page recipes as data/page boundary only.
 - Machine/block functionality remains intentionally deferred.
+## Remaining non-fake page recipe note
+
+- Added seven conservative page-boundary recipes for remaining non-fake references.
+- Fake/synthetic pages, infusion altar variants, and GolemPress remain separate targeted work.
+## Remaining non-fake page recipe repair note
+
+- Registered alchemical_construct, essentia_importer, and essentia_exporter bridge item ids used by thaumatorium.json.
+- This repairs the previous server smoke datapack parse failure and keeps the same batch commit target.

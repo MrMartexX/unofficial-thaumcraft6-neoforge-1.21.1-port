@@ -1,13 +1,13 @@
 # Legacy Alchemy Recipe Source Audit
 
-Generated: 2026-06-18 19:08:57 +03:00
+Generated: 2026-06-18 20:22:51 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Alchemy missing recipe-page references from current audit | 3 |
-| References with at least one legacy source hit | 3 |
+| Alchemy missing recipe-page references from current audit | 0 |
+| References with at least one legacy source hit | 0 |
 | References without direct source hit | 0 |
 | Legacy Java files scanned | 902 |
 | Legacy API/pattern source hits | 361 |
@@ -16,7 +16,6 @@ Generated: 2026-06-18 19:08:57 +03:00
 
 | Family | Count |
 |---|---:|
-| ALCHEMY_OTHER | 3 |
 
 ## Legacy recipe API/pattern hit distribution
 
@@ -32,238 +31,11 @@ Generated: 2026-06-18 19:08:57 +03:00
 
 ## Alchemy page references and legacy source hits
 
-| Family | Reference | Legacy hits | Research path |
-|---|---|---:|---|
-| ALCHEMY_OTHER | thaumcraft:EverfullUrn | 35 | $.entries[20].stages[1].recipes[0] |
-| ALCHEMY_OTHER | thaumcraft:JarLabelEssence | 1 | $.entries[11].stages[0].recipes[4] |
-| ALCHEMY_OTHER | thaumcraft:Thaumatorium | 186 | $.entries[18].stages[1].recipes[0] |
+No alchemy missing recipe-page references were found in the current research page gap audit.
 
 ## Representative legacy source hits
 
-| Reference | Family | File | Line | Snippet |
-|---|---|---|---:|---|
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/java/thaumcraft/api/blocks/BlocksTC.java | 153 | public static Block everfullUrn; |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigBlocks.java | 329 | BlocksTC.everfullUrn = registerBlock(new BlockWaterJug()); |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 180 | ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:EverfullUrn"), new CrucibleRecipe("EVERFULLURN", new ItemStack(BlocksTC.everfullUrn), new ItemStack(Items.FLOWER_POT), new AspectList().add(Aspect.WATER, 3 ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/de_de.lang | 1330 | research.EVERFULLURN.title=Everfull Urn |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/de_de.lang | 1331 | research.EVERFULLURN.stage.1=Alchemical creation has proven to be much easier than I expected. If I can somehow automate this process to create something simple and practical it will go a long way toward further alchemic ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/de_de.lang | 1332 | research.EVERFULLURN.stage.2=A small fountain of pure water always flows from the top of this urn, making it a perfect water source to fill my buckets, bottles or other liquid containers.<BR>The urn will also automatical ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/en_us.lang | 1389 | research.EVERFULLURN.title=Everfull Urn |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/en_us.lang | 1390 | research.EVERFULLURN.stage.1=Alchemical creation has proven to be much easier than I expected. If I can somehow automate this process to create something simple and practical it will go a long way toward further alchemic ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/en_us.lang | 1391 | research.EVERFULLURN.stage.2=A small fountain of pure water always flows from the top of this urn, making it a perfect water source to fill my buckets, bottles or other liquid containers.<BR>The urn will also automatical ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/fr_fr.lang | 1384 | research.EVERFULLURN.title=Everfull urn |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/fr_fr.lang | 1385 | research.EVERFULLURN.stage.1=Alchemical creation has proven to be much easier than i expected. if i can somehow automate this process to create something simple and practical it will go a long way toward further alchemic ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/fr_fr.lang | 1386 | research.EVERFULLURN.stage.2=A small fountain of pure water always flows from the top of this urn, making it a perfect water source to fill my buckets, bottles or other liquid containers.<br>the urn will also automatical ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ja_jp.lang | 1383 | research.EVERFULLURN.title=底なしの壺 |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ja_jp.lang | 1384 | research.EVERFULLURN.stage.1=錬金術のクラフトは予想よりもとても簡単だった。この単純で実用的なものを作る工程をどうにかして自動化できれば、更なる錬金術のブレイクスルーへの道が大きく開けるだろう。<BR>無限水源のようなものがスタートとしてちょうどよいだろうか？ |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ja_jp.lang | 1385 | research.EVERFULLURN.stage.2=純水の小さな湧き水がこの壺の口から常に流れ続け、バケツやボトルなどの液体容器を満たす完璧な水源となり得る。<BR>またこの壺は2ブロック以内の任意の液体容器に、ブロック上面から水が搬入できるものがあれば、それへと自動的に水を補給する。これはるつぼの給水を自動化するのに完璧だが、他の用途にも使える。<BR>より俗っぽく、液体パイプを壺の上面に取り付けることもできる。<BR>バケツ一 ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ko_kr.lang | 1384 | research.EVERFULLURN.title=영원한 항아리 |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ko_kr.lang | 1385 | research.EVERFULLURN.stage.1=연금술적인 창작은 기대했던 것보단 훨씬 쉽다는 것이 입증되었습니다. 어떻게든 이 과정을 자동화해서 간단하고 실용적인 무언가를 만들 수 있다면, 더 많은 연금술적인 돌파구를 향해 갈 것입니다.<BR>무한한 물의 원천 같은 것이 좋은 시작이 되겠죠? |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ko_kr.lang | 1386 | research.EVERFULLURN.stage.2=이 깨끗한 물이 담긴 작은 분수는 항상 이 항아리의 꼭대기에서 흘러 나와 양동이나 병 또는 다른 액체 용기를 채울 수 있습니다.<BR>만약 윗부분으로 물을 받아들일 수 있는 장치가 있다면 2블럭 안에 있는 어떤 액체 용기든간에 물을 채울 것입니다. 이 기능은 도가니를 자동으로 채우는 데 적합하지만 다른 용도도 있습니다.<BR>항아리 위로 액 ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/nl_NL.lang | 1411 | research.EVERFULLURN.title=Everfull Urn |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/nl_NL.lang | 1412 | research.EVERFULLURN.stage.1=Alchemical creation has proven to be much easier than I expected. If I can somehow automate this process to create something simple and practical it will go a long way toward further alchemic ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/nl_NL.lang | 1413 | research.EVERFULLURN.stage.2=A small fountain of pure water always flows from the top of this urn, making it a perfect water source to fill my buckets, bottles or other liquid containers.<BR>The urn will also automatical ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ru_ru.lang | 1379 | research.EVERFULLURN.title=Неиссякающая урна |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ru_ru.lang | 1380 | research.EVERFULLURN.stage.1=Алхимия оказалась намного проще, чем я думал. А если я еще смогу и автоматизировать работу с ней, создав что-то простое и практичное, то в конечном итоге мне это очень поможет в алхимических  ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ru_ru.lang | 1381 | research.EVERFULLURN.stage.2=Небольшой фонтан чистой воды постоянно льётся из горлышка этой урны, делая её идеальным источником воды для моих вёдер, бутылок или других контейнеров жидкости.<BR>Урна также автоматически по ... |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_cn.lang | 1383 | research.EVERFULLURN.title=无尽之瓮 |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_cn.lang | 1384 | research.EVERFULLURN.stage.1=炼金术的创造事实上比我预想的容易的多。如果我能以某种方式自动化地创造一些简单而实用的东西，那么这将是炼金术的进一步突破。 <BR>或许无限水源是一个良好的开始？ |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_cn.lang | 1385 | research.EVERFULLURN.stage.2=从瓮口不断涌出的一小股清泉让无尽之瓮能够用来为水桶，药瓶和其他流体容器提供水源。 <BR>它还能够为两格范围内的流体容器自动添水，只要这些容器能够从顶部注水。配合坩埚可以很完美地实现自动化，当然别的方面也有诸多妙用。 <BR>流体管道可以接在瓮的顶部以便作为其它更凡庸的方法使用。 <BR>每制造一桶水都会从灵气中抽取1点vis。 <BR>水的味道有点……奇怪。我确定无需担心。 |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_tw.lang | 1383 | research.EVERFULLURN.title=無盡之甕 |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_tw.lang | 1384 | research.EVERFULLURN.stage.1=煉金製造已被證實遠比我所預期的還要容易。如果能找到方法將其過程自動化以生產一些簡單而實用的物質，相信會是煉金術的一大突破。 <BR>或許類似無限水源之類的東西會是個不錯的開始？ |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_tw.lang | 1385 | research.EVERFULLURN.stage.2=細小的純水噴泉會不斷從甕中流出，成為我裝填水桶、瓶子或其他容器的完美水源。 <BR>若兩格內有任何盛水的容器，這個甕也會自動將之注滿。除了可以完美地自動填滿坩堝外，當然還有其他實用的功能。 <BR>可以在甕的上方接上流體管道以利於進行更多凡世的用途。 <BR>每生成一桶水都會直接從靈氣中汲取1點魔素。 <BR>這水嘗起來有些...異味。我確定這沒什麼好擔心的。 |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 411 | "key": "EVERFULLURN", |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 412 | "name": "research.EVERFULLURN.title", |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 418 | "text": "research.EVERFULLURN.stage.1", |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 422 | "text": "research.EVERFULLURN.stage.2", |
-| thaumcraft:EverfullUrn | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 423 | "recipes": ["thaumcraft:EverfullUrn"] |
-| thaumcraft:JarLabelEssence | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 258 | "recipes": ["thaumcraft:WardedJar","thaumcraft:JarVoid","thaumcraft:BrassBrace","thaumcraft:JarLabel","thaumcraft:JarLabelEssence"] |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/api/blocks/BlocksTC.java | 146 | public static Block thaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/api/blocks/BlocksTC.java | 147 | public static Block thaumatoriumTop; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 22 | import thaumcraft.common.container.ContainerThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 26 | import thaumcraft.common.tiles.crafting.TileThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 30 | public class GuiThaumatorium extends GuiContainer |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 32 | private TileThaumatorium inventory; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 33 | private ContainerThaumatorium container; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 42 | public GuiThaumatorium(InventoryPlayer par1InventoryPlayer, TileThaumatorium par2TileEntityFurnace) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 43 | super(new ContainerThaumatorium(par1InventoryPlayer, par2TileEntityFurnace)); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 48 | tex = new ResourceLocation("thaumcraft", "textures/gui/gui_thaumatorium.png"); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 54 | container = (ContainerThaumatorium) inventorySlots; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 110 | if (GuiThaumatorium.recipeCache.containsKey(hash)) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 111 | return GuiThaumatorium.recipeCache.get(hash); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 115 | GuiThaumatorium.recipeCache.put(hash, cr); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/gui/GuiThaumatorium.java | 312 | GuiThaumatorium.recipeCache = new HashMap<Integer, CrucibleRecipe>(); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/renderers/tile/TileThaumatoriumRenderer.java | 16 | import thaumcraft.common.tiles.crafting.TileThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/renderers/tile/TileThaumatoriumRenderer.java | 20 | public class TileThaumatoriumRenderer extends TileEntitySpecialRenderer |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/renderers/tile/TileThaumatoriumRenderer.java | 24 | public TileThaumatoriumRenderer() { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/renderers/tile/TileThaumatoriumRenderer.java | 28 | public void renderTileEntityAt(TileThaumatorium tile, double par2, double par4, double par6, float par8) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/client/renderers/tile/TileThaumatoriumRenderer.java | 64 | renderTileEntityAt((TileThaumatorium)te, x, y, z, partialTicks); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 24 | import thaumcraft.common.tiles.crafting.TileThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 25 | import thaumcraft.common.tiles.crafting.TileThaumatoriumTop; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 28 | public class BlockThaumatorium extends BlockTCDevice implements IBlockFacingHorizontal |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 32 | public BlockThaumatorium(boolean top) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 33 | super(Material.IRON, null, top ? "thaumatorium_top" : "thaumatorium"); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 42 | return new TileThaumatorium(); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 45 | return new TileThaumatoriumTop(); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 93 | if (top && worldIn.getBlockState(pos.down()).getBlock() == BlocksTC.thaumatorium) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 96 | if (!top && worldIn.getBlockState(pos.up()).getBlock() == BlocksTC.thaumatoriumTop) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 106 | if (worldIn.getBlockState(pos.up()).getBlock() == BlocksTC.thaumatoriumTop) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java | 118 | if (tile != null && tile instanceof TileThaumatorium) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/devices/BlockBrainBox.java | 58 | if (worldIn.getBlockState(pos.offset(BlockStateUtils.getFacing(state))).getBlock() != BlocksTC.thaumatorium && worldIn.getBlockState(pos.offset(BlockStateUtils.getFacing(state))).getBlock() != BlocksTC.thaumatoriumTop) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/blocks/devices/BlockBrainBox.java | 65 | return (worldIn.getBlockState(pos.offset(side.getOpposite())).getBlock() == BlocksTC.thaumatorium \|\| worldIn.getBlockState(pos.offset(side.getOpposite())).getBlock() == BlocksTC.thaumatoriumTop) && worldIn.getBlockState( ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigBlocks.java | 42 | import thaumcraft.common.blocks.crafting.BlockThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigBlocks.java | 110 | import thaumcraft.common.tiles.crafting.TileThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigBlocks.java | 111 | import thaumcraft.common.tiles.crafting.TileThaumatoriumTop; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigBlocks.java | 330 | BlocksTC.thaumatorium = registerBlock(new BlockThaumatorium(false)); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigBlocks.java | 331 | BlocksTC.thaumatoriumTop = registerBlock(new BlockThaumatorium(true)); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigBlocks.java | 399 | GameRegistry.registerTileEntity(TileThaumatorium.class, "thaumcraft:TileThaumatorium"); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigBlocks.java | 400 | GameRegistry.registerTileEntity(TileThaumatoriumTop.class, "thaumcraft:TileThaumatoriumTop"); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 111 | Part TH1 = new Part(BlocksTC.metalAlchemical.getDefaultState(), BlocksTC.thaumatoriumTop).setApplyPlayerFacing(true); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 112 | Part TH2 = new Part(BlocksTC.metalAlchemical.getDefaultState(), BlocksTC.thaumatorium).setApplyPlayerFacing(true); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 115 | IDustTrigger.registerDustTrigger(new DustTriggerMultiblock("THAUMATORIUM", thaumotoriumBlueprint)); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 116 | ThaumcraftApi.addMultiblockRecipeToCatalog(new ResourceLocation("thaumcraft:Thaumatorium"), new ThaumcraftApi.BluePrint("THAUMATORIUM", thaumotoriumBlueprint, new ItemStack(BlocksTC.metalAlchemical, 2), new ItemStack(Blo ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/config/ConfigRecipes.java | 251 | ThaumcraftApi.addArcaneCraftingRecipe(new ResourceLocation("thaumcraft:MnemonicMatrix"), new ShapedArcaneRecipe(ConfigRecipes.defaultGroup, "THAUMATORIUM", 50, new AspectList().add(Aspect.EARTH, 1).add(Aspect.ORDER, 1),  ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 8 | import thaumcraft.common.tiles.crafting.TileThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 11 | public class ContainerThaumatorium extends Container |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 13 | private TileThaumatorium thaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 16 | public ContainerThaumatorium(InventoryPlayer par1InventoryPlayer, TileThaumatorium tileEntity) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 19 | thaumatorium = tileEntity; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 20 | ((ContainerThaumatorium)(thaumatorium.eventHandler = this)).addSlotToContainer(new Slot(tileEntity, 0, 55, 24)); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 29 | thaumatorium.updateRecipes(player); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 34 | thaumatorium.updateRecipes(player); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 39 | if (!thaumatorium.getWorld().isRemote) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 40 | thaumatorium.eventHandler = null; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/container/ContainerThaumatorium.java | 45 | return thaumatorium.isUsableByPlayer(par1EntityPlayer); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 14 | import thaumcraft.common.tiles.crafting.TileThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 50 | if (te != null && te instanceof TileThaumatorium) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 51 | TileThaumatorium thaumatorium = (TileThaumatorium)te; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 54 | for (int hash : thaumatorium.recipeHash) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 56 | thaumatorium.recipeEssentia.remove(i); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 57 | thaumatorium.recipePlayer.remove(i); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 58 | thaumatorium.recipeHash.remove(i); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 59 | thaumatorium.currentCraft = -1; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 65 | if (!flag && thaumatorium.recipeHash.size() < thaumatorium.maxRecipes) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 66 | for (CrucibleRecipe cr : thaumatorium.recipes) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 68 | thaumatorium.recipeEssentia.add(cr.getAspects().copy()); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 69 | thaumatorium.recipePlayer.add(player.getName()); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 70 | thaumatorium.recipeHash.add(cr.hash); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 77 | thaumatorium.markDirty(); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/network/misc/PacketSelectThaumotoriumRecipeToServer.java | 78 | thaumatorium.syncTile(false); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/lib/RefGui.java | 8 | public static int THAUMATORIUM = 3; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatorium.java | 49 | public class TileThaumatorium extends TileThaumcraftInventory implements IAspectContainer, IEssentiaTransport, ITickable |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatorium.java | 65 | public TileThaumatorium() { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 16 | public class TileThaumatoriumTop extends TileThaumcraft implements IAspectContainer, IEssentiaTransport, ISidedInventory, ITickable |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 18 | public TileThaumatorium thaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 20 | public TileThaumatoriumTop() { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 21 | thaumatorium = null; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 25 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 27 | if (tile != null && tile instanceof TileThaumatorium) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 28 | thaumatorium = (TileThaumatorium)tile; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 35 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 38 | return thaumatorium.addToContainer(tt, am); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 43 | return thaumatorium != null && thaumatorium.takeFromContainer(tt, am); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 58 | return thaumatorium != null && thaumatorium.doesContainerContainAmount(tt, am); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 63 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 66 | return thaumatorium.containerContains(tt); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 76 | return thaumatorium != null && thaumatorium.isConnectable(face); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 81 | return thaumatorium != null && thaumatorium.canInputFrom(face); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 91 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 94 | thaumatorium.setSuction(aspect, amount); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 99 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 102 | return thaumatorium.getSuctionType(loc); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 107 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 110 | return thaumatorium.getSuctionAmount(loc); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 125 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 128 | return thaumatorium.takeEssentia(aspect, amount, face); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 133 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 136 | return thaumatorium.addEssentia(aspect, amount, face); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 146 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 149 | return thaumatorium.essentia; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 154 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 157 | thaumatorium.setAspects(aspects); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 165 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 168 | return thaumatorium.getStackInSlot(par1); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 172 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 175 | return thaumatorium.decrStackSize(par1, par2); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 179 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 182 | return thaumatorium.removeStackFromSlot(par1); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 186 | if (thaumatorium == null) { |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 189 | thaumatorium.setInventorySlotContents(par1, stack2); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 234 | thaumatorium.clear(); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/common/tiles/crafting/TileThaumatoriumTop.java | 250 | return thaumatorium.isEmpty(); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/proxies/ProxyGUI.java | 23 | import thaumcraft.client.gui.GuiThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/proxies/ProxyGUI.java | 40 | import thaumcraft.common.container.ContainerThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/proxies/ProxyGUI.java | 53 | import thaumcraft.common.tiles.crafting.TileThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/proxies/ProxyGUI.java | 87 | return new GuiThaumatorium(player.inventory, (TileThaumatorium)world.getTileEntity(new BlockPos(x, y, z))); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/proxies/ProxyGUI.java | 156 | return new ContainerThaumatorium(player.inventory, (TileThaumatorium)world.getTileEntity(new BlockPos(x, y, z))); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/proxies/ProxyTESR.java | 21 | import thaumcraft.client.renderers.tile.TileThaumatoriumRenderer; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/proxies/ProxyTESR.java | 33 | import thaumcraft.common.tiles.crafting.TileThaumatorium; |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/java/thaumcraft/proxies/ProxyTESR.java | 68 | registerTESR(TileThaumatorium.class, new TileThaumatoriumRenderer()); |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/blockstates/thaumatorium.json | 4 | "model": "thaumcraft:thaumatorium.obj", |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/blockstates/thaumatorium.json | 5 | "textures": {"#texture": "thaumcraft:blocks/thaumatorium"}, |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/blockstates/thaumatorium.json | 13 | "facing=up":    { "model": "thaumcraft:thaumatorium.obj", "x": 90}, |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/blockstates/thaumatorium.json | 14 | "facing=down":    { "model": "thaumcraft:thaumatorium.obj", "x": 90}, |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/blockstates/thaumatorium.json | 15 | "facing=west":    { "model": "thaumcraft:thaumatorium.obj", "x": 90}, |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/blockstates/thaumatorium.json | 16 | "facing=south":    { "model": "thaumcraft:thaumatorium.obj", "y": 270, "x": 90}, |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/blockstates/thaumatorium.json | 17 | "facing=north":    { "model": "thaumcraft:thaumatorium.obj", "y": 90, "x": 90}, |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/blockstates/thaumatorium.json | 18 | "facing=east":    { "model": "thaumcraft:thaumatorium.obj", "y": 180, "x": 90} |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/de_de.lang | 317 | tile.thaumatorium.name=Thaumatorium |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/de_de.lang | 318 | tile.thaumatorium_top.name=Thaumatorium |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/de_de.lang | 1306 | research.THAUMATORIUM.title=Alchemical Automation |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/de_de.lang | 1307 | research.THAUMATORIUM.stage.1=Sometimes alchemy can be a hit and miss affair - miscounted aspects, degrading essentia and ingredients that require manual labor to mix. I have had enough.<BR>Now that I have raw, liquid es ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/de_de.lang | 1308 | research.THAUMATORIUM.stage.2=I have invented an automated device I have named the Thaumatorium. The Thaumatorium is a marvelous invention that allows a thaumaturge to select which formula to use and what catalysts to ad ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/en_us.lang | 339 | tile.thaumatorium.name=Thaumatorium |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/en_us.lang | 340 | tile.thaumatorium_top.name=Thaumatorium |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/en_us.lang | 1365 | research.THAUMATORIUM.title=Alchemical Automation |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/en_us.lang | 1366 | research.THAUMATORIUM.stage.1=Sometimes alchemy can be a hit and miss affair - miscounted aspects, degrading essentia and ingredients that require manual labor to mix. I have had enough.<BR>Now that I have raw, liquid es ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/en_us.lang | 1367 | research.THAUMATORIUM.stage.2=I have invented an automated device I have named the Thaumatorium. Like many multi part devices this one must be created using Salis Mundus.<BR>The Thaumatorium is a marvelous invention that ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/fr_fr.lang | 338 | tile.thaumatorium.name=Thaumatorium |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/fr_fr.lang | 339 | tile.thaumatorium_top.name=Thaumatorium |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/fr_fr.lang | 1360 | research.THAUMATORIUM.title=Alchemical automation |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/fr_fr.lang | 1361 | research.THAUMATORIUM.stage.1=Sometimes alchemy can be a hit and miss affair - miscounted aspects, degrading essentia and ingredients that require manual labor to mix. i have had enough.<br>now that i have raw, liquid es ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/fr_fr.lang | 1362 | research.THAUMATORIUM.stage.2=I have invented an automated device i have named the thaumatorium. like many multi part devices this one must be created using salis mundus.<br>the thaumatorium is a marvelous invention that ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ja_jp.lang | 338 | tile.thaumatorium.name=ソーマトリウム |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ja_jp.lang | 339 | tile.thaumatorium_top.name=ソーマトリウム |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ja_jp.lang | 1359 | research.THAUMATORIUM.title=錬金術的自動化 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ja_jp.lang | 1360 | research.THAUMATORIUM.stage.1=時として錬金術は運任せになり得る。相の数え間違い、エッセンシアや素材の分解は手作業による混合では避けて通れない。もうたくさんだ。<BR>原液の液体エッセンシアが扱えるようになった今、錬金術の工程全体を改善すべきであろう。 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ja_jp.lang | 1361 | research.THAUMATORIUM.stage.2=自動装置を発明し、ソーマトリウムと名付けた。多くの複数ブロック装置と同様に、サリス・ムンドゥスを使って作らねばならない。<br>ソーマトリウムは素晴らしい発明で魔導師が使いたいレシピと加えるべき触媒を選択することが可能になる。そうするとこれは自動的に配管を通して利用可能な供給源からエッセンシアを吸引する。触媒が供給され続ける限り、これは要求された製品を常に完璧に提供し続ける。< ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ko_kr.lang | 338 | tile.thaumatorium.name=사우마토리움 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ko_kr.lang | 339 | tile.thaumatorium_top.name=사우마토리움 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ko_kr.lang | 1360 | research.THAUMATORIUM.title=연금의 자동화 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ko_kr.lang | 1361 | research.THAUMATORIUM.stage.1=연금술은 때때로 불친절하며, 이는 에센시아의 혼합에서 필요한 성분들을 저하시킵니다. 충분히 겪었죠.<BR>이제 나는 가공되지 않은 액체 에센시아를 가지고 있기 때문에 이 전체적인 연금술 과정을 개선해야 합니다. |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ko_kr.lang | 1362 | research.THAUMATORIUM.stage.2=사우마토리움이라고 이름 붙인 자동화 기기를 발명했습니다. 사우마토리움은 사용할 조합 공식과 촉매제를 선택할 수 있는 엄청난 발명품입니다. 선택하고 나면 자동으로 튜브를 통해 사용 가능한 공급원에서 에센시아를 추출합니다. 촉매가 공급되는 한 필요한 물체를 완벽하게 지속적으로 생성합니다.<BR>더이상 물을 필요로 하지 않지만, 열원은 여전히  ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/nl_NL.lang | 339 | tile.thaumatorium.name=Thaumatorium |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/nl_NL.lang | 340 | tile.thaumatorium_top.name=Thaumatorium |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/nl_NL.lang | 1387 | research.THAUMATORIUM.title=Alchemical Automation |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/nl_NL.lang | 1388 | research.THAUMATORIUM.stage.1=Sometimes alchemy can be a hit and miss affair - miscounted aspects, degrading essentia and ingredients that require manual labor to mix. I have had enough.<BR>Now that I have raw, liquid es ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/nl_NL.lang | 1389 | research.THAUMATORIUM.stage.2=I have invented an automated device I have named the Thaumatorium. Like many multi part devices this one must be created using Salis Mundus.<BR>The Thaumatorium is a marvelous invention that ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ru_ru.lang | 338 | tile.thaumatorium.name=Тауматорий |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ru_ru.lang | 339 | tile.thaumatorium_top.name=Тауматорий |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ru_ru.lang | 1355 | research.THAUMATORIUM.title=Алхимическая автоматизация |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ru_ru.lang | 1356 | research.THAUMATORIUM.stage.1=Временами алхимия преподносит неприятные сюрпризы - то аспекты несовместимые, то эссенция уничтожается, то необходимо вручную смешивать ингредиенты. Всё, с меня хватит.<BR>Теперь, имея эссен ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/ru_ru.lang | 1357 | research.THAUMATORIUM.stage.2=Я изобрёл устройство, которое назвал Тауматориум. Как и для большинства многоблочных структур, для его активации, нужен Salis Mundus.<BR>Тауматориум - это прекрасное изобретение, которое поз ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_cn.lang | 338 | tile.thaumatorium.name=神秘炼金塔 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_cn.lang | 339 | tile.thaumatorium_top.name=神秘炼金塔 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_cn.lang | 1359 | research.THAUMATORIUM.title=炼金自动化 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_cn.lang | 1360 | research.THAUMATORIUM.stage.1=迄今炼金术多少有些变成一件撞运道的差事 - 误算数量的要素，品质低劣的源质和炼金配料全都需要手动劳作去混合。我受够了。 <BR>现在我有了可用的液体源质，我需要改进整个炼金工艺了。 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_cn.lang | 1361 | research.THAUMATORIUM.stage.2=我发明了一个自动的设备，命名为神秘炼金塔。像大部分多方块结构一样，需要使用世界盐来制造。 <BR>神秘炼金塔是一个奇妙的发明，神秘使可以选择使用哪种配方和添加哪种触媒。然后它就会使用管道自动从可用的来源中抽取源质。只要有足够的触媒它就可以随时生产所需物品。 <BR>组成其基座的坩埚不需要加入水，但是依然需要热源。<LINE>当访问设备时可以看到几个槽位。左上角的槽位是放置触媒的 ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_tw.lang | 338 | tile.thaumatorium.name=秘術煉成機 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_tw.lang | 339 | tile.thaumatorium_top.name=秘術煉成機 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_tw.lang | 1359 | research.THAUMATORIUM.title=煉金自動化 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_tw.lang | 1360 | research.THAUMATORIUM.stage.1=煉金過程總會遇到一些挫折與失誤——算錯要素、源質降解，而且材料需要勞心費神手動混合。 我受夠了。 <BR>現在我有了純粹的液態源質，我應該改善整個煉金過程。 |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/lang/zh_tw.lang | 1361 | research.THAUMATORIUM.stage.2=我發明了一項自動裝置，並命名為秘術煉成機。就像其他複合式裝置一樣需要利用世界鹽來製作。 <BR>秘術煉成機是能讓秘術師選擇煉成公式與觸媒的一項神奇發明。可以透過管道中自動抽取所需的源質。只需提供觸媒，它就能完美地持續合成每項物品。 <BR>底座的的坩堝並不需要添水，但其下方依舊需要提供熱源。<LINE>開啟該設備後會看見一些格子。左上方的格子用來放置觸媒。 放置好後便能在右上方 ... |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 376 | "key": "THAUMATORIUM", |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 377 | "name": "research.THAUMATORIUM.title", |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 378 | "icons": [ "thaumcraft:thaumatorium" ], |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 384 | "text": "research.THAUMATORIUM.stage.1", |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 388 | "text": "research.THAUMATORIUM.stage.2", |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 389 | "recipes": ["thaumcraft:Thaumatorium","thaumcraft:MnemonicMatrix"] |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/assets/thaumcraft/research/alchemy.json | 397 | "parents": [ "THAUMATORIUM", "INFUSION"], |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/changelog.txt | 23 | - thaumatorium should now display all recipes (occasionally a recipe would be lost, like the spiritus vis crystal recipe) |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/changelog.txt | 24 | - thaumatorium recipes are now sorted alphabetically |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/changelog.txt | 69 | - improved thaumatorium GUI |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/changelog.txt | 156 | - fixed thaumatorium crafting that involves the same catalyst being able to craft multiple different results (for example vis crystal recipes) |
-| thaumcraft:Thaumatorium | ALCHEMY_OTHER | src/main/resources/changelog.txt | 164 | - fix thaumatorium, infusion crafting and golem builder not working |
+No direct legacy source hits were found for the alchemy page references.
 
 ## Legacy recipe API/pattern hit samples
 

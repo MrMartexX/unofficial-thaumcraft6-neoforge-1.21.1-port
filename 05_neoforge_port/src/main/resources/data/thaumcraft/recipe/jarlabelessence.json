@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thaumcraft:jar_label"
+    },
+    {
+      "item": "thaumcraft:phial"
+    },
+    {
+      "item": "minecraft:ink_sac"
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:jar_label_essence",
+    "count": 1
+  }
+}

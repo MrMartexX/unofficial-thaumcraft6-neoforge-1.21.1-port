@@ -1,0 +1,25 @@
+{
+  "type": "thaumcraft:crucible",
+  "research": "VOIDMETAL",
+  "catalyst": {
+    "item": "thaumcraft:thaumium_ingot"
+  },
+  "aspects": [
+    {
+      "aspect": "void",
+      "amount": 20
+    },
+    {
+      "aspect": "metal",
+      "amount": 10
+    },
+    {
+      "aspect": "entropy",
+      "amount": 10
+    }
+  ],
+  "result": {
+    "id": "thaumcraft:void_ingot",
+    "count": 1
+  }
+}
