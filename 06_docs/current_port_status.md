@@ -441,3 +441,7 @@ The sections below are historical update notes. They should not be read as the c
 - Refreshed recipe/page and alchemy source audits after the GOLEMANCY_SEAL_CRUCIBLE recipe/page batch.
 - Use the refreshed counts to confirm the golemancy seal crucible page gap reduction and select the next safe batch.
 - If golemancy seal crucible gaps are closed, keep infusion-based seals, JarBrain, MindBiothaumic, and GolemPress separated into their own boundary batches.
+### Latest focused infusion recipe source candidate audit
+
+- Added `focused_infusion_recipe_source_candidates.md`, extracting legacy `addInfusionCraftingRecipe` blocks for missing infusion-related research page references.
+- This prepares the next architecture slice: a modern infusion recipe/page boundary without in-world infusion crafting behavior.

@@ -136,3 +136,7 @@ Last updated: 2026-06-18
 ## Post-metal-purification audit note
 
 - Use refreshed post-GOLEMANCY_SEALS audits to confirm how many GOLEMANCY_PAGE_DEFERRED entries remain before choosing the next batch.
+## Focused infusion recipe candidate note
+
+- Use `06_docs/audits/focused_infusion_recipe_source_candidates.md` before implementing an infusion recipe/page boundary.
+- Scope for the first infusion slice should be serializer/catalog/page display only, not in-world infusion altar behavior.
