@@ -545,3 +545,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - The blueprint placeholder batch removed the last GOLEMANCY_PAGE_DEFERRED reference.
 - The golemancy page-boundary extractor is now skipped when that class is absent from the page-gap audit.
+## Synthetic recipe page audit classification
+
+- FAKE_OR_SYNTHETIC_PAGE references are now reported separately from actionable missing recipe pages.
+- This preserves the list of synthetic teaching/UI placeholders while allowing actionable recipe page gaps to reach zero.

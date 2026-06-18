@@ -328,7 +328,9 @@ $requiredCraftRefs = @($classified | Where-Object { $_.Kind -eq 'REQUIRED_CRAFT'
 $iconRefs = @($classified | Where-Object { $_.Kind -eq 'ICON' })
 $requiredItemRefs = @($classified | Where-Object { $_.Kind -eq 'REQUIRED_ITEM' })
 
-$missingRecipePageRefs = @($recipePageRefs | Where-Object { -not $_.ResolvedRecipe } | Sort-Object MissingRecipePageClass, ResearchFile, Reference)
+$rawMissingRecipePageRefs = @($recipePageRefs | Where-Object { -not $_.ResolvedRecipe } | Sort-Object MissingRecipePageClass, ResearchFile, Reference)
+$intentionalSyntheticPageRefs = @($rawMissingRecipePageRefs | Where-Object { $_.MissingRecipePageClass -eq 'FAKE_OR_SYNTHETIC_PAGE' } | Sort-Object ResearchFile, Reference, JsonPath)
+$missingRecipePageRefs = @($rawMissingRecipePageRefs | Where-Object { $_.MissingRecipePageClass -ne 'FAKE_OR_SYNTHETIC_PAGE' } | Sort-Object MissingRecipePageClass, ResearchFile, Reference)
 $resolvedRecipePageRefs = @($recipePageRefs | Where-Object { $_.ResolvedRecipe } | Sort-Object RecipeClass, Reference)
 $missingPageGroups = @($missingRecipePageRefs | Group-Object MissingRecipePageClass | Sort-Object -Property @{ Expression = 'Count'; Descending = $true }, Name)
 $fileGroups = @($missingRecipePageRefs | Group-Object ResearchFile | Sort-Object -Property @{ Expression = 'Count'; Descending = $true }, Name)
@@ -346,7 +348,9 @@ $lines.Add("| Recipe JSON files scanned | $($recipeRows.Count) |")
 $lines.Add("| Research JSON files scanned | $($researchFiles.Count) |")
 $lines.Add("| Stage/addendum recipe page references | $($recipePageRefs.Count) |")
 $lines.Add("| Resolved recipe page references | $($resolvedRecipePageRefs.Count) |")
+$lines.Add("| Raw unresolved recipe page references | $($rawMissingRecipePageRefs.Count) |")
 $lines.Add("| Missing recipe page references | $($missingRecipePageRefs.Count) |")
+$lines.Add("| Intentional fake/synthetic page references | $($intentionalSyntheticPageRefs.Count) |")
 $lines.Add("| Required craft references | $($requiredCraftRefs.Count) |")
 $lines.Add("| Required item references | $($requiredItemRefs.Count) |")
 $lines.Add("| Icon references | $($iconRefs.Count) |")
@@ -399,6 +403,18 @@ if ($missingRecipePageRefs.Count -eq 0) {
     }
 }
 $lines.Add('')
+$lines.Add('## Intentional fake/synthetic page references')
+$lines.Add('')
+if ($intentionalSyntheticPageRefs.Count -eq 0) {
+    $lines.Add('No intentional fake/synthetic page references were found.')
+} else {
+    $lines.Add('| Reference | Research file | JSON path |')
+    $lines.Add('|---|---|---|')
+    foreach ($ref in $intentionalSyntheticPageRefs) {
+        $lines.Add("| $(Escape-Md $ref.Reference) | $(Escape-Md $ref.ResearchFile) | $(Escape-Md $ref.JsonPath) |")
+    }
+}
+$lines.Add('')
 $lines.Add('## Required craft references')
 $lines.Add('')
 if ($requiredCraftRefs.Count -eq 0) {
@@ -415,7 +431,7 @@ $lines.Add('## Next implementation guidance')
 $lines.Add('')
 $lines.Add('1. Use Missing recipe page references by class as the decision source for the next large implementation slice.')
 $lines.Add('2. If ALCHEMY_CRUCIBLE_OR_SPECIAL_PAGE dominates, design a crucible/special alchemy recipe serializer and page snapshot before machine behavior.')
-$lines.Add('3. If INFUSION_PAGE_DEFERRED or FAKE_OR_SYNTHETIC_PAGE dominates, design an infusion/fake recipe page boundary before infusion matrix behavior.')
+$lines.Add('3. FAKE_OR_SYNTHETIC_PAGE references are intentional non-recipe teaching/UI placeholders and are reported separately from actionable gaps.')
 $lines.Add('4. Do not treat ICON, REQUIRED_ITEM, or REQUIRED_CRAFT references as missing recipe pages unless their own requirement audit says they are unresolved.')
 $lines.Add('5. Keep build and dedicated server smoke green after every page/serializer expansion.')
 $lines.Add('')

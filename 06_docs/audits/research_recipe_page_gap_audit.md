@@ -1,6 +1,6 @@
 # Research Recipe Page Gap Audit
 
-Generated: 2026-06-18 21:35:49 +03:00
+Generated: 2026-06-18 23:01:16 +03:00
 
 ## Summary
 
@@ -10,24 +10,20 @@ Generated: 2026-06-18 21:35:49 +03:00
 | Research JSON files scanned | 8 |
 | Stage/addendum recipe page references | 253 |
 | Resolved recipe page references | 238 |
-| Missing recipe page references | 15 |
+| Raw unresolved recipe page references | 15 |
+| Missing recipe page references | 0 |
+| Intentional fake/synthetic page references | 15 |
 | Required craft references | 29 |
 | Required item references | 30 |
 | Icon references | 156 |
 
 ## Missing recipe page references by class
 
-| Class | Count |
-|---|---:|
-| FAKE_OR_SYNTHETIC_PAGE | 15 |
+No missing stage/addendum recipe page references were found.
 
 ## Missing recipe page references by research file
 
-| Research file | Count |
-|---|---:|
-| 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | 11 |
-| 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | 3 |
-| 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | 1 |
+No missing stage/addendum recipe page references were found.
 
 ## Resolved recipe page references
 
@@ -274,23 +270,27 @@ Generated: 2026-06-18 21:35:49 +03:00
 
 ## Missing recipe page references
 
-| Class | Reference | Research file | JSON path |
-|---|---|---|---|
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:triplemeattreatfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[3].stages[1].recipes[1] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[0].recipes[0] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[1].recipes[1] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[2].recipes[1] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:IEARCINGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[5] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:IEBURROWINGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[0] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:IECOLLECTORFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[1] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:IEDESTRUCTIVEFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[2] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:IEESSENCEFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[6] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:IELAMPLIGHTFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[7] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:IEREFININGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[3] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:IESOUNDINGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[4] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:RunicArmorFake0 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[10].stages[1].recipes[0] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:RunicArmorFake1 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[10].stages[1].recipes[1] |
-| FAKE_OR_SYNTHETIC_PAGE | thaumcraft:RunicArmorFake2 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[10].stages[1].recipes[2] |
+No missing stage/addendum recipe page references were found.
+
+## Intentional fake/synthetic page references
+
+| Reference | Research file | JSON path |
+|---|---|---|
+| thaumcraft:triplemeattreatfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[3].stages[1].recipes[1] |
+| thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[0].recipes[0] |
+| thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[1].recipes[1] |
+| thaumcraft:salismundusfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[0].stages[2].recipes[1] |
+| thaumcraft:IEARCINGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[5] |
+| thaumcraft:IEBURROWINGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[0] |
+| thaumcraft:IECOLLECTORFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[1] |
+| thaumcraft:IEDESTRUCTIVEFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[2] |
+| thaumcraft:IEESSENCEFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[6] |
+| thaumcraft:IELAMPLIGHTFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[7] |
+| thaumcraft:IEREFININGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[3] |
+| thaumcraft:IESOUNDINGFAKE | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[9].stages[1].recipes[4] |
+| thaumcraft:RunicArmorFake0 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[10].stages[1].recipes[0] |
+| thaumcraft:RunicArmorFake1 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[10].stages[1].recipes[1] |
+| thaumcraft:RunicArmorFake2 | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[10].stages[1].recipes[2] |
 
 ## Required craft references
 
@@ -330,6 +330,6 @@ Generated: 2026-06-18 21:35:49 +03:00
 
 1. Use Missing recipe page references by class as the decision source for the next large implementation slice.
 2. If ALCHEMY_CRUCIBLE_OR_SPECIAL_PAGE dominates, design a crucible/special alchemy recipe serializer and page snapshot before machine behavior.
-3. If INFUSION_PAGE_DEFERRED or FAKE_OR_SYNTHETIC_PAGE dominates, design an infusion/fake recipe page boundary before infusion matrix behavior.
+3. FAKE_OR_SYNTHETIC_PAGE references are intentional non-recipe teaching/UI placeholders and are reported separately from actionable gaps.
 4. Do not treat ICON, REQUIRED_ITEM, or REQUIRED_CRAFT references as missing recipe pages unless their own requirement audit says they are unresolved.
 5. Keep build and dedicated server smoke green after every page/serializer expansion.
