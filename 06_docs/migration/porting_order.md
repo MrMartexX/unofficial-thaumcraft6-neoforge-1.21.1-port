@@ -1,8 +1,8 @@
 # Thaumcraft 6 to NeoForge 1.21.1 Porting Order
 
-Source basis: `06_docs/subsystem_inventory.md`
+Source basis: `06_docs/migration/subsystem_inventory.md`
 
-Migration guide basis: `06_docs/NeoForge_legacy_migration_guide.md`
+Migration guide basis: `06_docs/migration/NeoForge_legacy_migration_guide.md`
 
 This document defines a staged porting order. It is not an implementation plan for copying legacy classes directly. The legacy Thaumcraft 6 source should be used as behavioral reference. NeoForge 1.21.1 work must rebuild registration, data loading, storage, networking, screens, worldgen, and client rendering through current APIs.
 

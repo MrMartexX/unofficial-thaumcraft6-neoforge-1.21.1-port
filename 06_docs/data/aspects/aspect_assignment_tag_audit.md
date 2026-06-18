@@ -6,11 +6,11 @@ Legacy references:
 
 - `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/api/OreDictionaryEntries.java`
 - `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/config/ConfigAspects.java`
-- `06_docs/NeoForge_legacy_migration_guide.md`
-- `06_docs/aspects_design.md`
-- `06_docs/aspect_generate_tags_audit.md`
-- `06_docs/aspect_assignment_data_format.md`
-- `06_docs/vanilla_aspect_policy.md`
+- `06_docs/migration/NeoForge_legacy_migration_guide.md`
+- `06_docs/data/aspects/aspects_design.md`
+- `06_docs/data/aspects/aspect_generate_tags_audit.md`
+- `06_docs/data/aspects/aspect_assignment_data_format.md`
+- `06_docs/data/aspects/vanilla_aspect_policy.md`
 
 ## Purpose
 

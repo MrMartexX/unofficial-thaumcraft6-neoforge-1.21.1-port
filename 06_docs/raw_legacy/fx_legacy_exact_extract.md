@@ -279,7 +279,7 @@ public class ParticleEngine
 
 ## FXDispatcher methods using FXGeneric or ParticleEngine
 
-Full extracted methods are also written to 06_docs/fxdispatcher_fxgeneric_methods.txt.
+Full extracted methods are also written to 06_docs/raw_legacy/fxdispatcher_fxgeneric_methods.txt.
 
 | Method | Contains drawWispyMotes | Contains setGridSize | Contains setParticles | Contains ParticleEngine.addEffect |
 |---|---:|---:|---:|---:|
@@ -339,7 +339,7 @@ Full extracted methods are also written to 06_docs/fxdispatcher_fxgeneric_method
 
 ## First 300 usage hits
 
-Full CSV is written to 06_docs/fx_legacy_usage_hits.csv.
+Full CSV is written to 06_docs/raw_legacy/fx_legacy_usage_hits.csv.
 
 | File | Line | Pattern | Method guess | Code |
 |---|---:|---|---|---|

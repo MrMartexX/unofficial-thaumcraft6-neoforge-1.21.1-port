@@ -11,8 +11,8 @@ This is no longer the live implementation inventory. For current repository stat
 | Target module | `05_neoforge_port` |
 | Legacy source reference | `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master` |
 | Visual reference | `07_Test_Instance_and_Comparisons/02_Thaumcraft 1.12.2 Inventory Screenshots` |
-| Migration matrix | `06_docs/migration_matrix.md` |
-| Creative order reference | `06_docs/creative_tab_order_reference.md` |
+| Migration matrix | `06_docs/migration/migration_matrix.md` |
+| Creative order reference | `06_docs/resources/creative_tab_order_reference.md` |
 | Current status | `06_docs/current_port_status.md` |
 
 ## Purpose

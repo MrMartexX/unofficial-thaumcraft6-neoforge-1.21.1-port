@@ -12,27 +12,27 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 | Original jar reference | `01_original_jar/Thaumcraft-1.12.2-6.1.BETA26.jar` |
 | API reference | `04_api_reference/thaumcraft-api-master` |
 | NeoForge target project | `05_neoforge_port` |
-| Main migration guide | `06_docs/NeoForge_legacy_migration_guide.md` |
+| Main migration guide | `06_docs/migration/NeoForge_legacy_migration_guide.md` |
 | Current task queue | `06_docs/CURRENT_TASK.md` |
 | Current implementation status | `06_docs/current_port_status.md` |
 | Documentation index | `06_docs/documentation_index.md` |
-| Subsystem inventory | `06_docs/subsystem_inventory.md` |
-| Porting order | `06_docs/porting_order.md` |
-| Creative tab reference | `06_docs/creative_tab_order_reference.md` |
-| Aspect assignment tag audit | `06_docs/aspect_assignment_tag_audit.md` |
-| Aspect generateTags audit | `06_docs/aspect_generate_tags_audit.md` |
-| Aspect assignment data format | `06_docs/aspect_assignment_data_format.md` |
-| Aspect generated cache design | `06_docs/aspect_generated_cache_design.md` |
-| Vanilla aspect policy | `06_docs/vanilla_aspect_policy.md` |
-| Vanilla 1.21 aspect assignment audit | `06_docs/vanilla_1_21_aspect_assignments.md` |
-| Vanilla post-1.12 aspect rationale table | `06_docs/vanilla_post_1_12_aspect_rationale.md` |
-| Aspect legacy gap audit | `06_docs/aspect_legacy_gap_audit.md` |
-| Aspect runtime logic audit | `06_docs/aspect_legacy_runtime_logic_audit.md` |
-| Aspect parity comparison harness | `06_docs/aspect_parity_comparison_harness.md`; mapped runtime artifacts under `07_Test_Instance_and_Comparisons/aspect_parity` |
-| Scan parity comparison harness | `06_docs/scanning_parity_validation.md`; mapped runtime artifacts under `07_Test_Instance_and_Comparisons/scan_parity` |
-| Research table design | `06_docs/research_table_scribing_tools_design.md` |
-| Research progression parity audit | `06_docs/research_progression_parity_audit.md`; runtime/source artifacts under `07_Test_Instance_and_Comparisons/research_data_parity` |
-| Arcane crafting design | `06_docs/arcane_crafting_design.md`; runtime audit under `07_Test_Instance_and_Comparisons/arcane_crafting` |
+| Subsystem inventory | `06_docs/migration/subsystem_inventory.md` |
+| Porting order | `06_docs/migration/porting_order.md` |
+| Creative tab reference | `06_docs/resources/creative_tab_order_reference.md` |
+| Aspect assignment tag audit | `06_docs/data/aspects/aspect_assignment_tag_audit.md` |
+| Aspect generateTags audit | `06_docs/data/aspects/aspect_generate_tags_audit.md` |
+| Aspect assignment data format | `06_docs/data/aspects/aspect_assignment_data_format.md` |
+| Aspect generated cache design | `06_docs/data/aspects/aspect_generated_cache_design.md` |
+| Vanilla aspect policy | `06_docs/data/aspects/vanilla_aspect_policy.md` |
+| Vanilla 1.21 aspect assignment audit | `06_docs/data/aspects/vanilla_1_21_aspect_assignments.md` |
+| Vanilla post-1.12 aspect rationale table | `06_docs/data/aspects/vanilla_post_1_12_aspect_rationale.md` |
+| Aspect legacy gap audit | `06_docs/data/aspects/aspect_legacy_gap_audit.md` |
+| Aspect runtime logic audit | `06_docs/data/aspects/aspect_legacy_runtime_logic_audit.md` |
+| Aspect parity comparison harness | `06_docs/data/aspects/aspect_parity_comparison_harness.md`; mapped runtime artifacts under `07_Test_Instance_and_Comparisons/aspect_parity` |
+| Scan parity comparison harness | `06_docs/research/scanning_parity_validation.md`; mapped runtime artifacts under `07_Test_Instance_and_Comparisons/scan_parity` |
+| Research table design | `06_docs/research/research_table_scribing_tools_design.md` |
+| Research progression parity audit | `06_docs/research/research_progression_parity_audit.md`; runtime/source artifacts under `07_Test_Instance_and_Comparisons/research_data_parity` |
+| Arcane crafting design | `06_docs/crafting/arcane_crafting_design.md`; runtime audit under `07_Test_Instance_and_Comparisons/arcane_crafting` |
 | Visual reference | `07_Test_Instance_and_Comparisons/02_Thaumcraft 1.12.2 Inventory Screenshots` |
 
 ## Target baseline

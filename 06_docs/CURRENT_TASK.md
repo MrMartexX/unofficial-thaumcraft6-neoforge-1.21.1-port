@@ -17,7 +17,7 @@ Last updated: 2026-06-18
 - GitHub Actions build workflow exists and runs on GitHub-hosted Windows runner.
 - Build workflow is now path-filtered to `05_neoforge_port/**` and `.github/workflows/build.yml`.
 - Dedicated server smoke test script exists under `tools/ci/server-smoke.ps1`.
-- The active migration guide is now `06_docs/NeoForge_legacy_migration_guide.md`; older `.docx` references were removed from current docs.
+- The active migration guide is now `06_docs/migration/NeoForge_legacy_migration_guide.md`; older `.docx` references were removed from current docs.
 - The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
 
 ## Do not change without explicit request

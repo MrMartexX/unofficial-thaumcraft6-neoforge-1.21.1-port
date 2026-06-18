@@ -5,7 +5,7 @@ Last updated: 2026-05-14
 
 ## Purpose
 
-This document records every current manual vanilla 1.21 item assignment in `legacy_vanilla_modern_manual.json`. For the broader table of all modern-only, flattened, damage, potion, and stored-enchantment stack samples from the runtime comparer, use `06_docs/vanilla_post_1_12_aspect_rationale.md`.
+This document records every current manual vanilla 1.21 item assignment in `legacy_vanilla_modern_manual.json`. For the broader table of all modern-only, flattened, damage, potion, and stored-enchantment stack samples from the runtime comparer, use `06_docs/data/aspects/vanilla_post_1_12_aspect_rationale.md`.
 
 The parity rule is: legacy 1.12 assignments win first; 1.21-only values are allowed only when they are explicit, documented, and based on a closest Thaumcraft 6 aspect category. No lookup-time name guessing is allowed.
 

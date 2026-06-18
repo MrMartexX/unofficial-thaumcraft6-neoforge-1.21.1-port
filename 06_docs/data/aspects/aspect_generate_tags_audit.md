@@ -9,7 +9,7 @@ Legacy references:
 - `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/InternalMethodHandler.java`
 - `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/config/ConfigAspects.java`
 - `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/api/OreDictionaryEntries.java`
-- `06_docs/NeoForge_legacy_migration_guide.md`
+- `06_docs/migration/NeoForge_legacy_migration_guide.md`
 
 ## Purpose
 

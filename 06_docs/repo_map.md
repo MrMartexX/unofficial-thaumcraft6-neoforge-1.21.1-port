@@ -53,8 +53,8 @@ Read in this order when starting a new session:
 
 1. `06_docs/CURRENT_TASK.md` - current focus, branch and guardrails.
 2. `06_docs/current_port_status.md` - current implementation status and document priority list.
-3. `06_docs/migration_matrix.md` - gate sequencing, subsystem scope and risk rules.
-4. `06_docs/porting_order.md` - staged roadmap.
+3. `06_docs/migration/migration_matrix.md` - gate sequencing, subsystem scope and risk rules.
+4. `06_docs/migration/porting_order.md` - staged roadmap.
 5. Specific subsystem docs depending on the work.
 
 ## Current workflow

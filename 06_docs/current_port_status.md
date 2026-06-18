@@ -48,33 +48,33 @@ This is the current implementation status document. Use it together with the mig
 
 ## Document priority
 
-1. `06_docs/NeoForge_legacy_migration_guide.md` - main architecture guide.
+1. `06_docs/migration/NeoForge_legacy_migration_guide.md` - main architecture guide.
 2. `06_docs/current_port_status.md` - current repository status.
 3. `06_docs/CURRENT_TASK.md` - live task queue and immediate guardrails.
 4. `06_docs/documentation_index.md` - docs folder navigation and cleanup rules.
-5. `06_docs/migration_matrix.md` - subsystem matrix and gate rules.
-6. `06_docs/porting_order.md` - staged roadmap.
-7. `06_docs/creative_tab_order_reference.md` - creative tab order rules.
-8. `06_docs/subsystem_inventory.md` - legacy subsystem audit.
-9. `06_docs/aspect_assignment_tag_audit.md` - exact OreDictionary-to-tag audit for aspect assignments.
-10. `06_docs/aspect_generate_tags_audit.md` - exact legacy recipe-derived aspect generation audit and blockers.
-11. `06_docs/aspect_assignment_data_format.md` - current data-driven aspect assignment format.
-12. `06_docs/vanilla_aspect_policy.md` - policy for exact vanilla seeds, legacy OreDictionary tag bridges, and 1.21-only content.
-13. `06_docs/vanilla_1_21_aspect_assignments.md` - complete current manual 1.21 vanilla assignment table and rationale.
-14. `06_docs/vanilla_post_1_12_aspect_rationale.md` - complete modern-only/flattened/component stack table with aspect amounts and rationale.
-15. `06_docs/aspect_legacy_gap_audit.md` - gap audit against 1.12 legacy and the rough 1.20.1 attempt.
-16. `06_docs/aspect_generated_cache_design.md` - generated aspect stack key/cache scaffold and invalidation rules.
-17. `06_docs/aspect_legacy_runtime_logic_audit.md` - detailed 1.12 runtime aspect lookup/bonus/generation/scanning audit.
-18. `06_docs/aspect_parity_comparison_harness.md` - runtime dump and comparison method for 1.12.2 vs 1.21.1 aspect parity.
-19. `06_docs/aura_design.md` - server-side aura storage/query/tick design for the first aura slice.
-20. `06_docs/research_knowledge_scanning_design.md` - current research/knowledge/scanning design slice.
-21. `06_docs/research_table_scribing_tools_design.md` - first research table/scribing tools BlockEntity slice boundary.
-22. `06_docs/research_progression_parity_audit.md` - exact research progression, warp, reward, addendum, and data-parity checkpoint.
-23. `06_docs/thaumonomicon_ui_design.md` - server-authoritative item/open/browser/entry UI boundary and deferred recipe-page scope.
-24. `06_docs/scanning_parity_validation.md` - runtime dump and comparison method for scan predicate parity.
-25. `06_docs/entity_aspect_assignment_audit.md` - entity aspect assignment parity/policy audit for scanning.
-26. `06_docs/rendering_model_pipeline_audit.md` - model/resource/rendering pipeline audit for 1.12 -> NeoForge 1.21.1.
-27. `06_docs/gate1_items_plan.md` - historical Gate 1 workflow, not a full current inventory.
+5. `06_docs/migration/migration_matrix.md` - subsystem matrix and gate rules.
+6. `06_docs/migration/porting_order.md` - staged roadmap.
+7. `06_docs/resources/creative_tab_order_reference.md` - creative tab order rules.
+8. `06_docs/migration/subsystem_inventory.md` - legacy subsystem audit.
+9. `06_docs/data/aspects/aspect_assignment_tag_audit.md` - exact OreDictionary-to-tag audit for aspect assignments.
+10. `06_docs/data/aspects/aspect_generate_tags_audit.md` - exact legacy recipe-derived aspect generation audit and blockers.
+11. `06_docs/data/aspects/aspect_assignment_data_format.md` - current data-driven aspect assignment format.
+12. `06_docs/data/aspects/vanilla_aspect_policy.md` - policy for exact vanilla seeds, legacy OreDictionary tag bridges, and 1.21-only content.
+13. `06_docs/data/aspects/vanilla_1_21_aspect_assignments.md` - complete current manual 1.21 vanilla assignment table and rationale.
+14. `06_docs/data/aspects/vanilla_post_1_12_aspect_rationale.md` - complete modern-only/flattened/component stack table with aspect amounts and rationale.
+15. `06_docs/data/aspects/aspect_legacy_gap_audit.md` - gap audit against 1.12 legacy and the rough 1.20.1 attempt.
+16. `06_docs/data/aspects/aspect_generated_cache_design.md` - generated aspect stack key/cache scaffold and invalidation rules.
+17. `06_docs/data/aspects/aspect_legacy_runtime_logic_audit.md` - detailed 1.12 runtime aspect lookup/bonus/generation/scanning audit.
+18. `06_docs/data/aspects/aspect_parity_comparison_harness.md` - runtime dump and comparison method for 1.12.2 vs 1.21.1 aspect parity.
+19. `06_docs/gameplay/aura_design.md` - server-side aura storage/query/tick design for the first aura slice.
+20. `06_docs/research/research_knowledge_scanning_design.md` - current research/knowledge/scanning design slice.
+21. `06_docs/research/research_table_scribing_tools_design.md` - first research table/scribing tools BlockEntity slice boundary.
+22. `06_docs/research/research_progression_parity_audit.md` - exact research progression, warp, reward, addendum, and data-parity checkpoint.
+23. `06_docs/research/thaumonomicon_ui_design.md` - server-authoritative item/open/browser/entry UI boundary and deferred recipe-page scope.
+24. `06_docs/research/scanning_parity_validation.md` - runtime dump and comparison method for scan predicate parity.
+25. `06_docs/data/aspects/entity_aspect_assignment_audit.md` - entity aspect assignment parity/policy audit for scanning.
+26. `06_docs/rendering/rendering_model_pipeline_audit.md` - model/resource/rendering pipeline audit for 1.12 -> NeoForge 1.21.1.
+27. `06_docs/migration/gate1_items_plan.md` - historical Gate 1 workflow, not a full current inventory.
 
 ## High-level status
 
@@ -124,9 +124,9 @@ Import rule: do not overwrite already-adapted 1.21 resources. Some shared legacy
 
 Imported legacy resources include old `.lang` files, `research`, `shader`, `sounds`, `textures/gui`, `textures/entity`, `textures/research`, OBJ/MTL models, legacy `loot_tables`, and legacy `textures/blocks`. These are reference/base assets until each subsystem adapts them to NeoForge/Minecraft 1.21.1 conventions.
 
-The copied-file manifest is `06_docs/asset_bulk_import_manifest.txt`.
+The copied-file manifest is `06_docs/resources/asset_bulk_import_manifest.txt`.
 
-The runtime asset audit is `06_docs/runtime_asset_audit.md`.
+The runtime asset audit is `06_docs/resources/runtime_asset_audit.md`.
 
 ## Last local validation
 

@@ -43,7 +43,7 @@ Minecraft 1.21.1 contains vanilla items and blocks that did not exist in Minecra
 
 This keeps 1.21.1 additions deterministic. A new item can be added later, but only by adding an explicit data assignment, an audited tag bridge, or a validated recipe-derived path.
 
-The full current manual 1.21 assignment table is `06_docs/vanilla_1_21_aspect_assignments.md`.
+The full current manual 1.21 assignment table is `06_docs/data/aspects/vanilla_1_21_aspect_assignments.md`.
 
 ## Current Implementation Decision
 
