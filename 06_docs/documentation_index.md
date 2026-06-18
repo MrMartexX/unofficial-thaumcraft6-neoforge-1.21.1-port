@@ -2,7 +2,7 @@
 
 Last updated: 2026-06-18
 
-This is the human navigation map for `06_docs/`. It records where documents live after the docs-folder restructuring.
+This is the navigation map for `06_docs/`. It records where documents live after the docs-folder restructuring.
 
 ## Read First
 
