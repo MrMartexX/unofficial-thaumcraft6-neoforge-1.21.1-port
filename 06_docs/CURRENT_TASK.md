@@ -68,3 +68,7 @@ Last updated: 2026-06-17
 ## Post-HEDGE audit refresh note
 
 - Use refreshed post-HEDGE research_recipe_page_gap_audit.md counts to choose the next family-level recipe/page batch.
+
+## Remaining alchemy recipe extraction note
+
+- Use 06_docs/audits/remaining_alchemy_legacy_recipe_blocks.md to select the next remaining alchemy family-level recipe/page batch.

@@ -324,3 +324,9 @@ Next:
 - Refreshed custom recipe boundary, research recipe page gap, and legacy alchemy source audits after the HEDGE_ALCHEMY crucible recipe page boundary landed.
 - Use the refreshed missing recipe page class and research-file distributions as the source of truth for the next large family-level recipe/page batch.
 - The next batch should target the largest remaining family, not individual recipe ids, unless an audit shows a family needs a separate data-model boundary.
+
+### Latest remaining alchemy recipe extraction update
+
+- Added tools/audits/extract-remaining-alchemy-recipes.ps1 and 06_docs/audits/remaining_alchemy_legacy_recipe_blocks.md.
+- This extraction captures exact legacy recipe source blocks for remaining non-HEDGE alchemy recipe-page gaps after the first crucible boundary batch.
+- Use the extracted API kind and family distribution to choose the next broad alchemy batch without mixing crucible page recipes with infusion or machine behavior.
