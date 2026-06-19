@@ -311,3 +311,7 @@ Last updated: 2026-06-19
 - Added `TCInfusionMutationExecutor.executeWithAspectSource(...)` for audit-only completion that drains an in-memory source before item mutation.
 - Runtime audit covers exact source drain plus item completion, and insufficient source rejection with no item/source mutation.
 - Player-facing completion remains deferred until this boundary is wired to a real essentia source policy.
+## Infusion aspect source interface note
+
+- Refactored `TCInfusionAspectSource` into a small interface while preserving the audit-only `memory(...)` source.
+- This prepares future real essentia source implementations without changing current non-player-facing behavior.

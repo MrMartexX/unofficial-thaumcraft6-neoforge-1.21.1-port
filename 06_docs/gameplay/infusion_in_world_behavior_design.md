@@ -130,3 +130,7 @@ Every infusion behavior change must pass:
 - `TCInfusionMutationExecutor.executeWithAspectSource(...)` combines the audit-only mutation executor with `TCInfusionAspectSource`.
 - It rejects insufficient aspect sources before item mutation, then drains the source and completes the same audit-only item mutation path.
 - This is still not player-facing and still does not implement jars, tubes, aura, alembics or essentia transport.
+## Aspect source interface note
+
+- `TCInfusionAspectSource` is now an interface with the current audit-only in-memory implementation behind `TCInfusionAspectSource.memory(...)`.
+- This keeps the executor/source contract stable for future jar, tube, alembic or aura-backed sources without making those systems part of the current slice.

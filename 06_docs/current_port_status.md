@@ -632,3 +632,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added audit-only executor/source integration for all-or-nothing aspect drain plus item mutation.
 - This remains isolated from real jars, tubes, aura and player-facing infusion completion.
+## Infusion aspect source interface note
+
+- `TCInfusionAspectSource` is now an interface with an in-memory audit implementation.
+- Real essentia source implementations remain deferred.
