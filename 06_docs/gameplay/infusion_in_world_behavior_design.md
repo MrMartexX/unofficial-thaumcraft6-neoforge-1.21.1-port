@@ -148,3 +148,7 @@ Every infusion behavior change must pass:
 
 - `infusion_container_item_remainder_audit.md` now separates handled component-side remainders from still-blocked catalyst-side remainders.
 - Current data has component-side remainder inputs covered by the audit-only policy; catalyst-side container remainders remain blocked if they appear later.
+## Tag input expansion audit note
+
+- `infusion_tag_input_expansion_audit.md` expands locally available infusion tag inputs and flags missing/external tags.
+- This audit keeps tag-based recipe ingredients from bypassing the container/remainder policy when player-facing completion is eventually enabled.

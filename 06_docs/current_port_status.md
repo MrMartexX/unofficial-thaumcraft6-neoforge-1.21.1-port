@@ -648,3 +648,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Updated the infusion container remainder audit to reflect component-side remainder preservation.
 - Player-facing completion remains disabled.
+## Infusion tag input expansion audit note
+
+- Added local tag expansion audit for tag-based infusion inputs.
+- External/built-in tags remain a future player-facing validation concern.

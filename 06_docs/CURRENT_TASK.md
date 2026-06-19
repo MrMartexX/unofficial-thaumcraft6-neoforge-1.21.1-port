@@ -329,3 +329,7 @@ Last updated: 2026-06-19
 
 - Refreshed the container remainder audit after adding component-side remainder preservation.
 - The audit now distinguishes handled component remainders from still-blocked catalyst remainders and tag-input follow-ups.
+## Infusion tag input expansion audit note
+
+- Added an audit for tag-based infusion catalyst/component inputs.
+- The audit expands local tags, reports external or missing tags, and checks for known remainder item members.
