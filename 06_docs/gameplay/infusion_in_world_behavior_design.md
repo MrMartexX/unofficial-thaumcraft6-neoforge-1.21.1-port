@@ -63,3 +63,8 @@ Every infusion behavior change must pass:
 - Keep matrix/pedestal inventory behavior deferred until validation is stable.
 - Add a runtime audit/exporter only after the validation helper exists.
 - Update this document after the first behavior slice lands.
+## Validation helper note
+
+- `TCInfusionRecipeMatcher` provides the first server-side validation helper for catalyst, unordered pedestal components and aspect costs.
+- The helper is intentionally non-mutating and does not activate matrix crafting, pedestal inventories, instability events or visual effects.
+- Future in-world infusion behavior should call this helper before consuming items or mutating aura/aspect state.

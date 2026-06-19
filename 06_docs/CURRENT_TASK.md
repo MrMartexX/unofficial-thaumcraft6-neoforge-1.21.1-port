@@ -252,3 +252,7 @@ Last updated: 2026-06-18
 - Added a focused design document for the first in-world infusion behavior slice.
 - Added an infusion recipe data audit to validate catalyst/components/aspects/result shape before behavior activation.
 - In-world infusion matrix, pedestal inventory, instability events and visual effects remain deferred.
+## Infusion validation helper note
+
+- Added `TCInfusionRecipeMatcher` as a non-mutating server-side validation helper for catalyst, components and aspect costs.
+- In-world infusion matrix behavior remains deferred until a focused runtime audit and BlockEntity slice are added.

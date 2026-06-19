@@ -574,3 +574,7 @@ The sections below are historical update notes. They should not be read as the c
 - Added a focused design document for the first in-world infusion behavior slice.
 - Added an infusion recipe data audit to validate catalyst/components/aspects/result shape before behavior activation.
 - In-world infusion matrix, pedestal inventory, instability events and visual effects remain deferred.
+## Infusion validation helper note
+
+- Added `TCInfusionRecipeMatcher` as a non-mutating server-side validation helper for loaded `thaumcraft:infusion` recipe data.
+- This is a validation boundary only; in-world infusion matrix behavior, pedestal inventories, instability effects and rendering remain deferred.
