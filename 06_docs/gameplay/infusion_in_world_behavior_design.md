@@ -110,3 +110,8 @@ Every infusion behavior change must pass:
 - `TCInfusionMutationExecutor` is an audit-only, non-player-facing boundary that executes a previously validated `TCInfusionCompletionPlan`.
 - It rechecks center catalyst and component pedestals before mutation, consumes matched component pedestal stacks, places the result on the center pedestal, and clears the active plan.
 - It does not implement instability, beams, particles, sounds, essentia network drain, jars/tubes, flux, taint, Thaumatorium or golem automation.
+## Container remainder audit note
+
+- `infusion_container_item_remainder_audit.md` scans current infusion catalyst/component data for known vanilla container or crafting-remainder inputs.
+- The current data set must remain free of unhandled container/remainder inputs before the audit-only mutation executor is considered safe for the current recipes.
+- Re-run this audit whenever infusion recipe data or tag-based ingredients change.

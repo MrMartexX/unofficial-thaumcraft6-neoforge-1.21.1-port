@@ -616,3 +616,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added audit-only `TCInfusionMutationExecutor` to test the first all-or-nothing item mutation boundary after completion readiness.
 - This remains non-player-facing and excludes instability, FX and essentia network behavior.
+## Infusion container remainder audit note
+
+- Added a current infusion recipe data audit for known vanilla container/remainder item inputs.
+- This keeps the audit-only mutation executor bounded to the currently validated recipe data set.

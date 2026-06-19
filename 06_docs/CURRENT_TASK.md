@@ -291,3 +291,8 @@ Last updated: 2026-06-19
 - Added audit-only `TCInfusionMutationExecutor` for valid `TCInfusionCompletionPlan` execution.
 - The executor is not connected to normal player-facing matrix activation.
 - Runtime audit covers valid execution, result placement, component consumption, active plan cleanup, invalid completion rejection and invalid-plan no-op state.
+## Infusion container remainder audit note
+
+- Added a current-data audit for known vanilla container/remainder inputs in infusion catalyst/component recipe data.
+- This checks whether the audit-only mutation executor can safely use raw pedestal extraction for the current recipe set.
+- Generic future container parity remains deferred until real player-facing execution is designed.
