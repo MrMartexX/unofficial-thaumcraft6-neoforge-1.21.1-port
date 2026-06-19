@@ -111,6 +111,9 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.SMELTER_VOID.get());
         acceptVisible(output, TCItems.WAND_WORKBENCH.get());
         acceptVisible(output, TCItems.INFUSION_MATRIX.get());
+        acceptVisible(output, TCItems.ARCANE_PEDESTAL.get());
+        acceptVisible(output, TCItems.ANCIENT_PEDESTAL.get());
+        acceptVisible(output, TCItems.ELDRITCH_PEDESTAL.get());
         acceptVisible(output, TCItems.GOLEM_BUILDER.get());
     }
 

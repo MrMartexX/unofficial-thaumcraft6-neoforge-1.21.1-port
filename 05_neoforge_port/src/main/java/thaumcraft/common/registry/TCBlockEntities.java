@@ -19,6 +19,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.tiles.crafting.TCArcaneWorkbenchBlockEntity;
 import thaumcraft.common.tiles.crafting.TCCrucibleBlockEntity;
+import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
+import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 import thaumcraft.common.tiles.misc.TCNitorBlockEntity;
 
@@ -35,6 +37,16 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCCrucibleBlockEntity>> CRUCIBLE =
             BLOCK_ENTITY_TYPES.register("crucible", () ->
                     BlockEntityType.Builder.of(TCCrucibleBlockEntity::new, TCBlocks.CRUCIBLE.get()).build(null));
+    public static final Supplier<BlockEntityType<TCInfusionMatrixBlockEntity>> INFUSION_MATRIX =
+            BLOCK_ENTITY_TYPES.register("infusion_matrix", () ->
+                    BlockEntityType.Builder.of(TCInfusionMatrixBlockEntity::new, TCBlocks.INFUSION_MATRIX.get()).build(null));
+    public static final Supplier<BlockEntityType<TCInfusionPedestalBlockEntity>> INFUSION_PEDESTAL =
+            BLOCK_ENTITY_TYPES.register("infusion_pedestal", () ->
+                    BlockEntityType.Builder.of(
+                            TCInfusionPedestalBlockEntity::new,
+                            TCBlocks.ARCANE_PEDESTAL.get(),
+                            TCBlocks.ANCIENT_PEDESTAL.get(),
+                            TCBlocks.ELDRITCH_PEDESTAL.get()).build(null));
 
     public static final Supplier<BlockEntityType<TCNitorBlockEntity>> NITOR =
             BLOCK_ENTITY_TYPES.register("nitor", () ->

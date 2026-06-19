@@ -1,6 +1,8 @@
 {
   "block.thaumcraft.amber_block": "Amber Block",
   "block.thaumcraft.amber_brick": "Amber Bricks",
+  "block.thaumcraft.ancient_pedestal": "Ancient Pedestal",
+  "block.thaumcraft.arcane_pedestal": "Arcane Pedestal",
   "block.thaumcraft.arcane_workbench": "Arcane Workbench",
   "block.thaumcraft.arcane_workbench_charger": "Workbench Charger",
   "block.thaumcraft.candle_black": "Black Tallow Candle",
@@ -28,6 +30,7 @@
   "block.thaumcraft.crystal_terra": "Earth Crystal Cluster",
   "block.thaumcraft.crystal_vitium": "Flux Crystal Cluster",
   "block.thaumcraft.crucible": "Crucible",
+  "block.thaumcraft.eldritch_pedestal": "Eldritch Pedestal",
   "block.thaumcraft.golem_builder": "Golem Press",
   "block.thaumcraft.infusion_matrix": "Infusion Matrix",
   "block.thaumcraft.leaves_greatwood": "Greatwood Leaves",

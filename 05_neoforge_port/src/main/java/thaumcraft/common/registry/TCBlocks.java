@@ -28,6 +28,8 @@ import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCCrucibleBlock;
+import thaumcraft.common.blocks.crafting.TCInfusionMatrixBlock;
+import thaumcraft.common.blocks.crafting.TCInfusionPedestalBlock;
 import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
 
@@ -123,12 +125,11 @@ public final class TCBlocks {
     public static final Supplier<Block> SMELTER_THAUMIUM = BLOCKS.register("smelter_thaumium", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.THAUMIUM));
     public static final Supplier<Block> SMELTER_VOID = BLOCKS.register("smelter_void", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.VOID));
     public static final Supplier<Block> WAND_WORKBENCH = BLOCKS.register("wand_workbench", () -> workbenchBlock());
-    public static final Supplier<Block> INFUSION_MATRIX = BLOCKS.register("infusion_matrix", () ->
-            new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
-                    .strength(5.0F, 1200.0F)
-                    .requiresCorrectToolForDrops()
-                    .noOcclusion()));
-public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
+    public static final Supplier<Block> INFUSION_MATRIX = BLOCKS.register("infusion_matrix", () -> infusionMatrixBlock());
+    public static final Supplier<Block> ARCANE_PEDESTAL = BLOCKS.register("arcane_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
+    public static final Supplier<Block> ANCIENT_PEDESTAL = BLOCKS.register("ancient_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
+    public static final Supplier<Block> ELDRITCH_PEDESTAL = BLOCKS.register("eldritch_pedestal", () -> infusionPedestalBlock(15.0F, 1000.0F));
+    public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
 
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
@@ -202,6 +203,20 @@ public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_build
     private static Block crucibleBlock() {
         return new TCCrucibleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
                 .strength(2.0F, 6.0F)
+                .requiresCorrectToolForDrops()
+                .noOcclusion());
+    }
+
+    private static Block infusionMatrixBlock() {
+        return new TCInfusionMatrixBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(5.0F, 1200.0F)
+                .requiresCorrectToolForDrops()
+                .noOcclusion());
+    }
+
+    private static Block infusionPedestalBlock(float strength, float resistance) {
+        return new TCInfusionPedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(strength, resistance)
                 .requiresCorrectToolForDrops()
                 .noOcclusion());
     }

@@ -218,9 +218,9 @@ public final class TCItems {
     public static final Supplier<Item> INFUSION_ALTAR_ELDRITCH_BLUEPRINT = simpleItem("infusion_altar_eldritch_blueprint");
     public static final Supplier<Item> INFUSION_ALTAR_ANCIENT_BLUEPRINT = simpleItem("infusion_altar_ancient_blueprint");
     public static final Supplier<Item> INFUSION_ALTAR_BLUEPRINT = simpleItem("infusion_altar_blueprint");
-    public static final Supplier<Item> ELDRITCH_PEDESTAL = simpleItem("eldritch_pedestal");
-    public static final Supplier<Item> ANCIENT_PEDESTAL = simpleItem("ancient_pedestal");
-    public static final Supplier<Item> ARCANE_PEDESTAL = simpleItem("arcane_pedestal");
+    public static final Supplier<BlockItem> ELDRITCH_PEDESTAL = blockItem("eldritch_pedestal", TCBlocks.ELDRITCH_PEDESTAL);
+    public static final Supplier<BlockItem> ANCIENT_PEDESTAL = blockItem("ancient_pedestal", TCBlocks.ANCIENT_PEDESTAL);
+    public static final Supplier<BlockItem> ARCANE_PEDESTAL = blockItem("arcane_pedestal", TCBlocks.ARCANE_PEDESTAL);
     public static final Supplier<Item> CAUSALITY_COLLAPSER = simpleItem("causality_collapser");
     public static final Supplier<Item> VOID_SIPHON = simpleItem("void_siphon");
     public static final Supplier<Item> THAUMATORIUM = simpleItem("thaumatorium");

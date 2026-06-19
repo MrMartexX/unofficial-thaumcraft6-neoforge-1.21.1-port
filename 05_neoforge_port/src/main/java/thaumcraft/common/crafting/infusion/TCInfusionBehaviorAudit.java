@@ -6,17 +6,23 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.level.block.Blocks;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCRecipes;
+import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
+import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
 
 public final class TCInfusionBehaviorAudit {
     private static final ResourceLocation CLOUD_RING = ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "cloudring");
@@ -52,8 +58,9 @@ public final class TCInfusionBehaviorAudit {
         lines.add("## Boundary");
         lines.add("");
         lines.add("- This validates the current server-owned infusion input snapshot and recipe matcher boundary.");
+        lines.add("- The audit also places a matrix and pedestals in a runtime server world to validate legacy-aligned pedestal discovery.");
         lines.add("- Legacy parity point: component matching uses Forge/NeoForge RecipeMatcher 1:1 semantics, so extra pedestal inputs must fail.");
-        lines.add("- This does not implement item consumption, pedestal discovery, instability events, essentia transport, particles, beams or matrix animation.");
+        lines.add("- This does not implement item consumption, instability events, essentia transport, particles, beams or matrix animation.");
 
         Files.write(output, lines);
         return report;
@@ -69,10 +76,10 @@ public final class TCInfusionBehaviorAudit {
                 "loaded=" + infusionRecipes.size()
         ));
 
-        Optional<TCInfusionRecipe> cloudRing = recipeManager.byKey(CLOUD_RING)
-                .map(RecipeHolder::value)
-                .filter(TCInfusionRecipe.class::isInstance)
-                .map(TCInfusionRecipe.class::cast);
+        Optional<RecipeHolder<TCInfusionRecipe>> cloudRingHolder = infusionRecipes.stream()
+                .filter(holder -> holder.id().equals(CLOUD_RING))
+                .findFirst();
+        Optional<TCInfusionRecipe> cloudRing = cloudRingHolder.map(RecipeHolder::value);
         checks.add(new Check(
                 "cloudring_recipe_loaded",
                 cloudRing.isPresent(),
@@ -187,9 +194,103 @@ public final class TCInfusionBehaviorAudit {
                     noPlayerAssembly.findMatchingRecipe(recipeManager, null).isEmpty(),
                     "legacy InfusionRecipe.matches checks player knowledge before recipe match"
             ));
+
+            cloudRingHolder.ifPresent(holder -> addRuntimeMatrixChecks(server, holder, checks));
         }
 
         return new Report(List.copyOf(checks), infusionRecipes.size());
+    }
+
+    private static void addRuntimeMatrixChecks(MinecraftServer server, RecipeHolder<TCInfusionRecipe> cloudRing, ArrayList<Check> checks) {
+        ServerLevel level = server.overworld();
+        BlockPos matrixPos = new BlockPos(0, level.getMinBuildHeight() + 12, 0);
+        BlockPos centerPos = matrixPos.below(2);
+        BlockPos featherPos = matrixPos.offset(2, -2, 0);
+        BlockPos crystalPos = matrixPos.offset(-2, -2, 0);
+        BlockPos extraPos = matrixPos.offset(0, -2, 2);
+        BlockPos outOfColumnPos = matrixPos.offset(0, -2, 3);
+
+        clearTestArea(level, matrixPos);
+        level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        level.setBlock(centerPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(featherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(crystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(outOfColumnPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+
+        TCInfusionMatrixBlockEntity matrix = blockEntity(level, matrixPos, TCInfusionMatrixBlockEntity.class);
+        TCInfusionPedestalBlockEntity center = blockEntity(level, centerPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity feather = blockEntity(level, featherPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity crystal = blockEntity(level, crystalPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity emptySameColumn = blockEntity(level, outOfColumnPos, TCInfusionPedestalBlockEntity.class);
+
+        checks.add(new Check(
+                "runtime_matrix_and_pedestal_block_entities_created",
+                matrix != null && center != null && feather != null && crystal != null && emptySameColumn != null,
+                "matrix=" + (matrix != null)
+                        + ", center=" + (center != null)
+                        + ", feather=" + (feather != null)
+                        + ", crystal=" + (crystal != null)
+        ));
+        if (matrix == null || center == null || feather == null || crystal == null) {
+            return;
+        }
+
+        center.setStoredForValidation(new ItemStack(TCItems.BAUBLE_RING.get()));
+        feather.setStoredForValidation(new ItemStack(Items.FEATHER));
+        crystal.setStoredForValidation(new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()));
+
+        TCInfusionMatrixBlockEntity.Snapshot snapshot = matrix.createSnapshot(new AspectList().add(Aspect.AIR, 50));
+        checks.add(new Check(
+                "runtime_matrix_detects_legacy_center_and_surrounding_pedestals",
+                snapshot.hasCentralPedestal()
+                        && snapshot.surroundingPedestalCount() == 3
+                        && snapshot.componentCount() == 2,
+                "surrounding=" + snapshot.surroundingPedestalCount() + ", components=" + snapshot.componentCount()
+        ));
+
+        TCInfusionValidationResult runtimeResult = matrix.validateAgainst(cloudRing, new AspectList().add(Aspect.AIR, 50));
+        checks.add(new Check(
+                "runtime_matrix_snapshot_matches_cloudring_recipe",
+                runtimeResult.valid()
+                        && runtimeResult.requiredComponentCount() == 2
+                        && runtimeResult.suppliedComponentCount() == 2,
+                "reason=" + runtimeResult.reason() + ", recipe=" + runtimeResult.recipeId()
+        ));
+
+        level.setBlock(extraPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        TCInfusionPedestalBlockEntity extra = blockEntity(level, extraPos, TCInfusionPedestalBlockEntity.class);
+        if (extra != null) {
+            extra.setStoredForValidation(new ItemStack(Items.STICK));
+        }
+        TCInfusionValidationResult extraResult = matrix.validateAgainst(cloudRing, new AspectList().add(Aspect.AIR, 50));
+        checks.add(new Check(
+                "runtime_matrix_extra_filled_pedestal_fails_one_to_one_match",
+                !extraResult.valid() && "component_mismatch".equals(extraResult.reason()),
+                "reason=" + extraResult.reason() + ", components=" + matrix.createSnapshot(new AspectList()).componentCount()
+        ));
+
+        level.setBlock(centerPos, Blocks.AIR.defaultBlockState(), 3);
+        TCInfusionValidationResult missingCenterResult = matrix.validateAgainst(cloudRing, new AspectList().add(Aspect.AIR, 50));
+        checks.add(new Check(
+                "runtime_matrix_requires_central_pedestal_two_blocks_below",
+                !missingCenterResult.valid() && "missing_central_pedestal".equals(missingCenterResult.reason()),
+                "reason=" + missingCenterResult.reason()
+        ));
+    }
+
+    private static void clearTestArea(ServerLevel level, BlockPos matrixPos) {
+        for (int dx = -3; dx <= 3; dx++) {
+            for (int dy = -3; dy <= 1; dy++) {
+                for (int dz = -3; dz <= 3; dz++) {
+                    level.setBlock(matrixPos.offset(dx, dy, dz), Blocks.AIR.defaultBlockState(), 3);
+                }
+            }
+        }
+    }
+
+    private static <T> T blockEntity(ServerLevel level, BlockPos pos, Class<T> type) {
+        Object blockEntity = level.getBlockEntity(pos);
+        return type.isInstance(blockEntity) ? type.cast(blockEntity) : null;
     }
 
     public record Report(List<Check> checks, int infusionRecipeCount) {
