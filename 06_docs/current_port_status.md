@@ -640,3 +640,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added an explicit disabled player-facing completion gate on the infusion matrix block.
 - Normal caster interaction remains validation/status-only while executor/source work is audit-only.
+## Infusion component remainder policy note
+
+- Added audit-only component remainder preservation for infusion mutation executor inputs.
+- Container/remainder catalysts remain blocked and player-facing completion remains disabled.

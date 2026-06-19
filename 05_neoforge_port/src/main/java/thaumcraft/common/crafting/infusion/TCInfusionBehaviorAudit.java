@@ -532,8 +532,8 @@ public final class TCInfusionBehaviorAudit {
                 new ItemStack(TCItems.CLOUD_RING.get()),
                 "AuditPlayer"
         );
-        TCInfusionCraftingPlan blockedPlan = new TCInfusionCraftingPlan(
-                ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "audit_container_remainder_guard"),
+        TCInfusionCraftingPlan waterComponentPlan = new TCInfusionCraftingPlan(
+                ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "audit_component_remainder_policy"),
                 "AUDIT",
                 0,
                 new ItemStack(TCItems.BAUBLE_RING.get()),
@@ -543,16 +543,33 @@ public final class TCInfusionBehaviorAudit {
                 new ItemStack(TCItems.CLOUD_RING.get()),
                 "AuditPlayer"
         );
+        TCInfusionCraftingPlan waterCatalystPlan = new TCInfusionCraftingPlan(
+                ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "audit_catalyst_remainder_policy"),
+                "AUDIT",
+                0,
+                new ItemStack(Items.WATER_BUCKET),
+                List.of(),
+                List.of(),
+                new AspectList(),
+                new ItemStack(TCItems.CLOUD_RING.get()),
+                "AuditPlayer"
+        );
         checks.add(new Check(
                 "infusion_container_policy_allows_current_cloudring_inputs",
                 !TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(safePlan),
-                "cloudring has no bucket/bottle/bowl input"
+                "cloudring has no blocked catalyst remainder"
         ));
         checks.add(new Check(
-                "infusion_container_policy_blocks_water_bucket_plan",
-                TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(blockedPlan)
-                        && TCInfusionContainerRemainderPolicy.firstBlockingInput(blockedPlan).orElse("").equals("component[0]"),
-                "blocker=" + TCInfusionContainerRemainderPolicy.firstBlockingInput(blockedPlan).orElse("none")
+                "infusion_container_policy_preserves_water_bucket_component_remainder",
+                !TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(waterComponentPlan)
+                        && TCInfusionContainerRemainderPolicy.remainderForComponent(new ItemStack(Items.WATER_BUCKET)).is(Items.BUCKET),
+                "water bucket component returns bucket on the same pedestal"
+        ));
+        checks.add(new Check(
+                "infusion_container_policy_blocks_container_catalyst_remainder",
+                TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(waterCatalystPlan)
+                        && TCInfusionContainerRemainderPolicy.firstBlockingInput(waterCatalystPlan).orElse("").equals("catalyst"),
+                "blocker=" + TCInfusionContainerRemainderPolicy.firstBlockingInput(waterCatalystPlan).orElse("none")
         ));
     }
     private static void addRuntimeMutationExecutorChecks(MinecraftServer server, RecipeHolder<TCInfusionRecipe> cloudRing, ArrayList<Check> checks) {

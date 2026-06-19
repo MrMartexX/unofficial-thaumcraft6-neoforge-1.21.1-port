@@ -320,3 +320,8 @@ Last updated: 2026-06-19
 - Added an explicit matrix completion gate: `TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled()` returns false.
 - Matrix caster interaction now reports completion disabled and remains validation/status-only.
 - Runtime audit verifies the player-facing completion gate stays disabled.
+## Infusion component remainder policy note
+
+- Added component-side remainder preservation for the audit-only mutation executor.
+- Bucket, potion/honey bottle and stew-style component remainders are restored to their original pedestal.
+- Container/remainder catalysts remain blocked until a center-output/remainder policy is designed.

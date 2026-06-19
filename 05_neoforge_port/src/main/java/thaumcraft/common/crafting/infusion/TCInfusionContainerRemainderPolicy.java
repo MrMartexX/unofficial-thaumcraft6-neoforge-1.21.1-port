@@ -7,11 +7,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 /**
- * Temporary guard for infusion inputs that need explicit container/remainder handling.
+ * Temporary container/remainder policy for audit-only infusion mutation.
  *
- * <p>The mutation executor is still audit-only. Until legacy container-item and real
- * essentia-source timing are implemented, plans containing known remainder inputs are
- * rejected instead of silently deleting buckets, bottles or bowls.
+ * <p>Component remainders can safely stay on their original pedestal after the input
+ * item is consumed. Catalyst remainders remain blocked because the center pedestal is
+ * also where the infusion result is placed in the current audit-only executor.
  */
 public final class TCInfusionContainerRemainderPolicy {
     private static final Set<Item> KNOWN_REMAINDER_INPUTS = Set.of(
@@ -50,12 +50,43 @@ public final class TCInfusionContainerRemainderPolicy {
         if (isKnownRemainderInput(plan.catalyst())) {
             return Optional.of("catalyst");
         }
-        for (int index = 0; index < plan.components().size(); index++) {
-            if (isKnownRemainderInput(plan.component(index))) {
-                return Optional.of("component[" + index + "]");
+        return Optional.empty();
+    }
+
+    public static boolean hasKnownRemainderInput(TCInfusionCraftingPlan plan) {
+        if (plan == null) {
+            return false;
+        }
+        if (isKnownRemainderInput(plan.catalyst())) {
+            return true;
+        }
+        for (ItemStack component : plan.components()) {
+            if (isKnownRemainderInput(component)) {
+                return true;
             }
         }
-        return Optional.empty();
+        return false;
+    }
+
+    public static ItemStack remainderForComponent(ItemStack input) {
+        if (input == null || input.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        Item item = input.getItem();
+        if (item == Items.WATER_BUCKET || item == Items.LAVA_BUCKET || item == Items.MILK_BUCKET || item == Items.POWDER_SNOW_BUCKET) {
+            return new ItemStack(Items.BUCKET);
+        }
+        if (item == Items.COD_BUCKET || item == Items.SALMON_BUCKET || item == Items.TROPICAL_FISH_BUCKET || item == Items.PUFFERFISH_BUCKET
+                || item == Items.AXOLOTL_BUCKET || item == Items.TADPOLE_BUCKET) {
+            return new ItemStack(Items.WATER_BUCKET);
+        }
+        if (item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.HONEY_BOTTLE) {
+            return new ItemStack(Items.GLASS_BOTTLE);
+        }
+        if (item == Items.MUSHROOM_STEW || item == Items.RABBIT_STEW || item == Items.BEETROOT_SOUP || item == Items.SUSPICIOUS_STEW) {
+            return new ItemStack(Items.BOWL);
+        }
+        return ItemStack.EMPTY;
     }
 
     public static boolean isKnownRemainderInput(ItemStack stack) {

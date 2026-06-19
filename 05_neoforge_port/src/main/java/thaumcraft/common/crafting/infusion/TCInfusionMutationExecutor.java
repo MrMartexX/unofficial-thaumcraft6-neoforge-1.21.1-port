@@ -59,6 +59,7 @@ public final class TCInfusionMutationExecutor {
         }
 
         ArrayList<TCInfusionPedestalBlockEntity> componentPedestals = new ArrayList<>(consumptions.size());
+        ArrayList<ItemStack> componentRemainders = new ArrayList<>(consumptions.size());
         for (TCInfusionCompletionPlan.ComponentConsumption consumption : consumptions) {
             BlockEntity blockEntity = level.getBlockEntity(consumption.pedestalPos());
             if (!(blockEntity instanceof TCInfusionPedestalBlockEntity pedestal)) {
@@ -68,10 +69,16 @@ public final class TCInfusionMutationExecutor {
                 return Result.failed("component_changed");
             }
             componentPedestals.add(pedestal);
+            componentRemainders.add(TCInfusionContainerRemainderPolicy.remainderForComponent(consumption.expectedStack()));
         }
 
-        for (TCInfusionPedestalBlockEntity pedestal : componentPedestals) {
+        for (int index = 0; index < componentPedestals.size(); index++) {
+            TCInfusionPedestalBlockEntity pedestal = componentPedestals.get(index);
             pedestal.extractStored();
+            ItemStack remainder = componentRemainders.get(index);
+            if (!remainder.isEmpty()) {
+                pedestal.setStoredForCrafting(remainder);
+            }
         }
         ItemStack result = plan.result();
         center.get().setStoredForCrafting(result);
@@ -125,6 +132,7 @@ public final class TCInfusionMutationExecutor {
         }
 
         ArrayList<TCInfusionPedestalBlockEntity> componentPedestals = new ArrayList<>(consumptions.size());
+        ArrayList<ItemStack> componentRemainders = new ArrayList<>(consumptions.size());
         for (TCInfusionCompletionPlan.ComponentConsumption consumption : consumptions) {
             BlockEntity blockEntity = level.getBlockEntity(consumption.pedestalPos());
             if (!(blockEntity instanceof TCInfusionPedestalBlockEntity pedestal)) {
@@ -134,6 +142,7 @@ public final class TCInfusionMutationExecutor {
                 return Result.failed("component_changed");
             }
             componentPedestals.add(pedestal);
+            componentRemainders.add(TCInfusionContainerRemainderPolicy.remainderForComponent(consumption.expectedStack()));
         }
 
         TCInfusionAspectSource.DrainResult drainResult = aspectSource.drain(plan);
@@ -141,8 +150,13 @@ public final class TCInfusionMutationExecutor {
             return Result.failed("aspect_source_" + drainResult.reason());
         }
 
-        for (TCInfusionPedestalBlockEntity pedestal : componentPedestals) {
+        for (int index = 0; index < componentPedestals.size(); index++) {
+            TCInfusionPedestalBlockEntity pedestal = componentPedestals.get(index);
             pedestal.extractStored();
+            ItemStack remainder = componentRemainders.get(index);
+            if (!remainder.isEmpty()) {
+                pedestal.setStoredForCrafting(remainder);
+            }
         }
         ItemStack result = plan.result();
         center.get().setStoredForCrafting(result);

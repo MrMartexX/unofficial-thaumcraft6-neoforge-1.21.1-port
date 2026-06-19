@@ -139,3 +139,8 @@ Every infusion behavior change must pass:
 - `TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled()` is explicitly false.
 - Caster interaction on the matrix remains validation/status-only and reports `completion=disabled` in the action-bar status.
 - The audit-only executor/source path must not be wired into normal player activation until container-item policy and real essentia source policy are implemented.
+## Component remainder policy note
+
+- Component pedestal inputs with known remainders now preserve the remainder on the same pedestal after audit-only mutation.
+- Center catalyst inputs with known remainders remain blocked because the center pedestal is currently used for the result output.
+- This unblocks current component-side bucket/bottle/bowl policy in the audit-only executor without enabling player-facing infusion completion.
