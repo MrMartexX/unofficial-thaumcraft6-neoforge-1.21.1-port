@@ -43,6 +43,11 @@ public class TCInfusionPedestalBlockEntity extends BlockEntity {
         markChangedAndSync();
     }
 
+    public void setStoredForCrafting(ItemStack stack) {
+        items.set(SLOT, stack == null || stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
+        markChangedAndSync();
+    }
+
     public ItemStack extractStored() {
         ItemStack stored = items.get(SLOT);
         if (stored.isEmpty()) {

@@ -612,3 +612,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added a focused legacy container/essentia timing audit for the infusion executor boundary.
 - The next implementation should remain audit-only and non-player-facing until mutation timing is validated.
+## Infusion mutation executor audit boundary note
+
+- Added audit-only `TCInfusionMutationExecutor` to test the first all-or-nothing item mutation boundary after completion readiness.
+- This remains non-player-facing and excludes instability, FX and essentia network behavior.

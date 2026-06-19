@@ -105,3 +105,8 @@ Every infusion behavior change must pass:
 - `infusion_legacy_container_essentia_cycle_audit.md` narrows the legacy audit from broad method anchors to item/container and essentia/source timing.
 - The next code slice may introduce a non-player-facing mutation executor, but it must be audit-only until the timing policy is proven.
 - Container item handling and real essentia network/source drain remain separate parity risks and must not be mixed with instability/FX work.
+## Mutation executor audit boundary note
+
+- `TCInfusionMutationExecutor` is an audit-only, non-player-facing boundary that executes a previously validated `TCInfusionCompletionPlan`.
+- It rechecks center catalyst and component pedestals before mutation, consumes matched component pedestal stacks, places the result on the center pedestal, and clears the active plan.
+- It does not implement instability, beams, particles, sounds, essentia network drain, jars/tubes, flux, taint, Thaumatorium or golem automation.

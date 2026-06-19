@@ -196,7 +196,10 @@ public final class TCInfusionBehaviorAudit {
                     "legacy InfusionRecipe.matches checks player knowledge before recipe match"
             ));
 
-            cloudRingHolder.ifPresent(holder -> addRuntimeMatrixChecks(server, holder, checks));
+            cloudRingHolder.ifPresent(holder -> {
+                addRuntimeMatrixChecks(server, holder, checks);
+                addRuntimeMutationExecutorChecks(server, holder, checks);
+            });
         }
 
         return new Report(List.copyOf(checks), infusionRecipes.size());
@@ -398,6 +401,105 @@ public final class TCInfusionBehaviorAudit {
         ));
     }
 
+    private static void addRuntimeMutationExecutorChecks(MinecraftServer server, RecipeHolder<TCInfusionRecipe> cloudRing, ArrayList<Check> checks) {
+        ServerLevel level = server.overworld();
+        BlockPos matrixPos = new BlockPos(12, level.getMinBuildHeight() + 12, 0);
+        BlockPos centerPos = matrixPos.below(2);
+        BlockPos featherPos = matrixPos.offset(2, -2, 0);
+        BlockPos crystalPos = matrixPos.offset(-2, -2, 0);
+
+        clearTestArea(level, matrixPos);
+        level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        level.setBlock(centerPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(featherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(crystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+
+        TCInfusionMatrixBlockEntity matrix = blockEntity(level, matrixPos, TCInfusionMatrixBlockEntity.class);
+        TCInfusionPedestalBlockEntity center = blockEntity(level, centerPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity feather = blockEntity(level, featherPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity crystal = blockEntity(level, crystalPos, TCInfusionPedestalBlockEntity.class);
+        checks.add(new Check(
+                "runtime_mutation_executor_setup_created",
+                matrix != null && center != null && feather != null && crystal != null,
+                "matrix=" + (matrix != null) + ", center=" + (center != null)
+        ));
+        if (matrix == null || center == null || feather == null || crystal == null) {
+            return;
+        }
+
+        center.setStoredForValidation(new ItemStack(TCItems.BAUBLE_RING.get()));
+        feather.setStoredForValidation(new ItemStack(Items.FEATHER));
+        crystal.setStoredForValidation(new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()));
+        TCInfusionStartResult startResult = matrix.startCraftingForValidation(
+                cloudRing,
+                new AspectList().add(Aspect.AIR, 50),
+                "AuditPlayer"
+        );
+        TCInfusionCompletionPlan completionPlan = matrix.createCompletionPlan(new AspectList().add(Aspect.AIR, 50));
+        TCInfusionMutationExecutor.Result result = TCInfusionMutationExecutor.execute(matrix, completionPlan);
+        checks.add(new Check(
+                "runtime_mutation_executor_executes_valid_plan",
+                startResult.started()
+                        && result.success()
+                        && "executed".equals(result.reason())
+                        && result.consumedComponents() == 2
+                        && result.result().is(TCItems.CLOUD_RING.get()),
+                "started=" + startResult.started() + ", reason=" + result.reason()
+        ));
+        checks.add(new Check(
+                "runtime_mutation_executor_places_result_on_center",
+                center.getStoredStack().is(TCItems.CLOUD_RING.get()),
+                "center=" + center.getStoredStack().getItem()
+        ));
+        checks.add(new Check(
+                "runtime_mutation_executor_consumes_component_pedestals",
+                feather.getStoredStack().isEmpty() && crystal.getStoredStack().isEmpty(),
+                "featherEmpty=" + feather.getStoredStack().isEmpty() + ", crystalEmpty=" + crystal.getStoredStack().isEmpty()
+        ));
+        checks.add(new Check(
+                "runtime_mutation_executor_clears_active_plan",
+                !matrix.isCrafting() && matrix.activePlan().isEmpty(),
+                "active=" + matrix.isCrafting()
+        ));
+
+        BlockPos failMatrixPos = new BlockPos(24, level.getMinBuildHeight() + 12, 0);
+        BlockPos failCenterPos = failMatrixPos.below(2);
+        BlockPos failFeatherPos = failMatrixPos.offset(2, -2, 0);
+        BlockPos failCrystalPos = failMatrixPos.offset(-2, -2, 0);
+        clearTestArea(level, failMatrixPos);
+        level.setBlock(failMatrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        level.setBlock(failCenterPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(failFeatherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(failCrystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        TCInfusionMatrixBlockEntity failMatrix = blockEntity(level, failMatrixPos, TCInfusionMatrixBlockEntity.class);
+        TCInfusionPedestalBlockEntity failCenter = blockEntity(level, failCenterPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity failFeather = blockEntity(level, failFeatherPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity failCrystal = blockEntity(level, failCrystalPos, TCInfusionPedestalBlockEntity.class);
+        if (failMatrix == null || failCenter == null || failFeather == null || failCrystal == null) {
+            checks.add(new Check("runtime_mutation_executor_invalid_plan_setup_created", false, "missing block entity"));
+            return;
+        }
+        failCenter.setStoredForValidation(new ItemStack(TCItems.BAUBLE_RING.get()));
+        failFeather.setStoredForValidation(new ItemStack(Items.FEATHER));
+        failCrystal.setStoredForValidation(new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()));
+        failMatrix.startCraftingForValidation(cloudRing, new AspectList().add(Aspect.AIR, 50), "AuditPlayer");
+        failFeather.setStoredForValidation(new ItemStack(Items.STICK));
+        TCInfusionCompletionPlan invalidCompletion = failMatrix.createCompletionPlan(new AspectList().add(Aspect.AIR, 50));
+        TCInfusionMutationExecutor.Result failedExecution = TCInfusionMutationExecutor.execute(failMatrix, invalidCompletion);
+        checks.add(new Check(
+                "runtime_mutation_executor_rejects_invalid_completion_plan",
+                !failedExecution.success() && "invalid_completion_plan".equals(failedExecution.reason()),
+                "reason=" + failedExecution.reason()
+        ));
+        checks.add(new Check(
+                "runtime_mutation_executor_invalid_plan_noops_world_state",
+                failMatrix.isCrafting()
+                        && failCenter.getStoredStack().is(TCItems.BAUBLE_RING.get())
+                        && failFeather.getStoredStack().is(Items.STICK)
+                        && failCrystal.getStoredStack().is(TCItems.CRYSTAL_ESSENCE_AER.get()),
+                "active=" + failMatrix.isCrafting()
+        ));
+    }
     private static void clearTestArea(ServerLevel level, BlockPos matrixPos) {
         for (int dx = -3; dx <= 3; dx++) {
             for (int dy = -3; dy <= 1; dy++) {

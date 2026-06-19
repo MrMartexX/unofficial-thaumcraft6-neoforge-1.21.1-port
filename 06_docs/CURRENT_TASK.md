@@ -286,3 +286,8 @@ Last updated: 2026-06-19
 - Added a focused legacy audit for item/container and essentia/source timing before implementing an infusion mutation executor.
 - Next safe code slice: non-player-facing, audit-only `TCInfusionMutationExecutor` based on `TCInfusionCompletionPlan`.
 - Keep real essentia network drain, instability and FX deferred.
+## Infusion mutation executor audit boundary note
+
+- Added audit-only `TCInfusionMutationExecutor` for valid `TCInfusionCompletionPlan` execution.
+- The executor is not connected to normal player-facing matrix activation.
+- Runtime audit covers valid execution, result placement, component consumption, active plan cleanup, invalid completion rejection and invalid-plan no-op state.
