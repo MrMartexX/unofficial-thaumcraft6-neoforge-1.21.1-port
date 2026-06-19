@@ -120,3 +120,8 @@ Every infusion behavior change must pass:
 - `TCInfusionContainerRemainderPolicy` blocks audit-only mutation execution for plans that contain known bucket, bottle, potion, honey bottle or bowl-style remainder inputs.
 - This is a temporary safety guard, not full legacy container-item parity.
 - Recipes such as jar brain and some verdant/mask recipes still require a real container-item policy before player-facing infusion completion is enabled.
+## Aspect source boundary note
+
+- `TCInfusionAspectSource` is an audit-only in-memory aspect source used to prove all-or-nothing drain semantics.
+- It is not jar, tube, alembic, aura or essentia transport gameplay.
+- The future player-facing executor must drain from a real source only after a valid `TCInfusionCompletionPlan` and before/with item mutation as one atomic completion policy.

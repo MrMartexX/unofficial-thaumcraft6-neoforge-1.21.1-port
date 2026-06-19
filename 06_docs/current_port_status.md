@@ -624,3 +624,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added a temporary `TCInfusionContainerRemainderPolicy` guard for bucket/bottle/bowl-style infusion inputs.
 - Player-facing infusion completion remains deferred until real container-item and essentia-source parity is implemented.
+## Infusion aspect source boundary note
+
+- Added audit-only `TCInfusionAspectSource` for all-or-nothing aspect drain semantics.
+- This remains isolated from real jars, tubes, aura and essentia transport.

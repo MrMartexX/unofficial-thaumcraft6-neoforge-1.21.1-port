@@ -301,3 +301,8 @@ Last updated: 2026-06-19
 - Added `TCInfusionContainerRemainderPolicy` so the mutation executor refuses plans containing known container/remainder inputs until explicit policy exists.
 - This protects current bucket/bottle/potion infusion inputs from silent deletion if the executor is reused before player-facing parity work.
 - Runtime audit now covers safe Cloud Ring inputs and a blocked water-bucket plan.
+## Infusion aspect source boundary note
+
+- Added audit-only `TCInfusionAspectSource` to model all-or-nothing aspect drain semantics without jar/tube/aura integration.
+- Runtime audit covers exact drain success and insufficient-aspect no-op failure.
+- Player-facing infusion completion remains deferred until this source boundary is connected to a real essentia source policy.

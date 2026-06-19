@@ -200,6 +200,7 @@ public final class TCInfusionBehaviorAudit {
                 addRuntimeMatrixChecks(server, holder, checks);
                 addRuntimeMutationExecutorChecks(server, holder, checks);
                 addContainerRemainderPolicyChecks(checks);
+                addAspectSourceBoundaryChecks(checks);
             });
         }
 
@@ -402,6 +403,42 @@ public final class TCInfusionBehaviorAudit {
         ));
     }
 
+    private static void addAspectSourceBoundaryChecks(ArrayList<Check> checks) {
+        TCInfusionCraftingPlan cloudRingPlan = new TCInfusionCraftingPlan(
+                CLOUD_RING,
+                "CLOUDRING",
+                1,
+                new ItemStack(TCItems.BAUBLE_RING.get()),
+                List.of(new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()), new ItemStack(Items.FEATHER)),
+                List.of(BlockPos.ZERO, BlockPos.ZERO.offset(1, 0, 0)),
+                new AspectList().add(Aspect.AIR, 50),
+                new ItemStack(TCItems.CLOUD_RING.get()),
+                "AuditPlayer"
+        );
+
+        TCInfusionAspectSource exactSource = TCInfusionAspectSource.memory(new AspectList().add(Aspect.AIR, 50));
+        TCInfusionAspectSource.DrainResult exactDrain = exactSource.drain(cloudRingPlan);
+        checks.add(new Check(
+                "infusion_aspect_source_drains_exact_required_aspects",
+                exactDrain.success()
+                        && "drained".equals(exactDrain.reason())
+                        && exactDrain.drainedAspects().getAmount(Aspect.AIR) == 50
+                        && exactDrain.remainingAspects().visSize() == 0
+                        && exactSource.availableAspects().visSize() == 0,
+                "reason=" + exactDrain.reason() + ", remaining=" + exactDrain.remainingAspects().visSize()
+        ));
+
+        TCInfusionAspectSource insufficientSource = TCInfusionAspectSource.memory(new AspectList().add(Aspect.AIR, 49));
+        TCInfusionAspectSource.DrainResult missingDrain = insufficientSource.drain(cloudRingPlan);
+        checks.add(new Check(
+                "infusion_aspect_source_rejects_insufficient_aspects_without_drain",
+                !missingDrain.success()
+                        && "missing_aspects".equals(missingDrain.reason())
+                        && missingDrain.missingAspects().getAmount(Aspect.AIR) == 1
+                        && insufficientSource.availableAspects().getAmount(Aspect.AIR) == 49,
+                "reason=" + missingDrain.reason() + ", missingAir=" + missingDrain.missingAspects().getAmount(Aspect.AIR)
+        ));
+    }
     private static void addContainerRemainderPolicyChecks(ArrayList<Check> checks) {
         TCInfusionCraftingPlan safePlan = new TCInfusionCraftingPlan(
                 CLOUD_RING,
