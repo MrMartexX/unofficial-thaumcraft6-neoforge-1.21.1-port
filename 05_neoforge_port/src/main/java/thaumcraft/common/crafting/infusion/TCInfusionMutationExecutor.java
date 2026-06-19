@@ -79,6 +79,76 @@ public final class TCInfusionMutationExecutor {
         return Result.success(result, completionPlan.remainingAspects(), componentPedestals.size());
     }
 
+    public static Result executeWithAspectSource(
+            TCInfusionMatrixBlockEntity matrix,
+            TCInfusionCompletionPlan completionPlan,
+            TCInfusionAspectSource aspectSource
+    ) {
+        if (aspectSource == null) {
+            return Result.failed("missing_aspect_source");
+        }
+        if (matrix == null) {
+            return Result.failed("missing_matrix");
+        }
+        if (completionPlan == null || !completionPlan.valid()) {
+            return Result.failed("invalid_completion_plan");
+        }
+        TCInfusionCraftingPlan plan = completionPlan.craftingPlan();
+        if (plan == null) {
+            return Result.failed("missing_crafting_plan");
+        }
+        if (TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(plan)) {
+            return Result.failed("container_remainder_policy_required");
+        }
+        Level level = matrix.getLevel();
+        if (level == null || level.isClientSide) {
+            return Result.failed("missing_server_level");
+        }
+        if (matrix.activePlan().isEmpty()) {
+            return Result.failed("missing_active_plan");
+        }
+        if (!matrix.activePlan().map(active -> active.recipeId().equals(plan.recipeId())).orElse(false)) {
+            return Result.failed("active_plan_mismatch");
+        }
+
+        var center = matrix.centralPedestal();
+        if (center.isEmpty()) {
+            return Result.failed("missing_central_pedestal");
+        }
+        if (!sameOne(center.get().getStoredStack(), plan.catalyst())) {
+            return Result.failed("catalyst_changed");
+        }
+
+        List<TCInfusionCompletionPlan.ComponentConsumption> consumptions = completionPlan.componentConsumptions();
+        if (consumptions.size() != plan.componentPedestalPositions().size()) {
+            return Result.failed("component_count_mismatch");
+        }
+
+        ArrayList<TCInfusionPedestalBlockEntity> componentPedestals = new ArrayList<>(consumptions.size());
+        for (TCInfusionCompletionPlan.ComponentConsumption consumption : consumptions) {
+            BlockEntity blockEntity = level.getBlockEntity(consumption.pedestalPos());
+            if (!(blockEntity instanceof TCInfusionPedestalBlockEntity pedestal)) {
+                return Result.failed("missing_component_pedestal");
+            }
+            if (!sameOne(pedestal.getStoredStack(), consumption.expectedStack())) {
+                return Result.failed("component_changed");
+            }
+            componentPedestals.add(pedestal);
+        }
+
+        TCInfusionAspectSource.DrainResult drainResult = aspectSource.drain(plan);
+        if (!drainResult.success()) {
+            return Result.failed("aspect_source_" + drainResult.reason());
+        }
+
+        for (TCInfusionPedestalBlockEntity pedestal : componentPedestals) {
+            pedestal.extractStored();
+        }
+        ItemStack result = plan.result();
+        center.get().setStoredForCrafting(result);
+        matrix.abortCrafting();
+        return Result.success(result, drainResult.remainingAspects(), componentPedestals.size());
+    }
     private static boolean sameOne(ItemStack left, ItemStack right) {
         if (left == null || right == null || left.isEmpty() || right.isEmpty()) {
             return false;

@@ -306,3 +306,8 @@ Last updated: 2026-06-19
 - Added audit-only `TCInfusionAspectSource` to model all-or-nothing aspect drain semantics without jar/tube/aura integration.
 - Runtime audit covers exact drain success and insufficient-aspect no-op failure.
 - Player-facing infusion completion remains deferred until this source boundary is connected to a real essentia source policy.
+## Infusion aspect-source executor integration note
+
+- Added `TCInfusionMutationExecutor.executeWithAspectSource(...)` for audit-only completion that drains an in-memory source before item mutation.
+- Runtime audit covers exact source drain plus item completion, and insufficient source rejection with no item/source mutation.
+- Player-facing completion remains deferred until this boundary is wired to a real essentia source policy.

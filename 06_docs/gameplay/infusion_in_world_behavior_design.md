@@ -125,3 +125,8 @@ Every infusion behavior change must pass:
 - `TCInfusionAspectSource` is an audit-only in-memory aspect source used to prove all-or-nothing drain semantics.
 - It is not jar, tube, alembic, aura or essentia transport gameplay.
 - The future player-facing executor must drain from a real source only after a valid `TCInfusionCompletionPlan` and before/with item mutation as one atomic completion policy.
+## Aspect-source executor integration note
+
+- `TCInfusionMutationExecutor.executeWithAspectSource(...)` combines the audit-only mutation executor with `TCInfusionAspectSource`.
+- It rejects insufficient aspect sources before item mutation, then drains the source and completes the same audit-only item mutation path.
+- This is still not player-facing and still does not implement jars, tubes, aura, alembics or essentia transport.

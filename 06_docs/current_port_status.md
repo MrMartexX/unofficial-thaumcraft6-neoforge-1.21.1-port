@@ -628,3 +628,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added audit-only `TCInfusionAspectSource` for all-or-nothing aspect drain semantics.
 - This remains isolated from real jars, tubes, aura and essentia transport.
+## Infusion aspect-source executor integration note
+
+- Added audit-only executor/source integration for all-or-nothing aspect drain plus item mutation.
+- This remains isolated from real jars, tubes, aura and player-facing infusion completion.
