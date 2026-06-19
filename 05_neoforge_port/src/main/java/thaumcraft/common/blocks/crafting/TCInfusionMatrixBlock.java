@@ -38,6 +38,10 @@ public class TCInfusionMatrixBlock extends Block implements EntityBlock {
         super(properties);
     }
 
+    public static boolean isPlayerFacingCompletionEnabled() {
+        return false;
+    }
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -79,6 +83,7 @@ public class TCInfusionMatrixBlock extends Block implements EntityBlock {
                     "Infusion matrix: " + result.reason()
                             + ", pedestals=" + matrix.findSurroundingPedestals().size()
                             + ", components=" + matrix.createSnapshot(new AspectList()).componentCount()
+                            + ", completion=" + (isPlayerFacingCompletionEnabled() ? "enabled" : "disabled")
             ), true);
         }
         return true;

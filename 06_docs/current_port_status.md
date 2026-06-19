@@ -636,3 +636,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - `TCInfusionAspectSource` is now an interface with an in-memory audit implementation.
 - Real essentia source implementations remain deferred.
+## Infusion player-facing completion gate note
+
+- Added an explicit disabled player-facing completion gate on the infusion matrix block.
+- Normal caster interaction remains validation/status-only while executor/source work is audit-only.

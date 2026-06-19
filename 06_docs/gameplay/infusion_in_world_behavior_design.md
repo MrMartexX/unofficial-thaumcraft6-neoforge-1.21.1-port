@@ -134,3 +134,8 @@ Every infusion behavior change must pass:
 
 - `TCInfusionAspectSource` is now an interface with the current audit-only in-memory implementation behind `TCInfusionAspectSource.memory(...)`.
 - This keeps the executor/source contract stable for future jar, tube, alembic or aura-backed sources without making those systems part of the current slice.
+## Player-facing completion gate note
+
+- `TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled()` is explicitly false.
+- Caster interaction on the matrix remains validation/status-only and reports `completion=disabled` in the action-bar status.
+- The audit-only executor/source path must not be wired into normal player activation until container-item policy and real essentia source policy are implemented.

@@ -16,6 +16,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.Blocks;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.blocks.crafting.TCInfusionMatrixBlock;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.registry.TCBlocks;
@@ -196,6 +197,11 @@ public final class TCInfusionBehaviorAudit {
                     "legacy InfusionRecipe.matches checks player knowledge before recipe match"
             ));
 
+            checks.add(new Check(
+                    "player_facing_infusion_completion_disabled",
+                    !TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled(),
+                    "matrix click remains validation/status only"
+            ));
             cloudRingHolder.ifPresent(holder -> {
                 addRuntimeMatrixChecks(server, holder, checks);
                 addRuntimeMutationExecutorChecks(server, holder, checks);

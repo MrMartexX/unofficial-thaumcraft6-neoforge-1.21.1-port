@@ -315,3 +315,8 @@ Last updated: 2026-06-19
 
 - Refactored `TCInfusionAspectSource` into a small interface while preserving the audit-only `memory(...)` source.
 - This prepares future real essentia source implementations without changing current non-player-facing behavior.
+## Infusion player-facing completion gate note
+
+- Added an explicit matrix completion gate: `TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled()` returns false.
+- Matrix caster interaction now reports completion disabled and remains validation/status-only.
+- Runtime audit verifies the player-facing completion gate stays disabled.
