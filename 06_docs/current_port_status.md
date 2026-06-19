@@ -569,3 +569,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Moved the living-entity crucible contact damage cooldown from the singleton block instance to TCCrucibleBlockEntity.
 - This prevents one crucible position from throttling or advancing another crucible's contact damage cadence.
+## Infusion gameplay boundary design note
+
+- Added a focused design document for the first in-world infusion behavior slice.
+- Added an infusion recipe data audit to validate catalyst/components/aspects/result shape before behavior activation.
+- In-world infusion matrix, pedestal inventory, instability events and visual effects remain deferred.
