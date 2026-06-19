@@ -325,3 +325,7 @@ Last updated: 2026-06-19
 - Added component-side remainder preservation for the audit-only mutation executor.
 - Bucket, potion/honey bottle and stew-style component remainders are restored to their original pedestal.
 - Container/remainder catalysts remain blocked until a center-output/remainder policy is designed.
+## Refreshed infusion container remainder audit note
+
+- Refreshed the container remainder audit after adding component-side remainder preservation.
+- The audit now distinguishes handled component remainders from still-blocked catalyst remainders and tag-input follow-ups.

@@ -644,3 +644,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added audit-only component remainder preservation for infusion mutation executor inputs.
 - Container/remainder catalysts remain blocked and player-facing completion remains disabled.
+## Refreshed infusion container remainder audit note
+
+- Updated the infusion container remainder audit to reflect component-side remainder preservation.
+- Player-facing completion remains disabled.

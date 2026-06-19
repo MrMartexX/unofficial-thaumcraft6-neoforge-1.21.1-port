@@ -144,3 +144,7 @@ Every infusion behavior change must pass:
 - Component pedestal inputs with known remainders now preserve the remainder on the same pedestal after audit-only mutation.
 - Center catalyst inputs with known remainders remain blocked because the center pedestal is currently used for the result output.
 - This unblocks current component-side bucket/bottle/bowl policy in the audit-only executor without enabling player-facing infusion completion.
+## Refreshed container remainder audit note
+
+- `infusion_container_item_remainder_audit.md` now separates handled component-side remainders from still-blocked catalyst-side remainders.
+- Current data has component-side remainder inputs covered by the audit-only policy; catalyst-side container remainders remain blocked if they appear later.

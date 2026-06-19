@@ -1,24 +1,29 @@
 # Infusion Container Item Remainder Audit
 
-Generated: 2026-06-19 16:57:25 +03:00
+Generated: 2026-06-19 23:33:09 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
 | Infusion recipes scanned | 42 |
-| Known container/remainder input hits | 5 |
+| Component-side known remainder inputs handled by current policy | 5 |
+| Catalyst-side known remainder inputs still blocked | 0 |
 | Tag-based inputs requiring future expansion check | 8 |
 
-## Known container/remainder input hits
+## Component-side known remainder inputs handled by current policy
 
 | Recipe id | Role | Item | Policy note | File |
 |---|---|---|---|---|
-| thaumcraft:jarbrain | component[2] | minecraft:water_bucket | returns empty bucket / special fluid container | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/jarbrain.json |
-| thaumcraft:masksippingfiend | component[4] | minecraft:milk_bucket | returns empty bucket | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/masksippingfiend.json |
-| thaumcraft:verdantheart | component[2] | minecraft:milk_bucket | returns empty bucket | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheart.json |
-| thaumcraft:verdantheartlife | component[2] | minecraft:potion | returns glass bottle in many crafting contexts | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartlife.json |
-| thaumcraft:verdantheartsustain | component[2] | minecraft:potion | returns glass bottle in many crafting contexts | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartsustain.json |
+| thaumcraft:jarbrain | component[2] | minecraft:water_bucket | handled component remainder: bucket | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/jarbrain.json |
+| thaumcraft:masksippingfiend | component[4] | minecraft:milk_bucket | handled component remainder: bucket | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/masksippingfiend.json |
+| thaumcraft:verdantheart | component[2] | minecraft:milk_bucket | handled component remainder: bucket | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheart.json |
+| thaumcraft:verdantheartlife | component[2] | minecraft:potion | handled component remainder: glass_bottle | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartlife.json |
+| thaumcraft:verdantheartsustain | component[2] | minecraft:potion | handled component remainder: glass_bottle | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/verdantheartsustain.json |
+
+## Catalyst-side known remainder inputs still blocked
+
+No known catalyst-side remainder inputs were found in current infusion data.
 
 ## Tag inputs
 
@@ -35,6 +40,7 @@ Generated: 2026-06-19 16:57:25 +03:00
 
 ## Porting conclusion
 
-- Current infusion data includes inputs that need an explicit container/remainder policy before player-facing execution.
-- This audit does not prove generic future safety. Re-run it when infusion recipes, tags, or accepted ingredient forms change.
-- Real essentia network/source drain and container item parity remain separate concerns from the first audit-only executor boundary.
+- Current infusion data has no known catalyst-side container/remainder input blockers.
+- Current component-side known bucket/bottle/bowl-style remainder inputs are covered by the audit-only component remainder policy.
+- Tag inputs still require future expansion checks whenever tags or tag membership change.
+- Player-facing infusion completion remains disabled until real essentia source and final catalyst/output policies are implemented.
