@@ -39,11 +39,10 @@ public class TCCrucibleBlockEntity extends BlockEntity {
     public static final int MAX_HEAT = 200;
     public static final int LEGACY_ASPECT_CAP = 500;
     public static final String SPECIAL_ITEM_MARKER = "thaumcraft:crucible_special_item";
-
     private int waterAmount;
     private short heat;
-        private int livingContactDelay;
-private long spillCounter = -100L;
+    private int livingContactDelay;
+    private long spillCounter = -100L;
     private AspectList aspects = new AspectList();
 
     public TCCrucibleBlockEntity(BlockPos pos, BlockState blockState) {
@@ -131,6 +130,7 @@ private long spillCounter = -100L;
         livingContactDelay = 0;
         return isBoiling();
     }
+
     public void addAspectForValidation(Aspect aspect, int amount) {
         if (aspect != null && amount > 0) {
             aspects.add(aspect, amount);
