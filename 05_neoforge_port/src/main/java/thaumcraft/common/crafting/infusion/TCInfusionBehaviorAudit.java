@@ -257,6 +257,71 @@ public final class TCInfusionBehaviorAudit {
                 "reason=" + runtimeResult.reason() + ", recipe=" + runtimeResult.recipeId()
         ));
 
+        TCInfusionStartResult startResult = matrix.startCraftingForValidation(
+                cloudRing,
+                new AspectList().add(Aspect.AIR, 50),
+                "AuditPlayer"
+        );
+        Optional<TCInfusionCraftingPlan> activePlan = matrix.activePlan();
+        checks.add(new Check(
+                "runtime_matrix_start_plan_cloudring",
+                startResult.started()
+                        && matrix.isCrafting()
+                        && activePlan.isPresent()
+                        && CLOUD_RING.equals(activePlan.get().recipeId()),
+                "started=" + startResult.started() + ", reason=" + startResult.reason()
+        ));
+        checks.add(new Check(
+                "runtime_matrix_start_plan_records_legacy_fields",
+                activePlan.isPresent()
+                        && "CLOUDRING".equals(activePlan.get().research())
+                        && activePlan.get().instability() == 1
+                        && activePlan.get().catalyst().is(TCItems.BAUBLE_RING.get())
+                        && activePlan.get().components().size() == 2
+                        && activePlan.get().requiredAspects().getAmount(Aspect.AIR) == 50
+                        && activePlan.get().result().is(TCItems.CLOUD_RING.get())
+                        && "AuditPlayer".equals(activePlan.get().playerName()),
+                activePlan.map(plan -> "research=" + plan.research()
+                                + ", instability=" + plan.instability()
+                                + ", components=" + plan.components().size()
+                                + ", aspects=" + plan.requiredAspectAmount())
+                        .orElse("no active plan")
+        ));
+        checks.add(new Check(
+                "runtime_matrix_start_plan_records_component_pedestal_positions",
+                activePlan.isPresent()
+                        && activePlan.get().componentPedestalPositions().size() == 2
+                        && activePlan.get().componentPedestalPositions().contains(featherPos)
+                        && activePlan.get().componentPedestalPositions().contains(crystalPos),
+                activePlan.map(plan -> "positions=" + plan.componentPedestalPositions()).orElse("no active plan")
+        ));
+        checks.add(new Check(
+                "runtime_matrix_active_plan_persists_through_nbt",
+                activePlan.map(plan -> TCInfusionCraftingPlan.load(plan.save(server.registryAccess()), server.registryAccess()))
+                        .map(loaded -> CLOUD_RING.equals(loaded.recipeId())
+                                && loaded.components().size() == 2
+                                && loaded.requiredAspects().getAmount(Aspect.AIR) == 50
+                                && loaded.result().is(TCItems.CLOUD_RING.get()))
+                        .orElse(false),
+                activePlan.map(plan -> "recipe=" + plan.recipeId()).orElse("no active plan")
+        ));
+        TCInfusionStartResult secondStart = matrix.startCraftingForValidation(
+                cloudRing,
+                new AspectList().add(Aspect.AIR, 50),
+                "AuditPlayer"
+        );
+        checks.add(new Check(
+                "runtime_matrix_rejects_second_start_while_active",
+                !secondStart.started() && "already_crafting".equals(secondStart.reason()),
+                "reason=" + secondStart.reason()
+        ));
+        matrix.abortCrafting();
+        checks.add(new Check(
+                "runtime_matrix_abort_clears_start_plan",
+                !matrix.isCrafting() && matrix.activePlan().isEmpty(),
+                "active=" + matrix.isCrafting()
+        ));
+
         level.setBlock(extraPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         TCInfusionPedestalBlockEntity extra = blockEntity(level, extraPos, TCInfusionPedestalBlockEntity.class);
         if (extra != null) {

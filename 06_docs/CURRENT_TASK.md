@@ -21,7 +21,7 @@ Last updated: 2026-06-19
 - The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
 - The in-world crucible behavior slices have a design boundary in `06_docs/gameplay/crucible_in_world_behavior_design.md`.
 - The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
-- The first infusion behavior boundary now has a server-owned input snapshot, non-mutating validation result, legacy 1:1 component matching, a matrix/pedestal BlockEntity relationship, and `tools/audits/audit-infusion-behavior.ps1`; latest runtime audit passes `14/14`.
+- The first infusion behavior boundary now has a server-owned input snapshot, non-mutating validation result, legacy 1:1 component matching, a matrix/pedestal BlockEntity relationship, a saved active crafting start plan, and `tools/audits/audit-infusion-behavior.ps1`; latest runtime audit passes `20/20`.
 
 ## Do not change without explicit request
 
@@ -33,9 +33,9 @@ Last updated: 2026-06-19
 ## Near-term tasks
 
 1. Continue the infusion work from `06_docs/gameplay/infusion_in_world_behavior_design.md`:
-   - Current implemented scope includes reloadable `thaumcraft:infusion` data, Thaumonomicon recipe-page snapshots, `TCInfusionRecipeMatcher`, `TCInfusionAssembly`, `TCInfusionValidationResult`, runtime behavior audit, active `arcane_pedestal`/`ancient_pedestal`/`eldritch_pedestal` block ids, and a validation-only matrix/pedestal BlockEntity relationship.
+   - Current implemented scope includes reloadable `thaumcraft:infusion` data, Thaumonomicon recipe-page snapshots, `TCInfusionRecipeMatcher`, `TCInfusionAssembly`, `TCInfusionValidationResult`, `TCInfusionCraftingPlan`, runtime behavior audit, active `arcane_pedestal`/`ancient_pedestal`/`eldritch_pedestal` block ids, and a matrix/pedestal BlockEntity relationship that can store a non-consuming active start plan.
    - Legacy parity requirement: pedestal component matching is unordered but exact 1:1 by count; extra components must fail.
-   - Next safe code slice is server-owned infusion crafting start/progress planning, still with no item/aspect mutation until an atomic plan and audit are added.
+   - Next safe code slice is atomic server-owned component consumption plus essentia-drain planning, still with no instability/FX until the mutation plan is audited.
    - Keep item consumption timing, broad pedestal UI, instability events, essentia drain, beams, particles, sounds, automation and enchantment infusion deferred until separate focused slices.
    - Re-run build, dedicated server smoke, infusion recipe-data audit, infusion behavior audit, research page catalog audit, and protocol audit after the batch.
    - Use legacy `TileInfusionMatrix`, `TilePedestal`, `InfusionRecipe`, and `ThaumcraftCraftingManager.findMatchingInfusionRecipe` as behavior references, not direct copy sources.
@@ -254,11 +254,18 @@ Last updated: 2026-06-19
 
 - Added a focused design document for the first in-world infusion behavior slice.
 - Added an infusion recipe data audit to validate catalyst/components/aspects/result shape before behavior activation.
-- Full in-world infusion crafting, broad pedestal UI, instability events and visual effects remain deferred beyond the current validation-only matrix/pedestal slice.
+- Full in-world infusion completion, broad pedestal UI, instability events and visual effects remain deferred beyond the current non-consuming matrix/pedestal start-plan slice.
 ## Infusion validation helper note
 
 - Added `TCInfusionRecipeMatcher` as a non-mutating server-side validation helper for catalyst, components and aspect costs.
 - Added `TCInfusionAssembly` and `TCInfusionValidationResult` as the current server-owned input snapshot and validation-result boundary.
 - `TCInfusionRecipeMatcher` now uses NeoForge `RecipeMatcher` like legacy Forge 1.12.2, so component matching is unordered but exact 1:1 by count.
-- `tools/audits/audit-infusion-behavior.ps1` validates the current boundary at server runtime and currently passes `14/14`.
-- Full in-world infusion crafting remains deferred until the focused atomic crafting/essentia/instability slices are added.
+- `tools/audits/audit-infusion-behavior.ps1` validates the current boundary at server runtime and currently passes `20/20`.
+- Full in-world infusion completion remains deferred until the focused atomic consumption, essentia drain, instability and FX slices are added.
+
+## Infusion start-plan boundary note
+
+- Added `TCInfusionCraftingPlan` and `TCInfusionStartResult` as the saved server-owned active infusion start state.
+- The matrix can start an audited plan only after legacy-shaped validation succeeds; the plan records recipe id, research, instability, catalyst, matched component stacks, matched pedestal positions, required aspects, result and player name.
+- Start planning intentionally does not consume catalyst, components, essentia, aura or aspects. Legacy `TileInfusionMatrix.craftingStart` also captures recipe state first; consumption happens later during crafting cycles.
+- The behavior audit now covers active plan creation, field parity for `CLOUDRING`, component pedestal positions, NBT round-trip, second-start rejection and abort.

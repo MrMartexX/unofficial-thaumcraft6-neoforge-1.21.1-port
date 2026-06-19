@@ -12,11 +12,12 @@ This document defines the first safe implementation boundary for in-world infusi
 - Infusion recipe pages can render data snapshots in the Thaumonomicon.
 - `TCInfusionRecipeMatcher` validates catalyst, exact-count unordered pedestal components, and aspect costs without mutation.
 - `TCInfusionAssembly` and `TCInfusionValidationResult` provide the first server-owned validation snapshot/result boundary.
-- `tools/audits/audit-infusion-behavior.ps1` runs the current server runtime audit; latest result is `14/14` checks passing after the matrix/pedestal relationship slice.
+- `TCInfusionCraftingPlan` and `TCInfusionStartResult` provide the first saved server-owned crafting-start state after validation.
+- `tools/audits/audit-infusion-behavior.ps1` runs the current server runtime audit; latest result is `20/20` checks passing after the matrix/pedestal start-plan slice.
 - Custom recipe boundary audit recognizes `thaumcraft:infusion` as `INFUSION_PAGE_READY_NO_GAMEPLAY`.
 - `TCInfusionMatrixBlockEntity` scans the legacy matrix-centered pedestal range and feeds a `TCInfusionAssembly` snapshot.
 - `TCInfusionPedestalBlockEntity` owns the first legacy-shaped one-slot pedestal state: empty pedestal accepts one item, occupied pedestal returns/drops its stored item.
-- Full in-world crafting activation, item/aspect consumption timing, instability events, essentia/aura side effects, client particles/beams and completion behavior are still deferred.
+- Full item/aspect consumption timing, instability events, essentia/aura side effects, client particles/beams and completion behavior are still deferred.
 
 ## First allowed gameplay slice
 
@@ -27,7 +28,21 @@ The first implementation slice may add only a minimal, server-owned infusion val
 3. Done: catalyst, component multiset and aspect-cost validation without mutating recipe objects.
 4. Done: deterministic validation/audit path for the current recipe JSON structure.
 5. Done: minimal happy-path and failed validation scenarios, including runtime world placement.
-6. Still required: no client authority and no implicit crafting from client-side state for later slices.
+6. Done: saved active crafting start plan recording recipe id, research, instability, catalyst, matched component stacks, matched pedestal positions, required aspects, result and player name.
+7. Still required: no client authority and no implicit crafting from client-side state for later slices.
+
+## Legacy crafting-start semantics
+
+Legacy `TileInfusionMatrix.craftingStart(EntityPlayer)` is the reference for the current boundary:
+
+- It first rejects invalid matrix/pedestal structure, missing center catalyst, and empty component lists.
+- It calls `getSurroundings()` to collect surrounding pedestals and stability/cost context.
+- It calls `ThaumcraftCraftingManager.findMatchingInfusionRecipe(components, recipeInput, player)`.
+- If a recipe is found, it records recipe type, input component copies, output, instability, required essentia list and player name, then sets `crafting = true`.
+- It does not immediately consume the center catalyst, component pedestal items, or essentia at start.
+- Later `craftCycle()` revalidates the center catalyst, drains essentia one unit at a time, consumes matching component pedestal items, and only then calls `craftingFinish(...)`.
+
+The port now mirrors only the start-state boundary: it records a validated plan and leaves all mutation for a later atomic consumption/essentia slice.
 
 ## Explicit non-goals for the first slice
 
@@ -69,10 +84,11 @@ Every infusion behavior change must pass:
 - Done: legacy-compatible unordered component matching with exact 1:1 count semantics.
 - Done: runtime audit/exporter for the current validation boundary.
 - Done: minimal matrix/pedestal BlockEntity relationship that feeds `TCInfusionAssembly` but still does not consume items/aspects or run instability/FX.
-- Still deferred: crafting start/progress/finish state, item consumption timing, essentia drain, instability, particles/beams/sounds and completion behavior.
+- Done: `TCInfusionCraftingPlan` active start state with NBT round-trip, second-start rejection and abort audit coverage.
+- Still deferred: item consumption timing, essentia drain, instability, particles/beams/sounds and completion behavior.
 ## Validation helper note
 
 - `TCInfusionRecipeMatcher` provides the first server-side validation helper for catalyst, unordered pedestal components and aspect costs.
 - The helper now mirrors the legacy `RecipeMatcher.findMatches` constraint: component order is flexible, but the number of supplied pedestal items must exactly equal the recipe component count.
 - The helper is intentionally non-mutating and does not activate matrix crafting, pedestal UI, instability events or visual effects.
-- Future in-world infusion behavior should call `TCInfusionAssembly.validateBest` or `TCInfusionAssembly.validateAgainst` before consuming items or mutating aura/aspect state.
+- Future in-world infusion behavior should build from the active `TCInfusionCraftingPlan` and validate a complete mutation plan before consuming items or mutating aura/aspect state.

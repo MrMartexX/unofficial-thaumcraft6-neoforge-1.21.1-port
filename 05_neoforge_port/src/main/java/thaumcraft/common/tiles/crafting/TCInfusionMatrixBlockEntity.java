@@ -6,6 +6,7 @@ import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -18,7 +19,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.crafting.infusion.TCInfusionAssembly;
+import thaumcraft.common.crafting.infusion.TCInfusionCraftingPlan;
 import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
+import thaumcraft.common.crafting.infusion.TCInfusionStartResult;
 import thaumcraft.common.crafting.infusion.TCInfusionValidationResult;
 import thaumcraft.common.registry.TCBlockEntities;
 
@@ -32,6 +35,7 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
     private String lastRecipeId = "";
     private int lastPedestalCount;
     private int lastComponentCount;
+    private TCInfusionCraftingPlan activePlan;
 
     public TCInfusionMatrixBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.INFUSION_MATRIX.get(), pos, state);
@@ -107,7 +111,84 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         if (!snapshot.hasCentralPedestal()) {
             return remember(TCInfusionValidationResult.failed("missing_central_pedestal"), snapshot);
         }
+        if (snapshot.catalyst().isEmpty()) {
+            return remember(TCInfusionValidationResult.failed("missing_catalyst"), snapshot);
+        }
+        if (snapshot.components().isEmpty()) {
+            return remember(TCInfusionValidationResult.failed("missing_components"), snapshot);
+        }
         return remember(snapshot.assembly().validateAgainst(recipe), snapshot);
+    }
+
+    public TCInfusionStartResult tryStartCrafting(ServerPlayer player, AspectList aspects) {
+        Snapshot snapshot = createSnapshot(aspects);
+        if (activePlan != null) {
+            TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("already_crafting"), snapshot);
+            return TCInfusionStartResult.failed("already_crafting", validation);
+        }
+        if (player == null) {
+            TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("missing_player"), snapshot);
+            return TCInfusionStartResult.failed("missing_player", validation);
+        }
+        if (!snapshot.hasCentralPedestal()) {
+            TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("missing_central_pedestal"), snapshot);
+            return TCInfusionStartResult.failed(validation.reason(), validation);
+        }
+        if (snapshot.catalyst().isEmpty()) {
+            TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("missing_catalyst"), snapshot);
+            return TCInfusionStartResult.failed(validation.reason(), validation);
+        }
+        if (snapshot.components().isEmpty()) {
+            TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("missing_components"), snapshot);
+            return TCInfusionStartResult.failed(validation.reason(), validation);
+        }
+        if (level == null) {
+            TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("missing_level"), snapshot);
+            return TCInfusionStartResult.failed(validation.reason(), validation);
+        }
+        Optional<RecipeHolder<TCInfusionRecipe>> match = snapshot.assembly().findMatchingRecipe(level.getRecipeManager(), player);
+        if (match.isEmpty()) {
+            TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("no_matching_researched_recipe"), snapshot);
+            return TCInfusionStartResult.failed(validation.reason(), validation);
+        }
+        TCInfusionValidationResult validation = remember(snapshot.assembly().validateAgainst(match.get()), snapshot);
+        if (!validation.valid()) {
+            return TCInfusionStartResult.failed(validation.reason(), validation);
+        }
+        return storeValidatedPlan(match.get(), snapshot, validation, player.getName().getString());
+    }
+
+    public TCInfusionStartResult startCraftingForValidation(
+            RecipeHolder<TCInfusionRecipe> recipe,
+            AspectList aspects,
+            String playerName
+    ) {
+        Snapshot snapshot = createSnapshot(aspects);
+        if (activePlan != null) {
+            TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("already_crafting"), snapshot);
+            return TCInfusionStartResult.failed("already_crafting", validation);
+        }
+        TCInfusionValidationResult validation = validateAgainst(recipe, aspects);
+        if (!validation.valid()) {
+            return TCInfusionStartResult.failed(validation.reason(), validation);
+        }
+        return storeValidatedPlan(recipe, snapshot, validation, playerName);
+    }
+
+    public boolean isCrafting() {
+        return activePlan != null;
+    }
+
+    public Optional<TCInfusionCraftingPlan> activePlan() {
+        return Optional.ofNullable(activePlan);
+    }
+
+    public void abortCrafting() {
+        if (activePlan == null) {
+            return;
+        }
+        activePlan = null;
+        markChangedAndSync();
     }
 
     public String lastValidationReason() {
@@ -126,6 +207,43 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         return lastComponentCount;
     }
 
+    private TCInfusionStartResult storeValidatedPlan(
+            RecipeHolder<TCInfusionRecipe> recipe,
+            Snapshot snapshot,
+            TCInfusionValidationResult validation,
+            String playerName
+    ) {
+        TCInfusionCraftingPlan.BuildResult buildResult = TCInfusionCraftingPlan.build(
+                recipe.id(),
+                recipe.value(),
+                snapshot.catalyst(),
+                filledSurroundingPedestalComponents(),
+                playerName
+        );
+        if (!buildResult.valid()) {
+            TCInfusionValidationResult failed = remember(
+                    TCInfusionValidationResult.failed(buildResult.reason()).withRecipeId(recipe.id().toString()),
+                    snapshot
+            );
+            return TCInfusionStartResult.failed(buildResult.reason(), failed);
+        }
+
+        activePlan = buildResult.plan();
+        markChangedAndSync();
+        return TCInfusionStartResult.started(activePlan, validation);
+    }
+
+    private List<TCInfusionCraftingPlan.PedestalComponent> filledSurroundingPedestalComponents() {
+        ArrayList<TCInfusionCraftingPlan.PedestalComponent> components = new ArrayList<>();
+        for (TCInfusionPedestalBlockEntity pedestal : findSurroundingPedestals()) {
+            ItemStack stack = pedestal.getStoredStack();
+            if (!stack.isEmpty()) {
+                components.add(new TCInfusionCraftingPlan.PedestalComponent(pedestal.getBlockPos(), stack));
+            }
+        }
+        return List.copyOf(components);
+    }
+
     private TCInfusionValidationResult remember(TCInfusionValidationResult result, Snapshot snapshot) {
         lastValidationReason = result.reason();
         lastRecipeId = result.recipeId();
@@ -136,6 +254,13 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
         return result;
+    }
+
+    private void markChangedAndSync() {
+        setChanged();
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     @Nullable
@@ -156,6 +281,9 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         tag.putString("LastRecipeId", lastRecipeId);
         tag.putInt("LastPedestalCount", lastPedestalCount);
         tag.putInt("LastComponentCount", lastComponentCount);
+        if (activePlan != null) {
+            tag.put("ActiveInfusionPlan", activePlan.save(registries));
+        }
     }
 
     @Override
@@ -165,6 +293,9 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         lastRecipeId = tag.getString("LastRecipeId");
         lastPedestalCount = tag.getInt("LastPedestalCount");
         lastComponentCount = tag.getInt("LastComponentCount");
+        activePlan = tag.contains("ActiveInfusionPlan", Tag.TAG_COMPOUND)
+                ? TCInfusionCraftingPlan.load(tag.getCompound("ActiveInfusionPlan"), registries)
+                : null;
     }
 
     public record Snapshot(
