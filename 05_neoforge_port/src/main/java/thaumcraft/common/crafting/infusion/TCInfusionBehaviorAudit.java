@@ -57,9 +57,10 @@ public final class TCInfusionBehaviorAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- This validates the current server-owned infusion input snapshot and recipe matcher boundary.");
+        lines.add("- This validates the current server-owned infusion input snapshot, recipe matcher and active-plan readiness boundary.");
         lines.add("- The audit also places a matrix and pedestals in a runtime server world to validate legacy-aligned pedestal discovery.");
         lines.add("- Legacy parity point: component matching uses Forge/NeoForge RecipeMatcher 1:1 semantics, so extra pedestal inputs must fail.");
+        lines.add("- The active completion plan is still read-only: it checks current catalyst, planned component pedestals and aspect availability before any future mutation.");
         lines.add("- This does not implement item consumption, instability events, essentia transport, particles, beams or matrix animation.");
 
         Files.write(output, lines);
@@ -305,6 +306,60 @@ public final class TCInfusionBehaviorAudit {
                         .orElse(false),
                 activePlan.map(plan -> "recipe=" + plan.recipeId()).orElse("no active plan")
         ));
+        TCInfusionCompletionPlan completionPlan = matrix.createCompletionPlan(new AspectList().add(Aspect.AIR, 50));
+        checks.add(new Check(
+                "runtime_matrix_completion_plan_cloudring",
+                completionPlan.valid()
+                        && "valid".equals(completionPlan.reason())
+                        && completionPlan.componentCount() == 2
+                        && completionPlan.requiredAspectAmount() == 50
+                        && completionPlan.remainingAspects().visSize() == 0,
+                "reason=" + completionPlan.reason()
+                        + ", components=" + completionPlan.componentCount()
+                        + ", missing=" + completionPlan.missingAspectAmount()
+        ));
+        TCInfusionCompletionPlan missingAspectCompletion = matrix.createCompletionPlan(new AspectList().add(Aspect.AIR, 49));
+        checks.add(new Check(
+                "runtime_matrix_completion_plan_requires_all_aspects",
+                !missingAspectCompletion.valid()
+                        && "missing_aspects".equals(missingAspectCompletion.reason())
+                        && missingAspectCompletion.missingAspects().getAmount(Aspect.AIR) == 1,
+                "reason=" + missingAspectCompletion.reason()
+                        + ", missingAer=" + missingAspectCompletion.missingAspects().getAmount(Aspect.AIR)
+        ));
+
+        center.setStoredForValidation(new ItemStack(Items.IRON_INGOT));
+        TCInfusionCompletionPlan changedCatalystCompletion = matrix.createCompletionPlan(new AspectList().add(Aspect.AIR, 50));
+        checks.add(new Check(
+                "runtime_matrix_completion_plan_rechecks_catalyst",
+                !changedCatalystCompletion.valid() && "catalyst_changed".equals(changedCatalystCompletion.reason()),
+                "reason=" + changedCatalystCompletion.reason()
+        ));
+        center.setStoredForValidation(new ItemStack(TCItems.BAUBLE_RING.get()));
+
+        feather.setStoredForValidation(new ItemStack(Items.STICK));
+        TCInfusionCompletionPlan changedComponentCompletion = matrix.createCompletionPlan(new AspectList().add(Aspect.AIR, 50));
+        checks.add(new Check(
+                "runtime_matrix_completion_plan_rechecks_component_stack",
+                !changedComponentCompletion.valid() && "component_changed".equals(changedComponentCompletion.reason()),
+                "reason=" + changedComponentCompletion.reason()
+        ));
+        feather.setStoredForValidation(new ItemStack(Items.FEATHER));
+
+        level.setBlock(featherPos, Blocks.AIR.defaultBlockState(), 3);
+        TCInfusionCompletionPlan missingComponentPedestalCompletion = matrix.createCompletionPlan(new AspectList().add(Aspect.AIR, 50));
+        checks.add(new Check(
+                "runtime_matrix_completion_plan_rechecks_component_pedestal",
+                !missingComponentPedestalCompletion.valid()
+                        && "missing_component_pedestal".equals(missingComponentPedestalCompletion.reason()),
+                "reason=" + missingComponentPedestalCompletion.reason()
+        ));
+        level.setBlock(featherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        feather = blockEntity(level, featherPos, TCInfusionPedestalBlockEntity.class);
+        if (feather != null) {
+            feather.setStoredForValidation(new ItemStack(Items.FEATHER));
+        }
+
         TCInfusionStartResult secondStart = matrix.startCraftingForValidation(
                 cloudRing,
                 new AspectList().add(Aspect.AIR, 50),

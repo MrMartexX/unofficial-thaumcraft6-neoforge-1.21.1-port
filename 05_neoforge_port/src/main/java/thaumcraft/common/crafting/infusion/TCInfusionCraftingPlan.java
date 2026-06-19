@@ -199,8 +199,26 @@ public record TCInfusionCraftingPlan(
         return catalyst.copy();
     }
 
+    public boolean catalystMatches(ItemStack stack) {
+        return craftingStackMatches(stack, catalyst);
+    }
+
     public List<ItemStack> components() {
         return components.stream().map(ItemStack::copy).toList();
+    }
+
+    public boolean componentMatches(int index, ItemStack stack) {
+        if (index < 0 || index >= components.size()) {
+            return false;
+        }
+        return craftingStackMatches(stack, components.get(index));
+    }
+
+    public ItemStack component(int index) {
+        if (index < 0 || index >= components.size()) {
+            return ItemStack.EMPTY;
+        }
+        return components.get(index).copy();
     }
 
     public AspectList requiredAspects() {
@@ -263,6 +281,13 @@ public record TCInfusionCraftingPlan(
         return stacks.stream()
                 .map(stack -> stack == null ? ItemStack.EMPTY : stack.copy())
                 .toList();
+    }
+
+    private static boolean craftingStackMatches(ItemStack currentStack, ItemStack expectedStack) {
+        if (currentStack == null || expectedStack == null || currentStack.isEmpty() || expectedStack.isEmpty()) {
+            return false;
+        }
+        return ItemStack.isSameItemSameComponents(currentStack.copyWithCount(1), expectedStack.copyWithCount(1));
     }
 
     public record PedestalComponent(BlockPos pos, ItemStack stack) {

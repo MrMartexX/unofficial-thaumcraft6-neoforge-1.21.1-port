@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.crafting.infusion.TCInfusionAssembly;
+import thaumcraft.common.crafting.infusion.TCInfusionCompletionPlan;
 import thaumcraft.common.crafting.infusion.TCInfusionCraftingPlan;
 import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
 import thaumcraft.common.crafting.infusion.TCInfusionStartResult;
@@ -181,6 +182,45 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
 
     public Optional<TCInfusionCraftingPlan> activePlan() {
         return Optional.ofNullable(activePlan);
+    }
+
+    public TCInfusionCompletionPlan createCompletionPlan(AspectList availableAspects) {
+        if (activePlan == null) {
+            return TCInfusionCompletionPlan.missingActivePlan(availableAspects);
+        }
+        if (level == null) {
+            return TCInfusionCompletionPlan.failed("missing_level", activePlan, availableAspects);
+        }
+
+        Optional<TCInfusionPedestalBlockEntity> center = centralPedestal();
+        if (center.isEmpty()) {
+            return TCInfusionCompletionPlan.failed("missing_central_pedestal", activePlan, availableAspects);
+        }
+        if (!activePlan.catalystMatches(center.get().getStoredStack())) {
+            return TCInfusionCompletionPlan.failed("catalyst_changed", activePlan, availableAspects);
+        }
+
+        ArrayList<TCInfusionCompletionPlan.ComponentConsumption> componentConsumptions = new ArrayList<>();
+        List<BlockPos> positions = activePlan.componentPedestalPositions();
+        for (int index = 0; index < positions.size(); index++) {
+            BlockPos pedestalPos = positions.get(index);
+            BlockEntity blockEntity = level.getBlockEntity(pedestalPos);
+            if (!(blockEntity instanceof TCInfusionPedestalBlockEntity pedestal)) {
+                return TCInfusionCompletionPlan.failed("missing_component_pedestal", activePlan, availableAspects);
+            }
+
+            ItemStack currentStack = pedestal.getStoredStack();
+            if (!activePlan.componentMatches(index, currentStack)) {
+                return TCInfusionCompletionPlan.failed("component_changed", activePlan, availableAspects);
+            }
+            componentConsumptions.add(new TCInfusionCompletionPlan.ComponentConsumption(
+                    pedestalPos,
+                    activePlan.component(index),
+                    currentStack
+            ));
+        }
+
+        return TCInfusionCompletionPlan.fromValidatedInputs(activePlan, availableAspects, componentConsumptions);
     }
 
     public void abortCrafting() {
