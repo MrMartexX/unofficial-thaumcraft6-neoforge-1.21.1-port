@@ -652,3 +652,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added local tag expansion audit for tag-based infusion inputs.
 - External/built-in tags remain a future player-facing validation concern.
+## Infusion built-in tag fallback audit note
+
+- Added reusable infusion tag input expansion audit tooling.
+- `minecraft:wool` is handled as a known built-in fallback for static audit coverage.

@@ -152,3 +152,7 @@ Every infusion behavior change must pass:
 
 - `infusion_tag_input_expansion_audit.md` expands locally available infusion tag inputs and flags missing/external tags.
 - This audit keeps tag-based recipe ingredients from bypassing the container/remainder policy when player-facing completion is eventually enabled.
+## Built-in tag fallback audit note
+
+- `audit-infusion-tag-input-expansion.ps1` now treats `minecraft:wool` as a known built-in fallback tag for static audit purposes.
+- Current local plus built-in fallback tag expansion does not introduce known bucket/bottle/bowl-style remainder inputs.

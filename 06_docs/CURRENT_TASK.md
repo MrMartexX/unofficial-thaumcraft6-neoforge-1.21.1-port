@@ -333,3 +333,7 @@ Last updated: 2026-06-19
 
 - Added an audit for tag-based infusion catalyst/component inputs.
 - The audit expands local tags, reports external or missing tags, and checks for known remainder item members.
+## Infusion built-in tag fallback audit note
+
+- Added a reusable tag expansion audit tool with a built-in fallback for `minecraft:wool`.
+- The refreshed audit reports no known remainder items through local or built-in fallback tag expansion.
