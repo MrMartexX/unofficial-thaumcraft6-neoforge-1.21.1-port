@@ -660,3 +660,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added explicit no-op `TCInfusionAspectSourceResolver` boundary for future real source discovery.
 - Audit-only memory sources remain separate from player-facing completion.
+## Infusion real source policy checkpoint
+
+- Added focused design documentation for the future real aspect/essentia source resolver.
+- Infusion completion remains audit-only and player-facing completion remains disabled.

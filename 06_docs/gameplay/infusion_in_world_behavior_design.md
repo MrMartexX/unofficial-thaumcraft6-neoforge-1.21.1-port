@@ -161,3 +161,7 @@ Every infusion behavior change must pass:
 - `TCInfusionAspectSourceResolver` is an explicit boundary for future jar, tube, alembic, aura or network-backed source discovery.
 - It currently returns no source and reports `real_source_policy_not_implemented`.
 - Player-facing completion must not bypass this resolver with direct in-memory sources.
+## Real source policy design checkpoint
+
+- See `06_docs/gameplay/infusion_real_source_policy_design.md` before implementing any real jar, tube, alembic, aura or network-backed source.
+- The resolver must fail closed and must not use audit-only memory sources for player-facing completion.

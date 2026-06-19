@@ -35,7 +35,8 @@ Last updated: 2026-06-19
 1. Continue the infusion work from `06_docs/gameplay/infusion_in_world_behavior_design.md`:
    - Current implemented scope includes reloadable `thaumcraft:infusion` data, Thaumonomicon recipe-page snapshots, `TCInfusionRecipeMatcher`, `TCInfusionAssembly`, `TCInfusionValidationResult`, `TCInfusionCraftingPlan`, `TCInfusionCompletionPlan`, runtime behavior audit, active `arcane_pedestal`/`ancient_pedestal`/`eldritch_pedestal` block ids, and a matrix/pedestal BlockEntity relationship that can store a non-consuming active start plan and verify it read-only against current world/aspect state.
    - Legacy parity requirement: pedestal component matching is unordered but exact 1:1 by count; extra components must fail.
-   - Next safe code slice is an atomic server-owned completion executor over the audited plan: apply aspect drain/source semantics, consume only the matched component pedestals, replace the center catalyst with the result, and clear the active plan only if every precondition still passes.
+   - Current audit-only completion boundary now includes mutation executor, aspect-source drain interface, no-op real source resolver, component container remainder preservation, tag expansion audit, and an explicit disabled player-facing matrix completion gate.
+   - Next safe code slice is a focused real aspect/essentia source resolver implementation for one explicitly supported source type, while keeping player-facing completion disabled until atomic source/item behavior is audited.
    - Keep broad pedestal UI, instability events, essentia transport networks, beams, particles, sounds, automation and enchantment infusion deferred until separate focused slices.
    - Re-run build, dedicated server smoke, infusion recipe-data audit, infusion behavior audit, research page catalog audit, and protocol audit after the batch.
    - Use legacy `TileInfusionMatrix`, `TilePedestal`, `InfusionRecipe`, and `ThaumcraftCraftingManager.findMatchingInfusionRecipe` as behavior references, not direct copy sources.
@@ -342,3 +343,8 @@ Last updated: 2026-06-19
 - Added `TCInfusionAspectSourceResolver` as the named future entry point for real aspect/essentia source discovery.
 - The resolver intentionally returns empty until a focused real source policy exists.
 - Runtime audit verifies this no-source boundary remains explicit.
+## Infusion real source policy checkpoint
+
+- Added `06_docs/gameplay/infusion_real_source_policy_design.md` to define the next real source policy boundary.
+- Current infusion completion remains audit-only: executor/source/remainder/tag checks exist, but player-facing matrix completion is disabled.
+- The next implementation slice should fail closed and resolve exactly one supported real source type before enabling any player-facing completion.
