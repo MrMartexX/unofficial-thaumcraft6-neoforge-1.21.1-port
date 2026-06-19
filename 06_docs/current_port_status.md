@@ -656,3 +656,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added reusable infusion tag input expansion audit tooling.
 - `minecraft:wool` is handled as a known built-in fallback for static audit coverage.
+## Infusion real aspect source resolver boundary note
+
+- Added explicit no-op `TCInfusionAspectSourceResolver` boundary for future real source discovery.
+- Audit-only memory sources remain separate from player-facing completion.

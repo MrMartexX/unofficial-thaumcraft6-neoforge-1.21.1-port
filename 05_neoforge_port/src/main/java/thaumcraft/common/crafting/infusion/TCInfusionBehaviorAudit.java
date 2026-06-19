@@ -208,6 +208,7 @@ public final class TCInfusionBehaviorAudit {
                 addContainerRemainderPolicyChecks(checks);
                 addAspectSourceBoundaryChecks(checks);
                 addAspectSourceMutationExecutorChecks(server, holder, checks);
+                addAspectSourceResolverChecks(checks);
             });
         }
 
@@ -410,6 +411,14 @@ public final class TCInfusionBehaviorAudit {
         ));
     }
 
+    private static void addAspectSourceResolverChecks(ArrayList<Check> checks) {
+        checks.add(new Check(
+                "aspect_source_resolver_is_explicitly_unimplemented",
+                TCInfusionAspectSourceResolver.findSource(null, null).isEmpty()
+                        && TCInfusionAspectSourceResolver.REAL_SOURCE_POLICY_NOT_IMPLEMENTED.equals(TCInfusionAspectSourceResolver.unavailableReason()),
+                "reason=" + TCInfusionAspectSourceResolver.unavailableReason()
+        ));
+    }
     private static void addAspectSourceMutationExecutorChecks(MinecraftServer server, RecipeHolder<TCInfusionRecipe> cloudRing, ArrayList<Check> checks) {
         ServerLevel level = server.overworld();
         BlockPos matrixPos = new BlockPos(36, level.getMinBuildHeight() + 12, 0);

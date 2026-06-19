@@ -156,3 +156,8 @@ Every infusion behavior change must pass:
 
 - `audit-infusion-tag-input-expansion.ps1` now treats `minecraft:wool` as a known built-in fallback tag for static audit purposes.
 - Current local plus built-in fallback tag expansion does not introduce known bucket/bottle/bowl-style remainder inputs.
+## Real aspect source resolver boundary note
+
+- `TCInfusionAspectSourceResolver` is an explicit boundary for future jar, tube, alembic, aura or network-backed source discovery.
+- It currently returns no source and reports `real_source_policy_not_implemented`.
+- Player-facing completion must not bypass this resolver with direct in-memory sources.

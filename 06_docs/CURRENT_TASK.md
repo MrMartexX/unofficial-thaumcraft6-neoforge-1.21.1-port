@@ -337,3 +337,8 @@ Last updated: 2026-06-19
 
 - Added a reusable tag expansion audit tool with a built-in fallback for `minecraft:wool`.
 - The refreshed audit reports no known remainder items through local or built-in fallback tag expansion.
+## Infusion real aspect source resolver boundary note
+
+- Added `TCInfusionAspectSourceResolver` as the named future entry point for real aspect/essentia source discovery.
+- The resolver intentionally returns empty until a focused real source policy exists.
+- Runtime audit verifies this no-source boundary remains explicit.
