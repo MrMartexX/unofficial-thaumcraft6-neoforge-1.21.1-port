@@ -95,3 +95,8 @@ Every infusion behavior change must pass:
 - The helper now mirrors the legacy `RecipeMatcher.findMatches` constraint: component order is flexible, but the number of supplied pedestal items must exactly equal the recipe component count.
 - The helper is intentionally non-mutating and does not activate matrix crafting, pedestal UI, instability events or visual effects.
 - Future in-world infusion behavior should build from the active `TCInfusionCraftingPlan` and the audited `TCInfusionCompletionPlan` before consuming items or mutating aura/aspect state.
+## Legacy cycle semantics audit note
+
+- `infusion_legacy_cycle_semantics_audit.md` records the legacy `craftingStart`, `craftCycle`, `craftingFinish`, and `getSurroundings` anchors before adding any mutation executor.
+- The next safe implementation step is not a player-facing one-shot craft trigger. It is an audited mutation/executor boundary built on `TCInfusionCraftingPlan` and `TCInfusionCompletionPlan`.
+- Container-item behavior and essentia drain/source timing remain unresolved parity risks and must stay separate from instability/FX work.

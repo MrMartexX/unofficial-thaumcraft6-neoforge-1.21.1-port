@@ -276,3 +276,8 @@ Last updated: 2026-06-19
 - The matrix now rechecks current center catalyst, the originally matched component pedestal positions/stacks, and available aspect totals before any future mutation.
 - The behavior audit now covers valid readiness, missing-aspect rejection, changed catalyst rejection, changed component rejection, and missing component pedestal rejection.
 - This still does not consume pedestal items, drain essentia/aspects, replace the catalyst with output, roll instability, or run beams/particles/sounds.
+## Infusion legacy cycle semantics audit note
+
+- Added a legacy cycle semantics audit for `TileInfusionMatrix` method anchors before implementing any mutation executor.
+- Do not connect a one-shot item mutation path to player-facing matrix activation yet.
+- Next safe slice: an audited, non-player-facing mutation/executor boundary based on `TCInfusionCraftingPlan` and `TCInfusionCompletionPlan`.

@@ -1,0 +1,2 @@
+# This generated audit is intentionally implemented in the batch script that created it.
+# Re-run add_infusion_legacy_cycle_semantics_audit.ps1 from D:\tc-port-scripts when the legacy source location changes.

@@ -604,3 +604,7 @@ The sections below are historical update notes. They should not be read as the c
 - The matrix rechecks the center catalyst, each originally matched component pedestal position/stack, and available aspect totals before any future mutation.
 - The behavior audit now covers valid readiness, missing-aspect rejection, changed catalyst rejection, changed component rejection, and missing component pedestal rejection.
 - This still does not consume pedestal items, drain essentia/aspects, replace the catalyst with output, roll instability, or run beams/particles/sounds.
+## Infusion legacy cycle semantics audit note
+
+- Added `06_docs/audits/infusion_legacy_cycle_semantics_audit.md` to capture legacy `craftingStart`, `craftCycle`, `craftingFinish`, and `getSurroundings` anchors.
+- The next implementation should be a small audited mutation/executor boundary, not a full player-facing infusion craft trigger.
