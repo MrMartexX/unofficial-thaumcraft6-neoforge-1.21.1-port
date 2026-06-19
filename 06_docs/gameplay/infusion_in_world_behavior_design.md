@@ -100,3 +100,8 @@ Every infusion behavior change must pass:
 - `infusion_legacy_cycle_semantics_audit.md` records the legacy `craftingStart`, `craftCycle`, `craftingFinish`, and `getSurroundings` anchors before adding any mutation executor.
 - The next safe implementation step is not a player-facing one-shot craft trigger. It is an audited mutation/executor boundary built on `TCInfusionCraftingPlan` and `TCInfusionCompletionPlan`.
 - Container-item behavior and essentia drain/source timing remain unresolved parity risks and must stay separate from instability/FX work.
+## Container and essentia cycle audit note
+
+- `infusion_legacy_container_essentia_cycle_audit.md` narrows the legacy audit from broad method anchors to item/container and essentia/source timing.
+- The next code slice may introduce a non-player-facing mutation executor, but it must be audit-only until the timing policy is proven.
+- Container item handling and real essentia network/source drain remain separate parity risks and must not be mixed with instability/FX work.

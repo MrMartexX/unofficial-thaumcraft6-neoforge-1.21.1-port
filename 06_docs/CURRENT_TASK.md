@@ -281,3 +281,8 @@ Last updated: 2026-06-19
 - Added a legacy cycle semantics audit for `TileInfusionMatrix` method anchors before implementing any mutation executor.
 - Do not connect a one-shot item mutation path to player-facing matrix activation yet.
 - Next safe slice: an audited, non-player-facing mutation/executor boundary based on `TCInfusionCraftingPlan` and `TCInfusionCompletionPlan`.
+## Infusion container and essentia cycle audit note
+
+- Added a focused legacy audit for item/container and essentia/source timing before implementing an infusion mutation executor.
+- Next safe code slice: non-player-facing, audit-only `TCInfusionMutationExecutor` based on `TCInfusionCompletionPlan`.
+- Keep real essentia network drain, instability and FX deferred.

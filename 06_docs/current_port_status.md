@@ -608,3 +608,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added `06_docs/audits/infusion_legacy_cycle_semantics_audit.md` to capture legacy `craftingStart`, `craftCycle`, `craftingFinish`, and `getSurroundings` anchors.
 - The next implementation should be a small audited mutation/executor boundary, not a full player-facing infusion craft trigger.
+## Infusion container and essentia cycle audit note
+
+- Added a focused legacy container/essentia timing audit for the infusion executor boundary.
+- The next implementation should remain audit-only and non-player-facing until mutation timing is validated.
