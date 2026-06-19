@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.neoforged.neoforge.common.util.RecipeMatcher;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.crafting.crucible.TCCrucibleAspectCost;
 import thaumcraft.common.registry.TCRecipes;
@@ -95,34 +96,19 @@ public final class TCInfusionRecipeMatcher {
         if (required.isEmpty()) {
             return true;
         }
-        if (components == null || components.size() < required.size()) {
+        if (components == null || components.size() != required.size()) {
             return false;
         }
 
-        boolean[] used = new boolean[components.size()];
-        for (Ingredient ingredient : required) {
-            boolean matched = false;
-            for (int index = 0; index < components.size(); index++) {
-                if (used[index]) {
-                    continue;
-                }
-                ItemStack stack = components.get(index);
-                if (stack == null || stack.isEmpty()) {
-                    continue;
-                }
-                ItemStack singleComponent = stack.copy();
-                singleComponent.setCount(1);
-                if (ingredient.test(singleComponent)) {
-                    used[index] = true;
-                    matched = true;
-                    break;
-                }
-            }
-            if (!matched) {
+        List<ItemStack> singleComponents = components.stream()
+                .map(stack -> stack == null ? ItemStack.EMPTY : stack.copyWithCount(1))
+                .toList();
+        for (ItemStack stack : singleComponents) {
+            if (stack.isEmpty()) {
                 return false;
             }
         }
-        return true;
+        return RecipeMatcher.findMatches(singleComponents, required) != null;
     }
 
     public static int recipeAspectCost(TCInfusionRecipe recipe) {

@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-06-18
+Last updated: 2026-06-19
 
 ## Current branch
 
@@ -21,6 +21,7 @@ Last updated: 2026-06-18
 - The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
 - The in-world crucible behavior slices have a design boundary in `06_docs/gameplay/crucible_in_world_behavior_design.md`.
 - The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
+- The first infusion behavior boundary now has a server-owned input snapshot, non-mutating validation result, legacy 1:1 component matching, and `tools/audits/audit-infusion-behavior.ps1`; latest runtime audit passes `9/9`.
 
 ## Do not change without explicit request
 
@@ -31,11 +32,13 @@ Last updated: 2026-06-18
 
 ## Near-term tasks
 
-1. Continue the crucible/alchemy work from the documented in-world behavior slices:
-   - Current implemented scope includes server-owned water/heat/aspect pool, manual top-side item insertion, item-entity collision absorption, hot living-entity contact damage, periodic/overflow spill pollution, recipe lookup, research-gated crafting, result ejection, and modern special-item reabsorption protection.
-   - Keep flux rifts, taint spread, liquid death, special alchemy effects, Thaumatorium, alembic/jar/tube integration, client particles, automation, item pulling radius, and recipe-derived aspect generation deferred.
-   - Re-run build, dedicated server smoke, crucible recipe-data audit, crucible behavior audit, research page catalog audit, and protocol audit after the batch.
-   - Use legacy `BlockCrucible`, `TileCrucible`, `CrucibleRecipe`, and `ThaumcraftCraftingManager.findMatchingCrucibleRecipe` as behavior references, not direct copy sources.
+1. Continue the infusion work from `06_docs/gameplay/infusion_in_world_behavior_design.md`:
+   - Current implemented scope includes reloadable `thaumcraft:infusion` data, Thaumonomicon recipe-page snapshots, `TCInfusionRecipeMatcher`, `TCInfusionAssembly`, `TCInfusionValidationResult`, and the runtime behavior audit.
+   - Legacy parity requirement: pedestal component matching is unordered but exact 1:1 by count; extra components must fail.
+   - Next safe code slice is a minimal server-owned matrix/pedestal BlockEntity relationship that calls the validation snapshot before any item/aspect mutation.
+   - Keep item consumption timing, pedestal inventories/UI, instability events, essentia drain, beams, particles, sounds, automation and enchantment infusion deferred until separate focused slices.
+   - Re-run build, dedicated server smoke, infusion recipe-data audit, infusion behavior audit, research page catalog audit, and protocol audit after the batch.
+   - Use legacy `TileInfusionMatrix`, `TilePedestal`, `InfusionRecipe`, and `ThaumcraftCraftingManager.findMatchingInfusionRecipe` as behavior references, not direct copy sources.
 2. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
 3. Keep reusable audit scripts under `tools/audits/`.
 4. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.
@@ -255,4 +258,7 @@ Last updated: 2026-06-18
 ## Infusion validation helper note
 
 - Added `TCInfusionRecipeMatcher` as a non-mutating server-side validation helper for catalyst, components and aspect costs.
-- In-world infusion matrix behavior remains deferred until a focused runtime audit and BlockEntity slice are added.
+- Added `TCInfusionAssembly` and `TCInfusionValidationResult` as the current server-owned input snapshot and validation-result boundary.
+- `TCInfusionRecipeMatcher` now uses NeoForge `RecipeMatcher` like legacy Forge 1.12.2, so component matching is unordered but exact 1:1 by count.
+- `tools/audits/audit-infusion-behavior.ps1` validates the current boundary at server runtime and currently passes `9/9`.
+- Full in-world infusion matrix behavior remains deferred until the focused BlockEntity slice is added.

@@ -10,6 +10,9 @@ This document defines the first safe implementation boundary for in-world infusi
 
 - `thaumcraft:infusion` recipe JSONs are reloadable data resources.
 - Infusion recipe pages can render data snapshots in the Thaumonomicon.
+- `TCInfusionRecipeMatcher` validates catalyst, exact-count unordered pedestal components, and aspect costs without mutation.
+- `TCInfusionAssembly` and `TCInfusionValidationResult` provide the first server-owned validation snapshot/result boundary.
+- `tools/audits/audit-infusion-behavior.ps1` runs the current server runtime audit; latest result is `9/9` checks passing.
 - Custom recipe boundary audit recognizes `thaumcraft:infusion` as `INFUSION_PAGE_READY_NO_GAMEPLAY`.
 - In-world infusion matrix activation, pedestal inventories, instability events, essentia/aura side effects, item consumption timing, client particles and completion behavior are still deferred.
 
@@ -53,18 +56,21 @@ Every infusion behavior change must pass:
 1. `gradlew.bat build --no-daemon`.
 2. `tools/ci/server-smoke.ps1 -TimeoutSeconds 420 -KillStaleRunServer`.
 3. `tools/audits/audit-infusion-recipe-data.ps1`.
-4. `tools/audits/audit-research-recipe-page-gaps.ps1`.
-5. A focused runtime audit before any in-world infusion behavior is considered implemented.
+4. `tools/audits/audit-infusion-behavior.ps1`.
+5. `tools/audits/audit-research-recipe-page-gaps.ps1`.
+6. A focused runtime audit must stay green before any in-world infusion behavior is considered implemented.
 
 ## First implementation checklist
 
-- Add or confirm a small server-side recipe validation helper.
-- Add exact catalyst/component/aspect validation without consuming items.
-- Keep matrix/pedestal inventory behavior deferred until validation is stable.
-- Add a runtime audit/exporter only after the validation helper exists.
-- Update this document after the first behavior slice lands.
+- Done: small server-side recipe validation helper.
+- Done: exact catalyst/component/aspect validation without consuming items.
+- Done: legacy-compatible unordered component matching with exact 1:1 count semantics.
+- Done: runtime audit/exporter for the current validation boundary.
+- Next: minimal matrix/pedestal BlockEntity relationship that feeds `TCInfusionAssembly` but still does not consume items or run instability/FX.
+- Still deferred: full matrix/pedestal inventory behavior, item consumption timing, essentia drain, instability, particles/beams/sounds and completion behavior.
 ## Validation helper note
 
 - `TCInfusionRecipeMatcher` provides the first server-side validation helper for catalyst, unordered pedestal components and aspect costs.
+- The helper now mirrors the legacy `RecipeMatcher.findMatches` constraint: component order is flexible, but the number of supplied pedestal items must exactly equal the recipe component count.
 - The helper is intentionally non-mutating and does not activate matrix crafting, pedestal inventories, instability events or visual effects.
-- Future in-world infusion behavior should call this helper before consuming items or mutating aura/aspect state.
+- Future in-world infusion behavior should call `TCInfusionAssembly.validateBest` or `TCInfusionAssembly.validateAgainst` before consuming items or mutating aura/aspect state.
