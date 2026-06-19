@@ -620,3 +620,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added a current infusion recipe data audit for known vanilla container/remainder item inputs.
 - This keeps the audit-only mutation executor bounded to the currently validated recipe data set.
+## Infusion container remainder guard note
+
+- Added a temporary `TCInfusionContainerRemainderPolicy` guard for bucket/bottle/bowl-style infusion inputs.
+- Player-facing infusion completion remains deferred until real container-item and essentia-source parity is implemented.

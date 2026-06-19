@@ -199,6 +199,7 @@ public final class TCInfusionBehaviorAudit {
             cloudRingHolder.ifPresent(holder -> {
                 addRuntimeMatrixChecks(server, holder, checks);
                 addRuntimeMutationExecutorChecks(server, holder, checks);
+                addContainerRemainderPolicyChecks(checks);
             });
         }
 
@@ -401,6 +402,41 @@ public final class TCInfusionBehaviorAudit {
         ));
     }
 
+    private static void addContainerRemainderPolicyChecks(ArrayList<Check> checks) {
+        TCInfusionCraftingPlan safePlan = new TCInfusionCraftingPlan(
+                CLOUD_RING,
+                "CLOUDRING",
+                1,
+                new ItemStack(TCItems.BAUBLE_RING.get()),
+                List.of(new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()), new ItemStack(Items.FEATHER)),
+                List.of(BlockPos.ZERO, BlockPos.ZERO.offset(1, 0, 0)),
+                new AspectList().add(Aspect.AIR, 50),
+                new ItemStack(TCItems.CLOUD_RING.get()),
+                "AuditPlayer"
+        );
+        TCInfusionCraftingPlan blockedPlan = new TCInfusionCraftingPlan(
+                ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "audit_container_remainder_guard"),
+                "AUDIT",
+                0,
+                new ItemStack(TCItems.BAUBLE_RING.get()),
+                List.of(new ItemStack(Items.WATER_BUCKET)),
+                List.of(BlockPos.ZERO),
+                new AspectList(),
+                new ItemStack(TCItems.CLOUD_RING.get()),
+                "AuditPlayer"
+        );
+        checks.add(new Check(
+                "infusion_container_policy_allows_current_cloudring_inputs",
+                !TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(safePlan),
+                "cloudring has no bucket/bottle/bowl input"
+        ));
+        checks.add(new Check(
+                "infusion_container_policy_blocks_water_bucket_plan",
+                TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(blockedPlan)
+                        && TCInfusionContainerRemainderPolicy.firstBlockingInput(blockedPlan).orElse("").equals("component[0]"),
+                "blocker=" + TCInfusionContainerRemainderPolicy.firstBlockingInput(blockedPlan).orElse("none")
+        ));
+    }
     private static void addRuntimeMutationExecutorChecks(MinecraftServer server, RecipeHolder<TCInfusionRecipe> cloudRing, ArrayList<Check> checks) {
         ServerLevel level = server.overworld();
         BlockPos matrixPos = new BlockPos(12, level.getMinBuildHeight() + 12, 0);

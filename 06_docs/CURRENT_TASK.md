@@ -296,3 +296,8 @@ Last updated: 2026-06-19
 - Added a current-data audit for known vanilla container/remainder inputs in infusion catalyst/component recipe data.
 - This checks whether the audit-only mutation executor can safely use raw pedestal extraction for the current recipe set.
 - Generic future container parity remains deferred until real player-facing execution is designed.
+## Infusion container remainder guard note
+
+- Added `TCInfusionContainerRemainderPolicy` so the mutation executor refuses plans containing known container/remainder inputs until explicit policy exists.
+- This protects current bucket/bottle/potion infusion inputs from silent deletion if the executor is reused before player-facing parity work.
+- Runtime audit now covers safe Cloud Ring inputs and a blocked water-bucket plan.

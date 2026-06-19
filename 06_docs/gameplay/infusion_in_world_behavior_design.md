@@ -115,3 +115,8 @@ Every infusion behavior change must pass:
 - `infusion_container_item_remainder_audit.md` scans current infusion catalyst/component data for known vanilla container or crafting-remainder inputs.
 - The current data set must remain free of unhandled container/remainder inputs before the audit-only mutation executor is considered safe for the current recipes.
 - Re-run this audit whenever infusion recipe data or tag-based ingredients change.
+## Container remainder guard note
+
+- `TCInfusionContainerRemainderPolicy` blocks audit-only mutation execution for plans that contain known bucket, bottle, potion, honey bottle or bowl-style remainder inputs.
+- This is a temporary safety guard, not full legacy container-item parity.
+- Recipes such as jar brain and some verdant/mask recipes still require a real container-item policy before player-facing infusion completion is enabled.

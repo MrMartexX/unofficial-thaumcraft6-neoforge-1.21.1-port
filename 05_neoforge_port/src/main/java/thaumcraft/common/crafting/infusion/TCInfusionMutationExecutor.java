@@ -31,6 +31,9 @@ public final class TCInfusionMutationExecutor {
         if (plan == null) {
             return Result.failed("missing_crafting_plan");
         }
+        if (TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(plan)) {
+            return Result.failed("container_remainder_policy_required");
+        }
         Level level = matrix.getLevel();
         if (level == null || level.isClientSide) {
             return Result.failed("missing_server_level");
