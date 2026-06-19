@@ -664,3 +664,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added focused design documentation for the future real aspect/essentia source resolver.
 - Infusion completion remains audit-only and player-facing completion remains disabled.
+## Infusion real source candidate audit note
+
+- Added a reusable audit for finding source candidates before implementing a real infusion aspect/essentia resolver.
+- No player-facing infusion completion behavior is enabled by this audit.

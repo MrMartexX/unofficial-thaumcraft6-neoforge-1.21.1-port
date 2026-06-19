@@ -348,3 +348,8 @@ Last updated: 2026-06-19
 - Added `06_docs/gameplay/infusion_real_source_policy_design.md` to define the next real source policy boundary.
 - Current infusion completion remains audit-only: executor/source/remainder/tag checks exist, but player-facing matrix completion is disabled.
 - The next implementation slice should fail closed and resolve exactly one supported real source type before enabling any player-facing completion.
+## Infusion real source candidate audit note
+
+- Added `tools/audits/audit-infusion-real-source-candidates.ps1` and `06_docs/audits/infusion_real_source_candidate_audit.md`.
+- Use this audit before choosing the first real aspect/essentia source adapter for infusion completion.
+- Keep player-facing completion disabled unless a reviewed source type has stable storage semantics and a fail-closed resolver path.
