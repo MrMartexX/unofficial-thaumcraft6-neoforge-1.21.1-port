@@ -668,3 +668,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added a reusable audit for finding source candidates before implementing a real infusion aspect/essentia resolver.
 - No player-facing infusion completion behavior is enabled by this audit.
+## Infusion transport source readiness note
+
+- Added a focused audit for deciding whether current essentia transport classes are source-ready for infusion.
+- No player-facing infusion completion behavior is enabled by this audit.

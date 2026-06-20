@@ -353,3 +353,8 @@ Last updated: 2026-06-19
 - Added `tools/audits/audit-infusion-real-source-candidates.ps1` and `06_docs/audits/infusion_real_source_candidate_audit.md`.
 - Use this audit before choosing the first real aspect/essentia source adapter for infusion completion.
 - Keep player-facing completion disabled unless a reviewed source type has stable storage semantics and a fail-closed resolver path.
+## Infusion transport source readiness note
+
+- Added `tools/audits/audit-infusion-transport-source-readiness.ps1` and `06_docs/audits/infusion_transport_source_readiness_audit.md`.
+- Use this audit to decide whether existing essentia transport classes can safely back the first real infusion source resolver slice.
+- Do not connect player-facing infusion completion to tubes or transport block entities without reviewed read/drain/storage semantics.
