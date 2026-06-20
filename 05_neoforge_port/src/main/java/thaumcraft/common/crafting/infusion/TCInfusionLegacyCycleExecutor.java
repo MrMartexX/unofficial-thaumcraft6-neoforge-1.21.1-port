@@ -35,7 +35,7 @@ public final class TCInfusionLegacyCycleExecutor {
         TCInfusionStability.CycleUpdate stabilityUpdate = TCInfusionStability.advanceCycle(
                 matrix.stability(),
                 plan.instability(),
-                plan.stabilityReplenish(),
+                matrix.liveStabilityReplenish(),
                 random.nextFloat()
         );
         matrix.setStabilityFromCycle(stabilityUpdate.stability());
@@ -107,7 +107,7 @@ public final class TCInfusionLegacyCycleExecutor {
                     matrix,
                     drain.sourcePos(),
                     currentAspect.getColor(),
-                    remainingAspectAmount > 1 ? state.cycleDelay() : 0
+                    remainingAspectAmount > 1 ? matrix.liveCycleDelay() : 0
             );
             TCInfusionCycleResult result = TCInfusionCycleResult.aspect(
                     TCInfusionCycleResult.Status.ASPECT_DRAINED,

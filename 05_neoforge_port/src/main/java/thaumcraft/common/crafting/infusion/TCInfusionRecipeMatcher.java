@@ -53,6 +53,41 @@ public final class TCInfusionRecipeMatcher {
         return Optional.ofNullable(best);
     }
 
+    /** Legacy crafting start matches research, catalyst and components before any essentia is drained. */
+    public static Optional<RecipeHolder<TCInfusionRecipe>> findMatchingRecipeForStart(
+            RecipeManager recipeManager,
+            ServerPlayer player,
+            ItemStack catalyst,
+            List<ItemStack> components
+    ) {
+        if (recipeManager == null || player == null || catalyst == null || catalyst.isEmpty()) {
+            return Optional.empty();
+        }
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        RecipeHolder<TCInfusionRecipe> best = null;
+        int highestScore = -1;
+        for (RecipeHolder<TCInfusionRecipe> holder : recipeManager.getAllRecipesFor(TCRecipes.INFUSION_TYPE.get())) {
+            TCInfusionRecipe recipe = holder.value();
+            if (!TCResearchManager.knowsResearchStrict(knowledge, recipe.getResearch())
+                    || !matchesInputs(recipe, catalyst, components)) {
+                continue;
+            }
+            int score = recipeScore(recipe);
+            if (score > highestScore) {
+                highestScore = score;
+                best = holder;
+            }
+        }
+        return Optional.ofNullable(best);
+    }
+
+    public static boolean matchesInputs(TCInfusionRecipe recipe, ItemStack catalyst, List<ItemStack> components) {
+        if (recipe == null || catalyst == null || catalyst.isEmpty()) {
+            return false;
+        }
+        return recipe.catalyst().test(catalyst.copyWithCount(1)) && hasRequiredComponents(recipe, components);
+    }
+
     public static boolean matches(TCInfusionRecipe recipe, AspectList aspects, ItemStack catalyst, List<ItemStack> components) {
         if (recipe == null || aspects == null || catalyst == null || catalyst.isEmpty()) {
             return false;

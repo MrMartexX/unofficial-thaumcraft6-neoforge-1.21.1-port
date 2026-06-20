@@ -125,6 +125,10 @@ public final class TCInfusionCycleState {
         return cycleDelay;
     }
 
+    public void setCycleDelay(int cycleDelay) {
+        this.cycleDelay = Math.max(1, cycleDelay);
+    }
+
     public long completedCycles() {
         return completedCycles;
     }

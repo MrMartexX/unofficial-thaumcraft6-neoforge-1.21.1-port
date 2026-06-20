@@ -28,6 +28,7 @@ import thaumcraft.common.crafting.infusion.TCInfusionCycleState;
 import thaumcraft.common.crafting.infusion.TCInfusionAspectSourceResolver;
 import thaumcraft.common.crafting.infusion.TCInfusionLegacyCycleExecutor;
 import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
+import thaumcraft.common.crafting.infusion.TCInfusionRecipeMatcher;
 import thaumcraft.common.crafting.infusion.TCInfusionStartResult;
 import thaumcraft.common.crafting.infusion.TCInfusionInstabilityEvent;
 import thaumcraft.common.crafting.infusion.TCInfusionStability;
@@ -59,6 +60,11 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
     private float stability;
     private String lastInstabilityEvent = "";
     private String lastInstabilityReason = "";
+    private boolean active;
+    private boolean surroundingsRefreshRequested = true;
+    private int lifecycleTicks;
+    private int liveCycleDelay = TCInfusionCycleState.BASE_CYCLE_DELAY;
+    private float liveStabilityReplenish;
 
     public TCInfusionMatrixBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.INFUSION_MATRIX.get(), pos, state);
@@ -70,21 +76,37 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
             BlockState state,
             TCInfusionMatrixBlockEntity matrix
     ) {
-        if (level == null || level.isClientSide || matrix.activePlan == null || matrix.activeCycleState == null) {
+        if (level == null || level.isClientSide) {
             return;
         }
-        if (level.getGameTime() % 20L == 0L) {
+        matrix.lifecycleTicks++;
+        if (matrix.surroundingsRefreshRequested || (matrix.active && matrix.lifecycleTicks % 100 == 0)) {
+            matrix.refreshLiveSurroundings();
+        }
+        int validationInterval = matrix.activePlan == null ? 100 : 20;
+        if (matrix.active && matrix.lifecycleTicks % validationInterval == 0) {
             TCInfusionStructureProfile.LocationValidation location = TCInfusionStructureProfile.validateLocation(matrix);
             if (!location.valid()) {
-                matrix.abortCraftingFromCycle(location.reason());
+                matrix.deactivateForInvalidStructure(location.reason());
                 return;
             }
+        }
+        if (matrix.active && matrix.activePlan == null && matrix.stability < TCInfusionStability.CAP
+                && matrix.lifecycleTicks % Math.max(5, matrix.liveCycleDelay) == 0) {
+            matrix.stability = Math.min(
+                    TCInfusionStability.CAP,
+                    matrix.stability + Math.max(0.1F, matrix.liveStabilityReplenish)
+            );
+            matrix.markChangedAndSync();
+        }
+        if (matrix.activePlan == null || matrix.activeCycleState == null) {
+            return;
         }
         if (matrix.sourceRefreshCooldownTicks > 0) {
             matrix.sourceRefreshCooldownTicks--;
         }
         matrix.cycleTickCounter++;
-        if (matrix.cycleTickCounter < matrix.activeCycleState.cycleDelay()) {
+        if (matrix.cycleTickCounter < matrix.liveCycleDelay) {
             return;
         }
         matrix.cycleTickCounter = 0;
@@ -187,6 +209,10 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
             TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("missing_player"), snapshot);
             return TCInfusionStartResult.failed("missing_player", validation);
         }
+        if (!active) {
+            TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("matrix_inactive"), snapshot);
+            return TCInfusionStartResult.failed("matrix_inactive", validation);
+        }
         if (!snapshot.structureProfile().valid()) {
             TCInfusionValidationResult validation = remember(
                     TCInfusionValidationResult.failed(snapshot.structureProfile().reason()), snapshot);
@@ -208,15 +234,21 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
             TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("missing_level"), snapshot);
             return TCInfusionStartResult.failed(validation.reason(), validation);
         }
-        Optional<RecipeHolder<TCInfusionRecipe>> match = snapshot.assembly().findMatchingRecipe(level.getRecipeManager(), player);
+        Optional<RecipeHolder<TCInfusionRecipe>> match = TCInfusionRecipeMatcher.findMatchingRecipeForStart(
+                level.getRecipeManager(),
+                player,
+                snapshot.catalyst(),
+                snapshot.components()
+        );
         if (match.isEmpty()) {
             TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("no_matching_researched_recipe"), snapshot);
             return TCInfusionStartResult.failed(validation.reason(), validation);
         }
-        TCInfusionValidationResult validation = remember(snapshot.assembly().validateAgainst(match.get()), snapshot);
-        if (!validation.valid()) {
-            return TCInfusionStartResult.failed(validation.reason(), validation);
-        }
+        TCInfusionValidationResult validation = remember(TCInfusionValidationResult.valid(
+                new AspectList(),
+                match.get().value().components().size(),
+                snapshot.components().size()
+        ).withRecipeId(match.get().id().toString()), snapshot);
         return storeValidatedPlan(match.get(), snapshot, validation, player.getName().getString());
     }
 
@@ -272,6 +304,7 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
     public void deferInfusionSourceRefresh() {
         cachedInfusionSourcePositions = List.of();
         sourceRefreshCooldownTicks = LEGACY_SOURCE_RESCAN_DELAY_TICKS;
+        requestSurroundingsRefresh();
     }
 
     public int sourceRefreshCooldownTicks() {
@@ -291,6 +324,70 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
 
     public float stability() {
         return stability;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public int liveCycleDelay() {
+        return liveCycleDelay;
+    }
+
+    public float liveStabilityReplenish() {
+        return liveStabilityReplenish;
+    }
+
+    public boolean activate() {
+        TCInfusionStructureProfile profile = TCInfusionStructureProfile.inspect(this);
+        if (!profile.valid()) {
+            lastValidationReason = profile.reason();
+            active = false;
+            markChangedAndSync();
+            return false;
+        }
+        active = true;
+        applyLiveProfile(profile);
+        lastValidationReason = "matrix_activated";
+        markChangedAndSync();
+        return true;
+    }
+
+    public void requestSurroundingsRefresh() {
+        surroundingsRefreshRequested = true;
+    }
+
+    private void refreshLiveSurroundings() {
+        surroundingsRefreshRequested = false;
+        TCInfusionStructureProfile profile = TCInfusionStructureProfile.inspect(this);
+        if (!profile.valid()) {
+            if (active) {
+                deactivateForInvalidStructure(profile.reason());
+            }
+            return;
+        }
+        applyLiveProfile(profile);
+    }
+
+    private void applyLiveProfile(TCInfusionStructureProfile profile) {
+        liveCycleDelay = profile.cycleDelay();
+        liveStabilityReplenish = profile.stabilityReplenish();
+        if (activeCycleState != null) {
+            activeCycleState.setCycleDelay(liveCycleDelay);
+        }
+        setChanged();
+    }
+
+    private void deactivateForInvalidStructure(String reason) {
+        active = false;
+        lastValidationReason = reason == null ? "invalid_structure" : reason;
+        if (activePlan != null) {
+            abortCraftingFromCycle(lastValidationReason);
+            return;
+        }
+        lastCycleStatus = TCInfusionCycleResult.Status.IDLE.name();
+        lastCycleReason = lastValidationReason;
+        markChangedAndSync();
     }
 
     public TCInfusionStability.StabilityCategory stabilityCategory() {
@@ -467,6 +564,10 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
 
         activePlan = buildResult.plan();
         activeCycleState = TCInfusionCycleState.start(activePlan);
+        active = true;
+        liveCycleDelay = snapshot.structureProfile().cycleDelay();
+        liveStabilityReplenish = snapshot.structureProfile().stabilityReplenish();
+        activeCycleState.setCycleDelay(liveCycleDelay);
         cachedInfusionSourcePositions = List.of();
         sourceRefreshCooldownTicks = 0;
         cycleTickCounter = 0;
@@ -531,6 +632,7 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         tag.putFloat("Stability", stability);
         tag.putString("LastInstabilityEvent", lastInstabilityEvent);
         tag.putString("LastInstabilityReason", lastInstabilityReason);
+        tag.putBoolean("Active", active);
         if (activePlan != null) {
             tag.put("ActiveInfusionPlan", activePlan.save(registries));
         }
@@ -551,6 +653,7 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         stability = tag.getFloat("Stability");
         lastInstabilityEvent = tag.getString("LastInstabilityEvent");
         lastInstabilityReason = tag.getString("LastInstabilityReason");
+        active = tag.getBoolean("Active");
         activePlan = tag.contains("ActiveInfusionPlan", Tag.TAG_COMPOUND)
                 ? TCInfusionCraftingPlan.load(tag.getCompound("ActiveInfusionPlan"), registries)
                 : null;
@@ -560,12 +663,22 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         if (activePlan != null && activeCycleState == null) {
             activeCycleState = TCInfusionCycleState.start(activePlan);
         }
+        if (activePlan != null) {
+            active = true;
+        }
         if (activePlan == null) {
             activeCycleState = null;
         }
         cachedInfusionSourcePositions = List.of();
         sourceRefreshCooldownTicks = 0;
         cycleTickCounter = 0;
+        lifecycleTicks = 0;
+        surroundingsRefreshRequested = true;
+        liveCycleDelay = activePlan == null ? TCInfusionCycleState.BASE_CYCLE_DELAY : activePlan.cycleDelay();
+        liveStabilityReplenish = activePlan == null ? 0.0F : activePlan.stabilityReplenish();
+        if (activeCycleState != null) {
+            activeCycleState.setCycleDelay(liveCycleDelay);
+        }
     }
 
     public record Snapshot(

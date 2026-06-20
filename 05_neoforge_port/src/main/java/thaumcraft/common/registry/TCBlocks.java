@@ -31,6 +31,7 @@ import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCCrucibleBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionMatrixBlock;
+import thaumcraft.common.blocks.crafting.TCInfusionModifierBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionPedestalBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionPillarBlock;
 import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
@@ -136,8 +137,8 @@ public final class TCBlocks {
     public static final Supplier<Block> PILLAR_ARCANE = BLOCKS.register("pillar_arcane", () -> infusionPillarBlock());
     public static final Supplier<Block> PILLAR_ANCIENT = BLOCKS.register("pillar_ancient", () -> infusionPillarBlock());
     public static final Supplier<Block> PILLAR_ELDRITCH = BLOCKS.register("pillar_eldritch", () -> infusionPillarBlock());
-    public static final Supplier<Block> MATRIX_SPEED = BLOCKS.register("matrix_speed", () -> stoneBlock(2.0F, 10.0F));
-    public static final Supplier<Block> MATRIX_COST = BLOCKS.register("matrix_cost", () -> stoneBlock(2.0F, 10.0F));
+    public static final Supplier<Block> MATRIX_SPEED = BLOCKS.register("matrix_speed", () -> infusionModifierBlock());
+    public static final Supplier<Block> MATRIX_COST = BLOCKS.register("matrix_cost", () -> infusionModifierBlock());
     public static final Supplier<Block> ARCANE_PEDESTAL = BLOCKS.register("arcane_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
     public static final Supplier<Block> ANCIENT_PEDESTAL = BLOCKS.register("ancient_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
     public static final Supplier<Block> ELDRITCH_PEDESTAL = BLOCKS.register("eldritch_pedestal", () -> infusionPedestalBlock(15.0F, 1000.0F));
@@ -250,6 +251,12 @@ public final class TCBlocks {
                 .strength(5.0F, 1200.0F)
                 .requiresCorrectToolForDrops()
                 .noOcclusion());
+    }
+
+    private static Block infusionModifierBlock() {
+        return new TCInfusionModifierBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(2.0F, 10.0F)
+                .requiresCorrectToolForDrops());
     }
 
     private static Block infusionPedestalBlock(float strength, float resistance) {

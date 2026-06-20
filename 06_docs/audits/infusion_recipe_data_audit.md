@@ -64,5 +64,5 @@ No invalid infusion recipe JSON files were found.
 ## Boundary note
 
 - This audit validates infusion recipe data shape only.
-- It does not mean in-world infusion altar gameplay is implemented.
-- Use it before activating any server-side infusion matrix behavior.
+- It does not by itself validate in-world infusion altar gameplay.
+- Use `tools/audits/audit-infusion-behavior.ps1` for the separate server-runtime boundary; the current behavior result is `93/93`.

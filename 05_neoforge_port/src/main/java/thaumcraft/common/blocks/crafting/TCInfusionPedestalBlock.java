@@ -28,6 +28,7 @@ import thaumcraft.api.crafting.IInfusionStabiliserExt;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
 import thaumcraft.common.blocks.devices.TCInlayNetwork;
+import thaumcraft.common.crafting.infusion.TCInfusionSurroundingsInvalidator;
 
 public class TCInfusionPedestalBlock extends Block implements EntityBlock, IInfusionStabiliserExt {
     public static final IntegerProperty CHARGE = IntegerProperty.create("charge", 0, 15);
@@ -52,6 +53,7 @@ public class TCInfusionPedestalBlock extends Block implements EntityBlock, IInfu
         super.onPlace(state, level, pos, oldState, movedByPiston);
         if (level instanceof ServerLevel serverLevel) {
             TCInlayNetwork.recalculateAround(serverLevel, pos);
+            TCInfusionSurroundingsInvalidator.requestNearby(serverLevel, pos);
         }
     }
 
@@ -106,6 +108,7 @@ public class TCInfusionPedestalBlock extends Block implements EntityBlock, IInfu
         super.onRemove(state, level, pos, newState, movedByPiston);
         if (!state.is(newState.getBlock()) && level instanceof ServerLevel serverLevel) {
             TCInlayNetwork.recalculateAround(serverLevel, pos);
+            TCInfusionSurroundingsInvalidator.requestNearby(serverLevel, pos);
         }
     }
 

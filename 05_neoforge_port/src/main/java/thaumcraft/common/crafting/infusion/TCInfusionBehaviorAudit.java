@@ -71,7 +71,8 @@ public final class TCInfusionBehaviorAudit {
         lines.add("- This validates the current server-owned infusion input snapshot, recipe matcher and active-plan readiness boundary.");
         lines.add("- The audit also places a matrix and pedestals in a runtime server world to validate legacy-aligned pedestal discovery.");
         lines.add("- Legacy parity point: component matching uses Forge/NeoForge RecipeMatcher 1:1 semantics, so extra pedestal inputs must fail.");
-        lines.add("- The audit-only mutation executor consumes validated inputs, while normal player interaction remains disabled.");
+        lines.add("- Player-facing caster interaction follows the legacy two-click boundary: activate first, then start a researched recipe.");
+        lines.add("- Recipe selection does not require pre-supplied essentia; exact cost remains frozen in the plan while delay/replenishment refresh live.");
         lines.add("- Legacy-shaped source discovery scans aspect containers in the range-12 volume and drains nearest containers first; transient tube buffers are excluded.");
         lines.add("- The persisted cycle audit drains one essentia point per cycle, waits six cycles per component and completes only on the following cycle.");
         lines.add("- Persistent stability math, all 24 legacy instability rolls, Flux Goo placement, harm effects and stabilizer mitigation are audited.");
@@ -211,13 +212,27 @@ public final class TCInfusionBehaviorAudit {
             ));
 
             checks.add(new Check(
-                    "player_facing_infusion_completion_disabled",
-                    !TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled(),
-                    "matrix click remains validation/status only"
+                    "craft_start_input_match_does_not_require_available_essentia",
+                    TCInfusionRecipeMatcher.matchesInputs(
+                            recipe,
+                            new ItemStack(TCItems.BAUBLE_RING.get()),
+                            List.of(
+                                    new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()),
+                                    new ItemStack(Items.FEATHER)
+                            )
+                    ),
+                    "legacy craftingStart chooses recipe before jar essentia drain"
+            ));
+
+            checks.add(new Check(
+                    "player_facing_infusion_activation_enabled",
+                    TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled(),
+                    "first caster click activates; second starts a researched recipe"
             ));
             cloudRingHolder.ifPresent(holder -> {
                 addRuntimeMatrixChecks(server, holder, checks);
                 addRuntimeStructureProfileChecks(server, holder, checks);
+                addRuntimeActivationAndLiveSurroundingsChecks(server, checks);
                 addRuntimeMutationExecutorChecks(server, holder, checks);
                 addContainerRemainderPolicyChecks(checks);
                 addAspectSourceBoundaryChecks(checks);
@@ -782,6 +797,81 @@ public final class TCInfusionBehaviorAudit {
                 + ", delay=" + profile.cycleDelay()
                 + ", cost=" + profile.costMultiplier()
                 + ", stability=" + profile.stabilityReplenish();
+    }
+
+    private static void addRuntimeActivationAndLiveSurroundingsChecks(
+            MinecraftServer server,
+            ArrayList<Check> checks
+    ) {
+        ServerLevel level = server.overworld();
+        BlockPos matrixPos = new BlockPos(280, level.getMinBuildHeight() + 12, 0);
+        clearTestArea(level, matrixPos);
+        level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.below(2), TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        placePillars(level, matrixPos, TCBlocks.PILLAR_ARCANE.get());
+        TCInfusionMatrixBlockEntity matrix = blockEntity(level, matrixPos, TCInfusionMatrixBlockEntity.class);
+        if (matrix == null) {
+            checks.add(new Check("runtime_matrix_activation_setup_created", false, "missing matrix block entity"));
+            return;
+        }
+
+        checks.add(new Check(
+                "runtime_valid_matrix_activates_with_legacy_defaults",
+                matrix.activate()
+                        && matrix.isActive()
+                        && matrix.liveCycleDelay() == 5
+                        && close(matrix.liveStabilityReplenish(), 0.0F),
+                "active=" + matrix.isActive()
+                        + ", delay=" + matrix.liveCycleDelay()
+                        + ", replenish=" + matrix.liveStabilityReplenish()
+        ));
+
+        matrix.setStabilityForValidation(0.0F);
+        for (int tick = 0; tick < 5; tick++) {
+            TCInfusionMatrixBlockEntity.serverTick(
+                    level,
+                    matrixPos,
+                    matrix.getBlockState(),
+                    matrix
+            );
+        }
+        checks.add(new Check(
+                "runtime_idle_active_matrix_replenishes_legacy_minimum",
+                close(matrix.stability(), 0.1F),
+                "stability=" + matrix.stability() + ", expected=0.1 after five ticks"
+        ));
+
+        BlockPos modifierPos = matrixPos.offset(-1, -3, -1);
+        level.setBlock(modifierPos, TCBlocks.MATRIX_SPEED.get().defaultBlockState(), 3);
+        TCInfusionMatrixBlockEntity.serverTick(level, matrixPos, matrix.getBlockState(), matrix);
+        checks.add(new Check(
+                "runtime_modifier_change_refreshes_live_cycle_delay",
+                matrix.liveCycleDelay() == 4,
+                "delay=" + matrix.liveCycleDelay() + ", expected=4"
+        ));
+
+        level.setBlock(modifierPos, Blocks.AIR.defaultBlockState(), 3);
+        TCInfusionMatrixBlockEntity.serverTick(level, matrixPos, matrix.getBlockState(), matrix);
+        checks.add(new Check(
+                "runtime_modifier_removal_restores_live_cycle_delay",
+                matrix.liveCycleDelay() == 5,
+                "delay=" + matrix.liveCycleDelay() + ", expected=5"
+        ));
+
+        CompoundTag updateTag = matrix.getUpdateTag(level.registryAccess());
+        checks.add(new Check(
+                "runtime_matrix_active_state_is_persisted_and_synced",
+                updateTag.getBoolean("Active"),
+                "Active=" + updateTag.getBoolean("Active")
+        ));
+
+        level.setBlock(matrixPos.offset(-1, -2, -1), Blocks.AIR.defaultBlockState(), 3);
+        TCInfusionMatrixBlockEntity.serverTick(level, matrixPos, matrix.getBlockState(), matrix);
+        checks.add(new Check(
+                "runtime_relevant_structure_change_deactivates_matrix",
+                !matrix.isActive() && "missing_infusion_pillar".equals(matrix.lastValidationReason()),
+                "active=" + matrix.isActive() + ", reason=" + matrix.lastValidationReason()
+        ));
     }
 
     private static boolean close(float actual, float expected) {

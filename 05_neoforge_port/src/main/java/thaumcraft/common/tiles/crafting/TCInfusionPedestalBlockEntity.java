@@ -21,6 +21,7 @@ import java.util.Set;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import thaumcraft.common.blocks.devices.TCInlayNetwork;
+import thaumcraft.common.crafting.infusion.TCInfusionSurroundingsInvalidator;
 import thaumcraft.common.tiles.devices.TCStabilizerBlockEntity;
 
 public class TCInfusionPedestalBlockEntity extends BlockEntity {
@@ -111,6 +112,7 @@ public class TCInfusionPedestalBlockEntity extends BlockEntity {
     private void markChangedAndSync() {
         setChanged();
         if (level != null && !level.isClientSide) {
+            TCInfusionSurroundingsInvalidator.requestNearby(level, worldPosition);
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
             level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
         }

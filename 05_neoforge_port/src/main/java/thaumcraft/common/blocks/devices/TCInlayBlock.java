@@ -19,6 +19,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thaumcraft.api.crafting.IInfusionStabiliserExt;
+import thaumcraft.common.crafting.infusion.TCInfusionSurroundingsInvalidator;
 
 public final class TCInlayBlock extends Block implements IInfusionStabiliserExt {
     public static final EnumProperty<Attach> NORTH = EnumProperty.create("north", Attach.class);
@@ -54,6 +55,7 @@ public final class TCInlayBlock extends Block implements IInfusionStabiliserExt 
         if (level instanceof ServerLevel serverLevel) {
             serverLevel.setBlock(pos, connections(level, pos, state), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
             TCInlayNetwork.recalculateAround(serverLevel, pos);
+            TCInfusionSurroundingsInvalidator.requestNearby(serverLevel, pos);
         }
     }
 
@@ -78,6 +80,7 @@ public final class TCInlayBlock extends Block implements IInfusionStabiliserExt 
         super.onRemove(state, level, pos, newState, movedByPiston);
         if (!state.is(newState.getBlock()) && level instanceof ServerLevel serverLevel) {
             TCInlayNetwork.recalculateAround(serverLevel, pos);
+            TCInfusionSurroundingsInvalidator.requestNearby(serverLevel, pos);
         }
     }
 

@@ -3,6 +3,7 @@ package thaumcraft.common.blocks.crafting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -24,9 +25,10 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.common.crafting.infusion.TCInfusionValidationResult;
+import thaumcraft.common.crafting.infusion.TCInfusionStartResult;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 
 public class TCInfusionMatrixBlock extends Block implements EntityBlock {
@@ -42,7 +44,7 @@ public class TCInfusionMatrixBlock extends Block implements EntityBlock {
     }
 
     public static boolean isPlayerFacingCompletionEnabled() {
-        return false;
+        return true;
     }
 
     @Nullable
@@ -101,12 +103,32 @@ public class TCInfusionMatrixBlock extends Block implements EntityBlock {
             return false;
         }
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
-            TCInfusionValidationResult result = matrix.validateFor(serverPlayer, new AspectList());
+            if (!matrix.isActive()) {
+                boolean activated = matrix.activate();
+                if (activated) {
+                    level.playSound(null, pos, TCSounds.CRAFTSTART.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                }
+                serverPlayer.displayClientMessage(Component.literal(
+                        activated
+                                ? "Infusion matrix: activated"
+                                : "Infusion matrix: " + matrix.lastValidationReason()
+                ), true);
+                return true;
+            }
+            if (!matrix.isCrafting()) {
+                TCInfusionStartResult start = matrix.tryStartCrafting(serverPlayer, new AspectList());
+                serverPlayer.displayClientMessage(Component.literal(
+                        start.started()
+                                ? "Infusion matrix: started " + start.recipeId()
+                                : "Infusion matrix: " + start.reason()
+                ), true);
+                return true;
+            }
             serverPlayer.displayClientMessage(Component.literal(
-                    "Infusion matrix: " + result.reason()
+                    "Infusion matrix: " + matrix.lastCycleReason()
                             + ", pedestals=" + matrix.findSurroundingPedestals().size()
                             + ", components=" + matrix.createSnapshot(new AspectList()).componentCount()
-                            + ", completion=" + (isPlayerFacingCompletionEnabled() ? "enabled" : "disabled")
+                            + ", active=true"
             ), true);
         }
         return true;

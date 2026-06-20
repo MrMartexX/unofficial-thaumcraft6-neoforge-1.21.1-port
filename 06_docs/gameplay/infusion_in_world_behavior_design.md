@@ -48,16 +48,17 @@ For the Cloud Ring fixture (`50 aer`, two components), the audited sequence is `
 
 The current generic billboard output is a visual bridge. Exact `FXEssentiaStream` polycone rendering and `FXBoreParticles` item/block debris are not complete and must not be called visual parity.
 
-## Explicitly disabled player path
+## Player activation boundary
 
-`TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled()` remains `false`. Caster interaction is validation/status-only. The production ticker is real server code, but normal players cannot start it until the remaining server rules below are audited.
+`TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled()` is now `true`. Caster interaction follows the legacy two-step boundary: the first click validates and activates an inactive matrix; the second click starts the highest-scoring researched recipe whose catalyst and unordered exact-count components match. Recipe selection deliberately does not require essentia to be present in jars, because legacy drains essentia later during craft cycles.
+
+The selected recipe cost and cost multiplier are frozen in `TCInfusionCraftingPlan`. Relevant block/pedestal changes request a bounded surroundings rescan, while a 100-tick fallback covers vanilla skulls and external stabilizers. Live cycle delay and stability replenishment update from that profile; invalid center/pillars deactivate the matrix, and no failed start mutates items or essentia.
 
 ## Next server batch
 
-1. Refresh surroundings when relevant blocks change while preserving server ownership and bounded scans.
-2. Add inactive matrix activation/stability charging plus start/fail/finish state sync and activation audit.
-3. Enable caster start only after failed paths cannot duplicate or delete items.
-4. Complete finite Flux Goo flow, Thaumic Slime/taint-fibre dependencies and stabilizer-to-Flux-Rift behavior with their owning subsystems.
+1. Preserve the current server-authoritative activation/live-surroundings boundary under client gameplay testing.
+2. Implement exact matrix animation, `FXEssentiaStream` polycone and item/block debris rendering as a Stage 13 visual-parity batch.
+3. Complete finite Flux Goo flow, Thaumic Slime/taint-fibre dependencies and stabilizer-to-Flux-Rift behavior with their owning subsystems.
 
 ## Deferred boundaries
 
@@ -80,4 +81,4 @@ Every infusion batch must pass:
 5. `tools/ci/server-smoke.ps1`;
 6. client startup when payload, particle, sound, model or renderer code changes.
 
-Current runtime result: `86/86` infusion behavior checks pass.
+Current runtime result: `93/93` infusion behavior checks pass.
