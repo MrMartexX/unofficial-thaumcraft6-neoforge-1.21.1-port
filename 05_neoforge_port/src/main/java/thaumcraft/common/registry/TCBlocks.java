@@ -25,6 +25,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.blocks.basic.TCTableBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
+import thaumcraft.common.blocks.essentia.TCWardedJarBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCCrucibleBlock;
@@ -115,6 +116,7 @@ public final class TCBlocks {
     public static final Supplier<Block> RESEARCH_TABLE = BLOCKS.register("research_table", () -> researchTableBlock());
     public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> crucibleBlock());
     public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> smelterBlock());
+    public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal", () -> wardedJarBlock());
     // Legacy-aligned transport/essentia blocks.
     public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));
     public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tube_buffer", () -> tubeBlock(TCLegacyTubeVariant.BUFFER));
@@ -229,6 +231,13 @@ public final class TCBlocks {
 
     private static Block smelterBlock() {
         return new TCSmelterBlock(smelterProperties());
+    }
+
+    private static Block wardedJarBlock() {
+        return new TCWardedJarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                .strength(0.3F, 0.3F)
+                .sound(SoundType.GLASS)
+                .noOcclusion());
     }
 
     private static BlockBehaviour.Properties smelterProperties() {

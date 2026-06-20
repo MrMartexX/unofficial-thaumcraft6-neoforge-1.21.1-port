@@ -107,6 +107,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.RESEARCH_TABLE.get());
         acceptVisible(output, TCItems.CRUCIBLE.get());
         acceptVisible(output, TCItems.SMELTER_BASIC.get());
+        acceptVisible(output, TCItems.JAR_NORMAL.get());
         acceptVisible(output, TCItems.SMELTER_THAUMIUM.get());
         acceptVisible(output, TCItems.SMELTER_VOID.get());
         acceptVisible(output, TCItems.WAND_WORKBENCH.get());

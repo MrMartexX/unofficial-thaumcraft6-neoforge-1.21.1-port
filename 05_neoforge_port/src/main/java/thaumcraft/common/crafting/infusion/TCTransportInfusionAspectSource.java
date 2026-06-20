@@ -7,9 +7,11 @@ import thaumcraft.common.essentia.transport.TCEssentiaStack;
 import thaumcraft.common.essentia.transport.TCEssentiaTransport;
 
 /**
- * Narrow real-source adapter for the first infusion source policy slice.
+ * Focused audit adapter for a transport face.
  *
- * <p>This adapter is intentionally conservative: the current transport API exposes a single
+ * <p>This adapter is intentionally not used by {@link TCInfusionAspectSourceResolver} because
+ * legacy infusion discovered {@code IAspectSource} containers rather than tube buffers. It
+ * remains useful for validating transport simulation semantics in isolation. The transport API exposes a single
  * visible essentia stack through a face, so this source accepts exactly one required aspect.
  * Multi-aspect infusion completion remains fail-closed until a broader storage-backed source
  * policy is implemented and audited.</p>

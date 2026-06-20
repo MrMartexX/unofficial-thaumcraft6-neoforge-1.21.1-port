@@ -9,6 +9,7 @@ import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import thaumcraft.common.essentia.transport.TCEssentiaTubeMode;
 import thaumcraft.common.essentia.transport.TCLegacyEssentiaTransportNode;
+import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -27,6 +28,7 @@ import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCRecipes;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
+import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 
 public final class TCInfusionBehaviorAudit {
     private static final ResourceLocation CLOUD_RING = ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "cloudring");
@@ -64,8 +66,9 @@ public final class TCInfusionBehaviorAudit {
         lines.add("- This validates the current server-owned infusion input snapshot, recipe matcher and active-plan readiness boundary.");
         lines.add("- The audit also places a matrix and pedestals in a runtime server world to validate legacy-aligned pedestal discovery.");
         lines.add("- Legacy parity point: component matching uses Forge/NeoForge RecipeMatcher 1:1 semantics, so extra pedestal inputs must fail.");
-        lines.add("- The active completion plan is still read-only: it checks current catalyst, planned component pedestals and aspect availability before any future mutation.");
-        lines.add("- This does not implement item consumption, instability events, essentia transport, particles, beams or matrix animation.");
+        lines.add("- The audit-only mutation executor consumes validated inputs, while normal player interaction remains disabled.");
+        lines.add("- Legacy-shaped source discovery scans aspect containers in the range-12 volume and drains nearest containers first; transient tube buffers are excluded.");
+        lines.add("- This does not yet implement the legacy one-point craft cycle, instability events, source beams, particles or matrix animation.");
 
         Files.write(output, lines);
         return report;
@@ -213,6 +216,7 @@ public final class TCInfusionBehaviorAudit {
                 addAspectSourceMutationExecutorChecks(server, holder, checks);
                 addAspectSourceResolverChecks(checks);
                 addTransportAspectSourceChecks(checks);
+                addRuntimeContainerAspectSourceChecks(server, holder, checks);
             });
         }
 
@@ -461,6 +465,139 @@ public final class TCInfusionBehaviorAudit {
                         + ", ignis=" + transport.storage().amount(Aspect.FIRE.getTag())
         ));
     }
+
+    private static void addRuntimeContainerAspectSourceChecks(
+            MinecraftServer server,
+            RecipeHolder<TCInfusionRecipe> cloudRing,
+            ArrayList<Check> checks
+    ) {
+        ServerLevel level = server.overworld();
+        BlockPos matrixPos = new BlockPos(72, level.getMinBuildHeight() + 12, 0);
+        BlockPos tubePos = matrixPos.offset(1, 0, 0);
+        BlockPos nearJarPos = matrixPos.offset(3, 0, 0);
+        BlockPos farJarPos = matrixPos.offset(6, 0, 0);
+        BlockPos outOfRangeJarPos = matrixPos.offset(TCInfusionAspectSourceResolver.LEGACY_SOURCE_RANGE + 1, 0, 0);
+
+        level.setBlock(matrixPos, Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(tubePos, Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(nearJarPos, Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(farJarPos, Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(outOfRangeJarPos, Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        level.setBlock(tubePos, TCBlocks.TUBE.get().defaultBlockState(), 3);
+
+        TCInfusionMatrixBlockEntity matrix = blockEntity(level, matrixPos, TCInfusionMatrixBlockEntity.class);
+        TCLegacyTubeBlockEntity tube = blockEntity(level, tubePos, TCLegacyTubeBlockEntity.class);
+        if (tube != null) {
+            tube.addEssentia(Aspect.AIR.getTag(), 1, Direction.WEST, false);
+        }
+        TCInfusionCraftingPlan plan = new TCInfusionCraftingPlan(
+                cloudRing.id(),
+                cloudRing.value().getResearch(),
+                cloudRing.value().instability(),
+                new ItemStack(TCItems.BAUBLE_RING.get()),
+                List.of(new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()), new ItemStack(Items.FEATHER)),
+                List.of(matrixPos.offset(-2, -2, 0), matrixPos.offset(2, -2, 0)),
+                new AspectList().add(Aspect.AIR, 50),
+                new ItemStack(TCItems.CLOUD_RING.get()),
+                "AuditPlayer"
+        );
+        checks.add(new Check(
+                "runtime_source_resolver_excludes_adjacent_transport_buffer",
+                matrix != null && TCInfusionAspectSourceResolver.findSource(matrix, plan).isEmpty(),
+                "matrix=" + (matrix != null) + ", tube=" + (tube != null)
+        ));
+        if (matrix == null) {
+            return;
+        }
+
+        level.setBlock(nearJarPos, TCBlocks.JAR_NORMAL.get().defaultBlockState(), 3);
+        level.setBlock(farJarPos, TCBlocks.JAR_NORMAL.get().defaultBlockState(), 3);
+        level.setBlock(outOfRangeJarPos, TCBlocks.JAR_NORMAL.get().defaultBlockState(), 3);
+        TCWardedJarBlockEntity nearJar = blockEntity(level, nearJarPos, TCWardedJarBlockEntity.class);
+        TCWardedJarBlockEntity farJar = blockEntity(level, farJarPos, TCWardedJarBlockEntity.class);
+        TCWardedJarBlockEntity outOfRangeJar = blockEntity(level, outOfRangeJarPos, TCWardedJarBlockEntity.class);
+        checks.add(new Check(
+                "runtime_warded_jar_source_block_entities_created",
+                nearJar != null && farJar != null && outOfRangeJar != null,
+                "near=" + (nearJar != null) + ", far=" + (farJar != null) + ", outside=" + (outOfRangeJar != null)
+        ));
+        if (nearJar == null || farJar == null || outOfRangeJar == null) {
+            return;
+        }
+
+        nearJar.setStoredForValidation(Aspect.AIR, 30);
+        farJar.setStoredForValidation(Aspect.AIR, 40);
+        outOfRangeJar.setStoredForValidation(Aspect.AIR, TCWardedJarBlockEntity.CAPACITY);
+        Optional<TCInfusionAspectSource> resolved = TCInfusionAspectSourceResolver.findSource(matrix, plan);
+        TCInfusionAspectSource.DrainResult nearestFirst = resolved
+                .map(source -> source.drain(new AspectList().add(Aspect.AIR, 50)))
+                .orElseGet(() -> TCInfusionAspectSource.DrainResult.failed("not_resolved", new AspectList(), new AspectList()));
+        checks.add(new Check(
+                "runtime_warded_jar_source_drains_nearest_first_with_legacy_range",
+                resolved.isPresent()
+                        && nearestFirst.success()
+                        && nearJar.storedAmount() == 0
+                        && farJar.storedAmount() == 20
+                        && outOfRangeJar.storedAmount() == TCWardedJarBlockEntity.CAPACITY,
+                "reason=" + nearestFirst.reason()
+                        + ", near=" + nearJar.storedAmount()
+                        + ", far=" + farJar.storedAmount()
+                        + ", outside=" + outOfRangeJar.storedAmount()
+        ));
+
+        nearJar.setStoredForValidation(Aspect.AIR, 30);
+        nearJar.setBlockedForValidation(true);
+        farJar.setStoredForValidation(Aspect.AIR, 60);
+        TCInfusionAspectSource.DrainResult blockedNearest = resolved
+                .map(source -> source.drain(new AspectList().add(Aspect.AIR, 50)))
+                .orElseGet(() -> TCInfusionAspectSource.DrainResult.failed("not_resolved", new AspectList(), new AspectList()));
+        checks.add(new Check(
+                "runtime_warded_jar_source_skips_blocked_nearest_container",
+                blockedNearest.success() && nearJar.storedAmount() == 30 && farJar.storedAmount() == 10,
+                "reason=" + blockedNearest.reason() + ", near=" + nearJar.storedAmount() + ", far=" + farJar.storedAmount()
+        ));
+
+        nearJar.setBlockedForValidation(false);
+        nearJar.setStoredForValidation(Aspect.AIR, 20);
+        farJar.setStoredForValidation(Aspect.AIR, 20);
+        TCInfusionAspectSource.DrainResult insufficient = resolved
+                .map(source -> source.drain(new AspectList().add(Aspect.AIR, 50)))
+                .orElseGet(() -> TCInfusionAspectSource.DrainResult.failed("not_resolved", new AspectList(), new AspectList()));
+        checks.add(new Check(
+                "runtime_warded_jar_source_insufficient_plan_is_atomic",
+                !insufficient.success()
+                        && TCContainerInfusionAspectSource.MISSING_ASPECTS.equals(insufficient.reason())
+                        && insufficient.missingAspects().getAmount(Aspect.AIR) == 10
+                        && nearJar.storedAmount() == 20
+                        && farJar.storedAmount() == 20,
+                "reason=" + insufficient.reason() + ", missing=" + insufficient.missingAspects().getAmount(Aspect.AIR)
+        ));
+
+        BlockPos pullBufferPos = outOfRangeJarPos.above();
+        level.setBlock(pullBufferPos, TCBlocks.TUBE_BUFFER.get().defaultBlockState(), 3);
+        TCLegacyTubeBlockEntity pullBuffer = blockEntity(level, pullBufferPos, TCLegacyTubeBlockEntity.class);
+        outOfRangeJar.setStoredForValidation(null, 0);
+        if (pullBuffer != null) {
+            pullBuffer.addEssentia(Aspect.AIR.getTag(), 2, Direction.DOWN, false);
+        }
+        for (int tick = 0; tick < 4; tick++) {
+            TCWardedJarBlockEntity.serverTick(level, outOfRangeJarPos, outOfRangeJar.getBlockState(), outOfRangeJar);
+        }
+        boolean unchangedBeforeFifthTick = outOfRangeJar.storedAmount() == 0;
+        TCWardedJarBlockEntity.serverTick(level, outOfRangeJarPos, outOfRangeJar.getBlockState(), outOfRangeJar);
+        checks.add(new Check(
+                "runtime_warded_jar_pulls_one_essentia_every_five_server_ticks",
+                pullBuffer != null
+                        && unchangedBeforeFifthTick
+                        && outOfRangeJar.storedAspect() == Aspect.AIR
+                        && outOfRangeJar.storedAmount() == 1
+                        && pullBuffer.transportNode().storage().amount(Aspect.AIR.getTag()) == 1,
+                "buffer=" + (pullBuffer == null ? -1 : pullBuffer.transportNode().storage().amount(Aspect.AIR.getTag()))
+                        + ", jar=" + outOfRangeJar.storedAmount()
+        ));
+    }
+
     private static void addAspectSourceMutationExecutorChecks(MinecraftServer server, RecipeHolder<TCInfusionRecipe> cloudRing, ArrayList<Check> checks) {
         ServerLevel level = server.overworld();
         BlockPos matrixPos = new BlockPos(36, level.getMinBuildHeight() + 12, 0);

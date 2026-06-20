@@ -103,6 +103,7 @@ public final class TCItems {
     public static final Supplier<BlockItem> RESEARCH_TABLE = blockItem("research_table", TCBlocks.RESEARCH_TABLE);
     public static final Supplier<BlockItem> CRUCIBLE = blockItem("crucible", TCBlocks.CRUCIBLE);
     public static final Supplier<BlockItem> SMELTER_BASIC = blockItem("smelter_basic", TCBlocks.SMELTER_BASIC);
+    public static final Supplier<BlockItem> JAR_NORMAL = blockItem("jar_normal", TCBlocks.JAR_NORMAL);
     public static final Supplier<BlockItem> SMELTER_THAUMIUM = blockItem("smelter_thaumium", TCBlocks.SMELTER_THAUMIUM);
     public static final Supplier<BlockItem> SMELTER_VOID = blockItem("smelter_void", TCBlocks.SMELTER_VOID);
     public static final Supplier<BlockItem> WAND_WORKBENCH = blockItem("wand_workbench", TCBlocks.WAND_WORKBENCH);
@@ -500,7 +501,7 @@ public final class TCItems {
     public static final Supplier<Item> CATALOG_PLACEHOLDER_STABILIZER = ITEMS.register("stabilizer", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_VISBATTERY = ITEMS.register("visbattery", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_VISGENERATOR = ITEMS.register("visgenerator", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_WARDEDJAR = ITEMS.register("wardedjar", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_WARDEDJAR = JAR_NORMAL;
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ADVANCEDCROSSBOW = ITEMS.register("advancedcrossbow", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANEEAR = ITEMS.register("arcaneear", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANESPA = ITEMS.register("arcanespa", () -> new Item(new Item.Properties()));

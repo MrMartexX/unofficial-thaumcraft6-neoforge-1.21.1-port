@@ -3,7 +3,7 @@
   "research": "JARBRAIN",
   "instability": 4,
   "catalyst": {
-    "item": "thaumcraft:wardedjar"
+    "item": "thaumcraft:jar_normal"
   },
   "components": [
     {

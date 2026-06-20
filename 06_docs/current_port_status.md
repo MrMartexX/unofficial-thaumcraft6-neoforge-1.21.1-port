@@ -1,7 +1,7 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
 Last reviewed branch: `main`
-Last reviewed checkpoint: `2026-06-19` infusion matrix/pedestal completion-readiness boundary
+Last reviewed checkpoint: `2026-06-20` Warded Jar infusion source-container boundary
 Reviewed target module: `05_neoforge_port`
 
 ## State Snapshot
@@ -26,7 +26,7 @@ This section records the current repository state. The lower "Changelog Notes" s
 - Exact active arcane recipes include `thaumometer`, `vis_resonator`, `workbenchcharger`, `goggles`, `mechanism_simple`, `mechanism_complex`, `wand_workbench`/Focal Manipulator, `caster_basic`, `enchantedfabric`, `mirrorglass`, `filter`, `morphicresonator`, `essentiasmelter`, and `infusionmatrix`, with passing server runtime audits.
 - Arcane recipe-derived aspect generation is active for the current `TCArcaneRecipe` family and reload-validates `filter` plus `morphic_resonator`, including the legacy `praecantatio` vis bonus.
 - The `thaumcraft:crucible` serializer/page-data boundary covers HEDGE_ALCHEMY, METAL_PURIFICATION, Alumentum, Nitor, Brass Ingot, Thaumium Ingot, all 37 vis-crystal recipes, and lowercase legacy OreDictionary catalyst tag bridges. The seven legacy dynamic HEDGE_ALCHEMY costs are resolved into explicit JSON aspect costs from current parity data so runtime recipe matching never sees zero-cost placeholders.
-- The `thaumcraft:infusion` serializer/page-data boundary now has `42/42` valid JSON recipes, Thaumonomicon page snapshots, a server-owned `TCInfusionAssembly` validation snapshot, `TCInfusionCraftingPlan` active start state, `TCInfusionCompletionPlan` read-only completion-readiness state, runtime behavior audit, active pedestal block ids, one-slot pedestal BlockEntities, and a matrix BlockEntity that scans legacy-range pedestal inputs. Component matching now follows legacy Forge `RecipeMatcher.findMatches`: unordered by position, but exact 1:1 by supplied component count.
+- The `thaumcraft:infusion` boundary has `42/42` valid JSON recipes, page snapshots, server-owned validation/start/readiness state, audit-only mutation with component remainders, active pedestal BlockEntities, and a real `jar_normal` source container. Source discovery follows the exact legacy range-12 volume, nearest-first ordering and blocked-source rules; the jar pulls one point every five server ticks; runtime audit passes `50/50`.
 
 ### Bridge recipe cleanup and identity alignment
 
@@ -41,7 +41,7 @@ This section records the current repository state. The lower "Changelog Notes" s
 
 ### Deferred boundaries
 
-- Special alchemy side effects, crucible-derived aspect generation, item pulling radius, Thaumatorium/alembic/jar/tube integration, infusion crafting mutation/consumption/instability/essentia/FX, full custom entity/golem systems, broad worldgen, broad rendering polish, full equipment/Curios discount integration, and remaining dependency-heavy recipe/page families remain deferred.
+- Special alchemy side effects, crucible-derived aspect generation, item pulling radius, broad Thaumatorium/alembic/tube integration, exact per-cycle infusion timing/instability/FX, full custom entity/golem systems, broad worldgen, broad rendering polish, full equipment/Curios discount integration, and remaining dependency-heavy recipe/page families remain deferred.
 
 ## Purpose
 

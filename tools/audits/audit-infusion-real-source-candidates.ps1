@@ -108,11 +108,11 @@ $md.Add('| Placeholder/bridge-like candidate files | ' + $placeholderFiles.Count
 $md.Add('') | Out-Null
 $md.Add('## Interpretation') | Out-Null
 $md.Add('') | Out-Null
-$md.Add('- This audit is a discovery pass for the first real infusion aspect/essentia source policy.') | Out-Null
-$md.Add('- It does not select a source implementation by itself.') | Out-Null
+$md.Add('- This audit began as the discovery pass for the first real infusion aspect/essentia source policy.') | Out-Null
+$md.Add('- The selected first source is now the storage-bearing `thaumcraft:jar_normal` BlockEntity through `TCAspectSourceContainer`.') | Out-Null
 $md.Add('- A source should be selected only if there is a stable block or block entity with explicit storage semantics in the current port.') | Out-Null
 $md.Add('- Placeholder or bridge-only identities must not be used as real source implementations.') | Out-Null
-$md.Add('- If no stable local source exists, the resolver must remain fail-closed and player-facing infusion completion must stay disabled.') | Out-Null
+$md.Add('- Transient tube transport buffers are not legacy infusion sources; unsupported source types remain fail-closed and player-facing completion stays disabled.') | Out-Null
 
 Add-Table $md 'Registry-like source candidates' (TopRows $registryHits 60) 'No registry-like source candidates were found.'
 Add-Table $md 'BlockEntity-like source candidates' (TopRows $blockEntityHits 80) 'No block-entity-like source candidates were found.'
@@ -123,8 +123,8 @@ Add-Table $md 'All candidate hits, first 120' (TopRows $hits 120) 'No candidate 
 $md.Add('') | Out-Null
 $md.Add('## Porting conclusion') | Out-Null
 $md.Add('') | Out-Null
-$md.Add('- Do not implement a real infusion source adapter until one candidate is manually reviewed and confirmed to be a real storage-bearing block/entity, not just a recipe/page placeholder.') | Out-Null
-$md.Add('- The first implementation slice should support exactly one reviewed source type and keep all unknown sources fail-closed.') | Out-Null
+$md.Add('- `TCWardedJarBlockEntity` is the reviewed first source type: it has persistent single-aspect storage, a blocked flag, simulation and exact drain semantics.') | Out-Null
+$md.Add('- Keep all other source types fail-closed until each receives its own storage and runtime parity audit.') | Out-Null
 $md.Add('- Re-run this audit after adding jar, tube, alembic, aura, essentia storage, or related block/entity implementations.') | Out-Null
 
 New-Item -ItemType Directory -Force -Path (Split-Path $OutputPath) | Out-Null

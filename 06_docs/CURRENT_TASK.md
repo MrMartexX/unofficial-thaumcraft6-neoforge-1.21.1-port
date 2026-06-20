@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-06-19
+Last updated: 2026-06-20
 
 ## Current branch
 
@@ -21,7 +21,7 @@ Last updated: 2026-06-19
 - The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
 - The in-world crucible behavior slices have a design boundary in `06_docs/gameplay/crucible_in_world_behavior_design.md`.
 - The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
-- The first infusion behavior boundary now has a server-owned input snapshot, non-mutating validation result, legacy 1:1 component matching, a matrix/pedestal BlockEntity relationship, a saved active crafting start plan, a read-only active-plan completion/readiness check, and `tools/audits/audit-infusion-behavior.ps1`; latest runtime audit passes `25/25`.
+- The infusion boundary now includes server-owned validation/start/readiness state, audit-only mutation with component remainders, a real `jar_normal` storage BlockEntity, exact legacy range-12 nearest-first aspect-container discovery, the legacy five-tick jar pull cadence, and `50/50` passing runtime checks.
 
 ## Do not change without explicit request
 
@@ -35,8 +35,10 @@ Last updated: 2026-06-19
 1. Continue the infusion work from `06_docs/gameplay/infusion_in_world_behavior_design.md`:
    - Current implemented scope includes reloadable `thaumcraft:infusion` data, Thaumonomicon recipe-page snapshots, `TCInfusionRecipeMatcher`, `TCInfusionAssembly`, `TCInfusionValidationResult`, `TCInfusionCraftingPlan`, `TCInfusionCompletionPlan`, runtime behavior audit, active `arcane_pedestal`/`ancient_pedestal`/`eldritch_pedestal` block ids, and a matrix/pedestal BlockEntity relationship that can store a non-consuming active start plan and verify it read-only against current world/aspect state.
    - Legacy parity requirement: pedestal component matching is unordered but exact 1:1 by count; extra components must fail.
-   - Current audit-only completion boundary now includes mutation executor, aspect-source drain interface, no-op real source resolver, component container remainder preservation, tag expansion audit, and an explicit disabled player-facing matrix completion gate.
-   - Next safe code slice is a focused real aspect/essentia source resolver implementation for one explicitly supported source type, while keeping player-facing completion disabled until atomic source/item behavior is audited.
+   - Current audit-only completion boundary includes mutation executor, component container remainder preservation, tag expansion audit, and an explicit disabled player-facing matrix completion gate.
+   - `thaumcraft:jar_normal` is the first reviewed real aspect source: capacity `250`, blocked/filter persistence, top-face transport access and exact simulated drain.
+   - Source discovery now mirrors legacy `EssentiaHandler` range and distance ordering; tube buffers are not selected.
+   - Next safe code slice is persisted one-point craft-cycle progression over the active plan. It must drain one essentia point per cycle, revalidate catalyst/components, preserve item timing, and remain player-disabled until instability/FX/failure audits exist.
    - Keep broad pedestal UI, instability events, essentia transport networks, beams, particles, sounds, automation and enchantment infusion deferred until separate focused slices.
    - Re-run build, dedicated server smoke, infusion recipe-data audit, infusion behavior audit, research page catalog audit, and protocol audit after the batch.
    - Use legacy `TileInfusionMatrix`, `TilePedestal`, `InfusionRecipe`, and `ThaumcraftCraftingManager.findMatchingInfusionRecipe` as behavior references, not direct copy sources.
@@ -340,9 +342,9 @@ Last updated: 2026-06-19
 - The refreshed audit reports no known remainder items through local or built-in fallback tag expansion.
 ## Infusion real aspect source resolver boundary note
 
-- Added `TCInfusionAspectSourceResolver` as the named future entry point for real aspect/essentia source discovery.
-- The resolver intentionally returns empty until a focused real source policy exists.
-- Runtime audit verifies this no-source boundary remains explicit.
+- `TCInfusionAspectSourceResolver` now discovers `TCAspectSourceContainer` BlockEntities in the exact legacy range-12 volume and orders them nearest-first.
+- The first supported source is `thaumcraft:jar_normal`; unknown source types fail closed and transient tube buffers are excluded.
+- Runtime audit verifies range, ordering, blocked-source and insufficient-source no-op behavior.
 ## Infusion real source policy checkpoint
 
 - Added `06_docs/gameplay/infusion_real_source_policy_design.md` to define the next real source policy boundary.
@@ -358,8 +360,8 @@ Last updated: 2026-06-19
 - Added `tools/audits/audit-infusion-transport-source-readiness.ps1` and `06_docs/audits/infusion_transport_source_readiness_audit.md`.
 - Use this audit to decide whether existing essentia transport classes can safely back the first real infusion source resolver slice.
 - Do not connect player-facing infusion completion to tubes or transport block entities without reviewed read/drain/storage semantics.
-## Infusion transport source adapter note
+## Infusion Warded Jar source checkpoint
 
-- Added first narrow transport-backed source adapter for audit-only infusion source resolution.
-- This is not full tube-network or jar behavior and does not enable player-facing infusion completion.
-- The adapter is single-aspect only and must stay fail-closed for multi-aspect plans.
+- Added the legacy-id `thaumcraft:jar_normal` block/item/BlockEntity and corrected Warded Jar recipe dependencies to use that identity.
+- `TCTransportInfusionAspectSource` is retained only for isolated transport tests; it is not a resolver-backed gameplay source.
+- Player-facing completion remains disabled until exact one-point legacy cycle semantics, instability and FX are implemented.

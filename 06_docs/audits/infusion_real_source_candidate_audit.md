@@ -1,25 +1,25 @@
 # Infusion Real Source Candidate Audit
 
-Generated: 2026-06-20 01:55:53 +03:00
+Generated: 2026-06-20 15:31:42 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Candidate-term hits | 3295 |
-| Files with candidate hits | 370 |
-| Registry-like candidate files | 15 |
-| BlockEntity-like candidate files | 11 |
-| Aspect/storage-like candidate files | 115 |
+| Candidate-term hits | 3449 |
+| Files with candidate hits | 375 |
+| Registry-like candidate files | 17 |
+| BlockEntity-like candidate files | 13 |
+| Aspect/storage-like candidate files | 120 |
 | Placeholder/bridge-like candidate files | 10 |
 
 ## Interpretation
 
-- This audit is a discovery pass for the first real infusion aspect/essentia source policy.
-- It does not select a source implementation by itself.
+- This audit began as the discovery pass for the first real infusion aspect/essentia source policy.
+- The selected first source is now the storage-bearing `thaumcraft:jar_normal` BlockEntity through `TCAspectSourceContainer`.
 - A source should be selected only if there is a stable block or block entity with explicit storage semantics in the current port.
 - Placeholder or bridge-only identities must not be used as real source implementations.
-- If no stable local source exists, the resolver must remain fail-closed and player-facing infusion completion must stay disabled.
+- Transient tube transport buffers are not legacy infusion sources; unsupported source types remain fail-closed and player-facing completion stays disabled.
 
 ## Registry-like source candidates
 
@@ -27,8 +27,22 @@ Generated: 2026-06-20 01:55:53 +03:00
 |---|---:|---|
 | 05_neoforge_port/src/main/java/thaumcraft/client/TCColorHandlers.java | 114 | `event.register((stack, tintIndex) -> FLUX, TCBlocks.CRYSTAL_VITIUM.get());` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/aspects/TCAspectReloadValidator.java | 515 | `TCAspectStackKey.from(new ItemStack(TCItems.ORE_AMBER.get())), new AspectList().add(Aspect.AIR, 99),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionAspectSourceResolver.java | 20 | `public static Optional<TCInfusionAspectSource> findSource(TCInfusionMatrixBlockEntity matrix, TCInfusionCraftingPlan plan) {` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 256 | `TCInfusionMatrixBlockEntity.Snapshot snapshot = matrix.createSnapshot(new AspectList().add(Aspect.AIR, 50));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCWardedJarBlock.java | 15 | `import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCWardedJarBlock.java | 27 | `return new TCWardedJarBlockEntity(pos, state);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCWardedJarBlock.java | 47 | `return level.getBlockEntity(pos) instanceof TCWardedJarBlockEntity jar ? jar.comparatorSignal() : 0;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionAspectSourceResolver.java | 28 | `public static Optional<TCInfusionAspectSource> findSource(TCInfusionMatrixBlockEntity matrix, TCInfusionCraftingPlan plan) {` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionAspectSourceResolver.java | 42 | `BlockEntity blockEntity = level.getBlockEntity(sourcePos);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionAspectSourceResolver.java | 43 | `if (blockEntity instanceof TCAspectSourceContainer container) {` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 12 | `import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 31 | `import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 264 | `TCInfusionMatrixBlockEntity.Snapshot snapshot = matrix.createSnapshot(new AspectList().add(Aspect.AIR, 50));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 487 | `level.setBlock(tubePos, TCBlocks.TUBE.get().defaultBlockState(), 3);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 490 | `TCLegacyTubeBlockEntity tube = blockEntity(level, tubePos, TCLegacyTubeBlockEntity.class);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 517 | `TCWardedJarBlockEntity nearJar = blockEntity(level, nearJarPos, TCWardedJarBlockEntity.class);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 518 | `TCWardedJarBlockEntity farJar = blockEntity(level, farJarPos, TCWardedJarBlockEntity.class);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 519 | `TCWardedJarBlockEntity outOfRangeJar = blockEntity(level, outOfRangeJarPos, TCWardedJarBlockEntity.class);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 531 | `outOfRangeJar.setStoredForValidation(Aspect.AIR, TCWardedJarBlockEntity.CAPACITY);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 542 | `&& outOfRangeJar.storedAmount() == TCWardedJarBlockEntity.CAPACITY,` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/block/TCLegacyTubeBlock.java | 31 | `return TCBlockEntities.createTubeBlockEntity(variant, pos, state);` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/blockentity/TCAbstractEssentiaTransportBlockEntity.java | 1 | `package thaumcraft.common.essentia.transport.blockentity;` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/blockentity/TCAbstractEssentiaTransportBlockEntity.java | 29 | `public abstract class TCAbstractEssentiaTransportBlockEntity extends BlockEntity implements TCEssentiaTransport {` |
@@ -44,54 +58,53 @@ Generated: 2026-06-20 01:55:53 +03:00
 | 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 5 | `import thaumcraft.common.essentia.transport.blockentity.TCLegacySmelterEndpointBlockEntity;` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 7 | `import thaumcraft.common.essentia.transport.block.TCLegacyTubeVariant;` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 9 | `import thaumcraft.common.essentia.transport.block.TCLegacySmelterEndpoint;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 71 | `// Legacy-aligned transport/essentia block entities.` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 72 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 73 | `BLOCK_ENTITY_TYPES.register("tube", () ->` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 75 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE.get(), pos, state, TCLegacyTubeVariant.TUBE),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 76 | `TCBlocks.TUBE.get()).build(null));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 77 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_BUFFER =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 78 | `BLOCK_ENTITY_TYPES.register("tube_buffer", () ->` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 80 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_BUFFER.get(), pos, state, TCLegacyTubeVariant.BUFFER),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 81 | `TCBlocks.TUBE_BUFFER.get()).build(null));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 82 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_FILTER =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 83 | `BLOCK_ENTITY_TYPES.register("tube_filter", () ->` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 85 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_FILTER.get(), pos, state, TCLegacyTubeVariant.FILTER),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 86 | `TCBlocks.TUBE_FILTER.get()).build(null));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 87 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_ONEWAY =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 88 | `BLOCK_ENTITY_TYPES.register("tube_oneway", () ->` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 90 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_ONEWAY.get(), pos, state, TCLegacyTubeVariant.ONEWAY),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 91 | `TCBlocks.TUBE_ONEWAY.get()).build(null));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 92 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_RESTRICT =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 93 | `BLOCK_ENTITY_TYPES.register("tube_restrict", () ->` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 95 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_RESTRICT.get(), pos, state, TCLegacyTubeVariant.RESTRICT),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 96 | `TCBlocks.TUBE_RESTRICT.get()).build(null));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 97 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_VALVE =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 98 | `BLOCK_ENTITY_TYPES.register("tube_valve", () ->` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 100 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_VALVE.get(), pos, state, TCLegacyTubeVariant.VALVE),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 101 | `TCBlocks.TUBE_VALVE.get()).build(null));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 113 | `public static TCLegacyTubeBlockEntity createTubeBlockEntity(TCLegacyTubeVariant variant, BlockPos pos, BlockState state) {` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 115 | `case TUBE -> new TCLegacyTubeBlockEntity(TUBE.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 116 | `case BUFFER -> new TCLegacyTubeBlockEntity(TUBE_BUFFER.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 117 | `case FILTER -> new TCLegacyTubeBlockEntity(TUBE_FILTER.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 118 | `case ONEWAY -> new TCLegacyTubeBlockEntity(TUBE_ONEWAY.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 119 | `case RESTRICT -> new TCLegacyTubeBlockEntity(TUBE_RESTRICT.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 120 | `case VALVE -> new TCLegacyTubeBlockEntity(TUBE_VALVE.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java | 3 | `import thaumcraft.common.essentia.transport.block.TCLegacyTubeVariant;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java | 5 | `import thaumcraft.common.essentia.transport.block.TCLegacyTubeBlock;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java | 7 | `import thaumcraft.common.essentia.transport.block.TCLegacySmelterEndpointBlock;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java | 9 | `import thaumcraft.common.essentia.transport.block.TCLegacySmelterEndpoint;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java | 27 | `import thaumcraft.common.blocks.essentia.TCSmelterBlock;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java | 118 | `// Legacy-aligned transport/essentia blocks.` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java | 119 | `public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java | 120 | `public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tube_buffer", () -> tubeBlock(TCLegacyTubeVariant.BUFFER));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java | 121 | `public static final Supplier<Block> TUBE_FILTER = BLOCKS.register("tube_filter", () -> tubeBlock(TCLegacyTubeVariant.FILTER));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 24 | `import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 41 | `public static final Supplier<BlockEntityType<TCWardedJarBlockEntity>> WARDED_JAR =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 43 | `BlockEntityType.Builder.of(TCWardedJarBlockEntity::new, TCBlocks.JAR_NORMAL.get()).build(null));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 75 | `// Legacy-aligned transport/essentia block entities.` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 76 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 77 | `BLOCK_ENTITY_TYPES.register("tube", () ->` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 79 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE.get(), pos, state, TCLegacyTubeVariant.TUBE),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 80 | `TCBlocks.TUBE.get()).build(null));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 81 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_BUFFER =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 82 | `BLOCK_ENTITY_TYPES.register("tube_buffer", () ->` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 84 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_BUFFER.get(), pos, state, TCLegacyTubeVariant.BUFFER),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 85 | `TCBlocks.TUBE_BUFFER.get()).build(null));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 86 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_FILTER =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 87 | `BLOCK_ENTITY_TYPES.register("tube_filter", () ->` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 89 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_FILTER.get(), pos, state, TCLegacyTubeVariant.FILTER),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 90 | `TCBlocks.TUBE_FILTER.get()).build(null));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 91 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_ONEWAY =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 92 | `BLOCK_ENTITY_TYPES.register("tube_oneway", () ->` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 94 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_ONEWAY.get(), pos, state, TCLegacyTubeVariant.ONEWAY),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 95 | `TCBlocks.TUBE_ONEWAY.get()).build(null));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 96 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_RESTRICT =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 97 | `BLOCK_ENTITY_TYPES.register("tube_restrict", () ->` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 99 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_RESTRICT.get(), pos, state, TCLegacyTubeVariant.RESTRICT),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 100 | `TCBlocks.TUBE_RESTRICT.get()).build(null));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 101 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_VALVE =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 102 | `BLOCK_ENTITY_TYPES.register("tube_valve", () ->` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 104 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_VALVE.get(), pos, state, TCLegacyTubeVariant.VALVE),` |
 
 ## BlockEntity-like source candidates
 
 | File | Line | Evidence |
 |---|---:|---|
-| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionAspectSourceResolver.java | 20 | `public static Optional<TCInfusionAspectSource> findSource(TCInfusionMatrixBlockEntity matrix, TCInfusionCraftingPlan plan) {` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 256 | `TCInfusionMatrixBlockEntity.Snapshot snapshot = matrix.createSnapshot(new AspectList().add(Aspect.AIR, 50));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCWardedJarBlock.java | 15 | `import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCWardedJarBlock.java | 27 | `return new TCWardedJarBlockEntity(pos, state);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCWardedJarBlock.java | 47 | `return level.getBlockEntity(pos) instanceof TCWardedJarBlockEntity jar ? jar.comparatorSignal() : 0;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionAspectSourceResolver.java | 28 | `public static Optional<TCInfusionAspectSource> findSource(TCInfusionMatrixBlockEntity matrix, TCInfusionCraftingPlan plan) {` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionAspectSourceResolver.java | 42 | `BlockEntity blockEntity = level.getBlockEntity(sourcePos);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionAspectSourceResolver.java | 43 | `if (blockEntity instanceof TCAspectSourceContainer container) {` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 12 | `import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 31 | `import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 264 | `TCInfusionMatrixBlockEntity.Snapshot snapshot = matrix.createSnapshot(new AspectList().add(Aspect.AIR, 50));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 490 | `TCLegacyTubeBlockEntity tube = blockEntity(level, tubePos, TCLegacyTubeBlockEntity.class);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 517 | `TCWardedJarBlockEntity nearJar = blockEntity(level, nearJarPos, TCWardedJarBlockEntity.class);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 518 | `TCWardedJarBlockEntity farJar = blockEntity(level, farJarPos, TCWardedJarBlockEntity.class);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 519 | `TCWardedJarBlockEntity outOfRangeJar = blockEntity(level, outOfRangeJarPos, TCWardedJarBlockEntity.class);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 531 | `outOfRangeJar.setStoredForValidation(Aspect.AIR, TCWardedJarBlockEntity.CAPACITY);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionBehaviorAudit.java | 542 | `&& outOfRangeJar.storedAmount() == TCWardedJarBlockEntity.CAPACITY,` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/block/TCLegacyTubeBlock.java | 31 | `return TCBlockEntities.createTubeBlockEntity(variant, pos, state);` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/blockentity/TCAbstractEssentiaTransportBlockEntity.java | 1 | `package thaumcraft.common.essentia.transport.blockentity;` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/blockentity/TCAbstractEssentiaTransportBlockEntity.java | 14 | `import thaumcraft.common.essentia.transport.TCEssentiaStack;` |
@@ -134,42 +147,29 @@ Generated: 2026-06-20 01:55:53 +03:00
 | 05_neoforge_port/src/main/java/thaumcraft/common/menu/TCArcaneWorkbenchMenu.java | 252 | `syncedAvailableVis = blockEntity.availableVis();` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 3 | `import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 5 | `import thaumcraft.common.essentia.transport.blockentity.TCLegacySmelterEndpointBlockEntity;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 72 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 75 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE.get(), pos, state, TCLegacyTubeVariant.TUBE),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 77 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_BUFFER =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 80 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_BUFFER.get(), pos, state, TCLegacyTubeVariant.BUFFER),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 82 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_FILTER =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 85 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_FILTER.get(), pos, state, TCLegacyTubeVariant.FILTER),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 87 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_ONEWAY =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 90 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_ONEWAY.get(), pos, state, TCLegacyTubeVariant.ONEWAY),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 92 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_RESTRICT =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 95 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_RESTRICT.get(), pos, state, TCLegacyTubeVariant.RESTRICT),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 97 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_VALVE =` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 100 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_VALVE.get(), pos, state, TCLegacyTubeVariant.VALVE),` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 113 | `public static TCLegacyTubeBlockEntity createTubeBlockEntity(TCLegacyTubeVariant variant, BlockPos pos, BlockState state) {` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 115 | `case TUBE -> new TCLegacyTubeBlockEntity(TUBE.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 116 | `case BUFFER -> new TCLegacyTubeBlockEntity(TUBE_BUFFER.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 117 | `case FILTER -> new TCLegacyTubeBlockEntity(TUBE_FILTER.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 118 | `case ONEWAY -> new TCLegacyTubeBlockEntity(TUBE_ONEWAY.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 119 | `case RESTRICT -> new TCLegacyTubeBlockEntity(TUBE_RESTRICT.get(), pos, state, variant);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 120 | `case VALVE -> new TCLegacyTubeBlockEntity(TUBE_VALVE.get(), pos, state, variant);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 24 | `import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 41 | `public static final Supplier<BlockEntityType<TCWardedJarBlockEntity>> WARDED_JAR =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 43 | `BlockEntityType.Builder.of(TCWardedJarBlockEntity::new, TCBlocks.JAR_NORMAL.get()).build(null));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 76 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 79 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE.get(), pos, state, TCLegacyTubeVariant.TUBE),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 81 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_BUFFER =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 84 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_BUFFER.get(), pos, state, TCLegacyTubeVariant.BUFFER),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 86 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_FILTER =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 89 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_FILTER.get(), pos, state, TCLegacyTubeVariant.FILTER),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 91 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_ONEWAY =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 94 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_ONEWAY.get(), pos, state, TCLegacyTubeVariant.ONEWAY),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 96 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_RESTRICT =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 99 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_RESTRICT.get(), pos, state, TCLegacyTubeVariant.RESTRICT),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 101 | `public static final Supplier<BlockEntityType<TCLegacyTubeBlockEntity>> TUBE_VALVE =` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 104 | `(pos, state) -> new TCLegacyTubeBlockEntity(TCBlockEntities.TUBE_VALVE.get(), pos, state, TCLegacyTubeVariant.VALVE),` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 117 | `public static TCLegacyTubeBlockEntity createTubeBlockEntity(TCLegacyTubeVariant variant, BlockPos pos, BlockState state) {` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 119 | `case TUBE -> new TCLegacyTubeBlockEntity(TUBE.get(), pos, state, variant);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 120 | `case BUFFER -> new TCLegacyTubeBlockEntity(TUBE_BUFFER.get(), pos, state, variant);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 121 | `case FILTER -> new TCLegacyTubeBlockEntity(TUBE_FILTER.get(), pos, state, variant);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 122 | `case ONEWAY -> new TCLegacyTubeBlockEntity(TUBE_ONEWAY.get(), pos, state, variant);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 123 | `case RESTRICT -> new TCLegacyTubeBlockEntity(TUBE_RESTRICT.get(), pos, state, variant);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java | 124 | `case VALVE -> new TCLegacyTubeBlockEntity(TUBE_VALVE.get(), pos, state, variant);` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 29 | `import thaumcraft.common.world.aura.AuraChunk;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 30 | `import thaumcraft.common.world.aura.AuraHandler;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 53 | `public int availableVis() {` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 61 | `AuraChunk chunk = AuraHandler.ensureAuraChunk(serverLevel, new ChunkPos(worldPosition));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 62 | `return (int) chunk.getVis();` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 64 | `return (int) AuraHandler.getVis(level, worldPosition);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 67 | `public boolean canSpendVis(int amount) {` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 71 | `return level instanceof ServerLevel && availableVis() >= amount;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 74 | `public boolean spendVis(int amount) {` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 82 | `return AuraHandler.drainVis(level, worldPosition, amount, false) >= amount;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 99 | `AuraChunk chunk = AuraHandler.ensureAuraChunk(serverLevel, new ChunkPos(center.x + xx, center.z + zz));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 100 | `total += (int) chunk.getVis();` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 107 | `if (!canSpendVis(amount)) {` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCArcaneWorkbenchBlockEntity.java | 120 | `remaining -= (int) AuraHandler.drainVis(level, worldPosition.offset(xx * 16, 0, zz * 16), chunkDrain, false);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCCrucibleBlockEntity.java | 12 | `import net.minecraft.sounds.SoundSource;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCCrucibleBlockEntity.java | 27 | `import thaumcraft.api.aspects.AspectList;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCCrucibleBlockEntity.java | 28 | `import thaumcraft.api.aura.AuraHelper;` |
 
 ## Aspect/storage-like candidates
 
@@ -261,18 +261,18 @@ Generated: 2026-06-20 01:55:53 +03:00
 | File | Line | Evidence |
 |---|---:|---|
 | 05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/TCEssentiaTubeMode.java | 7 | `* restriction tube, input/output transport bridge, and smelter endpoints.` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 483 | `public static final Supplier<Item> CATALOG_PLACEHOLDER_ALEMBIC = ITEMS.register("alembic", () -> new Item(new Item.Properties()));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 503 | `public static final Supplier<Item> CATALOG_PLACEHOLDER_WARDEDJAR = ITEMS.register("wardedjar", () -> new Item(new Item.Properties()));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 521 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERTHAUMIUM = SMELTER_THAUMIUM;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 522 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERVOID = SMELTER_VOID;` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 523 | `public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTIN = ITEMS.register("essentiatransportin", () -> new Item(new Item.Properties()));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 524 | `public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTOUT = ITEMS.register("essentiatransportout", () -> new Item(new Item.Properties()));` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 525 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBE = blockItem("tube", TCBlocks.TUBE);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 526 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEBUFFER = blockItem("tube_buffer", TCBlocks.TUBE_BUFFER);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 527 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEFILTER = blockItem("tube_filter", TCBlocks.TUBE_FILTER);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 528 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEONEWAY = blockItem("tube_oneway", TCBlocks.TUBE_ONEWAY);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 529 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBERESTRICT = blockItem("tube_restrict", TCBlocks.TUBE_RESTRICT);` |
-| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 530 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEVALVE = blockItem("tube_valve", TCBlocks.TUBE_VALVE);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 484 | `public static final Supplier<Item> CATALOG_PLACEHOLDER_ALEMBIC = ITEMS.register("alembic", () -> new Item(new Item.Properties()));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 504 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_WARDEDJAR = JAR_NORMAL;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 522 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERTHAUMIUM = SMELTER_THAUMIUM;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 523 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERVOID = SMELTER_VOID;` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 524 | `public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTIN = ITEMS.register("essentiatransportin", () -> new Item(new Item.Properties()));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 525 | `public static final Supplier<Item> CATALOG_PLACEHOLDER_ESSENTIATRANSPORTOUT = ITEMS.register("essentiatransportout", () -> new Item(new Item.Properties()));` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 526 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBE = blockItem("tube", TCBlocks.TUBE);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 527 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEBUFFER = blockItem("tube_buffer", TCBlocks.TUBE_BUFFER);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 528 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEFILTER = blockItem("tube_filter", TCBlocks.TUBE_FILTER);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 529 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEONEWAY = blockItem("tube_oneway", TCBlocks.TUBE_ONEWAY);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 530 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBERESTRICT = blockItem("tube_restrict", TCBlocks.TUBE_RESTRICT);` |
+| 05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java | 531 | `public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_TUBEVALVE = blockItem("tube_valve", TCBlocks.TUBE_VALVE);` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/research/TCArcaneRecipeAudit.java | 64 | `private static final ResourceLocation THAUMOMETER_BRIDGE =` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/research/TCArcaneRecipeAudit.java | 65 | `ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "research_bridge/thaumometer");` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/research/TCArcaneRecipeAudit.java | 66 | `private static final ResourceLocation VIS_RESONATOR_BRIDGE =` |
@@ -293,7 +293,7 @@ Generated: 2026-06-20 01:55:53 +03:00
 | 05_neoforge_port/src/main/java/thaumcraft/common/research/theorycraft/TCResearchTableDiagnostics.java | 104 | `"First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy, Artifice item-option, Basic Auromancy, basic Infusion, Basic Golemancy and safe Eldritch option cards only.");` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/research/theorycraft/TCResearchTableDiagnostics.java | 105 | `report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");` |
 | 05_neoforge_port/src/main/java/thaumcraft/common/research/theorycraft/TCResearchTableDiagnostics.java | 199 | `"The safe Eldritch aid bridge should contain Glyphed Stone, End portal and Nether portal aids; Brain-in-a-Jar, Crimson portal and Basic Eldritch remain deferred.");` |
-| 05_neoforge_port/src/main/resources/assets/thaumcraft/lang/en_us.json | 929 | `"tc.placeholder.caster_basic": "Temporary port placeholder: caster focus socket and vis-cost logic are not fully implemented yet.",` |
+| 05_neoforge_port/src/main/resources/assets/thaumcraft/lang/en_us.json | 930 | `"tc.placeholder.caster_basic": "Temporary port placeholder: caster focus socket and vis-cost logic are not fully implemented yet.",` |
 | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/blueprint_page_placeholders.json | 5 | `"legacy_source": "THAUMCRAFT_CATALOG",` |
 | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/blueprint_page_placeholders.json | 22 | `"legacy_source": "THAUMCRAFT_CATALOG",` |
 | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/blueprint_page_placeholders.json | 39 | `"legacy_source": "THAUMCRAFT_CATALOG",` |
@@ -439,6 +439,6 @@ Generated: 2026-06-20 01:55:53 +03:00
 
 ## Porting conclusion
 
-- Do not implement a real infusion source adapter until one candidate is manually reviewed and confirmed to be a real storage-bearing block/entity, not just a recipe/page placeholder.
-- The first implementation slice should support exactly one reviewed source type and keep all unknown sources fail-closed.
+- `TCWardedJarBlockEntity` is the reviewed first source type: it has persistent single-aspect storage, a blocked flag, simulation and exact drain semantics.
+- Keep all other source types fail-closed until each receives its own storage and runtime parity audit.
 - Re-run this audit after adding jar, tube, alembic, aura, essentia storage, or related block/entity implementations.

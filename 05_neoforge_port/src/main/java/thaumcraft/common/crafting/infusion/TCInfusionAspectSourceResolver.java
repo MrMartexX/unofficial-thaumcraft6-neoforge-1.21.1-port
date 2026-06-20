@@ -1,23 +1,26 @@
 package thaumcraft.common.crafting.infusion;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import thaumcraft.common.essentia.transport.TCEssentiaTransport;
+import thaumcraft.common.essentia.container.TCAspectSourceContainer;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 
 /**
  * Boundary for real essentia/aspect source discovery.
  *
- * <p>The first real policy is intentionally narrow: adjacent block entities implementing
- * TCEssentiaTransport may be exposed as a single-aspect source through the face pointing
- * toward the matrix. Unknown or empty sources fail closed. Player-facing completion remains
- * disabled until this path is fully audited and explicitly enabled.</p>
+ * <p>Legacy {@code EssentiaHandler.drainEssentia(matrix, aspect, null, 12, ...)} searched a
+ * 25 x 24 x 25 volume for {@code IAspectSource} containers and ordered them by distance. This
+ * resolver preserves that discovery boundary for modern {@link TCAspectSourceContainer}
+ * block entities. Transient tube buffers are deliberately not infusion sources.</p>
  */
 public final class TCInfusionAspectSourceResolver {
     public static final String NO_SUPPORTED_SOURCE_FOUND = "no_supported_source_found";
+    public static final int LEGACY_SOURCE_RANGE = 12;
 
     private TCInfusionAspectSourceResolver() {
     }
@@ -28,24 +31,33 @@ public final class TCInfusionAspectSourceResolver {
         }
         Level level = matrix.getLevel();
         BlockPos matrixPos = matrix.getBlockPos();
-        for (Direction direction : Direction.values()) {
-            BlockEntity blockEntity = level.getBlockEntity(matrixPos.relative(direction));
-            if (!(blockEntity instanceof TCEssentiaTransport transport)) {
-                continue;
+        List<Candidate> candidates = new ArrayList<>();
+        for (int x = -LEGACY_SOURCE_RANGE; x <= LEGACY_SOURCE_RANGE; x++) {
+            for (int z = -LEGACY_SOURCE_RANGE; z <= LEGACY_SOURCE_RANGE; z++) {
+                for (int y = -LEGACY_SOURCE_RANGE; y < LEGACY_SOURCE_RANGE; y++) {
+                    if (x == 0 && y == 0 && z == 0) {
+                        continue;
+                    }
+                    BlockPos sourcePos = matrixPos.offset(x, y, z);
+                    BlockEntity blockEntity = level.getBlockEntity(sourcePos);
+                    if (blockEntity instanceof TCAspectSourceContainer container) {
+                        candidates.add(new Candidate(sourcePos, container));
+                    }
+                }
             }
-            Direction sourceFace = direction.getOpposite();
-            if (!transport.canOutputTo(sourceFace)) {
-                continue;
-            }
-            if (transport.getEssentia(sourceFace).isEmpty()) {
-                continue;
-            }
-            return Optional.of(new TCTransportInfusionAspectSource(transport, sourceFace));
         }
-        return Optional.empty();
+        candidates.sort(Comparator.comparingDouble(candidate -> candidate.pos().distSqr(matrixPos)));
+        if (candidates.isEmpty()) {
+            return Optional.empty();
+        }
+        List<TCAspectSourceContainer> containers = candidates.stream().map(Candidate::container).toList();
+        return Optional.of(new TCContainerInfusionAspectSource(containers));
     }
 
     public static String unavailableReason() {
         return NO_SUPPORTED_SOURCE_FOUND;
+    }
+
+    private record Candidate(BlockPos pos, TCAspectSourceContainer container) {
     }
 }

@@ -166,7 +166,7 @@ $md.Add('## Interpretation') | Out-Null
 $md.Add('') | Out-Null
 $md.Add('- This audit narrows the broad real-source candidate scan to the current essentia transport and related source API surface.') | Out-Null
 $md.Add('- A file is not source-ready just because it is a tube or transport block entity; it must expose stable readable storage and an all-or-nothing drain path.') | Out-Null
-$md.Add('- If no source-ready file is selected after manual review, `TCInfusionAspectSourceResolver` must remain fail-closed.') | Out-Null
+$md.Add('- `TCInfusionAspectSourceResolver` now selects storage-bearing aspect containers; tube transport buffers remain excluded.') | Out-Null
 $md.Add('- Player-facing infusion completion remains disabled by policy.') | Out-Null
 
 Add-Table $md 'Potential review candidates' $reviewCandidates 'No files currently expose enough read/drain/storage signals to select a real source automatically.'
@@ -177,8 +177,8 @@ Add-EvidenceTable $md 'Focused evidence, first 160 rows' $evidenceFocus 'No focu
 $md.Add('') | Out-Null
 $md.Add('## Porting conclusion') | Out-Null
 $md.Add('') | Out-Null
-$md.Add('- Do not connect infusion completion to tubes or transport entities unless a reviewed API provides exact availability and all-or-nothing drain semantics.') | Out-Null
-$md.Add('- The next implementation should either add a stable storage-bearing source type first, or explicitly document why infusion remains audit-only.') | Out-Null
+$md.Add('- Do not connect infusion completion directly to tubes or transient transport buffers: legacy `EssentiaHandler` discovered `IAspectSource` containers.') | Out-Null
+$md.Add('- The first selected storage-bearing source is `TCWardedJarBlockEntity` through `TCAspectSourceContainer`; player-facing completion remains audit-only.') | Out-Null
 $md.Add('- This audit should be re-run after changes under `thaumcraft.common.essentia.transport`, `thaumcraft.common.blocks.essentia`, or infusion source resolver code.') | Out-Null
 
 New-Item -ItemType Directory -Force -Path (Split-Path $OutputPath) | Out-Null

@@ -1,6 +1,6 @@
 # In-world Infusion Behavior Boundary Design
 
-Last updated: 2026-06-19
+Last updated: 2026-06-20
 
 ## Purpose
 
@@ -14,11 +14,11 @@ This document defines the first safe implementation boundary for in-world infusi
 - `TCInfusionAssembly` and `TCInfusionValidationResult` provide the first server-owned validation snapshot/result boundary.
 - `TCInfusionCraftingPlan` and `TCInfusionStartResult` provide the first saved server-owned crafting-start state after validation.
 - `TCInfusionCompletionPlan` provides the first read-only active-plan readiness check against the current center pedestal, originally matched component pedestal positions, and available aspects.
-- `tools/audits/audit-infusion-behavior.ps1` runs the current server runtime audit; latest result is `25/25` checks passing after the matrix/pedestal start-plan plus completion-readiness slice.
+- `tools/audits/audit-infusion-behavior.ps1` runs the current server runtime audit; latest result is `50/50` checks passing after the mutation, container-remainder, Warded Jar source-resolver and five-tick pull slices.
 - Custom recipe boundary audit recognizes `thaumcraft:infusion` as `INFUSION_PAGE_READY_NO_GAMEPLAY`.
 - `TCInfusionMatrixBlockEntity` scans the legacy matrix-centered pedestal range and feeds a `TCInfusionAssembly` snapshot.
 - `TCInfusionPedestalBlockEntity` owns the first legacy-shaped one-slot pedestal state: empty pedestal accepts one item, occupied pedestal returns/drops its stored item.
-- Full item/aspect mutation timing, instability events, essentia/aura side effects, client particles/beams and completion output behavior are still deferred.
+- Audit-only full-plan item/aspect mutation now exists, including component remainders and Warded Jar source discovery. Exact one-point legacy cycle timing, instability, client particles/beams and player-facing completion remain deferred.
 
 ## First allowed gameplay slice
 
@@ -31,7 +31,8 @@ The first implementation slice may add only a minimal, server-owned infusion val
 5. Done: minimal happy-path and failed validation scenarios, including runtime world placement.
 6. Done: saved active crafting start plan recording recipe id, research, instability, catalyst, matched component stacks, matched pedestal positions, required aspects, result and player name.
 7. Done: read-only completion/readiness planning that rechecks the current catalyst, originally matched component pedestal stacks/positions and available aspect totals before any future mutation.
-8. Still required: no client authority and no implicit crafting from client-side state for later slices.
+8. Done for audit use: component mutation, component remainders and fail-closed Warded Jar aspect-source resolution over the exact legacy range.
+9. Still required: persisted one-point craft-cycle state, source FX, instability and player-facing server activation.
 
 ## Legacy crafting-start semantics
 
@@ -53,7 +54,7 @@ Do not include these in the first implementation slice:
 - Full altar animation, beam rendering or particle parity.
 - Instability events beyond inert data validation.
 - Item tossing/consumption timing from legacy code.
-- Essentia transport, jars, tubes or golem automation.
+- Broad essentia transport, additional jars/mirrors/alembics or golem automation.
 - Flux rifts, taint spread or biome/world side effects.
 - Thaumatorium behavior.
 - Broad pedestal inventory UI beyond the legacy one-item right-click slot.
@@ -88,7 +89,7 @@ Every infusion behavior change must pass:
 - Done: minimal matrix/pedestal BlockEntity relationship that feeds `TCInfusionAssembly` but still does not consume items/aspects or run instability/FX.
 - Done: `TCInfusionCraftingPlan` active start state with NBT round-trip, second-start rejection and abort audit coverage.
 - Done: `TCInfusionCompletionPlan` read-only readiness state with catalyst, component-stack, component-pedestal and missing-aspect audit coverage.
-- Still deferred: item consumption timing, essentia drain/source integration, instability, particles/beams/sounds and completion output behavior.
+- Still deferred: exact legacy per-cycle item/essentia timing, instability, particles/beams/sounds and player-facing completion.
 ## Validation helper note
 
 - `TCInfusionRecipeMatcher` provides the first server-side validation helper for catalyst, unordered pedestal components and aspect costs.
@@ -158,10 +159,17 @@ Every infusion behavior change must pass:
 - Current local plus built-in fallback tag expansion does not introduce known bucket/bottle/bowl-style remainder inputs.
 ## Real aspect source resolver boundary note
 
-- `TCInfusionAspectSourceResolver` is an explicit boundary for future jar, tube, alembic, aura or network-backed source discovery.
-- It currently returns no source and reports `real_source_policy_not_implemented`.
+- `TCInfusionAspectSourceResolver` discovers reviewed `TCAspectSourceContainer` BlockEntities and fails closed for unknown source types.
+- The first supported source is `thaumcraft:jar_normal`; direct transport buffers are excluded to preserve legacy `IAspectSource` semantics.
 - Player-facing completion must not bypass this resolver with direct in-memory sources.
 ## Real source policy design checkpoint
 
 - See `06_docs/gameplay/infusion_real_source_policy_design.md` before implementing any real jar, tube, alembic, aura or network-backed source.
 - The resolver must fail closed and must not use audit-only memory sources for player-facing completion.
+
+## Warded Jar source checkpoint
+
+- `thaumcraft:jar_normal` now owns the first real storage-bearing source BlockEntity with legacy capacity `250`, blocked/filter persistence, top-face transport access and comparator output.
+- `TCInfusionAspectSourceResolver` now scans the legacy `25 x 24 x 25` source volume and sorts `TCAspectSourceContainer` candidates nearest-first.
+- Transient tubes are intentionally excluded because legacy infusion discovered `IAspectSource`, not arbitrary `IEssentiaTransport` buffers.
+- Runtime behavior audit includes the Warded Jar five-tick pull cadence; player-facing completion remains disabled until one-point matrix cycle semantics are implemented.

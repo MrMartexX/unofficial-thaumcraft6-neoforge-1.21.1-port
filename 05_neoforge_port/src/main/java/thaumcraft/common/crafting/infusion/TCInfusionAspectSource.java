@@ -6,9 +6,9 @@ import thaumcraft.api.aspects.AspectList;
 /**
  * Audit-only aspect source boundary for infusion completion planning.
  *
- * <p>This interface is intentionally tiny so future jar, tube, alembic or aura-backed
- * sources can be added behind the same all-or-nothing drain contract. The current
- * implementation is an in-memory source used only by runtime audits.
+ * <p>This interface is intentionally tiny so reviewed container implementations can be
+ * added behind the same all-or-nothing audit drain contract. Current implementations are
+ * the in-memory audit source and the distance-ordered warded-jar container source.
  */
 public interface TCInfusionAspectSource {
     AspectList availableAspects();

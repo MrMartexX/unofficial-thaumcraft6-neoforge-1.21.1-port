@@ -1,64 +1,82 @@
 # Infusion Real Source Policy Design
 
+Last updated: 2026-06-20
+
 ## Scope
 
-This document defines the boundary for the future real aspect/essentia source policy used by in-world infusion completion.
+This document defines the reviewed aspect-container source boundary for in-world infusion. It follows the migration guide rule that legacy subsystem roles are preserved while storage, persistence and server authority are rebuilt for NeoForge 1.21.1.
 
-Current implemented state is still audit-only:
+Normal player-facing completion remains disabled. The current implementation is a runtime-audited server boundary, not a completed infusion altar.
 
-- `TCInfusionRecipeMatcher` validates research, catalyst, exact unordered components, and required aspects.
-- `TCInfusionCraftingPlan` stores a server-owned immutable start snapshot.
-- `TCInfusionCompletionPlan` verifies current world state and required aspects without mutating items.
-- `TCInfusionMutationExecutor` can complete an already-audited plan in tests.
-- `TCInfusionAspectSource` is an interface with an in-memory audit implementation.
-- `TCInfusionAspectSourceResolver` is the named future entry point for real source discovery and currently returns no source.
-- `TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled()` is false, so normal caster interaction remains validation/status-only.
+## Legacy evidence
 
-## Required policy before player-facing completion
+Legacy `TileInfusionMatrix.craftCycle()` calls `EssentiaHandler.drainEssentia(this, aspect, null, 12, ...)`.
 
-Player-facing completion must not be enabled until all of the following are true:
+`EssentiaHandler` then:
 
-1. A real source resolver exists and returns a source only from explicitly supported nearby source blocks or systems.
-2. The source drain is all-or-nothing and happens before item mutation.
-3. A failed source drain leaves source state, center catalyst, component pedestals and active plan unchanged.
-4. Component container remainders are preserved on their original pedestals.
-5. Catalyst container remainders either have an explicit result/remainder placement policy or remain blocked.
-6. External and built-in tag inputs are audited for container/remainder risks.
-7. The player-facing matrix interaction calls only the resolver-backed path, never `TCInfusionAspectSource.memory(...)`.
+- scans `x=-12..12`, `z=-12..12`, `y=-12..11` around the matrix;
+- discovers `IAspectSource` BlockEntities, not arbitrary tube transport buffers;
+- sorts sources by squared distance from the matrix;
+- skips blocked sources;
+- drains one point of the current aspect per craft cycle;
+- refreshes the source cache after a failed pass.
 
-## First allowed implementation slice
+The first legacy source implemented by the port is `thaumcraft:jar_normal`, the Warded Jar. The legacy jar stores one aspect, has capacity `250`, supports a blocked state, exposes comparator fullness, and connects to essentia transport from its top face.
 
-The first real source implementation should be intentionally narrow:
+## Implemented boundary
 
-- Add a source adapter for one explicitly supported local source type only, after verifying the block/entity exists and has stable storage semantics in the current port.
-- Do not implement tube networks, aura drain, alembic automation, multi-block beam logic, instability events, particles, sounds, UI, automation or redstone behavior in the same batch.
-- Keep the resolver fail-closed. Unknown blocks and missing block entities must return no source.
-- Keep player-facing completion disabled until runtime audits prove success, insufficient-source no-op, missing-source no-op and source/item atomicity.
+- `TCAspectSourceContainer` is the modern server-side equivalent of the legacy source-container role.
+- `TCWardedJarBlockEntity` provides persistent one-aspect storage, capacity `250`, blocked/filter state, simulated/exact drain, top-face transport access, the legacy one-point-per-five-ticks pull cadence, sync and comparator output.
+- `TCInfusionAspectSourceResolver` scans the exact legacy range volume and sorts container candidates nearest-first.
+- `TCContainerInfusionAspectSource` plans and simulates all allocations before an audit-only full-plan drain.
+- `TCTransportInfusionAspectSource` remains an isolated transport simulation test adapter. The resolver never selects it.
+- Unknown sources, missing BlockEntities and worlds without supported containers fail closed.
+- `TCInfusionMatrixBlock.isPlayerFacingCompletionEnabled()` remains `false`.
+
+Runtime audit coverage verifies:
+
+- adjacent tube buffers are not selected;
+- the nearest jar drains first;
+- blocked jars are skipped;
+- a jar at distance `13` is outside the source boundary;
+- an insufficient multi-jar plan mutates no jar;
+- a jar pulls exactly one compatible essentia point from the transport above it on its fifth server tick;
+- null/missing source resolution fails closed.
+
+## Remaining parity gap
+
+The audit executor currently drains a complete aspect plan before item mutation. Legacy gameplay drains exactly one essentia point per matrix craft cycle and emits source FX for that point. Therefore the current full-plan source adapter must not be wired to normal matrix interaction.
+
+The Warded Jar is implemented only to the persistent storage/source/transport boundary needed here. Label interaction, item-form content preservation, filled-level item models, manual phial transfer and full jar rendering remain separate jar gameplay/rendering work.
+
+Before player-facing completion can be enabled, the matrix needs a persisted server cycle state that records:
+
+1. remaining essentia per aspect;
+2. remaining recipe components;
+3. cycle delay and component beam countdown;
+4. catalyst/component revalidation on every cycle;
+5. one-point nearest-source drain and source FX;
+6. component consumption/remainder timing;
+7. instability progression and failure behavior;
+8. final output and crafting event semantics.
 
 ## Validation requirements
 
-Every real source policy change must run:
+Every source-policy change must run:
 
-- Gradle build.
-- Dedicated server smoke.
-- `tools/audits/audit-infusion-behavior.ps1`.
-- `tools/audits/audit-infusion-tag-input-expansion.ps1` whenever tag inputs or accepted ingredient forms change.
+- `gradlew.bat build --no-daemon`;
+- `tools/ci/server-smoke.ps1`;
+- `tools/audits/audit-infusion-behavior.ps1`;
+- `tools/audits/audit-infusion-recipe-data.ps1`;
+- `tools/audits/audit-infusion-tag-input-expansion.ps1` when accepted ingredient forms change.
 
-## Deferred behavior
+## Deferred source types
 
-The following remain outside this boundary:
+- essentia mirrors;
+- alembics and other storage machines;
+- Brain in a Jar;
+- Thaumatorium automation;
+- aura/vis/flux sources;
+- addon-defined source containers.
 
-- Essentia tube transport.
-- Jar suction and network routing.
-- Alembic integration.
-- Aura/vis/flux as a source.
-- Infusion instability events.
-- Beam, particle, sound and animation parity.
-- Automation and hopper-style behavior.
-- Full player-facing completion trigger.
-## First transport-backed source adapter checkpoint
-
-- Added `TCTransportInfusionAspectSource` as the first narrow real-source adapter boundary.
-- The adapter is intentionally single-aspect only because the current transport API exposes one face-visible essentia stack.
-- The resolver may discover adjacent `TCEssentiaTransport` block entities, but player-facing matrix completion remains disabled.
-- Multi-aspect infusion completion remains fail-closed until a broader storage-backed source policy is audited.
+Each source type requires a separate storage, persistence and runtime parity audit before resolver registration.
