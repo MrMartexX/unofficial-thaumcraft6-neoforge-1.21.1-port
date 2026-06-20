@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
+import thaumcraft.common.essentia.transport.TCEssentiaTubeMode;
+import thaumcraft.common.essentia.transport.TCLegacyEssentiaTransportNode;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -209,6 +212,7 @@ public final class TCInfusionBehaviorAudit {
                 addAspectSourceBoundaryChecks(checks);
                 addAspectSourceMutationExecutorChecks(server, holder, checks);
                 addAspectSourceResolverChecks(checks);
+                addTransportAspectSourceChecks(checks);
             });
         }
 
@@ -413,10 +417,48 @@ public final class TCInfusionBehaviorAudit {
 
     private static void addAspectSourceResolverChecks(ArrayList<Check> checks) {
         checks.add(new Check(
-                "aspect_source_resolver_is_explicitly_unimplemented",
+                "aspect_source_resolver_null_inputs_fail_closed",
                 TCInfusionAspectSourceResolver.findSource(null, null).isEmpty()
-                        && TCInfusionAspectSourceResolver.REAL_SOURCE_POLICY_NOT_IMPLEMENTED.equals(TCInfusionAspectSourceResolver.unavailableReason()),
+                        && TCInfusionAspectSourceResolver.NO_SUPPORTED_SOURCE_FOUND.equals(TCInfusionAspectSourceResolver.unavailableReason()),
                 "reason=" + TCInfusionAspectSourceResolver.unavailableReason()
+        ));
+    }
+
+    private static void addTransportAspectSourceChecks(ArrayList<Check> checks) {
+        TCLegacyEssentiaTransportNode transport = new TCLegacyEssentiaTransportNode(TCEssentiaTubeMode.NORMAL, 128);
+        transport.addEssentia(Aspect.AIR.getTag(), 64, Direction.NORTH, false);
+        TCTransportInfusionAspectSource source = new TCTransportInfusionAspectSource(transport, Direction.NORTH);
+
+        TCInfusionAspectSource.DrainResult exactDrain = source.drain(new AspectList().add(Aspect.AIR, 50));
+        checks.add(new Check(
+                "transport_aspect_source_drains_single_aspect_exactly",
+                exactDrain.success()
+                        && exactDrain.drainedAspects().getAmount(Aspect.AIR) == 50
+                        && source.availableAspects().getAmount(Aspect.AIR) == 14
+                        && transport.storage().amount(Aspect.AIR.getTag()) == 14,
+                "reason=" + exactDrain.reason() + ", remainingAer=" + transport.storage().amount(Aspect.AIR.getTag())
+        ));
+
+        TCInfusionAspectSource.DrainResult insufficientDrain = source.drain(new AspectList().add(Aspect.AIR, 20));
+        checks.add(new Check(
+                "transport_aspect_source_rejects_insufficient_single_aspect_without_drain",
+                !insufficientDrain.success()
+                        && TCTransportInfusionAspectSource.MISSING_ASPECTS.equals(insufficientDrain.reason())
+                        && transport.storage().amount(Aspect.AIR.getTag()) == 14,
+                "reason=" + insufficientDrain.reason() + ", remainingAer=" + transport.storage().amount(Aspect.AIR.getTag())
+        ));
+
+        transport.addEssentia(Aspect.FIRE.getTag(), 10, Direction.NORTH, false);
+        TCInfusionAspectSource.DrainResult multiDrain = source.drain(new AspectList().add(Aspect.AIR, 1).add(Aspect.FIRE, 1));
+        checks.add(new Check(
+                "transport_aspect_source_rejects_multi_aspect_plan_without_drain",
+                !multiDrain.success()
+                        && TCTransportInfusionAspectSource.SINGLE_ASPECT_ONLY.equals(multiDrain.reason())
+                        && transport.storage().amount(Aspect.AIR.getTag()) == 14
+                        && transport.storage().amount(Aspect.FIRE.getTag()) == 10,
+                "reason=" + multiDrain.reason()
+                        + ", aer=" + transport.storage().amount(Aspect.AIR.getTag())
+                        + ", ignis=" + transport.storage().amount(Aspect.FIRE.getTag())
         ));
     }
     private static void addAspectSourceMutationExecutorChecks(MinecraftServer server, RecipeHolder<TCInfusionRecipe> cloudRing, ArrayList<Check> checks) {
@@ -714,3 +756,4 @@ public final class TCInfusionBehaviorAudit {
     public record Check(String name, boolean passed, String notes) {
     }
 }
+

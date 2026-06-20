@@ -358,3 +358,8 @@ Last updated: 2026-06-19
 - Added `tools/audits/audit-infusion-transport-source-readiness.ps1` and `06_docs/audits/infusion_transport_source_readiness_audit.md`.
 - Use this audit to decide whether existing essentia transport classes can safely back the first real infusion source resolver slice.
 - Do not connect player-facing infusion completion to tubes or transport block entities without reviewed read/drain/storage semantics.
+## Infusion transport source adapter note
+
+- Added first narrow transport-backed source adapter for audit-only infusion source resolution.
+- This is not full tube-network or jar behavior and does not enable player-facing infusion completion.
+- The adapter is single-aspect only and must stay fail-closed for multi-aspect plans.

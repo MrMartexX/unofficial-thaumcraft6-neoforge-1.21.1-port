@@ -56,3 +56,9 @@ The following remain outside this boundary:
 - Beam, particle, sound and animation parity.
 - Automation and hopper-style behavior.
 - Full player-facing completion trigger.
+## First transport-backed source adapter checkpoint
+
+- Added `TCTransportInfusionAspectSource` as the first narrow real-source adapter boundary.
+- The adapter is intentionally single-aspect only because the current transport API exposes one face-visible essentia stack.
+- The resolver may discover adjacent `TCEssentiaTransport` block entities, but player-facing matrix completion remains disabled.
+- Multi-aspect infusion completion remains fail-closed until a broader storage-backed source policy is audited.

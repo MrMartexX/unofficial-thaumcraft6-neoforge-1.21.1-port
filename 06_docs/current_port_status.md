@@ -672,3 +672,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added a focused audit for deciding whether current essentia transport classes are source-ready for infusion.
 - No player-facing infusion completion behavior is enabled by this audit.
+## Infusion transport source adapter note
+
+- Added `TCTransportInfusionAspectSource` and resolver discovery for adjacent `TCEssentiaTransport` sources.
+- Runtime infusion audit validates single-aspect drain, insufficient-source no-op and multi-aspect fail-closed behavior.
+- Player-facing infusion completion remains disabled.
