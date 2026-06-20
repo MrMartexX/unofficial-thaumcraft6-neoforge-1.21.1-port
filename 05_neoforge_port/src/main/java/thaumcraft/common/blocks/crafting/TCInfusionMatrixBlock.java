@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -24,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.crafting.infusion.TCInfusionValidationResult;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 
 public class TCInfusionMatrixBlock extends Block implements EntityBlock {
@@ -46,6 +49,26 @@ public class TCInfusionMatrixBlock extends Block implements EntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TCInfusionMatrixBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level,
+            BlockState state,
+            BlockEntityType<T> type
+    ) {
+        if (level.isClientSide || type != TCBlockEntities.INFUSION_MATRIX.get()) {
+            return null;
+        }
+        return (tickerLevel, tickerPos, tickerState, blockEntity) ->
+                TCInfusionMatrixBlockEntity.serverTick(
+                        tickerLevel,
+                        tickerPos,
+                        tickerState,
+                        (TCInfusionMatrixBlockEntity) blockEntity
+                );
     }
 
     @Override

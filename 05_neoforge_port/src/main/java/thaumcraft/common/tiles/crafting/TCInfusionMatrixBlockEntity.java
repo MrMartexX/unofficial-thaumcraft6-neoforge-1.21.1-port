@@ -12,7 +12,9 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,25 +23,59 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.crafting.infusion.TCInfusionAssembly;
 import thaumcraft.common.crafting.infusion.TCInfusionCompletionPlan;
 import thaumcraft.common.crafting.infusion.TCInfusionCraftingPlan;
+import thaumcraft.common.crafting.infusion.TCInfusionCycleResult;
+import thaumcraft.common.crafting.infusion.TCInfusionCycleState;
+import thaumcraft.common.crafting.infusion.TCInfusionAspectSourceResolver;
+import thaumcraft.common.crafting.infusion.TCInfusionLegacyCycleExecutor;
 import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
 import thaumcraft.common.crafting.infusion.TCInfusionStartResult;
 import thaumcraft.common.crafting.infusion.TCInfusionValidationResult;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.registry.TCSounds;
 
 public class TCInfusionMatrixBlockEntity extends BlockEntity {
     public static final int LEGACY_HORIZONTAL_SCAN_RANGE = 8;
     public static final int LEGACY_SCAN_MIN_Y_OFFSET = -7;
     public static final int LEGACY_SCAN_MAX_Y_OFFSET = 3;
     public static final int LEGACY_CENTRAL_PEDESTAL_Y_OFFSET = -2;
+    public static final int LEGACY_SOURCE_RESCAN_DELAY_TICKS = 200;
 
     private String lastValidationReason = "";
     private String lastRecipeId = "";
     private int lastPedestalCount;
     private int lastComponentCount;
     private TCInfusionCraftingPlan activePlan;
+    private TCInfusionCycleState activeCycleState;
+    private List<BlockPos> cachedInfusionSourcePositions = List.of();
+    private int sourceRefreshCooldownTicks;
+    private int cycleTickCounter;
+    private String lastCycleStatus = TCInfusionCycleResult.Status.IDLE.name();
+    private String lastCycleReason = "";
+    private BlockPos lastCycleSourcePos;
+    private BlockPos lastCycleComponentPos;
 
     public TCInfusionMatrixBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.INFUSION_MATRIX.get(), pos, state);
+    }
+
+    public static void serverTick(
+            Level level,
+            BlockPos pos,
+            BlockState state,
+            TCInfusionMatrixBlockEntity matrix
+    ) {
+        if (level == null || level.isClientSide || matrix.activePlan == null || matrix.activeCycleState == null) {
+            return;
+        }
+        if (matrix.sourceRefreshCooldownTicks > 0) {
+            matrix.sourceRefreshCooldownTicks--;
+        }
+        matrix.cycleTickCounter++;
+        if (matrix.cycleTickCounter < matrix.activeCycleState.cycleDelay()) {
+            return;
+        }
+        matrix.cycleTickCounter = 0;
+        TCInfusionLegacyCycleExecutor.advance(matrix);
     }
 
     public boolean hasCentralPedestal() {
@@ -184,6 +220,78 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         return Optional.ofNullable(activePlan);
     }
 
+    public Optional<TCInfusionCycleState> activeCycleState() {
+        return Optional.ofNullable(activeCycleState);
+    }
+
+    public TCInfusionCycleResult advanceCycleForValidation() {
+        return TCInfusionLegacyCycleExecutor.advance(this);
+    }
+
+    public List<BlockPos> cachedInfusionSourcePositions() {
+        return List.copyOf(cachedInfusionSourcePositions);
+    }
+
+    public List<BlockPos> refreshInfusionSourceCache() {
+        if (sourceRefreshCooldownTicks > 0) {
+            return List.of();
+        }
+        cachedInfusionSourcePositions = TCInfusionAspectSourceResolver.discoverSourcePositions(this);
+        return List.copyOf(cachedInfusionSourcePositions);
+    }
+
+    public void invalidateInfusionSourceCache() {
+        cachedInfusionSourcePositions = List.of();
+    }
+
+    public void deferInfusionSourceRefresh() {
+        cachedInfusionSourcePositions = List.of();
+        sourceRefreshCooldownTicks = LEGACY_SOURCE_RESCAN_DELAY_TICKS;
+    }
+
+    public int sourceRefreshCooldownTicks() {
+        return sourceRefreshCooldownTicks;
+    }
+
+    public void recordCycleResult(TCInfusionCycleResult result) {
+        if (result == null) {
+            return;
+        }
+        lastCycleStatus = result.status().name();
+        lastCycleReason = result.reason();
+        lastCycleSourcePos = result.sourcePos();
+        lastCycleComponentPos = result.componentPos();
+        setChanged();
+    }
+
+    public TCInfusionCycleResult abortCraftingFromCycle(String reason) {
+        TCInfusionCycleResult.Status status = "container_remainder_policy_required".equals(reason)
+                ? TCInfusionCycleResult.Status.BLOCKED
+                : TCInfusionCycleResult.Status.ABORTED;
+        TCInfusionCycleResult result = TCInfusionCycleResult.of(status, reason);
+        clearActiveCycle();
+        recordCycleResult(result);
+        markChangedAndSync();
+        if (level != null && !level.isClientSide && "catalyst_changed".equals(reason)) {
+            level.playSound(null, worldPosition, TCSounds.CRAFTFAIL.get(), SoundSource.BLOCKS, 1.0F, 0.6F);
+        }
+        return result;
+    }
+
+    public TCInfusionCycleResult completeCraftingFromCycle() {
+        TCInfusionCycleResult result = TCInfusionCycleResult.of(
+                TCInfusionCycleResult.Status.COMPLETED,
+                "craft_completed"
+        );
+        clearActiveCycle();
+        recordCycleResult(result);
+        markChangedAndSync();
+        if (level != null && !level.isClientSide) {
+            level.playSound(null, worldPosition, TCSounds.WAND.get(), SoundSource.BLOCKS, 0.5F, 1.0F);
+        }
+        return result;
+    }
+
     public TCInfusionCompletionPlan createCompletionPlan(AspectList availableAspects) {
         if (activePlan == null) {
             return TCInfusionCompletionPlan.missingActivePlan(availableAspects);
@@ -227,8 +335,16 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         if (activePlan == null) {
             return;
         }
-        activePlan = null;
+        clearActiveCycle();
         markChangedAndSync();
+    }
+
+    private void clearActiveCycle() {
+        activePlan = null;
+        activeCycleState = null;
+        cachedInfusionSourcePositions = List.of();
+        sourceRefreshCooldownTicks = 0;
+        cycleTickCounter = 0;
     }
 
     public String lastValidationReason() {
@@ -245,6 +361,22 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
 
     public int lastComponentCount() {
         return lastComponentCount;
+    }
+
+    public String lastCycleStatus() {
+        return lastCycleStatus;
+    }
+
+    public String lastCycleReason() {
+        return lastCycleReason;
+    }
+
+    public BlockPos lastCycleSourcePos() {
+        return lastCycleSourcePos;
+    }
+
+    public BlockPos lastCycleComponentPos() {
+        return lastCycleComponentPos;
     }
 
     private TCInfusionStartResult storeValidatedPlan(
@@ -269,6 +401,14 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         }
 
         activePlan = buildResult.plan();
+        activeCycleState = TCInfusionCycleState.start(activePlan);
+        cachedInfusionSourcePositions = List.of();
+        sourceRefreshCooldownTicks = 0;
+        cycleTickCounter = 0;
+        lastCycleStatus = TCInfusionCycleResult.Status.IDLE.name();
+        lastCycleReason = "cycle_started";
+        lastCycleSourcePos = null;
+        lastCycleComponentPos = null;
         markChangedAndSync();
         return TCInfusionStartResult.started(activePlan, validation);
     }
@@ -321,8 +461,13 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         tag.putString("LastRecipeId", lastRecipeId);
         tag.putInt("LastPedestalCount", lastPedestalCount);
         tag.putInt("LastComponentCount", lastComponentCount);
+        tag.putString("LastCycleStatus", lastCycleStatus);
+        tag.putString("LastCycleReason", lastCycleReason);
         if (activePlan != null) {
             tag.put("ActiveInfusionPlan", activePlan.save(registries));
+        }
+        if (activeCycleState != null) {
+            tag.put("ActiveInfusionCycle", activeCycleState.save(registries));
         }
     }
 
@@ -333,9 +478,23 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         lastRecipeId = tag.getString("LastRecipeId");
         lastPedestalCount = tag.getInt("LastPedestalCount");
         lastComponentCount = tag.getInt("LastComponentCount");
+        lastCycleStatus = tag.getString("LastCycleStatus");
+        lastCycleReason = tag.getString("LastCycleReason");
         activePlan = tag.contains("ActiveInfusionPlan", Tag.TAG_COMPOUND)
                 ? TCInfusionCraftingPlan.load(tag.getCompound("ActiveInfusionPlan"), registries)
                 : null;
+        activeCycleState = tag.contains("ActiveInfusionCycle", Tag.TAG_COMPOUND)
+                ? TCInfusionCycleState.load(tag.getCompound("ActiveInfusionCycle"), registries)
+                : null;
+        if (activePlan != null && activeCycleState == null) {
+            activeCycleState = TCInfusionCycleState.start(activePlan);
+        }
+        if (activePlan == null) {
+            activeCycleState = null;
+        }
+        cachedInfusionSourcePositions = List.of();
+        sourceRefreshCooldownTicks = 0;
+        cycleTickCounter = 0;
     }
 
     public record Snapshot(

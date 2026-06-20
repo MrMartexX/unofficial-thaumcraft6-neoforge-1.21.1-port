@@ -18,6 +18,7 @@ import thaumcraft.common.aspects.TCAspectAssignments;
 import thaumcraft.common.aspects.TCAspectDumpExporter;
 import thaumcraft.common.aspects.TCAspectReloadValidator;
 import thaumcraft.common.crafting.infusion.TCInfusionBehaviorAuditExporter;
+import thaumcraft.common.crafting.infusion.TCInfusionNetwork;
 import thaumcraft.common.aspects.TCGeneratedAspectRecipeGenerator;
 import thaumcraft.common.crafting.crucible.TCCrucibleBehaviorAuditExporter;
 import thaumcraft.common.config.TCConfig;
@@ -75,6 +76,7 @@ public final class Thaumcraft {
             TCKnowledgeGainHud.register(modEventBus);
         }
         modEventBus.addListener(TCAuraNetwork::onRegisterPayloadHandlers);
+        modEventBus.addListener(TCInfusionNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCKnowledgeNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCResearchTableNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCThaumonomiconNetwork::onRegisterPayloadHandlers);

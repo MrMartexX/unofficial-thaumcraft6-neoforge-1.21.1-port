@@ -5,6 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.AABB;
 
@@ -371,5 +373,88 @@ public final class TCFXDispatcher {
                 0.8F,
                 0.001F
         );
+    }
+
+    public static void essentiaTrailFx(
+            Level level,
+            BlockPos source,
+            BlockPos destination,
+            int count,
+            int color,
+            float scale,
+            int extension
+    ) {
+        if (!level.isClientSide()) {
+            return;
+        }
+        Vec3 start = Vec3.atCenterOf(source);
+        Vec3 end = Vec3.atCenterOf(destination);
+        Vec3 delta = end.subtract(start);
+        int samples = Math.max(8, Math.min(24, (int) Math.ceil(delta.length() * 2.0D)));
+        float red = (color >> 16 & 0xFF) / 255.0F;
+        float green = (color >> 8 & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+        for (int index = 0; index <= samples; index++) {
+            double progress = index / (double) samples;
+            double taper = Math.sin(progress * Math.PI);
+            double wave = Math.sin(count * 0.25D + progress * Math.PI * 4.0D) * 0.04D * taper;
+            Vec3 point = start.add(delta.scale(progress)).add(wave, wave * 0.5D, -wave);
+            TCLegacyFXData data = TCLegacyFXData.generic(
+                    Math.max(4, extension + 4),
+                    512,
+                    16,
+                    1,
+                    64,
+                    true,
+                    1,
+                    red,
+                    green,
+                    blue,
+                    0.55F,
+                    Math.max(0.15F, scale * (float) taper * 4.0F)
+            ).withAlpha(0.55F, 0.0F);
+            drawLegacyFX(level, data, point.x(), point.y(), point.z(), 0.0D, 0.0D, 0.0D);
+        }
+    }
+
+    public static void drawInfusionPedestalParticles(
+            Level level,
+            BlockPos pedestalPos,
+            BlockPos matrixPos,
+            ItemStack stack
+    ) {
+        if (!level.isClientSide() || stack == null || stack.isEmpty()) {
+            return;
+        }
+        RandomSource random = level.random;
+        double x = pedestalPos.getX() + 0.4D + random.nextFloat() * 0.2D;
+        double y = pedestalPos.getY() + 1.23D + random.nextFloat() * 0.2D;
+        double z = pedestalPos.getZ() + 0.4D + random.nextFloat() * 0.2D;
+        Vec3 delta = new Vec3(
+                matrixPos.getX() + 0.5D - x,
+                matrixPos.getY() - 0.5D - y,
+                matrixPos.getZ() + 0.5D - z
+        );
+        double distance = Math.max(0.001D, delta.length());
+        Vec3 motion = delta.scale(Math.min(0.25D, distance / 15.0D) / distance);
+        float red = 0.4F + random.nextFloat() * 0.2F;
+        float green = 0.2F;
+        float blue = 0.6F + random.nextFloat() * 0.3F;
+        TCLegacyFXData data = TCLegacyFXData.generic(
+                Math.max(4, (int) (distance * 10.0D)),
+                24,
+                4,
+                1,
+                64,
+                true,
+                0,
+                red,
+                green,
+                blue,
+                0.3F,
+                0.5F + random.nextFloat() * 0.5F
+        ).withAlpha(0.3F, 0.3F, 0.0F)
+                .withMotion(0.985D, 0.0F, 0.005D, 0.005D, 0.005D, 0.0D, 0.0D);
+        drawLegacyFX(level, data, x, y, z, motion.x(), motion.y(), motion.z());
     }
 }

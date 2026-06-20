@@ -7,6 +7,7 @@ import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.essentia.container.TCAspectSourceContainer;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 
@@ -30,6 +31,25 @@ public final class TCInfusionAspectSourceResolver {
             return Optional.empty();
         }
         Level level = matrix.getLevel();
+        List<BlockPos> positions = discoverSourcePositions(matrix);
+        if (positions.isEmpty()) {
+            return Optional.empty();
+        }
+        List<TCAspectSourceContainer> containers = positions.stream()
+                .map(level::getBlockEntity)
+                .filter(TCAspectSourceContainer.class::isInstance)
+                .map(TCAspectSourceContainer.class::cast)
+                .toList();
+        return containers.isEmpty()
+                ? Optional.empty()
+                : Optional.of(new TCContainerInfusionAspectSource(containers));
+    }
+
+    public static List<BlockPos> discoverSourcePositions(TCInfusionMatrixBlockEntity matrix) {
+        if (matrix == null || matrix.getLevel() == null) {
+            return List.of();
+        }
+        Level level = matrix.getLevel();
         BlockPos matrixPos = matrix.getBlockPos();
         List<Candidate> candidates = new ArrayList<>();
         for (int x = -LEGACY_SOURCE_RANGE; x <= LEGACY_SOURCE_RANGE; x++) {
@@ -40,24 +60,65 @@ public final class TCInfusionAspectSourceResolver {
                     }
                     BlockPos sourcePos = matrixPos.offset(x, y, z);
                     BlockEntity blockEntity = level.getBlockEntity(sourcePos);
-                    if (blockEntity instanceof TCAspectSourceContainer container) {
-                        candidates.add(new Candidate(sourcePos, container));
+                    if (blockEntity instanceof TCAspectSourceContainer) {
+                        candidates.add(new Candidate(sourcePos));
                     }
                 }
             }
         }
         candidates.sort(Comparator.comparingDouble(candidate -> candidate.pos().distSqr(matrixPos)));
-        if (candidates.isEmpty()) {
-            return Optional.empty();
+        return candidates.stream().map(Candidate::pos).toList();
+    }
+
+    public static OnePointDrainResult drainOne(
+            TCInfusionMatrixBlockEntity matrix,
+            Aspect aspect,
+            List<BlockPos> cachedSourcePositions
+    ) {
+        if (matrix == null || matrix.getLevel() == null || aspect == null) {
+            return OnePointDrainResult.failed("invalid_one_point_drain_request");
         }
-        List<TCAspectSourceContainer> containers = candidates.stream().map(Candidate::container).toList();
-        return Optional.of(new TCContainerInfusionAspectSource(containers));
+        if (cachedSourcePositions == null || cachedSourcePositions.isEmpty()) {
+            return OnePointDrainResult.failed("no_cached_sources");
+        }
+        Level level = matrix.getLevel();
+        for (BlockPos sourcePos : cachedSourcePositions) {
+            BlockEntity blockEntity = level.getBlockEntity(sourcePos);
+            if (!(blockEntity instanceof TCAspectSourceContainer container)) {
+                return OnePointDrainResult.failed("source_cache_invalid");
+            }
+            if (container.isSourceBlocked()) {
+                continue;
+            }
+            if (container.drainAspect(aspect, 1, true) != 1) {
+                continue;
+            }
+            if (container.drainAspect(aspect, 1, false) == 1) {
+                return OnePointDrainResult.success(aspect, sourcePos);
+            }
+            return OnePointDrainResult.failed("source_changed_during_commit");
+        }
+        return OnePointDrainResult.failed("aspect_unavailable");
     }
 
     public static String unavailableReason() {
         return NO_SUPPORTED_SOURCE_FOUND;
     }
 
-    private record Candidate(BlockPos pos, TCAspectSourceContainer container) {
+    private record Candidate(BlockPos pos) {
+    }
+
+    public record OnePointDrainResult(boolean success, String reason, Aspect aspect, BlockPos sourcePos) {
+        public OnePointDrainResult {
+            reason = reason == null ? "" : reason;
+        }
+
+        public static OnePointDrainResult success(Aspect aspect, BlockPos sourcePos) {
+            return new OnePointDrainResult(true, "drained", aspect, sourcePos);
+        }
+
+        public static OnePointDrainResult failed(String reason) {
+            return new OnePointDrainResult(false, reason, null, null);
+        }
     }
 }

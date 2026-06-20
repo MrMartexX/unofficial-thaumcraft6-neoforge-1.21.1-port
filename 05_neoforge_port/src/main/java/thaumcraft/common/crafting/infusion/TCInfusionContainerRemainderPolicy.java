@@ -7,11 +7,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 /**
- * Temporary container/remainder policy for audit-only infusion mutation.
+ * Legacy-compatible container/remainder policy for infusion mutation.
  *
- * <p>Component remainders can safely stay on their original pedestal after the input
- * item is consumed. Catalyst remainders remain blocked because the center pedestal is
- * also where the infusion result is placed in the current audit-only executor.
+ * <p>Legacy calls {@code getContainerItem} only for consumed side-pedestal components.
+ * The center catalyst is replaced by the result and does not leave a crafting remainder.
  */
 public final class TCInfusionContainerRemainderPolicy {
     private static final Set<Item> KNOWN_REMAINDER_INPUTS = Set.of(
@@ -40,16 +39,10 @@ public final class TCInfusionContainerRemainderPolicy {
     }
 
     public static boolean requiresExplicitPolicy(TCInfusionCraftingPlan plan) {
-        return firstBlockingInput(plan).isPresent();
+        return false;
     }
 
     public static Optional<String> firstBlockingInput(TCInfusionCraftingPlan plan) {
-        if (plan == null) {
-            return Optional.empty();
-        }
-        if (isKnownRemainderInput(plan.catalyst())) {
-            return Optional.of("catalyst");
-        }
         return Optional.empty();
     }
 
@@ -72,6 +65,9 @@ public final class TCInfusionContainerRemainderPolicy {
         if (input == null || input.isEmpty()) {
             return ItemStack.EMPTY;
         }
+        if (input.hasCraftingRemainingItem()) {
+            return input.getCraftingRemainingItem().copy();
+        }
         Item item = input.getItem();
         if (item == Items.WATER_BUCKET || item == Items.LAVA_BUCKET || item == Items.MILK_BUCKET || item == Items.POWDER_SNOW_BUCKET) {
             return new ItemStack(Items.BUCKET);
@@ -90,6 +86,8 @@ public final class TCInfusionContainerRemainderPolicy {
     }
 
     public static boolean isKnownRemainderInput(ItemStack stack) {
-        return stack != null && !stack.isEmpty() && KNOWN_REMAINDER_INPUTS.contains(stack.getItem());
+        return stack != null
+                && !stack.isEmpty()
+                && (stack.hasCraftingRemainingItem() || KNOWN_REMAINDER_INPUTS.contains(stack.getItem()));
     }
 }

@@ -21,7 +21,7 @@ Last updated: 2026-06-20
 - The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
 - The in-world crucible behavior slices have a design boundary in `06_docs/gameplay/crucible_in_world_behavior_design.md`.
 - The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
-- The infusion boundary now includes server-owned validation/start/readiness state, audit-only mutation with component remainders, a real `jar_normal` storage BlockEntity, exact legacy range-12 nearest-first aspect-container discovery, the legacy five-tick jar pull cadence, and `50/50` passing runtime checks.
+- The infusion boundary now includes server-owned validation/start/readiness state, persisted craft-cycle state, exact five-tick default matrix cadence, one-point nearest-source drain, the legacy 200-tick failed-source rescan delay, six-cycle component timing, result placement/damage carry-over, component remainders, completion/failure sounds, and the two clientbound legacy FX message contracts. The runtime audit passes `63/63`.
 
 ## Do not change without explicit request
 
@@ -33,13 +33,14 @@ Last updated: 2026-06-20
 ## Near-term tasks
 
 1. Continue the infusion work from `06_docs/gameplay/infusion_in_world_behavior_design.md`:
-   - Current implemented scope includes reloadable `thaumcraft:infusion` data, Thaumonomicon recipe-page snapshots, `TCInfusionRecipeMatcher`, `TCInfusionAssembly`, `TCInfusionValidationResult`, `TCInfusionCraftingPlan`, `TCInfusionCompletionPlan`, runtime behavior audit, active `arcane_pedestal`/`ancient_pedestal`/`eldritch_pedestal` block ids, and a matrix/pedestal BlockEntity relationship that can store a non-consuming active start plan and verify it read-only against current world/aspect state.
+   - Current implemented scope includes reloadable `thaumcraft:infusion` data, Thaumonomicon recipe-page snapshots, validation/start/readiness models, persisted per-cycle progress, real Warded Jar drain, exact default timing, component consumption, final output, sounds, and server-to-client FX event payloads.
    - Legacy parity requirement: pedestal component matching is unordered but exact 1:1 by count; extra components must fail.
-   - Current audit-only completion boundary includes mutation executor, component container remainder preservation, tag expansion audit, and an explicit disabled player-facing matrix completion gate.
+   - The old one-shot mutation executor remains audit/reference-only. Production server ticking now uses `TCInfusionLegacyCycleExecutor`; normal caster activation remains explicitly disabled.
    - `thaumcraft:jar_normal` is the first reviewed real aspect source: capacity `250`, blocked/filter persistence, top-face transport access and exact simulated drain.
    - Source discovery now mirrors legacy `EssentiaHandler` range and distance ordering; tube buffers are not selected.
-   - Next safe code slice is persisted one-point craft-cycle progression over the active plan. It must drain one essentia point per cycle, revalidate catalyst/components, preserve item timing, and remain player-disabled until instability/FX/failure audits exist.
-   - Keep broad pedestal UI, instability events, essentia transport networks, beams, particles, sounds, automation and enchantment infusion deferred until separate focused slices.
+   - Next safe code slice is the exact stability/instability model plus matrix structure modifiers (`pillar_ancient`, `pillar_eldritch`, `matrix_speed`, `matrix_cost`) before enabling player activation.
+   - The FX wire/cache lifetime contract is implemented. Exact `FXEssentiaStream` polycone and item/block debris renderers are still a Stage 13 visual parity task; the current billboard bridge must not be called final visual parity.
+   - Keep broad pedestal UI, mirrors/alembics, automation and enchantment infusion deferred until separate focused slices.
    - Re-run build, dedicated server smoke, infusion recipe-data audit, infusion behavior audit, research page catalog audit, and protocol audit after the batch.
    - Use legacy `TileInfusionMatrix`, `TilePedestal`, `InfusionRecipe`, and `ThaumcraftCraftingManager.findMatchingInfusionRecipe` as behavior references, not direct copy sources.
 2. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.

@@ -1,5 +1,7 @@
 # Infusion Legacy Cycle Semantics Audit
 
+> Historical evidence snapshot. The recommendations below predate the persisted cycle implementation. Current state and next work are authoritative in `06_docs/gameplay/infusion_in_world_behavior_design.md`; runtime audit is `63/63`.
+
 Generated: 2026-06-19 16:42:49 +03:00
 
 ## Source

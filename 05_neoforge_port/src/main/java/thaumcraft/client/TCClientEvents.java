@@ -10,6 +10,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.client.fx.legacy.TCLegacyParticleEngine;
 import thaumcraft.client.gui.TCThaumonomiconClientController;
 import thaumcraft.common.lib.fx.TCFXDispatcher;
+import thaumcraft.common.crafting.infusion.TCInfusionClientFXCache;
 import thaumcraft.common.research.TCKnowledgeClientCache;
 import thaumcraft.common.research.TCThaumonomiconClientCache;
 import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
@@ -30,10 +31,12 @@ public final class TCClientEvents {
             TCKnowledgeClientCache.clear();
             TCThaumonomiconClientCache.clear();
             TCResearchTableClientCache.clear();
+            TCInfusionClientFXCache.clear();
             return;
         }
 
         TCLegacyParticleEngine.tick();
+        TCInfusionClientFXCache.tick(Minecraft.getInstance().level);
         TCThaumometerClientEffects.onClientTick(Minecraft.getInstance());
         TCThaumonomiconClientController.tick(Minecraft.getInstance());
     }

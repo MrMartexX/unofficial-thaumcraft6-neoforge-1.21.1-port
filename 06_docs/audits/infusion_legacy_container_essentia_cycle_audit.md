@@ -1,5 +1,7 @@
 # Infusion Legacy Container and Essentia Cycle Audit
 
+> Historical evidence snapshot. Component remainders, one-point source drain, five-tick default cadence and the 200-tick failed-source delay are now implemented. See `06_docs/gameplay/infusion_in_world_behavior_design.md`; runtime audit is `63/63`.
+
 Generated: 2026-06-19 16:46:59 +03:00
 
 ## Source

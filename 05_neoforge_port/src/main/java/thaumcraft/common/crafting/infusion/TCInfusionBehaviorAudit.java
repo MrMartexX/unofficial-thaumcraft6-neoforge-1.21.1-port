@@ -11,6 +11,7 @@ import thaumcraft.common.essentia.transport.TCEssentiaTubeMode;
 import thaumcraft.common.essentia.transport.TCLegacyEssentiaTransportNode;
 import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -68,7 +69,8 @@ public final class TCInfusionBehaviorAudit {
         lines.add("- Legacy parity point: component matching uses Forge/NeoForge RecipeMatcher 1:1 semantics, so extra pedestal inputs must fail.");
         lines.add("- The audit-only mutation executor consumes validated inputs, while normal player interaction remains disabled.");
         lines.add("- Legacy-shaped source discovery scans aspect containers in the range-12 volume and drains nearest containers first; transient tube buffers are excluded.");
-        lines.add("- This does not yet implement the legacy one-point craft cycle, instability events, source beams, particles or matrix animation.");
+        lines.add("- The persisted cycle audit drains one essentia point per cycle, waits six cycles per component and completes only on the following cycle.");
+        lines.add("- This does not yet implement instability events, source-beam payloads, particles, sounds or matrix animation.");
 
         Files.write(output, lines);
         return report;
@@ -217,6 +219,7 @@ public final class TCInfusionBehaviorAudit {
                 addAspectSourceResolverChecks(checks);
                 addTransportAspectSourceChecks(checks);
                 addRuntimeContainerAspectSourceChecks(server, holder, checks);
+                addRuntimeLegacyCycleChecks(server, holder, checks);
             });
         }
 
@@ -598,6 +601,242 @@ public final class TCInfusionBehaviorAudit {
         ));
     }
 
+    private static void addRuntimeLegacyCycleChecks(
+            MinecraftServer server,
+            RecipeHolder<TCInfusionRecipe> cloudRing,
+            ArrayList<Check> checks
+    ) {
+        ServerLevel level = server.overworld();
+        BlockPos matrixPos = new BlockPos(112, level.getMinBuildHeight() + 12, 0);
+        BlockPos centerPos = matrixPos.below(2);
+        BlockPos featherPos = matrixPos.offset(2, -2, 0);
+        BlockPos crystalPos = matrixPos.offset(-2, -2, 0);
+        BlockPos jarPos = matrixPos.offset(4, 0, 0);
+
+        for (BlockPos pos : List.of(matrixPos, centerPos, featherPos, crystalPos, jarPos)) {
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        }
+        level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        level.setBlock(centerPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(featherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(crystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(jarPos, TCBlocks.JAR_NORMAL.get().defaultBlockState(), 3);
+
+        TCInfusionMatrixBlockEntity matrix = blockEntity(level, matrixPos, TCInfusionMatrixBlockEntity.class);
+        TCInfusionPedestalBlockEntity center = blockEntity(level, centerPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity feather = blockEntity(level, featherPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity crystal = blockEntity(level, crystalPos, TCInfusionPedestalBlockEntity.class);
+        TCWardedJarBlockEntity jar = blockEntity(level, jarPos, TCWardedJarBlockEntity.class);
+        checks.add(new Check(
+                "runtime_legacy_cycle_setup_created",
+                matrix != null && center != null && feather != null && crystal != null && jar != null,
+                "matrix=" + (matrix != null) + ", jar=" + (jar != null)
+        ));
+        if (matrix == null || center == null || feather == null || crystal == null || jar == null) {
+            return;
+        }
+
+        center.setStoredForValidation(new ItemStack(TCItems.BAUBLE_RING.get()));
+        feather.setStoredForValidation(new ItemStack(Items.FEATHER));
+        crystal.setStoredForValidation(new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()));
+        jar.setStoredForValidation(Aspect.AIR, 50);
+        TCInfusionStartResult start = matrix.startCraftingForValidation(
+                cloudRing,
+                new AspectList().add(Aspect.AIR, 50),
+                "AuditPlayer"
+        );
+        TCInfusionCycleState initialState = matrix.activeCycleState().orElse(null);
+        checks.add(new Check(
+                "runtime_legacy_cycle_initial_state_matches_plan",
+                start.started()
+                        && initialState != null
+                        && initialState.remainingAspectAmount() == 50
+                        && initialState.pendingComponentCount() == 2
+                        && initialState.itemCountdown() == 0
+                        && initialState.cycleDelay() == TCInfusionCycleState.BASE_CYCLE_DELAY,
+                "started=" + start.started() + ", aspects=" + (initialState == null ? -1 : initialState.remainingAspectAmount())
+        ));
+        if (initialState == null) {
+            return;
+        }
+
+        CompoundTag savedCycle = initialState.save(server.registryAccess());
+        TCInfusionCycleState loadedCycle = TCInfusionCycleState.load(savedCycle, server.registryAccess());
+        checks.add(new Check(
+                "runtime_legacy_cycle_state_nbt_round_trip",
+                loadedCycle != null
+                        && loadedCycle.remainingAspectAmount() == 50
+                        && loadedCycle.pendingComponentCount() == 2
+                        && loadedCycle.cycleDelay() == TCInfusionCycleState.BASE_CYCLE_DELAY,
+                "loaded=" + (loadedCycle != null)
+        ));
+
+        for (int tick = 0; tick < TCInfusionCycleState.BASE_CYCLE_DELAY - 1; tick++) {
+            TCInfusionMatrixBlockEntity.serverTick(level, matrixPos, matrix.getBlockState(), matrix);
+        }
+        boolean noEarlyDrain = jar.storedAmount() == 50 && initialState.remainingAspectAmount() == 50;
+        TCInfusionMatrixBlockEntity.serverTick(level, matrixPos, matrix.getBlockState(), matrix);
+        checks.add(new Check(
+                "runtime_legacy_cycle_uses_five_tick_default_cadence",
+                noEarlyDrain
+                        && jar.storedAmount() == 49
+                        && initialState.remainingAspectAmount() == 49
+                        && TCInfusionCycleResult.Status.ASPECT_DRAINED.name().equals(matrix.lastCycleStatus()),
+                "jar=" + jar.storedAmount() + ", remaining=" + initialState.remainingAspectAmount()
+        ));
+        checks.add(new Check(
+                "runtime_legacy_cycle_caches_nearest_source_positions",
+                matrix.cachedInfusionSourcePositions().equals(List.of(jarPos))
+                        && jarPos.equals(matrix.lastCycleSourcePos()),
+                "cached=" + matrix.cachedInfusionSourcePositions()
+        ));
+
+        for (int cycle = 0; cycle < 49; cycle++) {
+            matrix.advanceCycleForValidation();
+        }
+        checks.add(new Check(
+                "runtime_legacy_cycle_drains_exactly_one_aspect_per_cycle",
+                jar.storedAmount() == 0
+                        && initialState.remainingAspectAmount() == 0
+                        && initialState.completedCycles() == 50
+                        && !feather.getStoredStack().isEmpty()
+                        && !crystal.getStoredStack().isEmpty(),
+                "jar=" + jar.storedAmount() + ", cycles=" + initialState.completedCycles()
+        ));
+
+        TCInfusionCycleResult firstTarget = matrix.advanceCycleForValidation();
+        for (int cycle = 0; cycle < 4; cycle++) {
+            matrix.advanceCycleForValidation();
+        }
+        boolean firstComponentHeldForFiveCountdownSteps =
+                !feather.getStoredStack().isEmpty()
+                        && !crystal.getStoredStack().isEmpty()
+                        && initialState.itemCountdown() == 1;
+        TCInfusionCycleResult firstConsumed = matrix.advanceCycleForValidation();
+        checks.add(new Check(
+                "runtime_legacy_cycle_waits_six_cycles_before_first_component_consumption",
+                firstTarget.status() == TCInfusionCycleResult.Status.COMPONENT_TARGETED
+                        && firstComponentHeldForFiveCountdownSteps
+                        && firstConsumed.status() == TCInfusionCycleResult.Status.COMPONENT_CONSUMED
+                        && initialState.pendingComponentCount() == 1,
+                "target=" + firstTarget.status() + ", consumed=" + firstConsumed.status()
+        ));
+
+        TCInfusionCycleResult secondTarget = matrix.advanceCycleForValidation();
+        for (int cycle = 0; cycle < 4; cycle++) {
+            matrix.advanceCycleForValidation();
+        }
+        TCInfusionCycleResult secondConsumed = matrix.advanceCycleForValidation();
+        checks.add(new Check(
+                "runtime_legacy_cycle_consumes_second_component_with_same_timing",
+                secondTarget.status() == TCInfusionCycleResult.Status.COMPONENT_TARGETED
+                        && secondConsumed.status() == TCInfusionCycleResult.Status.COMPONENT_CONSUMED
+                        && initialState.pendingComponentCount() == 0
+                        && feather.getStoredStack().isEmpty()
+                        && crystal.getStoredStack().isEmpty(),
+                "target=" + secondTarget.status() + ", consumed=" + secondConsumed.status()
+        ));
+
+        TCInfusionCycleResult completed = matrix.advanceCycleForValidation();
+        checks.add(new Check(
+                "runtime_legacy_cycle_completes_cloudring_on_following_cycle",
+                completed.status() == TCInfusionCycleResult.Status.COMPLETED
+                        && !matrix.isCrafting()
+                        && center.getStoredStack().is(TCItems.CLOUD_RING.get())
+                        && initialState.completedCycles() == 63,
+                "status=" + completed.status() + ", cycles=" + initialState.completedCycles()
+        ));
+        ItemStack damagedCatalyst = new ItemStack(Items.IRON_PICKAXE);
+        damagedCatalyst.setDamageValue(50);
+        ItemStack damageCarriedResult = TCInfusionLegacyCycleExecutor.resultWithLegacyDamageRatio(
+                damagedCatalyst,
+                new ItemStack(Items.DIAMOND_PICKAXE)
+        );
+        int expectedResultDamage = (int) (
+                damageCarriedResult.getMaxDamage()
+                        * (damagedCatalyst.getDamageValue() / (float) damagedCatalyst.getMaxDamage())
+        );
+        checks.add(new Check(
+                "runtime_legacy_cycle_preserves_damaged_catalyst_ratio",
+                damageCarriedResult.getDamageValue() == expectedResultDamage,
+                "damage=" + damageCarriedResult.getDamageValue() + ", expected=" + expectedResultDamage
+        ));
+
+        addRuntimeLegacyCycleRecoveryChecks(server, cloudRing, checks);
+    }
+
+    private static void addRuntimeLegacyCycleRecoveryChecks(
+            MinecraftServer server,
+            RecipeHolder<TCInfusionRecipe> cloudRing,
+            ArrayList<Check> checks
+    ) {
+        ServerLevel level = server.overworld();
+        BlockPos matrixPos = new BlockPos(144, level.getMinBuildHeight() + 12, 0);
+        BlockPos centerPos = matrixPos.below(2);
+        BlockPos featherPos = matrixPos.offset(2, -2, 0);
+        BlockPos crystalPos = matrixPos.offset(-2, -2, 0);
+        BlockPos jarPos = matrixPos.offset(4, 0, 0);
+        for (BlockPos pos : List.of(matrixPos, centerPos, featherPos, crystalPos, jarPos)) {
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        }
+        level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        level.setBlock(centerPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(featherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(crystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(jarPos, TCBlocks.JAR_NORMAL.get().defaultBlockState(), 3);
+        TCInfusionMatrixBlockEntity matrix = blockEntity(level, matrixPos, TCInfusionMatrixBlockEntity.class);
+        TCInfusionPedestalBlockEntity center = blockEntity(level, centerPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity feather = blockEntity(level, featherPos, TCInfusionPedestalBlockEntity.class);
+        TCInfusionPedestalBlockEntity crystal = blockEntity(level, crystalPos, TCInfusionPedestalBlockEntity.class);
+        TCWardedJarBlockEntity jar = blockEntity(level, jarPos, TCWardedJarBlockEntity.class);
+        if (matrix == null || center == null || feather == null || crystal == null || jar == null) {
+            checks.add(new Check("runtime_legacy_cycle_recovery_setup_created", false, "missing block entity"));
+            return;
+        }
+        center.setStoredForValidation(new ItemStack(TCItems.BAUBLE_RING.get()));
+        feather.setStoredForValidation(new ItemStack(Items.FEATHER));
+        crystal.setStoredForValidation(new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()));
+        matrix.startCraftingForValidation(cloudRing, new AspectList().add(Aspect.AIR, 50), "AuditPlayer");
+
+        TCInfusionCycleResult waiting = matrix.advanceCycleForValidation();
+        TCInfusionCycleState state = matrix.activeCycleState().orElse(null);
+        checks.add(new Check(
+                "runtime_legacy_cycle_waits_without_mutation_when_source_is_empty",
+                waiting.status() == TCInfusionCycleResult.Status.WAITING_FOR_ASPECT
+                        && state != null
+                        && state.remainingAspectAmount() == 50
+                        && matrix.cachedInfusionSourcePositions().isEmpty()
+                        && matrix.sourceRefreshCooldownTicks() == TCInfusionMatrixBlockEntity.LEGACY_SOURCE_RESCAN_DELAY_TICKS,
+                "status=" + waiting.status() + ", cooldown=" + matrix.sourceRefreshCooldownTicks()
+        ));
+        jar.setStoredForValidation(Aspect.AIR, 1);
+        for (int tick = 0; tick < TCInfusionMatrixBlockEntity.LEGACY_SOURCE_RESCAN_DELAY_TICKS - 1; tick++) {
+            TCInfusionMatrixBlockEntity.serverTick(level, matrixPos, matrix.getBlockState(), matrix);
+        }
+        boolean didNotRescanEarly = jar.storedAmount() == 1 && state != null && state.remainingAspectAmount() == 50;
+        TCInfusionMatrixBlockEntity.serverTick(level, matrixPos, matrix.getBlockState(), matrix);
+        checks.add(new Check(
+                "runtime_legacy_cycle_rescans_after_legacy_ten_second_delay",
+                didNotRescanEarly
+                        && TCInfusionCycleResult.Status.ASPECT_DRAINED.name().equals(matrix.lastCycleStatus())
+                        && state != null
+                        && state.remainingAspectAmount() == 49
+                        && jar.storedAmount() == 0,
+                "status=" + matrix.lastCycleStatus() + ", remaining=" + (state == null ? -1 : state.remainingAspectAmount())
+        ));
+
+        center.setStoredForValidation(new ItemStack(Items.IRON_INGOT));
+        TCInfusionCycleResult aborted = matrix.advanceCycleForValidation();
+        checks.add(new Check(
+                "runtime_legacy_cycle_catalyst_change_aborts_without_component_loss",
+                aborted.status() == TCInfusionCycleResult.Status.ABORTED
+                        && !matrix.isCrafting()
+                        && feather.getStoredStack().is(Items.FEATHER)
+                        && crystal.getStoredStack().is(TCItems.CRYSTAL_ESSENCE_AER.get()),
+                "status=" + aborted.status() + ", reason=" + aborted.reason()
+        ));
+    }
+
     private static void addAspectSourceMutationExecutorChecks(MinecraftServer server, RecipeHolder<TCInfusionRecipe> cloudRing, ArrayList<Check> checks) {
         ServerLevel level = server.overworld();
         BlockPos matrixPos = new BlockPos(36, level.getMinBuildHeight() + 12, 0);
@@ -754,10 +993,10 @@ public final class TCInfusionBehaviorAudit {
                 "water bucket component returns bucket on the same pedestal"
         ));
         checks.add(new Check(
-                "infusion_container_policy_blocks_container_catalyst_remainder",
-                TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(waterCatalystPlan)
-                        && TCInfusionContainerRemainderPolicy.firstBlockingInput(waterCatalystPlan).orElse("").equals("catalyst"),
-                "blocker=" + TCInfusionContainerRemainderPolicy.firstBlockingInput(waterCatalystPlan).orElse("none")
+                "infusion_container_policy_replaces_container_catalyst_without_remainder",
+                !TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(waterCatalystPlan)
+                        && TCInfusionContainerRemainderPolicy.firstBlockingInput(waterCatalystPlan).isEmpty(),
+                "legacy completion replaces the center catalyst with the result"
         ));
     }
     private static void addRuntimeMutationExecutorChecks(MinecraftServer server, RecipeHolder<TCInfusionRecipe> cloudRing, ArrayList<Check> checks) {
