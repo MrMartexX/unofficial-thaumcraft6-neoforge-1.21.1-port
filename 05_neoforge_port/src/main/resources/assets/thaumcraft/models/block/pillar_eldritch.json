@@ -1,0 +1,14 @@
+{
+  "loader": "neoforge:obj",
+  "model": "thaumcraft:models/block/pillar.obj",
+  "automatic_culling": false,
+  "shade_quads": true,
+  "flip_v": false,
+  "emissive_ambient": false,
+  "mtl_override": "thaumcraft:models/block/pillar_eldritch.mtl",
+  "textures": {
+    "particle": "thaumcraft:block/pillar_eldritch",
+    "texture": "thaumcraft:block/pillar_eldritch",
+    "#texture": "thaumcraft:block/pillar_eldritch"
+  }
+}

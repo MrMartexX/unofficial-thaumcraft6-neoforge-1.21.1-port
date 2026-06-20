@@ -29,6 +29,7 @@ import thaumcraft.common.crafting.infusion.TCInfusionAspectSourceResolver;
 import thaumcraft.common.crafting.infusion.TCInfusionLegacyCycleExecutor;
 import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
 import thaumcraft.common.crafting.infusion.TCInfusionStartResult;
+import thaumcraft.common.crafting.infusion.TCInfusionStructureProfile;
 import thaumcraft.common.crafting.infusion.TCInfusionValidationResult;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCSounds;
@@ -66,6 +67,13 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
     ) {
         if (level == null || level.isClientSide || matrix.activePlan == null || matrix.activeCycleState == null) {
             return;
+        }
+        if (level.getGameTime() % 20L == 0L) {
+            TCInfusionStructureProfile.LocationValidation location = TCInfusionStructureProfile.validateLocation(matrix);
+            if (!location.valid()) {
+                matrix.abortCraftingFromCycle(location.reason());
+                return;
+            }
         }
         if (matrix.sourceRefreshCooldownTicks > 0) {
             matrix.sourceRefreshCooldownTicks--;
@@ -123,11 +131,15 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
             }
         }
         TCInfusionAssembly assembly = TCInfusionAssembly.of(catalyst, components, aspects);
-        return new Snapshot(center.isPresent(), catalyst.copy(), List.copyOf(components), pedestals.size(), assembly);
+        TCInfusionStructureProfile structure = TCInfusionStructureProfile.inspect(this);
+        return new Snapshot(center.isPresent(), catalyst.copy(), List.copyOf(components), pedestals.size(), assembly, structure);
     }
 
     public TCInfusionValidationResult validateFor(ServerPlayer player, AspectList aspects) {
         Snapshot snapshot = createSnapshot(aspects);
+        if (!snapshot.structureProfile().valid()) {
+            return remember(TCInfusionValidationResult.failed(snapshot.structureProfile().reason()), snapshot);
+        }
         if (!snapshot.hasCentralPedestal()) {
             return remember(TCInfusionValidationResult.failed("missing_central_pedestal"), snapshot);
         }
@@ -145,6 +157,9 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
 
     public TCInfusionValidationResult validateAgainst(RecipeHolder<TCInfusionRecipe> recipe, AspectList aspects) {
         Snapshot snapshot = createSnapshot(aspects);
+        if (!snapshot.structureProfile().valid()) {
+            return remember(TCInfusionValidationResult.failed(snapshot.structureProfile().reason()), snapshot);
+        }
         if (!snapshot.hasCentralPedestal()) {
             return remember(TCInfusionValidationResult.failed("missing_central_pedestal"), snapshot);
         }
@@ -166,6 +181,11 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         if (player == null) {
             TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("missing_player"), snapshot);
             return TCInfusionStartResult.failed("missing_player", validation);
+        }
+        if (!snapshot.structureProfile().valid()) {
+            TCInfusionValidationResult validation = remember(
+                    TCInfusionValidationResult.failed(snapshot.structureProfile().reason()), snapshot);
+            return TCInfusionStartResult.failed(validation.reason(), validation);
         }
         if (!snapshot.hasCentralPedestal()) {
             TCInfusionValidationResult validation = remember(TCInfusionValidationResult.failed("missing_central_pedestal"), snapshot);
@@ -390,7 +410,8 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
                 recipe.value(),
                 snapshot.catalyst(),
                 filledSurroundingPedestalComponents(),
-                playerName
+                playerName,
+                snapshot.structureProfile()
         );
         if (!buildResult.valid()) {
             TCInfusionValidationResult failed = remember(
@@ -502,13 +523,17 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
             ItemStack catalyst,
             List<ItemStack> components,
             int surroundingPedestalCount,
-            TCInfusionAssembly assembly
+            TCInfusionAssembly assembly,
+            TCInfusionStructureProfile structureProfile
     ) {
         public Snapshot {
             catalyst = catalyst == null ? ItemStack.EMPTY : catalyst.copy();
             components = components == null ? List.of() : components.stream()
                     .map(stack -> stack == null ? ItemStack.EMPTY : stack.copy())
                     .toList();
+            structureProfile = structureProfile == null
+                    ? TCInfusionStructureProfile.inspect(null)
+                    : structureProfile;
         }
 
         public int componentCount() {

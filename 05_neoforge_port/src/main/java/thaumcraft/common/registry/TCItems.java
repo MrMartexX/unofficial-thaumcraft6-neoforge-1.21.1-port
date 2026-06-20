@@ -108,6 +108,11 @@ public final class TCItems {
     public static final Supplier<BlockItem> SMELTER_VOID = blockItem("smelter_void", TCBlocks.SMELTER_VOID);
     public static final Supplier<BlockItem> WAND_WORKBENCH = blockItem("wand_workbench", TCBlocks.WAND_WORKBENCH);
     public static final Supplier<BlockItem> INFUSION_MATRIX = blockItem("infusion_matrix", TCBlocks.INFUSION_MATRIX);
+    public static final Supplier<BlockItem> PILLAR_ARCANE = blockItem("pillar_arcane", TCBlocks.PILLAR_ARCANE);
+    public static final Supplier<BlockItem> PILLAR_ANCIENT = blockItem("pillar_ancient", TCBlocks.PILLAR_ANCIENT);
+    public static final Supplier<BlockItem> PILLAR_ELDRITCH = blockItem("pillar_eldritch", TCBlocks.PILLAR_ELDRITCH);
+    public static final Supplier<BlockItem> MATRIX_SPEED = blockItem("matrix_speed", TCBlocks.MATRIX_SPEED);
+    public static final Supplier<BlockItem> MATRIX_COST = blockItem("matrix_cost", TCBlocks.MATRIX_COST);
     public static final Supplier<BlockItem> GOLEM_BUILDER = blockItem("golem_builder", TCBlocks.GOLEM_BUILDER);
     public static final Supplier<BlockItem> LOG_GREATWOOD = blockItem("log_greatwood", TCBlocks.LOG_GREATWOOD);
     public static final Supplier<BlockItem> LOG_SILVERWOOD = blockItem("log_silverwood", TCBlocks.LOG_SILVERWOOD);
@@ -490,8 +495,8 @@ public final class TCItems {
     public static final Supplier<Item> CATALOG_PLACEHOLDER_HUNGRYCHEST = ITEMS.register("hungrychest", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_JARVOID = ITEMS.register("jarvoid", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_LEVITATOR = ITEMS.register("levitator", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_MATRIXCOST = ITEMS.register("matrixcost", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_MATRIXMOTION = ITEMS.register("matrixmotion", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_MATRIXCOST = MATRIX_COST;
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_MATRIXMOTION = MATRIX_SPEED;
     public static final Supplier<Item> CATALOG_PLACEHOLDER_MNEMONICMATRIX = ITEMS.register("mnemonicmatrix", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_PATTERNCRAFTER = ITEMS.register("patterncrafter", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_REDSTONERELAY = ITEMS.register("redstonerelay", () -> new Item(new Item.Properties()));

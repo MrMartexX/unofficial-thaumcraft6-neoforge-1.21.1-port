@@ -1,6 +1,6 @@
 # Research Recipe Page Gap Audit
 
-Generated: 2026-06-20 16:30:30 +03:00
+Generated: 2026-06-20 17:13:49 +03:00
 
 ## Summary
 

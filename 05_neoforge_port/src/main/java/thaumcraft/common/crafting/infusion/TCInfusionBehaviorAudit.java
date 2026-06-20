@@ -212,6 +212,7 @@ public final class TCInfusionBehaviorAudit {
             ));
             cloudRingHolder.ifPresent(holder -> {
                 addRuntimeMatrixChecks(server, holder, checks);
+                addRuntimeStructureProfileChecks(server, holder, checks);
                 addRuntimeMutationExecutorChecks(server, holder, checks);
                 addContainerRemainderPolicyChecks(checks);
                 addAspectSourceBoundaryChecks(checks);
@@ -237,6 +238,7 @@ public final class TCInfusionBehaviorAudit {
 
         clearTestArea(level, matrixPos);
         level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        placeValidArcanePillars(level, matrixPos);
         level.setBlock(centerPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(featherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(crystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
@@ -326,7 +328,11 @@ public final class TCInfusionBehaviorAudit {
                         .map(loaded -> CLOUD_RING.equals(loaded.recipeId())
                                 && loaded.components().size() == 2
                                 && loaded.requiredAspects().getAmount(Aspect.AIR) == 50
-                                && loaded.result().is(TCItems.CLOUD_RING.get()))
+                                && loaded.result().is(TCItems.CLOUD_RING.get())
+                                && loaded.cycleTime() == 10
+                                && loaded.cycleDelay() == 5
+                                && close(loaded.costMultiplier(), 1.0F)
+                                && close(loaded.stabilityReplenish(), snapshot.structureProfile().stabilityReplenish()))
                         .orElse(false),
                 activePlan.map(plan -> "recipe=" + plan.recipeId()).orElse("no active plan")
         ));
@@ -422,6 +428,164 @@ public final class TCInfusionBehaviorAudit {
         ));
     }
 
+    private static void addRuntimeStructureProfileChecks(
+            MinecraftServer server,
+            RecipeHolder<TCInfusionRecipe> cloudRing,
+            ArrayList<Check> checks
+    ) {
+        ServerLevel level = server.overworld();
+        BlockPos matrixPos = new BlockPos(180, level.getMinBuildHeight() + 12, 0);
+        clearTestArea(level, matrixPos);
+        level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.below(2), TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        TCInfusionMatrixBlockEntity matrix = blockEntity(level, matrixPos, TCInfusionMatrixBlockEntity.class);
+        if (matrix == null) {
+            checks.add(new Check("runtime_structure_profile_setup_created", false, "missing matrix block entity"));
+            return;
+        }
+
+        TCInfusionStructureProfile missingPillars = TCInfusionStructureProfile.inspect(matrix);
+        checks.add(new Check(
+                "runtime_structure_requires_four_legacy_pillars",
+                !missingPillars.valid() && "missing_infusion_pillar".equals(missingPillars.reason()),
+                "reason=" + missingPillars.reason()
+        ));
+
+        placePillars(level, matrixPos, TCBlocks.PILLAR_ARCANE.get());
+        TCInfusionStructureProfile arcane = TCInfusionStructureProfile.inspect(matrix);
+        checks.add(new Check(
+                "runtime_arcane_pillars_keep_legacy_defaults",
+                arcane.valid()
+                        && arcane.pillarSet() == TCInfusionStructureProfile.PillarSet.ARCANE
+                        && arcane.cycleTime() == 10
+                        && arcane.cycleDelay() == 5
+                        && close(arcane.costMultiplier(), 1.0F)
+                        && close(arcane.stabilityReplenish(), 0.0F),
+                profileNotes(arcane)
+        ));
+
+        placePillars(level, matrixPos, TCBlocks.PILLAR_ANCIENT.get());
+        TCInfusionStructureProfile ancient = TCInfusionStructureProfile.inspect(matrix);
+        checks.add(new Check(
+                "runtime_ancient_pillars_apply_exact_legacy_modifiers",
+                ancient.valid()
+                        && ancient.pillarSet() == TCInfusionStructureProfile.PillarSet.ANCIENT
+                        && ancient.cycleTime() == 9
+                        && ancient.cycleDelay() == 4
+                        && close(ancient.costMultiplier(), 0.9F)
+                        && close(ancient.stabilityReplenish(), -0.1F),
+                profileNotes(ancient)
+        ));
+        TCInfusionCraftingPlan.BuildResult ancientPlan = TCInfusionCraftingPlan.build(
+                cloudRing.id(),
+                cloudRing.value(),
+                new ItemStack(TCItems.BAUBLE_RING.get()),
+                List.of(
+                        new TCInfusionCraftingPlan.PedestalComponent(matrixPos.offset(2, -2, 0), new ItemStack(Items.FEATHER)),
+                        new TCInfusionCraftingPlan.PedestalComponent(matrixPos.offset(-2, -2, 0), new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()))
+                ),
+                "AuditPlayer",
+                ancient
+        );
+        checks.add(new Check(
+                "runtime_ancient_cost_uses_legacy_integer_truncation",
+                ancientPlan.valid() && ancientPlan.plan().requiredAspects().getAmount(Aspect.AIR) == 45,
+                ancientPlan.valid() ? "aer=" + ancientPlan.plan().requiredAspects().getAmount(Aspect.AIR) : ancientPlan.reason()
+        ));
+
+        placePillars(level, matrixPos, TCBlocks.PILLAR_ELDRITCH.get());
+        TCInfusionStructureProfile eldritch = TCInfusionStructureProfile.inspect(matrix);
+        checks.add(new Check(
+                "runtime_eldritch_pillars_apply_exact_legacy_modifiers",
+                eldritch.valid()
+                        && eldritch.pillarSet() == TCInfusionStructureProfile.PillarSet.ELDRITCH
+                        && eldritch.cycleTime() == 7
+                        && eldritch.cycleDelay() == 3
+                        && close(eldritch.costMultiplier(), 1.05F)
+                        && close(eldritch.stabilityReplenish(), 0.2F),
+                profileNotes(eldritch)
+        ));
+        TCInfusionCraftingPlan.BuildResult eldritchPlan = TCInfusionCraftingPlan.build(
+                cloudRing.id(),
+                cloudRing.value(),
+                new ItemStack(TCItems.BAUBLE_RING.get()),
+                List.of(
+                        new TCInfusionCraftingPlan.PedestalComponent(matrixPos.offset(2, -2, 0), new ItemStack(Items.FEATHER)),
+                        new TCInfusionCraftingPlan.PedestalComponent(matrixPos.offset(-2, -2, 0), new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()))
+                ),
+                "AuditPlayer",
+                eldritch
+        );
+        checks.add(new Check(
+                "runtime_eldritch_cost_uses_legacy_integer_truncation",
+                eldritchPlan.valid() && eldritchPlan.plan().requiredAspects().getAmount(Aspect.AIR) == 52,
+                eldritchPlan.valid() ? "aer=" + eldritchPlan.plan().requiredAspects().getAmount(Aspect.AIR) : eldritchPlan.reason()
+        ));
+
+        level.setBlock(matrixPos.offset(-1, -3, -1), TCBlocks.MATRIX_SPEED.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.offset(1, -3, -1), TCBlocks.MATRIX_SPEED.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.offset(1, -3, 1), TCBlocks.MATRIX_COST.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.offset(-1, -3, 1), TCBlocks.MATRIX_COST.get().defaultBlockState(), 3);
+        TCInfusionStructureProfile modified = TCInfusionStructureProfile.inspect(matrix);
+        checks.add(new Check(
+                "runtime_matrix_stones_stack_exact_legacy_modifiers",
+                modified.cycleTime() == 7
+                        && modified.cycleDelay() == 3
+                        && close(modified.costMultiplier(), 1.03F),
+                profileNotes(modified)
+        ));
+
+        for (int dx : new int[]{-1, 1}) {
+            for (int dz : new int[]{-1, 1}) {
+                level.setBlock(matrixPos.offset(dx, -3, dz), Blocks.AIR.defaultBlockState(), 3);
+            }
+        }
+        placePillars(level, matrixPos, TCBlocks.PILLAR_ARCANE.get());
+        level.setBlock(matrixPos.offset(2, -2, 0), TCBlocks.ANCIENT_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.offset(-2, -2, 0), TCBlocks.ANCIENT_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.offset(0, -2, 2), TCBlocks.ELDRITCH_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.offset(0, -2, -2), TCBlocks.ELDRITCH_PEDESTAL.get().defaultBlockState(), 3);
+        TCInfusionStructureProfile pedestalModifiers = TCInfusionStructureProfile.inspect(matrix);
+        checks.add(new Check(
+                "runtime_pedestals_apply_exact_legacy_cost_and_stability_modifiers",
+                pedestalModifiers.surroundingPedestalCount() == 4
+                        && close(pedestalModifiers.costMultiplier(), 0.985F)
+                        && close(pedestalModifiers.stabilityReplenish(), 0.1F),
+                profileNotes(pedestalModifiers)
+        ));
+
+        for (BlockPos pos : List.of(
+                matrixPos.offset(2, -2, 0), matrixPos.offset(-2, -2, 0),
+                matrixPos.offset(0, -2, 2), matrixPos.offset(0, -2, -2))) {
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        }
+        level.setBlock(matrixPos.offset(3, 0, 0), TCBlocks.CANDLE_WHITE.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.offset(-3, 0, 0), TCBlocks.CANDLE_WHITE.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.offset(0, 0, 3), TCBlocks.CANDLE_WHITE.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.offset(0, 0, -3), TCBlocks.CANDLE_WHITE.get().defaultBlockState(), 3);
+        level.setBlock(matrixPos.offset(4, 0, 1), TCBlocks.CANDLE_RED.get().defaultBlockState(), 3);
+        TCInfusionStructureProfile candles = TCInfusionStructureProfile.inspect(matrix);
+        checks.add(new Check(
+                "runtime_stabilizer_symmetry_uses_diminishing_returns_and_unpaired_penalty",
+                candles.stabilizerCandidateCount() == 5
+                        && close(candles.stabilityReplenish(), 0.075F)
+                        && candles.problemBlocks().size() == 1,
+                profileNotes(candles) + ", problems=" + candles.problemBlocks().size()
+        ));
+    }
+
+    private static String profileNotes(TCInfusionStructureProfile profile) {
+        return "pillars=" + profile.pillarSet()
+                + ", cycle=" + profile.cycleTime()
+                + ", delay=" + profile.cycleDelay()
+                + ", cost=" + profile.costMultiplier()
+                + ", stability=" + profile.stabilityReplenish();
+    }
+
+    private static boolean close(float actual, float expected) {
+        return Math.abs(actual - expected) < 0.0001F;
+    }
+
     private static void addAspectSourceResolverChecks(ArrayList<Check> checks) {
         checks.add(new Check(
                 "aspect_source_resolver_null_inputs_fail_closed",
@@ -480,12 +644,14 @@ public final class TCInfusionBehaviorAudit {
         BlockPos nearJarPos = matrixPos.offset(3, 0, 0);
         BlockPos farJarPos = matrixPos.offset(6, 0, 0);
         BlockPos outOfRangeJarPos = matrixPos.offset(TCInfusionAspectSourceResolver.LEGACY_SOURCE_RANGE + 1, 0, 0);
+        BlockPos pullBufferPos = outOfRangeJarPos.above();
 
         level.setBlock(matrixPos, Blocks.AIR.defaultBlockState(), 3);
         level.setBlock(tubePos, Blocks.AIR.defaultBlockState(), 3);
         level.setBlock(nearJarPos, Blocks.AIR.defaultBlockState(), 3);
         level.setBlock(farJarPos, Blocks.AIR.defaultBlockState(), 3);
         level.setBlock(outOfRangeJarPos, Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(pullBufferPos, Blocks.AIR.defaultBlockState(), 3);
         level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
         level.setBlock(tubePos, TCBlocks.TUBE.get().defaultBlockState(), 3);
 
@@ -577,7 +743,6 @@ public final class TCInfusionBehaviorAudit {
                 "reason=" + insufficient.reason() + ", missing=" + insufficient.missingAspects().getAmount(Aspect.AIR)
         ));
 
-        BlockPos pullBufferPos = outOfRangeJarPos.above();
         level.setBlock(pullBufferPos, TCBlocks.TUBE_BUFFER.get().defaultBlockState(), 3);
         TCLegacyTubeBlockEntity pullBuffer = blockEntity(level, pullBufferPos, TCLegacyTubeBlockEntity.class);
         outOfRangeJar.setStoredForValidation(null, 0);
@@ -617,6 +782,7 @@ public final class TCInfusionBehaviorAudit {
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
         }
         level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        placeValidArcanePillars(level, matrixPos);
         level.setBlock(centerPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(featherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(crystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
@@ -780,6 +946,7 @@ public final class TCInfusionBehaviorAudit {
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
         }
         level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        placeValidArcanePillars(level, matrixPos);
         level.setBlock(centerPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(featherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(crystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
@@ -846,6 +1013,7 @@ public final class TCInfusionBehaviorAudit {
 
         clearTestArea(level, matrixPos);
         level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        placeValidArcanePillars(level, matrixPos);
         level.setBlock(centerPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(featherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(crystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
@@ -881,6 +1049,7 @@ public final class TCInfusionBehaviorAudit {
         BlockPos failCrystalPos = failMatrixPos.offset(-2, -2, 0);
         clearTestArea(level, failMatrixPos);
         level.setBlock(failMatrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        placeValidArcanePillars(level, failMatrixPos);
         level.setBlock(failCenterPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(failFeatherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(failCrystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
@@ -1008,6 +1177,7 @@ public final class TCInfusionBehaviorAudit {
 
         clearTestArea(level, matrixPos);
         level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        placeValidArcanePillars(level, matrixPos);
         level.setBlock(centerPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(featherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(crystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
@@ -1066,6 +1236,7 @@ public final class TCInfusionBehaviorAudit {
         BlockPos failCrystalPos = failMatrixPos.offset(-2, -2, 0);
         clearTestArea(level, failMatrixPos);
         level.setBlock(failMatrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        placeValidArcanePillars(level, failMatrixPos);
         level.setBlock(failCenterPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(failFeatherPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
         level.setBlock(failCrystalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
@@ -1099,11 +1270,26 @@ public final class TCInfusionBehaviorAudit {
         ));
     }
     private static void clearTestArea(ServerLevel level, BlockPos matrixPos) {
-        for (int dx = -3; dx <= 3; dx++) {
-            for (int dy = -3; dy <= 1; dy++) {
-                for (int dz = -3; dz <= 3; dz++) {
+        for (int dx = -TCInfusionMatrixBlockEntity.LEGACY_HORIZONTAL_SCAN_RANGE;
+             dx <= TCInfusionMatrixBlockEntity.LEGACY_HORIZONTAL_SCAN_RANGE; dx++) {
+            for (int dy = TCInfusionMatrixBlockEntity.LEGACY_SCAN_MIN_Y_OFFSET;
+                 dy <= TCInfusionMatrixBlockEntity.LEGACY_SCAN_MAX_Y_OFFSET; dy++) {
+                for (int dz = -TCInfusionMatrixBlockEntity.LEGACY_HORIZONTAL_SCAN_RANGE;
+                     dz <= TCInfusionMatrixBlockEntity.LEGACY_HORIZONTAL_SCAN_RANGE; dz++) {
                     level.setBlock(matrixPos.offset(dx, dy, dz), Blocks.AIR.defaultBlockState(), 3);
                 }
+            }
+        }
+    }
+
+    private static void placeValidArcanePillars(ServerLevel level, BlockPos matrixPos) {
+        placePillars(level, matrixPos, TCBlocks.PILLAR_ARCANE.get());
+    }
+
+    private static void placePillars(ServerLevel level, BlockPos matrixPos, net.minecraft.world.level.block.Block pillar) {
+        for (int dx : new int[]{-1, 1}) {
+            for (int dz : new int[]{-1, 1}) {
+                level.setBlock(matrixPos.offset(dx, -2, dz), pillar.defaultBlockState(), 3);
             }
         }
     }

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thaumcraft:stone_eldritch_tile",
+          "functions": [{ "function": "minecraft:set_count", "count": 2 }]
+        }
+      ]
+    }
+  ]
+}

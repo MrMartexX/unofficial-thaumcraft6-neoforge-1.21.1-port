@@ -210,7 +210,7 @@ final class TCAspectParityValidator {
 
     private static void validateDirectAssignments() {
         Map<ResourceLocation, AspectList> tags = TCAspectAssignments.directObjectTags();
-        expectEquals(687, tags.size(), "direct object assignment count");
+        expectEquals(692, tags.size(), "direct object assignment count");
 
         expectDirect(tags, "ore_quartz", amount(Aspect.EARTH, 5), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "ore_cinnabar", amount(Aspect.EARTH, 5), amount(Aspect.METAL, 10), amount(Aspect.ALCHEMY, 5), amount(Aspect.DEATH, 5));
@@ -260,6 +260,24 @@ final class TCAspectParityValidator {
         expectDirect(tags, "stone_porous", amount(Aspect.EARTH, 5), amount(Aspect.VOID, 5));
         expectDirect(tags, "stone_arcane", amount(Aspect.EARTH, 3));
         expectDirect(tags, "stone_arcane_brick", amount(Aspect.EARTH, 2));
+        expectDirect(tags, "pillar_arcane");
+        expectDirect(tags, "pillar_ancient");
+        expectDirect(tags, "pillar_eldritch");
+        expectDirect(tags, "matrix_speed",
+                amount(Aspect.EARTH, 9),
+                amount(Aspect.SENSES, 9),
+                amount(Aspect.WATER, 3),
+                amount(Aspect.CRYSTAL, 75),
+                amount(Aspect.DESIRE, 75),
+                amount(Aspect.MAGIC, 15));
+        expectDirect(tags, "matrix_cost",
+                amount(Aspect.EARTH, 9),
+                amount(Aspect.ENERGY, 39),
+                amount(Aspect.FIRE, 39),
+                amount(Aspect.ENTROPY, 6),
+                amount(Aspect.CRYSTAL, 75),
+                amount(Aspect.DESIRE, 75),
+                amount(Aspect.MAGIC, 15));
         expectDirect(tags, "slab_ancient", amount(Aspect.EARTH, 1), amount(Aspect.ELDRITCH, 1));
         expectDirect(tags, "slab_arcane_stone", amount(Aspect.EARTH, 1));
         expectDirect(tags, "slab_eldritch", amount(Aspect.EARTH, 1), amount(Aspect.ELDRITCH, 1));

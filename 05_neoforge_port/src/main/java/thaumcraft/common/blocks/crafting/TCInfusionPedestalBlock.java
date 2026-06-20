@@ -21,9 +21,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.api.crafting.IInfusionStabiliserExt;
+import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
 
-public class TCInfusionPedestalBlock extends Block implements EntityBlock {
+public class TCInfusionPedestalBlock extends Block implements EntityBlock, IInfusionStabiliserExt {
     private static final VoxelShape SHAPE = Shapes.or(
             box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
             box(4.0D, 4.0D, 4.0D, 12.0D, 12.0D, 12.0D),
@@ -86,6 +88,32 @@ public class TCInfusionPedestalBlock extends Block implements EntityBlock {
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
+    }
+
+    @Override
+    public boolean canStabaliseInfusion(net.minecraft.world.level.LevelReader level, BlockPos pos) {
+        return true;
+    }
+
+    @Override
+    public float getStabilizationAmount(net.minecraft.world.level.LevelReader level, BlockPos pos) {
+        return level.getBlockState(pos).is(TCBlocks.ELDRITCH_PEDESTAL.get()) ? 0.1F : 0.0F;
+    }
+
+    @Override
+    public boolean hasSymmetryPenalty(net.minecraft.world.level.LevelReader level, BlockPos pos1, BlockPos pos2) {
+        BlockEntity first = level.getBlockEntity(pos1);
+        BlockEntity second = level.getBlockEntity(pos2);
+        if (first instanceof TCInfusionPedestalBlockEntity firstPedestal
+                && second instanceof TCInfusionPedestalBlockEntity secondPedestal) {
+            return firstPedestal.getStoredStack().isEmpty() != secondPedestal.getStoredStack().isEmpty();
+        }
+        return false;
+    }
+
+    @Override
+    public float getSymmetryPenalty(net.minecraft.world.level.LevelReader level, BlockPos pos) {
+        return 0.1F;
     }
 
     private static void extractStored(Level level, BlockPos pos, TCInfusionPedestalBlockEntity pedestal) {

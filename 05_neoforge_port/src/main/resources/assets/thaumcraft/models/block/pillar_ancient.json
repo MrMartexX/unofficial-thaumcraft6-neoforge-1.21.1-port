@@ -1,0 +1,14 @@
+{
+  "loader": "neoforge:obj",
+  "model": "thaumcraft:models/block/pillar.obj",
+  "automatic_culling": false,
+  "shade_quads": true,
+  "flip_v": false,
+  "emissive_ambient": false,
+  "mtl_override": "thaumcraft:models/block/pillar_ancient.mtl",
+  "textures": {
+    "particle": "thaumcraft:block/pillar_ancient",
+    "texture": "thaumcraft:block/pillar_ancient",
+    "#texture": "thaumcraft:block/pillar_ancient"
+  }
+}

@@ -195,6 +195,41 @@
       "aspects": [
         { "aspect": "thaumcraft:terra", "amount": 2 }
       ]
+    },
+    {
+      "item": "thaumcraft:pillar_arcane",
+      "aspects": []
+    },
+    {
+      "item": "thaumcraft:pillar_ancient",
+      "aspects": []
+    },
+    {
+      "item": "thaumcraft:pillar_eldritch",
+      "aspects": []
+    },
+    {
+      "item": "thaumcraft:matrix_speed",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 9 },
+        { "aspect": "thaumcraft:sensus", "amount": 9 },
+        { "aspect": "thaumcraft:aqua", "amount": 3 },
+        { "aspect": "thaumcraft:vitreus", "amount": 75 },
+        { "aspect": "thaumcraft:desiderium", "amount": 75 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 15 }
+      ]
+    },
+    {
+      "item": "thaumcraft:matrix_cost",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 9 },
+        { "aspect": "thaumcraft:potentia", "amount": 39 },
+        { "aspect": "thaumcraft:ignis", "amount": 39 },
+        { "aspect": "thaumcraft:perditio", "amount": 6 },
+        { "aspect": "thaumcraft:vitreus", "amount": 75 },
+        { "aspect": "thaumcraft:desiderium", "amount": 75 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 15 }
+      ]
     }
   ]
 }

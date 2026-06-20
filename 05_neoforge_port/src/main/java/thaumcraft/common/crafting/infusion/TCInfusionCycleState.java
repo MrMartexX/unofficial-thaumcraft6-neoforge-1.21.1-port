@@ -53,7 +53,7 @@ public final class TCInfusionCycleState {
                 plan.requiredAspects(),
                 plan.components(),
                 0,
-                BASE_CYCLE_DELAY,
+                plan.cycleDelay(),
                 0L
         );
     }

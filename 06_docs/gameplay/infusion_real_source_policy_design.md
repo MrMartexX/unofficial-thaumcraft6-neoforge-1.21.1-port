@@ -50,8 +50,8 @@ Aura, vis and flux are not infusion essentia sources.
 - Discovery never scans every game tick; it uses the cached list and legacy failed-pass delay.
 - Unknown source BlockEntities fail closed.
 - Transient transport buffers cannot satisfy a recipe merely because they expose transport methods.
-- Player-facing matrix activation remains disabled until stability/instability and structure modifiers are implemented.
+- Player-facing matrix activation remains disabled until persistent stability and all instability event effects are implemented; structure modifiers are now runtime-audited.
 
 ## Validation
 
-`tools/audits/audit-infusion-behavior.ps1` covers nearest ordering, blocked jars, range exclusion, insufficient-source no-op behavior, one-point drain, cache invalidation and delayed recovery. Current total: `63/63` passing checks.
+`tools/audits/audit-infusion-behavior.ps1` covers nearest ordering, blocked jars, range exclusion, insufficient-source no-op behavior, one-point drain, cache invalidation and delayed recovery. Current total: `72/72` passing checks.

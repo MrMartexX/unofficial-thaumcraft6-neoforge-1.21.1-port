@@ -20,6 +20,12 @@ This is the active design boundary for Thaumcraft 6 infusion gameplay on NeoForg
 - Component crafting remainders remain on their original pedestal. The center catalyst is replaced by the result, as in legacy.
 - If a damaged catalyst produces an undamaged damageable output, its damage ratio is transferred.
 - Completion and catalyst-failure sounds use the legacy sound events.
+- A valid altar requires the center pedestal and all four legacy pillar positions.
+- Arcane, ancient, eldritch and mixed pillar sets reproduce the legacy cycle/cost/stability modifiers.
+- `matrix_speed` and `matrix_cost` are read from the four blocks below the pillars and stack exactly like legacy.
+- Ancient and eldritch surrounding pedestal cost modifiers are included before the legacy `0.5` cost floor and integer aspect truncation.
+- The preserved public `IInfusionStabiliser` / `IInfusionStabiliserExt` contracts drive candle, skull and pedestal symmetry scanning. Matched pairs use per-block `0.75^n` diminishing returns; mismatched and unpaired candidates apply the legacy penalty.
+- Craft plans persist the resolved cycle time/delay, cost multiplier and stability replenishment so save/load cannot silently revert altar modifiers.
 
 For the Cloud Ring fixture (`50 aer`, two components), the audited sequence is `50 + 6 + 6 + 1 = 63` craft cycles.
 
@@ -39,13 +45,9 @@ The current generic billboard output is a visual bridge. Exact `FXEssentiaStream
 
 ## Next server batch
 
-1. Port `getSurroundings()` structure validation and modifiers:
-   - four required pillars;
-   - ancient/eldritch pillar cycle/cost/stability modifiers;
-   - `matrix_speed` and `matrix_cost` modifiers;
-   - stabilizer discovery and cached surroundings invalidation.
-2. Port stability state and per-cycle loss/replenishment.
-3. Port instability event selection and effects in dependency-safe families, with no silent substitution for missing blocks/entities/effects.
+1. Port the persistent stability value, category thresholds, cap/floor and exact per-cycle loss/replenishment formula.
+2. Port all 24 instability roll outcomes. Effects whose owning content is absent must remain an explicit activation blocker; do not silently substitute vanilla effects.
+3. Refresh surroundings when relevant blocks change while preserving server ownership and bounded scans.
 4. Add start/fail/finish state sync and activation audit.
 5. Enable caster start only after failed paths cannot duplicate or delete items.
 
@@ -69,4 +71,4 @@ Every infusion batch must pass:
 5. `tools/ci/server-smoke.ps1`;
 6. client startup when payload, particle, sound, model or renderer code changes.
 
-Current runtime result: `63/63` infusion behavior checks pass.
+Current runtime result: `72/72` infusion behavior checks pass.

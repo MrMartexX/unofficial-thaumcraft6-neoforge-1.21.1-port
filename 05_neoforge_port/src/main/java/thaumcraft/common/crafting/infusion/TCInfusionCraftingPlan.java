@@ -25,7 +25,11 @@ public record TCInfusionCraftingPlan(
         List<BlockPos> componentPedestalPositions,
         AspectList requiredAspects,
         ItemStack result,
-        String playerName
+        String playerName,
+        int cycleTime,
+        int cycleDelay,
+        float costMultiplier,
+        float stabilityReplenish
 ) {
     private static final String STACKS_TAG = "Stacks";
     private static final int MAX_COMPONENTS = 64;
@@ -49,6 +53,37 @@ public record TCInfusionCraftingPlan(
         requiredAspects = requiredAspects == null ? new AspectList() : requiredAspects.copy();
         result = result == null ? ItemStack.EMPTY : result.copy();
         playerName = playerName == null ? "" : playerName;
+        cycleTime = Math.max(1, cycleTime);
+        cycleDelay = Math.max(1, cycleDelay);
+        costMultiplier = Math.max(0.5F, costMultiplier);
+    }
+
+    public TCInfusionCraftingPlan(
+            ResourceLocation recipeId,
+            String research,
+            int instability,
+            ItemStack catalyst,
+            List<ItemStack> components,
+            List<BlockPos> componentPedestalPositions,
+            AspectList requiredAspects,
+            ItemStack result,
+            String playerName
+    ) {
+        this(
+                recipeId,
+                research,
+                instability,
+                catalyst,
+                components,
+                componentPedestalPositions,
+                requiredAspects,
+                result,
+                playerName,
+                TCInfusionCycleState.BASE_CYCLE_TIME,
+                TCInfusionCycleState.BASE_CYCLE_DELAY,
+                1.0F,
+                0.0F
+        );
     }
 
     public static BuildResult build(
@@ -56,7 +91,8 @@ public record TCInfusionCraftingPlan(
             TCInfusionRecipe recipe,
             ItemStack catalyst,
             List<PedestalComponent> suppliedPedestals,
-            String playerName
+            String playerName,
+            TCInfusionStructureProfile structure
     ) {
         if (recipeId == null) {
             return BuildResult.failed("missing_recipe_id");
@@ -66,6 +102,9 @@ public record TCInfusionCraftingPlan(
         }
         if (catalyst == null || catalyst.isEmpty()) {
             return BuildResult.failed("missing_catalyst");
+        }
+        if (structure == null || !structure.valid()) {
+            return BuildResult.failed(structure == null ? "missing_structure_profile" : structure.reason());
         }
         List<PedestalComponent> supplied = suppliedPedestals == null ? List.of() : suppliedPedestals.stream()
                 .filter(component -> component != null && !component.stack().isEmpty())
@@ -94,9 +133,13 @@ public record TCInfusionCraftingPlan(
                 catalyst.copyWithCount(1),
                 List.copyOf(matchedComponents),
                 List.copyOf(matchedPositions),
-                requiredAspects(recipe),
+                requiredAspects(recipe, structure.costMultiplier()),
                 recipe.result(),
-                playerName
+                playerName,
+                structure.cycleTime(),
+                structure.cycleDelay(),
+                structure.costMultiplier(),
+                structure.stabilityReplenish()
         ));
     }
 
@@ -107,6 +150,10 @@ public record TCInfusionCraftingPlan(
         tag.putInt("Instability", instability);
         tag.putString("PlayerName", playerName);
         tag.putInt("ComponentCount", components.size());
+        tag.putInt("CycleTime", cycleTime);
+        tag.putInt("CycleDelay", cycleDelay);
+        tag.putFloat("CostMultiplier", costMultiplier);
+        tag.putFloat("StabilityReplenish", stabilityReplenish);
 
         NonNullList<ItemStack> stacks = NonNullList.withSize(components.size() + FIRST_COMPONENT_SLOT, ItemStack.EMPTY);
         stacks.set(CATALYST_SLOT, catalyst.copy());
@@ -187,7 +234,11 @@ public record TCInfusionCraftingPlan(
                 List.copyOf(positions),
                 requiredAspects,
                 result,
-                tag.getString("PlayerName")
+                tag.getString("PlayerName"),
+                tag.contains("CycleTime") ? tag.getInt("CycleTime") : TCInfusionCycleState.BASE_CYCLE_TIME,
+                tag.contains("CycleDelay") ? tag.getInt("CycleDelay") : TCInfusionCycleState.BASE_CYCLE_DELAY,
+                tag.contains("CostMultiplier") ? tag.getFloat("CostMultiplier") : 1.0F,
+                tag.getFloat("StabilityReplenish")
         );
     }
 
@@ -266,10 +317,13 @@ public record TCInfusionCraftingPlan(
         return false;
     }
 
-    private static AspectList requiredAspects(TCInfusionRecipe recipe) {
+    private static AspectList requiredAspects(TCInfusionRecipe recipe, float costMultiplier) {
         AspectList aspects = new AspectList();
         for (TCCrucibleAspectCost cost : recipe.aspectCosts()) {
-            aspects.add(cost.resolvedAspect(), cost.amount());
+            int adjusted = (int) (cost.amount() * Math.max(0.5F, costMultiplier));
+            if (adjusted > 0) {
+                aspects.add(cost.resolvedAspect(), adjusted);
+            }
         }
         return aspects;
     }

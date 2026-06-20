@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.blocks.basic.TCTableBlock;
+import thaumcraft.common.blocks.basic.TCInfusionCandleBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.blocks.essentia.TCWardedJarBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
@@ -31,6 +32,7 @@ import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCCrucibleBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionMatrixBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionPedestalBlock;
+import thaumcraft.common.blocks.crafting.TCInfusionPillarBlock;
 import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
 
@@ -128,6 +130,11 @@ public final class TCBlocks {
     public static final Supplier<Block> SMELTER_VOID = BLOCKS.register("smelter_void", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.VOID));
     public static final Supplier<Block> WAND_WORKBENCH = BLOCKS.register("wand_workbench", () -> workbenchBlock());
     public static final Supplier<Block> INFUSION_MATRIX = BLOCKS.register("infusion_matrix", () -> infusionMatrixBlock());
+    public static final Supplier<Block> PILLAR_ARCANE = BLOCKS.register("pillar_arcane", () -> infusionPillarBlock());
+    public static final Supplier<Block> PILLAR_ANCIENT = BLOCKS.register("pillar_ancient", () -> infusionPillarBlock());
+    public static final Supplier<Block> PILLAR_ELDRITCH = BLOCKS.register("pillar_eldritch", () -> infusionPillarBlock());
+    public static final Supplier<Block> MATRIX_SPEED = BLOCKS.register("matrix_speed", () -> stoneBlock(2.0F, 10.0F));
+    public static final Supplier<Block> MATRIX_COST = BLOCKS.register("matrix_cost", () -> stoneBlock(2.0F, 10.0F));
     public static final Supplier<Block> ARCANE_PEDESTAL = BLOCKS.register("arcane_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
     public static final Supplier<Block> ANCIENT_PEDESTAL = BLOCKS.register("ancient_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
     public static final Supplier<Block> ELDRITCH_PEDESTAL = BLOCKS.register("eldritch_pedestal", () -> infusionPedestalBlock(15.0F, 1000.0F));
@@ -223,6 +230,13 @@ public final class TCBlocks {
                 .noOcclusion());
     }
 
+    private static Block infusionPillarBlock() {
+        return new TCInfusionPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(2.5F)
+                .sound(SoundType.STONE)
+                .noOcclusion());
+    }
+
     private static Block furnaceLikeBlock() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                 .strength(3.5F, 17.5F)
@@ -267,11 +281,12 @@ public final class TCBlocks {
                 .noOcclusion());
     }
 
-    private static Block tallowCandleBlock(int lightLevel) {
-        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.CANDLE)
+    private static Block tallowCandleBlock(int ignoredLightLevel) {
+        return new TCInfusionCandleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CANDLE)
                 .strength(0.1F, 0.1F)
+                .sound(SoundType.WOOL)
                 .noOcclusion()
-                .lightLevel(state -> lightLevel));
+                .lightLevel(state -> 15));
     }
 
     private static Block amberBlock() {

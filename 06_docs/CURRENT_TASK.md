@@ -21,7 +21,7 @@ Last updated: 2026-06-20
 - The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
 - The in-world crucible behavior slices have a design boundary in `06_docs/gameplay/crucible_in_world_behavior_design.md`.
 - The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
-- The infusion boundary now includes server-owned validation/start/readiness state, persisted craft-cycle state, exact five-tick default matrix cadence, one-point nearest-source drain, the legacy 200-tick failed-source rescan delay, six-cycle component timing, result placement/damage carry-over, component remainders, completion/failure sounds, and the two clientbound legacy FX message contracts. The runtime audit passes `63/63`.
+- The infusion boundary now includes server-owned validation/start/readiness state, persisted craft-cycle state, exact five-tick default matrix cadence, one-point nearest-source drain, the legacy 200-tick failed-source rescan delay, six-cycle component timing, result placement/damage carry-over, component remainders, completion/failure sounds, the two clientbound legacy FX message contracts, exact four-pillar structure validation, pillar/matrix/pedestal cost and timing modifiers, and candle/skull/pedestal symmetry accounting. The runtime audit passes `72/72`.
 
 ## Do not change without explicit request
 
@@ -38,7 +38,8 @@ Last updated: 2026-06-20
    - The old one-shot mutation executor remains audit/reference-only. Production server ticking now uses `TCInfusionLegacyCycleExecutor`; normal caster activation remains explicitly disabled.
    - `thaumcraft:jar_normal` is the first reviewed real aspect source: capacity `250`, blocked/filter persistence, top-face transport access and exact simulated drain.
    - Source discovery now mirrors legacy `EssentiaHandler` range and distance ordering; tube buffers are not selected.
-   - Next safe code slice is the exact stability/instability model plus matrix structure modifiers (`pillar_ancient`, `pillar_eldritch`, `matrix_speed`, `matrix_cost`) before enabling player activation.
+   - Exact structure modifiers are active: arcane/ancient/eldritch pillars, `matrix_speed`, `matrix_cost`, ancient/eldritch pedestal cost effects, legacy `0.75^n` stabilizer diminishing returns, unpaired penalties, and the `0.5` cost floor.
+   - Next safe code slice is the persistent stability value plus exact instability roll/event execution. Player activation remains disabled until every selected event has a reviewed server effect or fails closed without consuming craft inputs.
    - The FX wire/cache lifetime contract is implemented. Exact `FXEssentiaStream` polycone and item/block debris renderers are still a Stage 13 visual parity task; the current billboard bridge must not be called final visual parity.
    - Keep broad pedestal UI, mirrors/alembics, automation and enchantment infusion deferred until separate focused slices.
    - Re-run build, dedicated server smoke, infusion recipe-data audit, infusion behavior audit, research page catalog audit, and protocol audit after the batch.
@@ -264,7 +265,7 @@ Last updated: 2026-06-20
 - Added `TCInfusionRecipeMatcher` as a non-mutating server-side validation helper for catalyst, components and aspect costs.
 - Added `TCInfusionAssembly` and `TCInfusionValidationResult` as the current server-owned input snapshot and validation-result boundary.
 - `TCInfusionRecipeMatcher` now uses NeoForge `RecipeMatcher` like legacy Forge 1.12.2, so component matching is unordered but exact 1:1 by count.
-- `tools/audits/audit-infusion-behavior.ps1` validates the current boundary at server runtime and currently passes `25/25`.
+- `tools/audits/audit-infusion-behavior.ps1` validates the current boundary at server runtime and currently passes `72/72`.
 - Full in-world infusion completion remains deferred until the focused atomic consumption, essentia drain/source, instability and FX slices are added.
 
 ## Infusion start-plan boundary note
