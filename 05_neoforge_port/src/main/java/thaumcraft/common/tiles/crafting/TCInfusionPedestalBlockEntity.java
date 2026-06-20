@@ -16,6 +16,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.common.registry.TCBlockEntities;
+import java.util.HashSet;
+import java.util.Set;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import thaumcraft.common.blocks.devices.TCInlayNetwork;
+import thaumcraft.common.tiles.devices.TCStabilizerBlockEntity;
 
 public class TCInfusionPedestalBlockEntity extends BlockEntity {
     private static final int SLOT = 0;
@@ -71,6 +77,35 @@ public class TCInfusionPedestalBlockEntity extends BlockEntity {
 
     public void dropContents(Level level, BlockPos pos) {
         dropStored(level, pos);
+    }
+
+    public BlockPos findInstabilityMitigator() {
+        if (!(level instanceof ServerLevel serverLevel) || TCInlayNetwork.charge(getBlockState()) <= 0) {
+            return null;
+        }
+        return seekSource(serverLevel, worldPosition, TCInlayNetwork.charge(getBlockState()), new HashSet<>());
+    }
+
+    private static BlockPos seekSource(ServerLevel level, BlockPos pos, int lastCharge, Set<BlockPos> visited) {
+        if (!visited.add(pos.immutable())) {
+            return null;
+        }
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockPos adjacent = pos.relative(direction);
+            if (TCInlayNetwork.sourceStrengthAt(level, adjacent) >= 5
+                    && level.getBlockEntity(adjacent) instanceof TCStabilizerBlockEntity) {
+                return adjacent;
+            }
+            BlockState state = level.getBlockState(adjacent);
+            int charge = TCInlayNetwork.charge(state);
+            if (TCInlayNetwork.isNetworkNode(state) && charge > lastCharge) {
+                BlockPos source = seekSource(level, adjacent, charge, visited);
+                if (source != null) {
+                    return source;
+                }
+            }
+        }
+        return null;
     }
 
     private void markChangedAndSync() {

@@ -16,6 +16,9 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -24,8 +27,10 @@ import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.crafting.IInfusionStabiliserExt;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
+import thaumcraft.common.blocks.devices.TCInlayNetwork;
 
 public class TCInfusionPedestalBlock extends Block implements EntityBlock, IInfusionStabiliserExt {
+    public static final IntegerProperty CHARGE = IntegerProperty.create("charge", 0, 15);
     private static final VoxelShape SHAPE = Shapes.or(
             box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D),
             box(4.0D, 4.0D, 4.0D, 12.0D, 12.0D, 12.0D),
@@ -34,6 +39,27 @@ public class TCInfusionPedestalBlock extends Block implements EntityBlock, IInfu
 
     public TCInfusionPedestalBlock(BlockBehaviour.Properties properties) {
         super(properties);
+        registerDefaultState(stateDefinition.any().setValue(CHARGE, 0));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(CHARGE);
+    }
+
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        if (level instanceof ServerLevel serverLevel) {
+            TCInlayNetwork.recalculateAround(serverLevel, pos);
+        }
+    }
+
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean movedByPiston) {
+        if (level instanceof ServerLevel serverLevel) {
+            TCInlayNetwork.recalculateAround(serverLevel, pos);
+        }
     }
 
     @Nullable
@@ -78,6 +104,9 @@ public class TCInfusionPedestalBlock extends Block implements EntityBlock, IInfu
             pedestal.dropContents(level, pos);
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
+        if (!state.is(newState.getBlock()) && level instanceof ServerLevel serverLevel) {
+            TCInlayNetwork.recalculateAround(serverLevel, pos);
+        }
     }
 
     @Override

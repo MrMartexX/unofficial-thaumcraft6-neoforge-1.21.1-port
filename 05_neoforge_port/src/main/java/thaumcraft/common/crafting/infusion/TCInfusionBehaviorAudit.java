@@ -30,6 +30,10 @@ import thaumcraft.common.registry.TCRecipes;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
+import thaumcraft.common.blocks.crafting.TCInfusionPedestalBlock;
+import thaumcraft.common.blocks.devices.TCInlayBlock;
+import thaumcraft.common.blocks.devices.TCInlayNetwork;
+import thaumcraft.common.tiles.devices.TCStabilizerBlockEntity;
 
 public final class TCInfusionBehaviorAudit {
     private static final ResourceLocation CLOUD_RING = ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "cloudring");
@@ -70,7 +74,7 @@ public final class TCInfusionBehaviorAudit {
         lines.add("- The audit-only mutation executor consumes validated inputs, while normal player interaction remains disabled.");
         lines.add("- Legacy-shaped source discovery scans aspect containers in the range-12 volume and drains nearest containers first; transient tube buffers are excluded.");
         lines.add("- The persisted cycle audit drains one essentia point per cycle, waits six cycles per component and completes only on the following cycle.");
-        lines.add("- Persistent stability math and all 24 legacy instability roll mappings are audited. Flux Goo and custom harm effects fail closed until their exact dependencies exist.");
+        lines.add("- Persistent stability math, all 24 legacy instability rolls, Flux Goo placement, harm effects and stabilizer mitigation are audited.");
         lines.add("- Exact source-beam geometry, block arcs, instability particles and matrix animation remain visual parity work.");
 
         Files.write(output, lines);
@@ -227,6 +231,7 @@ public final class TCInfusionBehaviorAudit {
         addStabilityMathChecks(checks);
         addInstabilityEventMappingChecks(checks);
         addRuntimeInstabilityBoundaryChecks(server, checks);
+        addRuntimeStabilizerNetworkChecks(server, checks);
 
         return new Report(List.copyOf(checks), infusionRecipes.size());
     }
@@ -297,12 +302,12 @@ public final class TCInfusionBehaviorAudit {
                 "mapped=24"
         ));
         checks.add(new Check(
-                "instability_missing_dependencies_are_explicit_not_substituted",
-                supportedRolls == 18
-                        && !TCInfusionInstabilityEvent.EJECT_FLUX_GOO_DROP.isSupportedByCurrentPort()
-                        && !TCInfusionInstabilityEvent.EJECT_FLUX_GOO_DELETE.isSupportedByCurrentPort()
-                        && !TCInfusionInstabilityEvent.HARM_ONE.isSupportedByCurrentPort()
-                        && !TCInfusionInstabilityEvent.HARM_ALL.isSupportedByCurrentPort(),
+                "instability_all_24_rolls_have_exact_runtime_dependencies",
+                supportedRolls == 24
+                        && TCInfusionInstabilityEvent.EJECT_FLUX_GOO_DROP.isSupportedByCurrentPort()
+                        && TCInfusionInstabilityEvent.EJECT_FLUX_GOO_DELETE.isSupportedByCurrentPort()
+                        && TCInfusionInstabilityEvent.HARM_ONE.isSupportedByCurrentPort()
+                        && TCInfusionInstabilityEvent.HARM_ALL.isSupportedByCurrentPort(),
                 "supportedRolls=" + supportedRolls + ", blockedRolls=" + (24 - supportedRolls)
         ));
     }
@@ -339,18 +344,20 @@ public final class TCInfusionBehaviorAudit {
         ));
 
         pedestal.setStoredForValidation(new ItemStack(Items.FEATHER));
-        TCInfusionInstabilityExecutor.ExecutionResult blocked = TCInfusionInstabilityExecutor.execute(
+        TCInfusionInstabilityExecutor.ExecutionResult gooDrop = TCInfusionInstabilityExecutor.execute(
                 matrix,
                 TCInfusionInstabilityEvent.EJECT_FLUX_GOO_DROP,
-                new FixedInfusionRandom(new float[0], new int[0])
+                new FixedInfusionRandom(new float[0], new int[]{0})
         );
         checks.add(new Check(
-                "runtime_missing_flux_goo_event_fails_closed_without_item_mutation",
-                blocked.status() == TCInfusionInstabilityExecutor.ExecutionResult.Status.BLOCKED
-                        && pedestal.getStoredStack().is(Items.FEATHER),
-                "reason=" + blocked.reason()
+                "runtime_flux_goo_drop_event_matches_legacy_effect",
+                gooDrop.status() == TCInfusionInstabilityExecutor.ExecutionResult.Status.EXECUTED
+                        && pedestal.getStoredStack().isEmpty()
+                        && level.getBlockState(pedestalPos.above()).is(TCBlocks.FLUX_GOO.get()),
+                "target=" + gooDrop.targetPos()
         ));
 
+        pedestal.setStoredForValidation(new ItemStack(Items.FEATHER));
         float fluxBefore = thaumcraft.api.aura.AuraHelper.getFlux(level, pedestalPos);
         TCInfusionInstabilityExecutor.ExecutionResult fluxDelete = TCInfusionInstabilityExecutor.execute(
                 matrix,
@@ -364,6 +371,61 @@ public final class TCInfusionBehaviorAudit {
                         && pedestal.getStoredStack().isEmpty()
                         && close(fluxDelta, 5.0F),
                 "target=" + fluxDelete.targetPos() + ", fluxDelta=" + fluxDelta
+        ));
+    }
+
+    private static void addRuntimeStabilizerNetworkChecks(MinecraftServer server, ArrayList<Check> checks) {
+        ServerLevel level = server.overworld();
+        BlockPos matrixPos = new BlockPos(260, level.getMinBuildHeight() + 14, 0);
+        BlockPos pedestalPos = matrixPos.offset(2, -2, 0);
+        BlockPos secondInlayPos = pedestalPos.east();
+        BlockPos firstInlayPos = secondInlayPos.east();
+        BlockPos stabilizerPos = firstInlayPos.east();
+        clearTestArea(level, matrixPos);
+        level.setBlock(firstInlayPos.below(), Blocks.STONE.defaultBlockState(), 3);
+        level.setBlock(secondInlayPos.below(), Blocks.STONE.defaultBlockState(), 3);
+        level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        level.setBlock(pedestalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        level.setBlock(secondInlayPos, TCBlocks.INLAY.get().defaultBlockState(), 3);
+        level.setBlock(firstInlayPos, TCBlocks.INLAY.get().defaultBlockState(), 3);
+        level.setBlock(stabilizerPos, TCBlocks.STABILIZER.get().defaultBlockState(), 3);
+
+        TCInfusionMatrixBlockEntity matrix = blockEntity(level, matrixPos, TCInfusionMatrixBlockEntity.class);
+        TCInfusionPedestalBlockEntity pedestal = blockEntity(level, pedestalPos, TCInfusionPedestalBlockEntity.class);
+        TCStabilizerBlockEntity stabilizer = blockEntity(level, stabilizerPos, TCStabilizerBlockEntity.class);
+        if (matrix == null || pedestal == null || stabilizer == null) {
+            checks.add(new Check("runtime_stabilizer_network_setup_created", false, "missing block entity"));
+            return;
+        }
+        stabilizer.setEnergyForValidation(10);
+        TCInlayNetwork.recalculateAround(level, stabilizerPos);
+        int firstCharge = level.getBlockState(firstInlayPos).getValue(TCInlayBlock.CHARGE);
+        int secondCharge = level.getBlockState(secondInlayPos).getValue(TCInlayBlock.CHARGE);
+        int pedestalCharge = level.getBlockState(pedestalPos).getValue(TCInfusionPedestalBlock.CHARGE);
+        checks.add(new Check(
+                "runtime_inlay_charge_decreases_once_per_network_step",
+                firstCharge == 10 && secondCharge == 9 && pedestalCharge == 8,
+                "charges=" + firstCharge + "," + secondCharge + "," + pedestalCharge
+        ));
+        CompoundTag saved = stabilizer.getUpdateTag(server.registryAccess());
+        checks.add(new Check(
+                "runtime_stabilizer_energy_is_persisted",
+                saved.getInt("energy") == 10,
+                "energy=" + saved.getInt("energy")
+        ));
+
+        pedestal.setStoredForValidation(new ItemStack(Items.FEATHER));
+        TCInfusionInstabilityExecutor.ExecutionResult result = TCInfusionInstabilityExecutor.execute(
+                matrix,
+                TCInfusionInstabilityEvent.EJECT_ITEM_DROP,
+                new FixedInfusionRandom(new float[0], new int[]{0, 0})
+        );
+        checks.add(new Check(
+                "runtime_stabilizer_absorbs_ejection_before_item_mutation",
+                result.status() == TCInfusionInstabilityExecutor.ExecutionResult.Status.EXECUTED
+                        && pedestal.getStoredStack().is(Items.FEATHER)
+                        && stabilizer.getEnergy() == 5,
+                "item=" + pedestal.getStoredStack() + ", energy=" + stabilizer.getEnergy()
         ));
     }
 
@@ -1493,6 +1555,11 @@ public final class TCInfusionBehaviorAudit {
                 throw new IllegalStateException("Fixed infusion int " + value + " outside bound " + bound);
             }
             return value;
+        }
+
+        @Override
+        public boolean nextBoolean() {
+            return nextInt(2) != 0;
         }
     }
 }

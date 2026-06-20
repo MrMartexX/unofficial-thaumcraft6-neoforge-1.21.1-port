@@ -29,6 +29,7 @@ import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMenus;
+import thaumcraft.common.registry.TCMobEffects;
 import thaumcraft.common.registry.TCRecipes;
 import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.research.TCKnowledgeCommands;
@@ -63,6 +64,7 @@ public final class Thaumcraft {
         TCDataComponents.DATA_COMPONENT_TYPES.register(modEventBus);
         TCBlocks.BLOCKS.register(modEventBus);
         TCBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
+        TCMobEffects.MOB_EFFECTS.register(modEventBus);
         TCItems.ITEMS.register(modEventBus);
         TCMenus.MENUS.register(modEventBus);
         TCRecipes.RECIPE_TYPES.register(modEventBus);

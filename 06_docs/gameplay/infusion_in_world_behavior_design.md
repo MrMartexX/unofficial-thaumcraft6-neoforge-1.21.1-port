@@ -29,8 +29,11 @@ This is the active design boundary for Thaumcraft 6 infusion gameplay on NeoForg
 - Matrix stability is persistent and follows the legacy `VERY_STABLE` / `STABLE` / `UNSTABLE` / `VERY_UNSTABLE` thresholds with loss modifiers `5/6/7/8`.
 - Every cycle applies random instability loss, structure replenishment and the legacy `[-100,25]` clamp before catalyst/event handling.
 - The event trigger preserves `nextInt(1500) <= abs(stability)` and all 24 legacy roll positions. Event recovery is added after the clamp exactly like legacy and is clamped only by the following cycle.
-- Real effects are implemented for 18 rolls: ordinary eject, flux drop/delete, explosive eject, matrix explosion, warp, single zap and multi-zap.
-- The six Flux Goo and custom Flux Taint/Vis Exhaust rolls fail closed with explicit dependency reasons. No vanilla substitute is used.
+- Real effects are implemented for all 24 rolls: ordinary/Flux Goo/flux/explosive ejection, matrix explosion, warp, single/multi zap and single/multi harm.
+- `flux_goo` preserves levels `0..7`, entity slowdown, 600-tick Vis Exhaust with `level/3` amplifier, legacy decay/aura pollution and exact ejection placement/sound. Finite-fluid spreading, Thaumic Slime spawning and the level-zero taint-fibre branch remain dependency-owned taint work.
+- Flux Taint and Vis Exhaust are real registered effects. Infusion uses exact `120`/`2400` durations, ambient/particle flags and no-curative Vis Exhaust behavior. Flux Taint damages non-undead targets every `40 >> amplifier` ticks; healing of future `ITaintedMob` equivalents remains owned by the taint entity subsystem.
+- Stabilizing inlay and pedestal charge use a bounded server-side network with legacy strength `0..15`, one-point attenuation per network step and source threshold `>=5`.
+- Stabilizer energy persists, recharges one point per 20 ticks up to 15 at a cost of `0.25` aura flux, and absorbs ejection before any item mutation for the exact random cost `5..10`.
 - Nearby players receive the `!INSTABILITY` discovery only after a real event executes.
 
 For the Cloud Ring fixture (`50 aer`, two components), the audited sequence is `50 + 6 + 6 + 1 = 63` craft cycles.
@@ -51,11 +54,10 @@ The current generic billboard output is a visual bridge. Exact `FXEssentiaStream
 
 ## Next server batch
 
-1. Register and audit exact `flux_goo`, Flux Taint and Vis Exhaust dependencies, then close the remaining six blocked event rolls.
-2. Port pedestal inlay/Stabilizer mitigation before declaring ejection events final.
-3. Refresh surroundings when relevant blocks change while preserving server ownership and bounded scans.
-4. Add inactive matrix activation/stability charging plus start/fail/finish state sync and activation audit.
-5. Enable caster start only after failed paths cannot duplicate or delete items.
+1. Refresh surroundings when relevant blocks change while preserving server ownership and bounded scans.
+2. Add inactive matrix activation/stability charging plus start/fail/finish state sync and activation audit.
+3. Enable caster start only after failed paths cannot duplicate or delete items.
+4. Complete finite Flux Goo flow, Thaumic Slime/taint-fibre dependencies and stabilizer-to-Flux-Rift behavior with their owning subsystems.
 
 ## Deferred boundaries
 
@@ -64,7 +66,8 @@ The current generic billboard output is a visual bridge. Exact `FXEssentiaStream
 - enchantment/NBT-object infusion outputs beyond the current item-stack recipe model;
 - Thaumatorium and golem automation;
 - broad pedestal GUI;
-- Flux Goo, Flux Taint/Vis Exhaust and pedestal inlay/Stabilizer mitigation.
+- finite Flux Goo spreading, Thaumic Slime/taint-fibre transformations and Flux Rift stabilization;
+- exact mob-effect icons and taint-specific healing behavior.
 
 ## Required validation
 
@@ -77,4 +80,4 @@ Every infusion batch must pass:
 5. `tools/ci/server-smoke.ps1`;
 6. client startup when payload, particle, sound, model or renderer code changes.
 
-Current runtime result: `83/83` infusion behavior checks pass.
+Current runtime result: `86/86` infusion behavior checks pass.

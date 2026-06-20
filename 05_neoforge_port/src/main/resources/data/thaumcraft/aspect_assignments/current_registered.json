@@ -221,6 +221,27 @@
       ]
     },
     {
+      "item": "thaumcraft:inlay",
+      "aspects": [
+        { "aspect": "thaumcraft:potentia", "amount": 3 },
+        { "aspect": "thaumcraft:metallum", "amount": 3 },
+        { "aspect": "thaumcraft:desiderium", "amount": 3 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:stabilizer",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 15 },
+        { "aspect": "thaumcraft:potentia", "amount": 58 },
+        { "aspect": "thaumcraft:metallum", "amount": 59 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 23 },
+        { "aspect": "thaumcraft:desiderium", "amount": 4 },
+        { "aspect": "thaumcraft:machina", "amount": 5 },
+        { "aspect": "thaumcraft:motus", "amount": 5 }
+      ]
+    },
+    {
       "tag": "c:ores/amber",
       "aspects": [
         { "aspect": "thaumcraft:terra", "amount": 5 },

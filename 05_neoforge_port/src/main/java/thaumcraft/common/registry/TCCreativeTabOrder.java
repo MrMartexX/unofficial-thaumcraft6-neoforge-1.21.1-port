@@ -120,6 +120,8 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.ARCANE_PEDESTAL.get());
         acceptVisible(output, TCItems.ANCIENT_PEDESTAL.get());
         acceptVisible(output, TCItems.ELDRITCH_PEDESTAL.get());
+        acceptVisible(output, TCItems.INLAY.get());
+        acceptVisible(output, TCItems.STABILIZER.get());
         acceptVisible(output, TCItems.GOLEM_BUILDER.get());
     }
 

@@ -8,6 +8,8 @@ public interface TCInfusionRandomSource {
 
     int nextInt(int bound);
 
+    boolean nextBoolean();
+
     static TCInfusionRandomSource wrap(RandomSource random) {
         return new TCInfusionRandomSource() {
             @Override
@@ -18,6 +20,11 @@ public interface TCInfusionRandomSource {
             @Override
             public int nextInt(int bound) {
                 return random.nextInt(bound);
+            }
+
+            @Override
+            public boolean nextBoolean() {
+                return random.nextBoolean();
             }
         };
     }

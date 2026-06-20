@@ -1,7 +1,1 @@
-{
-  "variants": {
-    "": {
-      "model": "thaumcraft:block/pedestal_ancient"
-    }
-  }
-}
+{ "multipart": [{ "apply": { "model": "thaumcraft:block/pedestal_ancient" } }] }

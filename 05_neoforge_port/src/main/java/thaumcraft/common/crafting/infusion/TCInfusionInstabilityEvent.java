@@ -34,16 +34,11 @@ public enum TCInfusionInstabilityEvent {
     }
 
     public boolean isSupportedByCurrentPort() {
-        return this != EJECT_FLUX_GOO_DROP
-                && this != EJECT_FLUX_GOO_DELETE
-                && this != HARM_ONE
-                && this != HARM_ALL;
+        return true;
     }
 
     public String missingDependency() {
         return switch (this) {
-            case EJECT_FLUX_GOO_DROP, EJECT_FLUX_GOO_DELETE -> "thaumcraft:flux_goo";
-            case HARM_ONE, HARM_ALL -> "thaumcraft:flux_taint_or_vis_exhaust_effect";
             default -> "";
         };
     }

@@ -35,6 +35,9 @@ import thaumcraft.common.blocks.crafting.TCInfusionPedestalBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionPillarBlock;
 import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
+import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
+import thaumcraft.common.blocks.devices.TCInlayBlock;
+import thaumcraft.common.blocks.devices.TCStabilizerBlock;
 
 public final class TCBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Thaumcraft.MODID);
@@ -139,6 +142,9 @@ public final class TCBlocks {
     public static final Supplier<Block> ANCIENT_PEDESTAL = BLOCKS.register("ancient_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
     public static final Supplier<Block> ELDRITCH_PEDESTAL = BLOCKS.register("eldritch_pedestal", () -> infusionPedestalBlock(15.0F, 1000.0F));
     public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
+    public static final Supplier<Block> INLAY = BLOCKS.register("inlay", () -> inlayBlock());
+    public static final Supplier<Block> STABILIZER = BLOCKS.register("stabilizer", () -> stabilizerBlock());
+    public static final Supplier<Block> FLUX_GOO = BLOCKS.register("flux_goo", () -> fluxGooBlock());
 
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
@@ -213,6 +219,29 @@ public final class TCBlocks {
         return new TCCrucibleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
                 .strength(2.0F, 6.0F)
                 .requiresCorrectToolForDrops()
+                .noOcclusion());
+    }
+
+    private static Block fluxGooBlock() {
+        return new TCFluxGooBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
+                .randomTicks()
+                .noCollission()
+                .noOcclusion()
+                .strength(100.0F));
+    }
+
+    private static Block inlayBlock() {
+        return new TCInlayBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(0.5F)
+                .sound(SoundType.METAL)
+                .noCollission()
+                .noOcclusion());
+    }
+
+    private static Block stabilizerBlock() {
+        return new TCStabilizerBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(2.0F, 10.0F)
+                .sound(SoundType.METAL)
                 .noOcclusion());
     }
 

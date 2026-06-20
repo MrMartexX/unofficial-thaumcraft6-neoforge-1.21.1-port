@@ -24,6 +24,7 @@ import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 import thaumcraft.common.tiles.misc.TCNitorBlockEntity;
+import thaumcraft.common.tiles.devices.TCStabilizerBlockEntity;
 
 public final class TCBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
@@ -51,6 +52,9 @@ public final class TCBlockEntities {
                             TCBlocks.ARCANE_PEDESTAL.get(),
                             TCBlocks.ANCIENT_PEDESTAL.get(),
                             TCBlocks.ELDRITCH_PEDESTAL.get()).build(null));
+    public static final Supplier<BlockEntityType<TCStabilizerBlockEntity>> STABILIZER =
+            BLOCK_ENTITY_TYPES.register("stabilizer", () ->
+                    BlockEntityType.Builder.of(TCStabilizerBlockEntity::new, TCBlocks.STABILIZER.get()).build(null));
 
     public static final Supplier<BlockEntityType<TCNitorBlockEntity>> NITOR =
             BLOCK_ENTITY_TYPES.register("nitor", () ->
