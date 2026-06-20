@@ -16,6 +16,13 @@ public final class TCInfusionLegacyCycleExecutor {
         if (matrix == null || matrix.getLevel() == null || matrix.getLevel().isClientSide) {
             return TCInfusionCycleResult.of(TCInfusionCycleResult.Status.IDLE, "missing_server_matrix");
         }
+        return advance(matrix, TCInfusionRandomSource.wrap(matrix.getLevel().getRandom()));
+    }
+
+    static TCInfusionCycleResult advance(
+            TCInfusionMatrixBlockEntity matrix,
+            TCInfusionRandomSource random
+    ) {
         TCInfusionCraftingPlan plan = matrix.activePlan().orElse(null);
         TCInfusionCycleState state = matrix.activeCycleState().orElse(null);
         if (plan == null || state == null) {
@@ -24,7 +31,41 @@ public final class TCInfusionLegacyCycleExecutor {
         state.recordCycle();
 
         TCInfusionPedestalBlockEntity center = matrix.centralPedestal().orElse(null);
-        if (center == null || !plan.catalystMatches(center.getStoredStack())) {
+        boolean catalystValid = center != null && plan.catalystMatches(center.getStoredStack());
+        TCInfusionStability.CycleUpdate stabilityUpdate = TCInfusionStability.advanceCycle(
+                matrix.stability(),
+                plan.instability(),
+                plan.stabilityReplenish(),
+                random.nextFloat()
+        );
+        matrix.setStabilityFromCycle(stabilityUpdate.stability());
+
+        boolean instabilityTriggered = !catalystValid;
+        if (!instabilityTriggered && stabilityUpdate.stability() < 0.0F) {
+            instabilityTriggered = TCInfusionStability.shouldTriggerEvent(
+                    stabilityUpdate.stability(),
+                    random.nextInt(TCInfusionStability.EVENT_ROLL_BOUND)
+            );
+        }
+        if (instabilityTriggered) {
+            TCInfusionInstabilityEvent event = TCInfusionInstabilityEvent.fromLegacyRoll(
+                    random.nextInt(24)
+            );
+            TCInfusionInstabilityExecutor.ExecutionResult execution =
+                    TCInfusionInstabilityExecutor.execute(matrix, event, random);
+            matrix.recordInstabilityEvent(event, execution.reason());
+            if (execution.status() == TCInfusionInstabilityExecutor.ExecutionResult.Status.BLOCKED) {
+                return matrix.abortCraftingFromCycle("instability_event_blocked:" + execution.reason());
+            }
+            matrix.addLegacyInstabilityRecovery(5.0F + random.nextFloat() * 5.0F);
+            TCInfusionInstabilityExecutor.grantInstabilityResearch(matrix);
+            if (catalystValid) {
+                TCInfusionCycleResult result = TCInfusionCycleResult.instability(event, "instability_event_executed");
+                matrix.recordCycleResult(result);
+                return result;
+            }
+        }
+        if (!catalystValid) {
             return matrix.abortCraftingFromCycle("catalyst_changed");
         }
         if (TCInfusionContainerRemainderPolicy.requiresExplicitPolicy(plan)) {

@@ -26,6 +26,12 @@ This is the active design boundary for Thaumcraft 6 infusion gameplay on NeoForg
 - Ancient and eldritch surrounding pedestal cost modifiers are included before the legacy `0.5` cost floor and integer aspect truncation.
 - The preserved public `IInfusionStabiliser` / `IInfusionStabiliserExt` contracts drive candle, skull and pedestal symmetry scanning. Matched pairs use per-block `0.75^n` diminishing returns; mismatched and unpaired candidates apply the legacy penalty.
 - Craft plans persist the resolved cycle time/delay, cost multiplier and stability replenishment so save/load cannot silently revert altar modifiers.
+- Matrix stability is persistent and follows the legacy `VERY_STABLE` / `STABLE` / `UNSTABLE` / `VERY_UNSTABLE` thresholds with loss modifiers `5/6/7/8`.
+- Every cycle applies random instability loss, structure replenishment and the legacy `[-100,25]` clamp before catalyst/event handling.
+- The event trigger preserves `nextInt(1500) <= abs(stability)` and all 24 legacy roll positions. Event recovery is added after the clamp exactly like legacy and is clamped only by the following cycle.
+- Real effects are implemented for 18 rolls: ordinary eject, flux drop/delete, explosive eject, matrix explosion, warp, single zap and multi-zap.
+- The six Flux Goo and custom Flux Taint/Vis Exhaust rolls fail closed with explicit dependency reasons. No vanilla substitute is used.
+- Nearby players receive the `!INSTABILITY` discovery only after a real event executes.
 
 For the Cloud Ring fixture (`50 aer`, two components), the audited sequence is `50 + 6 + 6 + 1 = 63` craft cycles.
 
@@ -45,10 +51,10 @@ The current generic billboard output is a visual bridge. Exact `FXEssentiaStream
 
 ## Next server batch
 
-1. Port the persistent stability value, category thresholds, cap/floor and exact per-cycle loss/replenishment formula.
-2. Port all 24 instability roll outcomes. Effects whose owning content is absent must remain an explicit activation blocker; do not silently substitute vanilla effects.
+1. Register and audit exact `flux_goo`, Flux Taint and Vis Exhaust dependencies, then close the remaining six blocked event rolls.
+2. Port pedestal inlay/Stabilizer mitigation before declaring ejection events final.
 3. Refresh surroundings when relevant blocks change while preserving server ownership and bounded scans.
-4. Add start/fail/finish state sync and activation audit.
+4. Add inactive matrix activation/stability charging plus start/fail/finish state sync and activation audit.
 5. Enable caster start only after failed paths cannot duplicate or delete items.
 
 ## Deferred boundaries
@@ -58,7 +64,7 @@ The current generic billboard output is a visual bridge. Exact `FXEssentiaStream
 - enchantment/NBT-object infusion outputs beyond the current item-stack recipe model;
 - Thaumatorium and golem automation;
 - broad pedestal GUI;
-- instability effects whose owning blocks/entities are not registered.
+- Flux Goo, Flux Taint/Vis Exhaust and pedestal inlay/Stabilizer mitigation.
 
 ## Required validation
 
@@ -71,4 +77,4 @@ Every infusion batch must pass:
 5. `tools/ci/server-smoke.ps1`;
 6. client startup when payload, particle, sound, model or renderer code changes.
 
-Current runtime result: `72/72` infusion behavior checks pass.
+Current runtime result: `83/83` infusion behavior checks pass.

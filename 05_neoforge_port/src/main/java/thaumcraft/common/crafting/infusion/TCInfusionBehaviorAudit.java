@@ -70,7 +70,8 @@ public final class TCInfusionBehaviorAudit {
         lines.add("- The audit-only mutation executor consumes validated inputs, while normal player interaction remains disabled.");
         lines.add("- Legacy-shaped source discovery scans aspect containers in the range-12 volume and drains nearest containers first; transient tube buffers are excluded.");
         lines.add("- The persisted cycle audit drains one essentia point per cycle, waits six cycles per component and completes only on the following cycle.");
-        lines.add("- This does not yet implement instability events, source-beam payloads, particles, sounds or matrix animation.");
+        lines.add("- Persistent stability math and all 24 legacy instability roll mappings are audited. Flux Goo and custom harm effects fail closed until their exact dependencies exist.");
+        lines.add("- Exact source-beam geometry, block arcs, instability particles and matrix animation remain visual parity work.");
 
         Files.write(output, lines);
         return report;
@@ -223,8 +224,147 @@ public final class TCInfusionBehaviorAudit {
                 addRuntimeLegacyCycleChecks(server, holder, checks);
             });
         }
+        addStabilityMathChecks(checks);
+        addInstabilityEventMappingChecks(checks);
+        addRuntimeInstabilityBoundaryChecks(server, checks);
 
         return new Report(List.copyOf(checks), infusionRecipes.size());
+    }
+
+    private static void addStabilityMathChecks(ArrayList<Check> checks) {
+        checks.add(new Check(
+                "stability_categories_match_legacy_thresholds",
+                TCInfusionStability.category(13.0F) == TCInfusionStability.StabilityCategory.VERY_STABLE
+                        && TCInfusionStability.category(12.0F) == TCInfusionStability.StabilityCategory.STABLE
+                        && TCInfusionStability.category(0.0F) == TCInfusionStability.StabilityCategory.STABLE
+                        && TCInfusionStability.category(-24.999F) == TCInfusionStability.StabilityCategory.UNSTABLE
+                        && TCInfusionStability.category(-25.0F) == TCInfusionStability.StabilityCategory.VERY_UNSTABLE,
+                "thresholds=>12, >=0, >-25, otherwise very unstable"
+        ));
+        checks.add(new Check(
+                "stability_loss_modifiers_match_legacy_values",
+                close(TCInfusionStability.StabilityCategory.VERY_STABLE.lossModifier(), 5.0F)
+                        && close(TCInfusionStability.StabilityCategory.STABLE.lossModifier(), 6.0F)
+                        && close(TCInfusionStability.StabilityCategory.UNSTABLE.lossModifier(), 7.0F)
+                        && close(TCInfusionStability.StabilityCategory.VERY_UNSTABLE.lossModifier(), 8.0F),
+                "modifiers=5/6/7/8"
+        ));
+        TCInfusionStability.CycleUpdate update = TCInfusionStability.advanceCycle(0.0F, 12, 0.25F, 0.5F);
+        checks.add(new Check(
+                "stability_cycle_applies_loss_then_replenish",
+                close(update.loss(), 1.0F) && close(update.stability(), -0.75F),
+                "loss=" + update.loss() + ", stability=" + update.stability()
+        ));
+        checks.add(new Check(
+                "stability_cycle_clamps_to_legacy_range",
+                close(TCInfusionStability.advanceCycle(25.0F, 0, 10.0F, 0.0F).stability(), 25.0F)
+                        && close(TCInfusionStability.advanceCycle(-99.0F, 100, -10.0F, 1.0F).stability(), -100.0F),
+                "range=[-100,25]"
+        ));
+        checks.add(new Check(
+                "stability_event_roll_is_inclusive_at_absolute_value",
+                TCInfusionStability.shouldTriggerEvent(-10.0F, 10)
+                        && !TCInfusionStability.shouldTriggerEvent(-10.0F, 11)
+                        && !TCInfusionStability.shouldTriggerEvent(0.0F, 0),
+                "legacy nextInt(1500) <= abs(stability)"
+        ));
+    }
+
+    private static void addInstabilityEventMappingChecks(ArrayList<Check> checks) {
+        int[] counts = new int[TCInfusionInstabilityEvent.values().length];
+        int supportedRolls = 0;
+        for (int roll = 0; roll < 24; roll++) {
+            TCInfusionInstabilityEvent event = TCInfusionInstabilityEvent.fromLegacyRoll(roll);
+            counts[event.ordinal()]++;
+            if (event.isSupportedByCurrentPort()) {
+                supportedRolls++;
+            }
+        }
+        checks.add(new Check(
+                "instability_all_24_rolls_match_legacy_distribution",
+                counts[TCInfusionInstabilityEvent.EJECT_ITEM_DROP.ordinal()] == 4
+                        && counts[TCInfusionInstabilityEvent.WARP.ordinal()] == 3
+                        && counts[TCInfusionInstabilityEvent.ZAP_ONE.ordinal()] == 3
+                        && counts[TCInfusionInstabilityEvent.ZAP_ALL.ordinal()] == 2
+                        && counts[TCInfusionInstabilityEvent.EJECT_FLUX_GOO_DROP.ordinal()] == 2
+                        && counts[TCInfusionInstabilityEvent.EJECT_FLUX_DROP.ordinal()] == 2
+                        && counts[TCInfusionInstabilityEvent.EJECT_FLUX_GOO_DELETE.ordinal()] == 1
+                        && counts[TCInfusionInstabilityEvent.EJECT_FLUX_DELETE.ordinal()] == 1
+                        && counts[TCInfusionInstabilityEvent.HARM_ONE.ordinal()] == 2
+                        && counts[TCInfusionInstabilityEvent.EJECT_EXPLOSIVE.ordinal()] == 2
+                        && counts[TCInfusionInstabilityEvent.HARM_ALL.ordinal()] == 1
+                        && counts[TCInfusionInstabilityEvent.MATRIX_EXPLOSION.ordinal()] == 1,
+                "mapped=24"
+        ));
+        checks.add(new Check(
+                "instability_missing_dependencies_are_explicit_not_substituted",
+                supportedRolls == 18
+                        && !TCInfusionInstabilityEvent.EJECT_FLUX_GOO_DROP.isSupportedByCurrentPort()
+                        && !TCInfusionInstabilityEvent.EJECT_FLUX_GOO_DELETE.isSupportedByCurrentPort()
+                        && !TCInfusionInstabilityEvent.HARM_ONE.isSupportedByCurrentPort()
+                        && !TCInfusionInstabilityEvent.HARM_ALL.isSupportedByCurrentPort(),
+                "supportedRolls=" + supportedRolls + ", blockedRolls=" + (24 - supportedRolls)
+        ));
+    }
+
+    private static void addRuntimeInstabilityBoundaryChecks(MinecraftServer server, ArrayList<Check> checks) {
+        ServerLevel level = server.overworld();
+        BlockPos matrixPos = new BlockPos(216, level.getMinBuildHeight() + 12, 0);
+        BlockPos pedestalPos = matrixPos.offset(2, -2, 0);
+        clearTestArea(level, matrixPos);
+        level.setBlock(matrixPos, TCBlocks.INFUSION_MATRIX.get().defaultBlockState(), 3);
+        level.setBlock(pedestalPos, TCBlocks.ARCANE_PEDESTAL.get().defaultBlockState(), 3);
+        TCInfusionMatrixBlockEntity matrix = blockEntity(level, matrixPos, TCInfusionMatrixBlockEntity.class);
+        TCInfusionPedestalBlockEntity pedestal = blockEntity(level, pedestalPos, TCInfusionPedestalBlockEntity.class);
+        if (matrix == null || pedestal == null) {
+            checks.add(new Check("runtime_instability_boundary_setup_created", false, "missing block entity"));
+            return;
+        }
+
+        matrix.setStabilityForValidation(7.25F);
+        CompoundTag syncTag = matrix.getUpdateTag(server.registryAccess());
+        checks.add(new Check(
+                "runtime_stability_is_persisted_in_matrix_nbt",
+                syncTag.contains("Stability") && close(syncTag.getFloat("Stability"), 7.25F),
+                "stability=" + syncTag.getFloat("Stability")
+        ));
+        matrix.setStabilityForValidation(24.0F);
+        matrix.addLegacyInstabilityRecovery(10.0F);
+        boolean recoveryIsUnclamped = close(matrix.stability(), 34.0F);
+        matrix.setStabilityFromCycle(matrix.stability());
+        checks.add(new Check(
+                "runtime_event_recovery_matches_legacy_post_clamp_order",
+                recoveryIsUnclamped && close(matrix.stability(), TCInfusionStability.CAP),
+                "recoveredUnclamped=" + recoveryIsUnclamped + ", nextCycle=" + matrix.stability()
+        ));
+
+        pedestal.setStoredForValidation(new ItemStack(Items.FEATHER));
+        TCInfusionInstabilityExecutor.ExecutionResult blocked = TCInfusionInstabilityExecutor.execute(
+                matrix,
+                TCInfusionInstabilityEvent.EJECT_FLUX_GOO_DROP,
+                new FixedInfusionRandom(new float[0], new int[0])
+        );
+        checks.add(new Check(
+                "runtime_missing_flux_goo_event_fails_closed_without_item_mutation",
+                blocked.status() == TCInfusionInstabilityExecutor.ExecutionResult.Status.BLOCKED
+                        && pedestal.getStoredStack().is(Items.FEATHER),
+                "reason=" + blocked.reason()
+        ));
+
+        float fluxBefore = thaumcraft.api.aura.AuraHelper.getFlux(level, pedestalPos);
+        TCInfusionInstabilityExecutor.ExecutionResult fluxDelete = TCInfusionInstabilityExecutor.execute(
+                matrix,
+                TCInfusionInstabilityEvent.EJECT_FLUX_DELETE,
+                new FixedInfusionRandom(new float[0], new int[]{0, 0})
+        );
+        float fluxDelta = thaumcraft.api.aura.AuraHelper.getFlux(level, pedestalPos) - fluxBefore;
+        checks.add(new Check(
+                "runtime_supported_flux_delete_event_matches_legacy_effect",
+                fluxDelete.status() == TCInfusionInstabilityExecutor.ExecutionResult.Status.EXECUTED
+                        && pedestal.getStoredStack().isEmpty()
+                        && close(fluxDelta, 5.0F),
+                "target=" + fluxDelete.targetPos() + ", fluxDelta=" + fluxDelta
+        ));
     }
 
     private static void addRuntimeMatrixChecks(MinecraftServer server, RecipeHolder<TCInfusionRecipe> cloudRing, ArrayList<Check> checks) {
@@ -806,6 +946,7 @@ public final class TCInfusionBehaviorAudit {
         feather.setStoredForValidation(new ItemStack(Items.FEATHER));
         crystal.setStoredForValidation(new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()));
         jar.setStoredForValidation(Aspect.AIR, 50);
+        matrix.setStabilityForValidation(TCInfusionStability.CAP);
         TCInfusionStartResult start = matrix.startCraftingForValidation(
                 cloudRing,
                 new AspectList().add(Aspect.AIR, 50),
@@ -963,6 +1104,7 @@ public final class TCInfusionBehaviorAudit {
         center.setStoredForValidation(new ItemStack(TCItems.BAUBLE_RING.get()));
         feather.setStoredForValidation(new ItemStack(Items.FEATHER));
         crystal.setStoredForValidation(new ItemStack(TCItems.CRYSTAL_ESSENCE_AER.get()));
+        matrix.setStabilityForValidation(TCInfusionStability.CAP);
         matrix.startCraftingForValidation(cloudRing, new AspectList().add(Aspect.AIR, 50), "AuditPlayer");
 
         TCInfusionCycleResult waiting = matrix.advanceCycleForValidation();
@@ -993,14 +1135,18 @@ public final class TCInfusionBehaviorAudit {
         ));
 
         center.setStoredForValidation(new ItemStack(Items.IRON_INGOT));
-        TCInfusionCycleResult aborted = matrix.advanceCycleForValidation();
+        TCInfusionCycleResult aborted = TCInfusionLegacyCycleExecutor.advance(
+                matrix,
+                new FixedInfusionRandom(new float[]{0.0F, 0.0F}, new int[]{4})
+        );
         checks.add(new Check(
-                "runtime_legacy_cycle_catalyst_change_aborts_without_component_loss",
+                "runtime_legacy_cycle_catalyst_change_runs_event_then_aborts_without_component_loss",
                 aborted.status() == TCInfusionCycleResult.Status.ABORTED
                         && !matrix.isCrafting()
+                        && TCInfusionInstabilityEvent.WARP.name().equals(matrix.lastInstabilityEvent())
                         && feather.getStoredStack().is(Items.FEATHER)
                         && crystal.getStoredStack().is(TCItems.CRYSTAL_ESSENCE_AER.get()),
-                "status=" + aborted.status() + ", reason=" + aborted.reason()
+                "status=" + aborted.status() + ", reason=" + aborted.reason() + ", event=" + matrix.lastInstabilityEvent()
         ));
     }
 
@@ -1316,6 +1462,38 @@ public final class TCInfusionBehaviorAudit {
     }
 
     public record Check(String name, boolean passed, String notes) {
+    }
+
+    private static final class FixedInfusionRandom implements TCInfusionRandomSource {
+        private final float[] floats;
+        private final int[] ints;
+        private int floatIndex;
+        private int intIndex;
+
+        private FixedInfusionRandom(float[] floats, int[] ints) {
+            this.floats = floats == null ? new float[0] : floats;
+            this.ints = ints == null ? new int[0] : ints;
+        }
+
+        @Override
+        public float nextFloat() {
+            if (floatIndex >= floats.length) {
+                throw new IllegalStateException("No fixed infusion float remaining");
+            }
+            return floats[floatIndex++];
+        }
+
+        @Override
+        public int nextInt(int bound) {
+            if (intIndex >= ints.length) {
+                throw new IllegalStateException("No fixed infusion int remaining for bound " + bound);
+            }
+            int value = ints[intIndex++];
+            if (value < 0 || value >= bound) {
+                throw new IllegalStateException("Fixed infusion int " + value + " outside bound " + bound);
+            }
+            return value;
+        }
     }
 }
 

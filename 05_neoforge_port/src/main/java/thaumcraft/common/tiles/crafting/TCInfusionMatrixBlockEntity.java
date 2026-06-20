@@ -29,6 +29,8 @@ import thaumcraft.common.crafting.infusion.TCInfusionAspectSourceResolver;
 import thaumcraft.common.crafting.infusion.TCInfusionLegacyCycleExecutor;
 import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
 import thaumcraft.common.crafting.infusion.TCInfusionStartResult;
+import thaumcraft.common.crafting.infusion.TCInfusionInstabilityEvent;
+import thaumcraft.common.crafting.infusion.TCInfusionStability;
 import thaumcraft.common.crafting.infusion.TCInfusionStructureProfile;
 import thaumcraft.common.crafting.infusion.TCInfusionValidationResult;
 import thaumcraft.common.registry.TCBlockEntities;
@@ -54,6 +56,9 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
     private String lastCycleReason = "";
     private BlockPos lastCycleSourcePos;
     private BlockPos lastCycleComponentPos;
+    private float stability;
+    private String lastInstabilityEvent = "";
+    private String lastInstabilityReason = "";
 
     public TCInfusionMatrixBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.INFUSION_MATRIX.get(), pos, state);
@@ -284,8 +289,47 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         setChanged();
     }
 
+    public float stability() {
+        return stability;
+    }
+
+    public TCInfusionStability.StabilityCategory stabilityCategory() {
+        return TCInfusionStability.category(stability);
+    }
+
+    public void setStabilityForValidation(float value) {
+        stability = value;
+        markChangedAndSync();
+    }
+
+    public void setStabilityFromCycle(float value) {
+        stability = TCInfusionStability.clamp(value);
+        setChanged();
+    }
+
+    public void addLegacyInstabilityRecovery(float amount) {
+        // Legacy adds event recovery after the cycle clamp and does not clamp it again until the next cycle.
+        stability += Math.max(0.0F, amount);
+        setChanged();
+    }
+
+    public void recordInstabilityEvent(TCInfusionInstabilityEvent event, String reason) {
+        lastInstabilityEvent = event == null ? "" : event.name();
+        lastInstabilityReason = reason == null ? "" : reason;
+        setChanged();
+    }
+
+    public String lastInstabilityEvent() {
+        return lastInstabilityEvent;
+    }
+
+    public String lastInstabilityReason() {
+        return lastInstabilityReason;
+    }
+
     public TCInfusionCycleResult abortCraftingFromCycle(String reason) {
         TCInfusionCycleResult.Status status = "container_remainder_policy_required".equals(reason)
+                || (reason != null && reason.startsWith("instability_event_blocked:"))
                 ? TCInfusionCycleResult.Status.BLOCKED
                 : TCInfusionCycleResult.Status.ABORTED;
         TCInfusionCycleResult result = TCInfusionCycleResult.of(status, reason);
@@ -484,6 +528,9 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         tag.putInt("LastComponentCount", lastComponentCount);
         tag.putString("LastCycleStatus", lastCycleStatus);
         tag.putString("LastCycleReason", lastCycleReason);
+        tag.putFloat("Stability", stability);
+        tag.putString("LastInstabilityEvent", lastInstabilityEvent);
+        tag.putString("LastInstabilityReason", lastInstabilityReason);
         if (activePlan != null) {
             tag.put("ActiveInfusionPlan", activePlan.save(registries));
         }
@@ -501,6 +548,9 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         lastComponentCount = tag.getInt("LastComponentCount");
         lastCycleStatus = tag.getString("LastCycleStatus");
         lastCycleReason = tag.getString("LastCycleReason");
+        stability = tag.getFloat("Stability");
+        lastInstabilityEvent = tag.getString("LastInstabilityEvent");
+        lastInstabilityReason = tag.getString("LastInstabilityReason");
         activePlan = tag.contains("ActiveInfusionPlan", Tag.TAG_COMPOUND)
                 ? TCInfusionCraftingPlan.load(tag.getCompound("ActiveInfusionPlan"), registries)
                 : null;
