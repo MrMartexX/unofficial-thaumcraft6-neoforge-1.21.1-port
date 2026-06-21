@@ -412,3 +412,8 @@ Last updated: 2026-06-21
 
 - Added an audit for the `smelter_basic` / `smelter_thaumium` / `smelter_void` runtime boundary.
 - Next implementation should avoid mixing endpoint transport placeholders with actual upgraded smelter machine behavior.
+
+## Smelter machine type field note
+
+- Added a variant-ready machine type field to the basic smelter block entity.
+- `smelter_thaumium` and `smelter_void` runtime activation remains blocked by the endpoint/machine ownership split.

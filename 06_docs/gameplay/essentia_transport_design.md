@@ -135,3 +135,9 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 
 - Added an audit documenting the boundary conflict between real legacy smelter variants and the current transport endpoint placeholder classes.
 - `SMELTER_THAUMIUM` and `SMELTER_VOID` should not be activated as runtime machine variants until their transport endpoint role is resolved.
+
+## Smelter machine type field checkpoint
+
+- Added an explicit `SmelterType` ownership field to `TCSmelterBlockEntity` and routed runtime efficiency/output-speed through the instance type.
+- Basic smelter behavior remains unchanged because the public constructor still defaults to `SmelterType.BASIC`.
+- This prepares a later bridge where thaumium/void smelters can become real machine variants without changing the endpoint placeholder classes in the same slice.

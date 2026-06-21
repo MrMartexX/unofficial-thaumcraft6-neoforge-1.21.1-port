@@ -735,3 +735,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added a focused audit for smelter variant versus transport endpoint ownership.
 - Basic smelter runtime is active; upgraded smelter variants still need a safe ownership split/bridge.
+
+## Smelter machine type field note
+
+- Basic smelter now routes efficiency and output-speed through an instance `SmelterType` field.
+- Upgraded smelter blocks are still not enabled as machine variants until the endpoint ownership bridge is implemented.

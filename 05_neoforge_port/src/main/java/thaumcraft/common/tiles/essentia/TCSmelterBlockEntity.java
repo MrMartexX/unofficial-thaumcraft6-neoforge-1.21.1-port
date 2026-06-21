@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aura.AuraHelper;
@@ -31,13 +32,14 @@ import thaumcraft.common.registry.TCBlocks;
  * intentionally leaves bellows discovery, efficiency/flux loss, vents and Alembic output for
  * later focused slices.
  */
-public final class TCSmelterBlockEntity extends BlockEntity {
+public class TCSmelterBlockEntity extends BlockEntity {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_COUNT = 2;
     public static final int MAX_VIS = 256;
     public static final int BASE_SMELT_TIME = 100;
 
+    private final SmelterType smelterType;
     private final NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
     private AspectList aspects = new AspectList();
     private int vis;
@@ -49,12 +51,15 @@ public final class TCSmelterBlockEntity extends BlockEntity {
     private int bellows = -1;
     private int transferTicks;
     private int pendingFlux;
-
     public TCSmelterBlockEntity(BlockPos pos, BlockState state) {
-        super(TCBlockEntities.SMELTER_BASIC.get(), pos, state);
+        this(TCBlockEntities.SMELTER_BASIC.get(), pos, state, SmelterType.BASIC);
     }
 
-    public ItemStack getStoredItem(int slot) {
+    protected TCSmelterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, SmelterType smelterType) {
+        super(type, pos, state);
+        this.smelterType = smelterType == null ? SmelterType.BASIC : smelterType;
+    }
+public ItemStack getStoredItem(int slot) {
         return slot >= 0 && slot < SLOT_COUNT ? items.get(slot) : ItemStack.EMPTY;
     }
 
@@ -98,7 +103,10 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         return bellows;
     }
 
-    public boolean speedBoost() {
+    public SmelterType smelterType() {
+        return smelterType;
+    }
+public boolean speedBoost() {
         return speedBoost;
     }
     public int pendingFlux() {
@@ -267,7 +275,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
             return converted;
         }
         RandomSource random = RandomSource.create();
-        float efficiency = efficiencyForType(SmelterType.BASIC);
+        float efficiency = efficiencyForType(smelterType());
         int fluxLoss = 0;
         for (Aspect aspect : inputAspects.getAspects()) {
             if (aspect == null) {
@@ -321,7 +329,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
             return false;
         }
         transferTicks++;
-        int speed = speedForType(SmelterType.BASIC);
+        int speed = speedForType(smelterType());
         if (transferTicks % speed != 0) {
             return false;
         }
