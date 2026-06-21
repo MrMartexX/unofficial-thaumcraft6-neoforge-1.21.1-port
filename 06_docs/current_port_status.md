@@ -698,3 +698,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added a legacy-source audit for the smelter machine model after the Alembic endpoint boundary.
 - No gameplay behavior is changed by this audit.
+## Smelter machine model boundary note
+
+- Added `TCSmelterBlockEntity` and attached it to `smelter_basic` as the first persisted machine model boundary.
+- This does not yet perform real smelting or fill Alembics.

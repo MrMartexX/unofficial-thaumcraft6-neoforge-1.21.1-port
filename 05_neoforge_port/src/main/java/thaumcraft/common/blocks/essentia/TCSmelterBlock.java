@@ -7,6 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -15,8 +16,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import thaumcraft.common.tiles.essentia.TCSmelterBlockEntity;
+import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class TCSmelterBlock extends Block {
+public class TCSmelterBlock extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty ENABLED = BooleanProperty.create("enabled");
 
@@ -27,6 +31,12 @@ public class TCSmelterBlock extends Block {
                 .setValue(ENABLED, Boolean.FALSE));
     }
 
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TCSmelterBlockEntity(pos, state);
+    }
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState()
@@ -76,3 +86,4 @@ public class TCSmelterBlock extends Block {
         level.addParticle(ParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
     }
 }
+

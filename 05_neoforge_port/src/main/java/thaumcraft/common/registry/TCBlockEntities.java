@@ -22,6 +22,7 @@ import thaumcraft.common.tiles.crafting.TCCrucibleBlockEntity;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
+import thaumcraft.common.tiles.essentia.TCSmelterBlockEntity;
 import thaumcraft.common.tiles.essentia.TCAlembicBlockEntity;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 import thaumcraft.common.tiles.misc.TCNitorBlockEntity;
@@ -40,6 +41,9 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCCrucibleBlockEntity>> CRUCIBLE =
             BLOCK_ENTITY_TYPES.register("crucible", () ->
                     BlockEntityType.Builder.of(TCCrucibleBlockEntity::new, TCBlocks.CRUCIBLE.get()).build(null));
+    public static final Supplier<BlockEntityType<TCSmelterBlockEntity>> SMELTER_BASIC =
+            BLOCK_ENTITY_TYPES.register("smelter_basic", () ->
+                    BlockEntityType.Builder.of(TCSmelterBlockEntity::new, TCBlocks.SMELTER_BASIC.get()).build(null));
     public static final Supplier<BlockEntityType<TCWardedJarBlockEntity>> WARDED_JAR =
             BLOCK_ENTITY_TYPES.register("jar_normal", () ->
                     BlockEntityType.Builder.of(TCWardedJarBlockEntity::new, TCBlocks.JAR_NORMAL.get()).build(null));
@@ -153,4 +157,5 @@ public final class TCBlockEntities {
     private TCBlockEntities() {
     }
 }
+
 

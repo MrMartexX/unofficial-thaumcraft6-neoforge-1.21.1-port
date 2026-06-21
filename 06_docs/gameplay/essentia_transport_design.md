@@ -90,3 +90,9 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Added `tools/audits/audit-legacy-smelter-machine-model.ps1` and `06_docs/audits/smelter_legacy_machine_model_audit.md`.
 - Use this audit to replace the current smelter skeleton with a real inventory/aspect/fuel/efficiency model in one focused batch.
 - Keep Bellows discovery, vent rendering, thaumatorium/importer/exporter and broad automation out of that first smelter machine batch.
+## Smelter machine model checkpoint
+
+- Added first `TCSmelterBlockEntity` machine-state boundary for the basic smelter.
+- Preserves the legacy two-slot shape, aspect buffer cap `256`, default smelt time `100`, burn/cook fields, speed-boost flag and bellows counter.
+- Encodes the legacy type constants: Basic efficiency `0.8`, Thaumium `0.9`, Void `0.95`, Basic/Void speed `15`, Thaumium speed `10`.
+- This is still not full smelting: item aspect lookup, fuel consumption ticking, flux losses, vent behavior and Alembic production remain the next implementation slice.

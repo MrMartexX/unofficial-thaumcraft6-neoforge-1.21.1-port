@@ -375,3 +375,7 @@ Last updated: 2026-06-21
 
 - Use `06_docs/audits/smelter_legacy_machine_model_audit.md` before replacing the current smelter skeleton with the real machine model.
 - The next implementation scope should be smelter inventory/aspect/fuel/efficiency plus Alembic output hookup only if the audit evidence supports it.
+## Smelter machine model boundary note
+
+- Added the first basic smelter block entity machine-state boundary.
+- Next smelter batch should implement ticking/fuel/input aspect conversion and Alembic output from this persisted state.
