@@ -87,3 +87,4 @@ public class TCSmelterBlock extends Block implements EntityBlock {
     }
 }
 
+
