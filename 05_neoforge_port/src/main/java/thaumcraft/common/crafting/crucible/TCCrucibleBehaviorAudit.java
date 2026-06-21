@@ -214,6 +214,25 @@ public final class TCCrucibleBehaviorAudit {
                 !aDamagedBeforeTenth && !bDamagedOnFirst && aDamagedOnTenth,
                 "contact delay is stored on each TCCrucibleBlockEntity instead of the singleton block"
         ));
+
+        TCCrucibleBlockEntity fluidCrucible = validationCrucible(level, pos.offset(8, 0, 0));
+        checks.add(new Check(
+                "fluid_height_full_water_baseline",
+                closeEnough(fluidCrucible.getFluidHeight(), 0.8F),
+                "legacy full-water surface baseline=" + fluidCrucible.getFluidHeight()
+        ));
+        fluidCrucible.addAspectForValidation(Aspect.FIRE, TCCrucibleBlockEntity.LEGACY_ASPECT_CAP);
+        checks.add(new Check(
+                "fluid_height_exact_aspect_cap_avoids_z_fighting",
+                closeEnough(fluidCrucible.getFluidHeight(), 0.9999F),
+                "legacy exact-height correction=" + fluidCrucible.getFluidHeight()
+        ));
+        fluidCrucible.addAspectForValidation(Aspect.FIRE, 1);
+        checks.add(new Check(
+                "fluid_height_overflow_rises_above_rim",
+                closeEnough(fluidCrucible.getFluidHeight(), 1.001F),
+                "legacy overflow height=" + fluidCrucible.getFluidHeight()
+        ));
         return new Report(List.copyOf(checks));
     }
 

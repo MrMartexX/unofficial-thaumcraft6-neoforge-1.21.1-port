@@ -33,7 +33,7 @@ This table is a roadmap snapshot, not the live task queue. Use `06_docs/CURRENT_
 | Stage 10. Networking | In progress | Aura, knowledge, research table, Thaumonomicon and both clientbound infusion FX payload contracts exist; future gameplay payloads need subsystem-specific design. |
 | Stage 11. Entities / Golems | Deferred | Vanilla/entity scan parity is handled; custom Thaumcraft entities, golems, AI and renderers are not started. |
 | Stage 12. Worldgen | In progress | Sapling-grown Greatwood/Silverwood behavior exists; biome/world placement and structures are not started. |
-| Stage 13. Rendering / Particles | In progress | Thaumometer effects, selected FX scaffolding and narrow table renderer exist; broad render system/BEWLR/shader work remains high risk. |
+| Stage 13. Rendering / Particles | In progress | Thaumometer effects, table renderer, infusion matrix/stream/source FX and crucible liquid/boil/block-event FX exist; measured visual parity and broad render/BEWLR/shader work remain high risk. |
 | Stage 14. Integrations | Deferred | Optional accessory/recipe-viewer integrations are intentionally held until core systems stabilize. |
 
 ## Stage 1. Minimal Launch

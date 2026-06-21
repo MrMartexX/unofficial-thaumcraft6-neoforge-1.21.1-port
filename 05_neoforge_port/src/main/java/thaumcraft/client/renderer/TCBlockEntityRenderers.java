@@ -14,6 +14,7 @@ public final class TCBlockEntityRenderers {
 
     private static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(TCBlockEntities.RESEARCH_TABLE.get(), TCResearchTableRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.CRUCIBLE.get(), TCCrucibleRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.INFUSION_PEDESTAL.get(), TCInfusionPedestalRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.INFUSION_MATRIX.get(), TCInfusionMatrixRenderer::new);
     }

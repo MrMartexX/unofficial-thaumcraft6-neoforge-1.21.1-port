@@ -31,6 +31,7 @@ import thaumcraft.common.crafting.crucible.TCCrucibleRecipe;
 import thaumcraft.common.crafting.crucible.TCCrucibleRecipeMatcher;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCSounds;
+import thaumcraft.common.lib.fx.TCFXDispatcher;
 
 public class TCCrucibleBlockEntity extends BlockEntity {
     public static final int WATER_CAPACITY = 1000;
@@ -77,6 +78,44 @@ public class TCCrucibleBlockEntity extends BlockEntity {
         if (crucible.spillCounter >= 100L) {
             crucible.spillRandom();
             crucible.spillCounter = 0L;
+        }
+    }
+
+    public static void clientTick(Level level, BlockPos pos, BlockState state, TCCrucibleBlockEntity crucible) {
+        if (level == null || !level.isClientSide || crucible.waterAmount <= 0) {
+            return;
+        }
+        float fluidHeight = crucible.getFluidHeight();
+        if (crucible.heat > 150) {
+            TCFXDispatcher.crucibleFroth(
+                    level,
+                    pos.getX() + 0.2D + level.random.nextFloat() * 0.6D,
+                    pos.getY() + fluidHeight,
+                    pos.getZ() + 0.2D + level.random.nextFloat() * 0.6D
+            );
+            if (crucible.aspects.visSize() > LEGACY_ASPECT_CAP) {
+                for (int index = 0; index < 2; index++) {
+                    TCFXDispatcher.crucibleFrothDown(level, pos.getX(), pos.getY() + 1.0D, pos.getZ() + level.random.nextFloat());
+                    TCFXDispatcher.crucibleFrothDown(level, pos.getX() + 1.0D, pos.getY() + 1.0D, pos.getZ() + level.random.nextFloat());
+                    TCFXDispatcher.crucibleFrothDown(level, pos.getX() + level.random.nextFloat(), pos.getY() + 1.0D, pos.getZ());
+                    TCFXDispatcher.crucibleFrothDown(level, pos.getX() + level.random.nextFloat(), pos.getY() + 1.0D, pos.getZ() + 1.0D);
+                }
+            }
+        }
+        if (level.random.nextInt(6) == 0 && crucible.aspects.size() > 0) {
+            Aspect[] present = crucible.aspects.getAspects();
+            int color = present[level.random.nextInt(present.length)].getColor();
+            int gridX = 5 + level.random.nextInt(22);
+            int gridZ = 5 + level.random.nextInt(22);
+            TCFXDispatcher.crucibleBubble(
+                    level,
+                    pos.getX() + gridX / 32.0D + 0.015625D,
+                    pos.getY() + 0.05D + fluidHeight,
+                    pos.getZ() + gridZ / 32.0D + 0.015625D,
+                    (color >> 16 & 0xFF) / 255.0F,
+                    (color >> 8 & 0xFF) / 255.0F,
+                    (color & 0xFF) / 255.0F
+            );
         }
     }
 
@@ -167,6 +206,15 @@ public class TCCrucibleBlockEntity extends BlockEntity {
         return waterAmount > 0 && heat >= BOILING_HEAT;
     }
 
+    public float getFluidHeight() {
+        float base = 0.3F + 0.5F * (waterAmount / (float) WATER_CAPACITY);
+        float height = base + aspects.visSize() / (float) LEGACY_ASPECT_CAP * (1.0F - base);
+        if (height > 1.0F) {
+            return 1.001F;
+        }
+        return height == 1.0F ? 0.9999F : height;
+    }
+
     public boolean fillWaterFromBucket() {
         if (waterAmount >= WATER_CAPACITY) {
             return false;
@@ -194,9 +242,7 @@ public class TCCrucibleBlockEntity extends BlockEntity {
         waterAmount = 0;
         polluteSpillRemnants(totalAspects, aspects.getAmount(Aspect.FLUX));
         aspects = new AspectList();
-        if (level != null) {
-            level.playSound(null, worldPosition, TCSounds.SPILL.get(), SoundSource.BLOCKS, 0.2F, 1.0F);
-        }
+        emitClientEvent(2, 5);
         markChangedAndSync();
     }
 
@@ -305,9 +351,10 @@ public class TCCrucibleBlockEntity extends BlockEntity {
         }
         if (result.dissolved()) {
             playBubbleSound();
+            emitClientEvent(2, 1);
         }
         if (result.crafted()) {
-            playCraftSound();
+            emitClientEvent(99, 0);
         }
         markChangedAndSync();
     }
@@ -315,12 +362,6 @@ public class TCCrucibleBlockEntity extends BlockEntity {
     private void playBubbleSound() {
         if (level != null) {
             level.playSound(null, worldPosition, TCSounds.BUBBLE.get(), SoundSource.BLOCKS, 0.2F, 1.0F + level.random.nextFloat() * 0.4F);
-        }
-    }
-
-    private void playCraftSound() {
-        if (level != null) {
-            level.playSound(null, worldPosition, TCSounds.SPILL.get(), SoundSource.BLOCKS, 0.2F, 1.0F);
         }
     }
 
@@ -348,6 +389,41 @@ public class TCCrucibleBlockEntity extends BlockEntity {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
             level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
         }
+    }
+
+    private void emitClientEvent(int eventId, int parameter) {
+        if (level != null && !level.isClientSide) {
+            level.blockEvent(worldPosition, getBlockState().getBlock(), eventId, parameter);
+        }
+    }
+
+    @Override
+    public boolean triggerEvent(int eventId, int parameter) {
+        if (level == null || !level.isClientSide) {
+            return super.triggerEvent(eventId, parameter);
+        }
+        if (eventId == 99 || eventId == 1) {
+            TCFXDispatcher.drawCrucibleBamf(
+                    level,
+                    worldPosition.getX() + 0.5D,
+                    eventId == 99 ? worldPosition.getY() + 1.25D : worldPosition.getY() + 1.5D,
+                    worldPosition.getZ() + 0.5D
+            );
+            level.playLocalSound(worldPosition, TCSounds.POOF.get(), SoundSource.BLOCKS, 0.4F,
+                    1.0F + (float) level.random.nextGaussian() * 0.05F, false);
+            if (eventId == 99) {
+                level.playLocalSound(worldPosition, TCSounds.SPILL.get(), SoundSource.BLOCKS, 0.2F, 1.0F, false);
+            }
+            return true;
+        }
+        if (eventId == 2) {
+            level.playLocalSound(worldPosition, TCSounds.SPILL.get(), SoundSource.BLOCKS, 0.2F, 1.0F, false);
+            for (int index = 0; index < 10; index++) {
+                TCFXDispatcher.crucibleBoil(level, worldPosition, getFluidHeight(), aspects, parameter);
+            }
+            return true;
+        }
+        return super.triggerEvent(eventId, parameter);
     }
 
     private static boolean isHeatSource(BlockState state) {

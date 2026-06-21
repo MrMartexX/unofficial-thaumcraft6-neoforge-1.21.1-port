@@ -56,8 +56,12 @@ public class TCCrucibleBlock extends Block implements EntityBlock {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide || type != TCBlockEntities.CRUCIBLE.get()) {
+        if (type != TCBlockEntities.CRUCIBLE.get()) {
             return null;
+        }
+        if (level.isClientSide) {
+            return (tickerLevel, pos, tickerState, blockEntity) ->
+                    TCCrucibleBlockEntity.clientTick(tickerLevel, pos, tickerState, (TCCrucibleBlockEntity) blockEntity);
         }
         return (tickerLevel, pos, tickerState, blockEntity) ->
                 TCCrucibleBlockEntity.serverTick(tickerLevel, pos, tickerState, (TCCrucibleBlockEntity) blockEntity);

@@ -32,6 +32,7 @@ public final class TCLegacyFXData {
     public final double windZ;
     public final float rotationSpeed;
     public final boolean fullBright;
+    public final int[] finalFrames;
 
     public TCLegacyFXData(
             int maxAge,
@@ -58,6 +59,62 @@ public final class TCLegacyFXData {
             double windZ,
             float rotationSpeed,
             boolean fullBright
+    ) {
+        this(
+                maxAge,
+                startParticle,
+                numParticles,
+                particleInc,
+                gridSize,
+                loop,
+                layer,
+                redStart,
+                greenStart,
+                blueStart,
+                redEnd,
+                greenEnd,
+                blueEnd,
+                alphaKeys,
+                scaleKeys,
+                slowDown,
+                gravity,
+                randomX,
+                randomY,
+                randomZ,
+                windX,
+                windZ,
+                rotationSpeed,
+                fullBright,
+                new int[0]
+        );
+    }
+
+    private TCLegacyFXData(
+            int maxAge,
+            int startParticle,
+            int numParticles,
+            int particleInc,
+            int gridSize,
+            boolean loop,
+            int layer,
+            float redStart,
+            float greenStart,
+            float blueStart,
+            float redEnd,
+            float greenEnd,
+            float blueEnd,
+            float[] alphaKeys,
+            float[] scaleKeys,
+            double slowDown,
+            float gravity,
+            double randomX,
+            double randomY,
+            double randomZ,
+            double windX,
+            double windZ,
+            float rotationSpeed,
+            boolean fullBright,
+            int[] finalFrames
     ) {
         this.maxAge = Math.max(1, maxAge);
         this.startParticle = startParticle;
@@ -86,6 +143,7 @@ public final class TCLegacyFXData {
         this.windZ = windZ;
         this.rotationSpeed = rotationSpeed;
         this.fullBright = fullBright;
+        this.finalFrames = finalFrames == null ? new int[0] : Arrays.copyOf(finalFrames, finalFrames.length);
     }
 
     public static TCLegacyFXData wispyMote(int age, float red, float green, float blue, float gravity, float randomAgeFactor) {
@@ -263,7 +321,8 @@ public final class TCLegacyFXData {
                 windX,
                 windZ,
                 this.rotationSpeed,
-                this.fullBright
+                this.fullBright,
+                this.finalFrames
         );
     }
 
@@ -292,7 +351,8 @@ public final class TCLegacyFXData {
                 this.windX,
                 this.windZ,
                 this.rotationSpeed,
-                this.fullBright
+                this.fullBright,
+                this.finalFrames
         );
     }
 
@@ -321,7 +381,8 @@ public final class TCLegacyFXData {
                 this.windX,
                 this.windZ,
                 this.rotationSpeed,
-                this.fullBright
+                this.fullBright,
+                this.finalFrames
         );
     }
 
@@ -350,7 +411,38 @@ public final class TCLegacyFXData {
                 this.windX,
                 this.windZ,
                 rotationSpeed,
-                this.fullBright
+                this.fullBright,
+                this.finalFrames
+        );
+    }
+
+    public TCLegacyFXData withFinalFrames(int... finalFrames) {
+        return new TCLegacyFXData(
+                this.maxAge,
+                this.startParticle,
+                this.numParticles,
+                this.particleInc,
+                this.gridSize,
+                this.loop,
+                this.layer,
+                this.redStart,
+                this.greenStart,
+                this.blueStart,
+                this.redEnd,
+                this.greenEnd,
+                this.blueEnd,
+                this.alphaKeys,
+                this.scaleKeys,
+                this.slowDown,
+                this.gravity,
+                this.randomX,
+                this.randomY,
+                this.randomZ,
+                this.windX,
+                this.windZ,
+                this.rotationSpeed,
+                this.fullBright,
+                finalFrames
         );
     }
 

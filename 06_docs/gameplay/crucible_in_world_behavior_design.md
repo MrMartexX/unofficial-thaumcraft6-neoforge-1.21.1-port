@@ -1,6 +1,6 @@
 # In-world Crucible Behavior Boundary Design
 
-Last updated: 2026-06-18
+Last updated: 2026-06-21
 
 ## Purpose
 
@@ -16,7 +16,8 @@ This document defines the first safe implementation boundary for in-world crucib
 - Craft ejection marks result entities with a persistent special-item marker, replacing legacy `EntitySpecialItem` for the current non-custom-entity slice and preventing immediate reabsorption.
 - A third server-owned slice covers legacy spill pollution through the existing modern `AuraHelper` facade: periodic/overflow `spillRandom` removes one aspect and adds flux, while `spillRemnants` converts remaining aspects into aura flux.
 - The seven HEDGE_ALCHEMY recipes that legacy built with dynamic `AspectList(ItemStack)` formulas now have explicit JSON aspect costs resolved from the current parity data; this keeps runtime reload and page snapshots deterministic.
-- Taint side effects, special alchemy behavior, essentia interaction, client particles, Thaumatorium, jars, alembics, tubes and automation are still deferred.
+- The focused Stage 13 client slice now renders the synced water/aspect surface, boiling froth, overflow drips, aspect bubbles and legacy block-event boil/bamf bursts.
+- Taint side effects, special alchemy behavior, essentia interaction, Thaumatorium, jars, alembics, tubes and automation are still deferred.
 
 ## First allowed gameplay slice
 
@@ -63,6 +64,17 @@ The third slice may add server-side spill pollution because the modern aura core
 5. Preserve `spillRemnants`: remove all water/aspects, pollute `visSize * 0.25`, and add an extra `fluxAspectAmount * 0.75` when flux/vitium is present.
 6. Do not add flux rifts, taint spread, liquid death side effects, client froth/bubbles, block event particles, Thaumatorium behavior or essentia network interactions in this slice.
 
+## Focused client rendering slice
+
+The Stage 13 slice is implemented without moving authority away from the server:
+
+1. `TCCrucibleRenderer` uses the synced water/aspect state and legacy `getFluidHeight`, including the `0.9999` exact-cap and `1.001` overflow corrections.
+2. Surface recoloring preserves the legacy total-aspect-to-500 ratio and red/green/blue attenuation.
+3. The client ticker emits one froth particle per boiling tick, eight edge drips per overflow tick, and a one-in-six aspect-colored bubble.
+4. Server mutation emits the legacy block-event ids and parameters: `2/1` for dissolution, `99/0` for crafting, and `2/5` for spill remnants.
+5. Shared legacy particle data now supports exact final-frame arrays required by the crucible `64 -> 65/66` transitions.
+6. Block events remain display-only; recipe lookup, water/aspect mutation and aura pollution stay server authoritative.
+
 ## Legacy collision audit
 
 Relevant legacy behavior checked before the second slice:
@@ -94,6 +106,8 @@ Every crucible behavior change must pass:
 5. `tools/audits/audit-crucible-behavior.ps1`.
 6. A manual in-game check for water fill, heat source, aspect dissolution, item entity absorption, living contact damage and a known-research recipe before any broader behavior is marked complete.
 
+Current runtime result: `16/16` crucible behavior checks pass. Client resource/renderer startup is clean; active-crucible visual parity still requires an in-world comparison.
+
 ## First implementation checklist
 
 - Done: add a small server-side crucible behavior class or block entity boundary.
@@ -106,10 +120,13 @@ Every crucible behavior change must pass:
 - Done: add item-entity absorption with a modern special-item marker boundary.
 - Done: add hot living-entity contact damage with the legacy delay threshold.
 - Done: audit and implement server-side spill pollution through the existing aura facade.
+- Done: add synced fluid surface rendering and the legacy client-tick particle branches.
+- Done: restore dissolution/craft/spill block-event FX and sound routing.
+- Done: validate all three legacy fluid-height boundary values at server runtime.
 
 ## Next behavior checklist
 
 - Add a controlled live-player manual test path for a known research key rather than bypassing research.
 - Keep empty-bucket draining out unless a later audit finds a real TC6 legacy path; legacy right-click fill uses fluid containers, while sneak-empty-hand spills the crucible.
-- Do not add client boil/froth/bubble particles until the rendering/FX slice is opened.
+- Compare fluid tint, surface height and particle density side-by-side with legacy before declaring pixel-level visual parity.
 - Do not add flux rifts, taint spread, liquid death or special alchemy side effects until their own legacy source audit and validation path exist.

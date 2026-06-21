@@ -199,6 +199,10 @@ public final class TCLegacyFXGeneric {
     }
 
     private int getCurrentFrame() {
+        if (this.data.finalFrames.length > 0 && this.age > this.data.maxAge - this.data.finalFrames.length) {
+            int index = Mth.clamp(this.data.maxAge - this.age, 0, this.data.finalFrames.length - 1);
+            return this.data.finalFrames[index];
+        }
         if (this.data.loop) {
             return this.data.startParticle + (this.age / this.data.particleInc) % this.data.numParticles;
         }

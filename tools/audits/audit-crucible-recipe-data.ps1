@@ -88,8 +88,8 @@ $lines.Add('')
 $lines.Add('## Boundary note')
 $lines.Add('')
 $lines.Add('- This audit validates crucible recipe data shape only.')
-$lines.Add('- It does not mean in-world crucible gameplay is implemented.')
-$lines.Add('- Use it before activating any server-side crucible behavior.')
+$lines.Add('- It does not validate in-world heat, mutation, spill pollution, block-event FX or rendering.')
+$lines.Add('- Use `tools/audits/audit-crucible-behavior.ps1` for the separate server-runtime boundary; the current expected result is `16/16`.')
 
 [System.IO.File]::WriteAllText($outputFullPath, ($lines -join "`n"), [System.Text.UTF8Encoding]::new($false))
 Write-Host "Crucible recipe data audit written to $outputFullPath"

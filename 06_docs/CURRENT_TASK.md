@@ -21,6 +21,7 @@ Last updated: 2026-06-21
 - The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
 - The in-world crucible behavior slices have a design boundary in `06_docs/gameplay/crucible_in_world_behavior_design.md`.
 - The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
+- The crucible client slice now includes the synced liquid surface, exact fluid-height/recolor formulas, boil/froth/overflow/bubble particles and legacy dissolution/craft/spill block-event FX. Runtime behavior audit passes `16/16`.
 - The infusion boundary now includes server-owned two-click caster activation, live bounded surroundings refresh, inactive stability charging, researched recipe start without pre-supplied essentia, persisted craft-cycle/stability state, exact five-tick default cadence, one-point nearest-source drain, the legacy 200-tick failed-source rescan delay, six-cycle component timing, result placement/damage carry-over, component remainders, completion/failure sounds, the two clientbound legacy FX message contracts, exact structure modifiers, exact stability math, all 24 executable instability rolls, Flux Goo/harm dependencies, inlay/Stabilizer pedestal mitigation, client matrix animation/halo, eight-sided essentia streams and item/block source debris. The runtime audit passes `95/95`.
 
 ## Do not change without explicit request
@@ -252,7 +253,7 @@ Last updated: 2026-06-21
 - Recipe/page actionable gaps are closed.
 - The current in-world crucible behavior slices are gated by `06_docs/gameplay/crucible_in_world_behavior_design.md`, `tools/audits/audit-crucible-recipe-data.ps1`, and `tools/audits/audit-crucible-behavior.ps1`.
 - `tools/audits/audit-crucible-behavior.ps1` runs against an isolated world/port by default to avoid false failures from an already open local dev server.
-- Do not expand this into flux rifts, taint spread, essentia networks, automation, item pulling radius, client particles or special alchemy side effects without a new focused slice.
+- Do not expand this into flux rifts, taint spread, essentia networks, automation, item pulling radius or special alchemy side effects without a new focused slice.
 ## Crucible contact cooldown scope note
 
 - Moved the living-entity crucible contact damage cooldown from the singleton block instance to TCCrucibleBlockEntity.

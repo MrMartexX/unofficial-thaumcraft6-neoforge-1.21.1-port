@@ -9,6 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.AABB;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
 
 public final class TCFXDispatcher {
     @FunctionalInterface
@@ -278,6 +280,179 @@ public final class TCFXDispatcher {
                 0.0D,
                 0.0D
         );
+    }
+
+    public static void crucibleBubble(Level level, double x, double y, double z, float red, float green, float blue) {
+        if (!level.isClientSide()) {
+            return;
+        }
+        RandomSource random = level.random;
+        float scale = random.nextFloat() * 0.3F + 0.3F;
+        TCLegacyFXData data = TCLegacyFXData.generic(
+                15 + random.nextInt(10), 64, 1, 1, 64, false, 0,
+                red, green, blue, 1.0F, scale
+        ).withMotion(
+                TCLegacyFXData.LEGACY_DEFAULT_SLOWDOWN,
+                -0.001F,
+                0.002D,
+                0.002D,
+                0.002D,
+                0.0D,
+                0.0D
+        ).withFinalFrames(65, 66, 66);
+        drawLegacyFX(level, data, x, y, z, 0.0D, 0.0D, 0.0D);
+    }
+
+    public static void crucibleBoil(
+            Level level,
+            BlockPos position,
+            float fluidHeight,
+            AspectList aspects,
+            int intensity
+    ) {
+        if (!level.isClientSide()) {
+            return;
+        }
+        RandomSource random = level.random;
+        Aspect[] present = aspects == null ? new Aspect[0] : aspects.getAspects();
+        for (int index = 0; index < 2; index++) {
+            float red = 1.0F;
+            float green = 1.0F;
+            float blue = 1.0F;
+            if (present.length > 0) {
+                int color = present[random.nextInt(present.length)].getColor();
+                red = (color >> 16 & 0xFF) / 255.0F;
+                green = (color >> 8 & 0xFF) / 255.0F;
+                blue = (color & 0xFF) / 255.0F;
+            }
+            int age = (int) (7.0D + 8.0D / (random.nextDouble() * 0.8D + 0.2D));
+            float scale = random.nextFloat() * 0.3F + 0.2F;
+            TCLegacyFXData data = TCLegacyFXData.generic(
+                    age, 64, 1, 1, 64, false, 0,
+                    red, green, blue, 1.0F, scale
+            ).withMotion(
+                    TCLegacyFXData.LEGACY_DEFAULT_SLOWDOWN,
+                    -0.025F * intensity,
+                    0.001D,
+                    0.001D,
+                    0.001D,
+                    0.0D,
+                    0.0D
+            ).withFinalFrames(65, 66);
+            drawLegacyFX(
+                    level,
+                    data,
+                    position.getX() + 0.2D + random.nextFloat() * 0.6D,
+                    position.getY() + 0.1D + fluidHeight,
+                    position.getZ() + 0.2D + random.nextFloat() * 0.6D,
+                    0.0D,
+                    0.002D,
+                    0.0D
+            );
+        }
+    }
+
+    public static void crucibleFroth(Level level, double x, double y, double z) {
+        if (!level.isClientSide()) {
+            return;
+        }
+        RandomSource random = level.random;
+        float scale = random.nextFloat() * 0.2F + 0.2F;
+        TCLegacyFXData data = TCLegacyFXData.generic(
+                4 + random.nextInt(3), 64, 1, 1, 64, false, 0,
+                0.5F, 0.5F, 0.7F, 1.0F, scale
+        ).withMotion(
+                TCLegacyFXData.LEGACY_DEFAULT_SLOWDOWN,
+                0.1F,
+                0.001D,
+                0.001D,
+                0.001D,
+                0.0D,
+                0.0D
+        ).withFinalFrames(65, 66);
+        drawLegacyFX(level, data, x, y, z, 0.0D, 0.0D, 0.0D);
+    }
+
+    public static void crucibleFrothDown(Level level, double x, double y, double z) {
+        if (!level.isClientSide()) {
+            return;
+        }
+        RandomSource random = level.random;
+        float scale = random.nextFloat() * 0.2F + 0.4F;
+        TCLegacyFXData data = TCLegacyFXData.generic(
+                12 + random.nextInt(12), 73, 1, 1, 64, false, 1,
+                0.25F, 0.0F, 0.75F, 0.8F, scale
+        ).withMotion(
+                TCLegacyFXData.LEGACY_DEFAULT_SLOWDOWN,
+                0.05F,
+                0.001D,
+                0.001D,
+                0.001D,
+                0.0D,
+                0.0D
+        ).withFinalFrames(65, 66);
+        drawLegacyFX(level, data, x, y, z, 0.0D, 0.0D, 0.0D);
+    }
+
+    public static void drawCrucibleBamf(Level level, double x, double y, double z) {
+        if (!level.isClientSide()) {
+            return;
+        }
+        RandomSource random = level.random;
+        int puffs = 8 + random.nextInt(3);
+        for (int index = 0; index < puffs; index++) {
+            double velocityX = signed(random, 0.05F, 0.05F);
+            double velocityY = signed(random, 0.05F, 0.05F) + 0.1D;
+            double velocityZ = signed(random, 0.05F, 0.05F);
+            float red = Mth.clamp(0.5F * (1.0F + (float) random.nextGaussian() * 0.1F), 0.0F, 1.0F);
+            float green = Mth.clamp(0.1F * (1.0F + (float) random.nextGaussian() * 0.1F), 0.0F, 1.0F);
+            float blue = Mth.clamp(0.6F * (1.0F + (float) random.nextGaussian() * 0.1F), 0.0F, 1.0F);
+            TCLegacyFXData data = TCLegacyFXData.generic(
+                    20 + random.nextInt(15), 123, 5, 1, 16, true, 1,
+                    red, green, blue, 1.0F, 3.0F
+            ).withAlpha(1.0F, 0.1F)
+                    .withScale(3.0F, 4.0F + random.nextFloat() * 3.0F)
+                    .withMotion(0.7D, 0.0F, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D)
+                    .withRotation(random.nextBoolean() ? -1.0F : 1.0F);
+            drawLegacyFX(
+                    level,
+                    data,
+                    x + velocityX * 2.0D,
+                    y + velocityY * 2.0D,
+                    z + velocityZ * 2.0D,
+                    velocityX / 2.0D,
+                    velocityY / 2.0D,
+                    velocityZ / 2.0D
+            );
+        }
+        for (int index = 0; index < 2 + random.nextInt(3); index++) {
+            double velocityX = signed(random, 0.025F, 0.025F);
+            double velocityY = signed(random, 0.025F, 0.025F);
+            double velocityZ = signed(random, 0.025F, 0.025F);
+            drawWispyMotes(
+                    level,
+                    x + velocityX * 2.0D,
+                    y + velocityY * 2.0D,
+                    z + velocityZ * 2.0D,
+                    velocityX,
+                    velocityY,
+                    velocityZ,
+                    15 + random.nextInt(10),
+                    -0.01F
+            );
+        }
+        float flareScale = 10.0F + random.nextFloat() * 2.0F;
+        TCLegacyFXData flare = TCLegacyFXData.generic(
+                10 + random.nextInt(5), 77, 1, 1, 16, false, 0,
+                1.0F, 0.9F, 1.0F, 1.0F, flareScale
+        ).withAlpha(1.0F, 0.0F)
+                .withScale(flareScale, 0.0F)
+                .withRotation((float) random.nextGaussian());
+        drawLegacyFX(level, flare, x, y, z, 0.0D, 0.0D, 0.0D);
+    }
+
+    private static double signed(RandomSource random, float base, float spread) {
+        return (base + random.nextFloat() * spread) * (random.nextBoolean() ? -1.0D : 1.0D);
     }
 
     public static void drawSimpleSparkle(

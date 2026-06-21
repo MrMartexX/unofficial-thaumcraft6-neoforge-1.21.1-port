@@ -1,6 +1,6 @@
 # Crucible Recipe Data Audit
 
-Generated: 2026-06-19 00:07:35 +03:00
+Generated: 2026-06-21 05:23:27 +03:00
 
 ## Summary
 
@@ -99,5 +99,5 @@ No invalid crucible recipe JSON files were found.
 ## Boundary note
 
 - This audit validates crucible recipe data shape only.
-- It does not mean in-world crucible gameplay is implemented.
-- Use it before activating any server-side crucible behavior.
+- It does not validate in-world heat, mutation, spill pollution, block-event FX or rendering.
+- Use `tools/audits/audit-crucible-behavior.ps1` for the separate server-runtime boundary; the current expected result is `16/16`.
