@@ -730,3 +730,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added `smelter_vent` as a minimal block placeholder and wired it into basic smelter pending-flux mitigation.
 - Exact legacy facing, auxiliary smelter output and Bellows effects remain incomplete.
+
+## Smelter variant endpoint boundary note
+
+- Added a focused audit for smelter variant versus transport endpoint ownership.
+- Basic smelter runtime is active; upgraded smelter variants still need a safe ownership split/bridge.

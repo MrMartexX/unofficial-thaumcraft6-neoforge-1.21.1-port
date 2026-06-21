@@ -130,3 +130,8 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Added a minimal `smelter_vent` placeholder block/id boundary where it was missing from `TCBlocks`.
 - Added first placeholder-level pending-flux mitigation before aura pollution: adjacent `smelter_vent` gives each pending flux point a `0.333` mitigation chance.
 - This still does not implement exact legacy vent facing or side placement parity.
+
+## Smelter variant endpoint boundary checkpoint
+
+- Added an audit documenting the boundary conflict between real legacy smelter variants and the current transport endpoint placeholder classes.
+- `SMELTER_THAUMIUM` and `SMELTER_VOID` should not be activated as runtime machine variants until their transport endpoint role is resolved.

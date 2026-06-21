@@ -407,3 +407,8 @@ Last updated: 2026-06-21
 
 - Added minimal `smelter_vent` block placeholder and connected it to basic smelter pending-flux mitigation.
 - Future vent batch should make vent placement/facing exact and should not mix in aux smelter discovery.
+
+## Smelter variant endpoint boundary note
+
+- Added an audit for the `smelter_basic` / `smelter_thaumium` / `smelter_void` runtime boundary.
+- Next implementation should avoid mixing endpoint transport placeholders with actual upgraded smelter machine behavior.
