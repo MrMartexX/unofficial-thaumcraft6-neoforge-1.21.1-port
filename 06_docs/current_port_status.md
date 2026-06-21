@@ -706,3 +706,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added server tick state progression for the basic smelter machine boundary.
 - This still does not implement real smelting or Alembic filling.
+## Smelter fuel/input conversion note
+
+- Basic smelter now has a first server processing path for fuel/cook progression and item aspect conversion into its buffer.
+- Alembic output and legacy flux/vent behavior remain incomplete.

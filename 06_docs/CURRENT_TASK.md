@@ -383,3 +383,7 @@ Last updated: 2026-06-21
 
 - Added basic server tick state progression for `TCSmelterBlockEntity`.
 - Next smelter batch should add real fuel start/consumption and item aspect conversion before Alembic output.
+## Smelter fuel/input conversion note
+
+- Added basic smelter fuel start/consume and input item aspect conversion into the smelter aspect buffer.
+- Next smelter batch should stay focused: either legacy efficiency/flux loss or Alembic output transfer.

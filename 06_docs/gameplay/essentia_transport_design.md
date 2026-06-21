@@ -101,3 +101,8 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Added the first server tick state progression for the basic smelter block entity.
 - The tick decrements `furnaceBurnTime`, advances/reset `furnaceCookTime`, and synchronizes the block `enabled` state.
 - This is intentionally pre-smelting: it does not yet consume fuel, convert input item aspects, apply flux loss, use vents, discover bellows or fill Alembics.
+## Smelter fuel and input aspect checkpoint
+
+- Added first basic smelter server processing path: vanilla fuel start/consume, cook-time progression and input `ItemStack` aspect conversion into the internal aspect buffer.
+- This still uses full aspect conversion without legacy efficiency/flux loss and does not yet push buffered essentia into Alembics.
+- Next slice should add efficiency/flux handling or Alembic output, but not both at once.

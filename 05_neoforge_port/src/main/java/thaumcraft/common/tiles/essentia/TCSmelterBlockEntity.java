@@ -2,17 +2,18 @@ package thaumcraft.common.tiles.essentia;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.Level;
-import net.minecraft.core.NonNullList;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -20,10 +21,11 @@ import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.registry.TCBlockEntities;
 
 /**
- * First server-owned smelter machine model boundary.
+ * First server-owned smelter machine model.
  *
- * This intentionally stores the legacy two-slot/aspect/fuel state without yet implementing
- * recipe ticking, fuel consumption, bellows discovery or Alembic production.
+ * This class now owns basic fuel/cook progression and input item aspect conversion. It still
+ * intentionally leaves bellows discovery, efficiency/flux loss, vents and Alembic output for
+ * later focused slices.
  */
 public final class TCSmelterBlockEntity extends BlockEntity {
     public static final int SLOT_INPUT = 0;
@@ -90,6 +92,9 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         return bellows;
     }
 
+    public boolean speedBoost() {
+        return speedBoost;
+    }
 
     public boolean isBurning() {
         return furnaceBurnTime > 0;
@@ -102,9 +107,6 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         smeltTime = Math.max(1, targetSmeltTime);
         markChangedAndSync();
         syncEnabledBlockState();
-    }
-    public boolean speedBoost() {
-        return speedBoost;
     }
 
     public void setMachineStateForValidation(
@@ -122,6 +124,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         speedBoost = newSpeedBoost;
         bellows = newBellows;
         markChangedAndSync();
+        syncEnabledBlockState();
     }
 
     public void setStoredAspectsForValidation(AspectList newAspects) {
@@ -132,6 +135,10 @@ public final class TCSmelterBlockEntity extends BlockEntity {
 
     public boolean canAcceptAspects(AspectList incoming) {
         return incoming != null && incoming.size() > 0 && incoming.visSize() <= MAX_VIS - vis;
+    }
+
+    public boolean canSmeltStoredInputForValidation() {
+        return canProcessInput();
     }
 
     public boolean takeFromContainer(Aspect aspect, int amount) {
@@ -157,7 +164,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
     }
 
     public static int smeltTimeForVis(int visSize, int bellowsCount) {
-        return (int) (visSize * 2 * (1.0F - 0.125F * Math.max(0, bellowsCount)));
+        return Math.max(1, (int) (visSize * 2 * (1.0F - 0.125F * Math.max(0, bellowsCount))));
     }
 
     public enum SmelterType {
@@ -165,7 +172,6 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         THAUMIUM,
         VOID
     }
-
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TCSmelterBlockEntity smelter) {
         if (level == null || level.isClientSide) {
@@ -176,21 +182,84 @@ public final class TCSmelterBlockEntity extends BlockEntity {
 
     private void tickServer() {
         boolean wasBurning = isBurning();
+        boolean dirty = false;
+
         if (furnaceBurnTime > 0) {
             furnaceBurnTime--;
+            dirty = true;
         }
-        if (isBurning()) {
+
+        if (!isBurning() && canProcessInput()) {
+            dirty |= tryConsumeFuel();
+        }
+
+        if (isBurning() && canProcessInput()) {
+            AspectList inputAspects = aspectsFromInput();
+            smeltTime = smeltTimeForVis(inputAspects.visSize(), bellows);
             furnaceCookTime++;
             if (furnaceCookTime >= smeltTime) {
                 furnaceCookTime = 0;
+                dirty |= smeltInputAspects(inputAspects);
             }
-        } else {
+            dirty = true;
+        } else if (furnaceCookTime != 0) {
             furnaceCookTime = 0;
+            dirty = true;
         }
+
         if (wasBurning != isBurning()) {
             syncEnabledBlockState();
         }
-        markChangedAndSync();
+        if (dirty) {
+            markChangedAndSync();
+        }
+    }
+
+    private boolean canProcessInput() {
+        AspectList inputAspects = aspectsFromInput();
+        return canAcceptAspects(inputAspects);
+    }
+
+    private AspectList aspectsFromInput() {
+        ItemStack input = items.get(SLOT_INPUT);
+        return input.isEmpty() ? new AspectList() : new AspectList(input);
+    }
+
+    private boolean tryConsumeFuel() {
+        ItemStack fuel = items.get(SLOT_FUEL);
+        int burnTime = getBurnTime(fuel);
+        if (burnTime <= 0) {
+            return false;
+        }
+        furnaceBurnTime = burnTime;
+        currentItemBurnTime = burnTime;
+        speedBoost = false;
+        fuel.shrink(1);
+        if (fuel.isEmpty()) {
+            items.set(SLOT_FUEL, ItemStack.EMPTY);
+        }
+        return true;
+    }
+
+    private static int getBurnTime(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return 0;
+        }
+        return AbstractFurnaceBlockEntity.getFuel().getOrDefault(stack.getItem(), 0);
+    }
+
+    private boolean smeltInputAspects(AspectList inputAspects) {
+        if (!canAcceptAspects(inputAspects)) {
+            return false;
+        }
+        aspects.add(inputAspects);
+        vis = aspects.visSize();
+        ItemStack input = items.get(SLOT_INPUT);
+        input.shrink(1);
+        if (input.isEmpty()) {
+            items.set(SLOT_INPUT, ItemStack.EMPTY);
+        }
+        return true;
     }
 
     private void syncEnabledBlockState() {
@@ -206,6 +275,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
             level.setBlock(worldPosition, state.setValue(TCSmelterBlock.ENABLED, burning), Block.UPDATE_ALL);
         }
     }
+
     private void markChangedAndSync() {
         setChanged();
         if (level != null && !level.isClientSide) {
@@ -253,4 +323,3 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         bellows = tag.contains("Bellows") ? tag.getInt("Bellows") : -1;
     }
 }
-
