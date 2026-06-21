@@ -85,3 +85,8 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Preserves capacity `128`, single-aspect storage, optional filter, output-only sides excluding facing and down, zero suction, and exact requested take semantics.
 - Exposes Alembic through `TCEssentiaCapabilities.BLOCK` after runtime audit coverage.
 - Full smelter inventory/fuel/efficiency and real alembic production remain separate.
+## Smelter machine model audit checkpoint
+
+- Added `tools/audits/audit-legacy-smelter-machine-model.ps1` and `06_docs/audits/smelter_legacy_machine_model_audit.md`.
+- Use this audit to replace the current smelter skeleton with a real inventory/aspect/fuel/efficiency model in one focused batch.
+- Keep Bellows discovery, vent rendering, thaumatorium/importer/exporter and broad automation out of that first smelter machine batch.

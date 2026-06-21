@@ -371,3 +371,7 @@ Last updated: 2026-06-21
 
 - Added Alembic as the first real smelter output transport endpoint boundary.
 - Continue to keep smelter inventory/aspect/fuel/efficiency separate from this endpoint slice.
+## Smelter legacy machine audit note
+
+- Use `06_docs/audits/smelter_legacy_machine_model_audit.md` before replacing the current smelter skeleton with the real machine model.
+- The next implementation scope should be smelter inventory/aspect/fuel/efficiency plus Alembic output hookup only if the audit evidence supports it.

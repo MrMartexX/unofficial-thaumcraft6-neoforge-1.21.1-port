@@ -694,3 +694,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added `TCAlembicBlock`, `TCAlembicBlockEntity`, block/item/entity registration, capability exposure and runtime transport audit coverage.
 - This does not complete smelter processing; it only adds the Alembic output endpoint boundary.
+## Smelter legacy machine audit note
+
+- Added a legacy-source audit for the smelter machine model after the Alembic endpoint boundary.
+- No gameplay behavior is changed by this audit.
