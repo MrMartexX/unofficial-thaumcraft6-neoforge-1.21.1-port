@@ -74,3 +74,8 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 2. Replace the smelter endpoint skeleton with the real inventory/aspect machine model.
 3. Add Bellows only after its block and neighbor contract are explicit.
 4. Add caster sub-part interactions and client renderers after gameplay state is stable.
+## Alembic source audit checkpoint
+
+- Added `tools/audits/audit-legacy-alembic-transport-source.ps1` and `06_docs/audits/alembic_legacy_transport_source_audit.md`.
+- Use this audit as the source evidence for the next Alembic endpoint batch.
+- Do not expose Alembic capability or claim smelter completion until its sided transport and storage semantics are audited.

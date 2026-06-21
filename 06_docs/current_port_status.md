@@ -686,3 +686,7 @@ The sections below are historical update notes. They should not be read as the c
 - Added `TCTransportInfusionAspectSource` and resolver discovery for adjacent `TCEssentiaTransport` sources.
 - Runtime infusion audit validates single-aspect drain, insufficient-source no-op and multi-aspect fail-closed behavior.
 - Player-facing infusion completion remains disabled.
+## Alembic legacy source audit note
+
+- Added a legacy-source audit for the next Alembic transport endpoint batch after the tube/jar transport slice.
+- No gameplay behavior is changed by this audit.

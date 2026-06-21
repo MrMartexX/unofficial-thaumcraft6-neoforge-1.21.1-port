@@ -363,3 +363,7 @@ Last updated: 2026-06-21
 - Added the legacy-id `thaumcraft:jar_normal` block/item/BlockEntity and corrected Warded Jar recipe dependencies to use that identity.
 - `TCTransportInfusionAspectSource` is retained only for isolated transport tests; it is not a resolver-backed gameplay source.
 - Player-facing completion remains disabled until exact one-point legacy cycle semantics, instability and FX are implemented.
+## Alembic legacy source audit note
+
+- Use `06_docs/audits/alembic_legacy_transport_source_audit.md` before implementing the next Alembic endpoint batch.
+- Scope should stay on Alembic as a transport endpoint; full smelter inventory/fuel/efficiency remains separate.
