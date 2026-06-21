@@ -106,3 +106,8 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Added first basic smelter server processing path: vanilla fuel start/consume, cook-time progression and input `ItemStack` aspect conversion into the internal aspect buffer.
 - This still uses full aspect conversion without legacy efficiency/flux loss and does not yet push buffered essentia into Alembics.
 - Next slice should add efficiency/flux handling or Alembic output, but not both at once.
+## Smelter Alembic output checkpoint
+
+- Added the first basic smelter buffered essentia output path into an Alembic directly above the smelter.
+- The smelter now attempts to move one aspect point every Basic smelter output-speed interval (`15` ticks), matching the current Basic speed boundary.
+- This is intentionally narrower than legacy full output discovery: auxiliary smelter offsets, Bellows effects, vents and efficiency/flux loss remain separate slices.

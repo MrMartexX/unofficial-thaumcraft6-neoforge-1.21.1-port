@@ -710,3 +710,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Basic smelter now has a first server processing path for fuel/cook progression and item aspect conversion into its buffer.
 - Alembic output and legacy flux/vent behavior remain incomplete.
+## Smelter Alembic output note
+
+- Basic smelter now has a first direct-above Alembic output path for buffered essentia.
+- Legacy flux loss, vent behavior, Bellows discovery and auxiliary smelter output remain incomplete.

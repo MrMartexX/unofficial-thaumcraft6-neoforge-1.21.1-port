@@ -43,6 +43,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
     private int currentItemBurnTime;
     private int furnaceCookTime;
     private int bellows = -1;
+    private int transferTicks;
 
     public TCSmelterBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.SMELTER_BASIC.get(), pos, state);
@@ -207,6 +208,8 @@ public final class TCSmelterBlockEntity extends BlockEntity {
             dirty = true;
         }
 
+        dirty |= outputBufferedEssentia();
+
         if (wasBurning != isBurning()) {
             syncEnabledBlockState();
         }
@@ -262,6 +265,30 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         return true;
     }
 
+
+    private boolean outputBufferedEssentia() {
+        if (level == null || level.isClientSide || aspects == null || aspects.size() == 0) {
+            return false;
+        }
+        transferTicks++;
+        int speed = speedForType(SmelterType.BASIC);
+        if (transferTicks % speed != 0) {
+            return false;
+        }
+        if (!(level.getBlockEntity(worldPosition.above()) instanceof TCAlembicBlockEntity alembic)) {
+            return false;
+        }
+        for (Aspect aspect : aspects.getAspects()) {
+            if (aspect == null || aspects.getAmount(aspect) <= 0) {
+                continue;
+            }
+            int remainder = alembic.addToContainer(aspect, 1);
+            if (remainder == 0) {
+                return takeFromContainer(aspect, 1);
+            }
+        }
+        return false;
+    }
     private void syncEnabledBlockState() {
         if (level == null || level.isClientSide) {
             return;
@@ -306,6 +333,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         tag.putInt("CurrentItemBurnTime", currentItemBurnTime);
         tag.putInt("CookTime", furnaceCookTime);
         tag.putInt("Bellows", bellows);
+        tag.putInt("TransferTicks", transferTicks);
     }
 
     @Override
@@ -321,5 +349,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         currentItemBurnTime = Math.max(0, tag.getInt("CurrentItemBurnTime"));
         furnaceCookTime = Math.max(0, tag.getInt("CookTime"));
         bellows = tag.contains("Bellows") ? tag.getInt("Bellows") : -1;
+        transferTicks = Math.max(0, tag.getInt("TransferTicks"));
     }
 }
+

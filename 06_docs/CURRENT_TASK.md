@@ -387,3 +387,7 @@ Last updated: 2026-06-21
 
 - Added basic smelter fuel start/consume and input item aspect conversion into the smelter aspect buffer.
 - Next smelter batch should stay focused: either legacy efficiency/flux loss or Alembic output transfer.
+## Smelter Alembic output note
+
+- Added basic smelter buffered essentia output into the Alembic block entity above it.
+- Next smelter batch should implement legacy efficiency/flux loss or auxiliary output discovery, not both at once.
