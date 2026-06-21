@@ -34,6 +34,7 @@ import thaumcraft.common.crafting.infusion.TCInfusionInstabilityEvent;
 import thaumcraft.common.crafting.infusion.TCInfusionStability;
 import thaumcraft.common.crafting.infusion.TCInfusionStructureProfile;
 import thaumcraft.common.crafting.infusion.TCInfusionValidationResult;
+import thaumcraft.common.lib.fx.TCFXDispatcher;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCSounds;
 
@@ -65,6 +66,8 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
     private int lifecycleTicks;
     private int liveCycleDelay = TCInfusionCycleState.BASE_CYCLE_DELAY;
     private float liveStabilityReplenish;
+    private float clientStartUp;
+    private int clientCraftCount;
 
     public TCInfusionMatrixBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.INFUSION_MATRIX.get(), pos, state);
@@ -111,6 +114,69 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
         }
         matrix.cycleTickCounter = 0;
         TCInfusionLegacyCycleExecutor.advance(matrix);
+    }
+
+    public static void clientTick(
+            Level level,
+            BlockPos pos,
+            BlockState state,
+            TCInfusionMatrixBlockEntity matrix
+    ) {
+        if (level == null || !level.isClientSide) {
+            return;
+        }
+        if (matrix.isCrafting()) {
+            if (matrix.clientCraftCount == 0) {
+                level.playLocalSound(pos, TCSounds.INFUSERSTART.get(), SoundSource.BLOCKS, 0.5F, 1.0F, false);
+            } else if (matrix.clientCraftCount % 65 == 0) {
+                level.playLocalSound(pos, TCSounds.INFUSER.get(), SoundSource.BLOCKS, 0.5F, 1.0F, false);
+            }
+            matrix.clientCraftCount++;
+            TCFXDispatcher.blockRunes(
+                    level,
+                    pos.getX(),
+                    pos.getY() - 2.0D,
+                    pos.getZ(),
+                    0.5F + level.random.nextFloat() * 0.2F,
+                    0.1F,
+                    0.7F + level.random.nextFloat() * 0.3F,
+                    25,
+                    -0.03F
+            );
+            if (matrix.stability < 0.0F && level.random.nextInt(250) <= Math.abs(matrix.stability)) {
+                TCFXDispatcher.drawSimpleSparkle(
+                        level,
+                        pos.getX() + level.random.nextFloat(),
+                        pos.getY() + level.random.nextFloat(),
+                        pos.getZ() + level.random.nextFloat(),
+                        0.0D,
+                        0.0D,
+                        0.0D,
+                        3.0F + level.random.nextFloat() * 2.0F,
+                        0.7F + level.random.nextFloat() * 0.1F,
+                        0.1F,
+                        0.65F + level.random.nextFloat() * 0.1F,
+                        0,
+                        1.0F,
+                        0.0F,
+                        4
+                );
+            }
+        } else if (matrix.clientCraftCount > 0) {
+            matrix.clientCraftCount = Math.max(0, Math.min(50, matrix.clientCraftCount - 2));
+        }
+
+        if (matrix.active && matrix.clientStartUp != 1.0F) {
+            matrix.clientStartUp += Math.max(matrix.clientStartUp / 10.0F, 0.001F);
+            if (matrix.clientStartUp > 0.999F) {
+                matrix.clientStartUp = 1.0F;
+            }
+        } else if (!matrix.active && matrix.clientStartUp > 0.0F) {
+            matrix.clientStartUp -= matrix.clientStartUp / 10.0F;
+            if (matrix.clientStartUp < 0.001F) {
+                matrix.clientStartUp = 0.0F;
+            }
+        }
     }
 
     public boolean hasCentralPedestal() {
@@ -336,6 +402,14 @@ public class TCInfusionMatrixBlockEntity extends BlockEntity {
 
     public float liveStabilityReplenish() {
         return liveStabilityReplenish;
+    }
+
+    public float clientStartUp() {
+        return clientStartUp;
+    }
+
+    public int clientCraftCount() {
+        return clientCraftCount;
     }
 
     public boolean activate() {

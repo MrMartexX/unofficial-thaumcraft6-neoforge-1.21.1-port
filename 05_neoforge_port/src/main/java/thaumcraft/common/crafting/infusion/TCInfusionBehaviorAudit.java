@@ -247,8 +247,37 @@ public final class TCInfusionBehaviorAudit {
         addInstabilityEventMappingChecks(checks);
         addRuntimeInstabilityBoundaryChecks(server, checks);
         addRuntimeStabilizerNetworkChecks(server, checks);
+        addClientFxQueueChecks(checks);
 
         return new Report(List.copyOf(checks), infusionRecipes.size());
+    }
+
+    private static void addClientFxQueueChecks(ArrayList<Check> checks) {
+        BlockPos matrixPos = new BlockPos(4, 8, 12);
+        BlockPos sourcePos = new BlockPos(9, 8, 12);
+        BlockPos pedestalPos = new BlockPos(6, 6, 12);
+        TCInfusionClientFXCache.clear();
+        TCInfusionClientFXCache.accept(new TCInfusionEssentiaSourcePayload(matrixPos, sourcePos, 0x3366FF, 3));
+        TCInfusionClientFXCache.accept(new TCInfusionEssentiaSourcePayload(matrixPos, sourcePos, 0x3366FF, 7));
+        List<TCInfusionEssentiaSourcePayload> trails = TCInfusionClientFXCache.drainEssentiaTrails();
+        checks.add(new Check(
+                "client_fx_essentia_queue_coalesces_and_drains_latest_payload",
+                trails.size() == 1
+                        && trails.getFirst().extension() == 7
+                        && TCInfusionClientFXCache.pendingEssentiaTrailCount() == 0,
+                "drained=" + trails.size()
+                        + ", extension=" + (trails.isEmpty() ? -1 : trails.getFirst().extension())
+        ));
+
+        TCInfusionClientFXCache.accept(new TCInfusionSourcePayload(matrixPos, pedestalPos, 0));
+        TCInfusionClientFXCache.accept(new TCInfusionSourcePayload(matrixPos, pedestalPos, 0));
+        List<TCInfusionSourcePayload> sources = TCInfusionClientFXCache.drainSources();
+        checks.add(new Check(
+                "client_fx_component_queue_coalesces_and_drains_once",
+                sources.size() == 1 && TCInfusionClientFXCache.pendingSourceCount() == 0,
+                "drained=" + sources.size()
+        ));
+        TCInfusionClientFXCache.clear();
     }
 
     private static void addStabilityMathChecks(ArrayList<Check> checks) {

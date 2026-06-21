@@ -61,8 +61,17 @@ public class TCInfusionMatrixBlock extends Block implements EntityBlock {
             BlockState state,
             BlockEntityType<T> type
     ) {
-        if (level.isClientSide || type != TCBlockEntities.INFUSION_MATRIX.get()) {
+        if (type != TCBlockEntities.INFUSION_MATRIX.get()) {
             return null;
+        }
+        if (level.isClientSide) {
+            return (tickerLevel, tickerPos, tickerState, blockEntity) ->
+                    TCInfusionMatrixBlockEntity.clientTick(
+                            tickerLevel,
+                            tickerPos,
+                            tickerState,
+                            (TCInfusionMatrixBlockEntity) blockEntity
+                    );
         }
         return (tickerLevel, tickerPos, tickerState, blockEntity) ->
                 TCInfusionMatrixBlockEntity.serverTick(
@@ -90,7 +99,7 @@ public class TCInfusionMatrixBlock extends Block implements EntityBlock {
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.MODEL;
+        return RenderShape.INVISIBLE;
     }
 
     @Override

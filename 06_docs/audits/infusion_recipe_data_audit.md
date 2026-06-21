@@ -1,6 +1,6 @@
 # Infusion Recipe Data Audit
 
-Generated: 2026-06-20 22:58:32 +03:00
+Generated: 2026-06-21 05:05:38 +03:00
 
 ## Summary
 
@@ -64,5 +64,5 @@ No invalid infusion recipe JSON files were found.
 ## Boundary note
 
 - This audit validates infusion recipe data shape only.
-- It does not by itself validate in-world infusion altar gameplay.
-- Use `tools/audits/audit-infusion-behavior.ps1` for the separate server-runtime boundary; the current behavior result is `93/93`.
+- It does not validate in-world altar timing, mutation, source discovery, instability or client rendering.
+- Use `tools/audits/audit-infusion-behavior.ps1` for the separate server-runtime boundary; the current expected result is `95/95`.

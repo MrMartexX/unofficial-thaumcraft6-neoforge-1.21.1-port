@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-06-20
+Last updated: 2026-06-21
 
 ## Current branch
 
@@ -21,7 +21,7 @@ Last updated: 2026-06-20
 - The latest crucible recipe/page boundary batch passed build, server smoke, research page catalog audit, and Thaumonomicon protocol audit.
 - The in-world crucible behavior slices have a design boundary in `06_docs/gameplay/crucible_in_world_behavior_design.md`.
 - The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
-- The infusion boundary now includes server-owned two-click caster activation, live bounded surroundings refresh, inactive stability charging, researched recipe start without pre-supplied essentia, persisted craft-cycle/stability state, exact five-tick default cadence, one-point nearest-source drain, the legacy 200-tick failed-source rescan delay, six-cycle component timing, result placement/damage carry-over, component remainders, completion/failure sounds, the two clientbound legacy FX message contracts, exact structure modifiers, exact stability math, all 24 executable instability rolls, Flux Goo/harm dependencies, and inlay/Stabilizer pedestal mitigation. The runtime audit passes `93/93`.
+- The infusion boundary now includes server-owned two-click caster activation, live bounded surroundings refresh, inactive stability charging, researched recipe start without pre-supplied essentia, persisted craft-cycle/stability state, exact five-tick default cadence, one-point nearest-source drain, the legacy 200-tick failed-source rescan delay, six-cycle component timing, result placement/damage carry-over, component remainders, completion/failure sounds, the two clientbound legacy FX message contracts, exact structure modifiers, exact stability math, all 24 executable instability rolls, Flux Goo/harm dependencies, inlay/Stabilizer pedestal mitigation, client matrix animation/halo, eight-sided essentia streams and item/block source debris. The runtime audit passes `95/95`.
 
 ## Do not change without explicit request
 
@@ -42,7 +42,7 @@ Last updated: 2026-06-20
    - Persistent stability, legacy `5/6/7/8` loss categories, `[-100,25]` cycle clamp, post-event recovery order and all 24 event roll mappings/effects are active.
    - Flux Goo placement, Flux Taint/Vis Exhaust, bounded inlay charge propagation, persisted Stabilizer energy/recharge and pre-mutation pedestal mitigation are active. Full goo flow/taint transforms and Flux Rift stabilization remain owned by their future subsystems.
    - Live surroundings refresh, inactive matrix activation/stability charging and start-state safety are closed. Recipe cost stays frozen at start; live delay/replenishment refresh without mutating inputs.
-   - The FX wire/cache lifetime contract is implemented. Exact `FXEssentiaStream` polycone and item/block debris renderers are still a Stage 13 visual parity task; the current billboard bridge must not be called final visual parity.
+   - The FX wire/cache lifetime contract, matrix BER, deterministic crafting halo, eight-sided `FXEssentiaStream` replacement and item/block/entity source effects are implemented. Pixel-level transforms, blending and timing still require a side-by-side active-altar review before final visual parity is claimed.
    - Keep broad pedestal UI, mirrors/alembics, automation and enchantment infusion deferred until separate focused slices.
    - Re-run build, dedicated server smoke, infusion recipe-data audit, infusion behavior audit, research page catalog audit, and protocol audit after the batch.
    - Use legacy `TileInfusionMatrix`, `TilePedestal`, `InfusionRecipe`, and `ThaumcraftCraftingManager.findMatchingInfusionRecipe` as behavior references, not direct copy sources.
@@ -267,8 +267,8 @@ Last updated: 2026-06-20
 - Added `TCInfusionRecipeMatcher` as a non-mutating server-side validation helper for catalyst, components and aspect costs.
 - Added `TCInfusionAssembly` and `TCInfusionValidationResult` as the current server-owned input snapshot and validation-result boundary.
 - `TCInfusionRecipeMatcher` now uses NeoForge `RecipeMatcher` like legacy Forge 1.12.2, so component matching is unordered but exact 1:1 by count.
-- `tools/audits/audit-infusion-behavior.ps1` validates the current boundary at server runtime and currently passes `93/93`.
-- Full server-side in-world completion, essentia drain/source, instability effects and caster start are active; exact matrix/stream/debris visual parity remains deferred to the focused Stage 13 renderer slice.
+- `tools/audits/audit-infusion-behavior.ps1` validates the current boundary at server runtime and currently passes `95/95`.
+- Full server-side in-world completion, essentia drain/source, instability effects and caster start are active. The focused Stage 13 renderer slice is implemented; final visual parity remains an explicit in-world comparison task.
 
 ## Infusion start-plan boundary note
 

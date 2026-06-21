@@ -1,6 +1,6 @@
 # In-world Infusion Behavior Design
 
-Last updated: 2026-06-20
+Last updated: 2026-06-21
 
 ## Purpose
 
@@ -44,9 +44,13 @@ For the Cloud Ring fixture (`50 aer`, two components), the audited sequence is `
 - `TCInfusionSourcePayload` is the modern equivalent of `PacketFXInfusionSource`.
 - Packets are server-triggered and sent only to players within the legacy 32-block radius.
 - Component source state uses the legacy 15-tick default and 60-tick pedestal lifetime.
-- `TCInfusionClientFXCache` owns display state only; no recipe, inventory, aspect or progression mutation is client-authoritative.
+- `TCInfusionClientFXCache` is a synchronized payload-coalescing handoff; `TCInfusionClientEffects` owns the live display objects. Neither may mutate recipes, inventories, aspects or progression.
+- `TCInfusionMatrixRenderer` replaces the static world model with the legacy eight-cube BER, startup rotation, active jitter, pillar texture variants and emissive overlay.
+- The crafting halo preserves the legacy deterministic `Random(245)`, Fast/Fancy ray count, additive triangle-fan shape and `craftCount` growth curve.
+- Essentia source payloads create persistent keyed eight-sided tube streams. Repeated payloads extend the existing stream lifetime/length instead of spawning duplicates.
+- Component source payloads preserve the entity, pedestal sparkle, block debris and item debris branches, including the legacy 15/60-tick source lifetime, target attraction, damping, tint and distance policy.
 
-The current generic billboard output is a visual bridge. Exact `FXEssentiaStream` polycone rendering and `FXBoreParticles` item/block debris are not complete and must not be called visual parity.
+The modern renderer no longer uses the generic billboard bridge. Functional topology and timing are reconstructed from `TileInfusionMatrixRenderer`, `FXEssentiaStream`, `FXBoreParticles` and `TileInfusionMatrix#doEffects`. Pixel-level parity is not yet certified: an active altar still needs side-by-side legacy/1.21 capture for transform, blend, stream UV and particle-density tuning.
 
 ## Player activation boundary
 
@@ -57,12 +61,12 @@ The selected recipe cost and cost multiplier are frozen in `TCInfusionCraftingPl
 ## Next server batch
 
 1. Preserve the current server-authoritative activation/live-surroundings boundary under client gameplay testing.
-2. Implement exact matrix animation, `FXEssentiaStream` polycone and item/block debris rendering as a Stage 13 visual-parity batch.
+2. Run a side-by-side active-altar visual capture and correct only measured matrix/halo/stream/debris differences.
 3. Complete finite Flux Goo flow, Thaumic Slime/taint-fibre dependencies and stabilizer-to-Flux-Rift behavior with their owning subsystems.
 
 ## Deferred boundaries
 
-- exact polycone essentia stream and item/block debris renderers;
+- final pixel-level matrix/halo/stream/debris comparison and tuning;
 - essentia mirrors, alembics and addon source containers;
 - enchantment/NBT-object infusion outputs beyond the current item-stack recipe model;
 - Thaumatorium and golem automation;
@@ -81,4 +85,4 @@ Every infusion batch must pass:
 5. `tools/ci/server-smoke.ps1`;
 6. client startup when payload, particle, sound, model or renderer code changes.
 
-Current runtime result: `93/93` infusion behavior checks pass.
+Current runtime result: `95/95` infusion behavior checks pass. The client reaches resource/renderer startup without an infusion renderer exception; active-altar visual parity remains a manual in-world check.

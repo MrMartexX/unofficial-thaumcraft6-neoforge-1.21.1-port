@@ -29,6 +29,10 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "craftstart")));
     public static final Supplier<SoundEvent> CRAFTFAIL = SOUND_EVENTS.register("craftfail", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "craftfail")));
+    public static final Supplier<SoundEvent> INFUSER = SOUND_EVENTS.register("infuser", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "infuser")));
+    public static final Supplier<SoundEvent> INFUSERSTART = SOUND_EVENTS.register("infuserstart", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "infuserstart")));
 
     private TCSounds() {
     }

@@ -132,8 +132,8 @@ $lines.Add('')
 $lines.Add('## Boundary note')
 $lines.Add('')
 $lines.Add('- This audit validates infusion recipe data shape only.')
-$lines.Add('- It does not mean in-world infusion altar gameplay is implemented.')
-$lines.Add('- Use it before activating any server-side infusion matrix behavior.')
+$lines.Add('- It does not validate in-world altar timing, mutation, source discovery, instability or client rendering.')
+$lines.Add('- Use `tools/audits/audit-infusion-behavior.ps1` for the separate server-runtime boundary; the current expected result is `95/95`.')
 
 [System.IO.File]::WriteAllText($outputFullPath, ($lines -join "`n"), [System.Text.UTF8Encoding]::new($false))
 Write-Host "Infusion recipe data audit written to $outputFullPath"
