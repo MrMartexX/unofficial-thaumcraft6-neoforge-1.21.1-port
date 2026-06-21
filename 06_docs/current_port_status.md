@@ -745,3 +745,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added a dual-role endpoint/machine bridge for thaumium and void smelter ids.
 - Transport endpoint compatibility is preserved through delegated `TCEssentiaTransport` methods.
+
+## Smelter Bellows placeholder boost note
+
+- Added Bellows placeholder block and first adjacent-facing smelter speed boost behavior.
+- Smelter variants, Alembic output, flux accounting, aura pollution and vent placeholder mitigation are already present in the current smelter path.

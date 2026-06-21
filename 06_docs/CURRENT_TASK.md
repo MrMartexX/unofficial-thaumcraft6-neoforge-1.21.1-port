@@ -422,3 +422,8 @@ Last updated: 2026-06-21
 
 - `smelter_thaumium` and `smelter_void` now bridge to smelter machine state while still exposing the transport endpoint interface.
 - Next smelter slices can verify type-specific speed/efficiency and then address exact placement/facing/Bellows behavior.
+
+## Smelter Bellows placeholder boost note
+
+- Added minimal Bellows block/id and first smelter speed interaction through the existing `smeltTimeForVis` formula.
+- Exact Bellows visuals and any non-smelter Bellows interactions remain future work.

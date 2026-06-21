@@ -22,6 +22,7 @@ import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
+import thaumcraft.common.blocks.essentia.TCBellowsBlock;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
 
@@ -200,6 +201,7 @@ public boolean speedBoost() {
     private void tickServer() {
         boolean wasBurning = isBurning();
         boolean dirty = false;
+        dirty |= refreshBellows();
 
         if (furnaceBurnTime > 0) {
             furnaceBurnTime--;
@@ -235,6 +237,30 @@ public boolean speedBoost() {
         }
     }
 
+    private boolean refreshBellows() {
+        if (level == null) {
+            return false;
+        }
+        int oldBellows = bellows;
+        int foundBellows = 0;
+        Direction smelterFacing = getBlockState().hasProperty(TCSmelterBlock.FACING)
+                ? getBlockState().getValue(TCSmelterBlock.FACING)
+                : Direction.NORTH;
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            if (direction == smelterFacing) {
+                continue;
+            }
+            BlockState neighbour = level.getBlockState(worldPosition.relative(direction));
+            if (!neighbour.is(TCBlocks.BELLOWS.get()) || !neighbour.hasProperty(TCBellowsBlock.FACING)) {
+                continue;
+            }
+            if (neighbour.getValue(TCBellowsBlock.FACING) == direction.getOpposite()) {
+                foundBellows++;
+            }
+        }
+        bellows = foundBellows;
+        return oldBellows != bellows;
+    }
     private boolean canProcessInput() {
         AspectList inputAspects = aspectsFromInput();
         return canAcceptAspects(inputAspects);

@@ -28,6 +28,7 @@ import thaumcraft.common.blocks.basic.TCInfusionCandleBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.blocks.essentia.TCWardedJarBlock;
 import thaumcraft.common.blocks.essentia.TCAlembicBlock;
+import thaumcraft.common.blocks.essentia.TCBellowsBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCCrucibleBlock;
@@ -127,6 +128,9 @@ public final class TCBlocks {
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(3.0F, 6.0F)
                     .requiresCorrectToolForDrops()));
+    public static final Supplier<Block> BELLOWS = BLOCKS.register("bellows",
+            () -> new TCBellowsBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                    .strength(1.5F, 3.0F)));
 public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal", () -> wardedJarBlock());
     public static final Supplier<Block> ALEMBIC = BLOCKS.register("alembic", () -> alembicBlock());
     // Legacy-aligned transport/essentia blocks.

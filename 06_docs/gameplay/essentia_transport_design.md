@@ -147,3 +147,9 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Bridged `smelter_thaumium` and `smelter_void` endpoint block entities onto `TCSmelterBlockEntity` while preserving their transport endpoint interface.
 - This enables upgraded smelter ids to use machine tick/fuel/aspect/Alembic behavior without removing the current tube transport boundary.
 - The endpoint transport node remains a compatibility boundary and should be revisited when exact legacy upgraded smelter transport behavior is implemented.
+
+## Smelter Bellows placeholder boost checkpoint
+
+- Added a minimal facing `bellows` block placeholder and connected it to smelter `bellows` counting.
+- Smelters now refresh adjacent horizontal Bellows that face into the smelter and route the count into existing legacy smelt-time math.
+- This does not yet implement exact Bellows model/animation or broader auxiliary smelter parity.

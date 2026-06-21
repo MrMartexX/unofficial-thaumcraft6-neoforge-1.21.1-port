@@ -103,6 +103,8 @@ public final class TCItems {
     public static final Supplier<BlockItem> RESEARCH_TABLE = blockItem("research_table", TCBlocks.RESEARCH_TABLE);
     public static final Supplier<BlockItem> CRUCIBLE = blockItem("crucible", TCBlocks.CRUCIBLE);
     public static final Supplier<BlockItem> SMELTER_BASIC = blockItem("smelter_basic", TCBlocks.SMELTER_BASIC);
+    public static final Supplier<BlockItem> BELLOWS = blockItem("bellows", TCBlocks.BELLOWS);
+
     public static final Supplier<BlockItem> SMELTER_VENT = blockItem("smelter_vent", TCBlocks.SMELTER_VENT);
 
 public static final Supplier<BlockItem> JAR_NORMAL = blockItem("jar_normal", TCBlocks.JAR_NORMAL);
@@ -491,8 +493,7 @@ public static final Supplier<BlockItem> JAR_NORMAL = blockItem("jar_normal", TCB
     public static final Supplier<Item> CATALOG_PLACEHOLDER_REDSTONEINLAY = ITEMS.register("redstoneinlay", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ADVALCHEMYCONSTRUCT = ITEMS.register("advalchemyconstruct", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ALCHEMICALCONSTRUCT = ITEMS.register("alchemicalconstruct", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BELLOWS = ITEMS.register("bellows", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_CENTRIFUGE = ITEMS.register("centrifuge", () -> new Item(new Item.Properties()));
+public static final Supplier<Item> CATALOG_PLACEHOLDER_CENTRIFUGE = ITEMS.register("centrifuge", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_CONDENSER = ITEMS.register("condenser", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_CONDENSERLATTICE = ITEMS.register("condenserlattice", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_DIOPTRA = ITEMS.register("dioptra", () -> new Item(new Item.Properties()));
