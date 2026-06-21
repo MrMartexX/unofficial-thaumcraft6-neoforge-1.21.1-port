@@ -379,3 +379,7 @@ Last updated: 2026-06-21
 
 - Added the first basic smelter block entity machine-state boundary.
 - Next smelter batch should implement ticking/fuel/input aspect conversion and Alembic output from this persisted state.
+## Smelter tick-state progression note
+
+- Added basic server tick state progression for `TCSmelterBlockEntity`.
+- Next smelter batch should add real fuel start/consumption and item aspect conversion before Alembic output.

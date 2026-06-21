@@ -702,3 +702,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added `TCSmelterBlockEntity` and attached it to `smelter_basic` as the first persisted machine model boundary.
 - This does not yet perform real smelting or fill Alembics.
+## Smelter tick-state progression note
+
+- Added server tick state progression for the basic smelter machine boundary.
+- This still does not implement real smelting or Alembic filling.

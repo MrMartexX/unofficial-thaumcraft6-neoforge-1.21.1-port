@@ -11,10 +11,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.Level;
 import net.minecraft.core.NonNullList;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.registry.TCBlockEntities;
 
 /**
@@ -88,6 +90,19 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         return bellows;
     }
 
+
+    public boolean isBurning() {
+        return furnaceBurnTime > 0;
+    }
+
+    public void setBurnStateForValidation(int burnTime, int currentBurnTime, int cookTime, int targetSmeltTime) {
+        furnaceBurnTime = Math.max(0, burnTime);
+        currentItemBurnTime = Math.max(0, currentBurnTime);
+        furnaceCookTime = Math.max(0, cookTime);
+        smeltTime = Math.max(1, targetSmeltTime);
+        markChangedAndSync();
+        syncEnabledBlockState();
+    }
     public boolean speedBoost() {
         return speedBoost;
     }
@@ -151,6 +166,46 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         VOID
     }
 
+
+    public static void serverTick(Level level, BlockPos pos, BlockState state, TCSmelterBlockEntity smelter) {
+        if (level == null || level.isClientSide) {
+            return;
+        }
+        smelter.tickServer();
+    }
+
+    private void tickServer() {
+        boolean wasBurning = isBurning();
+        if (furnaceBurnTime > 0) {
+            furnaceBurnTime--;
+        }
+        if (isBurning()) {
+            furnaceCookTime++;
+            if (furnaceCookTime >= smeltTime) {
+                furnaceCookTime = 0;
+            }
+        } else {
+            furnaceCookTime = 0;
+        }
+        if (wasBurning != isBurning()) {
+            syncEnabledBlockState();
+        }
+        markChangedAndSync();
+    }
+
+    private void syncEnabledBlockState() {
+        if (level == null || level.isClientSide) {
+            return;
+        }
+        BlockState state = getBlockState();
+        if (!state.hasProperty(TCSmelterBlock.ENABLED)) {
+            return;
+        }
+        boolean burning = isBurning();
+        if (state.getValue(TCSmelterBlock.ENABLED) != burning) {
+            level.setBlock(worldPosition, state.setValue(TCSmelterBlock.ENABLED, burning), Block.UPDATE_ALL);
+        }
+    }
     private void markChangedAndSync() {
         setChanged();
         if (level != null && !level.isClientSide) {
@@ -198,3 +253,4 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         bellows = tag.contains("Bellows") ? tag.getInt("Bellows") : -1;
     }
 }
+

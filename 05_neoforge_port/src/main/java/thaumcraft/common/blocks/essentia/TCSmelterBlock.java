@@ -17,8 +17,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import thaumcraft.common.tiles.essentia.TCSmelterBlockEntity;
+import thaumcraft.common.registry.TCBlockEntities;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 
 public class TCSmelterBlock extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -36,6 +39,22 @@ public class TCSmelterBlock extends Block implements EntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TCSmelterBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        if (level.isClientSide || type != TCBlockEntities.SMELTER_BASIC.get()) {
+            return null;
+        }
+        return (tickerLevel, pos, tickerState, blockEntity) ->
+                TCSmelterBlockEntity.serverTick(
+                        tickerLevel,
+                        pos,
+                        tickerState,
+                        (TCSmelterBlockEntity) blockEntity
+                );
     }
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -86,6 +105,7 @@ public class TCSmelterBlock extends Block implements EntityBlock {
         level.addParticle(ParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
     }
 }
+
 
 
 
