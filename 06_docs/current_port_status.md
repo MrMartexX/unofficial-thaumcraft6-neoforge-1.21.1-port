@@ -714,3 +714,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Basic smelter now has a first direct-above Alembic output path for buffered essentia.
 - Legacy flux loss, vent behavior, Bellows discovery and auxiliary smelter output remain incomplete.
+## Smelter efficiency/flux note
+
+- Basic smelter now records legacy-style lost aspect points as pending flux during conversion.
+- Vent mitigation and aura pollution are still incomplete.

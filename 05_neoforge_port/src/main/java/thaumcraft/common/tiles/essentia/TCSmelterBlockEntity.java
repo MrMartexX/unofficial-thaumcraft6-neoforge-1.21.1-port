@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -44,6 +45,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
     private int furnaceCookTime;
     private int bellows = -1;
     private int transferTicks;
+    private int pendingFlux;
 
     public TCSmelterBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.SMELTER_BASIC.get(), pos, state);
@@ -95,6 +97,9 @@ public final class TCSmelterBlockEntity extends BlockEntity {
 
     public boolean speedBoost() {
         return speedBoost;
+    }
+    public int pendingFlux() {
+        return pendingFlux;
     }
 
     public boolean isBurning() {
@@ -251,12 +256,49 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         return AbstractFurnaceBlockEntity.getFuel().getOrDefault(stack.getItem(), 0);
     }
 
+
+    private AspectList applyEfficiencyLoss(AspectList inputAspects) {
+        AspectList converted = new AspectList();
+        if (inputAspects == null || inputAspects.size() == 0) {
+            return converted;
+        }
+        RandomSource random = RandomSource.create();
+        float efficiency = efficiencyForType(SmelterType.BASIC);
+        int fluxLoss = 0;
+        for (Aspect aspect : inputAspects.getAspects()) {
+            if (aspect == null) {
+                continue;
+            }
+            int kept = 0;
+            int amount = inputAspects.getAmount(aspect);
+            float threshold = isFluxAspect(aspect) ? efficiency * 0.66F : efficiency;
+            for (int i = 0; i < amount; i++) {
+                if (random.nextFloat() > threshold) {
+                    fluxLoss++;
+                } else {
+                    kept++;
+                }
+            }
+            if (kept > 0) {
+                converted.add(aspect, kept);
+            }
+        }
+        pendingFlux += fluxLoss;
+        return converted;
+    }
+
+    private static boolean isFluxAspect(Aspect aspect) {
+        return aspect != null && "flux".equals(aspect.getTag());
+    }
     private boolean smeltInputAspects(AspectList inputAspects) {
         if (!canAcceptAspects(inputAspects)) {
             return false;
         }
-        aspects.add(inputAspects);
-        vis = aspects.visSize();
+        AspectList convertedAspects = applyEfficiencyLoss(inputAspects);
+        if (convertedAspects.size() > 0) {
+            aspects.add(convertedAspects);
+            vis = aspects.visSize();
+        }
         ItemStack input = items.get(SLOT_INPUT);
         input.shrink(1);
         if (input.isEmpty()) {
@@ -334,6 +376,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         tag.putInt("CookTime", furnaceCookTime);
         tag.putInt("Bellows", bellows);
         tag.putInt("TransferTicks", transferTicks);
+        tag.putInt("PendingFlux", pendingFlux);
     }
 
     @Override
@@ -350,6 +393,8 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         furnaceCookTime = Math.max(0, tag.getInt("CookTime"));
         bellows = tag.contains("Bellows") ? tag.getInt("Bellows") : -1;
         transferTicks = Math.max(0, tag.getInt("TransferTicks"));
+        pendingFlux = Math.max(0, tag.getInt("PendingFlux"));
     }
 }
+
 

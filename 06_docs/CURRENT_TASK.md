@@ -391,3 +391,7 @@ Last updated: 2026-06-21
 
 - Added basic smelter buffered essentia output into the Alembic block entity above it.
 - Next smelter batch should implement legacy efficiency/flux loss or auxiliary output discovery, not both at once.
+## Smelter efficiency/flux note
+
+- Added basic smelter efficiency loss and pending flux accounting during input aspect conversion.
+- Next smelter batch should implement vent mitigation or aura pollution for pending flux, not both with auxiliary smelter discovery.

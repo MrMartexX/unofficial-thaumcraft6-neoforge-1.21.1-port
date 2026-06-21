@@ -111,3 +111,8 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Added the first basic smelter buffered essentia output path into an Alembic directly above the smelter.
 - The smelter now attempts to move one aspect point every Basic smelter output-speed interval (`15` ticks), matching the current Basic speed boundary.
 - This is intentionally narrower than legacy full output discovery: auxiliary smelter offsets, Bellows effects, vents and efficiency/flux loss remain separate slices.
+## Smelter efficiency and pending flux checkpoint
+
+- Added the first legacy-style efficiency loss calculation for basic smelter input aspect conversion.
+- Basic smelter conversion now keeps each aspect point with `0.8` probability and records lost points as `pendingFlux`; flux aspect points use the legacy lower threshold multiplier `0.66`.
+- This intentionally records pending flux only. Aura pollution and vent mitigation remain separate because they depend on aura/vent behavior boundaries.
