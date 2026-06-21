@@ -125,3 +125,8 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Wired smelter `pendingFlux` into the current `AuraHelper.polluteAura(Level, BlockPos, float, boolean)` API after conversion/output tick work.
 - This mirrors the direct pollution portion of legacy `smeltItem()` after lost aspect points are counted.
 - Vent mitigation is still separate and should intercept pending flux before this direct pollution in a future slice.
+## Smelter vent placeholder and mitigation checkpoint
+
+- Added a minimal `smelter_vent` placeholder block/id boundary where it was missing from `TCBlocks`.
+- Added first placeholder-level pending-flux mitigation before aura pollution: adjacent `smelter_vent` gives each pending flux point a `0.333` mitigation chance.
+- This still does not implement exact legacy vent facing or side placement parity.

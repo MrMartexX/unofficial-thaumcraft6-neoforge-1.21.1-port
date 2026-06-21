@@ -403,3 +403,7 @@ Last updated: 2026-06-21
 
 - Added direct aura pollution for smelter `pendingFlux` through `AuraHelper.polluteAura`.
 - Next smelter batch should add smelter vent mitigation or auxiliary output discovery, not both at once.
+## Smelter vent placeholder mitigation note
+
+- Added minimal `smelter_vent` block placeholder and connected it to basic smelter pending-flux mitigation.
+- Future vent batch should make vent placement/facing exact and should not mix in aux smelter discovery.

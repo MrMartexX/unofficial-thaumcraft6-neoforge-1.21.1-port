@@ -726,3 +726,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Basic smelter now drains pending flux into the current aura pollution API.
 - Vent mitigation and auxiliary smelter output remain incomplete.
+## Smelter vent placeholder mitigation note
+
+- Added `smelter_vent` as a minimal block placeholder and wired it into basic smelter pending-flux mitigation.
+- Exact legacy facing, auxiliary smelter output and Bellows effects remain incomplete.

@@ -123,15 +123,19 @@ public final class TCBlocks {
     public static final Supplier<Block> RESEARCH_TABLE = BLOCKS.register("research_table", () -> researchTableBlock());
     public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> crucibleBlock());
     public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> smelterBlock());
-    public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal", () -> wardedJarBlock());
+    public static final Supplier<Block> SMELTER_VENT = BLOCKS.register("smelter_vent",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(3.0F, 6.0F)
+                    .requiresCorrectToolForDrops()));
+public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal", () -> wardedJarBlock());
     public static final Supplier<Block> ALEMBIC = BLOCKS.register("alembic", () -> alembicBlock());
     // Legacy-aligned transport/essentia blocks.
-    public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));
-    public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tube_buffer", () -> tubeBlock(TCLegacyTubeVariant.BUFFER));
-    public static final Supplier<Block> TUBE_FILTER = BLOCKS.register("tube_filter", () -> tubeBlock(TCLegacyTubeVariant.FILTER));
-    public static final Supplier<Block> TUBE_ONEWAY = BLOCKS.register("tube_oneway", () -> tubeBlock(TCLegacyTubeVariant.ONEWAY));
-    public static final Supplier<Block> TUBE_RESTRICT = BLOCKS.register("tube_restrict", () -> tubeBlock(TCLegacyTubeVariant.RESTRICT));
-    public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", () -> tubeBlock(TCLegacyTubeVariant.VALVE));
+public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));
+public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tube_buffer", () -> tubeBlock(TCLegacyTubeVariant.BUFFER));
+public static final Supplier<Block> TUBE_FILTER = BLOCKS.register("tube_filter", () -> tubeBlock(TCLegacyTubeVariant.FILTER));
+public static final Supplier<Block> TUBE_ONEWAY = BLOCKS.register("tube_oneway", () -> tubeBlock(TCLegacyTubeVariant.ONEWAY));
+public static final Supplier<Block> TUBE_RESTRICT = BLOCKS.register("tube_restrict", () -> tubeBlock(TCLegacyTubeVariant.RESTRICT));
+public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", () -> tubeBlock(TCLegacyTubeVariant.VALVE));
     public static final Supplier<Block> SMELTER_THAUMIUM = BLOCKS.register("smelter_thaumium", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.THAUMIUM));
     public static final Supplier<Block> SMELTER_VOID = BLOCKS.register("smelter_void", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.VOID));
     public static final Supplier<Block> WAND_WORKBENCH = BLOCKS.register("wand_workbench", () -> workbenchBlock());
@@ -425,6 +429,3 @@ public final class TCBlocks {
     private TCBlocks() {
     }
 }
-
-
-
