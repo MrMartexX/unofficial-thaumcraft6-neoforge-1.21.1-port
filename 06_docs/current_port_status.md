@@ -690,3 +690,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added a legacy-source audit for the next Alembic transport endpoint batch after the tube/jar transport slice.
 - No gameplay behavior is changed by this audit.
+## Alembic endpoint implementation note
+
+- Added `TCAlembicBlock`, `TCAlembicBlockEntity`, block/item/entity registration, capability exposure and runtime transport audit coverage.
+- This does not complete smelter processing; it only adds the Alembic output endpoint boundary.

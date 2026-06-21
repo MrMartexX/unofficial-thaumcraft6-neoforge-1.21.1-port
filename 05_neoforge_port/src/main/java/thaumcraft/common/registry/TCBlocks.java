@@ -27,6 +27,7 @@ import thaumcraft.common.blocks.basic.TCTableBlock;
 import thaumcraft.common.blocks.basic.TCInfusionCandleBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.blocks.essentia.TCWardedJarBlock;
+import thaumcraft.common.blocks.essentia.TCAlembicBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCCrucibleBlock;
@@ -123,6 +124,7 @@ public final class TCBlocks {
     public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> crucibleBlock());
     public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> smelterBlock());
     public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal", () -> wardedJarBlock());
+    public static final Supplier<Block> ALEMBIC = BLOCKS.register("alembic", () -> alembicBlock());
     // Legacy-aligned transport/essentia blocks.
     public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));
     public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tube_buffer", () -> tubeBlock(TCLegacyTubeVariant.BUFFER));
@@ -283,6 +285,13 @@ public final class TCBlocks {
         return new TCSmelterBlock(smelterProperties());
     }
 
+    private static Block alembicBlock() {
+        return new TCAlembicBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK)
+                .strength(1.5F, 6.0F)
+                .sound(SoundType.COPPER)
+                .requiresCorrectToolForDrops()
+                .noOcclusion());
+    }
     private static Block wardedJarBlock() {
         return new TCWardedJarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                 .strength(0.3F, 0.3F)
@@ -416,5 +425,6 @@ public final class TCBlocks {
     private TCBlocks() {
     }
 }
+
 
 

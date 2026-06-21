@@ -367,3 +367,7 @@ Last updated: 2026-06-21
 
 - Use `06_docs/audits/alembic_legacy_transport_source_audit.md` before implementing the next Alembic endpoint batch.
 - Scope should stay on Alembic as a transport endpoint; full smelter inventory/fuel/efficiency remains separate.
+## Alembic endpoint implementation note
+
+- Added Alembic as the first real smelter output transport endpoint boundary.
+- Continue to keep smelter inventory/aspect/fuel/efficiency separate from this endpoint slice.

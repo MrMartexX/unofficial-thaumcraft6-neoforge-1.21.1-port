@@ -17,6 +17,7 @@ import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
+import thaumcraft.common.tiles.essentia.TCAlembicBlockEntity;
 
 /** Runtime checks for the legacy TileTube/TileJar transport contract. */
 public final class TCEssentiaTransportBehaviorAudit {
@@ -127,6 +128,7 @@ public final class TCEssentiaTransportBehaviorAudit {
         addTransferChecks(level, origin.offset(0, 0, 12), checks);
         addSideAndValveChecks(level, origin.offset(8, 0, 0), checks);
         addJarChecks(level, origin.offset(8, 0, 10), checks);
+        addAlembicChecks(level, origin.offset(12, 0, 18), checks);
         clearArea(level, origin, 24);
         return new Report(List.copyOf(checks));
     }
@@ -284,6 +286,52 @@ public final class TCEssentiaTransportBehaviorAudit {
         }
     }
 
+
+    private static void addAlembicChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
+        level.setBlock(origin, TCBlocks.ALEMBIC.get().defaultBlockState(), 3);
+        TCAlembicBlockEntity alembic = blockEntity(level, origin, TCAlembicBlockEntity.class);
+        checks.add(check("runtime_alembic_block_entity_created", alembic != null, "alembic=" + (alembic != null)));
+        if (alembic == null) {
+            return;
+        }
+
+        int overflow = alembic.addToContainer(Aspect.AIR, 200);
+        int mixedRemainder = alembic.addToContainer(Aspect.FIRE, 1);
+        checks.add(check("alembic_stores_single_aspect_up_to_128", overflow == 72
+                        && mixedRemainder == 1
+                        && alembic.storedAmount() == 128
+                        && alembic.storedAspect() == Aspect.AIR,
+                "overflow=" + overflow + ", mixed=" + mixedRemainder + ", amount=" + alembic.storedAmount()));
+
+        checks.add(check("alembic_is_output_only_except_down_and_facing", !alembic.canInputFrom(Direction.UP)
+                        && !alembic.canOutputTo(Direction.DOWN)
+                        && !alembic.canOutputTo(Direction.NORTH)
+                        && alembic.canOutputTo(Direction.EAST),
+                "upInput=" + alembic.canInputFrom(Direction.UP)
+                        + ", downOutput=" + alembic.canOutputTo(Direction.DOWN)
+                        + ", northOutput=" + alembic.canOutputTo(Direction.NORTH)
+                        + ", eastOutput=" + alembic.canOutputTo(Direction.EAST)));
+
+        int simulated = alembic.takeEssentia(Aspect.AIR.getTag(), 64, Direction.EAST, true);
+        int taken = alembic.takeEssentia(Aspect.AIR.getTag(), 64, Direction.EAST, false);
+        int blocked = alembic.takeEssentia(Aspect.AIR.getTag(), 1, Direction.NORTH, false);
+        checks.add(check("alembic_outputs_requested_aspect_from_valid_side", simulated == 64
+                        && taken == 64
+                        && blocked == 0
+                        && alembic.storedAmount() == 64,
+                "simulated=" + simulated + ", taken=" + taken + ", blocked=" + blocked
+                        + ", remaining=" + alembic.storedAmount()));
+
+        alembic.setStoredForValidation(null, 0);
+        alembic.setFilterForValidation(Aspect.FIRE);
+        int rejected = alembic.addToContainer(Aspect.AIR, 1);
+        int accepted = alembic.addToContainer(Aspect.FIRE, 1);
+        checks.add(check("alembic_filter_accepts_only_matching_aspect", rejected == 1
+                        && accepted == 0
+                        && alembic.storedAspect() == Aspect.FIRE
+                        && alembic.storedAmount() == 1,
+                "rejected=" + rejected + ", accepted=" + accepted + ", amount=" + alembic.storedAmount()));
+    }
     private static void addJarChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
         level.setBlock(origin, TCBlocks.JAR_NORMAL.get().defaultBlockState(), 3);
         TCLegacyTubeBlockEntity buffer = placeTube(level, origin.above(), TCLegacyTubeVariant.BUFFER);
@@ -364,3 +412,4 @@ public final class TCEssentiaTransportBehaviorAudit {
     public record Check(String name, boolean passed, String notes) {
     }
 }
+

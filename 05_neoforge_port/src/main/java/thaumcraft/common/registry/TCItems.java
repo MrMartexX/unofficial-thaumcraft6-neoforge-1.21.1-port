@@ -104,6 +104,7 @@ public final class TCItems {
     public static final Supplier<BlockItem> CRUCIBLE = blockItem("crucible", TCBlocks.CRUCIBLE);
     public static final Supplier<BlockItem> SMELTER_BASIC = blockItem("smelter_basic", TCBlocks.SMELTER_BASIC);
     public static final Supplier<BlockItem> JAR_NORMAL = blockItem("jar_normal", TCBlocks.JAR_NORMAL);
+    public static final Supplier<BlockItem> ALEMBIC = blockItem("alembic", TCBlocks.ALEMBIC);
     public static final Supplier<BlockItem> SMELTER_THAUMIUM = blockItem("smelter_thaumium", TCBlocks.SMELTER_THAUMIUM);
     public static final Supplier<BlockItem> SMELTER_VOID = blockItem("smelter_void", TCBlocks.SMELTER_VOID);
     public static final Supplier<BlockItem> WAND_WORKBENCH = blockItem("wand_workbench", TCBlocks.WAND_WORKBENCH);
@@ -488,7 +489,6 @@ public final class TCItems {
     public static final Supplier<Item> CATALOG_PLACEHOLDER_REDSTONEINLAY = ITEMS.register("redstoneinlay", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ADVALCHEMYCONSTRUCT = ITEMS.register("advalchemyconstruct", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ALCHEMICALCONSTRUCT = ITEMS.register("alchemicalconstruct", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ALEMBIC = ITEMS.register("alembic", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_BELLOWS = ITEMS.register("bellows", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_CENTRIFUGE = ITEMS.register("centrifuge", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_CONDENSER = ITEMS.register("condenser", () -> new Item(new Item.Properties()));
@@ -540,3 +540,4 @@ public final class TCItems {
     private TCItems() {
     }
 }
+

@@ -27,9 +27,11 @@ public final class TCEssentiaCapabilities {
         event.registerBlockEntity(BLOCK, TCBlockEntities.TUBE_RESTRICT.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.TUBE_VALVE.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.WARDED_JAR.get(), TCEssentiaCapabilities::forSide);
+        event.registerBlockEntity(BLOCK, TCBlockEntities.ALEMBIC.get(), TCEssentiaCapabilities::forSide);
     }
 
     private static TCEssentiaTransport forSide(TCEssentiaTransport transport, @Nullable Direction side) {
         return side == null || transport.isConnectable(side) ? transport : null;
     }
 }
+

@@ -79,3 +79,9 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Added `tools/audits/audit-legacy-alembic-transport-source.ps1` and `06_docs/audits/alembic_legacy_transport_source_audit.md`.
 - Use this audit as the source evidence for the next Alembic endpoint batch.
 - Do not expose Alembic capability or claim smelter completion until its sided transport and storage semantics are audited.
+## Alembic endpoint checkpoint
+
+- Added first Alembic block/entity transport endpoint boundary from legacy `TileAlembic` evidence.
+- Preserves capacity `128`, single-aspect storage, optional filter, output-only sides excluding facing and down, zero suction, and exact requested take semantics.
+- Exposes Alembic through `TCEssentiaCapabilities.BLOCK` after runtime audit coverage.
+- Full smelter inventory/fuel/efficiency and real alembic production remain separate.
