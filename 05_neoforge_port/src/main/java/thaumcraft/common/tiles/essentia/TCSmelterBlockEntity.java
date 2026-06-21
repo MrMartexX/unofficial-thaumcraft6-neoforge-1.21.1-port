@@ -339,6 +339,9 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         }
         return false;
     }
+
+
+
     private boolean pollutePendingFlux() {
         if (level == null || level.isClientSide || pendingFlux <= 0) {
             return false;
