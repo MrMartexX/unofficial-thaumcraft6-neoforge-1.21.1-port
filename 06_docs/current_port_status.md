@@ -722,3 +722,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added a focused audit for smelter pending-flux to aura/flux API wiring.
 - No runtime behavior changed in this audit batch.
+## Smelter pending flux aura pollution note
+
+- Basic smelter now drains pending flux into the current aura pollution API.
+- Vent mitigation and auxiliary smelter output remain incomplete.

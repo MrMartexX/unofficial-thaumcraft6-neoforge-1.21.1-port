@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
@@ -214,6 +215,7 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         }
 
         dirty |= outputBufferedEssentia();
+        dirty |= pollutePendingFlux();
 
         if (wasBurning != isBurning()) {
             syncEnabledBlockState();
@@ -308,6 +310,15 @@ public final class TCSmelterBlockEntity extends BlockEntity {
     }
 
 
+
+    private boolean pollutePendingFlux() {
+        if (level == null || level.isClientSide || pendingFlux <= 0) {
+            return false;
+        }
+        AuraHelper.polluteAura(level, worldPosition, (float) pendingFlux, true);
+        pendingFlux = 0;
+        return true;
+    }
     private boolean outputBufferedEssentia() {
         if (level == null || level.isClientSide || aspects == null || aspects.size() == 0) {
             return false;
@@ -396,5 +407,6 @@ public final class TCSmelterBlockEntity extends BlockEntity {
         pendingFlux = Math.max(0, tag.getInt("PendingFlux"));
     }
 }
+
 
 

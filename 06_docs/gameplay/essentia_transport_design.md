@@ -120,3 +120,8 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 
 - Added `tools/audits/audit-smelter-flux-aura-bridge.ps1` and `06_docs/audits/smelter_flux_aura_bridge_audit.md`.
 - Use this audit before wiring `pendingFlux` into aura pollution or adding vent mitigation.
+## Smelter pending flux aura pollution checkpoint
+
+- Wired smelter `pendingFlux` into the current `AuraHelper.polluteAura(Level, BlockPos, float, boolean)` API after conversion/output tick work.
+- This mirrors the direct pollution portion of legacy `smeltItem()` after lost aspect points are counted.
+- Vent mitigation is still separate and should intercept pending flux before this direct pollution in a future slice.

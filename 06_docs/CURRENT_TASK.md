@@ -399,3 +399,7 @@ Last updated: 2026-06-21
 
 - Added an audit for connecting smelter `pendingFlux` to the current aura/flux API.
 - Next batch should use the audit result to add either direct aura pollution or a missing aura mutation boundary.
+## Smelter pending flux aura pollution note
+
+- Added direct aura pollution for smelter `pendingFlux` through `AuraHelper.polluteAura`.
+- Next smelter batch should add smelter vent mitigation or auxiliary output discovery, not both at once.
