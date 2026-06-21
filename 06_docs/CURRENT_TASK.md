@@ -395,3 +395,7 @@ Last updated: 2026-06-21
 
 - Added basic smelter efficiency loss and pending flux accounting during input aspect conversion.
 - Next smelter batch should implement vent mitigation or aura pollution for pending flux, not both with auxiliary smelter discovery.
+## Smelter pending-flux aura bridge note
+
+- Added an audit for connecting smelter `pendingFlux` to the current aura/flux API.
+- Next batch should use the audit result to add either direct aura pollution or a missing aura mutation boundary.

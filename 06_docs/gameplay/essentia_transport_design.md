@@ -116,3 +116,7 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Added the first legacy-style efficiency loss calculation for basic smelter input aspect conversion.
 - Basic smelter conversion now keeps each aspect point with `0.8` probability and records lost points as `pendingFlux`; flux aspect points use the legacy lower threshold multiplier `0.66`.
 - This intentionally records pending flux only. Aura pollution and vent mitigation remain separate because they depend on aura/vent behavior boundaries.
+## Smelter pending-flux aura bridge audit checkpoint
+
+- Added `tools/audits/audit-smelter-flux-aura-bridge.ps1` and `06_docs/audits/smelter_flux_aura_bridge_audit.md`.
+- Use this audit before wiring `pendingFlux` into aura pollution or adding vent mitigation.

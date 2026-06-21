@@ -718,3 +718,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Basic smelter now records legacy-style lost aspect points as pending flux during conversion.
 - Vent mitigation and aura pollution are still incomplete.
+## Smelter pending-flux aura bridge note
+
+- Added a focused audit for smelter pending-flux to aura/flux API wiring.
+- No runtime behavior changed in this audit batch.
