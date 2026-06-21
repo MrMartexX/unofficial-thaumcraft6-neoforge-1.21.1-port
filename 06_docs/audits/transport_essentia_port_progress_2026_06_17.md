@@ -1,5 +1,10 @@
 # Transport/essentia port progress - 2026-06-17
 
+> Historical checkpoint. The behavior skeleton described below was replaced by the audited
+> tube/Warded Jar implementation on 2026-06-21. See
+> `06_docs/gameplay/essentia_transport_design.md` and
+> `06_docs/audits/essentia_transport_behavior_batch.md` for current state.
+
 ## Current checkpoint
 
 Latest pushed implementation checkpoint:

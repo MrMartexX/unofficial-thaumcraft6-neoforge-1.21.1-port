@@ -81,7 +81,7 @@ public final class TCMutableEssentiaStorage implements TCEssentiaStorage {
         if (aspect == null || aspect.isBlank() || amount <= 0) {
             return;
         }
-        int accepted = Math.min(amount, capacity);
+        int accepted = Math.min(amount, Math.max(0, capacity - totalAmount() + amount(aspect)));
         if (accepted <= 0) {
             essentia.remove(aspect);
         } else {

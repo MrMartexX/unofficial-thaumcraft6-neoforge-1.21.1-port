@@ -18,6 +18,7 @@ import thaumcraft.common.essentia.container.TCAspectSourceContainer;
 import thaumcraft.common.essentia.transport.TCEssentiaStack;
 import thaumcraft.common.essentia.transport.TCEssentiaSuction;
 import thaumcraft.common.essentia.transport.TCEssentiaTransport;
+import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.registry.TCBlockEntities;
 
 /** First legacy-shaped warded jar storage slice. */
@@ -127,7 +128,7 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
 
     @Override
     public TCEssentiaStack getEssentia(Direction face) {
-        return isConnectable(face) && aspect != null && amount > 0
+        return (face == null || isConnectable(face)) && aspect != null && amount > 0
                 ? TCEssentiaStack.of(aspect.getTag(), amount)
                 : TCEssentiaStack.EMPTY;
     }
@@ -162,7 +163,10 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
         if (requestedAspect == null || requestedAspect != aspect || requestedAmount <= 0) {
             return 0;
         }
-        int drained = Math.min(requestedAmount, amount);
+        if (amount < requestedAmount) {
+            return 0;
+        }
+        int drained = requestedAmount;
         if (!simulate && drained > 0) {
             amount -= drained;
             if (amount <= 0) {
@@ -186,10 +190,18 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
     }
 
     private void fillFromAbove() {
-        if (level == null || !(level.getBlockEntity(worldPosition.above()) instanceof TCEssentiaTransport source)) {
+        if (level == null) {
             return;
         }
         Direction sourceFace = Direction.DOWN;
+        TCEssentiaTransport source = level.getCapability(
+                TCEssentiaCapabilities.BLOCK,
+                worldPosition.above(),
+                sourceFace
+        );
+        if (source == null) {
+            return;
+        }
         if (!source.canOutputTo(sourceFace)) {
             return;
         }

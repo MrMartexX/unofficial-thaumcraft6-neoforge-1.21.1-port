@@ -58,6 +58,7 @@ public abstract class TCAbstractEssentiaTransportBlockEntity extends BlockEntity
         if (level != null) {
             BlockState state = getBlockState();
             level.sendBlockUpdated(worldPosition, state, state, 3);
+            level.updateNeighbourForOutputSignal(worldPosition, state.getBlock());
         }
     }
 

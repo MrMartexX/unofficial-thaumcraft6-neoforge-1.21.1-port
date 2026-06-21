@@ -94,6 +94,8 @@ neoForge {
             def infusionBehaviorAuditPath = providers.gradleProperty('tcInfusionBehaviorAuditPath').orNull ?: System.getProperty('tc.infusionBehaviorAuditPath')
             def researchTableAuditEnabled = providers.gradleProperty('tcResearchTableAudit').orNull ?: System.getProperty('tc.researchTableAudit')
             def researchTableAuditPath = providers.gradleProperty('tcResearchTableAuditPath').orNull ?: System.getProperty('tc.researchTableAuditPath')
+            def essentiaTransportBehaviorAuditEnabled = providers.gradleProperty('tcEssentiaTransportBehaviorAudit').orNull ?: System.getProperty('tc.essentiaTransportBehaviorAudit')
+            def essentiaTransportBehaviorAuditPath = providers.gradleProperty('tcEssentiaTransportBehaviorAuditPath').orNull ?: System.getProperty('tc.essentiaTransportBehaviorAuditPath')
             if (aspectDumpEnabled != null) {
                 systemProperty 'tc.aspectDump', aspectDumpEnabled
             }
@@ -168,6 +170,12 @@ neoForge {
             }
             if (researchTableAuditPath != null) {
                 systemProperty 'tc.researchTableAuditPath', researchTableAuditPath
+            }
+            if (essentiaTransportBehaviorAuditEnabled != null) {
+                systemProperty 'tc.essentiaTransportBehaviorAudit', essentiaTransportBehaviorAuditEnabled
+            }
+            if (essentiaTransportBehaviorAuditPath != null) {
+                systemProperty 'tc.essentiaTransportBehaviorAuditPath', essentiaTransportBehaviorAuditPath
             }
             logLevel = org.slf4j.event.Level.DEBUG
         }

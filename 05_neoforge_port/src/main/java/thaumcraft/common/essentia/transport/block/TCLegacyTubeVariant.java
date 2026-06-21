@@ -9,12 +9,12 @@ import java.util.Optional;
  * Tube block variants mapped from legacy TC6 tube catalog ids.
  */
 public enum TCLegacyTubeVariant {
-    TUBE("tube", TCEssentiaTubeMode.NORMAL, 16),
-    BUFFER("tube_buffer", TCEssentiaTubeMode.BUFFER, 128),
-    FILTER("tube_filter", TCEssentiaTubeMode.FILTER, 16),
-    ONEWAY("tube_oneway", TCEssentiaTubeMode.ONEWAY, 16),
-    RESTRICT("tube_restrict", TCEssentiaTubeMode.RESTRICT, 16),
-    VALVE("tube_valve", TCEssentiaTubeMode.VALVE, 16);
+    TUBE("tube", TCEssentiaTubeMode.NORMAL, 1),
+    BUFFER("tube_buffer", TCEssentiaTubeMode.BUFFER, 10),
+    FILTER("tube_filter", TCEssentiaTubeMode.FILTER, 1),
+    ONEWAY("tube_oneway", TCEssentiaTubeMode.ONEWAY, 1),
+    RESTRICT("tube_restrict", TCEssentiaTubeMode.RESTRICT, 1),
+    VALVE("tube_valve", TCEssentiaTubeMode.VALVE, 1);
 
     private final String catalogId;
     private final TCEssentiaTubeMode mode;

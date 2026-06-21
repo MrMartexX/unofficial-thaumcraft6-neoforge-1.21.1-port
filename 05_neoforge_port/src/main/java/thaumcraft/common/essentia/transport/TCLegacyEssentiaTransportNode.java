@@ -101,7 +101,7 @@ public class TCLegacyEssentiaTransportNode implements TCEssentiaTransport {
 
     @Override
     public TCEssentiaStack getEssentia(Direction face) {
-        if (!isConnectable(face)) return TCEssentiaStack.EMPTY;
+        if (face != null && !isConnectable(face)) return TCEssentiaStack.EMPTY;
         return storage.dominantAspect()
                 .map(aspect -> TCEssentiaStack.of(aspect, storage.amount(aspect)))
                 .orElse(TCEssentiaStack.EMPTY);
@@ -109,14 +109,14 @@ public class TCLegacyEssentiaTransportNode implements TCEssentiaTransport {
 
     @Override
     public int addEssentia(String aspect, int amount, Direction face, boolean simulate) {
-        if (!canInputFrom(face)) return 0;
+        if (face != null && !canInputFrom(face)) return 0;
         if (mode == TCEssentiaTubeMode.FILTER && !filterAspect.isBlank() && !filterAspect.equals(aspect)) return 0;
         return storage.add(aspect, amount, simulate);
     }
 
     @Override
     public int takeEssentia(String aspect, int amount, Direction face, boolean simulate) {
-        if (!canOutputTo(face)) return 0;
+        if (face != null && !canOutputTo(face)) return 0;
         return storage.take(aspect, amount, simulate);
     }
 }

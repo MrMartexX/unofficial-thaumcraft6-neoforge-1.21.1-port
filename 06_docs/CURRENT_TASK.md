@@ -23,6 +23,7 @@ Last updated: 2026-06-21
 - The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
 - The crucible client slice now includes the synced liquid surface, exact fluid-height/recolor formulas, boil/froth/overflow/bubble particles and legacy dissolution/craft/spill block-event FX. Runtime behavior audit passes `16/16`.
 - The infusion boundary now includes server-owned two-click caster activation, live bounded surroundings refresh, inactive stability charging, researched recipe start without pre-supplied essentia, persisted craft-cycle/stability state, exact five-tick default cadence, one-point nearest-source drain, the legacy 200-tick failed-source rescan delay, six-cycle component timing, result placement/damage carry-over, component remainders, completion/failure sounds, the two clientbound legacy FX message contracts, exact structure modifiers, exact stability math, all 24 executable instability rolls, Flux Goo/harm dependencies, inlay/Stabilizer pedestal mitigation, client matrix animation/halo, eight-sided essentia streams and item/block source debris. The runtime audit passes `95/95`.
+- The first real essentia transport slice now has legacy capacities/cadence/suction formulas for all six tube variants, Warded Jar transfer, sided NeoForge capability access, persisted directional state and legacy multipart tube geometry. The dedicated-server runtime audit passes `23/23`.
 
 ## Do not change without explicit request
 
@@ -33,20 +34,12 @@ Last updated: 2026-06-21
 
 ## Near-term tasks
 
-1. Continue the infusion work from `06_docs/gameplay/infusion_in_world_behavior_design.md`:
-   - Current implemented scope includes reloadable `thaumcraft:infusion` data, Thaumonomicon recipe-page snapshots, validation/start/readiness models, persisted per-cycle progress, real Warded Jar drain, exact default timing, component consumption, final output, sounds, and server-to-client FX event payloads.
-   - Legacy parity requirement: pedestal component matching is unordered but exact 1:1 by count; extra components must fail.
-   - The old one-shot mutation executor remains audit/reference-only. Production server ticking uses `TCInfusionLegacyCycleExecutor`; normal caster activation is enabled through a server-authoritative activate-then-start interaction.
-   - `thaumcraft:jar_normal` is the first reviewed real aspect source: capacity `250`, blocked/filter persistence, top-face transport access and exact simulated drain.
-   - Source discovery now mirrors legacy `EssentiaHandler` range and distance ordering; tube buffers are not selected.
-   - Exact structure modifiers are active: arcane/ancient/eldritch pillars, `matrix_speed`, `matrix_cost`, ancient/eldritch pedestal cost effects, legacy `0.75^n` stabilizer diminishing returns, unpaired penalties, and the `0.5` cost floor.
-   - Persistent stability, legacy `5/6/7/8` loss categories, `[-100,25]` cycle clamp, post-event recovery order and all 24 event roll mappings/effects are active.
-   - Flux Goo placement, Flux Taint/Vis Exhaust, bounded inlay charge propagation, persisted Stabilizer energy/recharge and pre-mutation pedestal mitigation are active. Full goo flow/taint transforms and Flux Rift stabilization remain owned by their future subsystems.
-   - Live surroundings refresh, inactive matrix activation/stability charging and start-state safety are closed. Recipe cost stays frozen at start; live delay/replenishment refresh without mutating inputs.
-   - The FX wire/cache lifetime contract, matrix BER, deterministic crafting halo, eight-sided `FXEssentiaStream` replacement and item/block/entity source effects are implemented. Pixel-level transforms, blending and timing still require a side-by-side active-altar review before final visual parity is claimed.
-   - Keep broad pedestal UI, mirrors/alembics, automation and enchantment infusion deferred until separate focused slices.
-   - Re-run build, dedicated server smoke, infusion recipe-data audit, infusion behavior audit, research page catalog audit, and protocol audit after the batch.
-   - Use legacy `TileInfusionMatrix`, `TilePedestal`, `InfusionRecipe`, and `ThaumcraftCraftingManager.findMatchingInfusionRecipe` as behavior references, not direct copy sources.
+1. Continue essentia transport from `06_docs/gameplay/essentia_transport_design.md`:
+   - Keep the `23/23` tube/jar runtime audit green.
+   - Port Alembic as the next real output endpoint before claiming smelter transport completion.
+   - Replace smelter skeleton storage with its real inventory/aspect/fuel/efficiency model as one audited machine batch.
+   - Keep Bellows discovery, caster sub-part interaction and client-only vent/valve rendering in their owning follow-up slices.
+   - Do not expose the current smelter skeletons through `TCEssentiaCapabilities.BLOCK`.
 2. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
 3. Keep reusable audit scripts under `tools/audits/`.
 4. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.

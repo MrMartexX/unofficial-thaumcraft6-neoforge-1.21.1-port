@@ -1068,7 +1068,8 @@ public final class TCInfusionBehaviorAudit {
         TCLegacyTubeBlockEntity pullBuffer = blockEntity(level, pullBufferPos, TCLegacyTubeBlockEntity.class);
         outOfRangeJar.setStoredForValidation(null, 0);
         if (pullBuffer != null) {
-            pullBuffer.addEssentia(Aspect.AIR.getTag(), 2, Direction.DOWN, false);
+            pullBuffer.addEssentia(Aspect.AIR.getTag(), 1, Direction.DOWN, false);
+            pullBuffer.addEssentia(Aspect.AIR.getTag(), 1, Direction.DOWN, false);
         }
         for (int tick = 0; tick < 4; tick++) {
             TCWardedJarBlockEntity.serverTick(level, outOfRangeJarPos, outOfRangeJar.getBlockState(), outOfRangeJar);

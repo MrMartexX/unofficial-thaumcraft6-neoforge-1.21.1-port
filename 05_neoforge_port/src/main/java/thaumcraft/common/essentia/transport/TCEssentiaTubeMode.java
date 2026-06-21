@@ -9,9 +9,9 @@ package thaumcraft.common.essentia.transport;
 public enum TCEssentiaTubeMode {
     NORMAL(true, true, 0),
     BUFFER(true, true, 0),
-    FILTER(true, true, 1),
+    FILTER(true, true, 0),
     ONEWAY(true, true, 0),
-    RESTRICT(true, true, 64),
+    RESTRICT(true, true, 0),
     VALVE(true, true, 0),
     INPUT(true, false, 0),
     OUTPUT(false, true, 0),

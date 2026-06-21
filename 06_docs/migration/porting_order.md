@@ -23,17 +23,17 @@ This table is a roadmap snapshot, not the live task queue. Use `06_docs/CURRENT_
 |---|---|---|
 | Stage 1. Minimal Launch | Done | Client and dedicated server bootstrap exist and remain guarded by build/server smoke checks. |
 | Stage 2. Items / Materials | In progress | Identity, bridge items, selected materials, models, lang, tags and creative ordering are active; many item behaviors remain deferred. |
-| Stage 3. Blocks / Basic Resources | In progress | Basic blocks, candles, tubes, smelter identities, tables, Arcane Workbench and resource coverage are started; broad machine behavior is not complete. |
+| Stage 3. Blocks / Basic Resources | In progress | Basic blocks, candles, tables and Arcane Workbench exist; all six tube blocks now use legacy multipart connection topology and shapes. Broad machine behavior remains incomplete. |
 | Stage 4. Aspects | In progress | Core aspect model, item/entity assignments, parity harnesses and current generated cache are active; gameplay-heavy consumers remain staged. |
 | Stage 5. Aura | In progress | Server-side saved data, chunk initialization, update loop, debug commands and Workbench Charger aura usage exist; HUD/FX/rifts/consumers remain deferred. |
 | Stage 6. Research | In progress | Data/progression/page-catalog core, scan knowledge, research table slice and first Thaumonomicon flow exist; full UI/search/warp polish remains blocked. |
 | Stage 7. Crafting | In progress | Vanilla fixtures, exact arcane recipes, Arcane Workbench behavior, crucible gameplay slices, and infusion through structure-derived timing/cost, persistent stability, exact 24-way event selection, essentia/component consumption and output placement are active; six dependency-owned instability rolls and remaining recipe families are deferred. |
-| Stage 8. Tile Entities | In progress | Research Table, Arcane Workbench, Crucible, server-ticking Infusion Matrix/Pedestals, exact infusion pillar/modifier surroundings scan, transport endpoints and persistent Warded Jar storage exist; broad machine ticking and remaining essentia machines are deferred. |
+| Stage 8. Tile Entities | In progress | Research Table, Arcane Workbench, Crucible, Infusion Matrix/Pedestals, all six server-ticking tube variants and persistent Warded Jar storage exist. Tube/Jar transport is capability-backed and passes `23/23`; Alembic, Bellows and real smelter processing remain. |
 | Stage 9. GUI | In progress | Research Table, Arcane Workbench and first Thaumonomicon screens exist as functional slices; final visual parity and recipe drilldown remain incomplete. |
 | Stage 10. Networking | In progress | Aura, knowledge, research table, Thaumonomicon and both clientbound infusion FX payload contracts exist; future gameplay payloads need subsystem-specific design. |
 | Stage 11. Entities / Golems | Deferred | Vanilla/entity scan parity is handled; custom Thaumcraft entities, golems, AI and renderers are not started. |
 | Stage 12. Worldgen | In progress | Sapling-grown Greatwood/Silverwood behavior exists; biome/world placement and structures are not started. |
-| Stage 13. Rendering / Particles | In progress | Thaumometer effects, table renderer, infusion matrix/stream/source FX and crucible liquid/boil/block-event FX exist; measured visual parity and broad render/BEWLR/shader work remain high risk. |
+| Stage 13. Rendering / Particles | In progress | Thaumometer effects, table renderer, infusion FX, crucible FX and legacy multipart tube geometry exist; tube vent/valve BER effects, measured visual parity and broad render/BEWLR/shader work remain high risk. |
 | Stage 14. Integrations | Deferred | Optional accessory/recipe-viewer integrations are intentionally held until core systems stabilize. |
 
 ## Stage 1. Minimal Launch

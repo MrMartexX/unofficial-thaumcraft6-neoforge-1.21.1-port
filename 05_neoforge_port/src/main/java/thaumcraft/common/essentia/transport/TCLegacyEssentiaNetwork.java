@@ -24,7 +24,9 @@ public final class TCLegacyEssentiaNetwork {
 
         TCEssentiaSuction targetSuction = target.getSuction(targetFace);
         TCEssentiaSuction sourceSuction = source.getSuction(sourceFace);
-        if (!targetSuction.accepts(aspect) || !targetSuction.strongerThan(sourceSuction)) return 0;
+        if (!targetSuction.accepts(aspect)
+                || !targetSuction.strongerThan(sourceSuction)
+                || targetSuction.amount() < source.getMinimumSuction()) return 0;
 
         int available = source.takeEssentia(aspect, maxAmount, sourceFace, true);
         int accepted = target.addEssentia(aspect, available, targetFace, true);

@@ -129,6 +129,17 @@ public final class TCBlockEntities {
         };
     }
 
+    public static BlockEntityType<TCLegacyTubeBlockEntity> typeForTube(TCLegacyTubeVariant variant) {
+        return switch (variant) {
+            case TUBE -> TUBE.get();
+            case BUFFER -> TUBE_BUFFER.get();
+            case FILTER -> TUBE_FILTER.get();
+            case ONEWAY -> TUBE_ONEWAY.get();
+            case RESTRICT -> TUBE_RESTRICT.get();
+            case VALVE -> TUBE_VALVE.get();
+        };
+    }
+
     public static TCLegacySmelterEndpointBlockEntity createSmelterEndpointBlockEntity(TCLegacySmelterEndpoint endpoint, BlockPos pos, BlockState state) {
         return switch (endpoint) {
             case THAUMIUM -> new TCLegacySmelterEndpointBlockEntity(SMELTER_THAUMIUM.get(), pos, state, endpoint);

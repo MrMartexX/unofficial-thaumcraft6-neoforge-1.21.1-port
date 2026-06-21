@@ -6,5 +6,6 @@ Current active documents:
 
 - `aura_design.md`
 - `crucible_in_world_behavior_design.md`
+- `essentia_transport_design.md`
 
-Infusion, essentia transport, golem gameplay and any further broad crucible/alchemy expansion should get focused design docs here before implementation.
+Infusion, golem gameplay and any further broad crucible/alchemy expansion should get focused design docs here before implementation.
