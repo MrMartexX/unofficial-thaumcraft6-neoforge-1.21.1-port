@@ -141,3 +141,9 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Added an explicit `SmelterType` ownership field to `TCSmelterBlockEntity` and routed runtime efficiency/output-speed through the instance type.
 - Basic smelter behavior remains unchanged because the public constructor still defaults to `SmelterType.BASIC`.
 - This prepares a later bridge where thaumium/void smelters can become real machine variants without changing the endpoint placeholder classes in the same slice.
+
+## Upgraded smelter endpoint machine bridge checkpoint
+
+- Bridged `smelter_thaumium` and `smelter_void` endpoint block entities onto `TCSmelterBlockEntity` while preserving their transport endpoint interface.
+- This enables upgraded smelter ids to use machine tick/fuel/aspect/Alembic behavior without removing the current tube transport boundary.
+- The endpoint transport node remains a compatibility boundary and should be revisited when exact legacy upgraded smelter transport behavior is implemented.

@@ -45,7 +45,7 @@ public class TCSmelterBlock extends Block implements EntityBlock {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide || type != TCBlockEntities.SMELTER_BASIC.get()) {
+        if (level.isClientSide || !isSmelterMachineType(type)) {
             return null;
         }
         return (tickerLevel, pos, tickerState, blockEntity) ->
@@ -55,6 +55,12 @@ public class TCSmelterBlock extends Block implements EntityBlock {
                         tickerState,
                         (TCSmelterBlockEntity) blockEntity
                 );
+    }
+
+    private static boolean isSmelterMachineType(BlockEntityType<?> type) {
+        return type == TCBlockEntities.SMELTER_BASIC.get()
+                || type == TCBlockEntities.SMELTER_THAUMIUM.get()
+                || type == TCBlockEntities.SMELTER_VOID.get();
     }
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -105,7 +111,3 @@ public class TCSmelterBlock extends Block implements EntityBlock {
         level.addParticle(ParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
     }
 }
-
-
-
-

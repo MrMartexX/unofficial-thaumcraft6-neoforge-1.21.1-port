@@ -417,3 +417,8 @@ Last updated: 2026-06-21
 
 - Added a variant-ready machine type field to the basic smelter block entity.
 - `smelter_thaumium` and `smelter_void` runtime activation remains blocked by the endpoint/machine ownership split.
+
+## Upgraded smelter endpoint machine bridge note
+
+- `smelter_thaumium` and `smelter_void` now bridge to smelter machine state while still exposing the transport endpoint interface.
+- Next smelter slices can verify type-specific speed/efficiency and then address exact placement/facing/Bellows behavior.

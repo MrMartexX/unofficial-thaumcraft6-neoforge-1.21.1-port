@@ -740,3 +740,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Basic smelter now routes efficiency and output-speed through an instance `SmelterType` field.
 - Upgraded smelter blocks are still not enabled as machine variants until the endpoint ownership bridge is implemented.
+
+## Upgraded smelter endpoint machine bridge note
+
+- Added a dual-role endpoint/machine bridge for thaumium and void smelter ids.
+- Transport endpoint compatibility is preserved through delegated `TCEssentiaTransport` methods.
