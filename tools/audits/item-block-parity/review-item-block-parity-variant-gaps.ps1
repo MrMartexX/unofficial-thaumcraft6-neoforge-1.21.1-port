@@ -47,29 +47,45 @@ function Get-PlainId([string]$Id) {
     return $Id
 }
 
-function Normalize-Id([string]$Id) {
-    return ((Get-PlainId $Id) -replace '[^a-z0-9]', '').ToLowerInvariant()
-}
-
 function Get-QuotedStrings([string]$Text) {
     if ([string]::IsNullOrWhiteSpace($Text)) { return @() }
     return @([regex]::Matches($Text, '"(?<value>[^"]+)"') | ForEach-Object { $_.Groups["value"].Value })
 }
 
 function Get-CandidatePortIds([string]$BaseId, [string]$Variant) {
-    $base = Get-PlainId $BaseId
-    $variantId = Get-PlainId $Variant
+    $base = (Get-PlainId $BaseId).ToLowerInvariant()
+    $variantId = (Get-PlainId $Variant).ToLowerInvariant()
     $candidates = [System.Collections.Generic.List[string]]::new()
 
-    foreach ($candidate in @(
-        "${variantId}_${base}",
-        "${base}_${variantId}",
-        "${base}${variantId}",
-        "${variantId}${base}",
-        $variantId
-    )) {
-        if (-not [string]::IsNullOrWhiteSpace($candidate) -and -not $candidates.Contains($candidate)) {
-            $candidates.Add($candidate)
+    function Add-Candidate([string]$CandidateId) {
+        if (-not [string]::IsNullOrWhiteSpace($CandidateId) -and -not $candidates.Contains($CandidateId)) {
+            $candidates.Add($CandidateId)
+        }
+    }
+
+    switch ($base) {
+        "cluster" {
+            Add-Candidate "cluster_$variantId"
+        }
+        "ingot" {
+            Add-Candidate "${variantId}_ingot"
+        }
+        "nugget" {
+            Add-Candidate "${variantId}_nugget"
+            if ($variantId -eq "rareearth") {
+                Add-Candidate "rare_earth"
+            }
+        }
+        "plate" {
+            Add-Candidate "${variantId}_plate"
+        }
+        "mind" {
+            Add-Candidate "mind$variantId"
+            Add-Candidate "mind_$variantId"
+        }
+        default {
+            Add-Candidate "${base}_$variantId"
+            Add-Candidate "${variantId}_$base"
         }
     }
 
@@ -95,17 +111,6 @@ function Find-PortVariantMatches([string]$Kind, [string]$BaseId, [string]$Varian
     foreach ($candidateId in $candidateIds) {
         if ($portIds.ContainsKey($candidateId) -and -not $matches.Contains($candidateId)) {
             $matches.Add($candidateId)
-        }
-    }
-
-    $variantNorm = Normalize-Id $Variant
-    $baseNorm = Normalize-Id $BaseId
-    foreach ($portId in $portIds.Keys) {
-        $portNorm = Normalize-Id $portId
-        if ($portNorm.Contains($variantNorm) -and ($portNorm.Contains($baseNorm) -or $baseNorm.Contains("cluster") -or $baseNorm.Contains("nugget") -or $baseNorm.Contains("ingot"))) {
-            if (-not $matches.Contains($portId)) {
-                $matches.Add($portId)
-            }
         }
     }
 
@@ -135,6 +140,7 @@ foreach ($candidate in @($registryReview.candidates)) {
         }
         $variantRows.Add([pscustomobject][ordered]@{
             legacyVariant = $variant
+            expectedPortIdPatterns = @(Get-CandidatePortIds $legacyBase $variant | ForEach-Object { "thaumcraft:$_" })
             candidatePortIds = @($matches | ForEach-Object { "thaumcraft:$_" })
             candidateCount = $matches.Count
         })
@@ -180,6 +186,7 @@ $output = [ordered]@{
     generatedAtUtc = [DateTime]::UtcNow.ToString("o")
     registryReview = $RegistryReviewPath
     portManifest = $PortManifestPath
+    matcher = "strict-base-patterns-v1"
     candidateCount = $orderedRows.Count
     summaryByConfidence = $summaryByConfidence
     candidates = $orderedRows
@@ -198,7 +205,9 @@ $lines.Add("Generated: $($output.generatedAtUtc)")
 $lines.Add("")
 $lines.Add("Source registry review: ``$RegistryReviewPath``")
 $lines.Add("")
-$lines.Add("This report extracts legacy metadata-style base IDs and variants from source evidence and searches for modern split IDs in the port manifest. It does not edit ``variant-mapping.json``.")
+$lines.Add("Matcher: strict-base-patterns-v1")
+$lines.Add("")
+$lines.Add("This report extracts legacy metadata-style base IDs and variants from source evidence and searches only for strict modern split-ID patterns. It does not edit ``variant-mapping.json``.")
 $lines.Add("")
 $lines.Add("## Summary by confidence")
 $lines.Add("")
@@ -226,6 +235,7 @@ foreach ($row in $orderedRows) {
 $lines | Set-Content -LiteralPath $OutputMarkdown -Encoding utf8NoBOM
 
 Write-Output "Variant gap review: $OutputMarkdown"
+Write-Output "Matcher=strict-base-patterns-v1"
 Write-Output "VariantCandidates=$($orderedRows.Count)"
 foreach ($group in $summaryByConfidence) {
     Write-Output "$($group.confidence)=$($group.count)"
