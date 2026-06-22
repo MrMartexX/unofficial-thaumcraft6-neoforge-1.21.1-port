@@ -750,3 +750,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added Bellows placeholder block and first adjacent-facing smelter speed boost behavior.
 - Smelter variants, Alembic output, flux accounting, aura pollution and vent placeholder mitigation are already present in the current smelter path.
+
+## Smelter vent facing mitigation note
+
+- Smelter vent mitigation now uses a facing placeholder block rather than any adjacent vent block.
+- Remaining smelter parity gaps include exact vent visuals, auxiliary smelter routing and additional legacy polish.

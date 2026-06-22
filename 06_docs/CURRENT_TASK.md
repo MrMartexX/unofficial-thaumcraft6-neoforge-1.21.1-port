@@ -427,3 +427,8 @@ Last updated: 2026-06-21
 
 - Added minimal Bellows block/id and first smelter speed interaction through the existing `smeltTimeForVis` formula.
 - Exact Bellows visuals and any non-smelter Bellows interactions remain future work.
+
+## Smelter vent facing mitigation note
+
+- Upgraded `smelter_vent` to a facing placeholder and tightened smelter pending-flux mitigation to require a vent facing the smelter.
+- Future work: exact vent model, placement parity and visual emission behavior.

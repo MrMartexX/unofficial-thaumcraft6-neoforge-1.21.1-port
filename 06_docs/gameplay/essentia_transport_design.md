@@ -153,3 +153,9 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Added a minimal facing `bellows` block placeholder and connected it to smelter `bellows` counting.
 - Smelters now refresh adjacent horizontal Bellows that face into the smelter and route the count into existing legacy smelt-time math.
 - This does not yet implement exact Bellows model/animation or broader auxiliary smelter parity.
+
+## Smelter vent facing mitigation checkpoint
+
+- Converted `smelter_vent` from a plain placeholder block into a facing placeholder block.
+- Smelter flux mitigation now only counts adjacent vents that face into the smelter, matching the direction-sensitive legacy boundary more closely.
+- The block still uses placeholder model/resources; exact legacy geometry and particles remain future work.

@@ -26,6 +26,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.blocks.basic.TCTableBlock;
 import thaumcraft.common.blocks.basic.TCInfusionCandleBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
+import thaumcraft.common.blocks.essentia.TCSmelterVentBlock;
 import thaumcraft.common.blocks.essentia.TCWardedJarBlock;
 import thaumcraft.common.blocks.essentia.TCAlembicBlock;
 import thaumcraft.common.blocks.essentia.TCBellowsBlock;
@@ -125,10 +126,10 @@ public final class TCBlocks {
     public static final Supplier<Block> CRUCIBLE = BLOCKS.register("crucible", () -> crucibleBlock());
     public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> smelterBlock());
     public static final Supplier<Block> SMELTER_VENT = BLOCKS.register("smelter_vent",
-            () -> new Block(BlockBehaviour.Properties.of()
+            () -> new TCSmelterVentBlock(BlockBehaviour.Properties.of()
                     .strength(3.0F, 6.0F)
                     .requiresCorrectToolForDrops()));
-    public static final Supplier<Block> BELLOWS = BLOCKS.register("bellows",
+public static final Supplier<Block> BELLOWS = BLOCKS.register("bellows",
             () -> new TCBellowsBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                     .strength(1.5F, 3.0F)));
 public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal", () -> wardedJarBlock());

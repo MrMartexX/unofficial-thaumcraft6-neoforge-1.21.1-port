@@ -22,6 +22,7 @@ import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
+import thaumcraft.common.blocks.essentia.TCSmelterVentBlock;
 import thaumcraft.common.blocks.essentia.TCBellowsBlock;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
@@ -407,7 +408,11 @@ public boolean speedBoost() {
             return false;
         }
         for (Direction direction : Direction.Plane.HORIZONTAL) {
-            if (level.getBlockState(worldPosition.relative(direction)).is(TCBlocks.SMELTER_VENT.get())) {
+            BlockState neighbour = level.getBlockState(worldPosition.relative(direction));
+            if (!neighbour.is(TCBlocks.SMELTER_VENT.get()) || !neighbour.hasProperty(TCSmelterVentBlock.FACING)) {
+                continue;
+            }
+            if (neighbour.getValue(TCSmelterVentBlock.FACING) == direction.getOpposite()) {
                 return true;
             }
         }

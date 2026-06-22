@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
-      "model": "thaumcraft:block/smelter_vent"
-    }
+    "facing=down": { "model": "thaumcraft:block/smelter_vent" },
+    "facing=up": { "model": "thaumcraft:block/smelter_vent" },
+    "facing=north": { "model": "thaumcraft:block/smelter_vent" },
+    "facing=south": { "model": "thaumcraft:block/smelter_vent" },
+    "facing=west": { "model": "thaumcraft:block/smelter_vent" },
+    "facing=east": { "model": "thaumcraft:block/smelter_vent" }
   }
 }
