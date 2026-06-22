@@ -44,6 +44,35 @@ function Format-RuleEvidence([string]$Prefix, $Rule) {
     }
     return "$Prefix; intentional rule"
 }
+function Get-VariantMappingEvidence($VariantMapping) {
+    $pairs = @(
+        foreach ($variant in @($VariantMapping.variants)) {
+            "$($variant.legacyVariant)->$($variant.portId)"
+        }
+    )
+    if ($pairs.Count -eq 0) {
+        return "Variant mapping has no variants"
+    }
+    return "Legacy metadata variants mapped: $($pairs -join ', '); $($VariantMapping.reason)"
+}
+
+function Test-VariantMappingResolved($VariantMapping, $PortLookup, [string]$Kind) {
+    $missing = [System.Collections.Generic.List[string]]::new()
+    foreach ($variant in @($VariantMapping.variants)) {
+        if ([string]::IsNullOrWhiteSpace($variant.portId)) {
+            $missing.Add("<empty>")
+            continue
+        }
+        $portKey = "${Kind}:$($variant.portId)"
+        if (-not $PortLookup.ContainsKey($portKey)) {
+            $missing.Add($variant.portId)
+        }
+    }
+    return [pscustomobject][ordered]@{
+        resolved = $missing.Count -eq 0
+        missingPortIds = @($missing)
+    }
+}
 
 foreach ($required in @($LegacyManifest, $PortManifest, (Join-Path $RulesRoot "known-renames.json"), (Join-Path $RulesRoot "parity-rules.json"))) {
     if (-not (Test-Path -LiteralPath $required -PathType Leaf)) { throw "Required parity input not found: $required" }
@@ -79,6 +108,13 @@ $portLookup = @{}
 foreach ($entry in $port.entries) { $portLookup["$($entry.kind):$($entry.registryId)"] = $entry }
 $renameLookup = @{}
 foreach ($entry in $renames.entries) { $renameLookup["$($entry.kind):$($entry.legacyId)"] = $entry }
+$variantLookup = @{}
+foreach ($entry in @($variantMappingRules.entries)) {
+    $legacyId = if ($entry.legacyId) { $entry.legacyId } else { $entry.id }
+    if (-not [string]::IsNullOrWhiteSpace($entry.kind) -and -not [string]::IsNullOrWhiteSpace($legacyId)) {
+        $variantLookup["$($entry.kind):$legacyId"] = $entry
+    }
+}
 $results = [System.Collections.Generic.List[object]]::new()
 
 function Add-Result([string]$Kind, [string]$Id, [string]$Check, [string]$Status, [string]$Evidence, [string]$LegacyId = "") {
@@ -113,7 +149,18 @@ if ("registry" -in $Checks) {
             $status = if ($null -ne $rename) { "RENAMED_WITH_MAPPING" } else { "PASS" }
             Add-Result $entry.kind $targetId "registry" $status $entry.evidence $entry.registryId
         } else {
-            Add-Result $entry.kind $targetId "registry" "MISSING" $entry.evidence $entry.registryId
+            $variantKey = "$($entry.kind):$($entry.registryId)"
+            $variantMapping = if ($variantLookup.ContainsKey($variantKey)) { $variantLookup[$variantKey] } else { $null }
+            if ($null -ne $variantMapping) {
+                $variantResolution = Test-VariantMappingResolved $variantMapping $portLookup $entry.kind
+                if ($variantResolution.resolved) {
+                    Add-Result $entry.kind $entry.registryId "registry" "VARIANT_MAPPED" (Get-VariantMappingEvidence $variantMapping) $entry.registryId
+                } else {
+                    Add-Result $entry.kind $entry.registryId "registry" "MISSING" "Variant mapping unresolved; missing port IDs: $($variantResolution.missingPortIds -join ', ')" $entry.registryId
+                }
+            } else {
+                Add-Result $entry.kind $targetId "registry" "MISSING" $entry.evidence $entry.registryId
+            }
         }
     }
 }
@@ -177,6 +224,7 @@ $summary = [ordered]@{
     results = $orderedResults.Count
     pass = @($orderedResults | Where-Object status -eq "PASS").Count
     renamed = @($orderedResults | Where-Object status -eq "RENAMED_WITH_MAPPING").Count
+    variantMapped = @($orderedResults | Where-Object status -eq "VARIANT_MAPPED").Count
     intentionalMissing = @($orderedResults | Where-Object status -eq "INTENTIONAL_MISSING").Count
     missing = @($orderedResults | Where-Object status -eq "MISSING").Count
     safeFailures = $safeFailures.Count
@@ -214,6 +262,7 @@ $lines.Add("| Result | Count |")
 $lines.Add("|---|---:|")
 $lines.Add("| PASS | $($summary.pass) |")
 $lines.Add("| RENAMED_WITH_MAPPING | $($summary.renamed) |")
+$lines.Add("| VARIANT_MAPPED | $($summary.variantMapped) |")
 $lines.Add("| INTENTIONAL_MISSING | $($summary.intentionalMissing) |")
 $lines.Add("| MISSING | $($summary.missing) |")
 $lines.Add("| Safe failures | $($summary.safeFailures) |")
@@ -243,7 +292,7 @@ if ($CuratedSummaryPath) {
         "",
         "Generated: $($report.generatedAtUtc)",
         "",
-        "The executable baseline produced $($summary.results) evaluated results: $($summary.pass) pass, $($summary.renamed) mapped rename, $($summary.intentionalMissing) intentional missing and $($summary.missing) missing.",
+        "The executable baseline produced $($summary.results) evaluated results: $($summary.pass) pass, $($summary.renamed) mapped rename, $($summary.variantMapped) variant mapped, $($summary.intentionalMissing) intentional missing and $($summary.missing) missing.",
         "",
         "Of the missing results, $($summary.safeFailures) currently fall into safe resource-boundary checks. The baseline is intentionally generated with FailMode off until the rule overrides are reviewed.",
         "",
@@ -265,6 +314,6 @@ if ($CuratedSummaryPath) {
 }
 
 Write-Output "Parity report: $OutputMarkdown"
-Write-Output "Pass=$($summary.pass), mapped=$($summary.renamed), intentional=$($summary.intentionalMissing), missing=$($summary.missing), safeFailures=$($summary.safeFailures)"
+Write-Output "Pass=$($summary.pass), mapped=$($summary.renamed), variantMapped=$($summary.variantMapped), intentional=$($summary.intentionalMissing), missing=$($summary.missing), safeFailures=$($summary.safeFailures)"
 if ($FailMode -eq "safe" -and $safeFailures.Count -gt 0) { exit 2 }
 if ($FailMode -eq "strict" -and $strictFailures.Count -gt 0) { exit 3 }

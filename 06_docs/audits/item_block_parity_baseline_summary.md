@@ -1,8 +1,8 @@
 # Item/block parity baseline summary
 
-Generated: 2026-06-22T14:30:49.2700217Z
+Generated: 2026-06-22T19:25:44.4241080Z
 
-The executable baseline produced 1558 evaluated results: 1321 pass, 5 mapped rename, 2 intentional missing and 230 missing.
+The executable baseline produced 1558 evaluated results: 1321 pass, 5 mapped rename, 2 variant mapped, 2 intentional missing and 228 missing.
 
 Of the missing results, 117 currently fall into safe resource-boundary checks. The baseline is intentionally generated with FailMode off until the rule overrides are reviewed.
 
@@ -18,7 +18,7 @@ Missing results by implemented check:
 - lang: 76
 - loot: 37
 - models: 41
-- registry: 76
+- registry: 74
 
 This milestone covers only: registry, duplicate_registry_id, block_item_pairs, blockstates, models, lang, loot. It does not claim behavior, runtime or visual parity.
 

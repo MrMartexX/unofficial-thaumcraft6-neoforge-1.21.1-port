@@ -1,5 +1,50 @@
 {
   "schemaVersion": 1,
-  "entries": [],
-  "note": "Legacy metadata/damage variants must be mapped here before they can satisfy modern split-ID parity. Empty in the first rule-normalization slice."
+  "entries": [
+    {
+      "kind": "item",
+      "id": "ingot",
+      "legacyId": "ingot",
+      "variants": [
+        {
+          "legacyVariant": "thaumium",
+          "portId": "thaumium_ingot"
+        },
+        {
+          "legacyVariant": "void",
+          "portId": "void_ingot"
+        },
+        {
+          "legacyVariant": "brass",
+          "portId": "brass_ingot"
+        }
+      ],
+      "reason": "High-confidence strict variant split: legacy ItemTCBase(\"ingot\", \"thaumium\", \"void\", \"brass\") maps to current split item IDs."
+    },
+    {
+      "kind": "item",
+      "id": "plate",
+      "legacyId": "plate",
+      "variants": [
+        {
+          "legacyVariant": "brass",
+          "portId": "brass_plate"
+        },
+        {
+          "legacyVariant": "iron",
+          "portId": "iron_plate"
+        },
+        {
+          "legacyVariant": "thaumium",
+          "portId": "thaumium_plate"
+        },
+        {
+          "legacyVariant": "void",
+          "portId": "void_plate"
+        }
+      ],
+      "reason": "High-confidence strict variant split: legacy ItemTCBase(\"plate\", \"brass\", \"iron\", \"thaumium\", \"void\") maps to current split item IDs."
+    }
+  ],
+  "note": "Only fully matched strict variant split groups belong here. Partial groups such as cluster, nugget, mind, module and activator_rail remain review-only."
 }

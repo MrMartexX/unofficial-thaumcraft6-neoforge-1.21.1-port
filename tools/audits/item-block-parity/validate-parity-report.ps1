@@ -20,7 +20,7 @@ if (-not $legacy.sourceFiles -or -not $legacy.entries) { throw "Legacy manifest 
 if (-not $port.sourceFiles -or -not $port.entries) { throw "Port manifest is structurally incomplete." }
 if (-not $report.implementedChecks -or $null -eq $report.results -or -not $report.summary) { throw "Parity report is structurally incomplete." }
 
-$allowedStatuses = @("PASS", "MISSING", "EXTRA", "RENAMED_WITH_MAPPING", "DEFERRED", "INTENTIONAL_MISSING", "NOT_EVALUATED")
+$allowedStatuses = @("PASS", "MISSING", "EXTRA", "RENAMED_WITH_MAPPING", "VARIANT_MAPPED", "DEFERRED", "INTENTIONAL_MISSING", "NOT_EVALUATED")
 $seen = @{}
 foreach ($result in $report.results) {
     if ($result.status -notin $allowedStatuses) { throw "Unknown parity status '$($result.status)' for $($result.id)." }
