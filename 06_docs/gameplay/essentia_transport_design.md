@@ -165,3 +165,8 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Added a minimal `smelter_aux` placeholder block/id boundary.
 - Smelter output now first tries the Alembic above the main smelter, then Alembics above horizontally adjacent `smelter_aux` blocks.
 - This mirrors the first practical part of legacy auxiliary smelter routing, but exact aux placement/facing and visuals remain future work.
+
+## Smelter runtime boundary audit checkpoint
+
+- Added a source-level audit for the current smelter runtime boundary after fuel, type, Bellows, vent, aux and upgraded endpoint bridge slices.
+- The audit guards against duplicate output methods and missing registry/runtime anchors before deeper parity work continues.

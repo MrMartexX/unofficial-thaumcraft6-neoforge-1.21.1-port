@@ -760,3 +760,7 @@ The sections below are historical update notes. They should not be read as the c
 
 - Added minimal `smelter_aux` and routed smelter output to Alembics above adjacent aux blocks.
 - Remaining smelter parity gaps include exact aux placement/facing, visuals and additional Bellows/vent polish.
+
+## Smelter runtime boundary audit note
+
+- Added an audit confirming the smelter runtime boundary after the recent smelter implementation slices.

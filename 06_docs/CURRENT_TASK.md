@@ -437,3 +437,7 @@ Last updated: 2026-06-21
 
 - Added `smelter_aux` placeholder and first auxiliary Alembic output routing from the smelter buffer.
 - Future work: exact aux model, valid placement/attachment rules and broader legacy multiblock behavior.
+
+## Smelter runtime boundary audit note
+
+- Added a smelter runtime boundary audit covering registry ids, output method uniqueness, Bellows, vent, aux routing and upgraded smelter endpoint bridge.
