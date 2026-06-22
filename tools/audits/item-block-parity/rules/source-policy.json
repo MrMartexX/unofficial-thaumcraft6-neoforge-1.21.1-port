@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "primaryLegacyRoot": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master",
+  "secondaryLegacyRoot": "03_self_decompiled_check/vineflower_thaumcraft6",
+  "originalJar": "01_original_jar/Thaumcraft-1.12.2-6.1.BETA26.jar",
+  "runtimeTruth": "legacy_and_port_exporters",
+  "comparableConfidence": [
+    "explicit_source",
+    "explicit_algorithm",
+    "rule_override"
+  ],
+  "inferredIdsAreAuthoritative": false
+}

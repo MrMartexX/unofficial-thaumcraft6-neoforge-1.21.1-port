@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Thaumcraft item/block parity report",
+  "type": "object",
+  "required": ["schemaVersion", "implementedChecks", "notEvaluatedChecks", "summary", "results"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 1 },
+    "implementedChecks": { "type": "array" },
+    "notEvaluatedChecks": { "type": "array" },
+    "summary": { "type": "object" },
+    "results": { "type": "array" }
+  }
+}

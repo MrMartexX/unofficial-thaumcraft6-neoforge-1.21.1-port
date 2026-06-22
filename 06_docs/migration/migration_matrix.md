@@ -134,7 +134,7 @@ The main rule from the migration guide is: port the role of each subsystem, not 
 | 27 | Worldgen | Datapack/datagen features, biome modifiers, structures | Critical | Convert sapling tree behavior into a modern design before expanding to biome/world placement | Early sapling-only work |
 | 28 | Rendering and FX | BERs, entity renderers, particles, overlays, `PoseStack` | Critical | Validate imported FX/textures and isolate old GL/shader assumptions before expanding | Early FX work; `rendering_model_pipeline_audit.md` records OBJ/MTL, BER and BEWLR migration rules; a narrow research table BER now uses legacy `ModelResearchTable` part geometry/UVs for the scroll/tube/ribbon and inkwell, plus the legacy quill texture/transform from synced slots |
 | 29 | Optional integrations | Optional modern abstraction, accessory/recipe viewer hooks later | High | Keep integrations disabled until core is stable | Port later |
-| 30 | Parity and QA | Page-by-page comparison, targeted checklists, build gates | High | Maintain visual and behavior checklists | Ongoing |
+| 30 | Parity and QA | Page-by-page comparison, targeted checklists, build gates | High | Maintain visual and behavior checklists | Ongoing; the item/block framework now has fingerprinted legacy/live manifests, confidence-scored registry/resource checks and report validation. Initial baseline is `1245 PASS`, `3 mapped`, `196 missing`; rule normalization and higher evidence layers remain. |
 
 ## Legacy asset corpus policy
 

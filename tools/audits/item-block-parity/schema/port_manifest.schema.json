@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Thaumcraft NeoForge port item/block manifest",
+  "type": "object",
+  "required": ["schemaVersion", "source", "sourceFiles", "entries"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "const": 1 },
+    "source": { "type": "string" },
+    "sourceFiles": { "type": "array" },
+    "entries": { "type": "array" }
+  }
+}

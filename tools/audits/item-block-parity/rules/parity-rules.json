@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "namespace": "thaumcraft",
+  "initialImplementedChecks": [
+    "registry",
+    "duplicate_registry_id",
+    "block_item_pairs",
+    "blockstates",
+    "models",
+    "lang",
+    "loot"
+  ],
+  "safeFailureChecks": [
+    "duplicate_registry_id",
+    "block_item_pairs",
+    "blockstates",
+    "models",
+    "lang"
+  ]
+}

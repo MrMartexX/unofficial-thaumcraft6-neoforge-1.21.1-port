@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "kind": "block",
+      "legacyId": "pedestal_arcane",
+      "portId": "arcane_pedestal",
+      "reason": "Existing port ID order differs from the legacy registry ID."
+    },
+    {
+      "kind": "block",
+      "legacyId": "pedestal_ancient",
+      "portId": "ancient_pedestal",
+      "reason": "Existing port ID order differs from the legacy registry ID."
+    },
+    {
+      "kind": "block",
+      "legacyId": "pedestal_eldritch",
+      "portId": "eldritch_pedestal",
+      "reason": "Existing port ID order differs from the legacy registry ID."
+    }
+  ]
+}

@@ -39,7 +39,7 @@ Only high-traffic navigation and state files should stay directly under `06_docs
 | `resources/` | Asset import/runtime audits, block parity and creative order references. | `runtime_asset_audit.md`, `asset_bulk_import_manifest.txt`, `block_parity_audit.md`, `creative_tab_order_reference.md` |
 | `rendering/` | FX, model, overlay and visual parity docs/assets. | `legacy_fx_engine.md`, `rendering_model_pipeline_audit.md`, `fx_preview/` |
 | `raw_legacy/` | Large raw extracts, source excerpts and evidence files. These are reference material, not current task docs. | `sapling_tree_generation_research.md`, `research_knowledge_scanning_legacy_audit.txt`, legacy source folders |
-| `audits/` | Curated audit summaries worth keeping as reviewable reports. | Current subsystem audit checkpoints. |
+| `audits/` | Curated audit summaries and cross-cutting parity policies worth keeping as reviewable reports. | `legacy_source_selection.md`, `item_block_parity_framework.md`, `item_block_parity_baseline_summary.md`, current subsystem checkpoints |
 
 ## What Not To Delete
 
