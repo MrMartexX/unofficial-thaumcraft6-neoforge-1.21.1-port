@@ -104,8 +104,10 @@ public final class TCItems {
     public static final Supplier<BlockItem> CRUCIBLE = blockItem("crucible", TCBlocks.CRUCIBLE);
     public static final Supplier<BlockItem> SMELTER_BASIC = blockItem("smelter_basic", TCBlocks.SMELTER_BASIC);
     public static final Supplier<BlockItem> BELLOWS = blockItem("bellows", TCBlocks.BELLOWS);
+public static final Supplier<BlockItem> SMELTER_VENT = blockItem("smelter_vent", TCBlocks.SMELTER_VENT);
+    public static final Supplier<BlockItem> SMELTER_AUX = blockItem("smelter_aux", TCBlocks.SMELTER_AUX);
 
-    public static final Supplier<BlockItem> SMELTER_VENT = blockItem("smelter_vent", TCBlocks.SMELTER_VENT);
+
 
 public static final Supplier<BlockItem> JAR_NORMAL = blockItem("jar_normal", TCBlocks.JAR_NORMAL);
     public static final Supplier<BlockItem> ALEMBIC = blockItem("alembic", TCBlocks.ALEMBIC);
@@ -506,7 +508,6 @@ public static final Supplier<Item> CATALOG_PLACEHOLDER_CENTRIFUGE = ITEMS.regist
     public static final Supplier<Item> CATALOG_PLACEHOLDER_PATTERNCRAFTER = ITEMS.register("patterncrafter", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_REDSTONERELAY = ITEMS.register("redstonerelay", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_RESONATOR = ITEMS.register("resonator", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_SMELTERAUX = ITEMS.register("smelter_aux", () -> new Item(new Item.Properties()));
 public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_STABILIZER = STABILIZER;
     public static final Supplier<Item> CATALOG_PLACEHOLDER_VISBATTERY = ITEMS.register("visbattery", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_VISGENERATOR = ITEMS.register("visgenerator", () -> new Item(new Item.Properties()));

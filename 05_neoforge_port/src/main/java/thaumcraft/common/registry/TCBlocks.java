@@ -129,6 +129,10 @@ public final class TCBlocks {
             () -> new TCSmelterVentBlock(BlockBehaviour.Properties.of()
                     .strength(3.0F, 6.0F)
                     .requiresCorrectToolForDrops()));
+    public static final Supplier<Block> SMELTER_AUX = BLOCKS.register("smelter_aux",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(3.0F, 6.0F)
+                    .requiresCorrectToolForDrops()));
 public static final Supplier<Block> BELLOWS = BLOCKS.register("bellows",
             () -> new TCBellowsBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                     .strength(1.5F, 3.0F)));

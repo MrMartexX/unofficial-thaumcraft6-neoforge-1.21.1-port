@@ -755,3 +755,8 @@ The sections below are historical update notes. They should not be read as the c
 
 - Smelter vent mitigation now uses a facing placeholder block rather than any adjacent vent block.
 - Remaining smelter parity gaps include exact vent visuals, auxiliary smelter routing and additional legacy polish.
+
+## Smelter auxiliary Alembic routing note
+
+- Added minimal `smelter_aux` and routed smelter output to Alembics above adjacent aux blocks.
+- Remaining smelter parity gaps include exact aux placement/facing, visuals and additional Bellows/vent polish.

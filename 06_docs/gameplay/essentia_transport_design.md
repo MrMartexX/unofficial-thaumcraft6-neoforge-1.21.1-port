@@ -159,3 +159,9 @@ The registered smelter endpoint skeletons are not evidence of completed legacy s
 - Converted `smelter_vent` from a plain placeholder block into a facing placeholder block.
 - Smelter flux mitigation now only counts adjacent vents that face into the smelter, matching the direction-sensitive legacy boundary more closely.
 - The block still uses placeholder model/resources; exact legacy geometry and particles remain future work.
+
+## Smelter auxiliary Alembic routing checkpoint
+
+- Added a minimal `smelter_aux` placeholder block/id boundary.
+- Smelter output now first tries the Alembic above the main smelter, then Alembics above horizontally adjacent `smelter_aux` blocks.
+- This mirrors the first practical part of legacy auxiliary smelter routing, but exact aux placement/facing and visuals remain future work.

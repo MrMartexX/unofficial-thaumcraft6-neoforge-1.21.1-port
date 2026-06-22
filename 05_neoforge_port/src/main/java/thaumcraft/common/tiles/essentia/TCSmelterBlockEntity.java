@@ -360,7 +360,20 @@ public boolean speedBoost() {
         if (transferTicks % speed != 0) {
             return false;
         }
-        if (!(level.getBlockEntity(worldPosition.above()) instanceof TCAlembicBlockEntity alembic)) {
+        if (tryOutputToAlembicAt(worldPosition)) {
+            return true;
+        }
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockPos auxPos = worldPosition.relative(direction);
+            if (level.getBlockState(auxPos).is(TCBlocks.SMELTER_AUX.get()) && tryOutputToAlembicAt(auxPos)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean tryOutputToAlembicAt(BlockPos outputPos) {
+        if (!(level.getBlockEntity(outputPos.above()) instanceof TCAlembicBlockEntity alembic)) {
             return false;
         }
         for (Aspect aspect : aspects.getAspects()) {
@@ -374,9 +387,6 @@ public boolean speedBoost() {
         }
         return false;
     }
-
-
-
     private boolean pollutePendingFlux() {
         if (level == null || level.isClientSide || pendingFlux <= 0) {
             return false;

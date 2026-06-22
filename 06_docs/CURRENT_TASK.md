@@ -432,3 +432,8 @@ Last updated: 2026-06-21
 
 - Upgraded `smelter_vent` to a facing placeholder and tightened smelter pending-flux mitigation to require a vent facing the smelter.
 - Future work: exact vent model, placement parity and visual emission behavior.
+
+## Smelter auxiliary Alembic routing note
+
+- Added `smelter_aux` placeholder and first auxiliary Alembic output routing from the smelter buffer.
+- Future work: exact aux model, valid placement/attachment rules and broader legacy multiblock behavior.
