@@ -106,10 +106,14 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.ARCANE_WORKBENCH_CHARGER.get());
         acceptVisible(output, TCItems.RESEARCH_TABLE.get());
         acceptVisible(output, TCItems.CRUCIBLE.get());
+        acceptVisible(output, TCItems.BELLOWS.get());
         acceptVisible(output, TCItems.SMELTER_BASIC.get());
-        acceptVisible(output, TCItems.JAR_NORMAL.get());
         acceptVisible(output, TCItems.SMELTER_THAUMIUM.get());
         acceptVisible(output, TCItems.SMELTER_VOID.get());
+        acceptVisible(output, TCItems.SMELTER_AUX.get());
+        acceptVisible(output, TCItems.SMELTER_VENT.get());
+        acceptVisible(output, TCItems.ALEMBIC.get());
+        acceptVisible(output, TCItems.JAR_NORMAL.get());
         acceptVisible(output, TCItems.WAND_WORKBENCH.get());
         acceptVisible(output, TCItems.INFUSION_MATRIX.get());
         acceptVisible(output, TCItems.PILLAR_ARCANE.get());

@@ -11,13 +11,25 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.blocks.essentia.TCSmelterAuxBlock;
+import thaumcraft.common.blocks.essentia.TCSmelterBlock;
+import thaumcraft.common.blocks.essentia.TCSmelterVentBlock;
 import thaumcraft.common.essentia.transport.block.TCLegacyTubeVariant;
+import thaumcraft.common.essentia.transport.blockentity.TCLegacySmelterEndpointBlockEntity;
 import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 import thaumcraft.common.tiles.essentia.TCAlembicBlockEntity;
+import thaumcraft.common.tiles.essentia.TCSmelterBlockEntity;
 
 /** Runtime checks for the legacy TileTube/TileJar transport contract. */
 public final class TCEssentiaTransportBehaviorAudit {
@@ -52,7 +64,8 @@ public final class TCEssentiaTransportBehaviorAudit {
         lines.add("");
         lines.add("- Covers TC6 normal, buffer, filter, one-way, restrict and redstone-valve transport semantics.");
         lines.add("- Covers Warded Jar top-face suction and five-tick one-point transfer.");
-        lines.add("- Does not claim smelter, alembic, bellows discovery, caster sub-part interaction or tube rendering parity.");
+        lines.add("- Covers smelter tier formulas, sided inventory, fuel data, Alembic-column routing, auxiliaries and vent attachment selection.");
+        lines.add("- Bellows dynamic rendering, label/phial interaction and caster sub-part interaction remain separate visual/item slices.");
         Files.write(output, lines);
         return report;
     }
@@ -129,6 +142,7 @@ public final class TCEssentiaTransportBehaviorAudit {
         addSideAndValveChecks(level, origin.offset(8, 0, 0), checks);
         addJarChecks(level, origin.offset(8, 0, 10), checks);
         addAlembicChecks(level, origin.offset(12, 0, 18), checks);
+        addSmelterChecks(level, origin.offset(-12, 0, 18), checks);
         clearArea(level, origin, 24);
         return new Report(List.copyOf(checks));
     }
@@ -303,9 +317,9 @@ public final class TCEssentiaTransportBehaviorAudit {
                         && alembic.storedAspect() == Aspect.AIR,
                 "overflow=" + overflow + ", mixed=" + mixedRemainder + ", amount=" + alembic.storedAmount()));
 
-        checks.add(check("alembic_is_output_only_except_down_and_facing", !alembic.canInputFrom(Direction.UP)
+        checks.add(check("unlabelled_alembic_outputs_on_all_horizontal_faces", !alembic.canInputFrom(Direction.UP)
                         && !alembic.canOutputTo(Direction.DOWN)
-                        && !alembic.canOutputTo(Direction.NORTH)
+                        && alembic.canOutputTo(Direction.NORTH)
                         && alembic.canOutputTo(Direction.EAST),
                 "upInput=" + alembic.canInputFrom(Direction.UP)
                         + ", downOutput=" + alembic.canOutputTo(Direction.DOWN)
@@ -314,7 +328,7 @@ public final class TCEssentiaTransportBehaviorAudit {
 
         int simulated = alembic.takeEssentia(Aspect.AIR.getTag(), 64, Direction.EAST, true);
         int taken = alembic.takeEssentia(Aspect.AIR.getTag(), 64, Direction.EAST, false);
-        int blocked = alembic.takeEssentia(Aspect.AIR.getTag(), 1, Direction.NORTH, false);
+        int blocked = alembic.takeEssentia(Aspect.AIR.getTag(), 1, Direction.DOWN, false);
         checks.add(check("alembic_outputs_requested_aspect_from_valid_side", simulated == 64
                         && taken == 64
                         && blocked == 0
@@ -323,14 +337,136 @@ public final class TCEssentiaTransportBehaviorAudit {
                         + ", remaining=" + alembic.storedAmount()));
 
         alembic.setStoredForValidation(null, 0);
-        alembic.setFilterForValidation(Aspect.FIRE);
+        alembic.setFilterForValidation(Aspect.FIRE, Direction.NORTH);
         int rejected = alembic.addToContainer(Aspect.AIR, 1);
         int accepted = alembic.addToContainer(Aspect.FIRE, 1);
         checks.add(check("alembic_filter_accepts_only_matching_aspect", rejected == 1
                         && accepted == 0
                         && alembic.storedAspect() == Aspect.FIRE
-                        && alembic.storedAmount() == 1,
+                        && alembic.storedAmount() == 1
+                        && !alembic.canOutputTo(Direction.NORTH)
+                        && alembic.canOutputTo(Direction.EAST),
                 "rejected=" + rejected + ", accepted=" + accepted + ", amount=" + alembic.storedAmount()));
+    }
+
+    private static void addSmelterChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
+        BlockState basicState = TCBlocks.SMELTER_BASIC.get().defaultBlockState()
+                .setValue(TCSmelterBlock.FACING, Direction.NORTH);
+        level.setBlock(origin, basicState, 3);
+        TCSmelterBlockEntity smelter = blockEntity(level, origin, TCSmelterBlockEntity.class);
+        checks.add(check("runtime_basic_smelter_created", smelter != null,
+                "smelter=" + (smelter != null)));
+        if (smelter == null) {
+            return;
+        }
+
+        checks.add(check("smelter_tier_formulas_match_legacy",
+                TCSmelterBlockEntity.efficiencyForType(TCSmelterBlockEntity.SmelterType.BASIC) == 0.8F
+                        && TCSmelterBlockEntity.efficiencyForType(TCSmelterBlockEntity.SmelterType.THAUMIUM) == 0.9F
+                        && TCSmelterBlockEntity.efficiencyForType(TCSmelterBlockEntity.SmelterType.VOID) == 0.95F
+                        && TCSmelterBlockEntity.speedForType(TCSmelterBlockEntity.SmelterType.BASIC) == 15
+                        && TCSmelterBlockEntity.speedForType(TCSmelterBlockEntity.SmelterType.THAUMIUM) == 10
+                        && TCSmelterBlockEntity.speedForType(TCSmelterBlockEntity.SmelterType.VOID) == 15
+                        && TCSmelterBlockEntity.outputInterval(TCSmelterBlockEntity.SmelterType.BASIC, true) == 12,
+                "basic=80%/15, thaumium=90%/10, void=95%/15, alumentumBasic=12"));
+
+        int alumentumBurn = TCSmelterBlockEntity.getBurnTime(new ItemStack(TCItems.ALUMENTUM.get()));
+        int greatwoodBurn = TCSmelterBlockEntity.getBurnTime(new ItemStack(TCBlocks.LOG_GREATWOOD.get()));
+        int silverwoodBurn = TCSmelterBlockEntity.getBurnTime(new ItemStack(TCBlocks.LOG_SILVERWOOD.get()));
+        checks.add(check("legacy_thaumcraft_fuels_are_data_driven",
+                alumentumBurn == 4800 && greatwoodBurn == 500 && silverwoodBurn == 400,
+                "alumentum=" + alumentumBurn + ", greatwood=" + greatwoodBurn
+                        + ", silverwood=" + silverwoodBurn));
+
+        IItemHandler side = level.getCapability(Capabilities.ItemHandler.BLOCK, origin, Direction.EAST);
+        IItemHandler bottom = level.getCapability(Capabilities.ItemHandler.BLOCK, origin, Direction.DOWN);
+        IItemHandler top = level.getCapability(Capabilities.ItemHandler.BLOCK, origin, Direction.UP);
+        boolean capabilityShape = side != null && side.getSlots() == 1
+                && bottom != null && bottom.getSlots() == 1
+                && top != null && top.getSlots() == 0;
+        if (capabilityShape) {
+            side.insertItem(0, new ItemStack(Items.COBBLESTONE), false);
+            bottom.insertItem(0, new ItemStack(TCItems.ALUMENTUM.get()), false);
+        }
+        checks.add(check("smelter_sided_item_capability_matches_legacy_slots",
+                capabilityShape
+                        && smelter.getStoredItem(TCSmelterBlockEntity.SLOT_INPUT).is(Items.COBBLESTONE)
+                        && smelter.getStoredItem(TCSmelterBlockEntity.SLOT_FUEL).is(TCItems.ALUMENTUM.get()),
+                "sideSlots=" + (side == null ? -1 : side.getSlots())
+                        + ", bottomSlots=" + (bottom == null ? -1 : bottom.getSlots())
+                        + ", topSlots=" + (top == null ? -1 : top.getSlots())));
+        checks.add(check("smelter_is_not_an_essentia_transport_endpoint",
+                level.getCapability(TCEssentiaCapabilities.BLOCK, origin, Direction.UP) == null,
+                "transportCapability=false"));
+
+        TCSmelterBlockEntity.serverTick(level, origin, smelter.getBlockState(), smelter);
+        checks.add(check("alumentum_starts_legacy_burn_and_speed_boost",
+                smelter.furnaceBurnTime() == 4800
+                        && smelter.currentItemBurnTime() == 4800
+                        && smelter.speedBoost(),
+                "burn=" + smelter.furnaceBurnTime() + ", boost=" + smelter.speedBoost()));
+
+        smelter.setStoredItemForValidation(TCSmelterBlockEntity.SLOT_INPUT, ItemStack.EMPTY);
+        smelter.setStoredAspectsForValidation(new AspectList().add(Aspect.AIR, 2));
+
+        BlockPos firstAlembicPos = origin.above();
+        BlockPos matchingAlembicPos = origin.above(2);
+        level.setBlock(firstAlembicPos, TCBlocks.ALEMBIC.get().defaultBlockState(), 3);
+        level.setBlock(matchingAlembicPos, TCBlocks.ALEMBIC.get().defaultBlockState(), 3);
+        TCAlembicBlockEntity firstAlembic = blockEntity(level, firstAlembicPos, TCAlembicBlockEntity.class);
+        TCAlembicBlockEntity matchingAlembic = blockEntity(level, matchingAlembicPos, TCAlembicBlockEntity.class);
+        if (matchingAlembic != null) {
+            matchingAlembic.setStoredForValidation(Aspect.AIR, 10);
+        }
+
+        BlockPos auxPos = origin.east();
+        level.setBlock(auxPos, TCBlocks.SMELTER_AUX.get().defaultBlockState()
+                .setValue(TCSmelterAuxBlock.FACING, Direction.WEST), 3);
+        level.setBlock(auxPos.above(), TCBlocks.ALEMBIC.get().defaultBlockState(), 3);
+        TCAlembicBlockEntity auxAlembic = blockEntity(level, auxPos.above(), TCAlembicBlockEntity.class);
+        smelter.setTransferTicksForValidation(
+                TCSmelterBlockEntity.outputInterval(smelter.smelterType(), smelter.speedBoost())
+        );
+        boolean output = smelter.outputBufferedEssentiaForValidation();
+        checks.add(check("smelter_outputs_direct_and_each_valid_aux_per_cycle",
+                output
+                        && smelter.storedVis() == 0
+                        && firstAlembic != null && firstAlembic.storedAmount() == 0
+                        && matchingAlembic != null && matchingAlembic.storedAmount() == 11
+                        && auxAlembic != null && auxAlembic.storedAmount() == 1,
+                "smelter=" + smelter.storedVis()
+                        + ", first=" + (firstAlembic == null ? -1 : firstAlembic.storedAmount())
+                        + ", matching=" + (matchingAlembic == null ? -1 : matchingAlembic.storedAmount())
+                        + ", aux=" + (auxAlembic == null ? -1 : auxAlembic.storedAmount())));
+
+        level.setBlock(origin.west(), TCBlocks.SMELTER_VENT.get().defaultBlockState()
+                .setValue(TCSmelterVentBlock.FACING, Direction.EAST), 3);
+        level.setBlock(origin.south(), TCBlocks.SMELTER_VENT.get().defaultBlockState()
+                .setValue(TCSmelterVentBlock.FACING, Direction.NORTH), 3);
+        level.setBlock(origin.north(), TCBlocks.SMELTER_VENT.get().defaultBlockState()
+                .setValue(TCSmelterVentBlock.FACING, Direction.SOUTH), 3);
+        checks.add(check("vent_selection_excludes_smelter_front_and_stacks_probability",
+                smelter.validVentCountForValidation() == 2
+                        && Math.abs(TCSmelterBlockEntity.ventMitigationChance(1) - 0.333D) < 0.0001D
+                        && TCSmelterBlockEntity.ventMitigationChance(2)
+                        > TCSmelterBlockEntity.ventMitigationChance(1),
+                "validVents=" + smelter.validVentCountForValidation()
+                        + ", p1=" + TCSmelterBlockEntity.ventMitigationChance(1)
+                        + ", p2=" + TCSmelterBlockEntity.ventMitigationChance(2)));
+
+        BlockPos thaumiumPos = origin.offset(5, 0, 0);
+        BlockPos voidPos = origin.offset(7, 0, 0);
+        level.setBlock(thaumiumPos, TCBlocks.SMELTER_THAUMIUM.get().defaultBlockState(), 3);
+        level.setBlock(voidPos, TCBlocks.SMELTER_VOID.get().defaultBlockState(), 3);
+        TCLegacySmelterEndpointBlockEntity thaumium =
+                blockEntity(level, thaumiumPos, TCLegacySmelterEndpointBlockEntity.class);
+        TCLegacySmelterEndpointBlockEntity voidSmelter =
+                blockEntity(level, voidPos, TCLegacySmelterEndpointBlockEntity.class);
+        checks.add(check("upgraded_smelters_use_shared_machine_model_with_exact_tiers",
+                thaumium != null && thaumium.smelterType() == TCSmelterBlockEntity.SmelterType.THAUMIUM
+                        && voidSmelter != null && voidSmelter.smelterType() == TCSmelterBlockEntity.SmelterType.VOID,
+                "thaumium=" + (thaumium == null ? "missing" : thaumium.smelterType())
+                        + ", void=" + (voidSmelter == null ? "missing" : voidSmelter.smelterType())));
     }
     private static void addJarChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
         level.setBlock(origin, TCBlocks.JAR_NORMAL.get().defaultBlockState(), 3);

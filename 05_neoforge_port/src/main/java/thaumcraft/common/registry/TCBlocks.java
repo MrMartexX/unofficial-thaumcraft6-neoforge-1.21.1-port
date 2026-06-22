@@ -26,6 +26,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.blocks.basic.TCTableBlock;
 import thaumcraft.common.blocks.basic.TCInfusionCandleBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
+import thaumcraft.common.blocks.essentia.TCSmelterAuxBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterVentBlock;
 import thaumcraft.common.blocks.essentia.TCWardedJarBlock;
 import thaumcraft.common.blocks.essentia.TCAlembicBlock;
@@ -127,11 +128,15 @@ public final class TCBlocks {
     public static final Supplier<Block> SMELTER_BASIC = BLOCKS.register("smelter_basic", () -> smelterBlock());
     public static final Supplier<Block> SMELTER_VENT = BLOCKS.register("smelter_vent",
             () -> new TCSmelterVentBlock(BlockBehaviour.Properties.of()
-                    .strength(3.0F, 6.0F)
+                    .strength(1.0F, 10.0F)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
                     .requiresCorrectToolForDrops()));
     public static final Supplier<Block> SMELTER_AUX = BLOCKS.register("smelter_aux",
-            () -> new Block(BlockBehaviour.Properties.of()
-                    .strength(3.0F, 6.0F)
+            () -> new TCSmelterAuxBlock(BlockBehaviour.Properties.of()
+                    .strength(1.0F, 10.0F)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
                     .requiresCorrectToolForDrops()));
 public static final Supplier<Block> BELLOWS = BLOCKS.register("bellows",
             () -> new TCBellowsBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)

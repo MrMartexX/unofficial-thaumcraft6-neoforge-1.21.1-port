@@ -30,4 +30,12 @@ finally {
 if (-not (Test-Path -LiteralPath $outputFullPath)) {
     throw "Essentia transport behavior audit did not write expected output: $outputFullPath"
 }
+$failedLine = Select-String -LiteralPath $outputFullPath -Pattern '^\| Failed \| ([0-9]+) \|$' | Select-Object -First 1
+if ($null -eq $failedLine) {
+    throw "Essentia transport behavior audit report has no parseable Failed count: $outputFullPath"
+}
+$failed = [int]$failedLine.Matches[0].Groups[1].Value
+if ($failed -ne 0) {
+    throw "Essentia transport behavior audit reported $failed failed checks: $outputFullPath"
+}
 Write-Host "Essentia transport behavior audit written to $outputFullPath"

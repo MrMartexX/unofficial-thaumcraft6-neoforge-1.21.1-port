@@ -1,42 +1,36 @@
 package thaumcraft.common.blocks.essentia;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** Minimal smelter vent placeholder with facing state for flux-mitigation parity slices. */
-public class TCSmelterVentBlock extends Block {
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+/** Side-mounted vent with the exact TC6 half-block collision bounds. */
+public final class TCSmelterVentBlock extends TCSmelterAuxBlock {
+    private static final VoxelShape NORTH = box(2, 2, 0, 14, 14, 8);
+    private static final VoxelShape SOUTH = box(2, 2, 8, 14, 14, 16);
+    private static final VoxelShape WEST = box(0, 2, 2, 8, 14, 14);
+    private static final VoxelShape EAST = box(8, 2, 2, 16, 14, 14);
 
     public TCSmelterVentBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getClickedFace().getOpposite());
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING);
-    }
-
-    @Override
-    protected BlockState rotate(BlockState state, Rotation rotation) {
-        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
-    }
-
-    @Override
-    protected BlockState mirror(BlockState state, Mirror mirror) {
-        return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    protected VoxelShape getShape(
+            BlockState state,
+            BlockGetter level,
+            BlockPos pos,
+            CollisionContext context
+    ) {
+        return switch (state.getValue(FACING)) {
+            case SOUTH -> SOUTH;
+            case WEST -> WEST;
+            case EAST -> EAST;
+            default -> NORTH;
+        };
     }
 }

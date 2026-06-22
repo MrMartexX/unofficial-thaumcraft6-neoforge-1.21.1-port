@@ -1,10 +1,8 @@
 {
   "variants": {
-    "facing=down": { "model": "thaumcraft:block/smelter_vent" },
-    "facing=up": { "model": "thaumcraft:block/smelter_vent" },
     "facing=north": { "model": "thaumcraft:block/smelter_vent" },
-    "facing=south": { "model": "thaumcraft:block/smelter_vent" },
-    "facing=west": { "model": "thaumcraft:block/smelter_vent" },
-    "facing=east": { "model": "thaumcraft:block/smelter_vent" }
+    "facing=east": { "model": "thaumcraft:block/smelter_vent", "y": 90 },
+    "facing=south": { "model": "thaumcraft:block/smelter_vent", "y": 180 },
+    "facing=west": { "model": "thaumcraft:block/smelter_vent", "y": 270 }
   }
 }

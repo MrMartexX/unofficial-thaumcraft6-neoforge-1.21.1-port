@@ -5,6 +5,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
@@ -22,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.phys.BlockHitResult;
 
 public class TCSmelterBlock extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -61,6 +68,59 @@ public class TCSmelterBlock extends Block implements EntityBlock {
         return type == TCBlockEntities.SMELTER_BASIC.get()
                 || type == TCBlockEntities.SMELTER_THAUMIUM.get()
                 || type == TCBlockEntities.SMELTER_VOID.get();
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(
+            ItemStack stack,
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            InteractionHand hand,
+            BlockHitResult hitResult
+    ) {
+        return openMenu(level, pos, player)
+                ? ItemInteractionResult.sidedSuccess(level.isClientSide)
+                : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            BlockHitResult hitResult
+    ) {
+        return openMenu(level, pos, player)
+                ? InteractionResult.sidedSuccess(level.isClientSide)
+                : InteractionResult.PASS;
+    }
+
+    private boolean openMenu(Level level, BlockPos pos, Player player) {
+        if (!(level.getBlockEntity(pos) instanceof TCSmelterBlockEntity smelter)) {
+            return false;
+        }
+        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.openMenu(smelter);
+        }
+        return true;
+    }
+
+    @Override
+    protected void onRemove(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            BlockState newState,
+            boolean movedByPiston
+    ) {
+        if (!state.is(newState.getBlock())
+                && level.getBlockEntity(pos) instanceof TCSmelterBlockEntity smelter) {
+            smelter.dropContents(level, pos);
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {

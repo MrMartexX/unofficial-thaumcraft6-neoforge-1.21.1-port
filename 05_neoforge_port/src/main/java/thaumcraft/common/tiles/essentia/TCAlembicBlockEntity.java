@@ -1,5 +1,7 @@
 package thaumcraft.common.tiles.essentia;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -7,26 +9,27 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.common.blocks.essentia.TCAlembicBlock;
 import thaumcraft.common.essentia.container.TCAspectSourceContainer;
 import thaumcraft.common.essentia.transport.TCEssentiaStack;
 import thaumcraft.common.essentia.transport.TCEssentiaSuction;
 import thaumcraft.common.essentia.transport.TCEssentiaTransport;
 import thaumcraft.common.registry.TCBlockEntities;
 
-/** Legacy-shaped Alembic storage/output endpoint. Full smelter production remains separate. */
+/** TC6 Alembic storage and output endpoint. */
 public final class TCAlembicBlockEntity extends BlockEntity implements TCAspectSourceContainer, TCEssentiaTransport {
     public static final int CAPACITY = 128;
 
     private Aspect aspect;
     private Aspect aspectFilter;
     private int amount;
+    private Direction labelFacing = Direction.DOWN;
     private boolean blocked;
 
     public TCAlembicBlockEntity(BlockPos pos, BlockState state) {
@@ -45,6 +48,10 @@ public final class TCAlembicBlockEntity extends BlockEntity implements TCAspectS
         return amount;
     }
 
+    public Direction labelFacing() {
+        return labelFacing;
+    }
+
     public void setStoredForValidation(Aspect newAspect, int newAmount) {
         aspect = newAspect;
         amount = newAspect == null ? 0 : Math.max(0, Math.min(CAPACITY, newAmount));
@@ -55,7 +62,12 @@ public final class TCAlembicBlockEntity extends BlockEntity implements TCAspectS
     }
 
     public void setFilterForValidation(Aspect filter) {
+        setFilterForValidation(filter, filter == null ? Direction.DOWN : Direction.NORTH);
+    }
+
+    public void setFilterForValidation(Aspect filter, Direction face) {
         aspectFilter = filter;
+        labelFacing = filter == null || face == null || face.getAxis().isVertical() ? Direction.DOWN : face;
         markChangedAndSync();
     }
 
@@ -84,7 +96,8 @@ public final class TCAlembicBlockEntity extends BlockEntity implements TCAspectS
     }
 
     public boolean takeFromContainer(Aspect requestedAspect, int requestedAmount) {
-        if (requestedAspect == null || requestedAmount <= 0 || blocked || aspect != requestedAspect || amount < requestedAmount) {
+        if (requestedAspect == null || requestedAmount <= 0 || blocked
+                || aspect != requestedAspect || amount < requestedAmount) {
             return false;
         }
         amount -= requestedAmount;
@@ -94,6 +107,52 @@ public final class TCAlembicBlockEntity extends BlockEntity implements TCAspectS
         }
         markChangedAndSync();
         return true;
+    }
+
+    /**
+     * Legacy TileAlembic.processAlembics ordering: matching filled Alembics first, then the first
+     * empty/filter-compatible Alembic in the contiguous column.
+     */
+    public static boolean processAlembics(Level level, BlockPos basePos, Aspect requestedAspect) {
+        if (level == null || requestedAspect == null) {
+            return false;
+        }
+        List<TCAlembicBlockEntity> column = new ArrayList<>();
+        for (int depth = 1; basePos.getY() + depth < level.getMaxBuildHeight(); depth++) {
+            BlockEntity blockEntity = level.getBlockEntity(basePos.above(depth));
+            if (!(blockEntity instanceof TCAlembicBlockEntity alembic)) {
+                break;
+            }
+            column.add(alembic);
+        }
+
+        for (TCAlembicBlockEntity alembic : column) {
+            if (alembic.amount > 0 && alembic.aspect == requestedAspect
+                    && alembic.addToContainer(requestedAspect, 1) == 0) {
+                return true;
+            }
+        }
+        for (TCAlembicBlockEntity alembic : column) {
+            if ((alembic.aspectFilter == null || alembic.aspectFilter == requestedAspect)
+                    && alembic.addToContainer(requestedAspect, 1) == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int comparatorOutput() {
+        return amount <= 0 ? 0 : (int) Math.floor(amount / (float) CAPACITY * 14.0F) + 1;
+    }
+
+    public int emptyIntoAura() {
+        int emptied = amount;
+        amount = 0;
+        aspect = null;
+        if (emptied > 0) {
+            markChangedAndSync();
+        }
+        return emptied;
     }
 
     @Override
@@ -123,14 +182,9 @@ public final class TCAlembicBlockEntity extends BlockEntity implements TCAspectS
         return drained;
     }
 
-    private Direction blockedOutputFace() {
-        BlockState state = getBlockState();
-        return state.hasProperty(TCAlembicBlock.FACING) ? state.getValue(TCAlembicBlock.FACING) : Direction.NORTH;
-    }
-
     @Override
     public boolean isConnectable(Direction face) {
-        return face != null && face != Direction.DOWN && face != blockedOutputFace();
+        return face != null && face != Direction.DOWN && face != labelFacing;
     }
 
     @Override
@@ -203,21 +257,30 @@ public final class TCAlembicBlockEntity extends BlockEntity implements TCAspectS
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         if (aspect != null) {
-            tag.putString("Aspect", aspect.getTag());
+            tag.putString("aspect", aspect.getTag());
         }
         if (aspectFilter != null) {
             tag.putString("AspectFilter", aspectFilter.getTag());
         }
-        tag.putInt("Amount", amount);
+        tag.putInt("amount", amount);
+        tag.putByte("facing", (byte) labelFacing.get3DDataValue());
         tag.putBoolean("Blocked", blocked);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        aspect = Aspect.getAspect(tag.getString("Aspect"));
+        String aspectTag = tag.contains("aspect") ? tag.getString("aspect") : tag.getString("Aspect");
+        aspect = Aspect.getAspect(aspectTag);
         aspectFilter = Aspect.getAspect(tag.getString("AspectFilter"));
-        amount = aspect == null ? 0 : Math.max(0, Math.min(CAPACITY, tag.getInt("Amount")));
+        int savedAmount = tag.contains("amount") ? tag.getInt("amount") : tag.getInt("Amount");
+        amount = aspect == null ? 0 : Math.max(0, Math.min(CAPACITY, savedAmount));
+        labelFacing = tag.contains("facing")
+                ? Direction.from3DDataValue(tag.getByte("facing"))
+                : aspectFilter == null ? Direction.DOWN : Direction.NORTH;
+        if (labelFacing.getAxis().isVertical() && labelFacing != Direction.DOWN) {
+            labelFacing = Direction.DOWN;
+        }
         blocked = tag.getBoolean("Blocked");
     }
 }

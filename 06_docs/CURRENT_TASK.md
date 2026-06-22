@@ -24,6 +24,7 @@ Last updated: 2026-06-21
 - The crucible client slice now includes the synced liquid surface, exact fluid-height/recolor formulas, boil/froth/overflow/bubble particles and legacy dissolution/craft/spill block-event FX. Runtime behavior audit passes `16/16`.
 - The infusion boundary now includes server-owned two-click caster activation, live bounded surroundings refresh, inactive stability charging, researched recipe start without pre-supplied essentia, persisted craft-cycle/stability state, exact five-tick default cadence, one-point nearest-source drain, the legacy 200-tick failed-source rescan delay, six-cycle component timing, result placement/damage carry-over, component remainders, completion/failure sounds, the two clientbound legacy FX message contracts, exact structure modifiers, exact stability math, all 24 executable instability rolls, Flux Goo/harm dependencies, inlay/Stabilizer pedestal mitigation, client matrix animation/halo, eight-sided essentia streams and item/block source debris. The runtime audit passes `95/95`.
 - The first real essentia transport slice now has legacy capacities/cadence/suction formulas for all six tube variants, Warded Jar transfer, sided NeoForge capability access, persisted directional state and legacy multipart tube geometry. The dedicated-server runtime audit passes `23/23`.
+- The Alembic/smelter machine batch now replaces the incremental placeholder path: all three smelter tiers share the server-owned two-slot machine state, exact tier efficiency/output intervals, Alumentum boost, fuel remainders, cumulative vent mitigation, direct plus attached auxiliary Alembic routing, modern sided item capability, legacy-layout menu/screen and detailed legacy-derived models. The combined transport/machine runtime audit passes `37/37`.
 
 ## Do not change without explicit request
 
@@ -35,11 +36,11 @@ Last updated: 2026-06-21
 ## Near-term tasks
 
 1. Continue essentia transport from `06_docs/gameplay/essentia_transport_design.md`:
-   - Keep the `23/23` tube/jar runtime audit green.
-   - Port Alembic as the next real output endpoint before claiming smelter transport completion.
-   - Replace smelter skeleton storage with its real inventory/aspect/fuel/efficiency model as one audited machine batch.
-   - Keep Bellows discovery, caster sub-part interaction and client-only vent/valve rendering in their owning follow-up slices.
-   - Do not expose the current smelter skeletons through `TCEssentiaCapabilities.BLOCK`.
+   - Keep the combined tube/jar/Alembic/smelter runtime audit at `37/37`.
+   - Keep smelters internal slurry machines; only tubes, jars and Alembics expose `TCEssentiaCapabilities.BLOCK`.
+   - Port the real Bellows BlockEntity/client animation and its tube-buffer/vanilla-furnace interactions as the next focused device batch.
+   - Port Alembic label/phial handling only over the existing aspect Data Components; do not reintroduce stack NBT.
+   - Keep caster tube sub-part interaction and remaining vent/valve rendering in their owning follow-up slices.
 2. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
 3. Keep reusable audit scripts under `tools/audits/`.
 4. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.
