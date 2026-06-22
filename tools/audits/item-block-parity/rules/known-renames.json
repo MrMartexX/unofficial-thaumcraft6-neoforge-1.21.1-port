@@ -3,14 +3,14 @@
   "entries": [
     {
       "kind": "block",
-      "legacyId": "pedestal_arcane",
-      "portId": "arcane_pedestal",
+      "legacyId": "pedestal_ancient",
+      "portId": "ancient_pedestal",
       "reason": "Existing port ID order differs from the legacy registry ID."
     },
     {
       "kind": "block",
-      "legacyId": "pedestal_ancient",
-      "portId": "ancient_pedestal",
+      "legacyId": "pedestal_arcane",
+      "portId": "arcane_pedestal",
       "reason": "Existing port ID order differs from the legacy registry ID."
     },
     {
@@ -18,6 +18,18 @@
       "legacyId": "pedestal_eldritch",
       "portId": "eldritch_pedestal",
       "reason": "Existing port ID order differs from the legacy registry ID."
+    },
+    {
+      "kind": "item",
+      "legacyId": "grapple_gun_spool",
+      "portId": "grapplegunspool",
+      "reason": "High-confidence normalized registry rename from the registry gap review: underscores were removed in the current port ID while legacy evidence registers grapple_gun_spool explicitly."
+    },
+    {
+      "kind": "item",
+      "legacyId": "grapple_gun_tip",
+      "portId": "grappleguntip",
+      "reason": "High-confidence normalized registry rename from the registry gap review: underscores were removed in the current port ID while legacy evidence registers grapple_gun_tip explicitly."
     }
   ]
 }
