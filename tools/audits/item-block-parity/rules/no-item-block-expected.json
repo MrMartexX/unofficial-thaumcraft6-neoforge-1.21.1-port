@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "kind": "block",
+      "id": "flux_goo",
+      "reason": "Flux Goo is a world/runtime fluid-like taint block and is not expected to have a player inventory BlockItem in the current port boundary.",
+      "evidence": "TCBlocks registers flux_goo, while TCItems intentionally does not register a matching BlockItem."
+    }
+  ]
+}

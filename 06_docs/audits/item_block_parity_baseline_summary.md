@@ -1,16 +1,19 @@
 # Item/block parity baseline summary
 
-Generated: 2026-06-22T12:58:33.3376209Z
+Generated: 2026-06-22T14:19:26.0326902Z
 
-The initial executable baseline produced 1444 evaluated results: 1245 pass, 3 mapped rename and 196 missing.
+The executable baseline produced 1444 evaluated results: 1245 pass, 3 mapped rename, 1 intentional missing and 195 missing.
 
-Of the missing results, 118 currently fall into safe resource-boundary checks. The baseline is intentionally generated with FailMode off until the rule overrides are reviewed.
+Of the missing results, 117 currently fall into safe resource-boundary checks. The baseline is intentionally generated with FailMode off until the rule overrides are reviewed.
 
 There are 106 legacy source entries whose IDs were inferred from symbols and therefore did not contribute to a registry pass.
 
-Missing results by implemented check:
+Intentional missing results by implemented check:
 
 - block_item_pairs: 1
+
+Missing results by implemented check:
+
 - lang: 76
 - models: 41
 - registry: 78

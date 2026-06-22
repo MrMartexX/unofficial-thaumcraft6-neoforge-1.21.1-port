@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "kind": "block",
+      "id": "flux_goo",
+      "reason": "Flux Goo is a runtime hazard/taint residue block; ordinary self-drop loot is not expected at this item/block parity layer.",
+      "evidence": "Treat missing loot as intentional until a focused Flux Goo gameplay/drop design says otherwise."
+    }
+  ]
+}

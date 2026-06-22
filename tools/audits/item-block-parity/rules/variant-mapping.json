@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "entries": [],
+  "note": "Legacy metadata/damage variants must be mapped here before they can satisfy modern split-ID parity. Empty in the first rule-normalization slice."
+}
