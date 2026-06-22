@@ -120,6 +120,13 @@ function Find-PortVariantMatches([string]$Kind, [string]$BaseId, [string]$Varian
 $rows = [System.Collections.Generic.List[object]]::new()
 
 foreach ($candidate in @($registryReview.candidates)) {
+    if ($candidate.evidence -match 'setRegistryName\(\s*"thaumcraft"\s*,') {
+        continue
+    }
+    if ($candidate.evidence -notmatch 'ItemTCBase\(') {
+        continue
+    }
+
     $quoted = Get-QuotedStrings $candidate.evidence
     if ($quoted.Count -lt 2) {
         continue
