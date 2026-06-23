@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist.",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 5 implements texture graph and registered-resource orphan reference checks.",
   "checks": [
     {
       "name": "registry",
@@ -78,8 +78,8 @@
     {
       "name": "textures",
       "layer": "resource_boundary",
-      "status": "planned",
-      "reason": "Recursive model texture graph not implemented yet"
+      "status": "implemented",
+      "reason": "Batch 5 registered model texture graph check"
     },
     {
       "name": "creative_tabs",
@@ -204,8 +204,8 @@
     {
       "name": "orphan_references",
       "layer": "resource_boundary",
-      "status": "planned",
-      "reason": "Orphan/missing references planned"
+      "status": "implemented",
+      "reason": "Batch 5 registered unresolved registered-resource reference check"
     },
     {
       "name": "datapack_load",

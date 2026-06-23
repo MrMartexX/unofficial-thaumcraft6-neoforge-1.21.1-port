@@ -92,7 +92,7 @@ $noLootLookup = New-RuleLookup $noLootRules
 $allowedExtrasLookup = New-RuleLookup $allowedExtrasRules
 $variantMappingLookup = New-RuleLookup $variantMappingRules
 
-$implemented = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "lang", "loot")
+$implemented = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "loot", "orphan_references")
 $unknownChecks = @($Checks | Where-Object { $_ -notin $implemented })
 if ($unknownChecks.Count -gt 0) { throw "Checks are not implemented in this batch: $($unknownChecks -join ', ')" }
 
@@ -126,6 +126,59 @@ function Add-Result([string]$Kind, [string]$Id, [string]$Check, [string]$Status,
         legacyId = if ($LegacyId) { "thaumcraft:$LegacyId" } else { $null }
         evidence = $Evidence
     })
+}
+function Get-RepoRootFromReportPath([string]$ManifestPath) {
+    $reportDirectory = Split-Path -Parent $ManifestPath
+    return (Resolve-Path (Join-Path $reportDirectory "../../../..")).Path
+}
+
+$compareRepoRoot = Get-RepoRootFromReportPath $PortManifest
+$comparePortRoot = Join-Path $compareRepoRoot $port.source
+$compareAssetsRoot = Join-Path $comparePortRoot "src/main/resources/assets/thaumcraft"
+
+function Resolve-ThaumcraftTextureRef([string]$TextureRef) {
+    if ([string]::IsNullOrWhiteSpace($TextureRef)) {
+        return [pscustomobject][ordered]@{ textureRef = $TextureRef; checked = $false; exists = $true; path = $null; reason = "empty" }
+    }
+    if ($TextureRef.StartsWith("#")) {
+        return [pscustomobject][ordered]@{ textureRef = $TextureRef; checked = $false; exists = $true; path = $null; reason = "model variable" }
+    }
+    if (-not $TextureRef.StartsWith("thaumcraft:")) {
+        return [pscustomobject][ordered]@{ textureRef = $TextureRef; checked = $false; exists = $true; path = $null; reason = "external namespace" }
+    }
+    $pathPart = $TextureRef.Substring("thaumcraft:".Length)
+    $candidate = Join-Path $compareAssetsRoot ("textures/$pathPart.png")
+    return [pscustomobject][ordered]@{ textureRef = $TextureRef; checked = $true; exists = (Test-Path -LiteralPath $candidate -PathType Leaf); path = $candidate; reason = "thaumcraft texture" }
+}
+
+function Get-ModelTextureRefs([string]$ModelRelativePath) {
+    $modelPath = Join-Path $compareAssetsRoot $ModelRelativePath
+    if (-not (Test-Path -LiteralPath $modelPath -PathType Leaf)) { return @() }
+    $modelText = Get-Content -Raw -LiteralPath $modelPath
+    return @([regex]::Matches($modelText, '"[A-Za-z0-9_]+"\s*:\s*"(?<texture>[^"#]+)"') | ForEach-Object {
+        $_.Groups["texture"].Value
+    } | Where-Object { $_ -like "thaumcraft:*" } | Sort-Object -Unique)
+}
+
+function Get-EntryTextureGraph($Entry) {
+    $textureRefs = [System.Collections.Generic.List[string]]::new()
+    $missing = [System.Collections.Generic.List[string]]::new()
+    if ($Entry.kind -eq "block") {
+        foreach ($model in @($Entry.resources.referencedBlockModels)) {
+            foreach ($textureRef in Get-ModelTextureRefs "models/$model.json") { $textureRefs.Add($textureRef) }
+        }
+    } elseif ($Entry.kind -eq "item") {
+        foreach ($textureRef in Get-ModelTextureRefs "models/item/$($Entry.registryId).json") { $textureRefs.Add($textureRef) }
+    }
+    foreach ($textureRef in @($textureRefs | Sort-Object -Unique)) {
+        $resolved = Resolve-ThaumcraftTextureRef $textureRef
+        if ($resolved.checked -and -not $resolved.exists) { $missing.Add($textureRef) }
+    }
+    return [pscustomobject][ordered]@{
+        textureRefs = @($textureRefs | Sort-Object -Unique)
+        missingTextures = @($missing | Sort-Object -Unique)
+        resolved = $missing.Count -eq 0
+    }
 }
 
 if ("duplicate_registry_id" -in $Checks) {
@@ -184,6 +237,16 @@ foreach ($entry in $port.entries) {
         if ("models" -in $Checks) {
             $modelEvidence = if ($entry.resources.missingBlockModels.Count -gt 0) { "Missing: $($entry.resources.missingBlockModels -join ', ')" } else { "All blockstate model references resolve" }
             Add-Result "block" $entry.registryId "models" $(if ($entry.resources.blockModelsResolved) { "PASS" } else { "MISSING" }) $modelEvidence
+        }        if ("textures" -in $Checks) {
+            $textureGraph = Get-EntryTextureGraph $entry
+            $textureEvidence = if ($textureGraph.missingTextures.Count -gt 0) { "Missing textures: $($textureGraph.missingTextures -join ', ')" } elseif ($textureGraph.textureRefs.Count -gt 0) { "Texture refs resolve: $($textureGraph.textureRefs -join ', ')" } else { "No thaumcraft texture refs found in resolved block models" }
+            Add-Result "block" $entry.registryId "textures" $(if ($textureGraph.resolved) { "PASS" } else { "MISSING" }) $textureEvidence
+        }
+        if ("orphan_references" -in $Checks) {
+            $textureGraph = Get-EntryTextureGraph $entry
+            $missingRefs = @($entry.resources.missingBlockModels + $textureGraph.missingTextures)
+            $orphanEvidence = if ($missingRefs.Count -gt 0) { "Unresolved registered-resource references: $($missingRefs -join ', ')" } else { "No unresolved registered blockstate/model/texture references" }
+            Add-Result "block" $entry.registryId "orphan_references" $(if ($missingRefs.Count -eq 0) { "PASS" } else { "MISSING" }) $orphanEvidence
         }
         if ("lang" -in $Checks) {
             Add-Result "block" $entry.registryId "lang" $(if ($entry.resources.langKey) { "PASS" } else { "MISSING" }) "block.thaumcraft.$($entry.registryId)"
@@ -202,6 +265,16 @@ foreach ($entry in $port.entries) {
     elseif ($entry.kind -eq "item") {
         if ("models" -in $Checks) {
             Add-Result "item" $entry.registryId "models" $(if ($entry.resources.itemModel) { "PASS" } else { "MISSING" }) "assets/thaumcraft/models/item/$($entry.registryId).json"
+        }        if ("textures" -in $Checks) {
+            $textureGraph = Get-EntryTextureGraph $entry
+            $textureEvidence = if ($textureGraph.missingTextures.Count -gt 0) { "Missing textures: $($textureGraph.missingTextures -join ', ')" } elseif ($textureGraph.textureRefs.Count -gt 0) { "Texture refs resolve: $($textureGraph.textureRefs -join ', ')" } else { "No thaumcraft texture refs found in item model" }
+            Add-Result "item" $entry.registryId "textures" $(if ($textureGraph.resolved) { "PASS" } else { "MISSING" }) $textureEvidence
+        }
+        if ("orphan_references" -in $Checks) {
+            $textureGraph = Get-EntryTextureGraph $entry
+            $missingRefs = @($textureGraph.missingTextures)
+            $orphanEvidence = if ($missingRefs.Count -gt 0) { "Unresolved registered item model texture references: $($missingRefs -join ', ')" } else { "No unresolved registered item model texture references" }
+            Add-Result "item" $entry.registryId "orphan_references" $(if ($missingRefs.Count -eq 0) { "PASS" } else { "MISSING" }) $orphanEvidence
         }
         if ("lang" -in $Checks) {
             $langKey = if ($entry.blockItem) { "block.thaumcraft.$($entry.registryId)" } else { "item.thaumcraft.$($entry.registryId)" }
@@ -215,7 +288,7 @@ $safeFailureChecks = @($parityRules.safeFailureChecks)
 $safeFailures = @($orderedResults | Where-Object { $_.status -eq "MISSING" -and $_.check -in $safeFailureChecks })
 $strictFailures = @($orderedResults | Where-Object status -eq "MISSING")
 $notEvaluated = @(
-    "variant_mapping", "texture_graph", "recipes", "tags", "aspects", "research_refs",
+    "variant_mapping", "recipes", "tags", "aspects", "research_refs",
     "data_components", "blockentities", "capabilities", "menus", "networking",
     "client_server_safety", "secondary_legacy_probe", "original_jar_probe", "runtime", "visual"
 )
