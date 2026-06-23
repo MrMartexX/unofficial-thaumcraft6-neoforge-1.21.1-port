@@ -39,12 +39,14 @@ $pass = @($report.results | Where-Object status -eq "PASS").Count
 $mapped = @($report.results | Where-Object status -eq "RENAMED_WITH_MAPPING").Count
 $variantMapped = @($report.results | Where-Object status -eq "VARIANT_MAPPED").Count
 $intentional = @($report.results | Where-Object status -eq "INTENTIONAL_MISSING").Count
+$deferred = @($report.results | Where-Object status -eq "DEFERRED").Count
 $missing = @($report.results | Where-Object status -eq "MISSING").Count
 if ($report.summary.results -ne $report.results.Count -or
     $report.summary.pass -ne $pass -or
     $report.summary.renamed -ne $mapped -or
     $report.summary.variantMapped -ne $variantMapped -or
     $report.summary.intentionalMissing -ne $intentional -or
+    $report.summary.deferred -ne $deferred -or
     $report.summary.missing -ne $missing) {
     throw "Parity report summary does not match its result rows."
 }

@@ -34,5 +34,11 @@
     "localReports": "tools/reports/local/item-block-parity/",
     "curatedReports": "06_docs/audits/",
     "commitRawReports": false
+  },
+  "ruleOverridePolicy": {
+    "knownRenames": "Can convert legacy ID comparison to RENAMED_WITH_MAPPING only when the target port ID exists.",
+    "variantMapping": "Can convert legacy metadata/subtype families to VARIANT_MAPPED only when all mapped port IDs exist.",
+    "deferredBoundaries": "Can convert MISSING to DEFERRED only for reviewed entries and concrete checks/boundaries.",
+    "intentionalMissing": "Can convert MISSING to INTENTIONAL_MISSING only for reviewed no-item/no-loot/content rules."
   }
 }

@@ -37,7 +37,30 @@ function Get-Rule($Lookup, [string]$Kind, [string]$Id) {
     return $null
 }
 
-function Format-RuleEvidence([string]$Prefix, $Rule) {
+
+function New-DeferredRuleLookup($Document) {
+    $lookup = @{}
+    foreach ($entry in @($Document.entries)) {
+        if ($null -eq $entry) { continue }
+        if ([string]::IsNullOrWhiteSpace($entry.kind) -or [string]::IsNullOrWhiteSpace($entry.id)) { continue }
+        $checks = @()
+        if ($entry.checks) { $checks = @($entry.checks) }
+        elseif ($entry.check) { $checks = @($entry.check) }
+        else { $checks = @("*") }
+        foreach ($check in $checks) {
+            if ([string]::IsNullOrWhiteSpace($check)) { $check = "*" }
+            $lookup["$($entry.kind):$($entry.id):$check"] = $entry
+        }
+    }
+    return $lookup
+}
+
+function Get-DeferredRule($Lookup, [string]$Kind, [string]$Id, [string]$Check) {
+    foreach ($key in @("${Kind}:${Id}:${Check}", "${Kind}:${Id}:*", "${Kind}:*:${Check}", "*:${Id}:${Check}", "*:${Id}:*")) {
+        if ($Lookup.ContainsKey($key)) { return $Lookup[$key] }
+    }
+    return $null
+}function Format-RuleEvidence([string]$Prefix, $Rule) {
     if ($null -eq $Rule) { return $Prefix }
     if (![string]::IsNullOrWhiteSpace($Rule.reason)) {
         return "$Prefix; intentional rule: $($Rule.reason)"
@@ -86,11 +109,13 @@ $noItemBlockRules = Read-RuleDocument $RulesRoot "no-item-block-expected.json"
 $noLootRules = Read-RuleDocument $RulesRoot "no-loot-expected.json"
 $allowedExtrasRules = Read-RuleDocument $RulesRoot "allowed-extras.json"
 $variantMappingRules = Read-RuleDocument $RulesRoot "variant-mapping.json"
+$deferredBoundaryRules = Read-RuleDocument $RulesRoot "deferred-boundaries.json"
 
 $noItemBlockLookup = New-RuleLookup $noItemBlockRules
 $noLootLookup = New-RuleLookup $noLootRules
 $allowedExtrasLookup = New-RuleLookup $allowedExtrasRules
 $variantMappingLookup = New-RuleLookup $variantMappingRules
+$deferredBoundaryLookup = New-DeferredRuleLookup $deferredBoundaryRules
 
 $implemented = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "loot", "orphan_references")
 $unknownChecks = @($Checks | Where-Object { $_ -notin $implemented })
@@ -118,13 +143,22 @@ foreach ($entry in @($variantMappingRules.entries)) {
 $results = [System.Collections.Generic.List[object]]::new()
 
 function Add-Result([string]$Kind, [string]$Id, [string]$Check, [string]$Status, [string]$Evidence, [string]$LegacyId = "") {
+    $effectiveStatus = $Status
+    $effectiveEvidence = $Evidence
+    if ($Status -eq "MISSING") {
+        $deferredRule = Get-DeferredRule $deferredBoundaryLookup $Kind $Id $Check
+        if ($null -ne $deferredRule) {
+            $effectiveStatus = "DEFERRED"
+            $effectiveEvidence = Format-RuleEvidence "Deferred boundary for $Check; original evidence: $Evidence" $deferredRule
+        }
+    }
     $results.Add([pscustomobject][ordered]@{
         kind = $Kind
         id = "thaumcraft:$Id"
         check = $Check
-        status = $Status
+        status = $effectiveStatus
         legacyId = if ($LegacyId) { "thaumcraft:$LegacyId" } else { $null }
-        evidence = $Evidence
+        evidence = $effectiveEvidence
     })
 }
 function Get-RepoRootFromReportPath([string]$ManifestPath) {
@@ -237,7 +271,8 @@ foreach ($entry in $port.entries) {
         if ("models" -in $Checks) {
             $modelEvidence = if ($entry.resources.missingBlockModels.Count -gt 0) { "Missing: $($entry.resources.missingBlockModels -join ', ')" } else { "All blockstate model references resolve" }
             Add-Result "block" $entry.registryId "models" $(if ($entry.resources.blockModelsResolved) { "PASS" } else { "MISSING" }) $modelEvidence
-        }        if ("textures" -in $Checks) {
+        }
+        if ("textures" -in $Checks) {
             $textureGraph = Get-EntryTextureGraph $entry
             $textureEvidence = if ($textureGraph.missingTextures.Count -gt 0) { "Missing textures: $($textureGraph.missingTextures -join ', ')" } elseif ($textureGraph.textureRefs.Count -gt 0) { "Texture refs resolve: $($textureGraph.textureRefs -join ', ')" } else { "No thaumcraft texture refs found in resolved block models" }
             Add-Result "block" $entry.registryId "textures" $(if ($textureGraph.resolved) { "PASS" } else { "MISSING" }) $textureEvidence
@@ -265,7 +300,8 @@ foreach ($entry in $port.entries) {
     elseif ($entry.kind -eq "item") {
         if ("models" -in $Checks) {
             Add-Result "item" $entry.registryId "models" $(if ($entry.resources.itemModel) { "PASS" } else { "MISSING" }) "assets/thaumcraft/models/item/$($entry.registryId).json"
-        }        if ("textures" -in $Checks) {
+        }
+        if ("textures" -in $Checks) {
             $textureGraph = Get-EntryTextureGraph $entry
             $textureEvidence = if ($textureGraph.missingTextures.Count -gt 0) { "Missing textures: $($textureGraph.missingTextures -join ', ')" } elseif ($textureGraph.textureRefs.Count -gt 0) { "Texture refs resolve: $($textureGraph.textureRefs -join ', ')" } else { "No thaumcraft texture refs found in item model" }
             Add-Result "item" $entry.registryId "textures" $(if ($textureGraph.resolved) { "PASS" } else { "MISSING" }) $textureEvidence
@@ -299,6 +335,7 @@ $summary = [ordered]@{
     renamed = @($orderedResults | Where-Object status -eq "RENAMED_WITH_MAPPING").Count
     variantMapped = @($orderedResults | Where-Object status -eq "VARIANT_MAPPED").Count
     intentionalMissing = @($orderedResults | Where-Object status -eq "INTENTIONAL_MISSING").Count
+    deferred = @($orderedResults | Where-Object status -eq "DEFERRED").Count
     missing = @($orderedResults | Where-Object status -eq "MISSING").Count
     safeFailures = $safeFailures.Count
     strictFailures = $strictFailures.Count
@@ -316,6 +353,7 @@ $report = [ordered]@{
         noLootExpected = @($noLootRules.entries).Count
         allowedExtras = @($allowedExtrasRules.entries).Count
         variantMappings = @($variantMappingRules.entries).Count
+        deferredBoundaries = @($deferredBoundaryRules.entries).Count
     }
     summary = $summary
     results = $orderedResults
@@ -337,11 +375,12 @@ $lines.Add("| PASS | $($summary.pass) |")
 $lines.Add("| RENAMED_WITH_MAPPING | $($summary.renamed) |")
 $lines.Add("| VARIANT_MAPPED | $($summary.variantMapped) |")
 $lines.Add("| INTENTIONAL_MISSING | $($summary.intentionalMissing) |")
+$lines.Add("| DEFERRED | $($summary.deferred) |")
 $lines.Add("| MISSING | $($summary.missing) |")
 $lines.Add("| Safe failures | $($summary.safeFailures) |")
 $lines.Add("| Legacy inferred IDs requiring review | $($summary.legacyInferredReviewRequired) |")
 $lines.Add("")
-$lines.Add("Rule inputs: no-item=$(@($noItemBlockRules.entries).Count), no-loot=$(@($noLootRules.entries).Count), allowed-extra=$(@($allowedExtrasRules.entries).Count), variants=$(@($variantMappingRules.entries).Count).")
+$lines.Add("Rule inputs: no-item=$(@($noItemBlockRules.entries).Count), no-loot=$(@($noLootRules.entries).Count), allowed-extra=$(@($allowedExtrasRules.entries).Count), variants=$(@($variantMappingRules.entries).Count), deferred=$(@($deferredBoundaryRules.entries).Count).")
 $lines.Add("")
 $lines.Add("This is not a full parity verdict. Not evaluated: $($notEvaluated -join ', ').")
 $lines.Add("")
@@ -359,7 +398,9 @@ if ($CuratedSummaryPath) {
     New-Item -ItemType Directory -Force -Path (Split-Path -Parent $CuratedSummaryPath) | Out-Null
     $missingByCheck = @($orderedResults | Where-Object status -eq "MISSING" | Group-Object check | Sort-Object Name | ForEach-Object { "- $($_.Name): $($_.Count)" })
     $intentionalByCheck = @($orderedResults | Where-Object status -eq "INTENTIONAL_MISSING" | Group-Object check | Sort-Object Name | ForEach-Object { "- $($_.Name): $($_.Count)" })
+$deferredByCheck = @($orderedResults | Where-Object status -eq "DEFERRED" | Group-Object check | Sort-Object Name | ForEach-Object { "- $($_.Name): $($_.Count)" })
     if ($intentionalByCheck.Count -eq 0) { $intentionalByCheck = @("- none: 0") }
+    if ($deferredByCheck.Count -eq 0) { $deferredByCheck = @("- none: 0") }
     $curated = @(
         "# Item/block parity baseline summary",
         "",
@@ -374,6 +415,10 @@ if ($CuratedSummaryPath) {
         "Intentional missing results by implemented check:",
         "",
         $intentionalByCheck,
+        "",
+        "Deferred results by implemented check:",
+        "",
+        $deferredByCheck,
         "",
         "Missing results by implemented check:",
         "",

@@ -14,13 +14,13 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 2 | Skeleton scripts and rules | Closed |
 | 3 | Primary legacy extractor v1 | Closed |
 | 4 | Port extractor v1 | Closed |
-| 5 | Safe compare v1 | Closed: comparer now covers registry/resource basics plus texture graph and unresolved registered-resource references |
+| 5 | Safe compare v1 | Closed |
+| 6 | Rule overrides | Closed: known renames, variants, intentional missing and deferred-boundary override mechanics are represented and deferred rules are applied by the comparer |
 
 ## Remaining framework batches
 
 | Planned area | Status | Next action |
 |---|---|---|
-| Batch 6 rule overrides | Partially implemented | Add deferred-boundaries and broader source-policy integration where missing |
 | Batch 7 secondary legacy probe | Missing | Implement explicit probe-only module |
 | Batch 8 aspect/research/recipe refs | Missing in item/block framework | Integrate existing aspect/research/recipe audit outputs as related checks |
 | Batch 9 BE/capability/menu boundary | Missing in item/block framework | Add behavior-boundary modules |

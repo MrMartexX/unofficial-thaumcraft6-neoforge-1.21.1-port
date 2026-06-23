@@ -1,5 +1,15 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "entries": [],
-  "note": "Populate only with reviewed IDs and a concrete deferred behavior/resource boundary."
+  "note": "Reviewed deferred boundaries only. Each entry may use kind, id, checks/check, boundary, reason and optional evidence. Deferred rules convert matching MISSING results to DEFERRED; they do not create PASS.",
+  "example": {
+    "kind": "block",
+    "id": "example",
+    "checks": [
+      "blockentities",
+      "menus"
+    ],
+    "boundary": "behavior-boundary",
+    "reason": "Deferred until the owning subsystem is implemented."
+  }
 }
