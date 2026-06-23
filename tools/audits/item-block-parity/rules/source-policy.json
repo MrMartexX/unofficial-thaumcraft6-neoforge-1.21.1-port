@@ -1,13 +1,38 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "primaryLegacyRoot": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master",
   "secondaryLegacyRoot": "03_self_decompiled_check/vineflower_thaumcraft6",
   "originalJar": "01_original_jar/Thaumcraft-1.12.2-6.1.BETA26.jar",
   "runtimeTruth": "legacy_and_port_exporters",
+  "defaultUseCachedLegacy": true,
+  "inferredIdsAreAuthoritative": false,
   "comparableConfidence": [
     "explicit_source",
     "explicit_algorithm",
     "rule_override"
   ],
-  "inferredIdsAreAuthoritative": false
+  "probeModes": {
+    "secondaryLegacy": "explicit_only",
+    "originalJar": "explicit_only_or_conflict_tie_breaker"
+  },
+  "conflictStatuses": [
+    "PRIMARY_CONFIRMED",
+    "SECONDARY_MATCH",
+    "SECONDARY_DIFF_NON_BLOCKING",
+    "SECONDARY_DIFF_REVIEW_NEEDED",
+    "JAR_FALLBACK_REQUIRED",
+    "PRIMARY_SOURCE_GAP"
+  ],
+  "refreshLegacyWhen": [
+    "extractor_updated",
+    "new_check_module_added",
+    "variant_mapping_policy_changed",
+    "baseline_suspected_incomplete",
+    "major_parity_review"
+  ],
+  "reportPolicy": {
+    "localReports": "tools/reports/local/item-block-parity/",
+    "curatedReports": "06_docs/audits/",
+    "commitRawReports": false
+  }
 }

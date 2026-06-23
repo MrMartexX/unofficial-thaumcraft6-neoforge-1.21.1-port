@@ -1,80 +1,229 @@
-# Item and block parity framework
+# Item/block parity audit framework
 
-## Purpose
+Status: authoritative framework plan for the Thaumcraft 6 -> NeoForge 1.21.1 item/block parity audit.
 
-The framework produces evidence-backed item/block parity reports without calling resource existence "full parity". It compares a fingerprinted legacy baseline, a live port manifest and explicit mapping/deferral rules.
+## 1. Goal
 
-## Corrections to the proposed plan
+The framework is an audit and planning instrument. It must collect legacy item/block evidence, collect the current port state, normalize known mappings and deferrals, and report parity by layer.
 
-1. **Batch 1 is an executable vertical slice.** Documentation-only and skeleton-only batches would postpone feedback while establishing untested interfaces. The first batch therefore includes source policy, schemas, primary/live extractors, a safe comparer and a local report.
-2. **The original jar is not merely an asset fallback.** It is the packaged class/resource inventory and the tie-breaker when decompiles disagree.
-3. **Regex evidence is confidence-scored.** An inferred camelCase registry name is not equivalent to an explicit registry string. Unresolved entries remain visible and cannot produce a parity pass.
-4. **Legacy variants are separate from registry IDs.** Metadata variants such as `ingot:thaumium` must be mapped to modern split IDs explicitly.
-5. **Safe failures apply only to implemented checks.** Unsupported behavior, texture graph, runtime and visual checks are marked `NOT_EVALUATED`, not passed.
-6. **CI is deferred until the baseline is classified.** The initial local run uses `FailMode off`; safe CI enforcement starts only after known dynamic models, intentional no-loot entries and renames are encoded.
-7. **Generated reports stay local.** Only source decisions and milestone summaries belong under `06_docs/audits/`.
+It must not call resource existence "full parity". Full parity is only a candidate when registry, resources, data references, behavior boundaries, runtime behavior and visual evidence have all been checked or explicitly documented.
 
-## Evidence layers
+## 2. Source of truth policy
 
-| Layer | Meaning |
-|---|---|
-| Registry identity | Explicit or mapped legacy ID exists in the matching modern registry |
-| Resource boundary | Required blockstate/model/lang/loot files exist for the selected modern entry |
-| Data boundary | Recipes, tags, aspects and research references resolve |
-| Behavior boundary | Block entity, capabilities, menu/network and side ownership match the intended contract |
-| Runtime parity | A dedicated runtime fixture/exporter verifies behavior and values |
-| Visual parity | Client inspection or deterministic render evidence verifies appearance |
+| Role | Path | Use |
+|---|---|---|
+| Primary legacy source | `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/` | Readable MCP/deobfuscated behavior, formulas, class roles, registry construction, recipes, GUI/container references, renderer references and comments/variant hints. |
+| Secondary legacy source | `03_self_decompiled_check/vineflower_thaumcraft6/` | Explicit cross-check/fallback only when the primary source is missing, suspicious or contradictory. |
+| Original jar fallback | `01_original_jar/Thaumcraft-1.12.2-6.1.BETA26.jar` | Packaged class/resource existence, asset truth and final tie-breaker when decompiled sources disagree. |
+| Runtime truth | Legacy and port runtime exporters/comparers | State-dependent behavior that cannot be proven safely from decompiled code alone. |
 
-No lower layer implies a higher one.
+The primary source is the default source for cached manifests. Secondary and jar probes must never silently replace primary evidence; they produce explicit review statuses.
 
-## Batch 1 scope
+## 3. Three-layer input model
 
-Implemented now:
-
-- authoritative source policy;
-- fingerprinted primary legacy manifest;
-- live port block/item/resource manifest;
-- explicit evidence confidence;
-- registry identity/duplicates, block-item pair, blockstate, model, lang and loot existence comparison;
-- ID filtering, presets, `ListChecks`, `ExplainPlan` and `off/safe/strict` fail modes;
-- JSON and Markdown local reports.
-
-Not evaluated yet:
-
-- recursive model parent/texture resolution;
-- metadata-to-split-ID variant mapping;
-- secondary decompiler and jar probes;
-- recipes, tags, aspects and research references;
-- block entities, capabilities, menus, networking and client/server ownership;
-- build, server smoke, gameplay runtime and visual parity.
-
-## Corrected implementation sequence
-
-1. **Executable baseline:** source policy, schemas, primary/live manifests and safe comparison.
-2. **Identity normalization:** known renames, metadata variants, no-item/no-loot rules and allowed modern extras.
-3. **Resource graph:** recursive blockstate/model/texture resolution and orphan detection.
-4. **Data references:** recipes, loot contents, tags, aspects, scanning, research and Thaumonomicon pages.
-5. **Behavior boundary:** block entities, data components, capabilities, menus, payloads and side safety.
-6. **Source conflict probes:** secondary decompile and original jar inventory.
-7. **Runtime orchestration:** build, datapack load, server smoke and related subsystem audits.
-8. **CI report-only:** publish local artifacts without hard failure.
-9. **CI safe enforcement:** fail only stable, low-false-positive checks.
-10. **Family parity milestones:** curated summaries plus manual visual verification where required.
-
-## Commands
-
-```powershell
-# Refresh both manifests and write a report without failing on the unclassified baseline.
-.\tools\audits\item-block-parity\audit-item-block-parity.ps1 `
-  -RefreshLegacy -Preset quick -FailMode off
-
-# Inspect only the smelter family.
-.\tools\audits\item-block-parity\audit-item-block-parity.ps1 `
-  -Ids thaumcraft:smelter_basic,thaumcraft:smelter_thaumium,thaumcraft:smelter_void `
-  -Preset resources -FailMode safe
-
-# Show the implemented execution plan.
-.\tools\audits\item-block-parity\audit-item-block-parity.ps1 -ExplainPlan
+```text
+legacy_primary_manifest.json
+port_manifest.json
+rules/*.json
 ```
 
-Raw output is written to `tools/reports/local/item-block-parity/` and is intentionally ignored by Git.
+Legacy data is cached and fingerprinted. Port data is live and must be extracted on every audit run because the port changes after each implementation batch.
+
+## 4. Planned folder structure
+
+```text
+tools/audits/item-block-parity/
+  audit-item-block-parity.ps1
+  extract-legacy-primary-manifest.ps1
+  extract-port-manifest.ps1
+  compare-item-block-parity.ps1
+  validate-parity-report.ps1
+  modules/
+    registry.ps1
+    legacy_mapping.ps1
+    variants.ps1
+    item_properties.ps1
+    block_properties.ps1
+    blockstates.ps1
+    models.ps1
+    textures.ps1
+    lang.ps1
+    creative_tabs.ps1
+    loot.ps1
+    recipes.ps1
+    tags.ps1
+    aspects.ps1
+    research_refs.ps1
+    data_components.ps1
+    blockentities.ps1
+    capabilities.ps1
+    menus.ps1
+    networking.ps1
+    client_server_safety.ps1
+    sounds_particles.ps1
+    fuels_flammability.ps1
+    equipment.ps1
+    entity_links.ps1
+    worldgen_links.ps1
+    config_gates.ps1
+    access_transformers.ps1
+    public_api.ps1
+    orphan_references.ps1
+    runtime_smoke.ps1
+    visual_boundary.ps1
+    docs_deferred.ps1
+    secondary_legacy_probe.ps1
+    original_jar_probe.ps1
+  rules/
+    parity-rules.json
+    known-renames.json
+    deferred-boundaries.json
+    allowed-extras.json
+    variant-mapping.json
+    no-item-block-expected.json
+    no-loot-expected.json
+    source-policy.json
+  schema/
+    legacy_manifest.schema.json
+    port_manifest.schema.json
+    parity_report.schema.json
+```
+
+Generated/local reports belong under `tools/reports/local/item-block-parity/`. Curated summaries and milestone reports belong under `06_docs/audits/`.
+
+## 5. Orchestrator contract
+
+Main entry point:
+
+```powershell
+.\tools\audits\item-block-parity\audit-item-block-parity.ps1 `
+  -RepoRoot "D:\Thaumcraft_6_port_to_1.21.1" `
+  -Preset quick `
+  -FailMode safe
+```
+
+Planned parameters:
+
+```text
+RepoRoot
+LegacyRoot
+SecondaryLegacyRoot
+OriginalJar
+Preset
+Checks
+Ids
+IdPrefix
+Families
+Packages
+ChangedOnly
+SinceCommit
+RefreshLegacy
+UseCachedLegacy
+ProbeSecondaryLegacy
+ExplainPlan
+ListChecks
+WriteCuratedSummary
+RunBuild
+RunSmoke
+RunRelatedAudits
+FailMode: off | safe | strict
+```
+
+## 6. Presets
+
+| Preset | Purpose | Checks |
+|---|---|---|
+| `quick` | Daily fast check | registry, block_item_pairs, blockstates, models, textures, lang, orphan_references |
+| `resources` | Asset/resource changes | blockstates, models, textures, lang, loot, tags, recipes, orphan_references |
+| `data` | Datapack/data changes | recipes, loot, tags, fuels_flammability, aspects, research_refs, thaumonomicon_refs |
+| `behavior-boundary` | Java behavior changes | item_properties, block_properties, blockentities, capabilities, menus, networking, client_server_safety |
+| `source-quality` | Legacy source consistency | legacy_primary_manifest, secondary_legacy_probe, source_conflict_report, original_jar_probe |
+| `ci-safe` | CI-safe hard-fail subset | registry, json_validity, blockstates, models, textures, lang, orphan_references, client_server_safety, datapack_load |
+| `full` | Manual milestone audit | all implemented and probe checks |
+
+The full preset is not for every commit. Use it for parity milestones, extractor changes and major family reviews.
+
+## 7. Status model
+
+Reports must use layered statuses, not only pass/fail.
+
+```text
+PASS
+MISSING
+EXTRA
+RENAMED_WITH_MAPPING
+VARIANT_MAPPED
+DEFERRED
+INTENTIONAL_MISSING
+PARTIAL_PARITY
+RESOURCE_PARITY
+DATA_PARITY
+BOUNDARY_PARITY
+RUNTIME_PARITY
+VISUAL_PARITY_UNCHECKED
+LEGACY_SOURCE_REVIEW_NEEDED
+FULL_PARITY_CANDIDATE
+NOT_EVALUATED
+```
+
+`FULL_PARITY_CANDIDATE` is allowed only when registry, resource, data, behavior boundary, runtime and visual boundaries are all resolved or explicitly documented.
+
+## 8. Fail modes
+
+| Fail mode | Meaning |
+|---|---|
+| `off` | Report only. Never fail for gaps. |
+| `safe` | Default. Fail only for safe mechanical errors in implemented checks: duplicate IDs, broken JSON, missing required registered resources, missing model textures, missing tag targets, missing recipe outputs, client imports in common/server code. |
+| `strict` | Manual milestone mode. Also fail for unresolved deferred, unchecked behavior, secondary source conflicts and visual boundary gaps. |
+
+Strict is not the default because it would block normal development before classifications exist.
+
+## 9. Report policy
+
+Local raw reports:
+
+```text
+tools/reports/local/item-block-parity/
+```
+
+Curated reports:
+
+```text
+06_docs/audits/
+```
+
+Commit only baseline summaries, milestone summaries, source decisions and architecture decisions. Do not commit large raw JSON/Markdown report dumps unless intentionally curated.
+
+## 10. Planned implementation sequence
+
+| Batch | Name | Result |
+|---:|---|---|
+| 1 | Source decision + framework plan | Framework and source policy docs; no port code changes |
+| 2 | Skeleton scripts and rules | Orchestrator skeleton, rules, ListChecks, ExplainPlan |
+| 3 | Primary legacy extractor v1 | Cached primary legacy manifest |
+| 4 | Port extractor v1 | Live port manifest |
+| 5 | Safe compare v1 | Registry/resources/basic orphan comparison |
+| 6 | Rule overrides | Renames, variants, extras, no-item, no-loot, deferrals |
+| 7 | Secondary legacy probe | Explicit cross-check report |
+| 8 | Aspect/research/recipe references | Data/reference checks |
+| 9 | BlockEntity/capability/menu boundary | Behavior-boundary checks |
+| 10 | Runtime integration | Build/smoke/related audit orchestration |
+| 11 | CI report-only mode | Artifact-producing CI-safe report mode |
+| 12 | CI hard fail safe categories | Enforce safe mechanical categories |
+
+## 11. Non-goals
+
+The framework must not:
+
+- copy legacy classes into the port;
+- treat Vineflower as primary source by default;
+- run the full audit every time;
+- commit raw local reports;
+- call resource parity full gameplay parity;
+- fail CI for visual/manual parity questions before those checks are classified;
+- hide source conflicts;
+- ignore the original jar when both decompiled sources disagree.
+
+## 12. Current note
+
+The existing `item-block-parity` implementation already contains parts of batches 2-6, but future work must now proceed in the planned sequence and classify framework gaps explicitly instead of continuing ad-hoc resource fixing.
