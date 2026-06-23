@@ -18,13 +18,13 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 6 | Rule overrides | Closed |
 | 7 | Secondary legacy probe | Closed |
 | 8 | Aspect/research/recipe refs | Closed |
-| 9 | BlockEntity/capability/menu boundary | Closed: report-only behavior boundary module compares legacy TileEntity/inventory/GUI clues with live port BlockEntity/capability/menu evidence |
+| 9 | BlockEntity/capability/menu boundary | Closed |
+| 10 | Runtime integration | Closed: explicit RunBuild, RunSmoke and RunRelatedAudits switches execute logged local runtime/build/audit commands |
 
 ## Remaining framework batches
 
 | Planned area | Status | Next action |
 |---|---|---|
-| Batch 10 runtime integration | Missing | Add RunBuild, RunSmoke and RunRelatedAudits orchestration |
 | Batch 11 CI report-only mode | Missing | Add workflow artifact mode after local reports stabilize |
 | Batch 12 CI hard fail safe categories | Missing | Enable only safe categories after classification |
 

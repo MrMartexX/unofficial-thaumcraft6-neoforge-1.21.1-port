@@ -184,7 +184,10 @@ if ($FailMode -eq "strict" -and $notEvaluated.Count -gt 0) {
 }
 
 if ($RunBuild -or $RunSmoke -or $RunRelatedAudits) {
-    Write-Output "Batch 2 skeleton note: RunBuild/RunSmoke/RunRelatedAudits are recognized parameters but not executed until Batch 10 runtime integration."
+    $runtimeModule = Join-Path $PSScriptRoot "modules/runtime_checks.ps1"
+    if (-not (Test-Path -LiteralPath $runtimeModule -PathType Leaf)) { throw "Runtime check module not found: $runtimeModule" }
+    & $runtimeModule -RepoRoot $RepoRoot -PortRoot $PortRoot -AuditScript $PSCommandPath -RunBuild:$RunBuild -RunSmoke:$RunSmoke -RunRelatedAudits:$RunRelatedAudits -FailMode $FailMode -OutputJson (Join-Path $reportRoot "item_block_runtime_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_runtime_report.md")
+    if (-not $?) { throw "Runtime check module failed." }
 }
 if ($ChangedOnly -or $SinceCommit -or $IdPrefix -or $Families -or $Packages) {
     Write-Output "Batch 2 skeleton note: ChangedOnly/SinceCommit/IdPrefix/Families/Packages are accepted for contract stability; filtering will be implemented in later extractor/check batches."
