@@ -13,14 +13,33 @@ foreach ($path in @($LegacyManifest, $PortManifest, $ReportPath)) {
 $legacy = Get-Content -Raw -LiteralPath $LegacyManifest | ConvertFrom-Json
 $port = Get-Content -Raw -LiteralPath $PortManifest | ConvertFrom-Json
 $report = Get-Content -Raw -LiteralPath $ReportPath | ConvertFrom-Json
-foreach ($document in @($legacy, $port, $report)) {
-    if ($document.schemaVersion -ne 1) { throw "Unsupported parity schema version: $($document.schemaVersion)" }
-}
+
+if ($legacy.schemaVersion -notin @(1, 2)) { throw "Unsupported legacy manifest schema version: $($legacy.schemaVersion)" }
+if ($port.schemaVersion -ne 1) { throw "Unsupported port manifest schema version: $($port.schemaVersion)" }
+if ($report.schemaVersion -ne 1) { throw "Unsupported parity report schema version: $($report.schemaVersion)" }
+
 if (-not $legacy.sourceFiles -or -not $legacy.entries) { throw "Legacy manifest is structurally incomplete." }
 if (-not $port.sourceFiles -or -not $port.entries) { throw "Port manifest is structurally incomplete." }
 if (-not $report.implementedChecks -or $null -eq $report.results -or -not $report.summary) { throw "Parity report is structurally incomplete." }
 
-$allowedStatuses = @("PASS", "MISSING", "EXTRA", "RENAMED_WITH_MAPPING", "VARIANT_MAPPED", "DEFERRED", "INTENTIONAL_MISSING", "NOT_EVALUATED")
+$allowedStatuses = @(
+    "PASS",
+    "MISSING",
+    "EXTRA",
+    "RENAMED_WITH_MAPPING",
+    "VARIANT_MAPPED",
+    "DEFERRED",
+    "INTENTIONAL_MISSING",
+    "PARTIAL_PARITY",
+    "RESOURCE_PARITY",
+    "DATA_PARITY",
+    "BOUNDARY_PARITY",
+    "RUNTIME_PARITY",
+    "VISUAL_PARITY_UNCHECKED",
+    "LEGACY_SOURCE_REVIEW_NEEDED",
+    "FULL_PARITY_CANDIDATE",
+    "NOT_EVALUATED"
+)
 $seen = @{}
 foreach ($result in $report.results) {
     if ($result.status -notin $allowedStatuses) { throw "Unknown parity status '$($result.status)' for $($result.id)." }
@@ -31,8 +50,15 @@ foreach ($result in $report.results) {
 
 $pass = @($report.results | Where-Object status -eq "PASS").Count
 $mapped = @($report.results | Where-Object status -eq "RENAMED_WITH_MAPPING").Count
+$variantMapped = @($report.results | Where-Object status -eq "VARIANT_MAPPED").Count
+$intentional = @($report.results | Where-Object status -eq "INTENTIONAL_MISSING").Count
 $missing = @($report.results | Where-Object status -eq "MISSING").Count
-if ($report.summary.results -ne $report.results.Count -or $report.summary.pass -ne $pass -or $report.summary.renamed -ne $mapped -or $report.summary.missing -ne $missing) {
+if ($report.summary.results -ne $report.results.Count -or
+    $report.summary.pass -ne $pass -or
+    $report.summary.renamed -ne $mapped -or
+    $report.summary.variantMapped -ne $variantMapped -or
+    $report.summary.intentionalMissing -ne $intentional -or
+    $report.summary.missing -ne $missing) {
     throw "Parity report summary does not match its result rows."
 }
 $overlap = @($report.implementedChecks | Where-Object { $_ -in $report.notEvaluatedChecks })
