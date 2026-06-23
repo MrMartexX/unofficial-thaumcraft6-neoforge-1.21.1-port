@@ -6,25 +6,17 @@ Generated purpose: align the repository with the original item/block parity fram
 
 The item/block parity framework is the current work product. Porting fixes are allowed only when a later implementation batch explicitly uses framework output to close a classified family or subsystem.
 
-## Current already-present implementation
+## Closed framework batches
 
-The repository already has a working vertical slice:
+| Batch | Name | Status |
+|---:|---|---|
+| 1 | Source decision + framework plan | Closed |
+| 2 | Skeleton scripts and rules | Closed: final orchestrator contract, preset names and check registry skeleton exist |
 
-- orchestrator script;
-- primary legacy manifest extractor;
-- live port manifest extractor;
-- safe comparer;
-- report validator;
-- rule files for known renames, variants, extras, no-item/no-loot and source policy;
-- registry, duplicate ID, block item pair, blockstate, model, lang and loot checks;
-- gap candidate/report helpers.
-
-## Gap against original plan
+## Remaining framework batches
 
 | Planned area | Status | Next action |
 |---|---|---|
-| Batch 1 source decision + framework plan | Closed by this alignment batch | Keep docs authoritative |
-| Batch 2 skeleton scripts and rules | Partially implemented | Normalize presets and check registry to final plan |
 | Batch 3 primary legacy extractor v1 | Partially implemented | Expand manifest fields for class roles, behavior clues, tile/menu/render references and variant hints |
 | Batch 4 port extractor v1 | Partially implemented | Expand live manifest for BE/menu/capability/data references |
 | Batch 5 safe compare v1 | Partially implemented | Add texture graph and orphan reference coverage |

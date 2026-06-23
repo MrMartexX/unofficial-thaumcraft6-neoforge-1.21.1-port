@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 2 skeleton",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist.",
+  "checks": [
+    {
+      "name": "registry",
+      "layer": "registry_identity",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "duplicate_registry_id",
+      "layer": "registry_identity",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "block_item_pairs",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "blockstates",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "models",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "lang",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "loot",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "json_validity",
+      "layer": "resource_boundary",
+      "status": "planned",
+      "reason": "CI-safe mechanical check planned"
+    },
+    {
+      "name": "legacy_mapping",
+      "layer": "registry_identity",
+      "status": "planned",
+      "reason": "Dedicated mapping review module planned"
+    },
+    {
+      "name": "variants",
+      "layer": "registry_identity",
+      "status": "planned",
+      "reason": "Metadata/split-ID module planned"
+    },
+    {
+      "name": "item_properties",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Legacy item behavior clues not extracted yet"
+    },
+    {
+      "name": "block_properties",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Legacy block behavior clues not extracted yet"
+    },
+    {
+      "name": "textures",
+      "layer": "resource_boundary",
+      "status": "planned",
+      "reason": "Recursive model texture graph not implemented yet"
+    },
+    {
+      "name": "creative_tabs",
+      "layer": "resource_boundary",
+      "status": "planned",
+      "reason": "Creative order parity module planned"
+    },
+    {
+      "name": "recipes",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Recipe reference module planned"
+    },
+    {
+      "name": "tags",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "OreDictionary/tag bridge module planned"
+    },
+    {
+      "name": "aspects",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Aspect assignment references planned"
+    },
+    {
+      "name": "research_refs",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Research/scan references planned"
+    },
+    {
+      "name": "thaumonomicon_refs",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Thaumonomicon page references planned"
+    },
+    {
+      "name": "data_components",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Legacy NBT/data component check planned"
+    },
+    {
+      "name": "blockentities",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "BE ownership boundary planned"
+    },
+    {
+      "name": "capabilities",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Capability access boundary planned"
+    },
+    {
+      "name": "menus",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Menu/screen boundary planned"
+    },
+    {
+      "name": "networking",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Payload reference boundary planned"
+    },
+    {
+      "name": "client_server_safety",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Client import/server safety audit planned"
+    },
+    {
+      "name": "sounds_particles",
+      "layer": "visual_boundary",
+      "status": "planned",
+      "reason": "Sound/particle references planned"
+    },
+    {
+      "name": "fuels_flammability",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Fuel/flammability maps planned"
+    },
+    {
+      "name": "equipment",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Tool/armor material and equipment links planned"
+    },
+    {
+      "name": "entity_links",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Entity/spawn egg links planned"
+    },
+    {
+      "name": "worldgen_links",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Worldgen-linked block references planned"
+    },
+    {
+      "name": "config_gates",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Config feature gate checks planned"
+    },
+    {
+      "name": "access_transformers",
+      "layer": "source_quality",
+      "status": "planned",
+      "reason": "AT visibility audit planned"
+    },
+    {
+      "name": "public_api",
+      "layer": "source_quality",
+      "status": "planned",
+      "reason": "Public API surface check planned"
+    },
+    {
+      "name": "orphan_references",
+      "layer": "resource_boundary",
+      "status": "planned",
+      "reason": "Orphan/missing references planned"
+    },
+    {
+      "name": "datapack_load",
+      "layer": "runtime_boundary",
+      "status": "planned",
+      "reason": "Runtime/datapack load integration planned"
+    },
+    {
+      "name": "runtime_smoke",
+      "layer": "runtime_boundary",
+      "status": "planned",
+      "reason": "Build/server smoke planned for Batch 10"
+    },
+    {
+      "name": "visual_boundary",
+      "layer": "visual_boundary",
+      "status": "planned",
+      "reason": "Manual/client visual evidence planned"
+    },
+    {
+      "name": "docs_deferred",
+      "layer": "source_quality",
+      "status": "planned",
+      "reason": "Deferred documentation consistency planned"
+    },
+    {
+      "name": "legacy_primary_manifest",
+      "layer": "source_quality",
+      "status": "implemented",
+      "reason": "Primary manifest extraction exists"
+    },
+    {
+      "name": "secondary_legacy_probe",
+      "layer": "source_quality",
+      "status": "planned",
+      "reason": "Batch 7 explicit secondary probe planned"
+    },
+    {
+      "name": "source_conflict_report",
+      "layer": "source_quality",
+      "status": "planned",
+      "reason": "Source conflict aggregation planned"
+    },
+    {
+      "name": "original_jar_probe",
+      "layer": "source_quality",
+      "status": "planned",
+      "reason": "Batch 7/quality jar probe planned"
+    }
+  ]
+}

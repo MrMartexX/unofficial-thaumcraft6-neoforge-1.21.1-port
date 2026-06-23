@@ -2,15 +2,29 @@
 param(
     [string]$RepoRoot,
     [string]$LegacyRoot = "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master",
+    [string]$SecondaryLegacyRoot = "03_self_decompiled_check/vineflower_thaumcraft6",
+    [string]$OriginalJar = "01_original_jar/Thaumcraft-1.12.2-6.1.BETA26.jar",
     [string]$PortRoot = "05_neoforge_port",
-    [ValidateSet("quick", "resources", "registry")][string]$Preset = "quick",
+    [ValidateSet("quick", "resources", "data", "behavior-boundary", "source-quality", "ci-safe", "full", "registry")]
+    [string]$Preset = "quick",
     [string[]]$Checks,
     [string[]]$Ids,
+    [string[]]$IdPrefix,
+    [string[]]$Families,
+    [string[]]$Packages,
+    [switch]$ChangedOnly,
+    [string]$SinceCommit,
     [switch]$RefreshLegacy,
+    [switch]$UseCachedLegacy,
+    [switch]$ProbeSecondaryLegacy,
     [switch]$ListChecks,
     [switch]$ExplainPlan,
     [switch]$WriteCuratedSummary,
-    [ValidateSet("off", "safe", "strict")][string]$FailMode = "safe"
+    [switch]$RunBuild,
+    [switch]$RunSmoke,
+    [switch]$RunRelatedAudits,
+    [ValidateSet("off", "safe", "strict")]
+    [string]$FailMode = "safe"
 )
 
 $ErrorActionPreference = "Stop"
@@ -18,27 +32,99 @@ if (-not $RepoRoot) {
     $RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot "../../..")).Path
 }
 $RepoRoot = (Resolve-Path $RepoRoot).Path
-$implementedChecks = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "lang", "loot")
-$presetChecks = @{
-    registry = @("registry", "duplicate_registry_id", "block_item_pairs")
-    quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "lang")
-    resources = @("duplicate_registry_id", "block_item_pairs", "blockstates", "models", "lang", "loot")
-}
-
-if ($ListChecks) {
-    $implementedChecks
-    exit 0
-}
-if (-not $Checks -or $Checks.Count -eq 0) { $Checks = $presetChecks[$Preset] }
-$unknown = @($Checks | Where-Object { $_ -notin $implementedChecks })
-if ($unknown.Count -gt 0) { throw "Checks are not implemented in Batch 1: $($unknown -join ', ')" }
 
 $reportRoot = Join-Path $RepoRoot "tools/reports/local/item-block-parity"
 $legacyManifest = Join-Path $reportRoot "legacy_primary_manifest.json"
 $portManifest = Join-Path $reportRoot "port_manifest.json"
 $reportJson = Join-Path $reportRoot "item_block_parity_report.json"
 $reportMarkdown = Join-Path $reportRoot "item_block_parity_report.md"
+$notEvaluatedJson = Join-Path $reportRoot "item_block_parity_not_evaluated_checks.json"
+$notEvaluatedMarkdown = Join-Path $reportRoot "item_block_parity_not_evaluated_checks.md"
 $rulesRoot = Join-Path $PSScriptRoot "rules"
+$checkRegistryPath = Join-Path $rulesRoot "check-registry.json"
+
+if (-not (Test-Path -LiteralPath $checkRegistryPath -PathType Leaf)) {
+    throw "Check registry not found: $checkRegistryPath"
+}
+$checkRegistry = Get-Content -Raw -LiteralPath $checkRegistryPath | ConvertFrom-Json
+$implementedChecks = @($checkRegistry.checks | Where-Object { $_.status -eq "implemented" } | ForEach-Object { $_.name })
+$allKnownChecks = @($checkRegistry.checks | ForEach-Object { $_.name })
+
+$presetChecks = @{
+    registry = @("registry", "duplicate_registry_id", "block_item_pairs")
+    quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references")
+    resources = @("blockstates", "models", "textures", "lang", "loot", "tags", "recipes", "orphan_references")
+    data = @("recipes", "loot", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
+    "behavior-boundary" = @("item_properties", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
+    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe")
+    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load")
+    full = @($allKnownChecks)
+}
+
+if ($ProbeSecondaryLegacy -and $Checks) {
+    $Checks = @($Checks + "secondary_legacy_probe") | Select-Object -Unique
+}
+
+if (-not $Checks -or $Checks.Count -eq 0) {
+    $Checks = @($presetChecks[$Preset])
+}
+$Checks = @($Checks | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique)
+
+$unknown = @($Checks | Where-Object { $_ -notin $allKnownChecks })
+if ($unknown.Count -gt 0) {
+    throw "Unknown item/block parity checks: $($unknown -join ', ')"
+}
+
+$implementedSelected = @($Checks | Where-Object { $_ -in $implementedChecks })
+$notEvaluated = @($Checks | Where-Object { $_ -notin $implementedChecks })
+
+function Write-NotEvaluatedReport {
+    param([string[]]$NotEvaluatedChecks)
+    New-Item -ItemType Directory -Force -Path $reportRoot | Out-Null
+    $rows = @(
+        foreach ($name in $NotEvaluatedChecks) {
+            $entry = @($checkRegistry.checks | Where-Object { $_.name -eq $name } | Select-Object -First 1)
+            [pscustomobject][ordered]@{
+                name = $name
+                status = if ($entry) { $entry.status } else { "unknown" }
+                layer = if ($entry) { $entry.layer } else { "unknown" }
+                reason = if ($entry) { $entry.reason } else { "Not in check registry" }
+            }
+        }
+    )
+    $output = [ordered]@{
+        schemaVersion = 1
+        generatedAtUtc = [DateTime]::UtcNow.ToString("o")
+        preset = $Preset
+        selectedChecks = @($Checks)
+        implementedSelected = @($implementedSelected)
+        notEvaluated = @($rows)
+        note = "Batch 2 recognizes planned checks without pretending they are implemented."
+    }
+    $output | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $notEvaluatedJson -Encoding utf8NoBOM
+
+    $lines = [System.Collections.Generic.List[string]]::new()
+    $lines.Add("# Item/block parity not-evaluated checks")
+    $lines.Add("")
+    $lines.Add("Generated: $($output.generatedAtUtc)")
+    $lines.Add("")
+    $lines.Add("Preset: ``$Preset``")
+    $lines.Add("")
+    $lines.Add("| Check | Layer | Status | Reason |")
+    $lines.Add("|---|---|---|---|")
+    foreach ($row in $rows) {
+        $reason = if ($row.reason) { $row.reason.Replace("|", "\\|") } else { "" }
+        $lines.Add("| $($row.name) | $($row.layer) | $($row.status) | $reason |")
+    }
+    $lines | Set-Content -LiteralPath $notEvaluatedMarkdown -Encoding utf8NoBOM
+}
+
+if ($ListChecks) {
+    $checkRegistry.checks |
+        Sort-Object layer, name |
+        Select-Object name, layer, status, reason
+    exit 0
+}
 
 function Test-LegacyCacheFresh {
     if (-not (Test-Path -LiteralPath $legacyManifest -PathType Leaf)) { return $false }
@@ -59,17 +145,49 @@ function Test-LegacyCacheFresh {
 }
 
 $legacyCacheFresh = Test-LegacyCacheFresh
+$legacyAction = if ($RefreshLegacy -or -not $legacyCacheFresh) { "refresh" } else { "reuse verified fingerprinted manifest" }
 
 if ($ExplainPlan) {
-    Write-Output "Item/block parity Batch 1 execution plan"
+    Write-Output "Item/block parity Batch 2 execution plan"
     Write-Output "RepoRoot: $RepoRoot"
     Write-Output "Primary legacy: $LegacyRoot"
+    Write-Output "Secondary legacy: $SecondaryLegacyRoot"
+    Write-Output "Original jar: $OriginalJar"
     Write-Output "Port: $PortRoot"
-    Write-Output "Checks: $($Checks -join ', ')"
+    Write-Output "Preset: $Preset"
+    Write-Output "Selected checks: $($Checks -join ', ')"
+    Write-Output "Implemented selected checks: $(if ($implementedSelected) { $implementedSelected -join ', ' } else { '<none>' })"
+    Write-Output "Not evaluated selected checks: $(if ($notEvaluated) { $notEvaluated -join ', ' } else { '<none>' })"
     Write-Output "IDs: $(if ($Ids) { $Ids -join ', ' } else { '<all>' })"
+    Write-Output "ID prefixes: $(if ($IdPrefix) { $IdPrefix -join ', ' } else { '<none>' })"
+    Write-Output "Families: $(if ($Families) { $Families -join ', ' } else { '<none>' })"
+    Write-Output "Packages: $(if ($Packages) { $Packages -join ', ' } else { '<none>' })"
+    Write-Output "ChangedOnly: $ChangedOnly"
+    Write-Output "SinceCommit: $(if ($SinceCommit) { $SinceCommit } else { '<none>' })"
     Write-Output "FailMode: $FailMode"
-    Write-Output "Legacy cache: $(if ($RefreshLegacy -or -not $legacyCacheFresh) { 'refresh' } else { 'reuse verified fingerprinted manifest' })"
-    Write-Output "Not evaluated: variants, texture graph, data references, behavior, runtime, visual parity"
+    Write-Output "RunBuild: $RunBuild"
+    Write-Output "RunSmoke: $RunSmoke"
+    Write-Output "RunRelatedAudits: $RunRelatedAudits"
+    Write-Output "Legacy cache: $legacyAction"
+    Write-Output "Batch 2 note: unimplemented selected checks are reported as NOT_EVALUATED, not as pass/fail."
+    exit 0
+}
+
+Write-NotEvaluatedReport -NotEvaluatedChecks $notEvaluated
+
+if ($FailMode -eq "strict" -and $notEvaluated.Count -gt 0) {
+    throw "Strict mode cannot continue with not-evaluated selected checks: $($notEvaluated -join ', ')"
+}
+
+if ($RunBuild -or $RunSmoke -or $RunRelatedAudits) {
+    Write-Output "Batch 2 skeleton note: RunBuild/RunSmoke/RunRelatedAudits are recognized parameters but not executed until Batch 10 runtime integration."
+}
+if ($ChangedOnly -or $SinceCommit -or $IdPrefix -or $Families -or $Packages) {
+    Write-Output "Batch 2 skeleton note: ChangedOnly/SinceCommit/IdPrefix/Families/Packages are accepted for contract stability; filtering will be implemented in later extractor/check batches."
+}
+
+if ($implementedSelected.Count -eq 0) {
+    Write-Output "No implemented checks selected. Wrote NOT_EVALUATED report: $notEvaluatedMarkdown"
     exit 0
 }
 
@@ -95,7 +213,7 @@ $compareArguments = @{
     RulesRoot = $rulesRoot
     OutputJson = $reportJson
     OutputMarkdown = $reportMarkdown
-    Checks = $Checks
+    Checks = $implementedSelected
     Ids = $Ids
     FailMode = $FailMode
 }
