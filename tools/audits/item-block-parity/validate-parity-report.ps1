@@ -15,7 +15,7 @@ $port = Get-Content -Raw -LiteralPath $PortManifest | ConvertFrom-Json
 $report = Get-Content -Raw -LiteralPath $ReportPath | ConvertFrom-Json
 
 if ($legacy.schemaVersion -notin @(1, 2)) { throw "Unsupported legacy manifest schema version: $($legacy.schemaVersion)" }
-if ($port.schemaVersion -ne 1) { throw "Unsupported port manifest schema version: $($port.schemaVersion)" }
+if ($port.schemaVersion -notin @(1, 2)) { throw "Unsupported port manifest schema version: $($port.schemaVersion)" }
 if ($report.schemaVersion -ne 1) { throw "Unsupported parity report schema version: $($report.schemaVersion)" }
 
 if (-not $legacy.sourceFiles -or -not $legacy.entries) { throw "Legacy manifest is structurally incomplete." }
@@ -23,22 +23,9 @@ if (-not $port.sourceFiles -or -not $port.entries) { throw "Port manifest is str
 if (-not $report.implementedChecks -or $null -eq $report.results -or -not $report.summary) { throw "Parity report is structurally incomplete." }
 
 $allowedStatuses = @(
-    "PASS",
-    "MISSING",
-    "EXTRA",
-    "RENAMED_WITH_MAPPING",
-    "VARIANT_MAPPED",
-    "DEFERRED",
-    "INTENTIONAL_MISSING",
-    "PARTIAL_PARITY",
-    "RESOURCE_PARITY",
-    "DATA_PARITY",
-    "BOUNDARY_PARITY",
-    "RUNTIME_PARITY",
-    "VISUAL_PARITY_UNCHECKED",
-    "LEGACY_SOURCE_REVIEW_NEEDED",
-    "FULL_PARITY_CANDIDATE",
-    "NOT_EVALUATED"
+    "PASS", "MISSING", "EXTRA", "RENAMED_WITH_MAPPING", "VARIANT_MAPPED", "DEFERRED", "INTENTIONAL_MISSING",
+    "PARTIAL_PARITY", "RESOURCE_PARITY", "DATA_PARITY", "BOUNDARY_PARITY", "RUNTIME_PARITY",
+    "VISUAL_PARITY_UNCHECKED", "LEGACY_SOURCE_REVIEW_NEEDED", "FULL_PARITY_CANDIDATE", "NOT_EVALUATED"
 )
 $seen = @{}
 foreach ($result in $report.results) {
@@ -63,5 +50,4 @@ if ($report.summary.results -ne $report.results.Count -or
 }
 $overlap = @($report.implementedChecks | Where-Object { $_ -in $report.notEvaluatedChecks })
 if ($overlap.Count -gt 0) { throw "Checks cannot be both implemented and not evaluated: $($overlap -join ', ')" }
-
 Write-Output "Validated item/block parity manifests and report: legacy=$($legacy.entries.Count), port=$($port.entries.Count), results=$($report.results.Count)."
