@@ -227,6 +227,15 @@ if ($selectedDataReferenceChecks.Count -gt 0) {
     & $dataReferenceModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -Checks $selectedDataReferenceChecks -OutputJson (Join-Path $reportRoot "item_block_data_reference_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_data_reference_report.md")
     if (-not $?) { throw "Data reference module failed." }
 }
+
+$behaviorBoundaryChecks = @("blockentities", "capabilities", "menus")
+$selectedBehaviorBoundaryChecks = @($implementedSelected | Where-Object { $_ -in $behaviorBoundaryChecks })
+if ($selectedBehaviorBoundaryChecks.Count -gt 0) {
+    $behaviorBoundaryModule = Join-Path $PSScriptRoot "modules/behavior_boundary.ps1"
+    if (-not (Test-Path -LiteralPath $behaviorBoundaryModule -PathType Leaf)) { throw "Behavior boundary module not found: $behaviorBoundaryModule" }
+    & $behaviorBoundaryModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -RulesRoot $rulesRoot -Checks $selectedBehaviorBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_behavior_boundary_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_behavior_boundary_report.md")
+    if (-not $?) { throw "Behavior boundary module failed." }
+}
 if ($comparerSelected.Count -eq 0) {
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0

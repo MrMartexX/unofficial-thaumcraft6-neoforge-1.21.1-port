@@ -17,13 +17,13 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 5 | Safe compare v1 | Closed |
 | 6 | Rule overrides | Closed |
 | 7 | Secondary legacy probe | Closed |
-| 8 | Aspect/research/recipe refs | Closed: report-only data reference module scans recipes, tags, aspects, research and Thaumonomicon references against item/block registry manifests |
+| 8 | Aspect/research/recipe refs | Closed |
+| 9 | BlockEntity/capability/menu boundary | Closed: report-only behavior boundary module compares legacy TileEntity/inventory/GUI clues with live port BlockEntity/capability/menu evidence |
 
 ## Remaining framework batches
 
 | Planned area | Status | Next action |
 |---|---|---|
-| Batch 9 BE/capability/menu boundary | Missing in item/block framework | Add behavior-boundary modules |
 | Batch 10 runtime integration | Missing | Add RunBuild, RunSmoke and RunRelatedAudits orchestration |
 | Batch 11 CI report-only mode | Missing | Add workflow artifact mode after local reports stabilize |
 | Batch 12 CI hard fail safe categories | Missing | Enable only safe categories after classification |

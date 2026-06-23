@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 8 implements report-only recipe/tag/aspect/research/Thaumonomicon reference scanning.",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 9 implements report-only BlockEntity/capability/menu boundary scanning.",
   "checks": [
     {
       "name": "registry",
@@ -126,20 +126,20 @@
     {
       "name": "blockentities",
       "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "BE ownership boundary planned"
+      "status": "implemented",
+      "reason": "Batch 9 report-only behavior-boundary module check"
     },
     {
       "name": "capabilities",
       "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Capability access boundary planned"
+      "status": "implemented",
+      "reason": "Batch 9 report-only behavior-boundary module check"
     },
     {
       "name": "menus",
       "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Menu/screen boundary planned"
+      "status": "implemented",
+      "reason": "Batch 9 report-only behavior-boundary module check"
     },
     {
       "name": "networking",
