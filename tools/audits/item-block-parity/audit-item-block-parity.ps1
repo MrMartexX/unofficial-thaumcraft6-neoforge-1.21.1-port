@@ -61,12 +61,11 @@ $presetChecks = @{
     full = @($allKnownChecks)
 }
 
-if ($ProbeSecondaryLegacy -and $Checks) {
-    $Checks = @($Checks + "secondary_legacy_probe") | Select-Object -Unique
-}
-
 if (-not $Checks -or $Checks.Count -eq 0) {
     $Checks = @($presetChecks[$Preset])
+}
+if ($ProbeSecondaryLegacy) {
+    $Checks = @($Checks + "secondary_legacy_probe") | Select-Object -Unique
 }
 $Checks = @($Checks | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique)
 
@@ -77,6 +76,9 @@ if ($unknown.Count -gt 0) {
 
 $implementedSelected = @($Checks | Where-Object { $_ -in $implementedChecks })
 $notEvaluated = @($Checks | Where-Object { $_ -notin $implementedChecks })
+$comparerChecks = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "loot", "orphan_references")
+$comparerSelected = @($implementedSelected | Where-Object { $_ -in $comparerChecks })
+$moduleSelected = @($implementedSelected | Where-Object { $_ -notin $comparerChecks })
 
 function Write-NotEvaluatedReport {
     param([string[]]$NotEvaluatedChecks)
@@ -157,6 +159,8 @@ if ($ExplainPlan) {
     Write-Output "Preset: $Preset"
     Write-Output "Selected checks: $($Checks -join ', ')"
     Write-Output "Implemented selected checks: $(if ($implementedSelected) { $implementedSelected -join ', ' } else { '<none>' })"
+    Write-Output "Comparer selected checks: $(if ($comparerSelected) { $comparerSelected -join ', ' } else { '<none>' })"
+    Write-Output "Module selected checks: $(if ($moduleSelected) { $moduleSelected -join ', ' } else { '<none>' })"
     Write-Output "Not evaluated selected checks: $(if ($notEvaluated) { $notEvaluated -join ', ' } else { '<none>' })"
     Write-Output "IDs: $(if ($Ids) { $Ids -join ', ' } else { '<all>' })"
     Write-Output "ID prefixes: $(if ($IdPrefix) { $IdPrefix -join ', ' } else { '<none>' })"
@@ -207,13 +211,24 @@ if ($RefreshLegacy -or -not $legacyCacheFresh) {
 & $portExtractor -RepoRoot $RepoRoot -PortRoot $PortRoot -OutputPath $portManifest
 if (-not $?) { throw "Port manifest extraction failed." }
 
+if ("secondary_legacy_probe" -in $implementedSelected) {
+    $secondaryProbe = Join-Path $PSScriptRoot "modules/secondary_legacy_probe.ps1"
+    if (-not (Test-Path -LiteralPath $secondaryProbe -PathType Leaf)) { throw "Secondary legacy probe module not found: $secondaryProbe" }
+    & $secondaryProbe -RepoRoot $RepoRoot -PrimaryManifestPath $legacyManifest -SecondaryLegacyRoot $SecondaryLegacyRoot -OutputJson (Join-Path $reportRoot "legacy_secondary_probe_report.json") -OutputMarkdown (Join-Path $reportRoot "legacy_secondary_probe_report.md")
+    if (-not $?) { throw "Secondary legacy probe failed." }
+}
+
+if ($comparerSelected.Count -eq 0) {
+    Write-Output "No comparer checks selected. Module/source-quality checks completed."
+    exit 0
+}
 $compareArguments = @{
     LegacyManifest = $legacyManifest
     PortManifest = $portManifest
     RulesRoot = $rulesRoot
     OutputJson = $reportJson
     OutputMarkdown = $reportMarkdown
-    Checks = $implementedSelected
+    Checks = $comparerSelected
     Ids = $Ids
     FailMode = $FailMode
 }

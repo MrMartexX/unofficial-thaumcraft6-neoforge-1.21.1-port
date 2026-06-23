@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 5 implements texture graph and registered-resource orphan reference checks.",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 7 implements secondary legacy probe as a module-only source-quality check.",
   "checks": [
     {
       "name": "registry",
@@ -240,8 +240,8 @@
     {
       "name": "secondary_legacy_probe",
       "layer": "source_quality",
-      "status": "planned",
-      "reason": "Batch 7 explicit secondary probe planned"
+      "status": "implemented",
+      "reason": "Batch 7 explicit secondary source class-presence probe"
     },
     {
       "name": "source_conflict_report",
