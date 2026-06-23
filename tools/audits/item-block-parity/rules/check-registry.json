@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 7 implements secondary legacy probe as a module-only source-quality check.",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 8 implements report-only recipe/tag/aspect/research/Thaumonomicon reference scanning.",
   "checks": [
     {
       "name": "registry",
@@ -90,32 +90,32 @@
     {
       "name": "recipes",
       "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Recipe reference module planned"
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
     },
     {
       "name": "tags",
       "layer": "data_boundary",
-      "status": "planned",
-      "reason": "OreDictionary/tag bridge module planned"
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
     },
     {
       "name": "aspects",
       "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Aspect assignment references planned"
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
     },
     {
       "name": "research_refs",
       "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Research/scan references planned"
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
     },
     {
       "name": "thaumonomicon_refs",
       "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Thaumonomicon page references planned"
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
     },
     {
       "name": "data_components",

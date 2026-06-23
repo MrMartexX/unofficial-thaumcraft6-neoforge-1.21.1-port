@@ -16,13 +16,13 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 4 | Port extractor v1 | Closed |
 | 5 | Safe compare v1 | Closed |
 | 6 | Rule overrides | Closed |
-| 7 | Secondary legacy probe | Closed: explicit probe-only Vineflower source cross-check module is wired into source-quality runs |
+| 7 | Secondary legacy probe | Closed |
+| 8 | Aspect/research/recipe refs | Closed: report-only data reference module scans recipes, tags, aspects, research and Thaumonomicon references against item/block registry manifests |
 
 ## Remaining framework batches
 
 | Planned area | Status | Next action |
 |---|---|---|
-| Batch 8 aspect/research/recipe refs | Missing in item/block framework | Integrate existing aspect/research/recipe audit outputs as related checks |
 | Batch 9 BE/capability/menu boundary | Missing in item/block framework | Add behavior-boundary modules |
 | Batch 10 runtime integration | Missing | Add RunBuild, RunSmoke and RunRelatedAudits orchestration |
 | Batch 11 CI report-only mode | Missing | Add workflow artifact mode after local reports stabilize |

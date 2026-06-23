@@ -218,6 +218,15 @@ if ("secondary_legacy_probe" -in $implementedSelected) {
     if (-not $?) { throw "Secondary legacy probe failed." }
 }
 
+
+$dataReferenceChecks = @("recipes", "tags", "aspects", "research_refs", "thaumonomicon_refs")
+$selectedDataReferenceChecks = @($implementedSelected | Where-Object { $_ -in $dataReferenceChecks })
+if ($selectedDataReferenceChecks.Count -gt 0) {
+    $dataReferenceModule = Join-Path $PSScriptRoot "modules/data_refs.ps1"
+    if (-not (Test-Path -LiteralPath $dataReferenceModule -PathType Leaf)) { throw "Data reference module not found: $dataReferenceModule" }
+    & $dataReferenceModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -Checks $selectedDataReferenceChecks -OutputJson (Join-Path $reportRoot "item_block_data_reference_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_data_reference_report.md")
+    if (-not $?) { throw "Data reference module failed." }
+}
 if ($comparerSelected.Count -eq 0) {
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0
