@@ -56,8 +56,8 @@ $presetChecks = @{
     resources = @("blockstates", "models", "textures", "lang", "loot", "tags", "recipes", "orphan_references")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
-    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe")
-    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load")
+    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema")
+    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema")
     full = @($allKnownChecks)
 }
 
@@ -97,11 +97,23 @@ function Write-NotEvaluatedReport {
     $output = [ordered]@{
         schemaVersion = 1
         generatedAtUtc = [DateTime]::UtcNow.ToString("o")
+        policy = "Report-only not-evaluated check inventory. Planned checks are framework work, not pass/fail parity results."
+        inputs = [ordered]@{
+            preset = $Preset
+            selectedChecks = @($Checks)
+            implementedSelected = @($implementedSelected)
+        }
+        summary = [ordered]@{
+            rows = @($rows).Count
+            notEvaluated = @($rows).Count
+            implementedSelected = @($implementedSelected).Count
+        }
+        results = @($rows)
         preset = $Preset
         selectedChecks = @($Checks)
         implementedSelected = @($implementedSelected)
         notEvaluated = @($rows)
-        note = "Batch 2 recognizes planned checks without pretending they are implemented."
+        note = "Batch 27 keeps this report schema-contract compatible while still treating planned checks as NOT_EVALUATED."
     }
     $output | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $notEvaluatedJson -Encoding utf8NoBOM
 
@@ -315,6 +327,16 @@ if ($selectedSoundParticleChecks.Count -gt 0) {
     & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
+$reportSchemaChecks = @("report_schema")
+$selectedReportSchemaChecks = @($implementedSelected | Where-Object { $_ -in $reportSchemaChecks })
+function Invoke-ReportSchemaValidator {
+    if ($selectedReportSchemaChecks.Count -eq 0) { return }
+    $reportSchemaModule = Join-Path $PSScriptRoot "modules/report_schema_validator.ps1"
+    if (-not (Test-Path -LiteralPath $reportSchemaModule -PathType Leaf)) { throw "Report schema validator module not found: $reportSchemaModule" }
+    & $reportSchemaModule -RepoRoot $RepoRoot -ReportRoot $reportRoot -RulesRoot $rulesRoot -Checks $selectedReportSchemaChecks -OutputJson (Join-Path $reportRoot "report_schema_contract_report.json") -OutputMarkdown (Join-Path $reportRoot "report_schema_contract_report.md")
+    if (-not $?) { throw "Report schema validator module failed." }
+}
+
 $autoFixCandidateChecks = @("auto_fix_candidates")
 $selectedAutoFixCandidateChecks = @($implementedSelected | Where-Object { $_ -in $autoFixCandidateChecks })
 function Invoke-AutoFixCandidateReporter {
@@ -335,6 +357,7 @@ if ($selectedClientServerSafetyChecks.Count -gt 0) {
 }
 if ($comparerSelected.Count -eq 0) {
     Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
+    Invoke-ReportSchemaValidator
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0
 }
@@ -357,6 +380,7 @@ $compareExitCode = $LASTEXITCODE
 & $validator -LegacyManifest $legacyManifestForChecks -PortManifest $portManifestForChecks -ReportPath $reportJson
 if (-not $?) { throw "Parity report validation failed." }
 Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
+Invoke-ReportSchemaValidator
 if (-not $compareSucceeded) {
     if ($null -ne $compareExitCode) { exit $compareExitCode }
     exit 1

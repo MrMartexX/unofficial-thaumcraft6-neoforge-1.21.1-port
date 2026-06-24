@@ -46,6 +46,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 24 | Closed: focused filtering generates filtered manifests for Ids, IdPrefix, Families, Packages and ChangedOnly/SinceCommit before checks execute | Focused audit filtering |
 | 25 | Closed: focus-aware auto-fix candidate reporter classifies missing/review rows and filters stale local module reports to the current focused manifest IDs | Auto-fix candidate reporter |
 | 26 | Closed: layer completion matrix defines completion requirements, known limitations and verifier/CI expectations for each existing item/block parity framework layer | Layer completion matrix |
+| 27 | Closed: report schema contract validator audits generated JSON reports for required top-level schema fields and summary/results consistency | Report schema contract |
 
 ## Roadmap numbering note
 
@@ -60,3 +61,5 @@ Batch 25 refinement: auto-fix candidate reports must respect focused manifests w
 Batch 23 closure: scripted behavior smoke is a report-only readiness framework; it inventories wiring and recommended commands but does not launch Minecraft automatically.
 
 Batch 26 closure: the layer completion matrix is the authoritative contract for deciding whether a layer is complete, still planned, intentionally out of scope, superseded or blocked.
+
+Batch 27 closure: report schema validation is report-only framework hardening; review rows identify reports that still need schema/freshness refinement and are not gameplay parity failures.

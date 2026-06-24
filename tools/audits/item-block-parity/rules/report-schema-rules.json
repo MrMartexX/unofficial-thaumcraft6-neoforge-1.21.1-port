@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 27 report schema contract",
+  "description": "Report-only schema contract for item/block parity framework JSON reports.",
+  "requiredTopLevelFields": [
+    "schemaVersion",
+    "generatedAtUtc",
+    "policy",
+    "inputs",
+    "summary",
+    "results"
+  ],
+  "reportFilePatterns": [
+    "*_report.json",
+    "item_block_parity_not_evaluated_checks.json",
+    "item_block_auto_fix_candidates.json"
+  ],
+  "ignoredFilePatterns": [
+    "legacy_primary_manifest.json",
+    "legacy_primary_manifest.focused.json",
+    "port_manifest.json",
+    "port_manifest.focused.json",
+    "report_schema_contract_report.json"
+  ],
+  "summaryCountFields": [
+    "rows",
+    "results"
+  ],
+  "status": {
+    "pass": "REPORT_SCHEMA_PASS",
+    "review": "REPORT_SCHEMA_REVIEW_NEEDED",
+    "error": "REPORT_SCHEMA_ERROR"
+  }
+}

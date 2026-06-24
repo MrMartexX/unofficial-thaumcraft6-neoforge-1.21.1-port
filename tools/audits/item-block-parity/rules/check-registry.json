@@ -273,6 +273,12 @@
       "reason": "Phase D Batch 25 focus-aware report-only candidate classifier; stale local module reports are filtered to focused manifest IDs"
     },
     {
+      "name": "report_schema",
+      "layer": "source_quality",
+      "status": "implemented",
+      "reason": "Batch 27 report-only JSON report schema contract validator"
+    },
+    {
       "name": "game_test_smoke",
       "layer": "runtime_boundary",
       "status": "implemented",
