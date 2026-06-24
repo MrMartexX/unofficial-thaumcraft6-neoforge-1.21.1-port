@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "generatedBy": "Batch 28 check invocation self-test",
   "description": "Invocation ownership rules for implemented item/block parity checks.",
+  "status": {
+    "pass": "CHECK_INVOCATION_PASS",
+    "review": "CHECK_INVOCATION_REVIEW_NEEDED",
+    "error": "CHECK_INVOCATION_ERROR"
+  },
   "owners": [
     {
       "invocation": "comparerSelected",
@@ -190,15 +195,16 @@
       "name": "report_freshness"
     },
     {
+      "invocation": "statusTaxonomyChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/status_taxonomy_validator.ps1",
+      "name": "status_taxonomy"
+    },
+    {
       "invocation": "checkInvocationChecks",
       "ownerType": "module",
       "ownerPath": "modules/check_invocation_self_test.ps1",
       "name": "check_invocation"
     }
-  ],
-  "status": {
-    "pass": "CHECK_INVOCATION_PASS",
-    "review": "CHECK_INVOCATION_REVIEW_NEEDED",
-    "error": "CHECK_INVOCATION_ERROR"
-  }
+  ]
 }

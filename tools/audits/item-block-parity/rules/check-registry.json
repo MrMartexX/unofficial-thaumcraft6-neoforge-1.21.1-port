@@ -267,6 +267,12 @@
       "reason": "Batch 29 report-only stale local report freshness guard"
     },
     {
+      "name": "status_taxonomy",
+      "layer": "source_quality",
+      "status": "implemented",
+      "reason": "Batch 30 report-only status taxonomy normalization validator"
+    },
+    {
       "name": "secondary_legacy_probe",
       "layer": "source_quality",
       "status": "implemented",

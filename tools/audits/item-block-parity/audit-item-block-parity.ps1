@@ -56,8 +56,8 @@ $presetChecks = @{
     resources = @("blockstates", "models", "textures", "lang", "loot", "tags", "recipes", "orphan_references")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
-    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation", "report_freshness")
-    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness")
+    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation", "report_freshness", "status_taxonomy")
+    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness", "status_taxonomy")
     full = @($allKnownChecks)
 }
 
@@ -327,6 +327,17 @@ if ($selectedSoundParticleChecks.Count -gt 0) {
     & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
+# Batch 30 status taxonomy validator start
+$statusTaxonomyChecks = @("status_taxonomy")
+$selectedStatusTaxonomyChecks = @($implementedSelected | Where-Object { $_ -in $statusTaxonomyChecks })
+function Invoke-StatusTaxonomyValidator {
+    if ($selectedStatusTaxonomyChecks.Count -eq 0) { return }
+    $statusTaxonomyModule = Join-Path $PSScriptRoot "modules/status_taxonomy_validator.ps1"
+    if (-not (Test-Path -LiteralPath $statusTaxonomyModule -PathType Leaf)) { throw "Status taxonomy validator module not found: $statusTaxonomyModule" }
+    & $statusTaxonomyModule -RepoRoot $RepoRoot -ReportRoot $reportRoot -RulesRoot $rulesRoot -Checks $selectedStatusTaxonomyChecks -OutputJson (Join-Path $reportRoot "status_taxonomy_report.json") -OutputMarkdown (Join-Path $reportRoot "status_taxonomy_report.md")
+    if (-not $?) { throw "Status taxonomy validator module failed." }
+}
+# Batch 30 status taxonomy validator end
 # Batch 29 report freshness guard start
 $reportFreshnessChecks = @("report_freshness")
 $selectedReportFreshnessChecks = @($implementedSelected | Where-Object { $_ -in $reportFreshnessChecks })
@@ -380,6 +391,7 @@ if ($selectedClientServerSafetyChecks.Count -gt 0) {
 if ($comparerSelected.Count -eq 0) {
     Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
 Invoke-CheckInvocationSelfTest
+Invoke-StatusTaxonomyValidator
 Invoke-ReportFreshnessGuard
 Invoke-ReportSchemaValidator
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
@@ -405,6 +417,7 @@ $compareExitCode = $LASTEXITCODE
 if (-not $?) { throw "Parity report validation failed." }
 Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
 Invoke-CheckInvocationSelfTest
+Invoke-StatusTaxonomyValidator
 Invoke-ReportFreshnessGuard
 Invoke-ReportSchemaValidator
 if (-not $compareSucceeded) {

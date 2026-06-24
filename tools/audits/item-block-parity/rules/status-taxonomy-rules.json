@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 30 status taxonomy normalization",
+  "description": "Report-only taxonomy rules for observed item/block parity report statuses. Unknown statuses are review rows, not gameplay parity failures.",
+  "reportFilePatterns": [
+    "*_report.json",
+    "item_block_parity_not_evaluated_checks.json",
+    "item_block_auto_fix_candidates.json"
+  ],
+  "ignoredFilePatterns": [
+    "legacy_primary_manifest.json",
+    "legacy_primary_manifest.focused.json",
+    "port_manifest.json",
+    "port_manifest.focused.json",
+    "status_taxonomy_report.json"
+  ],
+  "statusMap": {
+    "PASS": "pass",
+    "OK": "pass",
+    "MATCH": "pass",
+    "FOUND": "pass",
+    "PRESENT": "pass",
+    "IMPLEMENTED": "pass",
+    "COMPLETE": "pass",
+    "REVIEW": "review",
+    "REVIEW_NEEDED": "review",
+    "MISSING": "review",
+    "TODO": "review",
+    "PLANNED": "review",
+    "NOT_EVALUATED": "not_evaluated",
+    "SKIPPED": "not_evaluated",
+    "INTENTIONAL": "intentional",
+    "INTENTIONALLY_MISSING": "intentional",
+    "SUPERSEDED": "superseded",
+    "BLOCKED": "blocked",
+    "ERROR": "error",
+    "FAIL": "error",
+    "FAILED": "error",
+    "REPORT_SCHEMA_PASS": "pass",
+    "REPORT_SCHEMA_REVIEW_NEEDED": "review",
+    "REPORT_SCHEMA_ERROR": "error",
+    "REPORT_FRESHNESS_PASS": "pass",
+    "REPORT_FRESHNESS_REVIEW_NEEDED": "review",
+    "REPORT_FRESHNESS_ERROR": "error",
+    "CHECK_INVOCATION_PASS": "pass",
+    "CHECK_INVOCATION_REVIEW_NEEDED": "review",
+    "CHECK_INVOCATION_ERROR": "error",
+    "STATUS_TAXONOMY_PASS": "pass",
+    "STATUS_TAXONOMY_REVIEW_NEEDED": "review",
+    "STATUS_TAXONOMY_ERROR": "error"
+  },
+  "statusPatterns": [
+    {
+      "pattern": "*_PASS",
+      "category": "pass"
+    },
+    {
+      "pattern": "*_OK",
+      "category": "pass"
+    },
+    {
+      "pattern": "*_MATCH",
+      "category": "pass"
+    },
+    {
+      "pattern": "*_FOUND",
+      "category": "pass"
+    },
+    {
+      "pattern": "*_PRESENT",
+      "category": "pass"
+    },
+    {
+      "pattern": "*_REVIEW",
+      "category": "review"
+    },
+    {
+      "pattern": "*_REVIEW_NEEDED",
+      "category": "review"
+    },
+    {
+      "pattern": "*_MISSING",
+      "category": "review"
+    },
+    {
+      "pattern": "*_NOT_EVALUATED",
+      "category": "not_evaluated"
+    },
+    {
+      "pattern": "*_INTENTIONAL",
+      "category": "intentional"
+    },
+    {
+      "pattern": "*_SUPERSEDED",
+      "category": "superseded"
+    },
+    {
+      "pattern": "*_BLOCKED",
+      "category": "blocked"
+    },
+    {
+      "pattern": "*_ERROR",
+      "category": "error"
+    },
+    {
+      "pattern": "*_FAIL",
+      "category": "error"
+    },
+    {
+      "pattern": "*_FAILED",
+      "category": "error"
+    }
+  ],
+  "allowedCategories": [
+    "pass",
+    "review",
+    "error",
+    "blocked",
+    "superseded",
+    "intentional",
+    "not_evaluated",
+    "info"
+  ],
+  "status": {
+    "pass": "STATUS_TAXONOMY_PASS",
+    "review": "STATUS_TAXONOMY_REVIEW_NEEDED",
+    "error": "STATUS_TAXONOMY_ERROR"
+  }
+}
