@@ -38,7 +38,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 15 | Closed: reviewed item-transform and model-parent equivalence rule placeholders are wired into the visual model/transform report | Item transform tolerance/equivalence rules |
 | 16 | Closed: report-only item property parity audit compares source-evidenced stack size, durability, rarity and behavior/property clues | Item property parity audit |
 | 18 | Closed: report-only block property parity audit compares source-evidenced hardness, resistance, sound, light and behavior flags | Block property parity audit |
-| 19 | Planned | Loot/drop behavior parity audit |
+| 19 | Closed: report-only loot/drop behavior audit compares source-evidenced legacy drop clues against port loot tables and source clues | Loot/drop behavior parity audit |
 
 ## Rule from this point onward
 

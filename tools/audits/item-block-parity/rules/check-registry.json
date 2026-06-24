@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 18 adds report-only block property parity scanning.",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 19 adds report-only loot/drop behavior parity scanning.",
   "checks": [
     {
       "name": "registry",
@@ -46,6 +46,11 @@
       "reason": "Existing compare module"
     },
     {
+      "name": "drop_behavior",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Phase C Batch 19 report-only source/loot-table drop behavior parity scan"
+    },    {
       "name": "json_validity",
       "layer": "resource_boundary",
       "status": "planned",

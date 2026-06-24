@@ -54,7 +54,7 @@ $presetChecks = @{
     registry = @("registry", "duplicate_registry_id", "block_item_pairs")
     quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references")
     resources = @("blockstates", "models", "textures", "lang", "loot", "tags", "recipes", "orphan_references")
-    data = @("recipes", "loot", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
+    data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
     "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe")
     "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load")
@@ -246,6 +246,14 @@ if ($selectedBlockPropertyChecks.Count -gt 0) {
     if (-not (Test-Path -LiteralPath $blockPropertyModule -PathType Leaf)) { throw "Block property module not found: $blockPropertyModule" }
     & $blockPropertyModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedBlockPropertyChecks -OutputJson (Join-Path $reportRoot "item_block_block_property_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_block_property_report.md")
     if (-not $?) { throw "Block property module failed." }
+}
+$dropBehaviorChecks = @("drop_behavior")
+$selectedDropBehaviorChecks = @($implementedSelected | Where-Object { $_ -in $dropBehaviorChecks })
+if ($selectedDropBehaviorChecks.Count -gt 0) {
+    $dropBehaviorModule = Join-Path $PSScriptRoot "modules/loot_drop_behavior.ps1"
+    if (-not (Test-Path -LiteralPath $dropBehaviorModule -PathType Leaf)) { throw "Loot/drop behavior module not found: $dropBehaviorModule" }
+    & $dropBehaviorModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedDropBehaviorChecks -OutputJson (Join-Path $reportRoot "item_block_loot_drop_behavior_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_loot_drop_behavior_report.md")
+    if (-not $?) { throw "Loot/drop behavior module failed." }
 }
 $behaviorBoundaryChecks = @("blockentities", "capabilities", "menus")
 $selectedBehaviorBoundaryChecks = @($implementedSelected | Where-Object { $_ -in $behaviorBoundaryChecks })

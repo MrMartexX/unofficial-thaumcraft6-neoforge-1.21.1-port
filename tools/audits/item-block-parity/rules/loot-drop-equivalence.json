@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "description": "Reviewed loot/drop behavior equivalence rules. Entries must be explicit; empty rules mean review-needed rows stay review-needed.",
+  "entries": []
+}
