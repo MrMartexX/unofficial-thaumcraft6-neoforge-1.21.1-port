@@ -66,8 +66,8 @@
     {
       "name": "item_properties",
       "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Legacy item behavior clues not extracted yet"
+      "status": "implemented",
+      "reason": "Phase C Batch 16 report-only item stack size, durability, rarity and behavior/property clue audit"
     },
     {
       "name": "block_properties",

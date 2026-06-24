@@ -231,6 +231,14 @@ if ($selectedDataReferenceChecks.Count -gt 0) {
     if (-not $?) { throw "Data reference module failed." }
 }
 
+$itemPropertyChecks = @("item_properties")
+$selectedItemPropertyChecks = @($implementedSelected | Where-Object { $_ -in $itemPropertyChecks })
+if ($selectedItemPropertyChecks.Count -gt 0) {
+    $itemPropertyModule = Join-Path $PSScriptRoot "modules/item_properties.ps1"
+    if (-not (Test-Path -LiteralPath $itemPropertyModule -PathType Leaf)) { throw "Item property module not found: $itemPropertyModule" }
+    & $itemPropertyModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedItemPropertyChecks -OutputJson (Join-Path $reportRoot "item_block_item_property_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_item_property_report.md")
+    if (-not $?) { throw "Item property module failed." }
+}
 $behaviorBoundaryChecks = @("blockentities", "capabilities", "menus")
 $selectedBehaviorBoundaryChecks = @($implementedSelected | Where-Object { $_ -in $behaviorBoundaryChecks })
 if ($selectedBehaviorBoundaryChecks.Count -gt 0) {
