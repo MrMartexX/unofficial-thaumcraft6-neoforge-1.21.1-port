@@ -67,7 +67,7 @@ A layer is complete only when its implemented checks are invoked by the orchestr
 The framework may be called complete only after:
 
 - every implemented check has an invocation owner and schema-valid fresh reports;
-- every remaining non-implemented check is explicitly intentionally_out_of_scope, superseded or locked;
+- every remaining non-implemented check is explicitly intentionally_out_of_scope, superseded or bblocked;
 - verifier v2 validates script syntax, rule JSON, schema contracts, stale report guards, docs/registry consistency, focused family smoke and CI-safe mode;
 - runtime smoke and GameTest/scripted layers have at least minimal opt-in runtime execution coverage;
 - CI publishes report artifacts and supports report-only, safe and strict modes without committing generated local reports.
