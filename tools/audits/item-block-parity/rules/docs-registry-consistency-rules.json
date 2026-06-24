@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 31 docs/registry consistency audit",
+  "description": "Rules for report-only consistency checks between check registry, invocation owner rules and framework documentation.",
+  "registryPath": "tools/audits/item-block-parity/rules/check-registry.json",
+  "invocationRulesPath": "tools/audits/item-block-parity/rules/check-invocation-rules.json",
+  "frameworkAlignmentPath": "06_docs/audits/item_block_parity_framework_alignment.md",
+  "layerCompletionMatrixPath": "06_docs/audits/item_block_parity_layer_completion_matrix.md",
+  "expectedClosedBatch": 31,
+  "status": {
+    "pass": "DOCS_REGISTRY_PASS",
+    "review": "DOCS_REGISTRY_REVIEW_NEEDED",
+    "error": "DOCS_REGISTRY_ERROR"
+  }
+}

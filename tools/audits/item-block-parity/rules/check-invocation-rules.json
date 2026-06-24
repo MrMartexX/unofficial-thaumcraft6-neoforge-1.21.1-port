@@ -201,6 +201,12 @@
       "name": "status_taxonomy"
     },
     {
+      "invocation": "docsDeferredChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/docs_registry_consistency.ps1",
+      "name": "docs_deferred"
+    },
+    {
       "invocation": "checkInvocationChecks",
       "ownerType": "module",
       "ownerPath": "modules/check_invocation_self_test.ps1",

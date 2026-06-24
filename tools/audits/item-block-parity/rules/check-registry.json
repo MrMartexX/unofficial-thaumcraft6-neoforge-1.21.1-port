@@ -233,8 +233,8 @@
     {
       "name": "docs_deferred",
       "layer": "source_quality",
-      "status": "planned",
-      "reason": "Deferred documentation consistency planned"
+      "status": "implemented",
+      "reason": "Batch 31 report-only docs/registry consistency audit"
     },
     {
       "name": "legacy_primary_manifest",

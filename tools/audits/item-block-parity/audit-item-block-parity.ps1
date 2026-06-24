@@ -56,8 +56,8 @@ $presetChecks = @{
     resources = @("blockstates", "models", "textures", "lang", "loot", "tags", "recipes", "orphan_references")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
-    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation", "report_freshness", "status_taxonomy")
-    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness", "status_taxonomy")
+    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
+    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
     full = @($allKnownChecks)
 }
 
@@ -327,6 +327,17 @@ if ($selectedSoundParticleChecks.Count -gt 0) {
     & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
+# Batch 31 docs/registry consistency audit start
+$docsDeferredChecks = @("docs_deferred")
+$selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
+function Invoke-DocsRegistryConsistencyAudit {
+    if ($selectedDocsDeferredChecks.Count -eq 0) { return }
+    $docsRegistryModule = Join-Path $PSScriptRoot "modules/docs_registry_consistency.ps1"
+    if (-not (Test-Path -LiteralPath $docsRegistryModule -PathType Leaf)) { throw "Docs/registry consistency module not found: $docsRegistryModule" }
+    & $docsRegistryModule -RepoRoot $RepoRoot -RulesRoot $rulesRoot -Checks $selectedDocsDeferredChecks -OutputJson (Join-Path $reportRoot "docs_registry_consistency_report.json") -OutputMarkdown (Join-Path $reportRoot "docs_registry_consistency_report.md")
+    if (-not $?) { throw "Docs/registry consistency module failed." }
+}
+# Batch 31 docs/registry consistency audit end
 # Batch 30 status taxonomy validator start
 $statusTaxonomyChecks = @("status_taxonomy")
 $selectedStatusTaxonomyChecks = @($implementedSelected | Where-Object { $_ -in $statusTaxonomyChecks })
@@ -391,6 +402,7 @@ if ($selectedClientServerSafetyChecks.Count -gt 0) {
 if ($comparerSelected.Count -eq 0) {
     Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
 Invoke-CheckInvocationSelfTest
+Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
 Invoke-ReportFreshnessGuard
 Invoke-ReportSchemaValidator
@@ -417,6 +429,7 @@ $compareExitCode = $LASTEXITCODE
 if (-not $?) { throw "Parity report validation failed." }
 Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
 Invoke-CheckInvocationSelfTest
+Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
 Invoke-ReportFreshnessGuard
 Invoke-ReportSchemaValidator
