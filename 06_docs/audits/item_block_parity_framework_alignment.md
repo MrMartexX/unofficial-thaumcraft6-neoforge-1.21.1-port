@@ -42,16 +42,18 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 20 | Closed: report-only sound/particle/FX reference audit records source-evidenced SoundType, sound event calls, particle calls and client FX clues | Sound/particle/FX parity audit |
 | 21 | Closed: report-only client/server safety audit records client-only references outside client packages, server references in client packages and guarded boundary evidence | Client/server safety audit |
 | 22 | Closed: report-only runtime/datapack smoke audit validates static datapack load-critical JSON, namespace layout and pack metadata without claiming gameplay parity | Runtime registry/datapack smoke audit |
-| 23 | Deferred: GameTest/scripted behavior smoke framework remains reserved until runtime fixtures are stable | GameTest/scripted behavior smoke framework |
+| 23 | Closed: report-only GameTest/scripted behavior smoke readiness audit inventories GameTest namespace wiring, Gradle run configs, fixture directories, scripted runtime audit hooks and recommended smoke commands without launching Minecraft | GameTest/scripted behavior smoke framework |
 | 24 | Closed: focused filtering generates filtered manifests for Ids, IdPrefix, Families, Packages and ChangedOnly/SinceCommit before checks execute | Focused audit filtering |
 | 25 | Closed: focus-aware auto-fix candidate reporter classifies missing/review rows and filters stale local module reports to the current focused manifest IDs | Auto-fix candidate reporter |
 
 ## Roadmap numbering note
 
-Batch 24 was implemented before Batch 22/23 because focused filtering became necessary after the broad report-only layers made full reports too noisy for day-to-day work. Batch 22 and Batch 23 remain reserved/deferred roadmap slots, not silently skipped implementation claims.
+Batch 24 was implemented before Batch 22/23 because focused filtering became necessary after the broad report-only layers made full reports too noisy for day-to-day work. Batch 22 and Batch 23 have since been closed as report-only framework/smoke readiness layers, not gameplay parity claims.
 
 ## Rule from this point onward
 
 Do not continue fixing individual resource gaps as the default activity. The next batches should close framework-plan gaps in order.
 
 Batch 25 refinement: auto-fix candidate reports must respect focused manifests when reusing stale local module reports.
+
+Batch 23 closure: scripted behavior smoke is a report-only readiness framework; it inventories wiring and recommended commands but does not launch Minecraft automatically.

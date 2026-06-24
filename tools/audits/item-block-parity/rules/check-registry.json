@@ -271,7 +271,12 @@
       "layer": "source_quality",
       "status": "implemented",
       "reason": "Phase D Batch 25 focus-aware report-only candidate classifier; stale local module reports are filtered to focused manifest IDs"
+    },
+    {
+      "name": "game_test_smoke",
+      "layer": "runtime_boundary",
+      "status": "implemented",
+      "reason": "Batch 23 report-only GameTest/scripted behavior smoke readiness framework"
     }
-  ],
-  "note": "Batch 25 auto-fix candidate reporter is focus-aware and report-only; it must not apply fixes automatically."
+  ]
 }

@@ -251,6 +251,14 @@ if ($selectedDatapackLoadChecks.Count -gt 0) {
     & $datapackLoadModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedDatapackLoadChecks -OutputJson (Join-Path $reportRoot "item_block_runtime_datapack_smoke_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_runtime_datapack_smoke_report.md")
     if (-not $?) { throw "Runtime/datapack load smoke module failed." }
 }
+$gameTestSmokeChecks = @("game_test_smoke")
+$selectedGameTestSmokeChecks = @($implementedSelected | Where-Object { $_ -in $gameTestSmokeChecks })
+if ($selectedGameTestSmokeChecks.Count -gt 0) {
+    $gameTestSmokeModule = Join-Path $PSScriptRoot "modules/game_test_smoke.ps1"
+    if (-not (Test-Path -LiteralPath $gameTestSmokeModule -PathType Leaf)) { throw "GameTest/scripted behavior smoke module not found: $gameTestSmokeModule" }
+    & $gameTestSmokeModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedGameTestSmokeChecks -OutputJson (Join-Path $reportRoot "item_block_game_test_smoke_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_game_test_smoke_report.md")
+    if (-not $?) { throw "GameTest/scripted behavior smoke module failed." }
+}
 $itemPropertyChecks = @("item_properties")
 $selectedItemPropertyChecks = @($implementedSelected | Where-Object { $_ -in $itemPropertyChecks })
 if ($selectedItemPropertyChecks.Count -gt 0) {
