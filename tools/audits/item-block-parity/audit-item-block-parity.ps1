@@ -246,6 +246,13 @@ if ($selectedVisualBoundaryChecks.Count -gt 0) {
     if (-not (Test-Path -LiteralPath $visualBoundaryModule -PathType Leaf)) { throw "Visual boundary module not found: $visualBoundaryModule" }
     & $visualBoundaryModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -Checks $selectedVisualBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_visual_model_transform_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_visual_model_transform_report.md")
     if (-not $?) { throw "Visual boundary module failed." }
+}$textureColorChecks = @("texture_color")
+$selectedTextureColorChecks = @($implementedSelected | Where-Object { $_ -in $textureColorChecks })
+if ($selectedTextureColorChecks.Count -gt 0) {
+    $textureColorModule = Join-Path $PSScriptRoot "modules/texture_color_parity.ps1"
+    if (-not (Test-Path -LiteralPath $textureColorModule -PathType Leaf)) { throw "Texture/color parity module not found: $textureColorModule" }
+    & $textureColorModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -LegacyRoot $LegacyRoot -OriginalJar $OriginalJar -RulesRoot $rulesRoot -Checks $selectedTextureColorChecks -OutputJson (Join-Path $reportRoot "item_block_texture_color_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_texture_color_report.md")
+    if (-not $?) { throw "Texture/color parity module failed." }
 }
 if ($comparerSelected.Count -eq 0) {
     Write-Output "No comparer checks selected. Module/source-quality checks completed."

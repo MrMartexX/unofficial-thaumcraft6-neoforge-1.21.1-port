@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "entries": [],
+  "note": "Reviewed texture equivalence rules only. Use for known equivalent replacements where hash/size/color differs for accepted reasons.",
+  "example": {
+    "textureRef": "thaumcraft:block/example",
+    "reason": "Reviewed equivalent replacement texture."
+  }
+}

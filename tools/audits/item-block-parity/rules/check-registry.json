@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Phase B Batch 13 implements report-only visual model/transform boundary scanning.",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Phase B Batch 14 implements report-only texture/color parity scanning.",
   "checks": [
     {
       "name": "registry",
@@ -224,6 +224,12 @@
       "layer": "visual_boundary",
       "status": "implemented",
       "reason": "Phase B Batch 13 report-only model parent, block geometry and item display transform audit"
+    },
+    {
+      "name": "texture_color",
+      "layer": "visual_boundary",
+      "status": "implemented",
+      "reason": "Phase B Batch 14 report-only texture hash, size, alpha and average-color parity scan"
     },
     {
       "name": "docs_deferred",

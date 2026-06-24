@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "entries": [],
+  "note": "Reviewed intentional recolor/visual-difference rules only. Entries may use textureRef/ref and reason. These rules never create PASS; they classify reviewable texture color differences.",
+  "example": {
+    "textureRef": "thaumcraft:item/example",
+    "reason": "Reviewed and intentionally recolored in the port."
+  }
+}
