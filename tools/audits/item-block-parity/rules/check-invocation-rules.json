@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 28 check invocation self-test",
+  "description": "Invocation ownership rules for implemented item/block parity checks.",
+  "owners": [
+    {
+      "invocation": "comparerSelected",
+      "ownerType": "comparer",
+      "ownerPath": "compare-item-block-parity.ps1",
+      "name": "registry"
+    },
+    {
+      "invocation": "comparerSelected",
+      "ownerType": "comparer",
+      "ownerPath": "compare-item-block-parity.ps1",
+      "name": "duplicate_registry_id"
+    },
+    {
+      "invocation": "comparerSelected",
+      "ownerType": "comparer",
+      "ownerPath": "compare-item-block-parity.ps1",
+      "name": "block_item_pairs"
+    },
+    {
+      "invocation": "comparerSelected",
+      "ownerType": "comparer",
+      "ownerPath": "compare-item-block-parity.ps1",
+      "name": "blockstates"
+    },
+    {
+      "invocation": "comparerSelected",
+      "ownerType": "comparer",
+      "ownerPath": "compare-item-block-parity.ps1",
+      "name": "models"
+    },
+    {
+      "invocation": "comparerSelected",
+      "ownerType": "comparer",
+      "ownerPath": "compare-item-block-parity.ps1",
+      "name": "textures"
+    },
+    {
+      "invocation": "comparerSelected",
+      "ownerType": "comparer",
+      "ownerPath": "compare-item-block-parity.ps1",
+      "name": "lang"
+    },
+    {
+      "invocation": "comparerSelected",
+      "ownerType": "comparer",
+      "ownerPath": "compare-item-block-parity.ps1",
+      "name": "loot"
+    },
+    {
+      "invocation": "comparerSelected",
+      "ownerType": "comparer",
+      "ownerPath": "compare-item-block-parity.ps1",
+      "name": "orphan_references"
+    },
+    {
+      "invocation": "dataReferenceChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/data_refs.ps1",
+      "name": "recipes"
+    },
+    {
+      "invocation": "dataReferenceChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/data_refs.ps1",
+      "name": "tags"
+    },
+    {
+      "invocation": "dataReferenceChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/data_refs.ps1",
+      "name": "aspects"
+    },
+    {
+      "invocation": "dataReferenceChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/data_refs.ps1",
+      "name": "research_refs"
+    },
+    {
+      "invocation": "dataReferenceChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/data_refs.ps1",
+      "name": "thaumonomicon_refs"
+    },
+    {
+      "invocation": "dropBehaviorChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/loot_drop_behavior.ps1",
+      "name": "drop_behavior"
+    },
+    {
+      "invocation": "itemPropertyChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/item_properties.ps1",
+      "name": "item_properties"
+    },
+    {
+      "invocation": "blockPropertyChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/block_properties.ps1",
+      "name": "block_properties"
+    },
+    {
+      "invocation": "behaviorBoundaryChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/behavior_boundary.ps1",
+      "name": "blockentities"
+    },
+    {
+      "invocation": "behaviorBoundaryChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/behavior_boundary.ps1",
+      "name": "capabilities"
+    },
+    {
+      "invocation": "behaviorBoundaryChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/behavior_boundary.ps1",
+      "name": "menus"
+    },
+    {
+      "invocation": "clientServerSafetyChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/client_server_safety.ps1",
+      "name": "client_server_safety"
+    },
+    {
+      "invocation": "soundParticleChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/sounds_particles_fx.ps1",
+      "name": "sounds_particles"
+    },
+    {
+      "invocation": "datapackLoadChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/runtime_datapack_smoke.ps1",
+      "name": "datapack_load"
+    },
+    {
+      "invocation": "gameTestSmokeChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/game_test_smoke.ps1",
+      "name": "game_test_smoke"
+    },
+    {
+      "invocation": "visualBoundaryChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/visual_model_transforms.ps1",
+      "name": "visual_boundary"
+    },
+    {
+      "invocation": "textureColorChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/texture_color_parity.ps1",
+      "name": "texture_color"
+    },
+    {
+      "invocation": "baseManifestRefresh",
+      "ownerType": "extractor",
+      "ownerPath": "extract-legacy-primary-manifest.ps1",
+      "name": "legacy_primary_manifest"
+    },
+    {
+      "invocation": "secondary_legacy_probe",
+      "ownerType": "module",
+      "ownerPath": "modules/secondary_legacy_probe.ps1",
+      "name": "secondary_legacy_probe"
+    },
+    {
+      "invocation": "autoFixCandidateChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/auto_fix_candidates.ps1",
+      "name": "auto_fix_candidates"
+    },
+    {
+      "invocation": "reportSchemaChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/report_schema_validator.ps1",
+      "name": "report_schema"
+    },
+    {
+      "invocation": "checkInvocationChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/check_invocation_self_test.ps1",
+      "name": "check_invocation"
+    }
+  ],
+  "status": {
+    "pass": "CHECK_INVOCATION_PASS",
+    "review": "CHECK_INVOCATION_REVIEW_NEEDED",
+    "error": "CHECK_INVOCATION_ERROR"
+  }
+}

@@ -10,7 +10,7 @@ A layer is complete only when its implemented checks are invoked by the orchestr
 
 | Layer | Implemented | Planned | Other | Checks |
 |---|---:|---:|---:|---|
-| Source quality and legacy evidence ($layer=source_quality) | 4 | 5 | 0 | access_transformers, auto_fix_candidates, docs_deferred, legacy_primary_manifest, original_jar_probe, public_api, report_schema, secondary_legacy_probe, source_conflict_report |
+| Source quality and legacy evidence ($layer=source_quality) | 5 | 5 | 0 | access_transformers, auto_fix_candidates, check_invocation, docs_deferred, legacy_primary_manifest, original_jar_probe, public_api, report_schema, secondary_legacy_probe, source_conflict_report |
 | Registry identity ($layer=registry_identity) | 2 | 2 | 0 | duplicate_registry_id, legacy_mapping, registry, variants |
 | Resource boundary ($layer=resource_boundary) | 7 | 2 | 0 | block_item_pairs, blockstates, creative_tabs, json_validity, lang, loot, models, orphan_references, textures |
 | Data boundary ($layer=data_boundary) | 6 | 4 | 0 | aspects, config_gates, drop_behavior, entity_links, fuels_flammability, recipes, research_refs, tags, thaumonomicon_refs, worldgen_links |
@@ -37,7 +37,7 @@ A layer is complete only when its implemented checks are invoked by the orchestr
 | Focus and scope control | Focused filtering supports Ids, IdPrefix, Families, Packages, ChangedOnly and SinceCommit; current smelter smoke confirms focused manifests are generated. | Dependency-aware focus must include related block entities, menus, capabilities, recipes and support blocks by rule. |
 | Rule and override governance | Rule override files exist and auto-fix candidate rules are present; status semantics are still module-specific. | Status taxonomy must be normalized and final registry cleanup must remove ambiguous planned statuses. |
 | Report governance | Batch 27 adds a report-only schema contract validator for local JSON reports; freshness and input hash enforcement are still planned. | SchemaVersion, summary/results consistency, input hashes and repo commit metadata must be enforced. |
-| CI and verifier | A local verifier confirms clean working tree, script syntax, rule JSON, focused presets and CI-safe smoke; CI report-only workflow exists. | Verifier v2 must become a complete framework certification gate; CI must publish artifacts and support report-only/safe/strict modes. |
+| CI and verifier | A local verifier confirms clean working tree, script syntax, rule JSON, focused presets, check invocation ownership and CI-safe smoke; CI report-only workflow exists. | Verifier v2 must become a complete framework certification gate; CI must publish artifacts and support report-only/safe/strict modes. |
 | Runtime execution | Runtime/datapack and GameTest/scripted layers are report-only readiness checks. | Real runtime smoke runner, minimal fixture coverage and normalized runtime artifacts must be opt-in but implemented. |
 
 ## Completion backlog derived from the current registry

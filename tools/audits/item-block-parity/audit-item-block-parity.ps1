@@ -56,8 +56,8 @@ $presetChecks = @{
     resources = @("blockstates", "models", "textures", "lang", "loot", "tags", "recipes", "orphan_references")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
-    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema")
-    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema")
+    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation")
+    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation")
     full = @($allKnownChecks)
 }
 
@@ -327,6 +327,14 @@ if ($selectedSoundParticleChecks.Count -gt 0) {
     & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
+$checkInvocationSelfTestChecks = @("check_invocation")
+$selectedCheckInvocationSelfTestChecks = @($implementedSelected | Where-Object { $_ -in $checkInvocationSelfTestChecks })
+if ($selectedCheckInvocationSelfTestChecks.Count -gt 0) {
+    $checkInvocationModule = Join-Path $PSScriptRoot "modules/check_invocation_self_test.ps1"
+    if (-not (Test-Path -LiteralPath $checkInvocationModule -PathType Leaf)) { throw "Check invocation self-test module not found: $checkInvocationModule" }
+    & $checkInvocationModule -RepoRoot $RepoRoot -RulesRoot $rulesRoot -Checks $selectedCheckInvocationSelfTestChecks -OutputJson (Join-Path $reportRoot "item_block_check_invocation_self_test_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_check_invocation_self_test_report.md")
+    if (-not $?) { throw "Check invocation self-test module failed." }
+}
 $reportSchemaChecks = @("report_schema")
 $selectedReportSchemaChecks = @($implementedSelected | Where-Object { $_ -in $reportSchemaChecks })
 function Invoke-ReportSchemaValidator {
@@ -337,6 +345,17 @@ function Invoke-ReportSchemaValidator {
     if (-not $?) { throw "Report schema validator module failed." }
 }
 
+# Batch 28 check invocation self-test start
+$checkInvocationChecks = @("check_invocation")
+$selectedCheckInvocationChecks = @($implementedSelected | Where-Object { $_ -in $checkInvocationChecks })
+function Invoke-CheckInvocationSelfTest {
+    if ($selectedCheckInvocationChecks.Count -eq 0) { return }
+    $checkInvocationModule = Join-Path $PSScriptRoot "modules/check_invocation_self_test.ps1"
+    if (-not (Test-Path -LiteralPath $checkInvocationModule -PathType Leaf)) { throw "Check invocation self-test module not found: $checkInvocationModule" }
+    & $checkInvocationModule -RepoRoot $RepoRoot -RulesRoot $rulesRoot -Checks $selectedCheckInvocationChecks -OutputJson (Join-Path $reportRoot "check_invocation_self_test_report.json") -OutputMarkdown (Join-Path $reportRoot "check_invocation_self_test_report.md")
+    if (-not $?) { throw "Check invocation self-test module failed." }
+}
+# Batch 28 check invocation self-test end
 $autoFixCandidateChecks = @("auto_fix_candidates")
 $selectedAutoFixCandidateChecks = @($implementedSelected | Where-Object { $_ -in $autoFixCandidateChecks })
 function Invoke-AutoFixCandidateReporter {
@@ -357,6 +376,7 @@ if ($selectedClientServerSafetyChecks.Count -gt 0) {
 }
 if ($comparerSelected.Count -eq 0) {
     Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
+    Invoke-CheckInvocationSelfTest
     Invoke-ReportSchemaValidator
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0
@@ -380,6 +400,7 @@ $compareExitCode = $LASTEXITCODE
 & $validator -LegacyManifest $legacyManifestForChecks -PortManifest $portManifestForChecks -ReportPath $reportJson
 if (-not $?) { throw "Parity report validation failed." }
 Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
+    Invoke-CheckInvocationSelfTest
 Invoke-ReportSchemaValidator
 if (-not $compareSucceeded) {
     if ($null -ne $compareExitCode) { exit $compareExitCode }

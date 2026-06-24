@@ -3,130 +3,10 @@
   "generatedBy": "Batch 2 skeleton",
   "checks": [
     {
-      "name": "registry",
-      "layer": "registry_identity",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "duplicate_registry_id",
-      "layer": "registry_identity",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "block_item_pairs",
-      "layer": "resource_boundary",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "blockstates",
-      "layer": "resource_boundary",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "models",
-      "layer": "resource_boundary",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "lang",
-      "layer": "resource_boundary",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "loot",
-      "layer": "resource_boundary",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "drop_behavior",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Phase C Batch 19 report-only source/loot-table drop behavior parity scan"
-    },
-    {
-      "name": "json_validity",
-      "layer": "resource_boundary",
-      "status": "planned",
-      "reason": "CI-safe mechanical check planned"
-    },
-    {
-      "name": "legacy_mapping",
-      "layer": "registry_identity",
-      "status": "planned",
-      "reason": "Dedicated mapping review module planned"
-    },
-    {
-      "name": "variants",
-      "layer": "registry_identity",
-      "status": "planned",
-      "reason": "Metadata/split-ID module planned"
-    },
-    {
-      "name": "item_properties",
-      "layer": "behavior_boundary",
-      "status": "implemented",
-      "reason": "Phase C Batch 16 report-only item stack size, durability, rarity and behavior/property clue audit"
-    },
-    {
       "name": "block_properties",
       "layer": "behavior_boundary",
       "status": "implemented",
       "reason": "Phase C Batch 18 report-only source-evidenced block property parity scan"
-    },
-    {
-      "name": "textures",
-      "layer": "resource_boundary",
-      "status": "implemented",
-      "reason": "Batch 5 registered model texture graph check"
-    },
-    {
-      "name": "creative_tabs",
-      "layer": "resource_boundary",
-      "status": "planned",
-      "reason": "Creative order parity module planned"
-    },
-    {
-      "name": "recipes",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Batch 8 report-only data/reference module check"
-    },
-    {
-      "name": "tags",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Batch 8 report-only data/reference module check"
-    },
-    {
-      "name": "aspects",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Batch 8 report-only data/reference module check"
-    },
-    {
-      "name": "research_refs",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Batch 8 report-only data/reference module check"
-    },
-    {
-      "name": "thaumonomicon_refs",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Batch 8 report-only data/reference module check"
-    },
-    {
-      "name": "data_components",
-      "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Legacy NBT/data component check planned"
     },
     {
       "name": "blockentities",
@@ -141,6 +21,30 @@
       "reason": "Batch 9 report-only behavior-boundary module check"
     },
     {
+      "name": "client_server_safety",
+      "layer": "behavior_boundary",
+      "status": "implemented",
+      "reason": "Phase D Batch 21 report-only client/server boundary safety scan"
+    },
+    {
+      "name": "data_components",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Legacy NBT/data component check planned"
+    },
+    {
+      "name": "equipment",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Tool/armor material and equipment links planned"
+    },
+    {
+      "name": "item_properties",
+      "layer": "behavior_boundary",
+      "status": "implemented",
+      "reason": "Phase C Batch 16 report-only item stack size, durability, rarity and behavior/property clue audit"
+    },
+    {
       "name": "menus",
       "layer": "behavior_boundary",
       "status": "implemented",
@@ -153,40 +57,10 @@
       "reason": "Payload reference boundary planned"
     },
     {
-      "name": "client_server_safety",
-      "layer": "behavior_boundary",
+      "name": "aspects",
+      "layer": "data_boundary",
       "status": "implemented",
-      "reason": "Phase D Batch 21 report-only client/server boundary safety scan"
-    },
-    {
-      "name": "sounds_particles",
-      "layer": "visual_boundary",
-      "status": "implemented",
-      "reason": "Phase D Batch 20 report-only sound event, particle and client FX reference audit"
-    },
-    {
-      "name": "fuels_flammability",
-      "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Fuel/flammability maps planned"
-    },
-    {
-      "name": "equipment",
-      "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Tool/armor material and equipment links planned"
-    },
-    {
-      "name": "entity_links",
-      "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Entity/spawn egg links planned"
-    },
-    {
-      "name": "worldgen_links",
-      "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Worldgen-linked block references planned"
+      "reason": "Batch 8 report-only data/reference module check"
     },
     {
       "name": "config_gates",
@@ -195,16 +69,118 @@
       "reason": "Config feature gate checks planned"
     },
     {
-      "name": "access_transformers",
-      "layer": "source_quality",
-      "status": "planned",
-      "reason": "AT visibility audit planned"
+      "name": "drop_behavior",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Phase C Batch 19 report-only source/loot-table drop behavior parity scan"
     },
     {
-      "name": "public_api",
-      "layer": "source_quality",
+      "name": "entity_links",
+      "layer": "data_boundary",
       "status": "planned",
-      "reason": "Public API surface check planned"
+      "reason": "Entity/spawn egg links planned"
+    },
+    {
+      "name": "fuels_flammability",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Fuel/flammability maps planned"
+    },
+    {
+      "name": "recipes",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
+    },
+    {
+      "name": "research_refs",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
+    },
+    {
+      "name": "tags",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
+    },
+    {
+      "name": "thaumonomicon_refs",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
+    },
+    {
+      "name": "worldgen_links",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Worldgen-linked block references planned"
+    },
+    {
+      "name": "duplicate_registry_id",
+      "layer": "registry_identity",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "legacy_mapping",
+      "layer": "registry_identity",
+      "status": "planned",
+      "reason": "Dedicated mapping review module planned"
+    },
+    {
+      "name": "registry",
+      "layer": "registry_identity",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "variants",
+      "layer": "registry_identity",
+      "status": "planned",
+      "reason": "Metadata/split-ID module planned"
+    },
+    {
+      "name": "block_item_pairs",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "blockstates",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "creative_tabs",
+      "layer": "resource_boundary",
+      "status": "planned",
+      "reason": "Creative order parity module planned"
+    },
+    {
+      "name": "json_validity",
+      "layer": "resource_boundary",
+      "status": "planned",
+      "reason": "CI-safe mechanical check planned"
+    },
+    {
+      "name": "lang",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "loot",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "models",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
     },
     {
       "name": "orphan_references",
@@ -213,10 +189,22 @@
       "reason": "Batch 5 registered unresolved registered-resource reference check"
     },
     {
+      "name": "textures",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Batch 5 registered model texture graph check"
+    },
+    {
       "name": "datapack_load",
       "layer": "runtime_boundary",
       "status": "implemented",
       "reason": "Batch 22 report-only static runtime/datapack load smoke audit"
+    },
+    {
+      "name": "game_test_smoke",
+      "layer": "runtime_boundary",
+      "status": "implemented",
+      "reason": "Batch 23 report-only GameTest/scripted behavior smoke readiness framework"
     },
     {
       "name": "runtime_smoke",
@@ -225,16 +213,22 @@
       "reason": "Batch 10 runtime orchestration is available through explicit -RunSmoke; this check remains out of presets/CI hard-fail until policy is finalized"
     },
     {
-      "name": "visual_boundary",
-      "layer": "visual_boundary",
-      "status": "implemented",
-      "reason": "Phase B Batch 15 report-only model/transform audit with reviewed equivalence rule support"
+      "name": "access_transformers",
+      "layer": "source_quality",
+      "status": "planned",
+      "reason": "AT visibility audit planned"
     },
     {
-      "name": "texture_color",
-      "layer": "visual_boundary",
+      "name": "auto_fix_candidates",
+      "layer": "source_quality",
       "status": "implemented",
-      "reason": "Phase B Batch 14 report-only texture hash, size, alpha and average-color parity scan"
+      "reason": "Phase D Batch 25 focus-aware report-only candidate classifier; stale local module reports are filtered to focused manifest IDs"
+    },
+    {
+      "name": "check_invocation",
+      "layer": "source_quality",
+      "status": "implemented",
+      "reason": "Batch 28 report-only implemented-check invocation owner self-test"
     },
     {
       "name": "docs_deferred",
@@ -249,6 +243,24 @@
       "reason": "Primary manifest extraction exists"
     },
     {
+      "name": "original_jar_probe",
+      "layer": "source_quality",
+      "status": "planned",
+      "reason": "Batch 7/quality jar probe planned"
+    },
+    {
+      "name": "public_api",
+      "layer": "source_quality",
+      "status": "planned",
+      "reason": "Public API surface check planned"
+    },
+    {
+      "name": "report_schema",
+      "layer": "source_quality",
+      "status": "implemented",
+      "reason": "Batch 27 report-only JSON report schema contract validator"
+    },
+    {
       "name": "secondary_legacy_probe",
       "layer": "source_quality",
       "status": "implemented",
@@ -261,28 +273,22 @@
       "reason": "Source conflict aggregation planned"
     },
     {
-      "name": "original_jar_probe",
-      "layer": "source_quality",
-      "status": "planned",
-      "reason": "Batch 7/quality jar probe planned"
+      "name": "sounds_particles",
+      "layer": "visual_boundary",
+      "status": "implemented",
+      "reason": "Phase D Batch 20 report-only sound event, particle and client FX reference audit"
     },
     {
-      "name": "auto_fix_candidates",
-      "layer": "source_quality",
+      "name": "texture_color",
+      "layer": "visual_boundary",
       "status": "implemented",
-      "reason": "Phase D Batch 25 focus-aware report-only candidate classifier; stale local module reports are filtered to focused manifest IDs"
+      "reason": "Phase B Batch 14 report-only texture hash, size, alpha and average-color parity scan"
     },
     {
-      "name": "report_schema",
-      "layer": "source_quality",
+      "name": "visual_boundary",
+      "layer": "visual_boundary",
       "status": "implemented",
-      "reason": "Batch 27 report-only JSON report schema contract validator"
-    },
-    {
-      "name": "game_test_smoke",
-      "layer": "runtime_boundary",
-      "status": "implemented",
-      "reason": "Batch 23 report-only GameTest/scripted behavior smoke readiness framework"
+      "reason": "Phase B Batch 15 report-only model/transform audit with reviewed equivalence rule support"
     }
   ]
 }
