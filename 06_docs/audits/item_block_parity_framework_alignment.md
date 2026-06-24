@@ -45,6 +45,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 23 | Closed: report-only GameTest/scripted behavior smoke readiness audit inventories GameTest namespace wiring, Gradle run configs, fixture directories, scripted runtime audit hooks and recommended smoke commands without launching Minecraft | GameTest/scripted behavior smoke framework |
 | 24 | Closed: focused filtering generates filtered manifests for Ids, IdPrefix, Families, Packages and ChangedOnly/SinceCommit before checks execute | Focused audit filtering |
 | 25 | Closed: focus-aware auto-fix candidate reporter classifies missing/review rows and filters stale local module reports to the current focused manifest IDs | Auto-fix candidate reporter |
+| 26 | Closed: layer completion matrix defines completion requirements, known limitations and verifier/CI expectations for each existing item/block parity framework layer | Layer completion matrix |
 
 ## Roadmap numbering note
 
@@ -57,3 +58,5 @@ Do not continue fixing individual resource gaps as the default activity. The nex
 Batch 25 refinement: auto-fix candidate reports must respect focused manifests when reusing stale local module reports.
 
 Batch 23 closure: scripted behavior smoke is a report-only readiness framework; it inventories wiring and recommended commands but does not launch Minecraft automatically.
+
+Batch 26 closure: the layer completion matrix is the authoritative contract for deciding whether a layer is complete, still planned, intentionally out of scope, superseded or blocked.
