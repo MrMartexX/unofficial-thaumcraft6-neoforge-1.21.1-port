@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "policy": "Reviewed exemptions for the report-only auto-fix candidate classifier. Empty by default so candidates are not hidden.",
+  "entries": []
+}

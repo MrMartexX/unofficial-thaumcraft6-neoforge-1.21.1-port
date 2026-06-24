@@ -299,6 +299,16 @@ if ($selectedSoundParticleChecks.Count -gt 0) {
     & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
+$autoFixCandidateChecks = @("auto_fix_candidates")
+$selectedAutoFixCandidateChecks = @($implementedSelected | Where-Object { $_ -in $autoFixCandidateChecks })
+function Invoke-AutoFixCandidateReporter {
+    param([string]$LegacyManifestForCandidates, [string]$PortManifestForCandidates)
+    if ($selectedAutoFixCandidateChecks.Count -eq 0) { return }
+    $autoFixCandidateModule = Join-Path $PSScriptRoot "modules/auto_fix_candidates.ps1"
+    if (-not (Test-Path -LiteralPath $autoFixCandidateModule -PathType Leaf)) { throw "Auto-fix candidate module not found: $autoFixCandidateModule" }
+    & $autoFixCandidateModule -RepoRoot $RepoRoot -LegacyManifestPath $LegacyManifestForCandidates -PortManifestPath $PortManifestForCandidates -PortRoot $PortRoot -RulesRoot $rulesRoot -ReportRoot $reportRoot -Checks $selectedAutoFixCandidateChecks -ParityReportPath $reportJson -OutputJson (Join-Path $reportRoot "item_block_auto_fix_candidates.json") -OutputMarkdown (Join-Path $reportRoot "item_block_auto_fix_candidates.md")
+    if (-not $?) { throw "Auto-fix candidate module failed." }
+}
 $clientServerSafetyChecks = @("client_server_safety")
 $selectedClientServerSafetyChecks = @($implementedSelected | Where-Object { $_ -in $clientServerSafetyChecks })
 if ($selectedClientServerSafetyChecks.Count -gt 0) {
@@ -308,6 +318,7 @@ if ($selectedClientServerSafetyChecks.Count -gt 0) {
     if (-not $?) { throw "Client/server safety module failed." }
 }
 if ($comparerSelected.Count -eq 0) {
+    Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0
 }
@@ -329,6 +340,7 @@ $compareSucceeded = $?
 $compareExitCode = $LASTEXITCODE
 & $validator -LegacyManifest $legacyManifestForChecks -PortManifest $portManifestForChecks -ReportPath $reportJson
 if (-not $?) { throw "Parity report validation failed." }
+Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
 if (-not $compareSucceeded) {
     if ($null -ne $compareExitCode) { exit $compareExitCode }
     exit 1
