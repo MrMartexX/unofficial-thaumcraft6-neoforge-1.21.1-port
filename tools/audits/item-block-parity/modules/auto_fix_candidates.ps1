@@ -43,6 +43,10 @@ function Normalize-Id([string]$Id) {
     if ($Id.StartsWith("thaumcraft:")) { return $Id.Substring("thaumcraft:".Length) }
     return $Id
 }
+function Normalize-Kind([string]$Kind) {
+    if ([string]::IsNullOrWhiteSpace($Kind)) { return "unknown" }
+    return $Kind.ToLowerInvariant()
+}
 function Format-List($Values) {
     $items = @($Values | Where-Object { $_ } | Sort-Object -Unique)
     if ($items.Count -eq 0) { return "<none>" }
@@ -56,29 +60,59 @@ function New-EntryLookup($Manifest) {
     }
     return $lookup
 }
+function New-FocusContext($LegacyManifest, $PortManifest, [string]$LegacyPath, [string]$PortPath) {
+    $kindId = @{}
+    $idOnly = @{}
+    foreach ($manifest in @($LegacyManifest, $PortManifest)) {
+        foreach ($entry in @($manifest.entries)) {
+            if (-not $entry.registryId) { continue }
+            $id = Normalize-Id ([string]$entry.registryId)
+            $kind = Normalize-Kind ([string]$entry.kind)
+            if ([string]::IsNullOrWhiteSpace($id)) { continue }
+            $idOnly[$id] = $true
+            if ($kind -ne "unknown") { $kindId["${kind}:$id"] = $true }
+        }
+    }
+    $focused = $LegacyPath.EndsWith(".focused.json") -or $PortPath.EndsWith(".focused.json")
+    return [pscustomobject][ordered]@{
+        isFocused = $focused
+        kindId = $kindId
+        idOnly = $idOnly
+    }
+}
+function Test-FocusSelected($Focus, [string]$Kind, [string]$Id) {
+    if (-not $Focus.isFocused) { return $true }
+    $id = Normalize-Id $Id
+    $kind = Normalize-Kind $Kind
+    if ([string]::IsNullOrWhiteSpace($id) -or $id -eq "unknown") { return $false }
+    if ($kind -ne "unknown" -and $Focus.kindId.ContainsKey("${kind}:$id")) { return $true }
+    return $Focus.idOnly.ContainsKey($id)
+}
 function New-RuleLookup($Document) {
     $lookup = @{}
     foreach ($entry in @($Document.entries)) {
         if (-not $entry.kind -or -not $entry.id) { continue }
         $id = Normalize-Id ([string]$entry.id)
-        $lookup["$($entry.kind):$id"] = $entry
+        $kind = Normalize-Kind ([string]$entry.kind)
+        $lookup["${kind}:$id"] = $entry
     }
     return $lookup
 }
 function Test-RuleAccepted($Lookup, [string]$Kind, [string]$Id, [string]$Category) {
-    $key = "${Kind}:$(Normalize-Id $Id)"
+    $key = "$(Normalize-Kind $Kind):$(Normalize-Id $Id)"
     if (-not $Lookup.ContainsKey($key)) { return $false }
     $entry = $Lookup[$key]
     if (-not $entry.acceptedCategories) { return $false }
     return @($entry.acceptedCategories | ForEach-Object { [string]$_ }) -contains $Category
 }
 function Get-RuleReason($Lookup, [string]$Kind, [string]$Id) {
-    $key = "${Kind}:$(Normalize-Id $Id)"
+    $key = "$(Normalize-Kind $Kind):$(Normalize-Id $Id)"
     if ($Lookup.ContainsKey($key) -and $Lookup[$key].reason) { return [string]$Lookup[$key].reason }
     return ""
 }
 function Add-Candidate(
     $Rows,
+    $Focus,
     [string]$Category,
     [string]$Confidence,
     [string]$Kind,
@@ -90,11 +124,14 @@ function Add-Candidate(
     [string]$SuggestedPath = "",
     [string]$Reason = ""
 ) {
+    $kindNorm = Normalize-Kind $Kind
+    $idNorm = Normalize-Id $Id
+    if (-not (Test-FocusSelected $Focus $kindNorm $idNorm)) { return }
     $Rows.Add([pscustomobject][ordered]@{
         category = $Category
         confidence = $Confidence
-        kind = $Kind
-        id = if ($Id.StartsWith("thaumcraft:")) { $Id } else { "thaumcraft:$Id" }
+        kind = $kindNorm
+        id = if ($idNorm.StartsWith("thaumcraft:")) { $idNorm } else { "thaumcraft:$idNorm" }
         sourceCheck = $SourceCheck
         sourceStatus = $Status
         evidence = $Evidence
@@ -103,52 +140,52 @@ function Add-Candidate(
         reason = $Reason
     })
 }
-function Add-FromComparerReport($Rows, $Report, $PortLookup, $Rules) {
+function Add-FromComparerReport($Rows, $Focus, $Report, $PortLookup, $Rules) {
     if ($null -eq $Report -or -not $Report.results) { return }
     foreach ($row in @($Report.results)) {
         if ($row.status -notin @("MISSING", "DEFERRED")) { continue }
-        $kind = [string]$row.kind
+        $kind = Normalize-Kind ([string]$row.kind)
         $id = Normalize-Id ([string]$row.id)
+        if (-not (Test-FocusSelected $Focus $kind $id)) { continue }
         $check = [string]$row.check
         $entry = if ($PortLookup.ContainsKey("${kind}:$id")) { $PortLookup["${kind}:$id"] } else { $null }
         if (Test-RuleAccepted $Rules $kind $id $check) { continue }
         $ruleReason = Get-RuleReason $Rules $kind $id
         switch ($check) {
             "lang" {
-                $key = if ($kind -eq "block" -or ($entry -and $entry.blockItem)) { "block.thaumcraft.$id" } else { "item.thaumcraft.$id" }
-                Add-Candidate $Rows "missing_lang_stub" "safe_mechanical" $kind $id $check $row.status $row.evidence "Add a temporary English lang value after naming review" "05_neoforge_port/src/main/resources/assets/thaumcraft/lang/en_us.json" $ruleReason
+                Add-Candidate $Rows $Focus "missing_lang_stub" "safe_mechanical" $kind $id $check $row.status $row.evidence "Add a temporary English lang value after naming review" "05_neoforge_port/src/main/resources/assets/thaumcraft/lang/en_us.json" $ruleReason
             }
             "loot" {
-                Add-Candidate $Rows "missing_self_drop_loot_table" "safe_if_self_drop_expected" $kind $id $check $row.status $row.evidence "Generate a simple self-drop loot table only after confirming legacy did not use custom drops" "05_neoforge_port/src/main/resources/data/thaumcraft/loot_table/blocks/$id.json" $ruleReason
+                Add-Candidate $Rows $Focus "missing_self_drop_loot_table" "safe_if_self_drop_expected" $kind $id $check $row.status $row.evidence "Generate a simple self-drop loot table only after confirming legacy did not use custom drops" "05_neoforge_port/src/main/resources/data/thaumcraft/loot_table/blocks/$id.json" $ruleReason
             }
             "models" {
                 if ($kind -eq "item") {
                     $category = if ($entry -and $entry.blockItem) { "missing_block_item_model_proxy" } else { "missing_generated_item_model" }
                     $action = if ($entry -and $entry.blockItem) { "Generate item model that points to the block model" } else { "Generate item/generated model after confirming texture naming" }
-                    Add-Candidate $Rows $category "safe_if_texture_exists" $kind $id $check $row.status $row.evidence $action "05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/$id.json" $ruleReason
+                    Add-Candidate $Rows $Focus $category "safe_if_texture_exists" $kind $id $check $row.status $row.evidence $action "05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/$id.json" $ruleReason
                 } elseif ($kind -eq "block") {
-                    Add-Candidate $Rows "missing_block_model_reference" "review_required" $kind $id $check $row.status $row.evidence "Create or remap referenced block model only after reviewing intended geometry" "05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/$id.json" $ruleReason
+                    Add-Candidate $Rows $Focus "missing_block_model_reference" "review_required" $kind $id $check $row.status $row.evidence "Create or remap referenced block model only after reviewing intended geometry" "05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/$id.json" $ruleReason
                 }
             }
             "blockstates" {
-                Add-Candidate $Rows "missing_blockstate_stub" "review_required" $kind $id $check $row.status $row.evidence "Generate a blockstate only after confirming state/property variants" "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/$id.json" $ruleReason
+                Add-Candidate $Rows $Focus "missing_blockstate_stub" "review_required" $kind $id $check $row.status $row.evidence "Generate a blockstate only after confirming state/property variants" "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/$id.json" $ruleReason
             }
             "textures" {
-                Add-Candidate $Rows "missing_texture_reference" "review_required" $kind $id $check $row.status $row.evidence "Resolve texture reference by porting/remapping the legacy texture; do not synthesize visual parity blindly" "" $ruleReason
+                Add-Candidate $Rows $Focus "missing_texture_reference" "review_required" $kind $id $check $row.status $row.evidence "Resolve texture reference by porting/remapping the legacy texture; do not synthesize visual parity blindly" "" $ruleReason
             }
             "orphan_references" {
-                Add-Candidate $Rows "orphan_resource_reference" "safe_failure_candidate" $kind $id $check $row.status $row.evidence "Fix broken model/texture reference before enabling safe CI hard-fail" "" $ruleReason
+                Add-Candidate $Rows $Focus "orphan_resource_reference" "safe_failure_candidate" $kind $id $check $row.status $row.evidence "Fix broken model/texture reference before enabling safe CI hard-fail" "" $ruleReason
             }
             "block_item_pairs" {
-                Add-Candidate $Rows "missing_block_item_registration" "review_required" $kind $id $check $row.status $row.evidence "Add BlockItem registration only if legacy block was obtainable as an item" "05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java" $ruleReason
+                Add-Candidate $Rows $Focus "missing_block_item_registration" "review_required" $kind $id $check $row.status $row.evidence "Add BlockItem registration only if legacy block was obtainable as an item" "05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java" $ruleReason
             }
             default {
-                Add-Candidate $Rows "generic_missing_parity_input" "review_required" $kind $id $check $row.status $row.evidence "Review missing parity result and classify before auto-fix" "" $ruleReason
+                Add-Candidate $Rows $Focus "generic_missing_parity_input" "review_required" $kind $id $check $row.status $row.evidence "Review missing parity result and classify before auto-fix" "" $ruleReason
             }
         }
     }
 }
-function Add-FromModuleReport($Rows, $ReportPath, [string]$DefaultKind, [string]$CategoryPrefix, [string[]]$ReviewStatuses, [string[]]$MismatchStatuses) {
+function Add-FromModuleReport($Rows, $Focus, $ReportPath, [string]$DefaultKind, [string]$CategoryPrefix, [string[]]$ReviewStatuses, [string[]]$MismatchStatuses) {
     $report = Read-JsonOrNull $ReportPath
     if ($null -eq $report) { return }
     $dataRows = @()
@@ -157,33 +194,35 @@ function Add-FromModuleReport($Rows, $ReportPath, [string]$DefaultKind, [string]
     foreach ($row in $dataRows) {
         $status = [string]$row.status
         if ($status -notin @($ReviewStatuses + $MismatchStatuses)) { continue }
-        $kind = if ($row.kind) { [string]$row.kind } else { $DefaultKind }
+        $kind = if ($row.kind) { Normalize-Kind ([string]$row.kind) } else { Normalize-Kind $DefaultKind }
         $id = if ($row.id) { Normalize-Id ([string]$row.id) } elseif ($row.registryId) { Normalize-Id ([string]$row.registryId) } else { "unknown" }
+        if (-not (Test-FocusSelected $Focus $kind $id)) { continue }
         $subcheck = if ($row.subcheck) { [string]$row.subcheck } elseif ($row.check) { [string]$row.check } else { "unknown" }
         $confidence = if ($status -in $MismatchStatuses) { "review_required_mismatch" } else { "review_required" }
         $category = if ($status -in $MismatchStatuses) { "${CategoryPrefix}_mismatch" } else { "${CategoryPrefix}_review" }
         $evidence = if ($row.evidence) { [string]$row.evidence } else { "status=$status; subcheck=$subcheck" }
-        Add-Candidate $Rows $category $confidence $kind $id $subcheck $status $evidence "Review report row and either implement parity or add a documented equivalence rule" "" ""
+        Add-Candidate $Rows $Focus $category $confidence $kind $id $subcheck $status $evidence "Review report row and either implement parity or add a documented equivalence rule" "" ""
     }
 }
 
 $legacy = Get-Content -Raw -LiteralPath $LegacyManifestPath | ConvertFrom-Json
 $port = Get-Content -Raw -LiteralPath $PortManifestPath | ConvertFrom-Json
+$focus = New-FocusContext $legacy $port $LegacyManifestPath $PortManifestPath
 $portLookup = New-EntryLookup $port
 $rules = New-RuleLookup (Read-RuleDocument $RulesRoot "auto-fix-candidate-rules.json")
 $candidates = [System.Collections.Generic.List[object]]::new()
 
 $parityReport = Read-JsonOrNull $ParityReportPath
-Add-FromComparerReport $candidates $parityReport $portLookup $rules
+Add-FromComparerReport $candidates $focus $parityReport $portLookup $rules
 
-Add-FromModuleReport $candidates (Join-Path $ReportRoot "item_block_item_property_report.json") "item" "item_property" @("ITEM_PROPERTY_REVIEW_NEEDED", "LEGACY_PROPERTY_MISSING", "NOT_EVIDENCED", "LEGACY_MISSING") @("ITEM_PROPERTY_MISMATCH", "VALUE_MISMATCH")
-Add-FromModuleReport $candidates (Join-Path $ReportRoot "item_block_block_property_report.json") "block" "block_property" @("BLOCK_PROPERTY_REVIEW_NEEDED", "NOT_EVIDENCED", "LEGACY_MISSING") @("BLOCK_PROPERTY_MISMATCH", "VALUE_MISMATCH")
-Add-FromModuleReport $candidates (Join-Path $ReportRoot "item_block_loot_drop_behavior_report.json") "block" "loot_drop" @("DROP_REVIEW_NEEDED", "TABLE_MISSING", "NOT_EVIDENCED", "LEGACY_MISSING") @("DROP_VALUE_MISMATCH", "VALUE_MISMATCH")
-Add-FromModuleReport $candidates (Join-Path $ReportRoot "item_block_client_server_safety_report.json") "unknown" "client_server_safety" @("CLIENT_SERVER_REVIEW_NEEDED") @()
-Add-FromModuleReport $candidates (Join-Path $ReportRoot "item_block_sound_particle_fx_report.json") "unknown" "sound_particle_fx" @("SOUND_PARTICLE_REVIEW_NEEDED", "NOT_EVIDENCED", "LEGACY_MISSING") @("SOUND_PARTICLE_MISMATCH", "VALUE_MISMATCH")
-Add-FromModuleReport $candidates (Join-Path $ReportRoot "item_block_visual_model_transform_report.json") "unknown" "visual_model_transform" @("VISUAL_REVIEW_NEEDED", "VISUAL_MODEL_MISSING") @()
-Add-FromModuleReport $candidates (Join-Path $ReportRoot "item_block_texture_color_report.json") "unknown" "texture_color" @("PORT_TEXTURE_MISSING", "LEGACY_TEXTURE_MISSING", "TEXTURE_REVIEW_NEEDED") @("TEXTURE_MISMATCH", "COLOR_MISMATCH")
-Add-FromModuleReport $candidates (Join-Path $ReportRoot "item_block_data_reference_report.json") "unknown" "data_reference" @("DATA_REF_REVIEW_NEEDED", "MISSING_REFERENCE", "NOT_EVIDENCED") @()
+Add-FromModuleReport $candidates $focus (Join-Path $ReportRoot "item_block_item_property_report.json") "item" "item_property" @("ITEM_PROPERTY_REVIEW_NEEDED", "LEGACY_PROPERTY_MISSING", "NOT_EVIDENCED", "LEGACY_MISSING") @("ITEM_PROPERTY_MISMATCH", "VALUE_MISMATCH")
+Add-FromModuleReport $candidates $focus (Join-Path $ReportRoot "item_block_block_property_report.json") "block" "block_property" @("BLOCK_PROPERTY_REVIEW_NEEDED", "NOT_EVIDENCED", "LEGACY_MISSING") @("BLOCK_PROPERTY_MISMATCH", "VALUE_MISMATCH")
+Add-FromModuleReport $candidates $focus (Join-Path $ReportRoot "item_block_loot_drop_behavior_report.json") "block" "loot_drop" @("DROP_REVIEW_NEEDED", "TABLE_MISSING", "NOT_EVIDENCED", "LEGACY_MISSING") @("DROP_VALUE_MISMATCH", "VALUE_MISMATCH")
+Add-FromModuleReport $candidates $focus (Join-Path $ReportRoot "item_block_client_server_safety_report.json") "unknown" "client_server_safety" @("CLIENT_SERVER_REVIEW_NEEDED") @()
+Add-FromModuleReport $candidates $focus (Join-Path $ReportRoot "item_block_sound_particle_fx_report.json") "unknown" "sound_particle_fx" @("SOUND_PARTICLE_REVIEW_NEEDED", "NOT_EVIDENCED", "LEGACY_MISSING") @("SOUND_PARTICLE_MISMATCH", "VALUE_MISMATCH")
+Add-FromModuleReport $candidates $focus (Join-Path $ReportRoot "item_block_visual_model_transform_report.json") "unknown" "visual_model_transform" @("VISUAL_REVIEW_NEEDED", "VISUAL_MODEL_MISSING") @()
+Add-FromModuleReport $candidates $focus (Join-Path $ReportRoot "item_block_texture_color_report.json") "unknown" "texture_color" @("PORT_TEXTURE_MISSING", "LEGACY_TEXTURE_MISSING", "TEXTURE_REVIEW_NEEDED") @("TEXTURE_MISMATCH", "COLOR_MISMATCH")
+Add-FromModuleReport $candidates $focus (Join-Path $ReportRoot "item_block_data_reference_report.json") "unknown" "data_reference" @("DATA_REF_REVIEW_NEEDED", "MISSING_REFERENCE", "NOT_EVIDENCED") @()
 
 $ordered = @($candidates | Sort-Object confidence, category, kind, id, sourceCheck)
 $summaryByCategory = @($ordered | Group-Object category | Sort-Object Name | ForEach-Object {
@@ -194,14 +233,19 @@ $summaryByConfidence = @($ordered | Group-Object confidence | Sort-Object Name |
 })
 
 $report = [ordered]@{
-    schemaVersion = 1
+    schemaVersion = 2
     generatedAtUtc = [DateTime]::UtcNow.ToString("o")
-    policy = "Report-only auto-fix candidate classifier. It does not modify game resources. safe_mechanical means a candidate is mechanically simple, not automatically legacy-parity-correct."
+    policy = "Report-only auto-fix candidate classifier. It does not modify game resources. safe_mechanical means a candidate is mechanically simple, not automatically legacy-parity-correct. When focused manifests are supplied, stale full local module reports are filtered to the focused IDs."
     inputs = [ordered]@{
         legacyManifest = ConvertTo-RelativeRepoPath $LegacyManifestPath
         portManifest = ConvertTo-RelativeRepoPath $PortManifestPath
         parityReport = ConvertTo-RelativeRepoPath $ParityReportPath
         reportRoot = ConvertTo-RelativeRepoPath $ReportRoot
+        focus = [ordered]@{
+            focused = $focus.isFocused
+            focusedEntryKeys = $focus.kindId.Count
+            focusedIds = @($focus.idOnly.Keys | Sort-Object)
+        }
     }
     summary = [ordered]@{
         candidates = $ordered.Count
@@ -227,6 +271,8 @@ $lines.Add("Generated: $($report.generatedAtUtc)")
 $lines.Add("")
 $lines.Add("Policy: report-only. A candidate is not automatically parity-safe until reviewed against legacy behavior.")
 $lines.Add("")
+$lines.Add("Focused manifests: $($report.inputs.focus.focused); focused IDs: $($report.inputs.focus.focusedIds.Count)")
+$lines.Add("")
 $lines.Add("## Summary")
 $lines.Add("")
 $lines.Add("- Candidates: $($report.summary.candidates)")
@@ -247,7 +293,7 @@ $lines.Add("")
 $lines.Add("| Confidence | Category | Kind | ID | Source | Suggested action |")
 $lines.Add("|---|---|---|---|---|---|")
 foreach ($candidate in @($ordered | Select-Object -First 500)) {
-    $action = if ($candidate.suggestedAction) { $candidate.suggestedAction.Replace("|", "\\|") } else { "" }
+    $action = if ($candidate.suggestedAction) { $candidate.suggestedAction.Replace("|", "\|") } else { "" }
     $lines.Add("| $($candidate.confidence) | $($candidate.category) | $($candidate.kind) | $($candidate.id) | $($candidate.sourceCheck):$($candidate.sourceStatus) | $action |")
 }
 if ($ordered.Count -gt 500) { $lines.Add(""); $lines.Add("Only first 500 candidates are shown in Markdown. See JSON for all candidates.") }

@@ -270,8 +270,8 @@
       "name": "auto_fix_candidates",
       "layer": "source_quality",
       "status": "implemented",
-      "reason": "Batch 25 report-only auto-fix candidate classifier"
+      "reason": "Phase D Batch 25 focus-aware report-only candidate classifier; stale local module reports are filtered to focused manifest IDs"
     }
   ],
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 25 adds report-only auto-fix candidate classification."
+  "note": "Batch 25 auto-fix candidate reporter is focus-aware and report-only; it must not apply fixes automatically."
 }

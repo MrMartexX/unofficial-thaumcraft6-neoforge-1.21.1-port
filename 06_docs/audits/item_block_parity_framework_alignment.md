@@ -44,7 +44,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 22 | Deferred: dedicated runtime registry/datapack load smoke audit remains reserved; Batch 10 already provides explicit -RunBuild/-RunSmoke/-RunRelatedAudits orchestration | Runtime registry/datapack smoke audit |
 | 23 | Deferred: GameTest/scripted behavior smoke framework remains reserved until runtime fixtures are stable | GameTest/scripted behavior smoke framework |
 | 24 | Closed: focused filtering generates filtered manifests for Ids, IdPrefix, Families, Packages and ChangedOnly/SinceCommit before checks execute | Focused audit filtering |
-| 25 | Closed: report-only auto-fix candidate reporter classifies safe mechanical candidates and review-required candidates without modifying resources | Auto-fix candidate reporter |
+| 25 | Closed: focus-aware auto-fix candidate reporter classifies missing/review rows and filters stale local module reports to the current focused manifest IDs | Auto-fix candidate reporter |
 
 ## Roadmap numbering note
 
@@ -53,3 +53,5 @@ Batch 24 was implemented before Batch 22/23 because focused filtering became nec
 ## Rule from this point onward
 
 Do not continue fixing individual resource gaps as the default activity. The next batches should close framework-plan gaps in order.
+
+Batch 25 refinement: auto-fix candidate reports must respect focused manifests when reusing stale local module reports.
