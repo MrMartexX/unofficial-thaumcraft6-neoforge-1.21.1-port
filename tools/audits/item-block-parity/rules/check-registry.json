@@ -215,8 +215,8 @@
     {
       "name": "datapack_load",
       "layer": "runtime_boundary",
-      "status": "planned",
-      "reason": "Runtime/datapack load integration planned"
+      "status": "implemented",
+      "reason": "Batch 22 report-only static runtime/datapack load smoke audit"
     },
     {
       "name": "runtime_smoke",

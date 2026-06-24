@@ -243,6 +243,14 @@ if ($selectedDataReferenceChecks.Count -gt 0) {
     if (-not $?) { throw "Data reference module failed." }
 }
 
+$datapackLoadChecks = @("datapack_load")
+$selectedDatapackLoadChecks = @($implementedSelected | Where-Object { $_ -in $datapackLoadChecks })
+if ($selectedDatapackLoadChecks.Count -gt 0) {
+    $datapackLoadModule = Join-Path $PSScriptRoot "modules/runtime_datapack_smoke.ps1"
+    if (-not (Test-Path -LiteralPath $datapackLoadModule -PathType Leaf)) { throw "Runtime/datapack load smoke module not found: $datapackLoadModule" }
+    & $datapackLoadModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedDatapackLoadChecks -OutputJson (Join-Path $reportRoot "item_block_runtime_datapack_smoke_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_runtime_datapack_smoke_report.md")
+    if (-not $?) { throw "Runtime/datapack load smoke module failed." }
+}
 $itemPropertyChecks = @("item_properties")
 $selectedItemPropertyChecks = @($implementedSelected | Where-Object { $_ -in $itemPropertyChecks })
 if ($selectedItemPropertyChecks.Count -gt 0) {
