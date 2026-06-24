@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 29 report freshness guard",
+  "description": "Report-only stale local report detection for item/block parity JSON reports.",
+  "reportFilePatterns": [
+    "*_report.json",
+    "item_block_parity_not_evaluated_checks.json",
+    "item_block_auto_fix_candidates.json"
+  ],
+  "ignoredFilePatterns": [
+    "legacy_primary_manifest.json",
+    "legacy_primary_manifest.focused.json",
+    "port_manifest.json",
+    "port_manifest.focused.json",
+    "report_freshness_guard_report.json"
+  ],
+  "dependencyGlobs": [
+    "tools/audits/item-block-parity/audit-item-block-parity.ps1",
+    "tools/audits/item-block-parity/modules/*.ps1",
+    "tools/audits/item-block-parity/rules/*.json",
+    "06_docs/audits/item_block_parity_*.md"
+  ],
+  "clockSkewSeconds": 2,
+  "status": {
+    "pass": "REPORT_FRESHNESS_PASS",
+    "review": "REPORT_FRESHNESS_REVIEW_NEEDED",
+    "error": "REPORT_FRESHNESS_ERROR"
+  }
+}

@@ -184,6 +184,12 @@
       "name": "report_schema"
     },
     {
+      "invocation": "reportFreshnessChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/report_freshness_guard.ps1",
+      "name": "report_freshness"
+    },
+    {
       "invocation": "checkInvocationChecks",
       "ownerType": "module",
       "ownerPath": "modules/check_invocation_self_test.ps1",

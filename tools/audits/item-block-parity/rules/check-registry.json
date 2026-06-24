@@ -261,6 +261,12 @@
       "reason": "Batch 27 report-only JSON report schema contract validator"
     },
     {
+      "name": "report_freshness",
+      "layer": "source_quality",
+      "status": "implemented",
+      "reason": "Batch 29 report-only stale local report freshness guard"
+    },
+    {
       "name": "secondary_legacy_probe",
       "layer": "source_quality",
       "status": "implemented",

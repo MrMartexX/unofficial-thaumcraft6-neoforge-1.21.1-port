@@ -48,6 +48,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 26 | Closed: layer completion matrix defines completion requirements, known limitations and verifier/CI expectations for each existing item/block parity framework layer | Layer completion matrix |
 | 27 | Closed: report schema contract validator audits generated JSON reports for required top-level schema fields and summary/results consistency | Report schema contract |
 | 28 | Closed: implemented-check invocation self-test verifies every implemented registry check has an invocation owner and existing comparer/module/script path | Check invocation self-test |
+| 29 | Closed: report-only freshness guard detects stale local item/block parity JSON reports by comparing report timestamps with audit scripts, rules and resolved input paths | Report freshness/stale report guard |
 
 ## Roadmap numbering note
 
@@ -66,3 +67,5 @@ Batch 26 closure: the layer completion matrix is the authoritative contract for 
 Batch 27 closure: report schema validation is report-only framework hardening; review rows identify reports that still need schema/freshness refinement and are not gameplay parity failures.
 
 Batch 28 closure: check invocation self-test is report-only framework hardening; it verifies implemented registry checks have explicit comparer/module/script owners before verifier v2 promotes this to a certification gate.
+
+Batch 29 closure: report freshness validation is report-only framework hardening; review rows identify stale local reports that should be regenerated before being trusted.

@@ -56,8 +56,8 @@ $presetChecks = @{
     resources = @("blockstates", "models", "textures", "lang", "loot", "tags", "recipes", "orphan_references")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
-    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation")
-    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation")
+    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation", "report_freshness")
+    "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness")
     full = @($allKnownChecks)
 }
 
@@ -327,6 +327,17 @@ if ($selectedSoundParticleChecks.Count -gt 0) {
     & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
+# Batch 29 report freshness guard start
+$reportFreshnessChecks = @("report_freshness")
+$selectedReportFreshnessChecks = @($implementedSelected | Where-Object { $_ -in $reportFreshnessChecks })
+function Invoke-ReportFreshnessGuard {
+    if ($selectedReportFreshnessChecks.Count -eq 0) { return }
+    $reportFreshnessModule = Join-Path $PSScriptRoot "modules/report_freshness_guard.ps1"
+    if (-not (Test-Path -LiteralPath $reportFreshnessModule -PathType Leaf)) { throw "Report freshness guard module not found: $reportFreshnessModule" }
+    & $reportFreshnessModule -RepoRoot $RepoRoot -ReportRoot $reportRoot -RulesRoot $rulesRoot -Checks $selectedReportFreshnessChecks -OutputJson (Join-Path $reportRoot "report_freshness_guard_report.json") -OutputMarkdown (Join-Path $reportRoot "report_freshness_guard_report.md")
+    if (-not $?) { throw "Report freshness guard module failed." }
+}
+# Batch 29 report freshness guard end
 $reportSchemaChecks = @("report_schema")
 $selectedReportSchemaChecks = @($implementedSelected | Where-Object { $_ -in $reportSchemaChecks })
 function Invoke-ReportSchemaValidator {
@@ -369,6 +380,7 @@ if ($selectedClientServerSafetyChecks.Count -gt 0) {
 if ($comparerSelected.Count -eq 0) {
     Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
 Invoke-CheckInvocationSelfTest
+Invoke-ReportFreshnessGuard
 Invoke-ReportSchemaValidator
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0
@@ -393,6 +405,7 @@ $compareExitCode = $LASTEXITCODE
 if (-not $?) { throw "Parity report validation failed." }
 Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
 Invoke-CheckInvocationSelfTest
+Invoke-ReportFreshnessGuard
 Invoke-ReportSchemaValidator
 if (-not $compareSucceeded) {
     if ($null -ne $compareExitCode) { exit $compareExitCode }
