@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "entries": [],
+  "notes": [
+    "Explicit reviewed differences only. Accepted properties may include hardness, resistance, sound, light_level, randomTicks, noOcclusion, noCollision, requiresCorrectTool, dynamicShape, redstone.",
+    "Do not use this file to hide unknown behavior. Each accepted rule must be backed by manual/runtime evidence."
+  ]
+}

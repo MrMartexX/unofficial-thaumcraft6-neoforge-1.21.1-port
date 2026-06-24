@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Phase B Batch 14 implements report-only texture/color parity scanning.",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 18 adds report-only block property parity scanning.",
   "checks": [
     {
       "name": "registry",
@@ -72,8 +72,8 @@
     {
       "name": "block_properties",
       "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Legacy block behavior clues not extracted yet"
+      "status": "implemented",
+      "reason": "Phase C Batch 18 report-only source-evidenced block property parity scan"
     },
     {
       "name": "textures",
