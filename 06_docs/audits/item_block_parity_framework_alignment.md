@@ -41,7 +41,13 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 19 | Closed: report-only loot/drop behavior audit compares source-evidenced legacy drop clues against port loot tables and source clues | Loot/drop behavior parity audit |
 | 20 | Closed: report-only sound/particle/FX reference audit records source-evidenced SoundType, sound event calls, particle calls and client FX clues | Sound/particle/FX parity audit |
 | 21 | Closed: report-only client/server safety audit records client-only references outside client packages, server references in client packages and guarded boundary evidence | Client/server safety audit |
+| 22 | Deferred: dedicated runtime registry/datapack load smoke audit remains reserved; Batch 10 already provides explicit -RunBuild/-RunSmoke/-RunRelatedAudits orchestration | Runtime registry/datapack smoke audit |
+| 23 | Deferred: GameTest/scripted behavior smoke framework remains reserved until runtime fixtures are stable | GameTest/scripted behavior smoke framework |
 | 24 | Closed: focused filtering generates filtered manifests for Ids, IdPrefix, Families, Packages and ChangedOnly/SinceCommit before checks execute | Focused audit filtering |
+
+## Roadmap numbering note
+
+Batch 24 was implemented before Batch 22/23 because focused filtering became necessary after the broad report-only layers made full reports too noisy for day-to-day work. Batch 22 and Batch 23 remain reserved/deferred roadmap slots, not silently skipped implementation claims.
 
 ## Rule from this point onward
 
