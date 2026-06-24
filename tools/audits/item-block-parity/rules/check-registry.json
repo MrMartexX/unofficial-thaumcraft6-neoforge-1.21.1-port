@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 10 adds explicit RunBuild/RunSmoke/RunRelatedAudits runtime orchestration.",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 11 adds report-only GitHub Actions artifact workflow; it does not hard-fail parity gaps.",
   "checks": [
     {
       "name": "registry",

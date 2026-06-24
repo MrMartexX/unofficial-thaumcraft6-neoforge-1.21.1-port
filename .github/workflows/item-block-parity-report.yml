@@ -1,0 +1,151 @@
+name: Item Block Parity Report
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - '05_neoforge_port/**'
+      - 'tools/audits/item-block-parity/**'
+      - '06_docs/audits/**'
+      - '.github/workflows/item-block-parity-report.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '05_neoforge_port/**'
+      - 'tools/audits/item-block-parity/**'
+      - '06_docs/audits/**'
+      - '.github/workflows/item-block-parity-report.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  item-block-parity-report:
+    name: Item/block parity report-only audit
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Run report-only item/block parity audits
+        run: |
+          $ErrorActionPreference = "Continue"
+          $repo = (Get-Location).Path
+          $audit = Join-Path $repo "tools/audits/item-block-parity/audit-item-block-parity.ps1"
+          $reportRoot = Join-Path $repo "tools/reports/local/item-block-parity"
+          $logRoot = Join-Path $reportRoot "ci-logs"
+          New-Item -ItemType Directory -Force -Path $reportRoot, $logRoot | Out-Null
+
+          $steps = [System.Collections.Generic.List[object]]::new()
+          function Invoke-ReportOnlyAudit {
+            param(
+              [Parameter(Mandatory = $true)][string]$Name,
+              [Parameter(Mandatory = $true)][string[]]$Arguments
+            )
+            $logPath = Join-Path $logRoot "$Name.log"
+            $started = [DateTime]::UtcNow
+            Write-Host "[item-block-parity] Running $Name"
+            $output = @(& pwsh -NoProfile -ExecutionPolicy Bypass -File $audit @Arguments 2>&1 | ForEach-Object { [string]$_ })
+            $exitCode = if ($null -ne $LASTEXITCODE) { $LASTEXITCODE } else { 0 }
+            $finished = [DateTime]::UtcNow
+            $output | Set-Content -LiteralPath $logPath -Encoding utf8NoBOM
+            $steps.Add([pscustomobject][ordered]@{
+              name = $Name
+              arguments = @($Arguments)
+              exitCode = $exitCode
+              status = if ($exitCode -eq 0) { "PASS" } else { "REPORT_ONLY_FAIL" }
+              startedAtUtc = $started.ToString("o")
+              finishedAtUtc = $finished.ToString("o")
+              log = [System.IO.Path]::GetRelativePath($repo, $logPath).Replace("\\", "/")
+            })
+            if ($exitCode -ne 0) {
+              Write-Warning "Report-only audit step '$Name' exited with $exitCode. Continuing so artifacts are uploaded."
+            }
+          }
+
+          Invoke-ReportOnlyAudit "registry" @("-RepoRoot", $repo, "-Preset", "registry", "-FailMode", "off")
+          Invoke-ReportOnlyAudit "resources" @("-RepoRoot", $repo, "-Preset", "resources", "-FailMode", "off")
+          Invoke-ReportOnlyAudit "data" @("-RepoRoot", $repo, "-Preset", "data", "-FailMode", "off")
+          Invoke-ReportOnlyAudit "behavior_boundary" @("-RepoRoot", $repo, "-Preset", "behavior-boundary", "-FailMode", "off")
+
+          $secondaryRoot = Join-Path $repo "03_self_decompiled_check/vineflower_thaumcraft6"
+          if (Test-Path -LiteralPath $secondaryRoot -PathType Container) {
+            Invoke-ReportOnlyAudit "source_quality" @("-RepoRoot", $repo, "-Preset", "source-quality", "-ProbeSecondaryLegacy", "-FailMode", "off")
+          } else {
+            $placeholder = Join-Path $reportRoot "legacy_secondary_probe_ci_skipped.md"
+            @(
+              "# Secondary legacy probe skipped",
+              "",
+              'The report-only CI job did not find `03_self_decompiled_check/vineflower_thaumcraft6` in the checked-out repository.',
+              'This is not a failure. The secondary legacy source remains probe-only and can be run locally when available.'
+            ) | Set-Content -LiteralPath $placeholder -Encoding utf8NoBOM
+            $steps.Add([pscustomobject][ordered]@{
+              name = "source_quality"
+              arguments = @("skipped: secondary source root missing")
+              exitCode = 0
+              status = "SKIPPED"
+              startedAtUtc = [DateTime]::UtcNow.ToString("o")
+              finishedAtUtc = [DateTime]::UtcNow.ToString("o")
+              log = [System.IO.Path]::GetRelativePath($repo, $placeholder).Replace("\\", "/")
+            })
+          }
+
+          Invoke-ReportOnlyAudit "runtime_smoke_report" @("-RepoRoot", $repo, "-Preset", "registry", "-RunBuild", "-RunSmoke", "-FailMode", "off")
+
+          $summary = [ordered]@{
+            schemaVersion = 1
+            generatedAtUtc = [DateTime]::UtcNow.ToString("o")
+            policy = "Report-only CI audit. This workflow always uploads reports and does not enforce parity failures. Hard-fail safe categories belong to a later workflow/batch."
+            summary = [ordered]@{
+              steps = $steps.Count
+              pass = @($steps | Where-Object status -eq "PASS").Count
+              skipped = @($steps | Where-Object status -eq "SKIPPED").Count
+              reportOnlyFail = @($steps | Where-Object status -eq "REPORT_ONLY_FAIL").Count
+            }
+            steps = @($steps)
+          }
+          $summaryJson = Join-Path $reportRoot "ci_item_block_parity_report.json"
+          $summaryMd = Join-Path $reportRoot "ci_item_block_parity_report.md"
+          $summary | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $summaryJson -Encoding utf8NoBOM
+
+          $lines = [System.Collections.Generic.List[string]]::new()
+          $lines.Add("# Item/block parity CI report-only summary")
+          $lines.Add("")
+          $lines.Add("Generated: $($summary.generatedAtUtc)")
+          $lines.Add("")
+          $lines.Add("Policy: $($summary.policy)")
+          $lines.Add("")
+          $lines.Add("| Steps | PASS | SKIPPED | REPORT_ONLY_FAIL |")
+          $lines.Add("|---:|---:|---:|---:|")
+          $lines.Add("| $($summary.summary.steps) | $($summary.summary.pass) | $($summary.summary.skipped) | $($summary.summary.reportOnlyFail) |")
+          $lines.Add("")
+          $lines.Add("## Steps")
+          $lines.Add("")
+          $lines.Add("| Step | Status | Exit code | Log |")
+          $lines.Add("|---|---|---:|---|")
+          foreach ($step in $steps) {
+            $lines.Add("| $($step.name) | $($step.status) | $($step.exitCode) | ``$($step.log)`` |")
+          }
+          $lines | Set-Content -LiteralPath $summaryMd -Encoding utf8NoBOM
+          $lines | ForEach-Object { Write-Host $_ }
+
+      - name: Upload item/block parity reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: item-block-parity-reports
+          path: tools/reports/local/item-block-parity/**
+          if-no-files-found: error
+          retention-days: 14

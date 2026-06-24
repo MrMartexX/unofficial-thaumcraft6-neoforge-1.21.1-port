@@ -19,13 +19,13 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 7 | Secondary legacy probe | Closed |
 | 8 | Aspect/research/recipe refs | Closed |
 | 9 | BlockEntity/capability/menu boundary | Closed |
-| 10 | Runtime integration | Closed: explicit RunBuild, RunSmoke and RunRelatedAudits switches execute logged local runtime/build/audit commands |
+| 10 | Runtime integration | Closed |
 
 ## Remaining framework batches
 
 | Planned area | Status | Next action |
 |---|---|---|
-| Batch 11 CI report-only mode | Missing | Add workflow artifact mode after local reports stabilize |
+| 11 | CI report-only mode | Closed: GitHub Actions workflow runs report-only audit presets and uploads local reports as an artifact |
 | Batch 12 CI hard fail safe categories | Missing | Enable only safe categories after classification |
 
 ## Rule from this point onward
