@@ -279,6 +279,14 @@ if ($selectedTextureColorChecks.Count -gt 0) {
     & $textureColorModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -LegacyRoot $LegacyRoot -OriginalJar $OriginalJar -RulesRoot $rulesRoot -Checks $selectedTextureColorChecks -OutputJson (Join-Path $reportRoot "item_block_texture_color_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_texture_color_report.md")
     if (-not $?) { throw "Texture/color parity module failed." }
 }
+$soundParticleChecks = @("sounds_particles")
+$selectedSoundParticleChecks = @($implementedSelected | Where-Object { $_ -in $soundParticleChecks })
+if ($selectedSoundParticleChecks.Count -gt 0) {
+    $soundParticleModule = Join-Path $PSScriptRoot "modules/sounds_particles_fx.ps1"
+    if (-not (Test-Path -LiteralPath $soundParticleModule -PathType Leaf)) { throw "Sound/particle/FX module not found: $soundParticleModule" }
+    & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
+    if (-not $?) { throw "Sound/particle/FX module failed." }
+}
 if ($comparerSelected.Count -eq 0) {
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0

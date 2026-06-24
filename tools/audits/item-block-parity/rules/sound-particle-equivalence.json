@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "description": "Reviewed equivalence overrides for item/block sound, particle and client FX parity. Keep entries explicit; do not use broad wildcards.",
+  "entries": []
+}

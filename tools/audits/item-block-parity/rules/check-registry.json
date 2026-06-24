@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 19 adds report-only loot/drop behavior parity scanning.",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 20 adds report-only sound/particle/FX reference scanning.",
   "checks": [
     {
       "name": "registry",
@@ -161,8 +161,8 @@
     {
       "name": "sounds_particles",
       "layer": "visual_boundary",
-      "status": "planned",
-      "reason": "Sound/particle references planned"
+      "status": "implemented",
+      "reason": "Phase D Batch 20 report-only sound event, particle and client FX reference audit"
     },
     {
       "name": "fuels_flammability",
