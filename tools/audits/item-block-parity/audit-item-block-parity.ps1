@@ -368,8 +368,8 @@ if ($selectedClientServerSafetyChecks.Count -gt 0) {
 }
 if ($comparerSelected.Count -eq 0) {
     Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
-    Invoke-CheckInvocationSelfTest
-    Invoke-ReportSchemaValidator
+Invoke-CheckInvocationSelfTest
+Invoke-ReportSchemaValidator
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0
 }
@@ -392,7 +392,7 @@ $compareExitCode = $LASTEXITCODE
 & $validator -LegacyManifest $legacyManifestForChecks -PortManifest $portManifestForChecks -ReportPath $reportJson
 if (-not $?) { throw "Parity report validation failed." }
 Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
-    Invoke-CheckInvocationSelfTest
+Invoke-CheckInvocationSelfTest
 Invoke-ReportSchemaValidator
 if (-not $compareSucceeded) {
     if ($null -ne $compareExitCode) { exit $compareExitCode }
