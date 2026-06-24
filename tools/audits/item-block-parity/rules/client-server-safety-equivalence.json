@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "policy": "Explicit reviewed client/server safety exceptions only. Do not add entries for convenience; each accepted finding must explain why the reference is safe on dedicated server and client.",
+  "entries": []
+}

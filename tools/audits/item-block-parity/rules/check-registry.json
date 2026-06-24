@@ -1,7 +1,6 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 20 adds report-only sound/particle/FX reference scanning.",
   "checks": [
     {
       "name": "registry",
@@ -50,7 +49,8 @@
       "layer": "data_boundary",
       "status": "implemented",
       "reason": "Phase C Batch 19 report-only source/loot-table drop behavior parity scan"
-    },    {
+    },
+    {
       "name": "json_validity",
       "layer": "resource_boundary",
       "status": "planned",
@@ -155,8 +155,8 @@
     {
       "name": "client_server_safety",
       "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Client import/server safety audit planned"
+      "status": "implemented",
+      "reason": "Phase D Batch 21 report-only client/server boundary safety scan"
     },
     {
       "name": "sounds_particles",
@@ -266,5 +266,6 @@
       "status": "planned",
       "reason": "Batch 7/quality jar probe planned"
     }
-  ]
+  ],
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 21 adds report-only client/server safety scanning."
 }

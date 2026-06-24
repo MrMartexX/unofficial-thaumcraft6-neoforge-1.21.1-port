@@ -287,6 +287,14 @@ if ($selectedSoundParticleChecks.Count -gt 0) {
     & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
+$clientServerSafetyChecks = @("client_server_safety")
+$selectedClientServerSafetyChecks = @($implementedSelected | Where-Object { $_ -in $clientServerSafetyChecks })
+if ($selectedClientServerSafetyChecks.Count -gt 0) {
+    $clientServerSafetyModule = Join-Path $PSScriptRoot "modules/client_server_safety.ps1"
+    if (-not (Test-Path -LiteralPath $clientServerSafetyModule -PathType Leaf)) { throw "Client/server safety module not found: $clientServerSafetyModule" }
+    & $clientServerSafetyModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedClientServerSafetyChecks -OutputJson (Join-Path $reportRoot "item_block_client_server_safety_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_client_server_safety_report.md")
+    if (-not $?) { throw "Client/server safety module failed." }
+}
 if ($comparerSelected.Count -eq 0) {
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0

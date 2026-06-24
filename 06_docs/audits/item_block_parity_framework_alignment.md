@@ -40,6 +40,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 18 | Closed: report-only block property parity audit compares source-evidenced hardness, resistance, sound, light and behavior flags | Block property parity audit |
 | 19 | Closed: report-only loot/drop behavior audit compares source-evidenced legacy drop clues against port loot tables and source clues | Loot/drop behavior parity audit |
 | 20 | Closed: report-only sound/particle/FX reference audit records source-evidenced SoundType, sound event calls, particle calls and client FX clues | Sound/particle/FX parity audit |
+| 21 | Closed: report-only client/server safety audit records client-only references outside client packages, server references in client packages and guarded boundary evidence | Client/server safety audit |
 
 ## Rule from this point onward
 
