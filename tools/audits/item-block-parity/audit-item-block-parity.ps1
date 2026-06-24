@@ -189,10 +189,9 @@ if ($RunBuild -or $RunSmoke -or $RunRelatedAudits) {
     & $runtimeModule -RepoRoot $RepoRoot -PortRoot $PortRoot -AuditScript $PSCommandPath -RunBuild:$RunBuild -RunSmoke:$RunSmoke -RunRelatedAudits:$RunRelatedAudits -FailMode $FailMode -OutputJson (Join-Path $reportRoot "item_block_runtime_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_runtime_report.md")
     if (-not $?) { throw "Runtime check module failed." }
 }
-if ($ChangedOnly -or $SinceCommit -or $IdPrefix -or $Families -or $Packages) {
-    Write-Output "Batch 2 skeleton note: ChangedOnly/SinceCommit/IdPrefix/Families/Packages are accepted for contract stability; filtering will be implemented in later extractor/check batches."
+if ($Ids -or $ChangedOnly -or $SinceCommit -or $IdPrefix -or $Families -or $Packages) {
+    Write-Output "Focused filter requested; filtered manifests will be generated after primary manifests are refreshed."
 }
-
 if ($implementedSelected.Count -eq 0) {
     Write-Output "No implemented checks selected. Wrote NOT_EVALUATED report: $notEvaluatedMarkdown"
     exit 0
@@ -214,10 +213,23 @@ if ($RefreshLegacy -or -not $legacyCacheFresh) {
 & $portExtractor -RepoRoot $RepoRoot -PortRoot $PortRoot -OutputPath $portManifest
 if (-not $?) { throw "Port manifest extraction failed." }
 
+$legacyManifestForChecks = $legacyManifest
+$portManifestForChecks = $portManifest
+$filterRequested = [bool]($Ids -or $IdPrefix -or $Families -or $Packages -or $ChangedOnly -or -not [string]::IsNullOrWhiteSpace($SinceCommit))
+if ($filterRequested) {
+    $focusedFilterModule = Join-Path $PSScriptRoot "modules/focused_filter.ps1"
+    if (-not (Test-Path -LiteralPath $focusedFilterModule -PathType Leaf)) { throw "Focused filter module not found: $focusedFilterModule" }
+    $filteredLegacyManifest = Join-Path $reportRoot "legacy_primary_manifest.focused.json"
+    $filteredPortManifest = Join-Path $reportRoot "port_manifest.focused.json"
+    & $focusedFilterModule -RepoRoot $RepoRoot -PortRoot $PortRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -OutputLegacyManifest $filteredLegacyManifest -OutputPortManifest $filteredPortManifest -Ids $Ids -IdPrefix $IdPrefix -Families $Families -Packages $Packages -ChangedOnly:$ChangedOnly -SinceCommit $SinceCommit -OutputJson (Join-Path $reportRoot "item_block_focus_filter_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_focus_filter_report.md")
+    if (-not $?) { throw "Focused filter module failed." }
+    $legacyManifestForChecks = $filteredLegacyManifest
+    $portManifestForChecks = $filteredPortManifest
+}
 if ("secondary_legacy_probe" -in $implementedSelected) {
     $secondaryProbe = Join-Path $PSScriptRoot "modules/secondary_legacy_probe.ps1"
     if (-not (Test-Path -LiteralPath $secondaryProbe -PathType Leaf)) { throw "Secondary legacy probe module not found: $secondaryProbe" }
-    & $secondaryProbe -RepoRoot $RepoRoot -PrimaryManifestPath $legacyManifest -SecondaryLegacyRoot $SecondaryLegacyRoot -OutputJson (Join-Path $reportRoot "legacy_secondary_probe_report.json") -OutputMarkdown (Join-Path $reportRoot "legacy_secondary_probe_report.md")
+    & $secondaryProbe -RepoRoot $RepoRoot -PrimaryManifestPath $legacyManifestForChecks -SecondaryLegacyRoot $SecondaryLegacyRoot -OutputJson (Join-Path $reportRoot "legacy_secondary_probe_report.json") -OutputMarkdown (Join-Path $reportRoot "legacy_secondary_probe_report.md")
     if (-not $?) { throw "Secondary legacy probe failed." }
 }
 
@@ -227,7 +239,7 @@ $selectedDataReferenceChecks = @($implementedSelected | Where-Object { $_ -in $d
 if ($selectedDataReferenceChecks.Count -gt 0) {
     $dataReferenceModule = Join-Path $PSScriptRoot "modules/data_refs.ps1"
     if (-not (Test-Path -LiteralPath $dataReferenceModule -PathType Leaf)) { throw "Data reference module not found: $dataReferenceModule" }
-    & $dataReferenceModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -Checks $selectedDataReferenceChecks -OutputJson (Join-Path $reportRoot "item_block_data_reference_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_data_reference_report.md")
+    & $dataReferenceModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -Checks $selectedDataReferenceChecks -OutputJson (Join-Path $reportRoot "item_block_data_reference_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_data_reference_report.md")
     if (-not $?) { throw "Data reference module failed." }
 }
 
@@ -236,7 +248,7 @@ $selectedItemPropertyChecks = @($implementedSelected | Where-Object { $_ -in $it
 if ($selectedItemPropertyChecks.Count -gt 0) {
     $itemPropertyModule = Join-Path $PSScriptRoot "modules/item_properties.ps1"
     if (-not (Test-Path -LiteralPath $itemPropertyModule -PathType Leaf)) { throw "Item property module not found: $itemPropertyModule" }
-    & $itemPropertyModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedItemPropertyChecks -OutputJson (Join-Path $reportRoot "item_block_item_property_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_item_property_report.md")
+    & $itemPropertyModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedItemPropertyChecks -OutputJson (Join-Path $reportRoot "item_block_item_property_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_item_property_report.md")
     if (-not $?) { throw "Item property module failed." }
 }
 $blockPropertyChecks = @("block_properties")
@@ -244,7 +256,7 @@ $selectedBlockPropertyChecks = @($implementedSelected | Where-Object { $_ -in $b
 if ($selectedBlockPropertyChecks.Count -gt 0) {
     $blockPropertyModule = Join-Path $PSScriptRoot "modules/block_properties.ps1"
     if (-not (Test-Path -LiteralPath $blockPropertyModule -PathType Leaf)) { throw "Block property module not found: $blockPropertyModule" }
-    & $blockPropertyModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedBlockPropertyChecks -OutputJson (Join-Path $reportRoot "item_block_block_property_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_block_property_report.md")
+    & $blockPropertyModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedBlockPropertyChecks -OutputJson (Join-Path $reportRoot "item_block_block_property_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_block_property_report.md")
     if (-not $?) { throw "Block property module failed." }
 }
 $dropBehaviorChecks = @("drop_behavior")
@@ -252,7 +264,7 @@ $selectedDropBehaviorChecks = @($implementedSelected | Where-Object { $_ -in $dr
 if ($selectedDropBehaviorChecks.Count -gt 0) {
     $dropBehaviorModule = Join-Path $PSScriptRoot "modules/loot_drop_behavior.ps1"
     if (-not (Test-Path -LiteralPath $dropBehaviorModule -PathType Leaf)) { throw "Loot/drop behavior module not found: $dropBehaviorModule" }
-    & $dropBehaviorModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedDropBehaviorChecks -OutputJson (Join-Path $reportRoot "item_block_loot_drop_behavior_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_loot_drop_behavior_report.md")
+    & $dropBehaviorModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedDropBehaviorChecks -OutputJson (Join-Path $reportRoot "item_block_loot_drop_behavior_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_loot_drop_behavior_report.md")
     if (-not $?) { throw "Loot/drop behavior module failed." }
 }
 $behaviorBoundaryChecks = @("blockentities", "capabilities", "menus")
@@ -260,7 +272,7 @@ $selectedBehaviorBoundaryChecks = @($implementedSelected | Where-Object { $_ -in
 if ($selectedBehaviorBoundaryChecks.Count -gt 0) {
     $behaviorBoundaryModule = Join-Path $PSScriptRoot "modules/behavior_boundary.ps1"
     if (-not (Test-Path -LiteralPath $behaviorBoundaryModule -PathType Leaf)) { throw "Behavior boundary module not found: $behaviorBoundaryModule" }
-    & $behaviorBoundaryModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -RulesRoot $rulesRoot -Checks $selectedBehaviorBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_behavior_boundary_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_behavior_boundary_report.md")
+    & $behaviorBoundaryModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -RulesRoot $rulesRoot -Checks $selectedBehaviorBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_behavior_boundary_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_behavior_boundary_report.md")
     if (-not $?) { throw "Behavior boundary module failed." }
 }
 $visualBoundaryChecks = @("visual_boundary")
@@ -268,7 +280,7 @@ $selectedVisualBoundaryChecks = @($implementedSelected | Where-Object { $_ -in $
 if ($selectedVisualBoundaryChecks.Count -gt 0) {
     $visualBoundaryModule = Join-Path $PSScriptRoot "modules/visual_model_transforms.ps1"
     if (-not (Test-Path -LiteralPath $visualBoundaryModule -PathType Leaf)) { throw "Visual boundary module not found: $visualBoundaryModule" }
-    & $visualBoundaryModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedVisualBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_visual_model_transform_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_visual_model_transform_report.md")
+    & $visualBoundaryModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedVisualBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_visual_model_transform_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_visual_model_transform_report.md")
     if (-not $?) { throw "Visual boundary module failed." }
 }
 $textureColorChecks = @("texture_color")
@@ -276,7 +288,7 @@ $selectedTextureColorChecks = @($implementedSelected | Where-Object { $_ -in $te
 if ($selectedTextureColorChecks.Count -gt 0) {
     $textureColorModule = Join-Path $PSScriptRoot "modules/texture_color_parity.ps1"
     if (-not (Test-Path -LiteralPath $textureColorModule -PathType Leaf)) { throw "Texture/color parity module not found: $textureColorModule" }
-    & $textureColorModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -LegacyRoot $LegacyRoot -OriginalJar $OriginalJar -RulesRoot $rulesRoot -Checks $selectedTextureColorChecks -OutputJson (Join-Path $reportRoot "item_block_texture_color_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_texture_color_report.md")
+    & $textureColorModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -LegacyRoot $LegacyRoot -OriginalJar $OriginalJar -RulesRoot $rulesRoot -Checks $selectedTextureColorChecks -OutputJson (Join-Path $reportRoot "item_block_texture_color_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_texture_color_report.md")
     if (-not $?) { throw "Texture/color parity module failed." }
 }
 $soundParticleChecks = @("sounds_particles")
@@ -284,7 +296,7 @@ $selectedSoundParticleChecks = @($implementedSelected | Where-Object { $_ -in $s
 if ($selectedSoundParticleChecks.Count -gt 0) {
     $soundParticleModule = Join-Path $PSScriptRoot "modules/sounds_particles_fx.ps1"
     if (-not (Test-Path -LiteralPath $soundParticleModule -PathType Leaf)) { throw "Sound/particle/FX module not found: $soundParticleModule" }
-    & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
+    & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
 $clientServerSafetyChecks = @("client_server_safety")
@@ -292,7 +304,7 @@ $selectedClientServerSafetyChecks = @($implementedSelected | Where-Object { $_ -
 if ($selectedClientServerSafetyChecks.Count -gt 0) {
     $clientServerSafetyModule = Join-Path $PSScriptRoot "modules/client_server_safety.ps1"
     if (-not (Test-Path -LiteralPath $clientServerSafetyModule -PathType Leaf)) { throw "Client/server safety module not found: $clientServerSafetyModule" }
-    & $clientServerSafetyModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedClientServerSafetyChecks -OutputJson (Join-Path $reportRoot "item_block_client_server_safety_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_client_server_safety_report.md")
+    & $clientServerSafetyModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedClientServerSafetyChecks -OutputJson (Join-Path $reportRoot "item_block_client_server_safety_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_client_server_safety_report.md")
     if (-not $?) { throw "Client/server safety module failed." }
 }
 if ($comparerSelected.Count -eq 0) {
@@ -300,8 +312,8 @@ if ($comparerSelected.Count -eq 0) {
     exit 0
 }
 $compareArguments = @{
-    LegacyManifest = $legacyManifest
-    PortManifest = $portManifest
+    LegacyManifest = $legacyManifestForChecks
+    PortManifest = $portManifestForChecks
     RulesRoot = $rulesRoot
     OutputJson = $reportJson
     OutputMarkdown = $reportMarkdown
@@ -315,7 +327,7 @@ if ($WriteCuratedSummary) {
 & $comparer @compareArguments
 $compareSucceeded = $?
 $compareExitCode = $LASTEXITCODE
-& $validator -LegacyManifest $legacyManifest -PortManifest $portManifest -ReportPath $reportJson
+& $validator -LegacyManifest $legacyManifestForChecks -PortManifest $portManifestForChecks -ReportPath $reportJson
 if (-not $?) { throw "Parity report validation failed." }
 if (-not $compareSucceeded) {
     if ($null -ne $compareExitCode) { exit $compareExitCode }

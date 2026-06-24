@@ -267,5 +267,5 @@
       "reason": "Batch 7/quality jar probe planned"
     }
   ],
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 21 adds report-only client/server safety scanning."
+  "note": "Implemented checks are executable today. Batch 24 adds focused manifest filtering for Ids, IdPrefix, Families, Packages and ChangedOnly/SinceCommit before module/comparer execution."
 }
