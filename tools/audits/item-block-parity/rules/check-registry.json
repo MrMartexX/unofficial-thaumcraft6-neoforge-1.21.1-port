@@ -223,7 +223,7 @@
       "name": "visual_boundary",
       "layer": "visual_boundary",
       "status": "implemented",
-      "reason": "Phase B Batch 13 report-only model parent, block geometry and item display transform audit"
+      "reason": "Phase B Batch 15 report-only model/transform audit with reviewed equivalence rule support"
     },
     {
       "name": "texture_color",

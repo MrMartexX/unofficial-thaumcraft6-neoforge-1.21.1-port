@@ -244,9 +244,10 @@ $selectedVisualBoundaryChecks = @($implementedSelected | Where-Object { $_ -in $
 if ($selectedVisualBoundaryChecks.Count -gt 0) {
     $visualBoundaryModule = Join-Path $PSScriptRoot "modules/visual_model_transforms.ps1"
     if (-not (Test-Path -LiteralPath $visualBoundaryModule -PathType Leaf)) { throw "Visual boundary module not found: $visualBoundaryModule" }
-    & $visualBoundaryModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -Checks $selectedVisualBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_visual_model_transform_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_visual_model_transform_report.md")
+    & $visualBoundaryModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedVisualBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_visual_model_transform_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_visual_model_transform_report.md")
     if (-not $?) { throw "Visual boundary module failed." }
-}$textureColorChecks = @("texture_color")
+}
+$textureColorChecks = @("texture_color")
 $selectedTextureColorChecks = @($implementedSelected | Where-Object { $_ -in $textureColorChecks })
 if ($selectedTextureColorChecks.Count -gt 0) {
     $textureColorModule = Join-Path $PSScriptRoot "modules/texture_color_parity.ps1"

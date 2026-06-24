@@ -35,7 +35,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | Batch | Status | Next action |
 |---:|---|---|
 | 14 | Closed: report-only texture/color parity audit compares referenced port textures against primary legacy resources or original jar fallback | Texture/color parity audit |
-| 15 | Planned | Item transform tolerance/equivalence rules |
+| 15 | Closed: reviewed item-transform and model-parent equivalence rule placeholders are wired into the visual model/transform report | Item transform tolerance/equivalence rules |
 | 16 | Planned | Item property parity audit |
 | 18 | Planned | Block property parity audit |
 | 19 | Planned | Loot/drop behavior parity audit |

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "note": "Reviewed model parent equivalence rules. Use only when a port model parent intentionally differs from the legacy model but renders equivalently for the audited context.",
+  "entries": [],
+  "example": {
+    "kind": "item",
+    "id": "thaumcraft:example_item",
+    "acceptedParents": [
+      "item/generated",
+      "minecraft:item/generated"
+    ],
+    "reason": "Namespace-normalized generated parent is visually equivalent."
+  }
+}

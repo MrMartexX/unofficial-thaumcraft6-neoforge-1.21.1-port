@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "note": "Reviewed item display transform equivalence rules. Empty by default: no visual review rows are hidden unless an entry explicitly documents why vanilla/default transforms are accepted for an item or item family.",
+  "defaultTolerance": {
+    "rotationDegrees": 0.01,
+    "translation": 0.001,
+    "scale": 0.001
+  },
+  "entries": [],
+  "example": {
+    "kind": "item",
+    "id": "thaumcraft:example_item",
+    "parent": "item/generated",
+    "allowMissingDisplay": true,
+    "allowMissingHandheldTransforms": false,
+    "acceptedContexts": [
+      "gui",
+      "ground",
+      "fixed"
+    ],
+    "reason": "Legacy used vanilla generated icon transforms; reviewed against screenshot evidence."
+  }
+}
