@@ -239,6 +239,14 @@ if ($selectedBehaviorBoundaryChecks.Count -gt 0) {
     & $behaviorBoundaryModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifest -PortManifestPath $portManifest -RulesRoot $rulesRoot -Checks $selectedBehaviorBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_behavior_boundary_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_behavior_boundary_report.md")
     if (-not $?) { throw "Behavior boundary module failed." }
 }
+$visualBoundaryChecks = @("visual_boundary")
+$selectedVisualBoundaryChecks = @($implementedSelected | Where-Object { $_ -in $visualBoundaryChecks })
+if ($selectedVisualBoundaryChecks.Count -gt 0) {
+    $visualBoundaryModule = Join-Path $PSScriptRoot "modules/visual_model_transforms.ps1"
+    if (-not (Test-Path -LiteralPath $visualBoundaryModule -PathType Leaf)) { throw "Visual boundary module not found: $visualBoundaryModule" }
+    & $visualBoundaryModule -RepoRoot $RepoRoot -PortManifestPath $portManifest -PortRoot $PortRoot -Checks $selectedVisualBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_visual_model_transform_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_visual_model_transform_report.md")
+    if (-not $?) { throw "Visual boundary module failed." }
+}
 if ($comparerSelected.Count -eq 0) {
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0

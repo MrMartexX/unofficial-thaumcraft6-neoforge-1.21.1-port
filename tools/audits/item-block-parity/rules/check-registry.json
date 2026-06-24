@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Batch 2 skeleton",
-  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Batch 11 adds report-only GitHub Actions artifact workflow; it does not hard-fail parity gaps.",
+  "note": "Implemented checks are executable today. Planned checks are recognized by the orchestrator and reported as NOT_EVALUATED until their modules exist. Phase B Batch 13 implements report-only visual model/transform boundary scanning.",
   "checks": [
     {
       "name": "registry",
@@ -222,8 +222,8 @@
     {
       "name": "visual_boundary",
       "layer": "visual_boundary",
-      "status": "planned",
-      "reason": "Manual/client visual evidence planned"
+      "status": "implemented",
+      "reason": "Phase B Batch 13 report-only model parent, block geometry and item display transform audit"
     },
     {
       "name": "docs_deferred",

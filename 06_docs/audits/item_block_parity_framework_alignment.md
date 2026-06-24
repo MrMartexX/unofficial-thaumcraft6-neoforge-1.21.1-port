@@ -20,13 +20,25 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 8 | Aspect/research/recipe refs | Closed |
 | 9 | BlockEntity/capability/menu boundary | Closed |
 | 10 | Runtime integration | Closed |
+| 11 | CI report-only mode | Closed |
+| 13 | Visual model/transform parity audit | Closed: report-only visual boundary module records model parent, block geometry clues and item display transforms |
 
 ## Remaining framework batches
 
 | Planned area | Status | Next action |
 |---|---|---|
 | 11 | CI report-only mode | Closed: GitHub Actions workflow runs report-only audit presets and uploads local reports as an artifact |
-| Batch 12 CI hard fail safe categories | Missing | Enable only safe categories after classification |
+| Batch 12 CI hard fail safe categories | Delayed | Enable only after visual/property/drop false-positive classification improves |
+
+## Precision extension batches
+
+| Batch | Status | Next action |
+|---:|---|---|
+| 14 | Planned | Texture/color parity audit |
+| 15 | Planned | Item transform tolerance/equivalence rules |
+| 16 | Planned | Item property parity audit |
+| 18 | Planned | Block property parity audit |
+| 19 | Planned | Loot/drop behavior parity audit |
 
 ## Rule from this point onward
 
