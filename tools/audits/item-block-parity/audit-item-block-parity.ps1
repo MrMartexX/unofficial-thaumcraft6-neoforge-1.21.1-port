@@ -327,14 +327,6 @@ if ($selectedSoundParticleChecks.Count -gt 0) {
     & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
-$checkInvocationSelfTestChecks = @("check_invocation")
-$selectedCheckInvocationSelfTestChecks = @($implementedSelected | Where-Object { $_ -in $checkInvocationSelfTestChecks })
-if ($selectedCheckInvocationSelfTestChecks.Count -gt 0) {
-    $checkInvocationModule = Join-Path $PSScriptRoot "modules/check_invocation_self_test.ps1"
-    if (-not (Test-Path -LiteralPath $checkInvocationModule -PathType Leaf)) { throw "Check invocation self-test module not found: $checkInvocationModule" }
-    & $checkInvocationModule -RepoRoot $RepoRoot -RulesRoot $rulesRoot -Checks $selectedCheckInvocationSelfTestChecks -OutputJson (Join-Path $reportRoot "item_block_check_invocation_self_test_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_check_invocation_self_test_report.md")
-    if (-not $?) { throw "Check invocation self-test module failed." }
-}
 $reportSchemaChecks = @("report_schema")
 $selectedReportSchemaChecks = @($implementedSelected | Where-Object { $_ -in $reportSchemaChecks })
 function Invoke-ReportSchemaValidator {
@@ -352,7 +344,7 @@ function Invoke-CheckInvocationSelfTest {
     if ($selectedCheckInvocationChecks.Count -eq 0) { return }
     $checkInvocationModule = Join-Path $PSScriptRoot "modules/check_invocation_self_test.ps1"
     if (-not (Test-Path -LiteralPath $checkInvocationModule -PathType Leaf)) { throw "Check invocation self-test module not found: $checkInvocationModule" }
-    & $checkInvocationModule -RepoRoot $RepoRoot -RulesRoot $rulesRoot -Checks $selectedCheckInvocationChecks -OutputJson (Join-Path $reportRoot "check_invocation_self_test_report.json") -OutputMarkdown (Join-Path $reportRoot "check_invocation_self_test_report.md")
+    & $checkInvocationModule -RepoRoot $RepoRoot -RulesRoot $rulesRoot -Checks $selectedCheckInvocationChecks -OutputJson (Join-Path $reportRoot "item_block_check_invocation_self_test_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_check_invocation_self_test_report.md")
     if (-not $?) { throw "Check invocation self-test module failed." }
 }
 # Batch 28 check invocation self-test end
