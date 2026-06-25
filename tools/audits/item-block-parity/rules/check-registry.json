@@ -143,8 +143,8 @@
     {
       "name": "creative_tabs",
       "layer": "resource_boundary",
-      "status": "planned",
-      "reason": "Creative order parity module planned"
+      "status": "implemented",
+      "reason": "Batch 36 report-only creative tab and player-facing grouping audit"
     },
     {
       "name": "blockstates",

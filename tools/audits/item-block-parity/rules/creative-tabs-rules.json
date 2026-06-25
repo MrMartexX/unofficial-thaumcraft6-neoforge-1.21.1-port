@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 36 creative tab audit",
+  "description": "Report-only creative tab and player-facing grouping audit rules.",
+  "sourceRoots": [
+    "src/main/java"
+  ],
+  "sourceFileExtensions": [
+    ".java"
+  ],
+  "creativeSearchTerms": [
+    "CreativeModeTab",
+    "BuildCreativeModeTabContentsEvent",
+    "displayItems",
+    "CREATIVE_TAB",
+    "creative tab",
+    ".accept(",
+    "event.accept"
+  ],
+  "idReferencePattern": "thaumcraft:([a-z0-9_./-]+)",
+  "maxMissingSamples": 200,
+  "status": {
+    "pass": "CREATIVE_TABS_PASS",
+    "review": "CREATIVE_TABS_REVIEW_NEEDED",
+    "error": "CREATIVE_TABS_ERROR"
+  }
+}

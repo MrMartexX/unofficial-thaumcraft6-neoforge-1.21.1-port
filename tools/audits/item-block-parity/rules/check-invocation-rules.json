@@ -223,6 +223,12 @@
       "ownerType": "module",
       "ownerPath": "modules/variants.ps1",
       "name": "variants"
+    },
+    {
+      "invocation": "creativeTabChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/creative_tabs.ps1",
+      "name": "creative_tabs"
     }
   ]
 }

@@ -53,7 +53,7 @@ $allKnownChecks = @($checkRegistry.checks | ForEach-Object { $_.name })
 $presetChecks = @{
     registry = @("registry", "duplicate_registry_id", "block_item_pairs", "legacy_mapping", "variants")
     quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references")
-    resources = @("blockstates", "models", "textures", "lang", "loot", "tags", "recipes", "orphan_references")
+    resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
     "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
@@ -360,6 +360,17 @@ function Invoke-VariantsAudit {
     if (-not $?) { throw "Variants module failed." }
 }
 # Batch 35 variant split audit end
+# Batch 36 creative tab audit start
+$creativeTabChecks = @("creative_tabs")
+$selectedCreativeTabChecks = @($implementedSelected | Where-Object { $_ -in $creativeTabChecks })
+function Invoke-CreativeTabAudit {
+    if ($selectedCreativeTabChecks.Count -eq 0) { return }
+    $creativeTabModule = Join-Path $PSScriptRoot "modules/creative_tabs.ps1"
+    if (-not (Test-Path -LiteralPath $creativeTabModule -PathType Leaf)) { throw "Creative tab module not found: $creativeTabModule" }
+    & $creativeTabModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedCreativeTabChecks -OutputJson (Join-Path $reportRoot "item_block_creative_tabs_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_creative_tabs_report.md")
+    if (-not $?) { throw "Creative tab module failed." }
+}
+# Batch 36 creative tab audit end
 # Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
@@ -437,6 +448,7 @@ if ($comparerSelected.Count -eq 0) {
 Invoke-JsonValidityValidator
 Invoke-LegacyMappingReview
 Invoke-VariantsAudit
+Invoke-CreativeTabAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -467,6 +479,7 @@ Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForC
 Invoke-JsonValidityValidator
 Invoke-LegacyMappingReview
 Invoke-VariantsAudit
+Invoke-CreativeTabAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
