@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 32 dependency-aware focused filtering",
+  "description": "Rules for conservative dependency expansion in focused item/block parity manifests.",
+  "scanRoots": [
+    "src/main/resources/data/thaumcraft/recipes",
+    "src/main/resources/data/thaumcraft/tags",
+    "src/main/resources/data/thaumcraft/loot_tables",
+    "src/main/resources/data/thaumcraft/loot_table",
+    "src/main/resources/assets/thaumcraft/blockstates",
+    "src/main/resources/assets/thaumcraft/models"
+  ],
+  "idReferencePattern": "thaumcraft:([a-z0-9_./-]+)",
+  "maxScanFiles": 4000,
+  "status": {
+    "pass": "FOCUS_DEPENDENCY_PASS",
+    "review": "FOCUS_DEPENDENCY_REVIEW_NEEDED",
+    "error": "FOCUS_DEPENDENCY_ERROR"
+  },
+  "note": "Expansion is conservative: seed IDs remain authoritative; additional IDs are added only when existing manifests or resource/data JSON files contain direct thaumcraft:<id> references."
+}

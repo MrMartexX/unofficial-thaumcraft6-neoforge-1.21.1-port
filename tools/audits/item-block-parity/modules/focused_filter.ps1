@@ -104,6 +104,152 @@ function Test-ChangedEntry($Entry, [string[]]$ChangedFiles) {
     }
     return $false
 }
+# Batch 32 dependency-aware focus expansion start
+function Read-FocusedDependencyRules {
+    param([string]$RulesRoot)
+    $rulesPath = Join-Path $RulesRoot "focused-dependency-rules.json"
+    if (Test-Path -LiteralPath $rulesPath -PathType Leaf) {
+        return Get-Content -Raw -LiteralPath $rulesPath | ConvertFrom-Json
+    }
+    return [pscustomobject]@{
+        scanRoots = @(
+            "src/main/resources/data/thaumcraft/recipes",
+            "src/main/resources/data/thaumcraft/tags",
+            "src/main/resources/data/thaumcraft/loot_tables",
+            "src/main/resources/data/thaumcraft/loot_table",
+            "src/main/resources/assets/thaumcraft/blockstates",
+            "src/main/resources/assets/thaumcraft/models"
+        )
+        idReferencePattern = "thaumcraft:([a-z0-9_./-]+)"
+        maxScanFiles = 4000
+    }
+}
+function Add-FocusDependencyReason {
+    param(
+        [ref]$Reasons,
+        [string]$Id,
+        [string]$Reason,
+        [string]$Evidence
+    )
+    if ([string]::IsNullOrWhiteSpace($Id)) { return }
+    $Reasons.Value += [pscustomobject][ordered]@{
+        id = $Id
+        reason = $Reason
+        evidence = $Evidence
+    }
+}
+function Add-FocusDependencyId {
+    param(
+        [System.Collections.Generic.HashSet[string]]$SelectedSet,
+        [System.Collections.Generic.HashSet[string]]$SeedSet,
+        [string]$Id,
+        [string]$Reason,
+        [string]$Evidence,
+        [ref]$Reasons
+    )
+    $normalized = Normalize-Id $Id
+    if ([string]::IsNullOrWhiteSpace($normalized)) { return }
+    if ($SeedSet.Contains($normalized)) { return }
+    if ($SelectedSet.Add($normalized)) {
+        Add-FocusDependencyReason -Reasons $Reasons -Id $normalized -Reason $Reason -Evidence $Evidence
+    }
+}
+function Test-TextMentionsFocusId {
+    param([string]$Text, [string]$Id)
+    if ([string]::IsNullOrWhiteSpace($Text) -or [string]::IsNullOrWhiteSpace($Id)) { return $false }
+    $normalizedText = $Text.ToLowerInvariant()
+    $normalizedId = Normalize-Id $Id
+    if ($normalizedText.Contains('thaumcraft:' + $normalizedId)) { return $true }
+    if ($normalizedText.Contains('/' + $normalizedId + '.')) { return $true }
+    if ($normalizedText.Contains('/' + $normalizedId + '/')) { return $true }
+    if ($normalizedText.Contains('"' + $normalizedId + '"')) { return $true }
+    return $false
+}
+function Get-KnownManifestIdMap {
+    param([object[]]$Entries)
+    $map = @{}
+    foreach ($entry in @($Entries)) {
+        $id = Get-EntryId $entry
+        if (-not [string]::IsNullOrWhiteSpace($id) -and -not $map.ContainsKey($id)) { $map[$id] = $entry }
+    }
+    return $map
+}
+function Get-FocusDependencyExpansion {
+    param(
+        [object[]]$Entries,
+        [string[]]$SeedIds,
+        [string]$PortPath,
+        [string]$RulesRoot
+    )
+    $rules = Read-FocusedDependencyRules -RulesRoot $RulesRoot
+    $knownIds = Get-KnownManifestIdMap -Entries $Entries
+    $selectedSet = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+    $seedSet = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+    $dependencyReasons = @()
+
+    foreach ($seed in @($SeedIds)) {
+        $normalized = Normalize-Id $seed
+        if ([string]::IsNullOrWhiteSpace($normalized)) { continue }
+        [void]$selectedSet.Add($normalized)
+        [void]$seedSet.Add($normalized)
+    }
+
+    foreach ($seed in @($seedSet | Sort-Object)) {
+        if (-not $knownIds.ContainsKey($seed)) { continue }
+        $seedText = Get-EntrySearchText $knownIds[$seed]
+        foreach ($candidate in @($knownIds.Keys | Sort-Object)) {
+            if ($candidate -eq $seed) { continue }
+            if (Test-TextMentionsFocusId -Text $seedText -Id $candidate) {
+                Add-FocusDependencyId -SelectedSet $selectedSet -SeedSet $seedSet -Id $candidate -Reason 'seed_manifest_reference' -Evidence ("seed entry mentions " + $candidate) -Reasons ([ref]$dependencyReasons)
+            }
+            $candidateText = Get-EntrySearchText $knownIds[$candidate]
+            if (Test-TextMentionsFocusId -Text $candidateText -Id $seed) {
+                Add-FocusDependencyId -SelectedSet $selectedSet -SeedSet $seedSet -Id $candidate -Reason 'reverse_manifest_reference' -Evidence ("manifest entry mentions " + $seed) -Reasons ([ref]$dependencyReasons)
+            }
+        }
+    }
+
+    $pattern = if ($rules.idReferencePattern) { [string]$rules.idReferencePattern } else { 'thaumcraft:([a-z0-9_./-]+)' }
+    $maxScanFiles = if ($rules.maxScanFiles) { [int]$rules.maxScanFiles } else { 4000 }
+    $scannedFiles = 0
+    $stopScan = $false
+    foreach ($scanRoot in @($rules.scanRoots)) {
+        if ($stopScan) { break }
+        if ([string]::IsNullOrWhiteSpace([string]$scanRoot)) { continue }
+        $fullScanRoot = Join-Path $PortPath ([string]$scanRoot)
+        if (-not (Test-Path -LiteralPath $fullScanRoot -PathType Container)) { continue }
+        foreach ($file in @(Get-ChildItem -LiteralPath $fullScanRoot -Recurse -File -Filter '*.json' -ErrorAction SilentlyContinue)) {
+            $scannedFiles++
+            if ($scannedFiles -gt $maxScanFiles) { $stopScan = $true; break }
+            $text = Get-Content -Raw -LiteralPath $file.FullName
+            $refs = @([regex]::Matches($text.ToLowerInvariant(), $pattern) | ForEach-Object { Normalize-Id $_.Groups[1].Value } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Sort-Object -Unique)
+            $fileRel = ConvertTo-RelativeRepoPath $file.FullName
+            $fileMentionsSeed = $false
+            foreach ($seed in @($seedSet | Sort-Object)) {
+                if ($refs -contains $seed -or (Test-TextMentionsFocusId -Text $fileRel -Id $seed)) { $fileMentionsSeed = $true; break }
+            }
+            if (-not $fileMentionsSeed) { continue }
+            foreach ($refId in @($refs)) {
+                if ($knownIds.ContainsKey($refId)) {
+                    Add-FocusDependencyId -SelectedSet $selectedSet -SeedSet $seedSet -Id $refId -Reason 'resource_or_data_json_reference' -Evidence $fileRel -Reasons ([ref]$dependencyReasons)
+                }
+            }
+        }
+    }
+
+    $selectedIdsOut = @($selectedSet | Sort-Object)
+    $seedIdsOut = @($seedSet | Sort-Object)
+    $addedIdsOut = @($selectedIdsOut | Where-Object { $_ -notin $seedIdsOut } | Sort-Object)
+    return [pscustomobject][ordered]@{
+        seedSelectedIds = @($seedIdsOut)
+        selectedIds = @($selectedIdsOut)
+        addedIds = @($addedIdsOut)
+        reasons = @($dependencyReasons | Sort-Object id, reason, evidence -Unique)
+        scannedFiles = $scannedFiles
+    }
+}
+# Batch 32 dependency-aware focus expansion end
+
 function Copy-ManifestWithFilteredEntries($Manifest, [object[]]$Entries, [string]$OutputPath, [string[]]$SelectedIds, [bool]$KeepAllIfSchemaUnknown) {
     $copy = $Manifest | ConvertTo-Json -Depth 50 | ConvertFrom-Json
     $entryProps = @("entries", "items", "blocks")
@@ -163,7 +309,11 @@ if ($ChangedOnly -or -not [string]::IsNullOrWhiteSpace($SinceCommit)) {
     }
 }
 
-$selectedIds = @($selected | Sort-Object)
+$seedSelectedIds = @($selected | Sort-Object)
+$rulesRootForFocus = Join-Path (Split-Path -Parent $PSScriptRoot) "rules"
+$dependencyExpansion = Get-FocusDependencyExpansion -Entries $portEntries -SeedIds $seedSelectedIds -PortPath $portPath -RulesRoot $rulesRootForFocus
+$selectedIds = @($dependencyExpansion.selectedIds)
+$dependencyAddedIds = @($dependencyExpansion.addedIds)
 $filterRequested = [bool]($Ids -or $IdPrefix -or $Families -or $Packages -or $ChangedOnly -or -not [string]::IsNullOrWhiteSpace($SinceCommit))
 if (-not $filterRequested -or $selectedIds.Count -eq 0) {
     Copy-Item -LiteralPath $PortManifestPath -Destination $OutputPortManifest -Force
@@ -181,6 +331,15 @@ $report = [ordered]@{
     mode = $mode
     selectedIds = @($selectedIds)
     selectedCount = $selectedIds.Count
+    seedSelectedIds = @($seedSelectedIds)
+    dependencyExpandedIds = @($dependencyAddedIds)
+    focusDependencyExpansion = [ordered]@{
+        enabled = [bool]$filterRequested
+        seedCount = @($seedSelectedIds).Count
+        addedCount = @($dependencyAddedIds).Count
+        scannedFiles = $dependencyExpansion.scannedFiles
+        reasons = @($dependencyExpansion.reasons)
+    }
     filters = [ordered]@{
         ids = @($Ids)
         idPrefix = @($IdPrefix)
@@ -208,10 +367,22 @@ $lines.Add("")
 $lines.Add("Mode: ``$($report.mode)``")
 $lines.Add("")
 $lines.Add("Selected IDs: **$($report.selectedCount)**")
+$lines.Add("Seed selected IDs: **$(@($seedSelectedIds).Count)**")
+$lines.Add("Dependency-added IDs: **$(@($dependencyAddedIds).Count)**")
 $lines.Add("")
 $lines.Add("## Selected IDs")
 $lines.Add("")
 if ($selectedIds.Count -eq 0) { $lines.Add("<none>") } else { foreach ($id in $selectedIds) { $lines.Add("- ``thaumcraft:$id``") } }
+$lines.Add("")
+$lines.Add("## Dependency expansion reasons")
+$lines.Add("")
+if (@($dependencyExpansion.reasons).Count -eq 0) {
+    $lines.Add("<none>")
+} else {
+    foreach ($reason in @($dependencyExpansion.reasons)) {
+        $lines.Add("- ``thaumcraft:$($reason.id)`` — $($reason.reason): ``$($reason.evidence)``")
+    }
+}
 $lines.Add("")
 $lines.Add("## Changed files")
 $lines.Add("")
