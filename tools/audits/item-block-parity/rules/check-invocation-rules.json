@@ -217,6 +217,12 @@
       "ownerType": "module",
       "ownerPath": "modules/legacy_mapping_review.ps1",
       "name": "legacy_mapping"
+    },
+    {
+      "invocation": "variantChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/variants.ps1",
+      "name": "variants"
     }
   ]
 }

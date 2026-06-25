@@ -287,8 +287,8 @@
     {
       "name": "variants",
       "layer": "registry_identity",
-      "status": "planned",
-      "reason": "Metadata/split-ID module planned"
+      "status": "implemented",
+      "reason": "Batch 35 report-only metadata/split-ID variant audit"
     },
     {
       "name": "entity_links",

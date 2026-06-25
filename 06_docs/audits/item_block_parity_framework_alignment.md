@@ -54,6 +54,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 32 | Closed: focused filtering expands selected IDs with directly referenced manifest, resource and data dependencies before generating focused manifests | Dependency-aware focused filtering |
 | 33 | Closed: CI-safe JSON validity audit parses configured Thaumcraft resource/data JSON and audit rule JSON before resource-boundary checks trust them | JSON validity CI-safe mechanical check |
 | 34 | Closed: report-only legacy mapping review inventories direct legacy-to-port ID matches, missing legacy IDs, port-only IDs and conservative rename candidates | Legacy mapping review |
+| 35 | Closed: report-only variant split audit inventories metadata/suffix-derived variant families, split candidates, collapsed families and port-only variant families | Variant split audit |
 
 ## Roadmap numbering note
 
@@ -84,3 +85,5 @@ Batch 32 closure: dependency-aware focused filtering is report-only framework ha
 Batch 33 closure: JSON validity validation is CI-safe framework hardening; it parses configured resource/data and audit-rule JSON files before resource-boundary reports rely on those files.
 
 Batch 34 closure: legacy mapping review is report-only framework hardening; review rows identify direct mapping gaps, possible renames and port-only IDs before verifier v2 treats registry identity mapping as a certification gate.
+
+Batch 35 closure: variant split validation is report-only registry-identity hardening; review rows identify metadata/suffix-derived split, collapse, missing and port-only variant families before verifier v2 treats variant policy as a certification gate.
