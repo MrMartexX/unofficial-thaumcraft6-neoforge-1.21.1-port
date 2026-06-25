@@ -211,6 +211,12 @@
       "ownerType": "module",
       "ownerPath": "modules/json_validity.ps1",
       "name": "json_validity"
+    },
+    {
+      "invocation": "legacyMappingChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/legacy_mapping_review.ps1",
+      "name": "legacy_mapping"
     }
   ]
 }

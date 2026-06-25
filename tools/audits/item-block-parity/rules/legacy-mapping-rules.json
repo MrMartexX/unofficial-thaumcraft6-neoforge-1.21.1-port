@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 34 legacy mapping review",
+  "description": "Report-only rules for legacy-to-port registry mapping review.",
+  "candidateLimit": 5,
+  "status": {
+    "pass": "LEGACY_MAPPING_PASS",
+    "review": "LEGACY_MAPPING_REVIEW_NEEDED",
+    "error": "LEGACY_MAPPING_ERROR"
+  }
+}

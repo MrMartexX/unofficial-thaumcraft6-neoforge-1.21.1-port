@@ -51,7 +51,7 @@ $implementedChecks = @($checkRegistry.checks | Where-Object { $_.status -eq "imp
 $allKnownChecks = @($checkRegistry.checks | ForEach-Object { $_.name })
 
 $presetChecks = @{
-    registry = @("registry", "duplicate_registry_id", "block_item_pairs")
+    registry = @("registry", "duplicate_registry_id", "block_item_pairs", "legacy_mapping")
     quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references")
     resources = @("blockstates", "models", "textures", "lang", "loot", "tags", "recipes", "orphan_references")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
@@ -338,6 +338,17 @@ function Invoke-JsonValidityValidator {
     if (-not $?) { throw "JSON validity module failed." }
 }
 # Batch 33 JSON validity validator end
+# Batch 34 legacy mapping review start
+$legacyMappingChecks = @("legacy_mapping")
+$selectedLegacyMappingChecks = @($implementedSelected | Where-Object { $_ -in $legacyMappingChecks })
+function Invoke-LegacyMappingReview {
+    if ($selectedLegacyMappingChecks.Count -eq 0) { return }
+    $legacyMappingModule = Join-Path $PSScriptRoot "modules/legacy_mapping_review.ps1"
+    if (-not (Test-Path -LiteralPath $legacyMappingModule -PathType Leaf)) { throw "Legacy mapping module not found: $legacyMappingModule" }
+    & $legacyMappingModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -RulesRoot $rulesRoot -Checks $selectedLegacyMappingChecks -OutputJson (Join-Path $reportRoot "item_block_legacy_mapping_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_legacy_mapping_report.md")
+    if (-not $?) { throw "Legacy mapping module failed." }
+}
+# Batch 34 legacy mapping review end
 # Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
@@ -413,6 +424,7 @@ if ($selectedClientServerSafetyChecks.Count -gt 0) {
 if ($comparerSelected.Count -eq 0) {
     Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
 Invoke-JsonValidityValidator
+Invoke-LegacyMappingReview
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -441,6 +453,7 @@ $compareExitCode = $LASTEXITCODE
 if (-not $?) { throw "Parity report validation failed." }
 Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
 Invoke-JsonValidityValidator
+Invoke-LegacyMappingReview
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator

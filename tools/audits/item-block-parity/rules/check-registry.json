@@ -275,8 +275,8 @@
     {
       "name": "legacy_mapping",
       "layer": "registry_identity",
-      "status": "planned",
-      "reason": "Dedicated mapping review module planned"
+      "status": "implemented",
+      "reason": "Batch 34 report-only legacy mapping review"
     },
     {
       "name": "registry",
