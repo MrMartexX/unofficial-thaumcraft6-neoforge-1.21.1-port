@@ -327,6 +327,17 @@ if ($selectedSoundParticleChecks.Count -gt 0) {
     & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
+# Batch 33 JSON validity validator start
+$jsonValidityChecks = @("json_validity")
+$selectedJsonValidityChecks = @($implementedSelected | Where-Object { $_ -in $jsonValidityChecks })
+function Invoke-JsonValidityValidator {
+    if ($selectedJsonValidityChecks.Count -eq 0) { return }
+    $jsonValidityModule = Join-Path $PSScriptRoot "modules/json_validity.ps1"
+    if (-not (Test-Path -LiteralPath $jsonValidityModule -PathType Leaf)) { throw "JSON validity module not found: $jsonValidityModule" }
+    & $jsonValidityModule -RepoRoot $RepoRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedJsonValidityChecks -OutputJson (Join-Path $reportRoot "item_block_json_validity_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_json_validity_report.md")
+    if (-not $?) { throw "JSON validity module failed." }
+}
+# Batch 33 JSON validity validator end
 # Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
@@ -401,6 +412,7 @@ if ($selectedClientServerSafetyChecks.Count -gt 0) {
 }
 if ($comparerSelected.Count -eq 0) {
     Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
+Invoke-JsonValidityValidator
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -428,6 +440,7 @@ $compareExitCode = $LASTEXITCODE
 & $validator -LegacyManifest $legacyManifestForChecks -PortManifest $portManifestForChecks -ReportPath $reportJson
 if (-not $?) { throw "Parity report validation failed." }
 Invoke-AutoFixCandidateReporter -LegacyManifestForCandidates $legacyManifestForChecks -PortManifestForCandidates $portManifestForChecks
+Invoke-JsonValidityValidator
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator

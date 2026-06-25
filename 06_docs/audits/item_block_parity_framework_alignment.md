@@ -52,6 +52,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 30 | Closed: report-only status taxonomy validator maps observed report statuses to canonical categories and flags unmapped statuses for rule refinement | Status taxonomy normalization |
 | 31 | Closed: report-only docs/registry consistency audit checks check registry, invocation owner rules and framework documentation for drift | Docs/registry consistency audit |
 | 32 | Closed: focused filtering expands selected IDs with directly referenced manifest, resource and data dependencies before generating focused manifests | Dependency-aware focused filtering |
+| 33 | Closed: CI-safe JSON validity audit parses configured Thaumcraft resource/data JSON and audit rule JSON before resource-boundary checks trust them | JSON validity CI-safe mechanical check |
 
 ## Roadmap numbering note
 
@@ -78,3 +79,5 @@ Batch 30 closure: status taxonomy validation is report-only framework hardening;
 Batch 31 closure: docs/registry consistency validation is report-only framework hardening; review rows identify registry, invocation-rule or documentation drift before verifier v2 treats docs consistency as a certification gate.
 
 Batch 32 closure: dependency-aware focused filtering is report-only framework hardening; focused manifests now keep selected seed IDs plus directly referenced manifest/resource/data dependencies so focused reports are less likely to omit support blocks, recipes or related wiring evidence.
+
+Batch 33 closure: JSON validity validation is CI-safe framework hardening; it parses configured resource/data and audit-rule JSON files before resource-boundary reports rely on those files.

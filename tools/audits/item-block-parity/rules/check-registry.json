@@ -9,162 +9,6 @@
       "reason": "Phase C Batch 18 report-only source-evidenced block property parity scan"
     },
     {
-      "name": "blockentities",
-      "layer": "behavior_boundary",
-      "status": "implemented",
-      "reason": "Batch 9 report-only behavior-boundary module check"
-    },
-    {
-      "name": "capabilities",
-      "layer": "behavior_boundary",
-      "status": "implemented",
-      "reason": "Batch 9 report-only behavior-boundary module check"
-    },
-    {
-      "name": "client_server_safety",
-      "layer": "behavior_boundary",
-      "status": "implemented",
-      "reason": "Phase D Batch 21 report-only client/server boundary safety scan"
-    },
-    {
-      "name": "data_components",
-      "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Legacy NBT/data component check planned"
-    },
-    {
-      "name": "equipment",
-      "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Tool/armor material and equipment links planned"
-    },
-    {
-      "name": "item_properties",
-      "layer": "behavior_boundary",
-      "status": "implemented",
-      "reason": "Phase C Batch 16 report-only item stack size, durability, rarity and behavior/property clue audit"
-    },
-    {
-      "name": "menus",
-      "layer": "behavior_boundary",
-      "status": "implemented",
-      "reason": "Batch 9 report-only behavior-boundary module check"
-    },
-    {
-      "name": "networking",
-      "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Payload reference boundary planned"
-    },
-    {
-      "name": "aspects",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Batch 8 report-only data/reference module check"
-    },
-    {
-      "name": "config_gates",
-      "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Config feature gate checks planned"
-    },
-    {
-      "name": "drop_behavior",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Phase C Batch 19 report-only source/loot-table drop behavior parity scan"
-    },
-    {
-      "name": "entity_links",
-      "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Entity/spawn egg links planned"
-    },
-    {
-      "name": "fuels_flammability",
-      "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Fuel/flammability maps planned"
-    },
-    {
-      "name": "recipes",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Batch 8 report-only data/reference module check"
-    },
-    {
-      "name": "research_refs",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Batch 8 report-only data/reference module check"
-    },
-    {
-      "name": "tags",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Batch 8 report-only data/reference module check"
-    },
-    {
-      "name": "thaumonomicon_refs",
-      "layer": "data_boundary",
-      "status": "implemented",
-      "reason": "Batch 8 report-only data/reference module check"
-    },
-    {
-      "name": "worldgen_links",
-      "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Worldgen-linked block references planned"
-    },
-    {
-      "name": "duplicate_registry_id",
-      "layer": "registry_identity",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "legacy_mapping",
-      "layer": "registry_identity",
-      "status": "planned",
-      "reason": "Dedicated mapping review module planned"
-    },
-    {
-      "name": "registry",
-      "layer": "registry_identity",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "variants",
-      "layer": "registry_identity",
-      "status": "planned",
-      "reason": "Metadata/split-ID module planned"
-    },
-    {
-      "name": "block_item_pairs",
-      "layer": "resource_boundary",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "blockstates",
-      "layer": "resource_boundary",
-      "status": "implemented",
-      "reason": "Existing compare module"
-    },
-    {
-      "name": "creative_tabs",
-      "layer": "resource_boundary",
-      "status": "planned",
-      "reason": "Creative order parity module planned"
-    },
-    {
-      "name": "json_validity",
-      "layer": "resource_boundary",
-      "status": "planned",
-      "reason": "CI-safe mechanical check planned"
-    },
-    {
       "name": "lang",
       "layer": "resource_boundary",
       "status": "implemented",
@@ -291,10 +135,166 @@
       "reason": "Phase D Batch 20 report-only sound event, particle and client FX reference audit"
     },
     {
+      "name": "json_validity",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Batch 33 CI-safe mechanical JSON validity check"
+    },
+    {
+      "name": "creative_tabs",
+      "layer": "resource_boundary",
+      "status": "planned",
+      "reason": "Creative order parity module planned"
+    },
+    {
+      "name": "blockstates",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "block_item_pairs",
+      "layer": "resource_boundary",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "blockentities",
+      "layer": "behavior_boundary",
+      "status": "implemented",
+      "reason": "Batch 9 report-only behavior-boundary module check"
+    },
+    {
+      "name": "capabilities",
+      "layer": "behavior_boundary",
+      "status": "implemented",
+      "reason": "Batch 9 report-only behavior-boundary module check"
+    },
+    {
+      "name": "client_server_safety",
+      "layer": "behavior_boundary",
+      "status": "implemented",
+      "reason": "Phase D Batch 21 report-only client/server boundary safety scan"
+    },
+    {
+      "name": "data_components",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Legacy NBT/data component check planned"
+    },
+    {
+      "name": "equipment",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Tool/armor material and equipment links planned"
+    },
+    {
+      "name": "item_properties",
+      "layer": "behavior_boundary",
+      "status": "implemented",
+      "reason": "Phase C Batch 16 report-only item stack size, durability, rarity and behavior/property clue audit"
+    },
+    {
+      "name": "menus",
+      "layer": "behavior_boundary",
+      "status": "implemented",
+      "reason": "Batch 9 report-only behavior-boundary module check"
+    },
+    {
+      "name": "networking",
+      "layer": "behavior_boundary",
+      "status": "planned",
+      "reason": "Payload reference boundary planned"
+    },
+    {
+      "name": "aspects",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
+    },
+    {
+      "name": "config_gates",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Config feature gate checks planned"
+    },
+    {
       "name": "texture_color",
       "layer": "visual_boundary",
       "status": "implemented",
       "reason": "Phase B Batch 14 report-only texture hash, size, alpha and average-color parity scan"
+    },
+    {
+      "name": "drop_behavior",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Phase C Batch 19 report-only source/loot-table drop behavior parity scan"
+    },
+    {
+      "name": "fuels_flammability",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Fuel/flammability maps planned"
+    },
+    {
+      "name": "recipes",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
+    },
+    {
+      "name": "research_refs",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
+    },
+    {
+      "name": "tags",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
+    },
+    {
+      "name": "thaumonomicon_refs",
+      "layer": "data_boundary",
+      "status": "implemented",
+      "reason": "Batch 8 report-only data/reference module check"
+    },
+    {
+      "name": "worldgen_links",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Worldgen-linked block references planned"
+    },
+    {
+      "name": "duplicate_registry_id",
+      "layer": "registry_identity",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "legacy_mapping",
+      "layer": "registry_identity",
+      "status": "planned",
+      "reason": "Dedicated mapping review module planned"
+    },
+    {
+      "name": "registry",
+      "layer": "registry_identity",
+      "status": "implemented",
+      "reason": "Existing compare module"
+    },
+    {
+      "name": "variants",
+      "layer": "registry_identity",
+      "status": "planned",
+      "reason": "Metadata/split-ID module planned"
+    },
+    {
+      "name": "entity_links",
+      "layer": "data_boundary",
+      "status": "planned",
+      "reason": "Entity/spawn egg links planned"
     },
     {
       "name": "visual_boundary",

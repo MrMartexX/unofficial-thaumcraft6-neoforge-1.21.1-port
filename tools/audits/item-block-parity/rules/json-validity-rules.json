@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 33 JSON validity CI-safe check",
+  "description": "Rules for CI-safe mechanical JSON parsing across Thaumcraft resource/data files and item-block parity audit rule files.",
+  "scanRoots": [
+    "05_neoforge_port/src/main/resources",
+    "tools/audits/item-block-parity/rules"
+  ],
+  "filePatterns": [
+    "*.json"
+  ],
+  "ignoredPathFragments": [
+    "tools/reports/local/",
+    "/build/",
+    "/.gradle/"
+  ],
+  "maxFiles": 12000,
+  "status": {
+    "pass": "JSON_VALIDITY_PASS",
+    "review": "JSON_VALIDITY_REVIEW_NEEDED",
+    "error": "JSON_VALIDITY_ERROR"
+  }
+}
