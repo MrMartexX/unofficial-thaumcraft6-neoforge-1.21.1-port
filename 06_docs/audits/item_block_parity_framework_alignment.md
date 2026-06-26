@@ -62,6 +62,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 40 | Closed: report-only tool, armor and equipment link audit inventories item/material/accessory source evidence and manifest equipment candidates | Tool/armor/equipment parity audit |
 | 41 | Closed: report-only entity and spawn-egg link audit inventories EntityType, spawn egg, attribute, renderer, data and manifest entity candidate evidence | Entity and spawn-egg link audit |
 | 42 | Closed: report-only worldgen-linked block/data audit inventories configured/placed feature, biome modifier, structure/dimension and manifest worldgen candidate evidence | Worldgen-linked block/data audit |
+| 43 | Closed: report-only config gate audit inventories config specs, enable/disable gates, feature flags and manifest config candidate IDs | Config gate audit |
 
 ## Roadmap numbering note
 
@@ -108,3 +109,5 @@ Batch 40 closure: equipment validation is report-only behavior-boundary hardenin
 Batch 41 closure: entity link validation is report-only data-boundary hardening; review rows identify EntityType, spawn egg, attribute, renderer, data-resource and manifest entity candidates before verifier v2 treats entity/spawn-egg policy as a certification gate.
 
 Batch 42 closure: worldgen link validation is report-only data-boundary hardening; review rows identify configured/placed feature, biome modifier, structure/dimension, data-resource and manifest worldgen candidates before verifier v2 treats worldgen link policy as a certification gate.
+
+Batch 43 closure: config gate validation is report-only data-boundary hardening; review rows identify config specs, enable/disable gates, feature flags, config-backed resources and manifest config candidates before verifier v2 treats feature-gate policy as a certification gate.

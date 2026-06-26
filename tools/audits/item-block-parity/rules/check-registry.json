@@ -215,8 +215,8 @@
     {
       "name": "config_gates",
       "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Config feature gate checks planned"
+      "status": "implemented",
+      "reason": "Batch 43 report-only config gate audit"
     },
     {
       "name": "texture_color",

@@ -265,6 +265,12 @@
       "ownerType": "module",
       "ownerPath": "modules/worldgen_links.ps1",
       "name": "worldgen_links"
+    },
+    {
+      "invocation": "configGateChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/config_gates.ps1",
+      "name": "config_gates"
     }
   ]
 }

@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 43 config gate audit",
+  "statuses": {
+    "pass": "CONFIG_GATE_PASS",
+    "review": "CONFIG_GATE_REVIEW_NEEDED",
+    "error": "CONFIG_GATE_ERROR"
+  },
+  "sourceRoots": [
+    "src/main/java"
+  ],
+  "resourceRoots": [
+    "src/main/resources",
+    "src/generated/resources"
+  ],
+  "sourceExtensions": [
+    ".java"
+  ],
+  "resourceExtensions": [
+    ".json",
+    ".toml",
+    ".properties",
+    ".mcmeta"
+  ],
+  "configTerms": [
+    "ModConfig",
+    "ForgeConfigSpec",
+    "ConfigSpec",
+    "BooleanValue",
+    "IntValue",
+    "DoubleValue",
+    "EnumValue",
+    "ConfigValue",
+    "ServerConfig",
+    "ClientConfig",
+    "CommonConfig",
+    "loadConfig",
+    "ModLoadingContext"
+  ],
+  "gateTerms": [
+    "enabled",
+    "disabled",
+    "enable",
+    "disable",
+    "isEnabled",
+    "isDisabled",
+    "featureGate",
+    "configGate",
+    "allow",
+    "deny",
+    "blacklist",
+    "whitelist",
+    "gated",
+    "requiredResearch",
+    "requires"
+  ],
+  "featureFlagTerms": [
+    "feature",
+    "FeatureFlag",
+    "FeatureFlags",
+    "Toggle",
+    "toggle",
+    "experimental",
+    "debug",
+    "devOnly",
+    "configurable"
+  ],
+  "resourceConfigTerms": [
+    "config",
+    "enabled",
+    "disabled",
+    "feature",
+    "gate",
+    "toggle",
+    "condition",
+    "conditions",
+    "neoforge:conditions",
+    "forge:conditions",
+    "load_condition",
+    "mod_loaded"
+  ],
+  "manifestCandidateTerms": [
+    "thaumonomicon",
+    "research",
+    "arcane",
+    "crucible",
+    "infusion",
+    "aura",
+    "taint",
+    "rift",
+    "eldritch",
+    "crimson",
+    "golem",
+    "worldgen",
+    "ore",
+    "tree",
+    "debug",
+    "creative",
+    "spawn",
+    "entity",
+    "recipe",
+    "config"
+  ]
+}

@@ -54,7 +54,7 @@ $presetChecks = @{
     registry = @("registry", "duplicate_registry_id", "block_item_pairs", "legacy_mapping", "variants")
     quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references")
     resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references")
-    data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "entity_links", "worldgen_links", "aspects", "research_refs", "thaumonomicon_refs")
+    data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "entity_links", "worldgen_links", "config_gates", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "data_components", "equipment", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
     "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
     "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
@@ -437,6 +437,17 @@ function Invoke-WorldgenLinkAudit {
     if (-not $?) { throw "Worldgen link module failed." }
 }
 # Batch 42 worldgen link audit end
+# Batch 43 config gate audit start
+$configGateChecks = @("config_gates")
+$selectedConfigGateChecks = @($implementedSelected | Where-Object { $_ -in $configGateChecks })
+function Invoke-ConfigGateAudit {
+    if ($selectedConfigGateChecks.Count -eq 0) { return }
+    $configGateModule = Join-Path $PSScriptRoot "modules/config_gates.ps1"
+    if (-not (Test-Path -LiteralPath $configGateModule -PathType Leaf)) { throw "Config gate module not found: $configGateModule" }
+    & $configGateModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedConfigGateChecks -OutputJson (Join-Path $reportRoot "item_block_config_gates_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_config_gates_report.md")
+    if (-not $?) { throw "Config gate module failed." }
+}
+# Batch 43 config gate audit end
 # Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
@@ -521,6 +532,7 @@ Invoke-FuelFlammabilityAudit
 Invoke-EquipmentAudit
 Invoke-EntityLinkAudit
 Invoke-WorldgenLinkAudit
+Invoke-ConfigGateAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -558,6 +570,7 @@ Invoke-FuelFlammabilityAudit
 Invoke-EquipmentAudit
 Invoke-EntityLinkAudit
 Invoke-WorldgenLinkAudit
+Invoke-ConfigGateAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
