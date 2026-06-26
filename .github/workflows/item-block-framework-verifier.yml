@@ -1,0 +1,98 @@
+name: Item/block framework verifier
+
+on:
+  workflow_dispatch:
+    inputs:
+      fail_mode:
+        description: Verifier FailMode to use for manual runs
+        required: true
+        type: choice
+        default: off
+        options:
+          - off
+          - safe
+          - strict
+      full_audit:
+        description: Run the full report-only audit before verifier checks
+        required: true
+        type: boolean
+        default: true
+  pull_request:
+    paths:
+      - '.github/workflows/item-block-framework-verifier.yml'
+      - '06_docs/audits/**'
+      - 'tools/audits/item-block-parity/**'
+      - '05_neoforge_port/src/main/resources/**'
+      - '05_neoforge_port/src/main/java/**'
+      - '05_neoforge_port/build.gradle'
+      - '05_neoforge_port/gradle.properties'
+      - '05_neoforge_port/settings.gradle'
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/item-block-framework-verifier.yml'
+      - '06_docs/audits/**'
+      - 'tools/audits/item-block-parity/**'
+      - '05_neoforge_port/src/main/resources/**'
+      - '05_neoforge_port/src/main/java/**'
+      - '05_neoforge_port/build.gradle'
+      - '05_neoforge_port/gradle.properties'
+      - '05_neoforge_port/settings.gradle'
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  verifier:
+    name: Framework verifier (${{ github.event_name }})
+    runs-on: windows-latest
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Run framework verifier v2
+        run: |
+          $failMode = 'off'
+          $fullAudit = 'true'
+          if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
+            $inputFailMode = '${{ inputs.fail_mode }}'
+            $inputFullAudit = '${{ inputs.full_audit }}'
+            if (-not [string]::IsNullOrWhiteSpace($inputFailMode)) { $failMode = $inputFailMode }
+            if (-not [string]::IsNullOrWhiteSpace($inputFullAudit)) { $fullAudit = $inputFullAudit }
+          }
+
+          $verifierArgs = @(
+            '-NoProfile',
+            '-File', 'tools/audits/item-block-parity/verify-item-block-parity-framework.ps1',
+            '-RepoRoot', (Get-Location).Path,
+            '-FailMode', $failMode
+          )
+          if ($fullAudit -eq 'true') { $verifierArgs += '-FullAudit' }
+
+          & pwsh @verifierArgs
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Upload item/block parity reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: item-block-parity-framework-reports-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            tools/reports/local/item-block-parity/*.json
+            tools/reports/local/item-block-parity/*.md
+            tools/reports/local/item-block-parity/runtime-logs/**

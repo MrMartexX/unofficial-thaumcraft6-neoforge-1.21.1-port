@@ -67,6 +67,7 @@ $rulesRoot = Join-Path $auditRoot "rules"
 $registryPath = Join-Path $rulesRoot "check-registry.json"
 $ownerRulesPath = Join-Path $rulesRoot "check-invocation-rules.json"
 $matrixPath = Join-Path $RepoRoot "06_docs/audits/item_block_parity_layer_completion_matrix.md"
+$ciWorkflowPath = Join-Path $RepoRoot ".github/workflows/item-block-framework-verifier.yml"
 
 if (Test-Path -LiteralPath $auditScript -PathType Leaf) {
     Add-Row $rows "required_paths" $passStatus "info" "Audit orchestrator exists." ([ordered]@{ path = ConvertTo-RelativeRepoPath $auditScript })
@@ -78,6 +79,27 @@ if (-not (Test-Path -LiteralPath $registryPath -PathType Leaf)) {
 }
 if (-not (Test-Path -LiteralPath $ownerRulesPath -PathType Leaf)) {
     Add-Row $rows "required_paths" $errorStatus "error" "Invocation owner rules are missing." ([ordered]@{ path = ConvertTo-RelativeRepoPath $ownerRulesPath })
+}
+
+if (Test-Path -LiteralPath $ciWorkflowPath -PathType Leaf) {
+    $ciText = Get-Content -LiteralPath $ciWorkflowPath -Raw
+    $requiredCiTokens = @(
+        'workflow_dispatch',
+        'actions/checkout@v4',
+        'actions/setup-java@v4',
+        'actions/upload-artifact@v4',
+        'verify-item-block-parity-framework.ps1',
+        'tools/reports/local/item-block-parity/*.json',
+        'tools/reports/local/item-block-parity/*.md'
+    )
+    $missingCiTokens = @($requiredCiTokens | Where-Object { $ciText -notlike "*$_*" })
+    if ($missingCiTokens.Count -eq 0) {
+        Add-Row $rows "ci_workflow" $passStatus "info" "CI verifier workflow exists and uploads local report artifacts." ([ordered]@{ path = ConvertTo-RelativeRepoPath $ciWorkflowPath })
+    } else {
+        Add-Row $rows "ci_workflow" $errorStatus "error" "CI verifier workflow is missing required wiring tokens." ([ordered]@{ path = ConvertTo-RelativeRepoPath $ciWorkflowPath; missing = @($missingCiTokens) })
+    }
+} else {
+    Add-Row $rows "ci_workflow" $reviewStatus "review" "CI verifier workflow is not present; local verifier still works, but CI artifact publication is not configured." ([ordered]@{ path = ConvertTo-RelativeRepoPath $ciWorkflowPath })
 }
 
 $gitDirty = @(& git status --short)
