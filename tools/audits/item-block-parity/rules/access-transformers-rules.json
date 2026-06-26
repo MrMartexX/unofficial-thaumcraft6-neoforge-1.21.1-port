@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 44 access transformer visibility audit",
+  "check": "access_transformers",
+  "status": {
+    "pass": "ACCESS_TRANSFORMERS_PASS",
+    "review": "ACCESS_TRANSFORMERS_REVIEW_NEEDED",
+    "error": "ACCESS_TRANSFORMERS_ERROR"
+  },
+  "policy": "Report-only visibility and access-transformer audit. Review rows identify legacy/port access transformer files, build wiring, reflection/access widening evidence and candidate IDs; they are not parity failures.",
+  "sourceRoots": [
+    "src/main/java",
+    "src/main/resources"
+  ],
+  "legacyRoots": [
+    "src/main/java",
+    "src/main/resources"
+  ],
+  "sourceExtensions": [
+    ".java",
+    ".kt",
+    ".groovy",
+    ".gradle",
+    ".cfg",
+    ".toml"
+  ],
+  "accessTransformerFileTerms": [
+    "access_transformer",
+    "accesstransformer",
+    "tc_at.cfg",
+    "_at.cfg"
+  ],
+  "buildWiringTerms": [
+    "accessTransformer",
+    "access_transformer",
+    "accesstransformer",
+    "AccessTransformer"
+  ],
+  "visibilityTerms": [
+    "setAccessible",
+    "trySetAccessible",
+    "privateLookupIn",
+    "MethodHandles.Lookup",
+    "ObfuscationReflectionHelper",
+    "ReflectionHelper",
+    "Unsafe",
+    "mixin",
+    "@Mixin",
+    "accessor",
+    "invoker"
+  ],
+  "accessRuleTerms": [
+    "public-f",
+    "public",
+    "protected-f",
+    "protected",
+    "net.minecraft",
+    "thaumcraft"
+  ],
+  "manifestCandidateTerms": [
+    "private",
+    "protected",
+    "access",
+    "reflect",
+    "reflection",
+    "mixin",
+    "accessor",
+    "invoker",
+    "renderer",
+    "model",
+    "blockentity"
+  ]
+}

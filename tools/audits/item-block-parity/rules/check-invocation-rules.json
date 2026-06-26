@@ -271,6 +271,12 @@
       "ownerType": "module",
       "ownerPath": "modules/config_gates.ps1",
       "name": "config_gates"
+    },
+    {
+      "invocation": "accessTransformerChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/access_transformers.ps1",
+      "name": "access_transformers"
     }
   ]
 }

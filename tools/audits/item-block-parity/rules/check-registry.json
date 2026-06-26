@@ -59,8 +59,8 @@
     {
       "name": "access_transformers",
       "layer": "source_quality",
-      "status": "planned",
-      "reason": "AT visibility audit planned"
+      "status": "implemented",
+      "reason": "Batch 44 report-only access transformer visibility audit"
     },
     {
       "name": "auto_fix_candidates",
