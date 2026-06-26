@@ -109,8 +109,8 @@ if ((Test-Path -LiteralPath $goldenFocusedFamiliesScriptPath -PathType Leaf) -an
     $goldenRequiredTokens = @(
         'golden-focused-families.json',
         'audit-item-block-parity.ps1',
-        '-Families',
-        '-IdPrefix',
+        '$auditParams.Families',
+        '$auditParams.IdPrefix',
         'item_block_golden_focused_families_report.json'
     )
     $goldenMissingTokens = @($goldenRequiredTokens | Where-Object { $goldenScriptText -notlike "*$_*" })
