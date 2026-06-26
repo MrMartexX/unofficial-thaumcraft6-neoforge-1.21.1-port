@@ -70,6 +70,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 48 | Closed: report-only runtime smoke audit inventories Gradle wrapper/build metadata, mod metadata, task clues and explicit opt-in runtime/build commands | Runtime smoke readiness and opt-in execution audit |
 | 49 | Closed: verifier v2 framework gate validates PowerShell parser state, rule JSON, registry owner wiring, docs backlog state, report schema/freshness/status taxonomy and report-only audit smoke | Framework verifier v2 certification gate |
 | 50 | Closed: CI framework verifier workflow runs verifier v2 in report-only mode and uploads local audit JSON/Markdown artifacts | CI framework verifier workflow and artifact upload |
+| 51 | Closed: golden focused family runner defines stable dependency-aware slices for crystals, jars, tables, thaumonomicon and golems | Golden focused family regression slices |
 
 ## Roadmap numbering note
 
@@ -131,3 +132,5 @@ Batch 48 closure: runtime smoke validation is report-only runtime-boundary harde
 Batch 49 closure: verifier v2 validation is report-only framework certification hardening; it validates parser state, rule JSON, check registry owner wiring, docs backlog state, report summaries and full audit smoke before CI/strict modes rely on the framework as authoritative.
 
 Batch 50 closure: CI verifier validation is report-only workflow hardening; it runs verifier v2 from GitHub Actions, publishes generated local report artifacts and keeps strict mode opt-in until runtime/visual policies are promoted.
+
+Batch 51 closure: golden focused family validation is report-only focus-control hardening; it defines stable dependency-aware family slices and a runner for quick regression checks before broad reports are reviewed.

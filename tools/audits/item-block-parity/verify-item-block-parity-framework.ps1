@@ -68,6 +68,8 @@ $registryPath = Join-Path $rulesRoot "check-registry.json"
 $ownerRulesPath = Join-Path $rulesRoot "check-invocation-rules.json"
 $matrixPath = Join-Path $RepoRoot "06_docs/audits/item_block_parity_layer_completion_matrix.md"
 $ciWorkflowPath = Join-Path $RepoRoot ".github/workflows/item-block-framework-verifier.yml"
+$goldenFocusedFamiliesScriptPath = Join-Path $auditRoot "run-golden-focused-families.ps1"
+$goldenFocusedFamiliesRulesPath = Join-Path $rulesRoot "golden-focused-families.json"
 
 if (Test-Path -LiteralPath $auditScript -PathType Leaf) {
     Add-Row $rows "required_paths" $passStatus "info" "Audit orchestrator exists." ([ordered]@{ path = ConvertTo-RelativeRepoPath $auditScript })
@@ -102,6 +104,31 @@ if (Test-Path -LiteralPath $ciWorkflowPath -PathType Leaf) {
     Add-Row $rows "ci_workflow" $reviewStatus "review" "CI verifier workflow is not present; local verifier still works, but CI artifact publication is not configured." ([ordered]@{ path = ConvertTo-RelativeRepoPath $ciWorkflowPath })
 }
 
+if ((Test-Path -LiteralPath $goldenFocusedFamiliesScriptPath -PathType Leaf) -and (Test-Path -LiteralPath $goldenFocusedFamiliesRulesPath -PathType Leaf)) {
+    $goldenScriptText = Get-Content -LiteralPath $goldenFocusedFamiliesScriptPath -Raw
+    $goldenRequiredTokens = @(
+        'golden-focused-families.json',
+        'audit-item-block-parity.ps1',
+        '-Families',
+        '-IdPrefix',
+        'item_block_golden_focused_families_report.json'
+    )
+    $goldenMissingTokens = @($goldenRequiredTokens | Where-Object { $goldenScriptText -notlike "*$_*" })
+    try {
+        $goldenRules = Read-JsonFile $goldenFocusedFamiliesRulesPath
+        $goldenFamilyCount = @($goldenRules.families).Count
+    } catch {
+        $goldenFamilyCount = 0
+        $goldenMissingTokens = @($goldenMissingTokens + "valid-golden-focused-families-json")
+    }
+    if ($goldenMissingTokens.Count -eq 0 -and $goldenFamilyCount -gt 0) {
+        Add-Row $rows "golden_focused_families" $passStatus "info" "Golden focused family runner and rules are present." ([ordered]@{ script = ConvertTo-RelativeRepoPath $goldenFocusedFamiliesScriptPath; rules = ConvertTo-RelativeRepoPath $goldenFocusedFamiliesRulesPath; families = $goldenFamilyCount })
+    } else {
+        Add-Row $rows "golden_focused_families" $errorStatus "error" "Golden focused family wiring is incomplete." ([ordered]@{ script = ConvertTo-RelativeRepoPath $goldenFocusedFamiliesScriptPath; rules = ConvertTo-RelativeRepoPath $goldenFocusedFamiliesRulesPath; missing = @($goldenMissingTokens); families = $goldenFamilyCount })
+    }
+} else {
+    Add-Row $rows "golden_focused_families" $reviewStatus "review" "Golden focused family runner/rules are not present; broad framework verifier still works, but focused regression slices are not configured." ([ordered]@{ script = ConvertTo-RelativeRepoPath $goldenFocusedFamiliesScriptPath; rules = ConvertTo-RelativeRepoPath $goldenFocusedFamiliesRulesPath })
+}
 $gitDirty = @(& git status --short)
 if ($gitDirty.Count -gt 0) {
     $status = if ($AllowDirty) { $reviewStatus } else { $errorStatus }

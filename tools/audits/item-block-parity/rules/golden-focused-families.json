@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 51 golden focused families",
+  "policy": "Report-only golden focused family smoke definitions. These are small, stable dependency-aware focus slices used to catch framework regressions before broad audits are reviewed.",
+  "defaultPreset": "ci-safe",
+  "families": [
+    {
+      "name": "crystals",
+      "description": "Crystal blocks/items and directly referenced resource/data dependencies.",
+      "families": ["crystal"],
+      "idPrefix": ["crystal"]
+    },
+    {
+      "name": "jars",
+      "description": "Jar-like storage blocks and directly referenced resource/data dependencies.",
+      "families": ["jar"],
+      "idPrefix": ["jar"]
+    },
+    {
+      "name": "tables",
+      "description": "Table/workbench style crafting UI blocks and directly referenced resource/data dependencies.",
+      "families": ["table", "workbench"],
+      "idPrefix": ["table", "arcane_workbench", "workbench"]
+    },
+    {
+      "name": "thaumonomicon",
+      "description": "Thaumonomicon item/UI entry point and directly referenced resource/data dependencies.",
+      "families": ["thaumonomicon"],
+      "idPrefix": ["thaumonomicon"]
+    },
+    {
+      "name": "golems",
+      "description": "Golem-linked item/entity/resource clues and directly referenced dependencies.",
+      "families": ["golem"],
+      "idPrefix": ["golem"]
+    }
+  ]
+}
