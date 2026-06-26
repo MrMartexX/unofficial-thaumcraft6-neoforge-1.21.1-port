@@ -185,8 +185,8 @@
     {
       "name": "equipment",
       "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Tool/armor material and equipment links planned"
+      "status": "implemented",
+      "reason": "Batch 40 report-only tool/armor/equipment parity audit"
     },
     {
       "name": "item_properties",

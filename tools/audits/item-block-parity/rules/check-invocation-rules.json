@@ -247,6 +247,12 @@
       "ownerType": "module",
       "ownerPath": "modules/fuels_flammability.ps1",
       "name": "fuels_flammability"
+    },
+    {
+      "invocation": "equipmentChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/equipment.ps1",
+      "name": "equipment"
     }
   ]
 }

@@ -55,7 +55,7 @@ $presetChecks = @{
     quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references")
     resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "aspects", "research_refs", "thaumonomicon_refs")
-    "behavior-boundary" = @("item_properties", "data_components", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
+    "behavior-boundary" = @("item_properties", "data_components", "equipment", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
     "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
     "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
     full = @($allKnownChecks)
@@ -404,6 +404,17 @@ function Invoke-FuelFlammabilityAudit {
     if (-not $?) { throw "Fuel and flammability module failed." }
 }
 # Batch 39 fuel and flammability audit end
+# Batch 40 equipment audit start
+$equipmentChecks = @("equipment")
+$selectedEquipmentChecks = @($implementedSelected | Where-Object { $_ -in $equipmentChecks })
+function Invoke-EquipmentAudit {
+    if ($selectedEquipmentChecks.Count -eq 0) { return }
+    $equipmentModule = Join-Path $PSScriptRoot "modules/equipment.ps1"
+    if (-not (Test-Path -LiteralPath $equipmentModule -PathType Leaf)) { throw "Equipment module not found: $equipmentModule" }
+    & $equipmentModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedEquipmentChecks -OutputJson (Join-Path $reportRoot "item_block_equipment_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_equipment_report.md")
+    if (-not $?) { throw "Equipment module failed." }
+}
+# Batch 40 equipment audit end
 # Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
@@ -485,6 +496,7 @@ Invoke-CreativeTabAudit
 Invoke-DataComponentAudit
 Invoke-NetworkingAudit
 Invoke-FuelFlammabilityAudit
+Invoke-EquipmentAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -519,6 +531,7 @@ Invoke-CreativeTabAudit
 Invoke-DataComponentAudit
 Invoke-NetworkingAudit
 Invoke-FuelFlammabilityAudit
+Invoke-EquipmentAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
