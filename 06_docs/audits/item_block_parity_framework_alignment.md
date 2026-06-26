@@ -57,6 +57,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 35 | Closed: report-only variant split audit inventories metadata/suffix-derived variant families, split candidates, collapsed families and port-only variant families | Variant split audit |
 | 36 | Closed: report-only creative tab audit inventories player-facing port manifest IDs observed in creative tab source and review-only unobserved/source-only IDs | Creative tab and player-facing grouping audit |
 | 37 | Closed: report-only legacy NBT/data component bridge audit inventories source evidence for typed data components, tag/save-load usage and component-policy candidate IDs | Legacy NBT/data component bridge audit |
+| 38 | Closed: report-only networking boundary audit inventories custom payload registration, clientbound/serverbound handlers, validation evidence and mutation-risk source clues | Networking boundary deep audit |
 
 ## Roadmap numbering note
 
@@ -93,3 +94,5 @@ Batch 35 closure: variant split validation is report-only registry-identity hard
 Batch 36 closure: creative tab validation is report-only resource-boundary hardening; review rows identify player-facing manifest IDs not directly observed in creative tab source and source-only creative references before verifier v2 treats creative grouping as a certification gate.
 
 Batch 37 closure: data component bridge validation is report-only behavior-boundary hardening; review rows identify legacy tag/save-load usage, ItemStack NBT candidates and typed data component evidence before verifier v2 treats stack-state migration policy as a certification gate.
+
+Batch 38 closure: networking boundary validation is report-only behavior-boundary hardening; review rows identify payload registration, clientbound/serverbound handler evidence, validation clues and mutation-risk source patterns before verifier v2 treats networking policy as a certification gate.

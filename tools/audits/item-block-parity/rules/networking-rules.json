@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 38 networking boundary deep audit",
+  "sourceRoots": [
+    "src/main/java"
+  ],
+  "sourceExtensions": [
+    ".java"
+  ],
+  "payloadTerms": [
+    "CustomPacketPayload",
+    "PayloadRegistrar",
+    "RegisterPayloadHandlersEvent",
+    "StreamCodec",
+    "playToServer",
+    "playToClient",
+    "PacketDistributor",
+    "sendToServer",
+    "sendToPlayer",
+    "IPayloadContext",
+    "payload",
+    "Payload"
+  ],
+  "serverboundTerms": [
+    "playToServer",
+    "Serverbound",
+    "serverbound",
+    "serverbound payload",
+    "server payload"
+  ],
+  "clientboundTerms": [
+    "playToClient",
+    "Clientbound",
+    "clientbound",
+    "clientbound payload",
+    "client payload",
+    "sendToPlayer",
+    "PacketDistributor"
+  ],
+  "validationTerms": [
+    "ServerPlayer",
+    "player",
+    "containerMenu",
+    "stillValid",
+    "distanceToSqr",
+    "mayBuild",
+    "hasPermissions",
+    "permission",
+    "cooldown",
+    "level()",
+    "isLoaded",
+    "hasChunk",
+    "getMainHandItem",
+    "getOffhandItem",
+    "isAlive"
+  ],
+  "mutationTerms": [
+    "setItem",
+    "addItem",
+    "removeItem",
+    "shrink(",
+    "grow(",
+    "hurt(",
+    "setHealth",
+    "progressResearch",
+    "completeResearch",
+    "unlock",
+    "consume",
+    "setChanged",
+    "drain",
+    "give"
+  ],
+  "manifestCandidateTerms": [
+    "network",
+    "payload",
+    "packet",
+    "sync",
+    "serverbound",
+    "clientbound",
+    "menu",
+    "screen",
+    "research",
+    "aura"
+  ],
+  "status": {
+    "pass": "NETWORKING_PASS",
+    "review": "NETWORKING_REVIEW_NEEDED",
+    "error": "NETWORKING_ERROR"
+  },
+  "markdownSampleLimit": 120
+}

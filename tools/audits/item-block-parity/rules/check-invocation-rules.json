@@ -235,6 +235,12 @@
       "ownerType": "module",
       "ownerPath": "modules/data_components.ps1",
       "name": "data_components"
+    },
+    {
+      "invocation": "networkingChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/networking.ps1",
+      "name": "networking"
     }
   ]
 }

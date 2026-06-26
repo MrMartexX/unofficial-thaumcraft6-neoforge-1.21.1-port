@@ -203,8 +203,8 @@
     {
       "name": "networking",
       "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Payload reference boundary planned"
+      "status": "implemented",
+      "reason": "Batch 38 report-only networking boundary deep audit"
     },
     {
       "name": "aspects",

@@ -382,6 +382,17 @@ function Invoke-DataComponentAudit {
     if (-not $?) { throw "Data component module failed." }
 }
 # Batch 37 data component bridge audit end
+# Batch 38 networking boundary audit start
+$networkingChecks = @("networking")
+$selectedNetworkingChecks = @($implementedSelected | Where-Object { $_ -in $networkingChecks })
+function Invoke-NetworkingAudit {
+    if ($selectedNetworkingChecks.Count -eq 0) { return }
+    $networkingModule = Join-Path $PSScriptRoot "modules/networking.ps1"
+    if (-not (Test-Path -LiteralPath $networkingModule -PathType Leaf)) { throw "Networking module not found: $networkingModule" }
+    & $networkingModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedNetworkingChecks -OutputJson (Join-Path $reportRoot "item_block_networking_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_networking_report.md")
+    if (-not $?) { throw "Networking module failed." }
+}
+# Batch 38 networking boundary audit end
 # Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
@@ -461,6 +472,7 @@ Invoke-LegacyMappingReview
 Invoke-VariantsAudit
 Invoke-CreativeTabAudit
 Invoke-DataComponentAudit
+Invoke-NetworkingAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -493,6 +505,7 @@ Invoke-LegacyMappingReview
 Invoke-VariantsAudit
 Invoke-CreativeTabAudit
 Invoke-DataComponentAudit
+Invoke-NetworkingAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
