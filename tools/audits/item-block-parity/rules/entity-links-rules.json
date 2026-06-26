@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 41 entity and spawn egg link audit",
+  "sourceRoots": [
+    "src/main/java"
+  ],
+  "sourceExtensions": [
+    ".java"
+  ],
+  "resourceRoots": [
+    "src/main/resources/data",
+    "src/generated/resources/data",
+    "src/main/resources/assets",
+    "src/generated/resources/assets"
+  ],
+  "resourceExtensions": [
+    ".json"
+  ],
+  "entityTerms": [
+    "EntityType",
+    "Mob",
+    "Monster",
+    "Animal",
+    "LivingEntity",
+    "Projectile",
+    "ThrowableItemProjectile",
+    "ModEntities",
+    "SpawnPlacement",
+    "EntityAttributeCreationEvent",
+    "AttributeSupplier",
+    "Attributes.",
+    "registerEntity",
+    "ENTITY_TYPE"
+  ],
+  "spawnEggTerms": [
+    "SpawnEggItem",
+    "spawn_egg",
+    "Spawn Egg",
+    "spawn egg",
+    "egg",
+    "registerSpawnEgg"
+  ],
+  "attributeTerms": [
+    "AttributeSupplier",
+    "Attributes.",
+    "createAttributes",
+    "EntityAttributeCreationEvent",
+    "MAX_HEALTH",
+    "MOVEMENT_SPEED",
+    "ATTACK_DAMAGE",
+    "FOLLOW_RANGE"
+  ],
+  "rendererTerms": [
+    "EntityRenderers.register",
+    "EntityRenderer",
+    "MobRenderer",
+    "RendererProvider",
+    "client.render",
+    "render.entity"
+  ],
+  "dataTerms": [
+    "entity_type",
+    "spawn_egg",
+    "spawn_egg_item",
+    "neoforge:biome_modifier",
+    "spawns",
+    "spawn_costs",
+    "entities",
+    "type"
+  ],
+  "manifestCandidateTerms": [
+    "spawn_egg",
+    "egg",
+    "golem",
+    "pech",
+    "cultist",
+    "crimson",
+    "wisp",
+    "taint",
+    "eldritch",
+    "brain",
+    "giant",
+    "turret",
+    "projectile",
+    "bolt",
+    "orb",
+    "focus",
+    "seal",
+    "entity"
+  ],
+  "resourceEntityTerms": [
+    "entity_type",
+    "spawn_egg",
+    "spawn",
+    "entity",
+    "entities",
+    "mob",
+    "projectile",
+    "golem",
+    "wisp",
+    "pech",
+    "cultist"
+  ],
+  "status": {
+    "pass": "ENTITY_LINKS_PASS",
+    "review": "ENTITY_LINKS_REVIEW_NEEDED",
+    "error": "ENTITY_LINKS_ERROR"
+  },
+  "markdownSampleLimit": 120
+}

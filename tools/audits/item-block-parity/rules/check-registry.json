@@ -293,8 +293,8 @@
     {
       "name": "entity_links",
       "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Entity/spawn egg links planned"
+      "status": "implemented",
+      "reason": "Batch 41 report-only entity/spawn-egg link audit"
     },
     {
       "name": "visual_boundary",

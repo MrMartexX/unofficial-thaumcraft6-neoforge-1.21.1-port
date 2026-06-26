@@ -253,6 +253,12 @@
       "ownerType": "module",
       "ownerPath": "modules/equipment.ps1",
       "name": "equipment"
+    },
+    {
+      "invocation": "entityLinkChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/entity_links.ps1",
+      "name": "entity_links"
     }
   ]
 }
