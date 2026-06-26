@@ -469,8 +469,19 @@ function Invoke-PublicApiAudit {
     & $publicApiModule -RepoRoot $RepoRoot -LegacyRoot $LegacyRoot -PortRoot $PortRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -RulesRoot $rulesRoot -Checks $selectedPublicApiChecks -OutputJson (Join-Path $reportRoot "item_block_public_api_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_public_api_report.md")
     if (-not $?) { throw "Public API module failed." }
 }
-# Batch 45 public API audit end# Batch 31 docs/registry consistency audit start
-$docsDeferredChecks = @("docs_deferred")
+# Batch 45 public API audit end
+# Batch 46 source conflict report audit start
+$sourceConflictChecks = @("source_conflict_report")
+$selectedSourceConflictChecks = @($implementedSelected | Where-Object { $_ -in $sourceConflictChecks })
+function Invoke-SourceConflictReportAudit {
+    if ($selectedSourceConflictChecks.Count -eq 0) { return }
+    $sourceConflictModule = Join-Path $PSScriptRoot "modules/source_conflict_report.ps1"
+    if (-not (Test-Path -LiteralPath $sourceConflictModule -PathType Leaf)) { throw "Source conflict module not found: $sourceConflictModule" }
+    & $sourceConflictModule -RepoRoot $RepoRoot -LegacyRoot $LegacyRoot -SecondaryLegacyRoot $SecondaryLegacyRoot -PortRoot $PortRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -RulesRoot $rulesRoot -Checks $selectedSourceConflictChecks -OutputJson (Join-Path $reportRoot "item_block_source_conflict_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_source_conflict_report.md")
+    if (-not $?) { throw "Source conflict module failed." }
+}
+# Batch 46 source conflict report audit end
+# Batch 31 docs/registry consistency audit start$docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
 function Invoke-DocsRegistryConsistencyAudit {
     if ($selectedDocsDeferredChecks.Count -eq 0) { return }
@@ -556,6 +567,7 @@ Invoke-WorldgenLinkAudit
 Invoke-ConfigGateAudit
 Invoke-AccessTransformerAudit
 Invoke-PublicApiAudit
+Invoke-SourceConflictReportAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -596,6 +608,7 @@ Invoke-WorldgenLinkAudit
 Invoke-ConfigGateAudit
 Invoke-AccessTransformerAudit
 Invoke-PublicApiAudit
+Invoke-SourceConflictReportAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator

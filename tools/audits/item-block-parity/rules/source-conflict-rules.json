@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "check": "source_conflict_report",
+  "description": "Report-only source conflict aggregation across primary legacy, secondary legacy and port source trees.",
+  "sourceExtensions": [
+    ".java"
+  ],
+  "classificationTerms": [
+    "primary_secondary_conflict",
+    "legacy_only",
+    "port_only",
+    "primary_only",
+    "secondary_only",
+    "shared_source"
+  ],
+  "candidateIdTerms": [
+    "thaumcraft",
+    "wand",
+    "focus",
+    "golem",
+    "aura",
+    "aspect",
+    "research",
+    "essentia",
+    "crucible",
+    "infusion",
+    "arcane",
+    "caster",
+    "seal",
+    "void",
+    "thaumium"
+  ]
+}

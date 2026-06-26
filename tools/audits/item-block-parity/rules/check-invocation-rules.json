@@ -283,6 +283,12 @@
       "ownerType": "module",
       "ownerPath": "modules/public_api.ps1",
       "name": "public_api"
+    },
+    {
+      "invocation": "sourceConflictChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/source_conflict_report.ps1",
+      "name": "source_conflict_report"
     }
   ]
 }

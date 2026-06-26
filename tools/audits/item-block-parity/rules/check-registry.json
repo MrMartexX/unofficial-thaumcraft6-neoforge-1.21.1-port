@@ -125,8 +125,8 @@
     {
       "name": "source_conflict_report",
       "layer": "source_quality",
-      "status": "planned",
-      "reason": "Source conflict aggregation planned"
+      "status": "implemented",
+      "reason": "Batch 46 report-only primary/secondary/port source conflict aggregation"
     },
     {
       "name": "sounds_particles",
