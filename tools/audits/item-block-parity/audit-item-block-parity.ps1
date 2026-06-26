@@ -481,8 +481,18 @@ function Invoke-SourceConflictReportAudit {
     if (-not $?) { throw "Source conflict module failed." }
 }
 # Batch 46 source conflict report audit end
-# Batch 31 docs/registry consistency audit start
-$docsDeferredChecks = @("docs_deferred")
+# Batch 47 original jar probe audit start
+$originalJarProbeChecks = @("original_jar_probe")
+$selectedOriginalJarProbeChecks = @($implementedSelected | Where-Object { $_ -in $originalJarProbeChecks })
+function Invoke-OriginalJarProbeAudit {
+    if ($selectedOriginalJarProbeChecks.Count -eq 0) { return }
+    $originalJarProbeModule = Join-Path $PSScriptRoot "modules/original_jar_probe.ps1"
+    if (-not (Test-Path -LiteralPath $originalJarProbeModule -PathType Leaf)) { throw "Original jar probe module not found: $originalJarProbeModule" }
+    & $originalJarProbeModule -RepoRoot $RepoRoot -OriginalJar $OriginalJar -LegacyRoot $LegacyRoot -SecondaryLegacyRoot $SecondaryLegacyRoot -PortRoot $PortRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -RulesRoot $rulesRoot -Checks $selectedOriginalJarProbeChecks -OutputJson (Join-Path $reportRoot "item_block_original_jar_probe_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_original_jar_probe_report.md")
+    if (-not $?) { throw "Original jar probe module failed." }
+}
+# Batch 47 original jar probe audit end
+# Batch 31 docs/registry consistency audit start$docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
 function Invoke-DocsRegistryConsistencyAudit {
     if ($selectedDocsDeferredChecks.Count -eq 0) { return }
@@ -569,6 +579,7 @@ Invoke-ConfigGateAudit
 Invoke-AccessTransformerAudit
 Invoke-PublicApiAudit
 Invoke-SourceConflictReportAudit
+Invoke-OriginalJarProbeAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -610,6 +621,7 @@ Invoke-ConfigGateAudit
 Invoke-AccessTransformerAudit
 Invoke-PublicApiAudit
 Invoke-SourceConflictReportAudit
+Invoke-OriginalJarProbeAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator

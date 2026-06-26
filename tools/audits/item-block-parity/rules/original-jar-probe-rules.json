@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "check": "original_jar_probe",
+  "description": "Report-only original jar resource/class probe for legacy evidence authority checks.",
+  "jarClassExtensions": [
+    ".class"
+  ],
+  "resourceExtensions": [
+    ".json",
+    ".mcmeta",
+    ".png",
+    ".ogg",
+    ".lang",
+    ".txt",
+    ".cfg",
+    ".properties"
+  ],
+  "candidateIdTerms": [
+    "thaumcraft",
+    "wand",
+    "focus",
+    "golem",
+    "aura",
+    "aspect",
+    "research",
+    "essentia",
+    "crucible",
+    "infusion",
+    "arcane",
+    "caster",
+    "seal",
+    "void",
+    "thaumium",
+    "taint",
+    "eldritch"
+  ]
+}

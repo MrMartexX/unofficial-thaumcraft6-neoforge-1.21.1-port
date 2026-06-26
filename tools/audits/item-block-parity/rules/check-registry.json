@@ -89,8 +89,8 @@
     {
       "name": "original_jar_probe",
       "layer": "source_quality",
-      "status": "planned",
-      "reason": "Batch 7/quality jar probe planned"
+      "status": "implemented",
+      "reason": "Batch 47 report-only original jar resource/class probe"
     },
     {
       "name": "public_api",

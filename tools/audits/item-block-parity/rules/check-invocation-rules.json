@@ -289,6 +289,12 @@
       "ownerType": "module",
       "ownerPath": "modules/source_conflict_report.ps1",
       "name": "source_conflict_report"
+    },
+    {
+      "invocation": "originalJarProbeChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/original_jar_probe.ps1",
+      "name": "original_jar_probe"
     }
   ]
 }

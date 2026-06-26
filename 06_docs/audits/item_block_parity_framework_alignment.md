@@ -66,6 +66,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 44 | Closed: report-only access transformer visibility audit inventories AT files, build wiring, visibility/reflection source evidence and manifest/source candidate IDs | Access transformer visibility audit |
 | 45 | Closed: report-only public API surface audit inventories legacy and port public declarations, interop/stability clues and manifest/source API candidate IDs | Public API surface audit |
 | 46 | Closed: report-only source conflict aggregation inventories primary legacy, secondary legacy and port class presence/hash confidence conflicts | Primary/secondary/port source conflict aggregation |
+| 47 | Closed: report-only original jar probe inventories jar class/resource entries, source coverage gaps and manifest/resource candidates | Original jar resource/class probe |
 
 ## Roadmap numbering note
 
@@ -120,3 +121,5 @@ Batch 44 closure: access transformer validation is report-only source-quality ha
 Batch 45 closure: public API validation is report-only source-quality hardening; review rows identify legacy and port public declarations, interop clues, stability markers and candidate IDs before verifier v2 treats public API surface policy as a certification gate.
 
 Batch 46 closure: source conflict aggregation is report-only source-quality hardening; review rows identify primary-only, secondary-only, legacy-only, port-only and primary/secondary hash conflicts before verifier v2 treats source authority as a certification gate.
+
+Batch 47 closure: original jar probe validation is report-only source-quality hardening; review rows identify jar class/resource entries, legacy source coverage gaps, port overlap and manifest/resource candidates before verifier v2 treats original jar evidence as a certification gate.
