@@ -307,6 +307,12 @@
       "ownerType": "module",
       "ownerPath": "modules/visual_equivalence_completion.ps1",
       "name": "visual_equivalence_completion"
+    },
+    {
+      "invocation": "ciStrictSafePolicyChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/ci_strict_safe_policy.ps1",
+      "name": "ci_strict_safe_policy"
     }
   ]
 }

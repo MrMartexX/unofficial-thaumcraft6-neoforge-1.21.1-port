@@ -307,6 +307,12 @@
       "layer": "visual_boundary",
       "status": "implemented",
       "reason": "Batch 53 report-only visual equivalence completion criteria audit"
+    },
+    {
+      "name": "ci_strict_safe_policy",
+      "layer": "source_quality",
+      "status": "implemented",
+      "reason": "Batch 54 report-only CI strict/safe matrix policy audit"
     }
   ]
 }

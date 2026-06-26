@@ -17,6 +17,15 @@ on:
         required: true
         type: boolean
         default: true
+      policy_mode:
+        description: CI policy mode. report_only is default; strict is manual opt-in.
+        required: true
+        type: choice
+        default: report_only
+        options:
+          - report_only
+          - safe
+          - strict
   pull_request:
     paths:
       - '.github/workflows/item-block-framework-verifier.yml'
@@ -65,14 +74,22 @@ jobs:
 
       - name: Run framework verifier v2
         run: |
-          $failMode = 'off'
+          $policyMode = 'report_only'
           $fullAudit = 'true'
           if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
-            $inputFailMode = '${{ inputs.fail_mode }}'
+            $inputPolicyMode = '${{ inputs.policy_mode }}'
             $inputFullAudit = '${{ inputs.full_audit }}'
-            if (-not [string]::IsNullOrWhiteSpace($inputFailMode)) { $failMode = $inputFailMode }
+            if (-not [string]::IsNullOrWhiteSpace($inputPolicyMode)) { $policyMode = $inputPolicyMode }
             if (-not [string]::IsNullOrWhiteSpace($inputFullAudit)) { $fullAudit = $inputFullAudit }
           }
+
+          switch ($policyMode) {
+            'report_only' { $failMode = 'off' }
+            'safe' { $failMode = 'safe' }
+            'strict' { $failMode = 'strict' }
+            default { throw "Unknown policy_mode: $policyMode" }
+          }
+          Write-Host "CI policy mode: $policyMode; verifier FailMode: $failMode; fullAudit: $fullAudit"
 
           $verifierArgs = @(
             '-NoProfile',

@@ -73,6 +73,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 51 | Closed: golden focused family runner defines stable dependency-aware slices for crystals, jars, tables, thaumonomicon and golems | Golden focused family regression slices |
 | 52 | Closed: minimal opt-in scripted GameTest/runtime fixture validates server startup and representative Thaumcraft registry entries | Minimal GameTest/runtime fixture coverage |
 | 53 | Closed: visual equivalence completion criteria classifies model, texture and FX review blockers before strict visual certification | Visual equivalence completion criteria |
+| 54 | Closed: CI strict/safe policy matrix keeps report-only default, safe mechanical hard-fail and strict manual certification boundaries | CI strict/safe matrix policy |
 
 ## Roadmap numbering note
 
@@ -140,3 +141,5 @@ Batch 51 closure: golden focused family validation is report-only focus-control 
 Batch 52 closure: minimal GameTest fixture validation is report-only runtime-boundary hardening; it adds an opt-in server-started fixture that writes a runtime report for representative registry/bootstrap coverage and remains separate from strict gameplay parity.
 
 Batch 53 closure: visual equivalence completion validation is report-only visual-boundary hardening; it defines strict-promotion blockers for model transforms, texture/color parity and sound/particle/FX evidence without treating unresolved review rows as mechanical errors.
+
+Batch 54 closure: CI strict/safe policy validation is report-only workflow hardening; it documents report-only, safe and strict policy boundaries, keeps strict certification manual/opt-in and adds a policy audit report consumed by verifier v2.

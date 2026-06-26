@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 54 CI strict/safe matrix policy",
+  "policy": "Report-only is the default CI posture. Safe mode may hard-fail mechanical framework errors. Strict mode is manual/opt-in and may hard-fail unresolved runtime or visual certification blockers.",
+  "modes": [
+    {
+      "name": "report_only",
+      "failMode": "off",
+      "defaultFor": ["push", "pull_request"],
+      "hardFail": ["PowerShell parser errors", "invalid rule JSON", "missing required reports", "report summary errors or fail counts"],
+      "reviewOnly": ["visual completion blockers", "runtime readiness review rows", "status taxonomy review rows", "report schema review rows"]
+    },
+    {
+      "name": "safe",
+      "failMode": "safe",
+      "defaultFor": [],
+      "hardFail": ["mechanical framework errors", "invalid JSON", "parser failures", "generated report errors"],
+      "reviewOnly": ["unresolved visual/runtime certification blockers"]
+    },
+    {
+      "name": "strict",
+      "failMode": "strict",
+      "defaultFor": [],
+      "hardFail": ["all safe-mode hard failures", "visual completion review blockers", "runtime smoke review blockers", "GameTest/scripted smoke review blockers"],
+      "reviewOnly": ["documented intentionally out-of-scope or superseded rows only"]
+    }
+  ],
+  "requiredWorkflowTokens": [
+    "policy_mode",
+    "report_only",
+    "safe",
+    "strict",
+    "-FailMode",
+    "actions/upload-artifact@v4"
+  ],
+  "strictBlockerReports": [
+    {
+      "report": "item_block_visual_equivalence_completion_report.json",
+      "summaryField": "reviewNeeded",
+      "reason": "visual/model/texture/FX review blockers must be classified before strict visual certification"
+    },
+    {
+      "report": "item_block_runtime_smoke_report.json",
+      "summaryField": "reviewNeeded",
+      "reason": "runtime smoke readiness rows must be resolved before strict runtime certification"
+    },
+    {
+      "report": "item_block_game_test_smoke_report.json",
+      "summaryField": "reviewNeeded",
+      "reason": "GameTest/scripted smoke readiness rows must be resolved before strict runtime certification"
+    }
+  ],
+  "mechanicalReports": [
+    "item_block_check_invocation_self_test_report.json",
+    "report_schema_contract_report.json",
+    "status_taxonomy_report.json",
+    "docs_registry_consistency_report.json",
+    "item_block_json_validity_report.json",
+    "item_block_visual_equivalence_completion_report.json"
+  ]
+}

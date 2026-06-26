@@ -72,6 +72,8 @@ $goldenFocusedFamiliesScriptPath = Join-Path $auditRoot "run-golden-focused-fami
 $goldenFocusedFamiliesRulesPath = Join-Path $rulesRoot "golden-focused-families.json"
 $visualEquivalenceCompletionModulePath = Join-Path $auditRoot "modules/visual_equivalence_completion.ps1"
 $visualEquivalenceCompletionRulesPath = Join-Path $rulesRoot "visual-equivalence-completion.json"
+$ciStrictSafePolicyModulePath = Join-Path $auditRoot "modules/ci_strict_safe_policy.ps1"
+$ciStrictSafePolicyRulesPath = Join-Path $rulesRoot "ci-strict-safe-policy.json"
 
 if (Test-Path -LiteralPath $auditScript -PathType Leaf) {
     Add-Row $rows "required_paths" $passStatus "info" "Audit orchestrator exists." ([ordered]@{ path = ConvertTo-RelativeRepoPath $auditScript })
@@ -94,7 +96,11 @@ if (Test-Path -LiteralPath $ciWorkflowPath -PathType Leaf) {
         'actions/upload-artifact@v4',
         'verify-item-block-parity-framework.ps1',
         'tools/reports/local/item-block-parity/*.json',
-        'tools/reports/local/item-block-parity/*.md'
+        'tools/reports/local/item-block-parity/*.md',
+        'policy_mode',
+        'report_only',
+        'safe',
+        'strict'
     )
     $missingCiTokens = @($requiredCiTokens | Where-Object { $ciText -notlike "*$_*" })
     if ($missingCiTokens.Count -eq 0) {
@@ -154,6 +160,33 @@ if ($visualCompletionMissingTokens.Count -eq 0) {
     Add-Row $rows "visual_equivalence_completion" $passStatus "info" "Visual equivalence completion module and policy rules are present." ([ordered]@{ module = ConvertTo-RelativeRepoPath $visualEquivalenceCompletionModulePath; rules = ConvertTo-RelativeRepoPath $visualEquivalenceCompletionRulesPath })
 } else {
     Add-Row $rows "visual_equivalence_completion" $errorStatus "error" "Visual equivalence completion wiring is incomplete." ([ordered]@{ missing = @($visualCompletionMissingTokens) })
+}
+$ciPolicyMissingTokens = [System.Collections.Generic.List[string]]::new()
+if (Test-Path -LiteralPath $ciStrictSafePolicyModulePath -PathType Leaf) {
+    $ciPolicyModuleText = Get-Content -LiteralPath $ciStrictSafePolicyModulePath -Raw
+    foreach ($token in @('ci-strict-safe-policy.json', 'CI_POLICY_REVIEW_NEEDED', 'strictBlockers', 'FailMode')) {
+        if ($ciPolicyModuleText -notlike "*$token*") { $ciPolicyMissingTokens.Add($token) }
+    }
+} else {
+    $ciPolicyMissingTokens.Add('modules/ci_strict_safe_policy.ps1')
+}
+if (Test-Path -LiteralPath $ciStrictSafePolicyRulesPath -PathType Leaf) {
+    try {
+        $ciPolicyRules = Read-JsonFile $ciStrictSafePolicyRulesPath
+        $modeNames = @($ciPolicyRules.modes | ForEach-Object { [string]$_.name })
+        foreach ($modeName in @('report_only', 'safe', 'strict')) {
+            if ($modeNames -notcontains $modeName) { $ciPolicyMissingTokens.Add("mode:$modeName") }
+        }
+    } catch {
+        $ciPolicyMissingTokens.Add('valid_ci_strict_safe_policy_json')
+    }
+} else {
+    $ciPolicyMissingTokens.Add('ci-strict-safe-policy.json')
+}
+if ($ciPolicyMissingTokens.Count -eq 0) {
+    Add-Row $rows "ci_strict_safe_policy" $passStatus "info" "CI strict/safe policy module and rules are present." ([ordered]@{ module = ConvertTo-RelativeRepoPath $ciStrictSafePolicyModulePath; rules = ConvertTo-RelativeRepoPath $ciStrictSafePolicyRulesPath })
+} else {
+    Add-Row $rows "ci_strict_safe_policy" $errorStatus "error" "CI strict/safe policy wiring is incomplete." ([ordered]@{ missing = @($ciPolicyMissingTokens) })
 }
 $minimalGameTestFixturePath = Join-Path $RepoRoot "05_neoforge_port/src/main/java/thaumcraft/common/runtime/TCMinimalGameTestFixture.java"
 $minimalGameTestFixtureExporterPath = Join-Path $RepoRoot "05_neoforge_port/src/main/java/thaumcraft/common/runtime/TCMinimalGameTestFixtureExporter.java"
@@ -291,7 +324,7 @@ if (-not $SkipAuditRun) {
         & $auditScript -RepoRoot $RepoRoot -Preset full -UseCachedLegacy -FailMode off
     } else {
         Write-Output "Running core report-only item/block parity framework smoke."
-        $coreChecks = @("json_validity", "runtime_smoke", "check_invocation", "docs_deferred", "status_taxonomy", "report_freshness", "report_schema")
+        $coreChecks = @("json_validity", "runtime_smoke", "check_invocation", "docs_deferred", "status_taxonomy", "report_freshness", "report_schema", "ci_strict_safe_policy")
         & $auditScript -RepoRoot $RepoRoot -Checks $coreChecks -UseCachedLegacy -FailMode off
     }
     if (-not $?) {
@@ -323,7 +356,8 @@ $reportFilesToCheck = @(
     "item_block_public_api_report.json",
     "item_block_source_conflict_report.json",
     "item_block_original_jar_probe_report.json",
-    "item_block_visual_equivalence_completion_report.json"
+    "item_block_visual_equivalence_completion_report.json",
+    "ci_strict_safe_policy_report.json"
 ) | Select-Object -Unique
 
 $checkedReportCount = 0
