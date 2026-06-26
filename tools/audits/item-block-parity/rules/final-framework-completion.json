@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 55 final framework completion audit",
+  "policy": "Report-only final framework completion audit. This certifies framework closure, not gameplay parity completion.",
+  "expectedChecks": {
+    "minimumImplementedAfterBatch55": 53,
+    "mustHaveNoPlannedChecks": true,
+    "mustHaveOwnerForEveryImplementedCheck": true
+  },
+  "requiredReports": [
+    "item_block_check_invocation_self_test_report.json",
+    "docs_registry_consistency_report.json",
+    "status_taxonomy_report.json",
+    "report_freshness_guard_report.json",
+    "report_schema_contract_report.json",
+    "item_block_runtime_smoke_report.json",
+    "item_block_game_test_smoke_report.json",
+    "item_block_runtime_datapack_smoke_report.json",
+    "item_block_visual_equivalence_completion_report.json",
+    "ci_strict_safe_policy_report.json"
+  ],
+  "requiredPolicyFiles": [
+    "golden-focused-families.json",
+    "visual-equivalence-completion.json",
+    "ci-strict-safe-policy.json"
+  ],
+  "requiredDocs": [
+    "item_block_parity_layer_completion_matrix.md",
+    "item_block_parity_framework_alignment.md",
+    "item_block_parity_ci_framework_verifier.md",
+    "item_block_parity_minimal_gametest_fixture.md",
+    "item_block_parity_visual_equivalence_completion.md",
+    "item_block_parity_ci_strict_safe_policy.md",
+    "item_block_parity_final_framework_completion.md"
+  ],
+  "strictBlockerReports": [
+    "item_block_visual_equivalence_completion_report.json",
+    "ci_strict_safe_policy_report.json",
+    "item_block_runtime_smoke_report.json",
+    "item_block_game_test_smoke_report.json"
+  ],
+  "completionStatement": "The item/block parity framework is production-grade for report-only evidence collection, CI artifact publication and manual safe/strict policy runs. It is not a statement that every Thaumcraft gameplay parity gap is resolved."
+}

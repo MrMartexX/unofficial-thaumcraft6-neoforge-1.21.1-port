@@ -313,6 +313,12 @@
       "ownerType": "module",
       "ownerPath": "modules/ci_strict_safe_policy.ps1",
       "name": "ci_strict_safe_policy"
+    },
+    {
+      "invocation": "finalFrameworkCompletionChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/final_framework_completion.ps1",
+      "name": "final_framework_completion"
     }
   ]
 }

@@ -74,6 +74,8 @@ $visualEquivalenceCompletionModulePath = Join-Path $auditRoot "modules/visual_eq
 $visualEquivalenceCompletionRulesPath = Join-Path $rulesRoot "visual-equivalence-completion.json"
 $ciStrictSafePolicyModulePath = Join-Path $auditRoot "modules/ci_strict_safe_policy.ps1"
 $ciStrictSafePolicyRulesPath = Join-Path $rulesRoot "ci-strict-safe-policy.json"
+$finalFrameworkCompletionModulePath = Join-Path $auditRoot "modules/final_framework_completion.ps1"
+$finalFrameworkCompletionRulesPath = Join-Path $rulesRoot "final-framework-completion.json"
 
 if (Test-Path -LiteralPath $auditScript -PathType Leaf) {
     Add-Row $rows "required_paths" $passStatus "info" "Audit orchestrator exists." ([ordered]@{ path = ConvertTo-RelativeRepoPath $auditScript })
@@ -187,6 +189,31 @@ if ($ciPolicyMissingTokens.Count -eq 0) {
     Add-Row $rows "ci_strict_safe_policy" $passStatus "info" "CI strict/safe policy module and rules are present." ([ordered]@{ module = ConvertTo-RelativeRepoPath $ciStrictSafePolicyModulePath; rules = ConvertTo-RelativeRepoPath $ciStrictSafePolicyRulesPath })
 } else {
     Add-Row $rows "ci_strict_safe_policy" $errorStatus "error" "CI strict/safe policy wiring is incomplete." ([ordered]@{ missing = @($ciPolicyMissingTokens) })
+}
+$finalFrameworkMissingTokens = [System.Collections.Generic.List[string]]::new()
+if (Test-Path -LiteralPath $finalFrameworkCompletionModulePath -PathType Leaf) {
+    $finalFrameworkModuleText = Get-Content -LiteralPath $finalFrameworkCompletionModulePath -Raw
+    foreach ($token in @('final-framework-completion.json', 'FINAL_FRAMEWORK_REVIEW_NEEDED', 'strictBlockers', 'final_framework_completion_report.json')) {
+        if ($finalFrameworkModuleText -notlike "*$token*") { $finalFrameworkMissingTokens.Add($token) }
+    }
+} else {
+    $finalFrameworkMissingTokens.Add('modules/final_framework_completion.ps1')
+}
+if (Test-Path -LiteralPath $finalFrameworkCompletionRulesPath -PathType Leaf) {
+    try {
+        $finalFrameworkRules = Read-JsonFile $finalFrameworkCompletionRulesPath
+        if (@($finalFrameworkRules.requiredReports).Count -lt 5) { $finalFrameworkMissingTokens.Add('required_final_framework_reports') }
+        if (@($finalFrameworkRules.requiredDocs).Count -lt 5) { $finalFrameworkMissingTokens.Add('required_final_framework_docs') }
+    } catch {
+        $finalFrameworkMissingTokens.Add('valid_final_framework_completion_json')
+    }
+} else {
+    $finalFrameworkMissingTokens.Add('final-framework-completion.json')
+}
+if ($finalFrameworkMissingTokens.Count -eq 0) {
+    Add-Row $rows "final_framework_completion" $passStatus "info" "Final framework completion module and rules are present." ([ordered]@{ module = ConvertTo-RelativeRepoPath $finalFrameworkCompletionModulePath; rules = ConvertTo-RelativeRepoPath $finalFrameworkCompletionRulesPath })
+} else {
+    Add-Row $rows "final_framework_completion" $errorStatus "error" "Final framework completion wiring is incomplete." ([ordered]@{ missing = @($finalFrameworkMissingTokens) })
 }
 $minimalGameTestFixturePath = Join-Path $RepoRoot "05_neoforge_port/src/main/java/thaumcraft/common/runtime/TCMinimalGameTestFixture.java"
 $minimalGameTestFixtureExporterPath = Join-Path $RepoRoot "05_neoforge_port/src/main/java/thaumcraft/common/runtime/TCMinimalGameTestFixtureExporter.java"
@@ -358,6 +385,7 @@ $reportFilesToCheck = @(
     "item_block_original_jar_probe_report.json",
     "item_block_visual_equivalence_completion_report.json",
     "ci_strict_safe_policy_report.json"
+    "final_framework_completion_report.json"
 ) | Select-Object -Unique
 
 $checkedReportCount = 0

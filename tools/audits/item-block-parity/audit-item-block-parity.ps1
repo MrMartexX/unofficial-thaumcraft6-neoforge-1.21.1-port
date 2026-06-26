@@ -56,7 +56,7 @@ $presetChecks = @{
     resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "entity_links", "worldgen_links", "config_gates", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "data_components", "equipment", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
-    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "access_transformers", "public_api", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred", "ci_strict_safe_policy")
+    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "access_transformers", "public_api", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred", "ci_strict_safe_policy", "final_framework_completion")
     "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
     full = @($allKnownChecks)
 }
@@ -568,6 +568,17 @@ function Invoke-CiStrictSafePolicyAudit {
     if (-not $?) { throw "CI strict/safe policy module failed." }
 }
 # Batch 54 CI strict/safe policy audit end
+# Batch 55 final framework completion audit start
+$finalFrameworkCompletionChecks = @("final_framework_completion")
+$selectedFinalFrameworkCompletionChecks = @($implementedSelected | Where-Object { $_ -in $finalFrameworkCompletionChecks })
+function Invoke-FinalFrameworkCompletionAudit {
+    if ($selectedFinalFrameworkCompletionChecks.Count -eq 0) { return }
+    $finalFrameworkCompletionModule = Join-Path $PSScriptRoot "modules/final_framework_completion.ps1"
+    if (-not (Test-Path -LiteralPath $finalFrameworkCompletionModule -PathType Leaf)) { throw "Final framework completion module not found: $finalFrameworkCompletionModule" }
+    & $finalFrameworkCompletionModule -RepoRoot $RepoRoot -ReportRoot $reportRoot -RulesRoot $rulesRoot -Checks $selectedFinalFrameworkCompletionChecks -FailMode $FailMode -OutputJson (Join-Path $reportRoot "final_framework_completion_report.json") -OutputMarkdown (Join-Path $reportRoot "final_framework_completion_report.md")
+    if (-not $?) { throw "Final framework completion module failed." }
+}
+# Batch 55 final framework completion audit end
 # Batch 28 check invocation self-test start
 $checkInvocationChecks = @("check_invocation")
 $selectedCheckInvocationChecks = @($implementedSelected | Where-Object { $_ -in $checkInvocationChecks })
@@ -622,6 +633,7 @@ Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
 Invoke-ReportFreshnessGuard
 Invoke-ReportSchemaValidator
+Invoke-FinalFrameworkCompletionAudit
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0
 }
@@ -667,6 +679,7 @@ Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
 Invoke-ReportFreshnessGuard
 Invoke-ReportSchemaValidator
+Invoke-FinalFrameworkCompletionAudit
 if (-not $compareSucceeded) {
     if ($null -ne $compareExitCode) { exit $compareExitCode }
     exit 1
