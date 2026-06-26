@@ -52,29 +52,39 @@ if ($Families -and $Families.Count -gt 0) {
 if ($definitions.Count -eq 0) { throw "No golden focused family definitions selected." }
 
 $rows = [System.Collections.Generic.List[object]]::new()
-$pwsh = (Get-Command pwsh -ErrorAction Stop).Source
 foreach ($definition in $definitions) {
     $name = [string]$definition.name
     $safeName = ($name -replace '[^A-Za-z0-9_.-]', '_')
     $logPath = Join-Path $logRoot "$safeName.log"
-    $args = @(
-        "-NoProfile",
-        "-File", $auditScript,
-        "-RepoRoot", $RepoRoot,
-        "-Preset", $Preset,
-        "-FailMode", "off"
-    )
-    if (-not $RefreshLegacy) { $args += "-UseCachedLegacy" }
+
     $familyValues = @($definition.families | ForEach-Object { [string]$_ } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
     $prefixValues = @($definition.idPrefix | ForEach-Object { [string]$_ } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
     $idValues = @($definition.ids | ForEach-Object { [string]$_ } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
-    if ($familyValues.Count -gt 0) { $args += "-Families"; $args += @($familyValues) }
-    if ($prefixValues.Count -gt 0) { $args += "-IdPrefix"; $args += @($prefixValues) }
-    if ($idValues.Count -gt 0) { $args += "-Ids"; $args += @($idValues) }
+
+    $auditParams = @{
+        RepoRoot = $RepoRoot
+        Preset = $Preset
+        FailMode = "off"
+    }
+    if ($RefreshLegacy) {
+        $auditParams.RefreshLegacy = $true
+    } else {
+        $auditParams.UseCachedLegacy = $true
+    }
+    if ($familyValues.Count -gt 0) { $auditParams.Families = @($familyValues) }
+    if ($prefixValues.Count -gt 0) { $auditParams.IdPrefix = @($prefixValues) }
+    if ($idValues.Count -gt 0) { $auditParams.Ids = @($idValues) }
 
     $started = [DateTime]::UtcNow
-    $output = @(& $pwsh @args 2>&1 | ForEach-Object { [string]$_ })
-    $exitCode = if ($null -ne $LASTEXITCODE) { [int]$LASTEXITCODE } else { 0 }
+    $output = @()
+    $exitCode = 0
+    try {
+        $output = @(& $auditScript @auditParams 2>&1 | ForEach-Object { [string]$_ })
+        if (-not $?) { $exitCode = 1 }
+    } catch {
+        $exitCode = 1
+        $output = @($output + $_.Exception.Message)
+    }
     $finished = [DateTime]::UtcNow
     $output | Set-Content -LiteralPath $logPath -Encoding utf8NoBOM
 
