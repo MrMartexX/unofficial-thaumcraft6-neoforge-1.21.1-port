@@ -229,6 +229,12 @@
       "ownerType": "module",
       "ownerPath": "modules/creative_tabs.ps1",
       "name": "creative_tabs"
+    },
+    {
+      "invocation": "dataComponentChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/data_components.ps1",
+      "name": "data_components"
     }
   ]
 }

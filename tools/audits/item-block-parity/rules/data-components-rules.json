@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 37 data component bridge audit",
+  "description": "Report-only audit for legacy ItemStack NBT and modern data component bridge evidence.",
+  "sourceRoots": [
+    "src/main/java"
+  ],
+  "sourceFileExtensions": [
+    ".java"
+  ],
+  "dataComponentTerms": [
+    "DataComponentType",
+    "DataComponents",
+    "ModDataComponents",
+    "DeferredRegister.DataComponents",
+    "DataComponentPatch",
+    "DataComponentMap",
+    ".set(DataComponents",
+    ".get(DataComponents",
+    "stack.set(",
+    "stack.get("
+  ],
+  "legacyNbtTerms": [
+    "CompoundTag",
+    "ListTag",
+    "Tag.TAG_",
+    "getTag",
+    "setTag",
+    "getOrCreateTag",
+    "CustomData",
+    "DataComponents.CUSTOM_DATA",
+    "putString(",
+    "putInt(",
+    "putBoolean(",
+    "getString(",
+    "getInt(",
+    "getBoolean(",
+    "saveAdditional",
+    "loadAdditional",
+    "readAdditionalSaveData",
+    "addAdditionalSaveData"
+  ],
+  "itemStackTerms": [
+    "ItemStack",
+    "stack",
+    "Stack"
+  ],
+  "candidateIdPatterns": [
+    "caster",
+    "focus",
+    "wand",
+    "scribing",
+    "thaumometer",
+    "goggles",
+    "resonator",
+    "morphic",
+    "fabric",
+    "bauble",
+    "amulet",
+    "ring",
+    "belt",
+    "jar",
+    "phial"
+  ],
+  "maxMarkdownRows": 120,
+  "status": {
+    "pass": "DATA_COMPONENTS_PASS",
+    "review": "DATA_COMPONENTS_REVIEW_NEEDED",
+    "error": "DATA_COMPONENTS_ERROR"
+  }
+}

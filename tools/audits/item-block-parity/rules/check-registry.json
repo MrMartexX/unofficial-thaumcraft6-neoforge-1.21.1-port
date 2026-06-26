@@ -179,8 +179,8 @@
     {
       "name": "data_components",
       "layer": "behavior_boundary",
-      "status": "planned",
-      "reason": "Legacy NBT/data component check planned"
+      "status": "implemented",
+      "reason": "Batch 37 report-only legacy NBT/data component bridge audit"
     },
     {
       "name": "equipment",
