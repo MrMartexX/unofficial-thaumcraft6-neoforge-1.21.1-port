@@ -16,7 +16,7 @@ A layer is complete only when its implemented checks are invoked by the orchestr
 | Data boundary ($layer=data_boundary) | 10 | 0 | 0 | aspects, config_gates, drop_behavior, entity_links, fuels_flammability, recipes, research_refs, tags, thaumonomicon_refs, worldgen_links |
 | Behavior boundary ($layer=behavior_boundary) | 9 | 0 | 0 | block_properties, blockentities, capabilities, client_server_safety, data_components, equipment, item_properties, menus, networking |
 | Visual, model and FX boundary ($layer=visual_boundary) | 3 | 0 | 0 | sounds_particles, texture_color, visual_boundary |
-| Runtime and smoke boundary ($layer=runtime_boundary) | 2 | 1 | 0 | datapack_load, game_test_smoke, runtime_smoke |
+| Runtime and smoke boundary ($layer=runtime_boundary) | 3 | 0 | 0 | datapack_load, game_test_smoke, runtime_smoke |
 
 ## Layer matrix
 
@@ -28,7 +28,7 @@ A layer is complete only when its implemented checks are invoked by the orchestr
 | Data boundary ($layer=data_boundary) | Audits recipes, tags, aspects, research references, thaumonomicon references, fuel/flammability evidence, entity/spawn-egg links, worldgen-linked block/data evidence, config-gate evidence and source-evidenced data behavior. | item_block_data_reference_report, fuel/flammability report, entity link report, worldgen link report, config gate report and loot/drop behavior reports | Data-boundary rows remain review-only until burn-time, fire-spread, EntityType, spawn-egg, configured-feature, biome-modifier and config-gate policies are classified. | All data-backed parity dimensions must have report-only evidence and explicit intentional/superseded policy. | Verifier must run focused data smoke and validate report schema/freshness. |
 | Behavior boundary ($layer=behavior_boundary) | Audits item properties, data component and legacy tag-state evidence, tool/armor/equipment links, block properties, block entity/menu/capability references, networking and client/server boundaries. | item/block property reports, data component bridge report, equipment audit report, networking boundary report, behavior boundary report, client/server safety report | Equipment and networking rows remain review-only until tool/armor/accessory and payload validation policies are classified. | Every behavior dimension must classify static parity, runtime-required evidence and known review gaps. | Verifier must run focused behavior-boundary smoke and later runtime-backed checks. |
 | Visual, model and FX boundary ($layer=visual_boundary) | Audits model transforms, visual equivalence, texture color/shape clues and sound/particle/client FX references. | visual model/transform, texture color and sound/particle reports | Equivalence rule acceptance is conservative; some rows remain review-only until legacy visual intent is classified. | Reviewed equivalence rules and texture/FX policies must separate acceptable modern differences from true gaps. | Verifier must validate visual report schema/freshness and rule-completion status. |
-| Runtime and smoke boundary ($layer=runtime_boundary) | Validates load-critical datapack layout, GameTest/scripted smoke readiness and future real runtime smoke execution. | runtime datapack smoke report and game_test_smoke readiness report | runtime_smoke remains planned; GameTest layer inventories readiness but does not launch Minecraft automatically. | Runtime reports must have artifact schema, opt-in runner modes and minimal safe GameTest/server-startup coverage. | Verifier and CI must support report-only, safe and strict runtime modes. |
+| Runtime and smoke boundary ($layer=runtime_boundary) | Validates load-critical datapack layout, GameTest/scripted smoke readiness and runtime smoke opt-in execution readiness. | runtime datapack smoke report, game_test_smoke readiness report and runtime smoke readiness report | Runtime rows remain report-only until runtime execution policy is promoted from readiness inventory to strict certification. | Runtime reports must have artifact schema, opt-in runner modes and minimal safe GameTest/server-startup coverage. | Verifier and CI must support report-only, safe and strict runtime modes. |
 
 ## Cross-cutting framework layers
 
@@ -38,13 +38,13 @@ A layer is complete only when its implemented checks are invoked by the orchestr
 | Rule and override governance | Rule override files exist, auto-fix candidate rules are present, status taxonomy/docs registry checks are present, Batch 34 adds legacy mapping review evidence, Batch 35 adds variant split review evidence, Batch 36 adds creative tab grouping evidence, Batch 37 adds data component bridge evidence, Batch 38 adds networking boundary evidence, Batch 39 adds fuel/flammability evidence, Batch 40 adds equipment evidence, Batch 41 adds entity/spawn-egg link evidence, Batch 42 adds worldgen-link evidence, Batch 43 adds config-gate evidence, Batch 44 adds access-transformer visibility evidence, Batch 45 adds public API surface evidence, Batch 46 adds source conflict aggregation evidence, and Batch 47 adds original jar probe evidence. | Status taxonomy must remain mapped, and final registry cleanup must remove ambiguous planned statuses. |
 | Report governance | Batch 27 adds a report-only schema contract validator, Batch 29 adds a report-only freshness guard, and Batch 30 adds status taxonomy normalization and Batch 31 adds docs/registry consistency audit for local JSON reports; input hashes and commit metadata remain planned. | SchemaVersion, summary/results consistency, freshness, status taxonomy, input hashes and repo commit metadata must be enforced. |
 | CI and verifier | A local verifier confirms clean working tree, script syntax, rule JSON, focused presets, check invocation ownership and CI-safe smoke, docs/registry consistency; CI report-only workflow exists. | Verifier v2 must become a complete framework certification gate; CI must publish artifacts and support report-only/safe/strict modes. |
-| Runtime execution | Runtime/datapack and GameTest/scripted layers are report-only readiness checks. | Real runtime smoke runner, minimal fixture coverage and normalized runtime artifacts must be opt-in but implemented. |
+| Runtime execution | Runtime/datapack, GameTest/scripted and runtime-smoke layers are report-only readiness checks with explicit opt-in execution commands. | Minimal fixture coverage and normalized runtime artifacts must remain opt-in and report-only until strict runtime policy is finalized. |
 
 ## Completion backlog derived from the current registry
 
 | Check | Layer | Reason | Intended closure path |
 |---|---|---|---|
-| runtime_smoke | runtime_boundary | Batch 10 runtime orchestration is available through explicit -RunSmoke; this check remains out of presets/CI hard-fail until policy is finalized | Batch 48 real runtime smoke runner |
+| <none> | <none> | All currently registered checks are implemented. | No planned framework check remains in the registry. |
 
 ## Final framework completion gate
 
@@ -53,5 +53,5 @@ The framework may be called complete only after:
 - every implemented check has an invocation owner and schema-valid, status-normalized, fresh reports;
 - every remaining non-implemented check is explicitly intentionally_out_of_scope, superseded or blocked;
 - verifier v2 validates script syntax, rule JSON, schema contracts, stale report guards, docs/registry consistency, focused family smoke and CI-safe mode;
-- runtime smoke and GameTest/scripted layers have at least minimal opt-in runtime execution coverage;
+- runtime smoke and GameTest/scripted layers have report-only readiness plus documented opt-in execution coverage;
 - CI publishes report artifacts and supports report-only, safe and strict modes without committing generated local reports.

@@ -295,6 +295,12 @@
       "ownerType": "module",
       "ownerPath": "modules/original_jar_probe.ps1",
       "name": "original_jar_probe"
+    },
+    {
+      "invocation": "runtimeSmokeChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/runtime_smoke.ps1",
+      "name": "runtime_smoke"
     }
   ]
 }

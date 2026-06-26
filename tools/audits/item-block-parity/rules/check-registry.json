@@ -53,8 +53,8 @@
     {
       "name": "runtime_smoke",
       "layer": "runtime_boundary",
-      "status": "planned",
-      "reason": "Batch 10 runtime orchestration is available through explicit -RunSmoke; this check remains out of presets/CI hard-fail until policy is finalized"
+      "status": "implemented",
+      "reason": "Batch 48 report-only runtime smoke readiness and opt-in execution audit"
     },
     {
       "name": "access_transformers",

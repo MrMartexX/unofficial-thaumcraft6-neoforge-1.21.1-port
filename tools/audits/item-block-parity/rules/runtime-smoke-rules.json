@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "check": "runtime_smoke",
+  "status": {
+    "pass": "RUNTIME_SMOKE_PASS",
+    "review": "RUNTIME_SMOKE_REVIEW_NEEDED",
+    "error": "RUNTIME_SMOKE_ERROR"
+  },
+  "policy": {
+    "mode": "report-only",
+    "execution": "The runtime_smoke check inventories runtime-smoke readiness and explicit opt-in commands. It does not launch Minecraft unless the separate orchestrator -RunSmoke or -RunBuild switches are used.",
+    "safeDefault": "No Gradle task is executed by the runtime_smoke check itself."
+  },
+  "expectedFiles": [
+    "gradlew",
+    "gradlew.bat",
+    "build.gradle",
+    "settings.gradle",
+    "src/main/resources/META-INF/neoforge.mods.toml"
+  ],
+  "taskClues": [
+    "runClient",
+    "runServer",
+    "runData",
+    "gameTestServer",
+    "classes",
+    "compileJava"
+  ]
+}

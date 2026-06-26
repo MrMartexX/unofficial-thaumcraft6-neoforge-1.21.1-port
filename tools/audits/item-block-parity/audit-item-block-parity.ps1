@@ -492,7 +492,17 @@ function Invoke-OriginalJarProbeAudit {
     if (-not $?) { throw "Original jar probe module failed." }
 }
 # Batch 47 original jar probe audit end
-# Batch 31 docs/registry consistency audit start
+# Batch 48 runtime smoke audit start
+$runtimeSmokeChecks = @("runtime_smoke")
+$selectedRuntimeSmokeChecks = @($implementedSelected | Where-Object { $_ -in $runtimeSmokeChecks })
+function Invoke-RuntimeSmokeAudit {
+    if ($selectedRuntimeSmokeChecks.Count -eq 0) { return }
+    $runtimeSmokeModule = Join-Path $PSScriptRoot "modules/runtime_smoke.ps1"
+    if (-not (Test-Path -LiteralPath $runtimeSmokeModule -PathType Leaf)) { throw "Runtime smoke module not found: $runtimeSmokeModule" }
+    & $runtimeSmokeModule -RepoRoot $RepoRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedRuntimeSmokeChecks -OutputJson (Join-Path $reportRoot "item_block_runtime_smoke_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_runtime_smoke_report.md")
+    if (-not $?) { throw "Runtime smoke module failed." }
+}
+# Batch 48 runtime smoke audit end# Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
 function Invoke-DocsRegistryConsistencyAudit {
@@ -581,6 +591,7 @@ Invoke-AccessTransformerAudit
 Invoke-PublicApiAudit
 Invoke-SourceConflictReportAudit
 Invoke-OriginalJarProbeAudit
+Invoke-RuntimeSmokeAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -623,6 +634,7 @@ Invoke-AccessTransformerAudit
 Invoke-PublicApiAudit
 Invoke-SourceConflictReportAudit
 Invoke-OriginalJarProbeAudit
+Invoke-RuntimeSmokeAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
