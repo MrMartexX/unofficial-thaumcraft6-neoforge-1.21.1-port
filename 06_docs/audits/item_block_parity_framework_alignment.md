@@ -71,6 +71,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 49 | Closed: verifier v2 framework gate validates PowerShell parser state, rule JSON, registry owner wiring, docs backlog state, report schema/freshness/status taxonomy and report-only audit smoke | Framework verifier v2 certification gate |
 | 50 | Closed: CI framework verifier workflow runs verifier v2 in report-only mode and uploads local audit JSON/Markdown artifacts | CI framework verifier workflow and artifact upload |
 | 51 | Closed: golden focused family runner defines stable dependency-aware slices for crystals, jars, tables, thaumonomicon and golems | Golden focused family regression slices |
+| 52 | Closed: minimal opt-in scripted GameTest/runtime fixture validates server startup and representative Thaumcraft registry entries | Minimal GameTest/runtime fixture coverage |
 
 ## Roadmap numbering note
 
@@ -134,3 +135,5 @@ Batch 49 closure: verifier v2 validation is report-only framework certification 
 Batch 50 closure: CI verifier validation is report-only workflow hardening; it runs verifier v2 from GitHub Actions, publishes generated local report artifacts and keeps strict mode opt-in until runtime/visual policies are promoted.
 
 Batch 51 closure: golden focused family validation is report-only focus-control hardening; it defines stable dependency-aware family slices and a runner for quick regression checks before broad reports are reviewed.
+
+Batch 52 closure: minimal GameTest fixture validation is report-only runtime-boundary hardening; it adds an opt-in server-started fixture that writes a runtime report for representative registry/bootstrap coverage and remains separate from strict gameplay parity.

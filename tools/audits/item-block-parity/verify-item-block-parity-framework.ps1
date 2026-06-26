@@ -129,6 +129,42 @@ if ((Test-Path -LiteralPath $goldenFocusedFamiliesScriptPath -PathType Leaf) -an
 } else {
     Add-Row $rows "golden_focused_families" $reviewStatus "review" "Golden focused family runner/rules are not present; broad framework verifier still works, but focused regression slices are not configured." ([ordered]@{ script = ConvertTo-RelativeRepoPath $goldenFocusedFamiliesScriptPath; rules = ConvertTo-RelativeRepoPath $goldenFocusedFamiliesRulesPath })
 }
+$minimalGameTestFixturePath = Join-Path $RepoRoot "05_neoforge_port/src/main/java/thaumcraft/common/runtime/TCMinimalGameTestFixture.java"
+$minimalGameTestFixtureExporterPath = Join-Path $RepoRoot "05_neoforge_port/src/main/java/thaumcraft/common/runtime/TCMinimalGameTestFixtureExporter.java"
+$minimalGameTestBuildPath = Join-Path $RepoRoot "05_neoforge_port/build.gradle"
+$minimalGameTestBootstrapPath = Join-Path $RepoRoot "05_neoforge_port/src/main/java/thaumcraft/Thaumcraft.java"
+$minimalFixtureMissingTokens = [System.Collections.Generic.List[string]]::new()
+if (Test-Path -LiteralPath $minimalGameTestFixturePath -PathType Leaf) {
+    $minimalFixtureText = Get-Content -LiteralPath $minimalGameTestFixturePath -Raw
+    foreach ($token in @('tc.minimalGameTestFixture', 'TCBlocks.ARCANE_WORKBENCH', 'TCBlocks.RESEARCH_TABLE', 'TCBlocks.CRUCIBLE', 'TCItems.THAUMONOMICON', 'TCItems.THAUMOMETER')) {
+        if ($minimalFixtureText -notlike "*$token*") { $minimalFixtureMissingTokens.Add($token) }
+    }
+} else {
+    $minimalFixtureMissingTokens.Add('TCMinimalGameTestFixture.java')
+}
+if (Test-Path -LiteralPath $minimalGameTestFixtureExporterPath -PathType Leaf) {
+    $minimalExporterText = Get-Content -LiteralPath $minimalGameTestFixtureExporterPath -Raw
+    foreach ($token in @('ServerStartedEvent', 'TCMinimalGameTestFixture.writeMarkdown', 'event.getServer().halt(false)')) {
+        if ($minimalExporterText -notlike "*$token*") { $minimalFixtureMissingTokens.Add($token) }
+    }
+} else {
+    $minimalFixtureMissingTokens.Add('TCMinimalGameTestFixtureExporter.java')
+}
+if (Test-Path -LiteralPath $minimalGameTestBuildPath -PathType Leaf) {
+    $minimalBuildText = Get-Content -LiteralPath $minimalGameTestBuildPath -Raw
+    foreach ($token in @('tc.minimalGameTestFixture', 'tcMinimalGameTestFixturePath')) {
+        if ($minimalBuildText -notlike "*$token*") { $minimalFixtureMissingTokens.Add($token) }
+    }
+}
+if (Test-Path -LiteralPath $minimalGameTestBootstrapPath -PathType Leaf) {
+    $minimalBootstrapText = Get-Content -LiteralPath $minimalGameTestBootstrapPath -Raw
+    if ($minimalBootstrapText -notlike '*TCMinimalGameTestFixtureExporter::onServerStarted*') { $minimalFixtureMissingTokens.Add('TCMinimalGameTestFixtureExporter::onServerStarted') }
+}
+if ($minimalFixtureMissingTokens.Count -eq 0) {
+    Add-Row $rows "minimal_gametest_fixture" $passStatus "info" "Minimal scripted GameTest fixture source, exporter, Gradle opt-in and bootstrap listener are present." ([ordered]@{ fixture = ConvertTo-RelativeRepoPath $minimalGameTestFixturePath; exporter = ConvertTo-RelativeRepoPath $minimalGameTestFixtureExporterPath })
+} else {
+    Add-Row $rows "minimal_gametest_fixture" $errorStatus "error" "Minimal scripted GameTest fixture wiring is incomplete." ([ordered]@{ missing = @($minimalFixtureMissingTokens) })
+}
 $gitDirty = @(& git status --short)
 if ($gitDirty.Count -gt 0) {
     $status = if ($AllowDirty) { $reviewStatus } else { $errorStatus }

@@ -58,6 +58,9 @@ $srcMainJava = Join-Path $portPath "src/main/java"
 $srcTestJava = Join-Path $portPath "src/test/java"
 $srcGameTestJava = Join-Path $portPath "src/gametest/java"
 $srcGameTestResources = Join-Path $portPath "src/gametest/resources"
+$minimalFixture = Join-Path $srcMainJava "thaumcraft/common/runtime/TCMinimalGameTestFixture.java"
+$minimalFixtureExporter = Join-Path $srcMainJava "thaumcraft/common/runtime/TCMinimalGameTestFixtureExporter.java"
+$thaumcraftBootstrap = Join-Path $srcMainJava "thaumcraft/Thaumcraft.java"
 $rows = [System.Collections.Generic.List[object]]::new()
 
 if (Test-Path -LiteralPath $buildGradle -PathType Leaf) {
@@ -94,8 +97,47 @@ foreach ($pathInfo in @(
     } elseif ($pathInfo.required) {
         Add-Row $rows $pathInfo.subcheck "SCRIPTED_SMOKE_REVIEW_NEEDED" (ConvertTo-RelativeRepoPath $pathInfo.path) "Required source directory missing" "review"
     } else {
-        Add-Row $rows $pathInfo.subcheck "SCRIPTED_SMOKE_REVIEW_NEEDED" (ConvertTo-RelativeRepoPath $pathInfo.path) "Optional GameTest/scripted smoke fixture directory not present yet" "review"
+        Add-Row $rows $pathInfo.subcheck "SCRIPTED_SMOKE_REVIEW_NEEDED" (ConvertTo-RelativeRepoPath $pathInfo.path) "Optional standalone GameTest source/resource directory not present; scripted runtime fixture provides current minimal coverage" "review"
     }
+}
+
+$minimalFixtureText = Get-TextFile $minimalFixture
+$minimalExporterText = Get-TextFile $minimalFixtureExporter
+$bootstrapText = Get-TextFile $thaumcraftBootstrap
+$minimalTokens = @(
+    "tc.minimalGameTestFixture",
+    "tc.minimalGameTestFixturePath",
+    "TCBlocks.ARCANE_WORKBENCH",
+    "TCBlocks.RESEARCH_TABLE",
+    "TCBlocks.CRUCIBLE",
+    "TCItems.THAUMONOMICON",
+    "TCItems.THAUMOMETER"
+)
+$missingMinimalTokens = @($minimalTokens | Where-Object { $minimalFixtureText -notlike "*$_*" })
+if ((Test-Path -LiteralPath $minimalFixture -PathType Leaf) -and $missingMinimalTokens.Count -eq 0) {
+    Add-Row $rows "minimal_fixture_source" "SCRIPTED_SMOKE_PASS" (ConvertTo-RelativeRepoPath $minimalFixture) "Minimal scripted GameTest/runtime fixture source exists and checks representative registry entries" "info"
+} else {
+    Add-Row $rows "minimal_fixture_source" "SCRIPTED_SMOKE_REVIEW_NEEDED" (ConvertTo-RelativeRepoPath $minimalFixture) "Minimal scripted fixture source is missing required tokens: $($missingMinimalTokens -join ', ')" "review"
+}
+
+$exporterTokens = @("ServerStartedEvent", "TCMinimalGameTestFixture.writeMarkdown", "event.getServer().halt(false)")
+$missingExporterTokens = @($exporterTokens | Where-Object { $minimalExporterText -notlike "*$_*" })
+if ((Test-Path -LiteralPath $minimalFixtureExporter -PathType Leaf) -and $missingExporterTokens.Count -eq 0) {
+    Add-Row $rows "minimal_fixture_exporter" "SCRIPTED_SMOKE_PASS" (ConvertTo-RelativeRepoPath $minimalFixtureExporter) "Minimal fixture exporter writes an opt-in report and halts the server" "info"
+} else {
+    Add-Row $rows "minimal_fixture_exporter" "SCRIPTED_SMOKE_REVIEW_NEEDED" (ConvertTo-RelativeRepoPath $minimalFixtureExporter) "Minimal fixture exporter is missing required tokens: $($missingExporterTokens -join ', ')" "review"
+}
+
+if ($gradleText -match 'tc\.minimalGameTestFixture' -and $gradleText -match 'tcMinimalGameTestFixture') {
+    Add-Row $rows "gradle_minimal_fixture_hook" "SCRIPTED_SMOKE_PASS" (ConvertTo-RelativeRepoPath $buildGradle) "Gradle forwards tc.minimalGameTestFixture opt-in properties to runtime runs" "info"
+} else {
+    Add-Row $rows "gradle_minimal_fixture_hook" "SCRIPTED_SMOKE_REVIEW_NEEDED" (ConvertTo-RelativeRepoPath $buildGradle) "Gradle does not expose the minimal fixture opt-in properties" "review"
+}
+
+if ($bootstrapText -match 'TCMinimalGameTestFixtureExporter::onServerStarted') {
+    Add-Row $rows "minimal_fixture_bootstrap_listener" "SCRIPTED_SMOKE_PASS" (ConvertTo-RelativeRepoPath $thaumcraftBootstrap) "Thaumcraft bootstrap registers the minimal fixture exporter on ServerStartedEvent" "info"
+} else {
+    Add-Row $rows "minimal_fixture_bootstrap_listener" "SCRIPTED_SMOKE_REVIEW_NEEDED" (ConvertTo-RelativeRepoPath $thaumcraftBootstrap) "Thaumcraft bootstrap does not register the minimal fixture exporter" "review"
 }
 
 $tcPropertyEvidence = Find-UniqueMatches $gradleText "tc\.[A-Za-z0-9_.-]+"
@@ -125,6 +167,7 @@ if ($scriptedAuditEvidence.Count -gt 0) {
 
 $recommendedCommands = @(
     '.\\gradlew.bat -p 05_neoforge_port runData',
+    '.\\gradlew.bat -p 05_neoforge_port runServer -PtcRunServerWorld=TC_GAMETEST_MINIMAL -Dtc.minimalGameTestFixture=true -Dtc.minimalGameTestFixturePath=../tools/reports/local/runtime/minimal_gametest_fixture.md',
     '.\\gradlew.bat -p 05_neoforge_port runServer -PtcRunServerWorld=TC_SMOKE -Dtc.arcaneRecipeAudit=true -Dtc.arcaneRecipeAuditPath=../tools/reports/local/runtime/arcane_recipe_smoke.json',
     '.\\gradlew.bat -p 05_neoforge_port runServer -PtcRunServerWorld=TC_SMOKE -Dtc.crucibleBehaviorAudit=true -Dtc.crucibleBehaviorAuditPath=../tools/reports/local/runtime/crucible_smoke.json'
 )
@@ -145,11 +188,12 @@ $summary = [ordered]@{
 $report = [ordered]@{
     schemaVersion = 1
     generatedAtUtc = [DateTime]::UtcNow.ToString("o")
-    policy = "Report-only GameTest/scripted behavior smoke readiness audit. It inventories test/run wiring and existing scripted runtime audit hooks without launching Minecraft or claiming gameplay parity."
+    policy = "Report-only GameTest/scripted behavior smoke readiness audit. It inventories test/run wiring, minimal opt-in runtime fixture coverage and existing scripted runtime audit hooks without automatically launching Minecraft or claiming gameplay parity."
     inputs = [ordered]@{
         portManifest = ConvertTo-RelativeRepoPath $PortManifestPath
         portRoot = $PortRoot
         buildGradle = ConvertTo-RelativeRepoPath $buildGradle
+        minimalFixture = ConvertTo-RelativeRepoPath $minimalFixture
     }
     summary = $summary
     scriptedAuditFiles = @($scriptedAuditEvidence)
@@ -165,7 +209,7 @@ $lines.Add("# GameTest/scripted behavior smoke readiness report")
 $lines.Add("")
 $lines.Add("Generated: $($report.generatedAtUtc)")
 $lines.Add("")
-$lines.Add("Policy: report-only readiness audit. This does not launch Minecraft and does not claim gameplay parity.")
+$lines.Add("Policy: report-only readiness audit. This does not launch Minecraft automatically and does not claim gameplay parity.")
 $lines.Add("")
 $lines.Add("## Summary")
 $lines.Add("")

@@ -96,6 +96,8 @@ neoForge {
             def researchTableAuditPath = providers.gradleProperty('tcResearchTableAuditPath').orNull ?: System.getProperty('tc.researchTableAuditPath')
             def essentiaTransportBehaviorAuditEnabled = providers.gradleProperty('tcEssentiaTransportBehaviorAudit').orNull ?: System.getProperty('tc.essentiaTransportBehaviorAudit')
             def essentiaTransportBehaviorAuditPath = providers.gradleProperty('tcEssentiaTransportBehaviorAuditPath').orNull ?: System.getProperty('tc.essentiaTransportBehaviorAuditPath')
+            def minimalGameTestFixtureEnabled = providers.gradleProperty('tcMinimalGameTestFixture').orNull ?: System.getProperty('tc.minimalGameTestFixture')
+            def minimalGameTestFixturePath = providers.gradleProperty('tcMinimalGameTestFixturePath').orNull ?: System.getProperty('tc.minimalGameTestFixturePath')
             if (aspectDumpEnabled != null) {
                 systemProperty 'tc.aspectDump', aspectDumpEnabled
             }
@@ -176,6 +178,12 @@ neoForge {
             }
             if (essentiaTransportBehaviorAuditPath != null) {
                 systemProperty 'tc.essentiaTransportBehaviorAuditPath', essentiaTransportBehaviorAuditPath
+            }
+            if (minimalGameTestFixtureEnabled != null) {
+                systemProperty 'tc.minimalGameTestFixture', minimalGameTestFixtureEnabled
+            }
+            if (minimalGameTestFixturePath != null) {
+                systemProperty 'tc.minimalGameTestFixturePath', minimalGameTestFixturePath
             }
             logLevel = org.slf4j.event.Level.DEBUG
         }
