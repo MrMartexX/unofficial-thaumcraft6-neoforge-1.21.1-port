@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 39 fuel and flammability parity audit",
+  "sourceRoots": [
+    "src/main/java"
+  ],
+  "sourceExtensions": [
+    ".java"
+  ],
+  "resourceRoots": [
+    "src/main/resources/data",
+    "src/generated/resources/data"
+  ],
+  "resourceExtensions": [
+    ".json"
+  ],
+  "fuelTerms": [
+    "FurnaceFuelBurnTimeEvent",
+    "Fuel",
+    "fuel",
+    "burnTime",
+    "burn time",
+    "getBurnTime",
+    "setBurnTime",
+    "fuelValues",
+    "FUEL"
+  ],
+  "flammabilityTerms": [
+    "flammable",
+    "Flammable",
+    "flammability",
+    "fireSpread",
+    "fire spread",
+    "ignite",
+    "ignition",
+    "FireBlock",
+    "setFlammable",
+    "Flammability"
+  ],
+  "combustibleResourceTerms": [
+    "logs",
+    "planks",
+    "wooden",
+    "wood",
+    "leaves",
+    "saplings",
+    "coals",
+    "charcoal",
+    "coal",
+    "candles",
+    "fire",
+    "flame",
+    "lava",
+    "fuel",
+    "flammable"
+  ],
+  "manifestCandidateTerms": [
+    "log",
+    "wood",
+    "plank",
+    "leaf",
+    "leaves",
+    "sapling",
+    "coal",
+    "charcoal",
+    "fuel",
+    "fire",
+    "flame",
+    "nitor",
+    "candle",
+    "tallow",
+    "lamp",
+    "brazier",
+    "torch"
+  ],
+  "sourceReviewTerms": [
+    "shrink(",
+    "consume",
+    "setBlock",
+    "destroyBlock",
+    "ignite",
+    "burn",
+    "fire"
+  ],
+  "status": {
+    "pass": "FUELS_FLAMMABILITY_PASS",
+    "review": "FUELS_FLAMMABILITY_REVIEW_NEEDED",
+    "error": "FUELS_FLAMMABILITY_ERROR"
+  },
+  "markdownSampleLimit": 120
+}

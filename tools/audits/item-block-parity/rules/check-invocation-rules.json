@@ -241,6 +241,12 @@
       "ownerType": "module",
       "ownerPath": "modules/networking.ps1",
       "name": "networking"
+    },
+    {
+      "invocation": "fuelFlammabilityChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/fuels_flammability.ps1",
+      "name": "fuels_flammability"
     }
   ]
 }

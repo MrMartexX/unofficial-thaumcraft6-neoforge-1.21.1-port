@@ -233,8 +233,8 @@
     {
       "name": "fuels_flammability",
       "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Fuel/flammability maps planned"
+      "status": "implemented",
+      "reason": "Batch 39 report-only fuel and flammability parity audit"
     },
     {
       "name": "recipes",

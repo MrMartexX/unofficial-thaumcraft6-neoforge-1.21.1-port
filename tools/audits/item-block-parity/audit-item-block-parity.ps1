@@ -393,6 +393,17 @@ function Invoke-NetworkingAudit {
     if (-not $?) { throw "Networking module failed." }
 }
 # Batch 38 networking boundary audit end
+# Batch 39 fuel and flammability audit start
+$fuelFlammabilityChecks = @("fuels_flammability")
+$selectedFuelFlammabilityChecks = @($implementedSelected | Where-Object { $_ -in $fuelFlammabilityChecks })
+function Invoke-FuelFlammabilityAudit {
+    if ($selectedFuelFlammabilityChecks.Count -eq 0) { return }
+    $fuelFlammabilityModule = Join-Path $PSScriptRoot "modules/fuels_flammability.ps1"
+    if (-not (Test-Path -LiteralPath $fuelFlammabilityModule -PathType Leaf)) { throw "Fuel and flammability module not found: $fuelFlammabilityModule" }
+    & $fuelFlammabilityModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedFuelFlammabilityChecks -OutputJson (Join-Path $reportRoot "item_block_fuels_flammability_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_fuels_flammability_report.md")
+    if (-not $?) { throw "Fuel and flammability module failed." }
+}
+# Batch 39 fuel and flammability audit end
 # Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
@@ -473,6 +484,7 @@ Invoke-VariantsAudit
 Invoke-CreativeTabAudit
 Invoke-DataComponentAudit
 Invoke-NetworkingAudit
+Invoke-FuelFlammabilityAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -506,6 +518,7 @@ Invoke-VariantsAudit
 Invoke-CreativeTabAudit
 Invoke-DataComponentAudit
 Invoke-NetworkingAudit
+Invoke-FuelFlammabilityAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator

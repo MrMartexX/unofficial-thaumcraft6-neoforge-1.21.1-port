@@ -58,6 +58,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 36 | Closed: report-only creative tab audit inventories player-facing port manifest IDs observed in creative tab source and review-only unobserved/source-only IDs | Creative tab and player-facing grouping audit |
 | 37 | Closed: report-only legacy NBT/data component bridge audit inventories source evidence for typed data components, tag/save-load usage and component-policy candidate IDs | Legacy NBT/data component bridge audit |
 | 38 | Closed: report-only networking boundary audit inventories custom payload registration, clientbound/serverbound handlers, validation evidence and mutation-risk source clues | Networking boundary deep audit |
+| 39 | Closed: report-only fuel and flammability audit inventories data tags, source burn-time/flammability evidence and manifest fuel/flame candidate IDs | Fuel and flammability parity audit |
 
 ## Roadmap numbering note
 
@@ -96,3 +97,5 @@ Batch 36 closure: creative tab validation is report-only resource-boundary harde
 Batch 37 closure: data component bridge validation is report-only behavior-boundary hardening; review rows identify legacy tag/save-load usage, ItemStack NBT candidates and typed data component evidence before verifier v2 treats stack-state migration policy as a certification gate.
 
 Batch 38 closure: networking boundary validation is report-only behavior-boundary hardening; review rows identify payload registration, clientbound/serverbound handler evidence, validation clues and mutation-risk source patterns before verifier v2 treats networking policy as a certification gate.
+
+Batch 39 closure: fuel and flammability validation is report-only data-boundary hardening; review rows identify burn-time, flammability, combustible tag and manifest fuel/flame candidates before verifier v2 treats fuel/flammability policy as a certification gate.
