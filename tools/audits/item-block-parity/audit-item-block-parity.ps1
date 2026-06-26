@@ -502,7 +502,8 @@ function Invoke-RuntimeSmokeAudit {
     & $runtimeSmokeModule -RepoRoot $RepoRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedRuntimeSmokeChecks -OutputJson (Join-Path $reportRoot "item_block_runtime_smoke_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_runtime_smoke_report.md")
     if (-not $?) { throw "Runtime smoke module failed." }
 }
-# Batch 48 runtime smoke audit end# Batch 31 docs/registry consistency audit start
+# Batch 48 runtime smoke audit end
+# Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
 function Invoke-DocsRegistryConsistencyAudit {

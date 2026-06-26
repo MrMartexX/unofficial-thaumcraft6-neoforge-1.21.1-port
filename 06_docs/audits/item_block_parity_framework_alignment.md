@@ -68,6 +68,7 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 46 | Closed: report-only source conflict aggregation inventories primary legacy, secondary legacy and port class presence/hash confidence conflicts | Primary/secondary/port source conflict aggregation |
 | 47 | Closed: report-only original jar probe inventories jar class/resource entries, source coverage gaps and manifest/resource candidates | Original jar resource/class probe |
 | 48 | Closed: report-only runtime smoke audit inventories Gradle wrapper/build metadata, mod metadata, task clues and explicit opt-in runtime/build commands | Runtime smoke readiness and opt-in execution audit |
+| 49 | Closed: verifier v2 framework gate validates PowerShell parser state, rule JSON, registry owner wiring, docs backlog state, report schema/freshness/status taxonomy and report-only audit smoke | Framework verifier v2 certification gate |
 
 ## Roadmap numbering note
 
@@ -126,3 +127,4 @@ Batch 46 closure: source conflict aggregation is report-only source-quality hard
 Batch 47 closure: original jar probe validation is report-only source-quality hardening; review rows identify jar class/resource entries, legacy source coverage gaps, port overlap and manifest/resource candidates before verifier v2 treats original jar evidence as a certification gate.
 
 Batch 48 closure: runtime smoke validation is report-only runtime-boundary hardening; rows inventory Gradle wrapper/build metadata, mod metadata, runtime task clues and explicit opt-in commands before verifier v2 treats runtime execution readiness as a certification gate.
+Batch 49 closure: verifier v2 validation is report-only framework certification hardening; it validates parser state, rule JSON, check registry owner wiring, docs backlog state, report summaries and full audit smoke before CI/strict modes rely on the framework as authoritative.
