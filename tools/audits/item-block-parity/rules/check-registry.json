@@ -95,8 +95,8 @@
     {
       "name": "public_api",
       "layer": "source_quality",
-      "status": "planned",
-      "reason": "Public API surface check planned"
+      "status": "implemented",
+      "reason": "Batch 45 report-only public API surface audit"
     },
     {
       "name": "report_schema",

@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "check": "public_api",
+  "description": "Report-only public API surface audit for legacy and port source visibility, interop and stability clues.",
+  "sourceRoots": [
+    "src/main/java"
+  ],
+  "sourceExtensions": [
+    ".java"
+  ],
+  "apiTerms": [
+    "public ",
+    "protected ",
+    "interface ",
+    "abstract ",
+    "extends ",
+    "implements ",
+    "@ApiStatus",
+    "@Deprecated",
+    "api",
+    "capability",
+    "event",
+    "registry",
+    "service",
+    "provider"
+  ],
+  "interopTerms": [
+    "capability",
+    "event",
+    "registry",
+    "deferredregister",
+    "subscribeevent",
+    "intermod",
+    "imc",
+    "extension",
+    "plugin",
+    "api"
+  ],
+  "stabilityTerms": [
+    "deprecated",
+    "internal",
+    "experimental",
+    "todo",
+    "fixme",
+    "legacy",
+    "unsupported"
+  ],
+  "candidateIdTerms": [
+    "api",
+    "wand",
+    "focus",
+    "golem",
+    "thaumonomicon",
+    "aspect",
+    "aura",
+    "research",
+    "caster",
+    "vis",
+    "infusion",
+    "crucible",
+    "essentia",
+    "seal",
+    "arcane",
+    "thaumium",
+    "void",
+    "bauble",
+    "curio"
+  ]
+}

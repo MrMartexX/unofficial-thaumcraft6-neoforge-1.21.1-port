@@ -56,7 +56,7 @@ $presetChecks = @{
     resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "entity_links", "worldgen_links", "config_gates", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "data_components", "equipment", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
-    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "access_transformers", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
+    "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "access_transformers", "public_api", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
     "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
     full = @($allKnownChecks)
 }
@@ -459,7 +459,17 @@ function Invoke-AccessTransformerAudit {
     if (-not $?) { throw "Access transformer module failed." }
 }
 # Batch 44 access transformer audit end
-# Batch 31 docs/registry consistency audit start
+# Batch 45 public API audit start
+$publicApiChecks = @("public_api")
+$selectedPublicApiChecks = @($implementedSelected | Where-Object { $_ -in $publicApiChecks })
+function Invoke-PublicApiAudit {
+    if ($selectedPublicApiChecks.Count -eq 0) { return }
+    $publicApiModule = Join-Path $PSScriptRoot "modules/public_api.ps1"
+    if (-not (Test-Path -LiteralPath $publicApiModule -PathType Leaf)) { throw "Public API module not found: $publicApiModule" }
+    & $publicApiModule -RepoRoot $RepoRoot -LegacyRoot $LegacyRoot -PortRoot $PortRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -RulesRoot $rulesRoot -Checks $selectedPublicApiChecks -OutputJson (Join-Path $reportRoot "item_block_public_api_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_public_api_report.md")
+    if (-not $?) { throw "Public API module failed." }
+}
+# Batch 45 public API audit end# Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
 function Invoke-DocsRegistryConsistencyAudit {
@@ -545,6 +555,7 @@ Invoke-EntityLinkAudit
 Invoke-WorldgenLinkAudit
 Invoke-ConfigGateAudit
 Invoke-AccessTransformerAudit
+Invoke-PublicApiAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -584,6 +595,7 @@ Invoke-EntityLinkAudit
 Invoke-WorldgenLinkAudit
 Invoke-ConfigGateAudit
 Invoke-AccessTransformerAudit
+Invoke-PublicApiAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator

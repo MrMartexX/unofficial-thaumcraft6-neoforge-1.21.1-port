@@ -277,6 +277,12 @@
       "ownerType": "module",
       "ownerPath": "modules/access_transformers.ps1",
       "name": "access_transformers"
+    },
+    {
+      "invocation": "publicApiChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/public_api.ps1",
+      "name": "public_api"
     }
   ]
 }
