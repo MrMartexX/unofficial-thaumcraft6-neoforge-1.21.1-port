@@ -259,6 +259,12 @@
       "ownerType": "module",
       "ownerPath": "modules/entity_links.ps1",
       "name": "entity_links"
+    },
+    {
+      "invocation": "worldgenLinkChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/worldgen_links.ps1",
+      "name": "worldgen_links"
     }
   ]
 }

@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "Batch 42 worldgen-linked block/data audit",
+  "statuses": {
+    "pass": "WORLDGEN_LINK_PASS",
+    "review": "WORLDGEN_LINK_REVIEW_NEEDED",
+    "error": "WORLDGEN_LINK_ERROR"
+  },
+  "sourceRoots": [
+    "src/main/java"
+  ],
+  "resourceRoots": [
+    "src/main/resources",
+    "src/generated/resources"
+  ],
+  "sourceExtensions": [
+    ".java"
+  ],
+  "resourceExtensions": [
+    ".json",
+    ".mcmeta"
+  ],
+  "worldgenTerms": [
+    "WorldGen",
+    "Worldgen",
+    "ConfiguredFeature",
+    "PlacedFeature",
+    "FeatureUtils",
+    "PlacementUtils",
+    "BiomeModifier",
+    "BiomeModifiers",
+    "SpawnPlacements",
+    "LevelStem",
+    "ChunkGenerator",
+    "NoiseBasedChunkGenerator"
+  ],
+  "featureTerms": [
+    "ConfiguredFeature",
+    "PlacedFeature",
+    "Feature",
+    "OreConfiguration",
+    "TreeConfiguration",
+    "BlockStateProvider",
+    "FoliagePlacer",
+    "TrunkPlacer",
+    "TreeDecorator",
+    "RandomPatchConfiguration",
+    "VegetationPatchConfiguration"
+  ],
+  "biomeModifierTerms": [
+    "BiomeModifier",
+    "BiomeModifiers",
+    "biome_modifier",
+    "neoforge:biome_modifier",
+    "add_features",
+    "remove_features",
+    "biomes",
+    "features",
+    "generation_step"
+  ],
+  "structureTerms": [
+    "Structure",
+    "StructureType",
+    "StructureSet",
+    "Jigsaw",
+    "TemplatePool",
+    "ProcessorList",
+    "structure_set",
+    "template_pool",
+    "processor_list"
+  ],
+  "dimensionTerms": [
+    "DimensionType",
+    "LevelStem",
+    "ChunkGenerator",
+    "dimension_type",
+    "noise_settings",
+    "biome_source"
+  ],
+  "resourceWorldgenTerms": [
+    "worldgen",
+    "configured_feature",
+    "placed_feature",
+    "biome_modifier",
+    "structure",
+    "structure_set",
+    "template_pool",
+    "processor_list",
+    "dimension",
+    "dimension_type",
+    "noise_settings",
+    "add_features",
+    "features",
+    "ore",
+    "tree"
+  ],
+  "manifestCandidateTerms": [
+    "ore",
+    "crystal",
+    "cinnabar",
+    "amber",
+    "quartz",
+    "shimmerleaf",
+    "cinderpearl",
+    "vishroom",
+    "greatwood",
+    "silverwood",
+    "sapling",
+    "log",
+    "leaves",
+    "leaf",
+    "taint",
+    "ethereal",
+    "totem",
+    "mound",
+    "obelisk",
+    "cluster",
+    "worldgen"
+  ]
+}

@@ -54,7 +54,7 @@ $presetChecks = @{
     registry = @("registry", "duplicate_registry_id", "block_item_pairs", "legacy_mapping", "variants")
     quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references")
     resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references")
-    data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "entity_links", "aspects", "research_refs", "thaumonomicon_refs")
+    data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "entity_links", "worldgen_links", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "data_components", "equipment", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
     "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
     "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
@@ -426,6 +426,17 @@ function Invoke-EntityLinkAudit {
     if (-not $?) { throw "Entity link module failed." }
 }
 # Batch 41 entity link audit end
+# Batch 42 worldgen link audit start
+$worldgenLinkChecks = @("worldgen_links")
+$selectedWorldgenLinkChecks = @($implementedSelected | Where-Object { $_ -in $worldgenLinkChecks })
+function Invoke-WorldgenLinkAudit {
+    if ($selectedWorldgenLinkChecks.Count -eq 0) { return }
+    $worldgenLinkModule = Join-Path $PSScriptRoot "modules/worldgen_links.ps1"
+    if (-not (Test-Path -LiteralPath $worldgenLinkModule -PathType Leaf)) { throw "Worldgen link module not found: $worldgenLinkModule" }
+    & $worldgenLinkModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedWorldgenLinkChecks -OutputJson (Join-Path $reportRoot "item_block_worldgen_links_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_worldgen_links_report.md")
+    if (-not $?) { throw "Worldgen link module failed." }
+}
+# Batch 42 worldgen link audit end
 # Batch 31 docs/registry consistency audit start
 $docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
@@ -509,6 +520,7 @@ Invoke-NetworkingAudit
 Invoke-FuelFlammabilityAudit
 Invoke-EquipmentAudit
 Invoke-EntityLinkAudit
+Invoke-WorldgenLinkAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -545,6 +557,7 @@ Invoke-NetworkingAudit
 Invoke-FuelFlammabilityAudit
 Invoke-EquipmentAudit
 Invoke-EntityLinkAudit
+Invoke-WorldgenLinkAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator

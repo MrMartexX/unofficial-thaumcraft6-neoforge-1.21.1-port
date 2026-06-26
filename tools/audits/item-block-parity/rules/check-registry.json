@@ -263,8 +263,8 @@
     {
       "name": "worldgen_links",
       "layer": "data_boundary",
-      "status": "planned",
-      "reason": "Worldgen-linked block references planned"
+      "status": "implemented",
+      "reason": "Batch 42 report-only worldgen-linked block/data link audit"
     },
     {
       "name": "duplicate_registry_id",
