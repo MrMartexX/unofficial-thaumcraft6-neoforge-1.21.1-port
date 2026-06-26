@@ -481,7 +481,8 @@ function Invoke-SourceConflictReportAudit {
     if (-not $?) { throw "Source conflict module failed." }
 }
 # Batch 46 source conflict report audit end
-# Batch 31 docs/registry consistency audit start$docsDeferredChecks = @("docs_deferred")
+# Batch 31 docs/registry consistency audit start
+$docsDeferredChecks = @("docs_deferred")
 $selectedDocsDeferredChecks = @($implementedSelected | Where-Object { $_ -in $docsDeferredChecks })
 function Invoke-DocsRegistryConsistencyAudit {
     if ($selectedDocsDeferredChecks.Count -eq 0) { return }
