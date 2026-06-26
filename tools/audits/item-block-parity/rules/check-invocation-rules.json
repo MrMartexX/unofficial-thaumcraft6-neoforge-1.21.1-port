@@ -301,6 +301,12 @@
       "ownerType": "module",
       "ownerPath": "modules/runtime_smoke.ps1",
       "name": "runtime_smoke"
+    },
+    {
+      "invocation": "visualEquivalenceCompletionChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/visual_equivalence_completion.ps1",
+      "name": "visual_equivalence_completion"
     }
   ]
 }

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "name": "visual_equivalence_completion",
+  "policy": "Report-only visual equivalence completion criteria. This classifies visual/model/texture/FX review debt and defines when visual parity evidence may be promoted toward safe or strict certification without claiming gameplay parity.",
+  "requiredRuleFiles": [
+    "item-transform-equivalence.json",
+    "model-parent-equivalence.json",
+    "texture-equivalence.json",
+    "intentional-recolor.json"
+  ],
+  "requiredReports": [
+    "item_block_visual_model_transform_report.json",
+    "item_block_texture_color_report.json",
+    "item_block_sound_particle_fx_report.json"
+  ],
+  "criteria": [
+    {
+      "name": "model_transform_completion",
+      "report": "item_block_visual_model_transform_report.json",
+      "summaryFields": ["rows", "evidence", "ruleAccepted", "reviewNeeded", "missing", "models"],
+      "passStatuses": ["VISUAL_EVIDENCE", "VISUAL_RULE_ACCEPTED"],
+      "reviewStatuses": ["VISUAL_REVIEW_NEEDED", "VISUAL_MODEL_MISSING"],
+      "strictPromotion": "blocked_until_review_or_missing_rows_are_zero_or_explicitly_rule_accepted"
+    },
+    {
+      "name": "texture_color_completion",
+      "report": "item_block_texture_color_report.json",
+      "summaryFields": ["textures", "reviewNeeded", "byStatus"],
+      "passStatuses": ["TEXTURE_EXACT_MATCH", "TEXTURE_SIMILAR_MATCH", "TEXTURE_EQUIVALENT_BY_RULE", "INTENTIONAL_VISUAL_DIFFERENCE"],
+      "reviewStatuses": ["PORT_TEXTURE_MISSING", "LEGACY_TEXTURE_MISSING", "TEXTURE_READ_ERROR", "TEXTURE_SIZE_MISMATCH", "TEXTURE_ALPHA_MISMATCH", "TEXTURE_COLOR_MISMATCH", "TEXTURE_REVIEW_NEEDED"],
+      "strictPromotion": "blocked_until_review_needed_is_zero_or_each_row_has_a_reviewed_texture_rule"
+    },
+    {
+      "name": "sound_particle_fx_completion",
+      "report": "item_block_sound_particle_fx_report.json",
+      "summaryFields": ["rows", "reviewNeeded", "errors"],
+      "reviewStatusPatterns": ["REVIEW", "MISSING", "NOT_EVIDENCED"],
+      "strictPromotion": "blocked_until_fx_rows_are_classified_as_evidence_rule_accepted_intentional_or_out_of_scope"
+    }
+  ],
+  "strictReadiness": {
+    "minimumState": "report_only",
+    "requiredForSafeMode": [
+      "all required reports exist",
+      "all visual rule files exist and parse as JSON",
+      "no report summary errors or fail counters are present"
+    ],
+    "requiredForStrictMode": [
+      "model transform reviewNeeded and missing counts are zero or covered by reviewed rules",
+      "texture reviewNeeded count is zero or all review rows are intentionally classified",
+      "sound/particle/FX review rows are classified as evidence, rule accepted, intentional, superseded, blocked or out of scope"
+    ]
+  }
+}

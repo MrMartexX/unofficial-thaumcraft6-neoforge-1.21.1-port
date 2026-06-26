@@ -327,6 +327,17 @@ if ($selectedSoundParticleChecks.Count -gt 0) {
     & $soundParticleModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedSoundParticleChecks -OutputJson (Join-Path $reportRoot "item_block_sound_particle_fx_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_sound_particle_fx_report.md")
     if (-not $?) { throw "Sound/particle/FX module failed." }
 }
+# Batch 53 visual equivalence completion audit start
+$visualEquivalenceCompletionChecks = @("visual_equivalence_completion")
+$selectedVisualEquivalenceCompletionChecks = @($implementedSelected | Where-Object { $_ -in $visualEquivalenceCompletionChecks })
+function Invoke-VisualEquivalenceCompletionAudit {
+    if ($selectedVisualEquivalenceCompletionChecks.Count -eq 0) { return }
+    $visualEquivalenceCompletionModule = Join-Path $PSScriptRoot "modules/visual_equivalence_completion.ps1"
+    if (-not (Test-Path -LiteralPath $visualEquivalenceCompletionModule -PathType Leaf)) { throw "Visual equivalence completion module not found: $visualEquivalenceCompletionModule" }
+    & $visualEquivalenceCompletionModule -RepoRoot $RepoRoot -ReportRoot $reportRoot -RulesRoot $rulesRoot -Checks $selectedVisualEquivalenceCompletionChecks -OutputJson (Join-Path $reportRoot "item_block_visual_equivalence_completion_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_visual_equivalence_completion_report.md")
+    if (-not $?) { throw "Visual equivalence completion module failed." }
+}
+# Batch 53 visual equivalence completion audit end
 # Batch 33 JSON validity validator start
 $jsonValidityChecks = @("json_validity")
 $selectedJsonValidityChecks = @($implementedSelected | Where-Object { $_ -in $jsonValidityChecks })
@@ -593,6 +604,7 @@ Invoke-PublicApiAudit
 Invoke-SourceConflictReportAudit
 Invoke-OriginalJarProbeAudit
 Invoke-RuntimeSmokeAudit
+Invoke-VisualEquivalenceCompletionAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
@@ -636,6 +648,7 @@ Invoke-PublicApiAudit
 Invoke-SourceConflictReportAudit
 Invoke-OriginalJarProbeAudit
 Invoke-RuntimeSmokeAudit
+Invoke-VisualEquivalenceCompletionAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator

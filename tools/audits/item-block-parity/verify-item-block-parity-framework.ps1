@@ -70,6 +70,8 @@ $matrixPath = Join-Path $RepoRoot "06_docs/audits/item_block_parity_layer_comple
 $ciWorkflowPath = Join-Path $RepoRoot ".github/workflows/item-block-framework-verifier.yml"
 $goldenFocusedFamiliesScriptPath = Join-Path $auditRoot "run-golden-focused-families.ps1"
 $goldenFocusedFamiliesRulesPath = Join-Path $rulesRoot "golden-focused-families.json"
+$visualEquivalenceCompletionModulePath = Join-Path $auditRoot "modules/visual_equivalence_completion.ps1"
+$visualEquivalenceCompletionRulesPath = Join-Path $rulesRoot "visual-equivalence-completion.json"
 
 if (Test-Path -LiteralPath $auditScript -PathType Leaf) {
     Add-Row $rows "required_paths" $passStatus "info" "Audit orchestrator exists." ([ordered]@{ path = ConvertTo-RelativeRepoPath $auditScript })
@@ -128,6 +130,30 @@ if ((Test-Path -LiteralPath $goldenFocusedFamiliesScriptPath -PathType Leaf) -an
     }
 } else {
     Add-Row $rows "golden_focused_families" $reviewStatus "review" "Golden focused family runner/rules are not present; broad framework verifier still works, but focused regression slices are not configured." ([ordered]@{ script = ConvertTo-RelativeRepoPath $goldenFocusedFamiliesScriptPath; rules = ConvertTo-RelativeRepoPath $goldenFocusedFamiliesRulesPath })
+}
+$visualCompletionMissingTokens = [System.Collections.Generic.List[string]]::new()
+if (Test-Path -LiteralPath $visualEquivalenceCompletionModulePath -PathType Leaf) {
+    $visualCompletionModuleText = Get-Content -LiteralPath $visualEquivalenceCompletionModulePath -Raw
+    foreach ($token in @('visual-equivalence-completion.json', 'item_block_visual_model_transform_report.json', 'item_block_texture_color_report.json', 'item_block_sound_particle_fx_report.json', 'VISUAL_COMPLETION_REVIEW_NEEDED')) {
+        if ($visualCompletionModuleText -notlike "*$token*") { $visualCompletionMissingTokens.Add($token) }
+    }
+} else {
+    $visualCompletionMissingTokens.Add('modules/visual_equivalence_completion.ps1')
+}
+if (Test-Path -LiteralPath $visualEquivalenceCompletionRulesPath -PathType Leaf) {
+    try {
+        $visualCompletionRules = Read-JsonFile $visualEquivalenceCompletionRulesPath
+        if (@($visualCompletionRules.criteria).Count -lt 3) { $visualCompletionMissingTokens.Add('three_visual_completion_criteria') }
+    } catch {
+        $visualCompletionMissingTokens.Add('valid_visual_equivalence_completion_json')
+    }
+} else {
+    $visualCompletionMissingTokens.Add('visual-equivalence-completion.json')
+}
+if ($visualCompletionMissingTokens.Count -eq 0) {
+    Add-Row $rows "visual_equivalence_completion" $passStatus "info" "Visual equivalence completion module and policy rules are present." ([ordered]@{ module = ConvertTo-RelativeRepoPath $visualEquivalenceCompletionModulePath; rules = ConvertTo-RelativeRepoPath $visualEquivalenceCompletionRulesPath })
+} else {
+    Add-Row $rows "visual_equivalence_completion" $errorStatus "error" "Visual equivalence completion wiring is incomplete." ([ordered]@{ missing = @($visualCompletionMissingTokens) })
 }
 $minimalGameTestFixturePath = Join-Path $RepoRoot "05_neoforge_port/src/main/java/thaumcraft/common/runtime/TCMinimalGameTestFixture.java"
 $minimalGameTestFixtureExporterPath = Join-Path $RepoRoot "05_neoforge_port/src/main/java/thaumcraft/common/runtime/TCMinimalGameTestFixtureExporter.java"
@@ -296,7 +322,8 @@ $reportFilesToCheck = @(
     "item_block_access_transformers_report.json",
     "item_block_public_api_report.json",
     "item_block_source_conflict_report.json",
-    "item_block_original_jar_probe_report.json"
+    "item_block_original_jar_probe_report.json",
+    "item_block_visual_equivalence_completion_report.json"
 ) | Select-Object -Unique
 
 $checkedReportCount = 0
