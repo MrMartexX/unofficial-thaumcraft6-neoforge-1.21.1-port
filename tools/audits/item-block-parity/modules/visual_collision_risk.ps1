@@ -60,6 +60,49 @@ function Get-BlockDeclarationChunk([string]$Id) {
     if ($match.Success) { return $match.Groups["chunk"].Value }
     return ""
 }
+
+function Get-PrivateBlockHelperChunk([string]$HelperName) {
+    if ([string]::IsNullOrWhiteSpace($tcBlocksText) -or [string]::IsNullOrWhiteSpace($HelperName)) { return "" }
+    $pattern = 'private\s+static\s+Block\s+' + [regex]::Escape($HelperName) + '\s*\([^)]*\)\s*\{'
+    $match = [regex]::Match($tcBlocksText, $pattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    if (-not $match.Success) { return "" }
+
+    $braceStart = $tcBlocksText.IndexOf("{", $match.Index)
+    if ($braceStart -lt 0) { return "" }
+
+    $depth = 0
+    for ($i = $braceStart; $i -lt $tcBlocksText.Length; $i++) {
+        $ch = $tcBlocksText[$i]
+        if ($ch -eq "{") { $depth++ }
+        elseif ($ch -eq "}") {
+            $depth--
+            if ($depth -eq 0) {
+                return $tcBlocksText.Substring($match.Index, ($i - $match.Index + 1))
+            }
+        }
+    }
+    return ""
+}
+function Get-BlockFactoryEvidenceChunk($Entry) {
+    if ($null -eq $Entry) { return "" }
+    $id = [string]$Entry.registryId
+    $chunk = Get-BlockDeclarationChunk $id
+    $evidence = [System.Text.StringBuilder]::new()
+    [void]$evidence.AppendLine($chunk)
+
+    $helperNames = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+    foreach ($match in [regex]::Matches($chunk, '=>\s*(?<helper>[a-z][A-Za-z0-9_]*)\s*\(')) {
+        [void]$helperNames.Add($match.Groups["helper"].Value)
+    }
+    foreach ($helperName in @($helperNames)) {
+        $helperChunk = Get-PrivateBlockHelperChunk $helperName
+        if (-not [string]::IsNullOrWhiteSpace($helperChunk)) {
+            [void]$evidence.AppendLine($helperChunk)
+        }
+    }
+
+    return $evidence.ToString()
+}
 function Get-PortClassText($Entry) {
     if ($null -eq $Entry -or [string]::IsNullOrWhiteSpace([string]$Entry.portClassFile)) { return "" }
     $path = Join-Path $portPath ([string]$Entry.portClassFile)
@@ -71,13 +114,15 @@ function Test-BuiltInShapeBlock($Entry) {
     if ($Entry.declaredClass) { $text += " $($Entry.declaredClass)" }
     if ($Entry.portExtends) { $text += " $($Entry.portExtends)" }
     if ($Entry.portImplements) { $text += " $(@($Entry.portImplements) -join ' ')" }
-    return $text -match 'StairBlock|SlabBlock|FenceBlock|WallBlock|DoorBlock|TrapDoorBlock|FenceGateBlock|PaneBlock'
+    $text += " $(Get-BlockFactoryEvidenceChunk $Entry)"
+    return $text -match '\b(StairBlock|SlabBlock|FenceBlock|WallBlock|DoorBlock|TrapDoorBlock|FenceGateBlock|PaneBlock)\b'
 }
 function Test-BuiltInOcclusionBlock($Entry) {
     $text = ""
     if ($Entry.declaredClass) { $text += " $($Entry.declaredClass)" }
     if ($Entry.portExtends) { $text += " $($Entry.portExtends)" }
-    return $text -match 'StairBlock|SlabBlock|FenceBlock|WallBlock|DoorBlock|TrapDoorBlock|FenceGateBlock|PaneBlock'
+    $text += " $(Get-BlockFactoryEvidenceChunk $Entry)"
+    return $text -match '\b(StairBlock|SlabBlock|FenceBlock|WallBlock|DoorBlock|TrapDoorBlock|FenceGateBlock|PaneBlock)\b'
 }
 
 $modelCache = @{}
@@ -201,18 +246,24 @@ function Test-SixDirectionFacing($Entry, [string]$ClassText, $FacingMap) {
     $source = ""
     if ($ClassText) { $source += $ClassText }
     if ($Entry.declaredClass) { $source += " $($Entry.declaredClass)" }
-    return $source -match 'BlockStateProperties\.FACING|DirectionProperty\s+FACING|DirectionProperty\s+[A-Z0-9_]+\s*=\s*BlockStateProperties\.FACING'
+    if ($source -match 'BlockStateProperties\.HORIZONTAL_FACING\b') { return $false }
+    return $source -match 'BlockStateProperties\.FACING\b|DirectionProperty\s+FACING\s*=\s*BlockStateProperties\.FACING\b|DirectionProperty\s+[A-Z0-9_]+\s*=\s*BlockStateProperties\.FACING\b'
 }
 
 $results = [System.Collections.Generic.List[object]]::new()
 $modelSummaries = [System.Collections.Generic.List[object]]::new()
+$blockEntryById = @{}
+foreach ($blockEntry in @($port.entries | Where-Object { $_.kind -eq "block" })) {
+    $blockEntryById[[string]$blockEntry.registryId] = $blockEntry
+}
 
 foreach ($entry in @($port.entries | Sort-Object kind, registryId)) {
     if ($entry.kind -eq "block") {
         $classText = Get-PortClassText $entry
         $declarationChunk = Get-BlockDeclarationChunk ([string]$entry.registryId)
-        $hasShapeContract = ($classText -match '\bgetShape\s*\(|\bgetCollisionShape\s*\(|\bVoxelShape\b|\bShapes\.or\b') -or (Test-BuiltInShapeBlock $entry)
-        $hasOcclusionContract = ($classText -match '\bgetOcclusionShape\s*\(|\buseShapeForLightOcclusion\s*\(|\bnoOcclusion\b|\bnoCollission\b') -or ($declarationChunk -match '\.noOcclusion\s*\(|\.noCollission\s*\(') -or (Test-BuiltInOcclusionBlock $entry)
+        $factoryEvidenceChunk = Get-BlockFactoryEvidenceChunk $entry
+        $hasShapeContract = ($classText -match '\bgetShape\s*\(|\bgetCollisionShape\s*\(|\bVoxelShape\b|\bShapes\.or\b') -or ($factoryEvidenceChunk -match '\.noCollission\s*\(') -or (Test-BuiltInShapeBlock $entry)
+        $hasOcclusionContract = ($classText -match '\bgetOcclusionShape\s*\(|\buseShapeForLightOcclusion\s*\(|\bnoOcclusion\b|\bnoCollission\b') -or ($factoryEvidenceChunk -match '\.noOcclusion\s*\(|\.noCollission\s*\(') -or (Test-BuiltInOcclusionBlock $entry)
         $referencedModels = @($entry.resources.referencedBlockModels | Where-Object { $_ } | Sort-Object -Unique)
         if ($referencedModels.Count -eq 0) { continue }
 
@@ -302,10 +353,13 @@ foreach ($entry in @($port.entries | Sort-Object kind, registryId)) {
                 Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_MODEL_MISSING" "BlockItem parent model missing or invalid: parent=$parent" $relativeItemModelPath
                 continue
             }
-            if ($analysis.likelyNonFull -or $analysis.hasNorthProjection) {
+            $matchingBlockEntry = $null
+            if ($blockEntryById.ContainsKey([string]$entry.registryId)) { $matchingBlockEntry = $blockEntryById[[string]$entry.registryId] }
+            $blockHasBuiltInShape = ($null -ne $matchingBlockEntry) -and (Test-BuiltInShapeBlock $matchingBlockEntry)
+            if (($analysis.likelyNonFull -or $analysis.hasNorthProjection) -and -not $blockHasBuiltInShape) {
                 Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_REVIEW_NEEDED" "BlockItem inherits likely custom/non-full block model parent=$parent but has no explicit display transforms; GUI/hand item may render as incorrect flat/front view" $relativeItemModelPath $analysis
             } else {
-                Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_EVIDENCE" "BlockItem inherits full-cube/vanilla-like block model parent=$parent; default item display is acceptable unless screenshot review proves otherwise" $relativeItemModelPath $analysis
+                Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_EVIDENCE" "BlockItem inherits full-cube/vanilla-like or built-in-shape block model parent=$parent; default item display is acceptable unless screenshot review proves otherwise" $relativeItemModelPath $analysis
             }
         } else {
             Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_EVIDENCE" "BlockItem model parent=$parent is not a thaumcraft block model requiring custom display transform evidence" $relativeItemModelPath
@@ -324,10 +378,10 @@ $summaryBySubcheck = @($orderedResults | Group-Object subcheck | Sort-Object Nam
     }
 })
 $report = [ordered]@{
-    schemaVersion = 2
+    schemaVersion = 3
     generatedAtUtc = [DateTime]::UtcNow.ToString("o")
     selectedChecks = @("visual_collision_risk")
-    policy = "Report-only visual/collision risk scan. Full-cube or vanilla-shape models are evidence rows; review-needed rows focus on likely non-full/custom models whose Java shape, occlusion, blockstate rotation, or item display contracts are not mechanically evidenced."
+    policy = "Report-only visual/collision risk scan. Full-cube, helper-resolved vanilla-shape, no-collision, or helper-resolved no-occlusion models are evidence rows; review-needed rows focus on likely non-full/custom models whose Java shape, occlusion, blockstate rotation, or item display contracts are not mechanically evidenced."
     summary = [ordered]@{
         rows = $orderedResults.Count
         evidence = @($orderedResults | Where-Object status -eq "VISUAL_EVIDENCE").Count
