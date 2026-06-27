@@ -52,10 +52,10 @@ $allKnownChecks = @($checkRegistry.checks | ForEach-Object { $_.name })
 
 $presetChecks = @{
     registry = @("registry", "duplicate_registry_id", "block_item_pairs", "legacy_mapping", "variants")
-    quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references")
-    resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references")
+    quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references", "visual_collision_risk")
+    resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references", "visual_collision_risk")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "entity_links", "worldgen_links", "config_gates", "aspects", "research_refs", "thaumonomicon_refs")
-    "behavior-boundary" = @("item_properties", "data_components", "equipment", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety")
+    "behavior-boundary" = @("item_properties", "data_components", "equipment", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety", "visual_collision_risk")
     "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "access_transformers", "public_api", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred", "ci_strict_safe_policy", "final_framework_completion")
     "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
     full = @($allKnownChecks)
@@ -310,6 +310,14 @@ if ($selectedVisualBoundaryChecks.Count -gt 0) {
     if (-not (Test-Path -LiteralPath $visualBoundaryModule -PathType Leaf)) { throw "Visual boundary module not found: $visualBoundaryModule" }
     & $visualBoundaryModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedVisualBoundaryChecks -OutputJson (Join-Path $reportRoot "item_block_visual_model_transform_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_visual_model_transform_report.md")
     if (-not $?) { throw "Visual boundary module failed." }
+}
+$visualCollisionRiskChecks = @("visual_collision_risk")
+$selectedVisualCollisionRiskChecks = @($implementedSelected | Where-Object { $_ -in $visualCollisionRiskChecks })
+if ($selectedVisualCollisionRiskChecks.Count -gt 0) {
+    $visualCollisionRiskModule = Join-Path $PSScriptRoot "modules/visual_collision_risk.ps1"
+    if (-not (Test-Path -LiteralPath $visualCollisionRiskModule -PathType Leaf)) { throw "Visual collision risk module not found: $visualCollisionRiskModule" }
+    & $visualCollisionRiskModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedVisualCollisionRiskChecks -OutputJson (Join-Path $reportRoot "item_block_visual_collision_risk_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_visual_collision_risk_report.md")
+    if (-not $?) { throw "Visual collision risk module failed." }
 }
 $textureColorChecks = @("texture_color")
 $selectedTextureColorChecks = @($implementedSelected | Where-Object { $_ -in $textureColorChecks })

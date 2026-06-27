@@ -319,6 +319,12 @@
       "ownerType": "module",
       "ownerPath": "modules/final_framework_completion.ps1",
       "name": "final_framework_completion"
+    },
+    {
+      "name": "visual_collision_risk",
+      "ownerType": "module",
+      "ownerPath": "modules/visual_collision_risk.ps1",
+      "invocation": "visualCollisionRiskChecks"
     }
   ]
 }
