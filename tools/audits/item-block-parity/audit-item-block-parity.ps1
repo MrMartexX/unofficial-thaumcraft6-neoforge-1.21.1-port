@@ -627,12 +627,12 @@ Invoke-SourceConflictReportAudit
 Invoke-OriginalJarProbeAudit
 Invoke-RuntimeSmokeAudit
 Invoke-VisualEquivalenceCompletionAudit
-Invoke-CiStrictSafePolicyAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
 Invoke-ReportFreshnessGuard
 Invoke-ReportSchemaValidator
+Invoke-CiStrictSafePolicyAudit
 Invoke-FinalFrameworkCompletionAudit
     Write-Output "No comparer checks selected. Module/source-quality checks completed."
     exit 0
@@ -673,12 +673,12 @@ Invoke-SourceConflictReportAudit
 Invoke-OriginalJarProbeAudit
 Invoke-RuntimeSmokeAudit
 Invoke-VisualEquivalenceCompletionAudit
-Invoke-CiStrictSafePolicyAudit
 Invoke-CheckInvocationSelfTest
 Invoke-DocsRegistryConsistencyAudit
 Invoke-StatusTaxonomyValidator
 Invoke-ReportFreshnessGuard
 Invoke-ReportSchemaValidator
+Invoke-CiStrictSafePolicyAudit
 Invoke-FinalFrameworkCompletionAudit
 if (-not $compareSucceeded) {
     if ($null -ne $compareExitCode) { exit $compareExitCode }
