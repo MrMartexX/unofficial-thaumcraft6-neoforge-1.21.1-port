@@ -325,6 +325,12 @@
       "reason": "Batch 61 report-only generic visual/collision risk audit for non-full model shape, occlusion, item display and directional blockstate rotation issues",
       "status": "implemented",
       "layer": "visual_boundary"
+    },
+    {
+      "name": "legacy_shape_parity",
+      "layer": "visual_boundary",
+      "status": "implemented",
+      "reason": "Batch 62 report-only legacy-vs-port shape classification audit to catch false-safe full-cube ports for legacy custom/non-full blocks"
     }
   ]
 }

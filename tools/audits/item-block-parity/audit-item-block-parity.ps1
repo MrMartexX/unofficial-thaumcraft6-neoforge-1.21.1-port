@@ -52,10 +52,10 @@ $allKnownChecks = @($checkRegistry.checks | ForEach-Object { $_.name })
 
 $presetChecks = @{
     registry = @("registry", "duplicate_registry_id", "block_item_pairs", "legacy_mapping", "variants")
-    quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references", "visual_collision_risk")
-    resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references", "visual_collision_risk")
+    quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references", "visual_collision_risk", "legacy_shape_parity")
+    resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references", "visual_collision_risk", "legacy_shape_parity")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "entity_links", "worldgen_links", "config_gates", "aspects", "research_refs", "thaumonomicon_refs")
-    "behavior-boundary" = @("item_properties", "data_components", "equipment", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety", "visual_collision_risk")
+    "behavior-boundary" = @("item_properties", "data_components", "equipment", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety", "visual_collision_risk", "legacy_shape_parity")
     "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "access_transformers", "public_api", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred", "ci_strict_safe_policy", "final_framework_completion")
     "ci-safe" = @("registry", "json_validity", "blockstates", "models", "textures", "lang", "orphan_references", "client_server_safety", "datapack_load", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred")
     full = @($allKnownChecks)
@@ -318,6 +318,14 @@ if ($selectedVisualCollisionRiskChecks.Count -gt 0) {
     if (-not (Test-Path -LiteralPath $visualCollisionRiskModule -PathType Leaf)) { throw "Visual collision risk module not found: $visualCollisionRiskModule" }
     & $visualCollisionRiskModule -RepoRoot $RepoRoot -PortManifestPath $portManifestForChecks -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedVisualCollisionRiskChecks -OutputJson (Join-Path $reportRoot "item_block_visual_collision_risk_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_visual_collision_risk_report.md")
     if (-not $?) { throw "Visual collision risk module failed." }
+}
+$legacyShapeParityChecks = @("legacy_shape_parity")
+$selectedLegacyShapeParityChecks = @($implementedSelected | Where-Object { $_ -in $legacyShapeParityChecks })
+if ($selectedLegacyShapeParityChecks.Count -gt 0) {
+    $legacyShapeParityModule = Join-Path $PSScriptRoot "modules/legacy_shape_parity.ps1"
+    if (-not (Test-Path -LiteralPath $legacyShapeParityModule -PathType Leaf)) { throw "Legacy shape parity module not found: $legacyShapeParityModule" }
+    & $legacyShapeParityModule -RepoRoot $RepoRoot -LegacyManifestPath $legacyManifestForChecks -PortManifestPath $portManifestForChecks -LegacyRoot $LegacyRoot -PortRoot $PortRoot -RulesRoot $rulesRoot -Checks $selectedLegacyShapeParityChecks -OutputJson (Join-Path $reportRoot "item_block_legacy_shape_parity_report.json") -OutputMarkdown (Join-Path $reportRoot "item_block_legacy_shape_parity_report.md")
+    if (-not $?) { throw "Legacy shape parity module failed." }
 }
 $textureColorChecks = @("texture_color")
 $selectedTextureColorChecks = @($implementedSelected | Where-Object { $_ -in $textureColorChecks })

@@ -325,6 +325,12 @@
       "ownerType": "module",
       "ownerPath": "modules/visual_collision_risk.ps1",
       "invocation": "visualCollisionRiskChecks"
+    },
+    {
+      "invocation": "legacyShapeParityChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/legacy_shape_parity.ps1",
+      "name": "legacy_shape_parity"
     }
   ]
 }
