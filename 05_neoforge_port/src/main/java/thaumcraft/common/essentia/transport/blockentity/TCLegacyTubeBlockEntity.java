@@ -19,6 +19,8 @@ import thaumcraft.common.essentia.transport.TCEssentiaTransport;
 import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.essentia.transport.block.TCLegacyTubeVariant;
 import thaumcraft.common.essentia.transport.block.TCLegacyTubeBlock;
+import thaumcraft.common.blocks.essentia.TCBellowsBlock;
+import thaumcraft.common.registry.TCBlocks;
 
 /**
  * Server-owned port of the TC6 {@code TileTube} family.
@@ -165,10 +167,34 @@ public class TCLegacyTubeBlockEntity extends TCAbstractEssentiaTransportBlockEnt
     }
 
     private void tickBuffer() {
+        boolean pressureChanged = refreshBellowsPressure();
         tickCounter++;
         if (tickCounter % TRANSFER_INTERVAL == 0 && transportNode.storage().totalAmount() < BUFFER_CAPACITY) {
             fillBuffer();
         }
+        if (pressureChanged) {
+            markTransportDirty();
+        }
+    }
+
+    private boolean refreshBellowsPressure() {
+        if (level == null || variant != TCLegacyTubeVariant.BUFFER) {
+            return false;
+        }
+        int previousBellows = bellows;
+        int foundBellows = 0;
+        for (Direction direction : Direction.values()) {
+            BlockState neighbour = level.getBlockState(worldPosition.relative(direction));
+            if (neighbour.is(TCBlocks.BELLOWS.get())
+                    && neighbour.hasProperty(TCBellowsBlock.FACING)
+                    && neighbour.hasProperty(TCBellowsBlock.ENABLED)
+                    && neighbour.getValue(TCBellowsBlock.ENABLED)
+                    && neighbour.getValue(TCBellowsBlock.FACING) == direction.getOpposite()) {
+                foundBellows++;
+            }
+        }
+        bellows = foundBellows;
+        return previousBellows != bellows;
     }
 
     private void calculateSuction() {
@@ -515,7 +541,15 @@ public class TCLegacyTubeBlockEntity extends TCAbstractEssentiaTransportBlockEnt
     }
 
     public void setBellowsForValidation(int bellows) {
-        this.bellows = Math.max(0, bellows);
+        setBellowsPressure(bellows);
+    }
+
+    public void setBellowsPressure(int bellows) {
+        int normalized = Math.max(0, bellows);
+        if (this.bellows != normalized) {
+            this.bellows = normalized;
+            markTransportDirty();
+        }
     }
 
     public void setVentingForValidation(int venting) {
