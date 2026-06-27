@@ -1,16 +1,16 @@
 {
   "variants": {
-    "enabled=true,facing=down": { "model": "thaumcraft:block/bellows" },
-    "enabled=false,facing=down": { "model": "thaumcraft:block/bellows" },
-    "enabled=true,facing=up": { "model": "thaumcraft:block/bellows", "x": 180 },
-    "enabled=false,facing=up": { "model": "thaumcraft:block/bellows", "x": 180 },
-    "enabled=true,facing=north": { "model": "thaumcraft:block/bellows", "x": 90 },
-    "enabled=false,facing=north": { "model": "thaumcraft:block/bellows", "x": 90 },
-    "enabled=true,facing=south": { "model": "thaumcraft:block/bellows", "x": 90, "y": 180 },
-    "enabled=false,facing=south": { "model": "thaumcraft:block/bellows", "x": 90, "y": 180 },
-    "enabled=true,facing=west": { "model": "thaumcraft:block/bellows", "x": 90, "y": 270 },
-    "enabled=false,facing=west": { "model": "thaumcraft:block/bellows", "x": 90, "y": 270 },
-    "enabled=true,facing=east": { "model": "thaumcraft:block/bellows", "x": 90, "y": 90 },
-    "enabled=false,facing=east": { "model": "thaumcraft:block/bellows", "x": 90, "y": 90 }
+    "enabled=true,facing=north": { "model": "thaumcraft:block/bellows" },
+    "enabled=false,facing=north": { "model": "thaumcraft:block/bellows" },
+    "enabled=true,facing=south": { "model": "thaumcraft:block/bellows", "y": 180 },
+    "enabled=false,facing=south": { "model": "thaumcraft:block/bellows", "y": 180 },
+    "enabled=true,facing=west": { "model": "thaumcraft:block/bellows", "y": 270 },
+    "enabled=false,facing=west": { "model": "thaumcraft:block/bellows", "y": 270 },
+    "enabled=true,facing=east": { "model": "thaumcraft:block/bellows", "y": 90 },
+    "enabled=false,facing=east": { "model": "thaumcraft:block/bellows", "y": 90 },
+    "enabled=true,facing=down": { "model": "thaumcraft:block/bellows", "x": 90 },
+    "enabled=false,facing=down": { "model": "thaumcraft:block/bellows", "x": 90 },
+    "enabled=true,facing=up": { "model": "thaumcraft:block/bellows", "x": 270 },
+    "enabled=false,facing=up": { "model": "thaumcraft:block/bellows", "x": 270 }
   }
 }
