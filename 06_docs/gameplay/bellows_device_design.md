@@ -44,3 +44,12 @@ pwsh -NoProfile -File .\tools\audits\runtime\audit-bellows-device.ps1 `
 ```
 
 For code changes, also run build/server smoke and the item/block framework verifier.
+
+## Observed visual/collision repairs
+
+Manual in-game review found two Bellows parity defects that were not caught by the first boundary audit:
+
+- the inventory item used the block model without explicit display transforms, which made it appear as a flat/front-facing slot icon instead of a readable 3D block item;
+- the block behaved like a full cube for collision/occlusion even though the model is non-full, causing incorrect collision and face-culling/x-ray style holes against neighbouring blocks.
+
+The current repair adds explicit item display transforms, non-full directional VoxelShapes, an empty occlusion shape, and `noOcclusion()` on the block registration. This is a concrete implementation repair, not a Bellows-only audit expansion. The broader item/block framework should later gain generic visual/collision risk checks for registered non-full models.

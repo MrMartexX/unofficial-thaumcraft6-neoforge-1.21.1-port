@@ -1,5 +1,13 @@
 package thaumcraft.common.blocks.essentia;
 
+import net.minecraft.world.phys.shapes.VoxelShape;
+
+import net.minecraft.world.phys.shapes.Shapes;
+
+import net.minecraft.world.phys.shapes.CollisionContext;
+
+import net.minecraft.world.level.BlockGetter;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -26,6 +34,36 @@ public class TCBellowsBlock extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty ENABLED = BooleanProperty.create("enabled");
 
+    private static final VoxelShape CORE_SHAPE = Shapes.or(
+            Block.box(2.0D, 2.0D, 2.0D, 14.0D, 4.0D, 14.0D),
+            Block.box(3.0D, 4.0D, 3.0D, 13.0D, 12.0D, 13.0D),
+            Block.box(2.0D, 7.0D, 2.0D, 14.0D, 9.0D, 14.0D),
+            Block.box(2.0D, 12.0D, 2.0D, 14.0D, 14.0D, 14.0D)
+    );
+    private static final VoxelShape SHAPE_NORTH = Shapes.or(
+            CORE_SHAPE,
+            Block.box(6.0D, 6.0D, 0.0D, 10.0D, 10.0D, 2.0D)
+    );
+    private static final VoxelShape SHAPE_SOUTH = Shapes.or(
+            CORE_SHAPE,
+            Block.box(6.0D, 6.0D, 14.0D, 10.0D, 10.0D, 16.0D)
+    );
+    private static final VoxelShape SHAPE_WEST = Shapes.or(
+            CORE_SHAPE,
+            Block.box(0.0D, 6.0D, 6.0D, 2.0D, 10.0D, 10.0D)
+    );
+    private static final VoxelShape SHAPE_EAST = Shapes.or(
+            CORE_SHAPE,
+            Block.box(14.0D, 6.0D, 6.0D, 16.0D, 10.0D, 10.0D)
+    );
+    private static final VoxelShape SHAPE_UP = Shapes.or(
+            CORE_SHAPE,
+            Block.box(6.0D, 14.0D, 6.0D, 10.0D, 16.0D, 10.0D)
+    );
+    private static final VoxelShape SHAPE_DOWN = Shapes.or(
+            CORE_SHAPE,
+            Block.box(6.0D, 0.0D, 6.0D, 10.0D, 2.0D, 10.0D)
+    );
     public TCBellowsBlock(BlockBehaviour.Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any()
@@ -55,6 +93,38 @@ public class TCBellowsBlock extends Block implements EntityBlock {
                 );
     }
 
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return shapeFor(state);
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return shapeFor(state);
+    }
+
+    @Override
+    protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+        return Shapes.empty();
+    }
+
+    @Override
+    protected boolean useShapeForLightOcclusion(BlockState state) {
+        return true;
+    }
+
+    private static VoxelShape shapeFor(BlockState state) {
+        Direction facing = state.hasProperty(FACING) ? state.getValue(FACING) : Direction.NORTH;
+        return switch (facing) {
+            case DOWN -> SHAPE_DOWN;
+            case UP -> SHAPE_UP;
+            case SOUTH -> SHAPE_SOUTH;
+            case WEST -> SHAPE_WEST;
+            case EAST -> SHAPE_EAST;
+            case NORTH -> SHAPE_NORTH;
+        };
+    }
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return defaultBlockState()
