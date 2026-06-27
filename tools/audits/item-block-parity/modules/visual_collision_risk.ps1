@@ -20,240 +20,300 @@ if (-not $OutputMarkdown) { $OutputMarkdown = Join-Path $RepoRoot "tools/reports
 $port = Get-Content -Raw -LiteralPath $PortManifestPath | ConvertFrom-Json
 $assetsRoot = Join-Path $portPath "src/main/resources/assets/thaumcraft"
 $javaRoot = Join-Path $portPath "src/main/java"
-$blocksRegistryPath = Join-Path $portPath "src/main/java/thaumcraft/common/registry/TCBlocks.java"
-$blocksRegistryText = if (Test-Path -LiteralPath $blocksRegistryPath -PathType Leaf) { Get-Content -Raw -LiteralPath $blocksRegistryPath } else { "" }
+$tcBlocksPath = Join-Path $portPath "src/main/java/thaumcraft/common/registry/TCBlocks.java"
+$tcBlocksText = if (Test-Path -LiteralPath $tcBlocksPath -PathType Leaf) { Get-Content -Raw -LiteralPath $tcBlocksPath } else { "" }
 
 function ConvertTo-RelativeRepoPath([string]$FullPath) {
     return [System.IO.Path]::GetRelativePath($RepoRoot, $FullPath).Replace("\", "/")
 }
-
 function Read-JsonFileOrNull([string]$Path) {
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $null }
     try { return Get-Content -Raw -LiteralPath $Path | ConvertFrom-Json } catch { return $null }
 }
-
 function Get-JsonPropertyNames($Object) {
     if ($null -eq $Object) { return @() }
     return @($Object.PSObject.Properties | ForEach-Object { $_.Name } | Sort-Object -Unique)
 }
-
-function Format-List($Values) {
-    $items = @($Values | Where-Object { $_ } | Select-Object -Unique)
-    if ($items.Count -eq 0) { return "<none>" }
-    return $items -join ", "
+function Get-Array($Value) {
+    if ($null -eq $Value) { return @() }
+    if ($Value -is [System.Array]) { return @($Value) }
+    return @($Value)
+}
+function Test-ArrayEquals([object[]]$Value, [double[]]$Expected) {
+    if ($Value.Count -ne $Expected.Count) { return $false }
+    for ($i = 0; $i -lt $Expected.Count; $i++) {
+        if ([math]::Abs(([double]$Value[$i]) - $Expected[$i]) -gt 0.001D) { return $false }
+    }
+    return $true
+}
+function Normalize-RotationValue($Value) {
+    if ($null -eq $Value) { return 0 }
+    $number = [int]$Value
+    $number = $number % 360
+    if ($number -lt 0) { $number += 360 }
+    return $number
+}
+function Get-BlockDeclarationChunk([string]$Id) {
+    if ([string]::IsNullOrWhiteSpace($tcBlocksText)) { return "" }
+    $pattern = 'public\s+static\s+final\s+Supplier<Block>\s+[A-Z0-9_]+\s*=\s*BLOCKS\.register\(\s*"' + [regex]::Escape($Id) + '"(?<chunk>.*?)(?=public\s+static\s+final\s+Supplier<Block>|private\s+TCBlocks|\z)'
+    $match = [regex]::Match($tcBlocksText, $pattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
+    if ($match.Success) { return $match.Groups["chunk"].Value }
+    return ""
+}
+function Get-PortClassText($Entry) {
+    if ($null -eq $Entry -or [string]::IsNullOrWhiteSpace([string]$Entry.portClassFile)) { return "" }
+    $path = Join-Path $portPath ([string]$Entry.portClassFile)
+    if (Test-Path -LiteralPath $path -PathType Leaf) { return Get-Content -Raw -LiteralPath $path }
+    return ""
+}
+function Test-BuiltInShapeBlock($Entry) {
+    $text = ""
+    if ($Entry.declaredClass) { $text += " $($Entry.declaredClass)" }
+    if ($Entry.portExtends) { $text += " $($Entry.portExtends)" }
+    if ($Entry.portImplements) { $text += " $(@($Entry.portImplements) -join ' ')" }
+    return $text -match 'StairBlock|SlabBlock|FenceBlock|WallBlock|DoorBlock|TrapDoorBlock|FenceGateBlock|PaneBlock'
+}
+function Test-BuiltInOcclusionBlock($Entry) {
+    $text = ""
+    if ($Entry.declaredClass) { $text += " $($Entry.declaredClass)" }
+    if ($Entry.portExtends) { $text += " $($Entry.portExtends)" }
+    return $text -match 'StairBlock|SlabBlock|FenceBlock|WallBlock|DoorBlock|TrapDoorBlock|FenceGateBlock|PaneBlock'
 }
 
-function Add-ResultRow($Rows, [string]$Kind, [string]$Id, [string]$Subcheck, [string]$Status, [string]$Evidence, [string]$Path = "") {
+$modelCache = @{}
+function Get-ModelAnalysis([string]$ModelRef) {
+    if ([string]::IsNullOrWhiteSpace($ModelRef)) { return $null }
+    if ($modelCache.ContainsKey($ModelRef)) { return $modelCache[$ModelRef] }
+
+    $modelPath = Join-Path $assetsRoot "models/$ModelRef.json"
+    $relativePath = if (Test-Path -LiteralPath $modelPath -PathType Leaf) { ConvertTo-RelativeRepoPath $modelPath } else { "assets/thaumcraft/models/$ModelRef.json" }
+    $json = Read-JsonFileOrNull $modelPath
+    if ($null -eq $json) {
+        $analysis = [pscustomobject][ordered]@{
+            modelRef = $ModelRef
+            path = $relativePath
+            exists = $false
+            parent = "<missing>"
+            hasElements = $false
+            elementCount = 0
+            hasFullCubeElement = $false
+            parentImpliesFullCube = $false
+            parentImpliesBuiltInShape = $false
+            likelyNonFull = $false
+            hasNorthProjection = $false
+        }
+        $modelCache[$ModelRef] = $analysis
+        return $analysis
+    }
+
+    $parent = if ($json.parent) { [string]$json.parent } else { "<none>" }
+    $parentLower = $parent.ToLowerInvariant()
+    $elements = @(Get-Array $json.elements)
+    $hasFullCubeElement = $false
+    $hasNorthProjection = $false
+
+    foreach ($element in $elements) {
+        $from = @(Get-Array $element.from)
+        $to = @(Get-Array $element.to)
+        if ($from.Count -ne 3 -or $to.Count -ne 3) { continue }
+        $isFullCube = (Test-ArrayEquals $from @(0.0D, 0.0D, 0.0D)) -and (Test-ArrayEquals $to @(16.0D, 16.0D, 16.0D))
+        if ($isFullCube) { $hasFullCubeElement = $true }
+
+        $minX = [double]$from[0]
+        $minY = [double]$from[1]
+        $minZ = [double]$from[2]
+        $maxX = [double]$to[0]
+        $maxY = [double]$to[1]
+        $maxZ = [double]$to[2]
+        $widthX = $maxX - $minX
+        $heightY = $maxY - $minY
+        $depthZ = $maxZ - $minZ
+        $narrowProjection = ($minZ -le 0.001D -and $maxZ -le 4.001D -and $widthX -lt 14.0D -and $heightY -lt 14.0D -and -not $isFullCube)
+        if ($narrowProjection) { $hasNorthProjection = $true }
+    }
+
+    $parentImpliesFullCube = $parentLower -match '(^|:)block/(cube|cube_all|cube_column|orientable|log|column)$'
+    $parentImpliesBuiltInShape = $parentLower -match 'stairs|slab|cross|crop|torch|fence|wall|door|trapdoor|pane'
+    $hasElements = $elements.Count -gt 0
+    $likelyNonFull = $false
+    if ($hasElements) {
+        $likelyNonFull = -not $hasFullCubeElement
+    } elseif ($parentImpliesBuiltInShape) {
+        $likelyNonFull = $true
+    } elseif ($parentImpliesFullCube) {
+        $likelyNonFull = $false
+    }
+
+    $analysis = [pscustomobject][ordered]@{
+        modelRef = $ModelRef
+        path = $relativePath
+        exists = $true
+        parent = $parent
+        hasElements = $hasElements
+        elementCount = $elements.Count
+        hasFullCubeElement = $hasFullCubeElement
+        parentImpliesFullCube = $parentImpliesFullCube
+        parentImpliesBuiltInShape = $parentImpliesBuiltInShape
+        likelyNonFull = $likelyNonFull
+        hasNorthProjection = $hasNorthProjection
+    }
+    $modelCache[$ModelRef] = $analysis
+    return $analysis
+}
+
+function Add-ResultRow($Rows, [string]$Kind, [string]$Id, [string]$Subcheck, [string]$Status, [string]$Evidence, [string]$Path = "", $Details = $null) {
     $Rows.Add([pscustomobject][ordered]@{
         check = "visual_collision_risk"
         subcheck = $Subcheck
         kind = $Kind
         id = "thaumcraft:$Id"
         status = $Status
-        evidence = $Evidence
         path = $Path
+        evidence = $Evidence
+        details = $Details
     })
 }
-
-function Get-ModelPathFromRef([string]$ModelRef) {
-    if ([string]::IsNullOrWhiteSpace($ModelRef)) { return $null }
-    $normalized = $ModelRef
-    if ($normalized.StartsWith("thaumcraft:")) { $normalized = $normalized.Substring("thaumcraft:".Length) }
-    return Join-Path $assetsRoot "models/$normalized.json"
-}
-
-function Get-NumberArray($Value) {
-    return @($Value | ForEach-Object { [double]$_ })
-}
-
-function Test-FullCubeElement($Element) {
-    if ($null -eq $Element -or $null -eq $Element.from -or $null -eq $Element.to) { return $false }
-    $from = Get-NumberArray $Element.from
-    $to = Get-NumberArray $Element.to
-    if ($from.Count -ne 3 -or $to.Count -ne 3) { return $false }
-    return ($from[0] -eq 0.0D -and $from[1] -eq 0.0D -and $from[2] -eq 0.0D -and
-            $to[0] -eq 16.0D -and $to[1] -eq 16.0D -and $to[2] -eq 16.0D)
-}
-
-function Get-GeometryInfo($Json) {
-    $elements = @($Json.elements)
-    $hasElements = $elements.Count -gt 0
-    $isSingleFullCube = $false
-    if ($elements.Count -eq 1) { $isSingleFullCube = Test-FullCubeElement $elements[0] }
-    $nonFull = $hasElements -and -not $isSingleFullCube
-    $touchNorth = $false
-    $touchSouth = $false
-    $touchEast = $false
-    $touchWest = $false
-    $touchUp = $false
-    $touchDown = $false
-    foreach ($element in $elements) {
-        if ($null -eq $element.from -or $null -eq $element.to) { continue }
-        $from = Get-NumberArray $element.from
-        $to = Get-NumberArray $element.to
-        if ($from.Count -ne 3 -or $to.Count -ne 3) { continue }
-        if ($from[2] -le 0.01D -and $to[2] -le 4.0D) { $touchNorth = $true }
-        if ($to[2] -ge 15.99D -and $from[2] -ge 12.0D) { $touchSouth = $true }
-        if ($to[0] -ge 15.99D -and $from[0] -ge 12.0D) { $touchEast = $true }
-        if ($from[0] -le 0.01D -and $to[0] -le 4.0D) { $touchWest = $true }
-        if ($to[1] -ge 15.99D -and $from[1] -ge 12.0D) { $touchUp = $true }
-        if ($from[1] -le 0.01D -and $to[1] -le 4.0D) { $touchDown = $true }
+function Get-FacingVariantMap($BlockstateJson) {
+    $map = @{}
+    if ($null -eq $BlockstateJson -or $null -eq $BlockstateJson.variants) { return $map }
+    foreach ($prop in $BlockstateJson.variants.PSObject.Properties) {
+        $name = [string]$prop.Name
+        $match = [regex]::Match($name, '(^|,)facing=(?<facing>north|south|east|west|up|down)(,|$)')
+        if (-not $match.Success) { continue }
+        $facing = $match.Groups["facing"].Value
+        if (-not $map.ContainsKey($facing)) { $map[$facing] = [System.Collections.Generic.List[object]]::new() }
+        $value = $prop.Value
+        foreach ($variant in @(Get-Array $value)) { $map[$facing].Add($variant) }
     }
-    $northDefaultProjection = $touchNorth -and -not $touchSouth -and -not $touchEast -and -not $touchWest -and -not $touchUp -and -not $touchDown
-    return [pscustomobject][ordered]@{
-        elementCount = $elements.Count
-        hasElements = $hasElements
-        nonFull = $nonFull
-        isSingleFullCube = $isSingleFullCube
-        northDefaultProjection = $northDefaultProjection
-        touches = [ordered]@{
-            north = $touchNorth
-            south = $touchSouth
-            east = $touchEast
-            west = $touchWest
-            up = $touchUp
-            down = $touchDown
-        }
+    return $map
+}
+function Test-FacingVariantRotation($Variants, [int]$ExpectedX, [int]$ExpectedY) {
+    if ($null -eq $Variants -or @($Variants).Count -eq 0) { return $false }
+    foreach ($variant in @($Variants)) {
+        $x = Normalize-RotationValue $variant.x
+        $y = Normalize-RotationValue $variant.y
+        if ($x -ne $ExpectedX -or $y -ne $ExpectedY) { return $false }
     }
+    return $true
 }
-
-function Get-BlockDeclarationText([string]$Id) {
-    if ([string]::IsNullOrWhiteSpace($blocksRegistryText)) { return "" }
-    $escaped = [regex]::Escape($Id)
-    $pattern = 'BLOCKS\.register\(\s*"' + $escaped + '"(?<chunk>.*?)(?=public\s+static\s+final\s+Supplier<Block>|private\s+TCBlocks|\z)'
-    $match = [regex]::Match($blocksRegistryText, $pattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)
-    if ($match.Success) { return $match.Groups["chunk"].Value }
-    return ""
-}
-
-function Get-JavaClassText($Entry) {
-    if ($null -eq $Entry -or [string]::IsNullOrWhiteSpace([string]$Entry.portClassFile)) { return "" }
-    $path = Join-Path $portPath ([string]$Entry.portClassFile)
-    if (Test-Path -LiteralPath $path -PathType Leaf) { return Get-Content -Raw -LiteralPath $path }
-    return ""
-}
-
-function Get-VariantObject($BlockstateJson, [string]$Facing) {
-    if ($null -eq $BlockstateJson -or $null -eq $BlockstateJson.variants) { return $null }
-    foreach ($property in @($BlockstateJson.variants.PSObject.Properties)) {
-        if ($property.Name -match "(^|,)facing=$Facing(,|$)") { return $property.Value }
-    }
-    return $null
-}
-
-function Normalize-RotationValue($Value) {
-    if ($null -eq $Value) { return 0 }
-    try { return ([int]$Value + 360) % 360 } catch { return 0 }
-}
-
-function Test-RotationMatchesNorthDefault($Variant, [string]$Facing) {
-    if ($null -eq $Variant) { return $false }
-    $x = Normalize-RotationValue $Variant.x
-    $y = Normalize-RotationValue $Variant.y
-    switch ($Facing) {
-        "north" { return ($x -eq 0 -and $y -eq 0) }
-        "south" { return ($x -eq 0 -and $y -eq 180) }
-        "east"  { return ($x -eq 0 -and $y -eq 90) }
-        "west"  { return ($x -eq 0 -and $y -eq 270) }
-        "down"  { return ($x -eq 90 -and $y -eq 0) }
-        "up"    { return ($x -eq 270 -and $y -eq 0) }
-        default { return $true }
-    }
-}
-
-function Get-RotationSummary($Variant) {
-    if ($null -eq $Variant) { return "<missing>" }
-    return "x=$(Normalize-RotationValue $Variant.x),y=$(Normalize-RotationValue $Variant.y)"
+function Test-SixDirectionFacing($Entry, [string]$ClassText, $FacingMap) {
+    if ($FacingMap.ContainsKey("up") -or $FacingMap.ContainsKey("down")) { return $true }
+    $source = ""
+    if ($ClassText) { $source += $ClassText }
+    if ($Entry.declaredClass) { $source += " $($Entry.declaredClass)" }
+    return $source -match 'BlockStateProperties\.FACING|DirectionProperty\s+FACING|DirectionProperty\s+[A-Z0-9_]+\s*=\s*BlockStateProperties\.FACING'
 }
 
 $results = [System.Collections.Generic.List[object]]::new()
 $modelSummaries = [System.Collections.Generic.List[object]]::new()
 
 foreach ($entry in @($port.entries | Sort-Object kind, registryId)) {
-    if ($entry.kind -ne "block") { continue }
-    $id = [string]$entry.registryId
-    $referencedModels = @($entry.resources.referencedBlockModels | Where-Object { $_ } | Sort-Object -Unique)
-    if ($referencedModels.Count -eq 0) { continue }
+    if ($entry.kind -eq "block") {
+        $classText = Get-PortClassText $entry
+        $declarationChunk = Get-BlockDeclarationChunk ([string]$entry.registryId)
+        $hasShapeContract = ($classText -match '\bgetShape\s*\(|\bgetCollisionShape\s*\(|\bVoxelShape\b|\bShapes\.or\b') -or (Test-BuiltInShapeBlock $entry)
+        $hasOcclusionContract = ($classText -match '\bgetOcclusionShape\s*\(|\buseShapeForLightOcclusion\s*\(|\bnoOcclusion\b|\bnoCollission\b') -or ($declarationChunk -match '\.noOcclusion\s*\(|\.noCollission\s*\(') -or (Test-BuiltInOcclusionBlock $entry)
+        $referencedModels = @($entry.resources.referencedBlockModels | Where-Object { $_ } | Sort-Object -Unique)
+        if ($referencedModels.Count -eq 0) { continue }
 
-    $classText = Get-JavaClassText $entry
-    $blockDeclarationText = Get-BlockDeclarationText $id
-    $hasShapeContract = $classText -match '\bgetShape\b|\bgetCollisionShape\b|\bVoxelShape\b|\bShapes\.'
-    $hasOcclusionContract = ($classText -match '\bgetOcclusionShape\b|\buseShapeForLightOcclusion\b|\bskipRendering\b') -or ($blockDeclarationText -match '\.noOcclusion\s*\(')
-
-    foreach ($modelRef in $referencedModels) {
-        $modelPath = Get-ModelPathFromRef $modelRef
-        $relativeModelPath = if ($modelPath -and (Test-Path -LiteralPath $modelPath -PathType Leaf)) { ConvertTo-RelativeRepoPath $modelPath } else { "assets/thaumcraft/models/$modelRef.json" }
-        $modelJson = if ($modelPath) { Read-JsonFileOrNull $modelPath } else { $null }
-        if ($null -eq $modelJson) {
-            Add-ResultRow $results "block" $id "visual_collision_model_json" "VISUAL_MODEL_MISSING" "Block model missing or invalid for visual collision risk scan: $modelRef" $relativeModelPath
-            continue
-        }
-
-        $geometry = Get-GeometryInfo $modelJson
-        $modelSummaries.Add([pscustomobject][ordered]@{
-            kind = "block"
-            id = "thaumcraft:$id"
-            modelRef = $modelRef
-            path = $relativeModelPath
-            elementCount = $geometry.elementCount
-            nonFull = $geometry.nonFull
-            northDefaultProjection = $geometry.northDefaultProjection
-        })
-
-        if ($geometry.nonFull) {
-            if ($hasShapeContract) {
-                Add-ResultRow $results "block" $id "non_full_model_shape_contract" "VISUAL_EVIDENCE" "Non-full model has Java shape/collision evidence; model=$modelRef; class=$($entry.portClassFile)" $relativeModelPath
-            } else {
-                Add-ResultRow $results "block" $id "non_full_model_shape_contract" "VISUAL_REVIEW_NEEDED" "Non-full block model has custom elements but no detected getShape/getCollisionShape/VoxelShape contract; may behave like full-cube collision" $relativeModelPath
+        $anyNorthProjection = $false
+        foreach ($modelRef in $referencedModels) {
+            $analysis = Get-ModelAnalysis ([string]$modelRef)
+            if ($null -eq $analysis) { continue }
+            $modelSummaries.Add($analysis)
+            if (-not $analysis.exists) {
+                Add-ResultRow $results "block" $entry.registryId "block_model_geometry_read" "VISUAL_MODEL_MISSING" "Referenced block model JSON missing or invalid: $modelRef" $analysis.path $analysis
+                continue
             }
+            if ($analysis.hasNorthProjection) { $anyNorthProjection = $true }
 
-            if ($hasOcclusionContract) {
-                Add-ResultRow $results "block" $id "non_full_model_occlusion_contract" "VISUAL_EVIDENCE" "Non-full model has occlusion evidence via Java method or noOcclusion() registration; model=$modelRef" $relativeModelPath
+            if ($analysis.likelyNonFull) {
+                if ($hasShapeContract) {
+                    Add-ResultRow $results "block" $entry.registryId "non_full_model_shape_contract" "VISUAL_EVIDENCE" "Likely non-full model has detected shape contract or built-in shape class; model=$modelRef" $analysis.path $analysis
+                } else {
+                    Add-ResultRow $results "block" $entry.registryId "non_full_model_shape_contract" "VISUAL_REVIEW_NEEDED" "Likely non-full model lacks detected getShape/getCollisionShape/VoxelShape or built-in shape evidence; may behave like full-cube collision; model=$modelRef" $analysis.path $analysis
+                }
+
+                if ($hasOcclusionContract) {
+                    Add-ResultRow $results "block" $entry.registryId "non_full_model_occlusion_contract" "VISUAL_EVIDENCE" "Likely non-full model has detected noOcclusion/getOcclusionShape/useShapeForLightOcclusion or built-in occlusion evidence; model=$modelRef" $analysis.path $analysis
+                } else {
+                    Add-ResultRow $results "block" $entry.registryId "non_full_model_occlusion_contract" "VISUAL_REVIEW_NEEDED" "Likely non-full model lacks detected noOcclusion/getOcclusionShape/useShapeForLightOcclusion evidence; may cause face-culling/x-ray artifacts; model=$modelRef" $analysis.path $analysis
+                }
             } else {
-                Add-ResultRow $results "block" $id "non_full_model_occlusion_contract" "VISUAL_REVIEW_NEEDED" "Non-full block model lacks detected noOcclusion/getOcclusionShape/useShapeForLightOcclusion evidence; may cause face-culling/x-ray artifacts" $relativeModelPath
+                Add-ResultRow $results "block" $entry.registryId "non_full_model_shape_contract" "VISUAL_EVIDENCE" "Model appears full-cube or vanilla full-cube-parented; custom shape is not required; model=$modelRef" $analysis.path $analysis
+                Add-ResultRow $results "block" $entry.registryId "non_full_model_occlusion_contract" "VISUAL_EVIDENCE" "Model appears full-cube or vanilla full-cube-parented; custom occlusion contract is not required; model=$modelRef" $analysis.path $analysis
             }
         }
 
-        if ($geometry.northDefaultProjection) {
-            $blockstatePath = Join-Path $assetsRoot "blockstates/$id.json"
+        if ($anyNorthProjection) {
+            $blockstatePath = Join-Path $assetsRoot "blockstates/$($entry.registryId).json"
             $blockstateJson = Read-JsonFileOrNull $blockstatePath
-            $rotationEvidence = [System.Collections.Generic.List[string]]::new()
-            $rotationOk = $true
-            foreach ($face in @("north", "south", "east", "west", "down", "up")) {
-                $variant = Get-VariantObject $blockstateJson $face
-                $matches = Test-RotationMatchesNorthDefault $variant $face
-                $rotationEvidence.Add("$face=$(Get-RotationSummary $variant)")
-                if (-not $matches) { $rotationOk = $false }
-            }
-            $blockstateRelative = if (Test-Path -LiteralPath $blockstatePath -PathType Leaf) { ConvertTo-RelativeRepoPath $blockstatePath } else { "assets/thaumcraft/blockstates/$id.json" }
-            if ($rotationOk) {
-                Add-ResultRow $results "block" $id "directional_model_facing_rotation" "VISUAL_EVIDENCE" "North-default projection model has expected blockstate rotations: $(Format-List $rotationEvidence)" $blockstateRelative
-            } else {
-                Add-ResultRow $results "block" $id "directional_model_facing_rotation" "VISUAL_REVIEW_NEEDED" "North-default projection/nozzle model has suspicious facing rotations: $(Format-List $rotationEvidence)" $blockstateRelative
+            $relativeBlockstatePath = if (Test-Path -LiteralPath $blockstatePath -PathType Leaf) { ConvertTo-RelativeRepoPath $blockstatePath } else { "assets/thaumcraft/blockstates/$($entry.registryId).json" }
+            $facingMap = Get-FacingVariantMap $blockstateJson
+            if ($facingMap.Count -gt 0) {
+                $sixDirection = Test-SixDirectionFacing $entry $classText $facingMap
+                $rotationProblems = [System.Collections.Generic.List[string]]::new()
+                $expectations = @{
+                    north = @(0, 0)
+                    south = @(0, 180)
+                    east = @(0, 90)
+                    west = @(0, 270)
+                }
+                if ($sixDirection) {
+                    $expectations["down"] = @(90, 0)
+                    $expectations["up"] = @(270, 0)
+                }
+                foreach ($key in @($expectations.Keys | Sort-Object)) {
+                    if (-not $facingMap.ContainsKey($key)) {
+                        $rotationProblems.Add("$key=<missing>")
+                        continue
+                    }
+                    $expected = $expectations[$key]
+                    if (-not (Test-FacingVariantRotation $facingMap[$key] $expected[0] $expected[1])) {
+                        $seen = @($facingMap[$key] | ForEach-Object { "x=$(Normalize-RotationValue $_.x),y=$(Normalize-RotationValue $_.y)" } | Select-Object -Unique) -join ";"
+                        $rotationProblems.Add("$key=$seen expected x=$($expected[0]),y=$($expected[1])")
+                    }
+                }
+                if ($rotationProblems.Count -eq 0) {
+                    Add-ResultRow $results "block" $entry.registryId "directional_model_facing_rotation" "VISUAL_EVIDENCE" "North-default projection/nozzle model has expected facing rotations for $(if ($sixDirection) { 'six-direction' } else { 'horizontal' }) placement" $relativeBlockstatePath
+                } else {
+                    Add-ResultRow $results "block" $entry.registryId "directional_model_facing_rotation" "VISUAL_REVIEW_NEEDED" "North-default projection/nozzle model has suspicious facing rotations: $($rotationProblems -join ', ')" $relativeBlockstatePath
+                }
             }
         }
     }
-
-    if ([bool]$entry.blockItem) {
-        $itemModelPath = Join-Path $assetsRoot "models/item/$id.json"
-        $itemRelative = if (Test-Path -LiteralPath $itemModelPath -PathType Leaf) { ConvertTo-RelativeRepoPath $itemModelPath } else { "assets/thaumcraft/models/item/$id.json" }
-        $itemJson = Read-JsonFileOrNull $itemModelPath
-        if ($null -eq $itemJson) { continue }
-        $parent = if ($itemJson.parent) { [string]$itemJson.parent } else { "" }
-        $displaySlots = @(Get-JsonPropertyNames $itemJson.display)
-        $inheritsCustomBlockModel = $false
-        foreach ($modelRef in $referencedModels) {
-            if ($parent -eq "thaumcraft:$modelRef" -or $parent -eq $modelRef) { $inheritsCustomBlockModel = $true }
+    elseif ($entry.kind -eq "item" -and $entry.blockItem) {
+        $itemModelPath = Join-Path $assetsRoot "models/item/$($entry.registryId).json"
+        $relativeItemModelPath = if (Test-Path -LiteralPath $itemModelPath -PathType Leaf) { ConvertTo-RelativeRepoPath $itemModelPath } else { "assets/thaumcraft/models/item/$($entry.registryId).json" }
+        $json = Read-JsonFileOrNull $itemModelPath
+        if ($null -eq $json) {
+            Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_MODEL_MISSING" "BlockItem model JSON missing or invalid" $relativeItemModelPath
+            continue
         }
-        if ($inheritsCustomBlockModel -and $displaySlots.Count -eq 0) {
-            Add-ResultRow $results "item" $id "block_item_custom_model_display" "VISUAL_REVIEW_NEEDED" "BlockItem inherits custom block model parent=$parent but has no explicit display transforms; GUI/hand item may render as incorrect flat/front view" $itemRelative
-        } elseif ($inheritsCustomBlockModel) {
-            Add-ResultRow $results "item" $id "block_item_custom_model_display" "VISUAL_EVIDENCE" "BlockItem inherits custom block model parent=$parent with display transforms present=$(Format-List $displaySlots)" $itemRelative
+        $displaySlots = @(Get-JsonPropertyNames $json.display)
+        $parent = if ($json.parent) { [string]$json.parent } else { "" }
+        if ($displaySlots.Count -gt 0) {
+            Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_EVIDENCE" "BlockItem has explicit display transforms: $($displaySlots -join ', ')" $relativeItemModelPath
+            continue
+        }
+        if ($parent -match '^thaumcraft:block/(?<name>.+)$') {
+            $analysis = Get-ModelAnalysis ("block/$($Matches['name'])")
+            if ($null -eq $analysis -or -not $analysis.exists) {
+                Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_MODEL_MISSING" "BlockItem parent model missing or invalid: parent=$parent" $relativeItemModelPath
+                continue
+            }
+            if ($analysis.likelyNonFull -or $analysis.hasNorthProjection) {
+                Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_REVIEW_NEEDED" "BlockItem inherits likely custom/non-full block model parent=$parent but has no explicit display transforms; GUI/hand item may render as incorrect flat/front view" $relativeItemModelPath $analysis
+            } else {
+                Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_EVIDENCE" "BlockItem inherits full-cube/vanilla-like block model parent=$parent; default item display is acceptable unless screenshot review proves otherwise" $relativeItemModelPath $analysis
+            }
+        } else {
+            Add-ResultRow $results "item" $entry.registryId "block_item_custom_model_display" "VISUAL_EVIDENCE" "BlockItem model parent=$parent is not a thaumcraft block model requiring custom display transform evidence" $relativeItemModelPath
         }
     }
 }
 
-$orderedResults = @($results | Sort-Object status, kind, id, subcheck)
+$orderedResults = @($results | Sort-Object status, kind, id, subcheck, path)
 $summaryBySubcheck = @($orderedResults | Group-Object subcheck | Sort-Object Name | ForEach-Object {
     [pscustomobject][ordered]@{
         subcheck = $_.Name
@@ -263,24 +323,22 @@ $summaryBySubcheck = @($orderedResults | Group-Object subcheck | Sort-Object Nam
         missing = @($_.Group | Where-Object status -eq "VISUAL_MODEL_MISSING").Count
     }
 })
-
 $report = [ordered]@{
-    schemaVersion = 1
+    schemaVersion = 2
     generatedAtUtc = [DateTime]::UtcNow.ToString("o")
     selectedChecks = @("visual_collision_risk")
-    policy = "Report-only generic visual/collision risk scan. It catches non-full model shape/occlusion gaps, custom BlockItem display gaps, and north-default directional blockstate rotation risks like the Bellows issue. Review-needed rows are not hard failures by themselves."
+    policy = "Report-only visual/collision risk scan. Full-cube or vanilla-shape models are evidence rows; review-needed rows focus on likely non-full/custom models whose Java shape, occlusion, blockstate rotation, or item display contracts are not mechanically evidenced."
     summary = [ordered]@{
         rows = $orderedResults.Count
         evidence = @($orderedResults | Where-Object status -eq "VISUAL_EVIDENCE").Count
         reviewNeeded = @($orderedResults | Where-Object status -eq "VISUAL_REVIEW_NEEDED").Count
         missing = @($orderedResults | Where-Object status -eq "VISUAL_MODEL_MISSING").Count
-        models = @($modelSummaries).Count
+        models = @($modelSummaries | Sort-Object modelRef -Unique).Count
         bySubcheck = @($summaryBySubcheck)
     }
-    models = @($modelSummaries | Sort-Object kind, id, path)
+    models = @($modelSummaries | Sort-Object modelRef -Unique)
     results = $orderedResults
 }
-
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $OutputJson) | Out-Null
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $OutputMarkdown) | Out-Null
 $report | ConvertTo-Json -Depth 16 | Set-Content -LiteralPath $OutputJson -Encoding utf8NoBOM
@@ -309,7 +367,7 @@ $lines.Add("")
 $lines.Add("| Kind | ID | Subcheck | Status | Path | Evidence |")
 $lines.Add("|---|---|---|---|---|---|")
 foreach ($row in $orderedResults | Where-Object { $_.status -ne "VISUAL_EVIDENCE" }) {
-    $safeEvidence = $row.evidence.Replace("|", "\|")
+    $safeEvidence = if ($row.evidence) { $row.evidence.Replace("|", "\|") } else { "" }
     $lines.Add("| $($row.kind) | ``$($row.id)`` | $($row.subcheck) | $($row.status) | ``$($row.path)`` | $safeEvidence |")
 }
 $lines | Set-Content -LiteralPath $OutputMarkdown -Encoding utf8NoBOM
