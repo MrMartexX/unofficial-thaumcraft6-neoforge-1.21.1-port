@@ -1,7 +1,7 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
 Last reviewed branch: `main`
-Last reviewed checkpoint: `2026-06-29` item/block parity framework wiring review and visual-boundary audit repair
+Last reviewed checkpoint: `2026-06-29` item/block parity focused visual audit hardening
 Reviewed target module: `05_neoforge_port`
 
 ## State Snapshot
@@ -13,7 +13,7 @@ This section records the current repository state. The lower "Changelog Notes" s
 - Aspect, item-level scan, and entity-level scan parity dumps are clean for all comparable runtime keys.
 - Thaumometer scan-key mutation and legacy-shaped client highlight/overlay behavior are active for the current predicate layer.
 - Current comparable item aspect parity is `1139/1139`; item-level scan parity is `1139/1139`; entity scan parity has `83/85` parity-ok rows plus `2` documented expected modern entity-policy rows.
-- The cross-cutting item/block framework now extracts a fingerprinted primary legacy manifest and a live port manifest, then validates registry/resource, source-quality, behavior/data-boundary and visual-boundary reports. The `quick` preset is executable with `item_visual_parity`, `legacy_shape_parity` and `legacy_visual_collision_parity` wired through the orchestrator. Current `quick` report is report-only: `legacy_shape_parity` has `114` rows with `10` review rows, `legacy_visual_collision_parity` has `471` rows with `2` facing-domain mismatches (`golem_builder`, `research_table`) and `295` unknown rows, `item_visual_parity` has `2009` rows with `34` missing item models and `219` review rows, and the comparer summary is `2149 PASS`, `5 RENAMED_WITH_MAPPING`, `2 VARIANT_MAPPED`, `1 INTENTIONAL`, `301 MISSING`, `103` safe resource-boundary failures. These reports still do not claim full gameplay or measured visual parity.
+- The cross-cutting item/block framework now extracts a fingerprinted primary legacy manifest and a live port manifest, then validates registry/resource, source-quality, behavior/data-boundary and visual-boundary reports. The `quick` preset includes `texture_color`, `item_visual_parity`, `legacy_shape_parity` and `legacy_visual_collision_parity`; the focused `visual` preset runs model transforms, item visual assets, legacy shape, legacy visual/collision/outline, texture/color, sound/particle/FX and visual completion checks together. Current `visual` report is report-only: `legacy_shape_parity` has `114` rows with `10` review rows, `legacy_visual_collision_parity` has `585` rows with `2` facing-domain mismatches (`golem_builder`, `research_table`), `0` missing rows and `341` unknown rows, `outline_contract` has `68` match / `0` mismatch / `46` unknown, `item_visual_parity` has `2009` rows with `34` missing item models and `219` review rows, `texture_color` has `201` active texture refs with `176` exact matches and `25` review rows, and `visual_equivalence_completion` has `17` rows with `11` pass / `6` review / `0` errors. These reports still do not claim full gameplay or measured pixel parity.
 
 ### Research, scanning and theorycraft
 
@@ -39,6 +39,7 @@ This section records the current repository state. The lower "Changelog Notes" s
 ### Assets and visuals
 
 - Active resource/mining-tag cleanup and legacy-id alignment are current for registered candle, tube, smelter auxiliary, charger, nitor, creative-tab, and `smelter_basic` model paths. Tube blocks now use six-direction legacy multipart topology over modern model paths instead of static/full-cube placeholders; the normal tube item uses the legacy 2D icon.
+- The item/block `visual` audit preset is the current local visual evidence pass. It checks registered item model/placeholder risk, legacy non-full/custom shape evidence, source-backed facing/occlusion/outline/collision contracts, block-item display transforms, active texture SHA/color/alpha against legacy `textures/blocks`/`textures/items`, and sound/particle/FX evidence before `visual_equivalence_completion` allows any strict visual certification discussion.
 - Fresh in-game visual review is still separate from recipe cleanup and should be performed before treating visual parity as final.
 
 ### Essentia transport

@@ -136,8 +136,9 @@ FailMode: off | safe | strict
 
 | Preset | Purpose | Checks |
 |---|---|---|
-| `quick` | Daily fast check | registry, duplicate_registry_id, block_item_pairs, blockstates, models, textures, lang, orphan_references, item_visual_parity, legacy_shape_parity, legacy_visual_collision_parity |
-| `resources` | Asset/resource changes | blockstates, models, textures, lang, creative_tabs, loot, tags, recipes, orphan_references, item_visual_parity, legacy_shape_parity, legacy_visual_collision_parity |
+| `quick` | Daily fast check | registry, duplicate_registry_id, block_item_pairs, blockstates, models, textures, texture_color, lang, orphan_references, item_visual_parity, legacy_shape_parity, legacy_visual_collision_parity |
+| `resources` | Asset/resource changes | blockstates, models, textures, texture_color, lang, creative_tabs, loot, tags, recipes, orphan_references, item_visual_parity, legacy_shape_parity, legacy_visual_collision_parity |
+| `visual` | Focused visual/model/shape/FX evidence | blockstates, models, textures, orphan_references, visual_boundary, item_visual_parity, legacy_shape_parity, legacy_visual_collision_parity, texture_color, sounds_particles, visual_equivalence_completion |
 | `data` | Datapack/data changes | recipes, loot, tags, fuels_flammability, aspects, research_refs, thaumonomicon_refs |
 | `behavior-boundary` | Java behavior changes | item_properties, data_components, equipment, block_properties, blockentities, capabilities, menus, networking, client_server_safety, item_visual_parity, legacy_shape_parity, legacy_visual_collision_parity |
 | `source-quality` | Legacy source consistency | legacy_primary_manifest, secondary_legacy_probe, source_conflict_report, original_jar_probe |
@@ -244,6 +245,7 @@ The existing `item-block-parity` implementation already contains parts of batche
 
 - `item_visual_parity` is wired through the orchestrator and reports all registered `TCItems` entries, including missing item models, placeholder implementations and risky block-item display inheritance.
 - `legacy_shape_parity` remains the source/manifest shape classifier.
-- `legacy_visual_collision_parity` is a stricter original-jar/source-backed report-only audit for block model geometry, facing domains, occlusion/collision contracts and block-item display transform slots.
-- Current `quick` report is executable and report-only: `legacy_shape_parity` reports `114` rows with `10` review rows, `legacy_visual_collision_parity` reports `471` rows with `2` mismatches (`golem_builder`, `research_table` facing domain) and `295` unknown rows, and `item_visual_parity` reports `2009` rows with `34` missing item models plus `219` review rows.
+- `legacy_visual_collision_parity` is a stricter original-jar/source-backed report-only audit for block model geometry, facing domains, occlusion contracts, outline/selection-shape contracts, collision contracts and block-item display transform slots.
+- `texture_color` now maps active modern `textures/block` and `textures/item` model references back to legacy `textures/blocks` and `textures/items` resources before comparing SHA, dimensions, alpha ratio and sampled average color.
+- The `visual` preset is the focused visual evidence run. Current `visual` report is executable and report-only: `legacy_shape_parity` reports `114` rows with `10` review rows, `legacy_visual_collision_parity` reports `585` rows with `2` mismatches (`golem_builder`, `research_table` facing domain), `0` missing rows and `341` unknown rows, `outline_contract` reports `68` match / `0` mismatch / `46` unknown, `item_visual_parity` reports `2009` rows with `34` missing item models plus `219` review rows, `texture_color` reports `201` active texture refs with `176` exact matches and `25` review rows, and `visual_equivalence_completion` reports `17` rows with `11` pass / `6` review / `0` errors.
 - These visual-boundary reports do not claim full gameplay or measured pixel parity. They only classify evidence and blockers before targeted fixes.

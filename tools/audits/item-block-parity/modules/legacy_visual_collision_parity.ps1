@@ -203,8 +203,11 @@ try {
             sourceFiles = @($pathSet | Sort-Object | ForEach-Object { ConvertTo-RelativeRepoPath $_ })
             factoryResolved = -not [string]::IsNullOrWhiteSpace($factory)
             sourceResolved = $pathSet.Count -gt 0
-            hasShapeContract = ($all -match '\bgetShape\s*\(|\bgetCollisionShape\s*\(|\bVoxelShape\b|\bShapes\.or\b|\.noCollission\s*\(') -or $builtinShapeClass -or $builtinNoCollisionCopy
+            hasSelectionShapeContract = ($all -match '\bgetShape\s*\(|\bVoxelShape\b|\bShapes\.or\b|\bBlock\.box\s*\(|(?<![A-Za-z0-9_.])box\s*\(') -or $builtinShapeClass -or $builtinNoCollisionCopy
+            hasCollisionShapeContract = ($all -match '\bgetCollisionShape\s*\(|\bVoxelShape\b|\bShapes\.or\b|\.noCollission\s*\(|\bBlock\.box\s*\(|(?<![A-Za-z0-9_.])box\s*\(') -or $builtinShapeClass -or $builtinNoCollisionCopy
+            hasShapeContract = ($all -match '\bgetShape\s*\(|\bgetCollisionShape\s*\(|\bVoxelShape\b|\bShapes\.or\b|\bBlock\.box\s*\(|(?<![A-Za-z0-9_.])box\s*\(|\.noCollission\s*\(') -or $builtinShapeClass -or $builtinNoCollisionCopy
             hasOcclusionContract = ($all -match '\bgetOcclusionShape\s*\(|\buseShapeForLightOcclusion\s*\(|\.noOcclusion\s*\(|\.noCollission\s*\(') -or $builtinShapeClass -or $builtinNoCollisionCopy
+            hasBoxConstants = $all -match '\bBlock\.box\s*\(|(?<![A-Za-z0-9_.])box\s*\('
             noCollision = ($all -match '\.noCollission\s*\(') -or $builtinNoCollisionCopy
             resolvedText = -not [string]::IsNullOrWhiteSpace($all)
         }
@@ -412,6 +415,7 @@ try {
             hasExplicitNonOpaque = $all -match 'isOpaqueCube\s*\([^)]*\)\s*\{[^}]*return\s+false\s*;' -or $all -match 'isFullBlock\s*\([^)]*\)\s*\{[^}]*return\s+false\s*;' -or $all -match 'isFullCube\s*\([^)]*\)\s*\{[^}]*return\s+false\s*;'
             hasExplicitNonFullCube = $all -match 'isFullCube\s*\([^)]*\)\s*\{[^}]*return\s+false\s*;' -or $all -match 'isFullBlock\s*\([^)]*\)\s*\{[^}]*return\s+false\s*;'
             hasExplicitBounds = $all -match 'getBoundingBox\s*\(|getCollisionBoundingBox\s*\(|AxisAlignedBB\s+|setBlockBounds\s*\('
+            hasExplicitOutlineBounds = $all -match 'getBoundingBox\s*\(|getSelectedBoundingBox\s*\(|AxisAlignedBB\s+|setBlockBounds\s*\('
             hasExplicitNoCollision = $all -match 'getCollisionBoundingBox\s*\([^)]*\)\s*\{[^}]*return\s+NULL_AABB\s*;' -or $all -match 'getCollisionBoundingBox\s*\([^)]*\)\s*\{[^}]*return\s+null\s*;'
         }
     }
@@ -462,6 +466,7 @@ try {
         $portPathSummary = @($portEvidence.sourceFiles) -join ", "
         if (-not $legacySource.hasExactSource) {
             Add-ResultRow $results "block" $id "occlusion_contract" "LEGACY_PARITY_UNKNOWN" "No strict identity legacy source mapping for this block; no mismatch asserted." "" $portPathSummary
+            Add-ResultRow $results "block" $id "outline_contract" "LEGACY_PARITY_UNKNOWN" "No strict identity legacy source mapping for this block; no mismatch asserted." "" $portPathSummary
             Add-ResultRow $results "block" $id "collision_contract" "LEGACY_PARITY_UNKNOWN" "No strict identity legacy source mapping for this block; no mismatch asserted." "" $portPathSummary
         } else {
             $legacyPathSummary = @($legacySource.sourceFiles) -join ", "
@@ -472,12 +477,19 @@ try {
             } else {
                 Add-ResultRow $results "block" $id "occlusion_contract" "LEGACY_PARITY_UNKNOWN" "Exact legacy source was found, but it has no explicit non-opaque evidence; no mismatch asserted." $legacyPathSummary $portPathSummary
             }
+            if ($legacySource.hasExplicitOutlineBounds -or $legacySource.hasExplicitNonFullCube) {
+                if ($portEvidence.hasSelectionShapeContract) { Add-ResultRow $results "block" $id "outline_contract" "LEGACY_PARITY_MATCH" "Legacy exact source has outline/bounds/non-full evidence and port has getShape/VoxelShape/Block.box/built-in shape evidence." $legacyPathSummary $portPathSummary }
+                elseif (-not $portEvidence.factoryResolved -and -not $portEvidence.sourceResolved) { Add-ResultRow $results "block" $id "outline_contract" "LEGACY_PARITY_UNKNOWN" "Legacy exact source has outline/bounds/non-full evidence, but port source/factory could not be resolved; no mismatch asserted." $legacyPathSummary $portPathSummary }
+                else { Add-ResultRow $results "block" $id "outline_contract" "LEGACY_PARITY_MISMATCH" "Legacy exact source has outline/bounds/non-full evidence, but port lacks getShape/VoxelShape/Block.box/built-in shape evidence; in-game selection outline may be a full cube/default shape." $legacyPathSummary $portPathSummary }
+            } else {
+                Add-ResultRow $results "block" $id "outline_contract" "LEGACY_PARITY_UNKNOWN" "Exact legacy source was found, but it has no explicit outline/bounds evidence; no mismatch asserted." $legacyPathSummary $portPathSummary
+            }
             if ($legacySource.hasExplicitNoCollision) {
                 if ($portEvidence.noCollision) { Add-ResultRow $results "block" $id "collision_contract" "LEGACY_PARITY_MATCH" "Legacy exact source has no collision and port has no-collision evidence." $legacyPathSummary $portPathSummary }
                 elseif (-not $portEvidence.factoryResolved -and -not $portEvidence.sourceResolved) { Add-ResultRow $results "block" $id "collision_contract" "LEGACY_PARITY_UNKNOWN" "Legacy exact source has no collision, but port source/factory could not be resolved; no mismatch asserted." $legacyPathSummary $portPathSummary }
                 else { Add-ResultRow $results "block" $id "collision_contract" "LEGACY_PARITY_MISMATCH" "Legacy exact source has no collision, but port lacks noCollission/known no-collision inherited property evidence." $legacyPathSummary $portPathSummary }
             } elseif ($legacySource.hasExplicitBounds -or $legacySource.hasExplicitNonFullCube) {
-                if ($portEvidence.hasShapeContract) { Add-ResultRow $results "block" $id "collision_contract" "LEGACY_PARITY_MATCH" "Legacy exact source has bounds/non-full evidence and port has shape/no-collision/built-in evidence." $legacyPathSummary $portPathSummary }
+                if ($portEvidence.hasCollisionShapeContract) { Add-ResultRow $results "block" $id "collision_contract" "LEGACY_PARITY_MATCH" "Legacy exact source has bounds/non-full evidence and port has collision shape/no-collision/built-in evidence." $legacyPathSummary $portPathSummary }
                 elseif (-not $portEvidence.factoryResolved -and -not $portEvidence.sourceResolved) { Add-ResultRow $results "block" $id "collision_contract" "LEGACY_PARITY_UNKNOWN" "Legacy exact source has bounds/non-full evidence, but port source/factory could not be resolved; no mismatch asserted." $legacyPathSummary $portPathSummary }
                 else { Add-ResultRow $results "block" $id "collision_contract" "LEGACY_PARITY_MISMATCH" "Legacy exact source has bounds/non-full evidence, but port lacks getShape/getCollisionShape/VoxelShape/no-collision/built-in evidence." $legacyPathSummary $portPathSummary }
             } else {

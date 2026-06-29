@@ -5,7 +5,7 @@ param(
     [string]$SecondaryLegacyRoot = "03_self_decompiled_check/vineflower_thaumcraft6",
     [string]$OriginalJar = "01_original_jar/Thaumcraft-1.12.2-6.1.BETA26.jar",
     [string]$PortRoot = "05_neoforge_port",
-    [ValidateSet("quick", "resources", "data", "behavior-boundary", "source-quality", "ci-safe", "full", "registry")]
+    [ValidateSet("quick", "resources", "visual", "data", "behavior-boundary", "source-quality", "ci-safe", "full", "registry")]
     [string]$Preset = "quick",
     [string[]]$Checks,
     [string[]]$Ids,
@@ -52,8 +52,9 @@ $allKnownChecks = @($checkRegistry.checks | ForEach-Object { $_.name })
 
 $presetChecks = @{
     registry = @("registry", "duplicate_registry_id", "block_item_pairs", "legacy_mapping", "variants")
-    quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "lang", "orphan_references", "item_visual_parity", "legacy_shape_parity", "legacy_visual_collision_parity")
-    resources = @("blockstates", "models", "textures", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references", "item_visual_parity", "legacy_shape_parity", "legacy_visual_collision_parity")
+    quick = @("registry", "duplicate_registry_id", "block_item_pairs", "blockstates", "models", "textures", "texture_color", "lang", "orphan_references", "item_visual_parity", "legacy_shape_parity", "legacy_visual_collision_parity")
+    resources = @("blockstates", "models", "textures", "texture_color", "lang", "creative_tabs", "loot", "tags", "recipes", "orphan_references", "item_visual_parity", "legacy_shape_parity", "legacy_visual_collision_parity")
+    visual = @("blockstates", "models", "textures", "orphan_references", "visual_boundary", "item_visual_parity", "legacy_shape_parity", "legacy_visual_collision_parity", "texture_color", "sounds_particles", "visual_equivalence_completion")
     data = @("recipes", "loot", "drop_behavior", "tags", "fuels_flammability", "entity_links", "worldgen_links", "config_gates", "aspects", "research_refs", "thaumonomicon_refs")
     "behavior-boundary" = @("item_properties", "data_components", "equipment", "block_properties", "blockentities", "capabilities", "menus", "networking", "client_server_safety", "item_visual_parity", "legacy_shape_parity", "legacy_visual_collision_parity")
     "source-quality" = @("legacy_primary_manifest", "secondary_legacy_probe", "source_conflict_report", "original_jar_probe", "access_transformers", "public_api", "report_schema", "check_invocation", "report_freshness", "status_taxonomy", "docs_deferred", "ci_strict_safe_policy", "final_framework_completion")

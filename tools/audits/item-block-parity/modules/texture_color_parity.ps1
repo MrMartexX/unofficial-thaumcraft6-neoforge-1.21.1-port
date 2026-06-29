@@ -13,9 +13,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 $RepoRoot = (Resolve-Path $RepoRoot).Path
-$portPath = Join-Path $RepoRoot $PortRoot
-$legacyPath = Join-Path $RepoRoot $LegacyRoot
-$originalJarPath = Join-Path $RepoRoot $OriginalJar
+$portPath = if ([System.IO.Path]::IsPathRooted($PortRoot)) { $PortRoot } else { Join-Path $RepoRoot $PortRoot }
+$legacyPath = if ([System.IO.Path]::IsPathRooted($LegacyRoot)) { $LegacyRoot } else { Join-Path $RepoRoot $LegacyRoot }
+$originalJarPath = if ([System.IO.Path]::IsPathRooted($OriginalJar)) { $OriginalJar } else { Join-Path $RepoRoot $OriginalJar }
 if (-not (Test-Path -LiteralPath $portPath -PathType Container)) { throw "Port root not found: $portPath" }
 if (-not (Test-Path -LiteralPath $PortManifestPath -PathType Leaf)) { throw "Port manifest not found: $PortManifestPath" }
 if (-not $OutputJson) { $OutputJson = Join-Path $RepoRoot "tools/reports/local/item-block-parity/item_block_texture_color_report.json" }
@@ -68,13 +68,31 @@ function Resolve-PortTexture([string]$TextureRef, [string]$AssetsRoot) {
         exists = Test-Path -LiteralPath $fullPath -PathType Leaf
     }
 }
+function Get-LegacyTexturePathVariants([string]$TexturePath) {
+    $variants = [System.Collections.Generic.List[string]]::new()
+    $normalized = $TexturePath.Replace("\", "/")
+    $variants.Add($normalized)
+    if ($normalized.StartsWith("textures/block/")) {
+        $variants.Add($normalized.Replace("textures/block/", "textures/blocks/"))
+    }
+    if ($normalized.StartsWith("textures/item/")) {
+        $variants.Add($normalized.Replace("textures/item/", "textures/items/"))
+    }
+    if ($normalized.StartsWith("textures/blocks/")) {
+        $variants.Add($normalized.Replace("textures/blocks/", "textures/block/"))
+    }
+    if ($normalized.StartsWith("textures/items/")) {
+        $variants.Add($normalized.Replace("textures/items/", "textures/item/"))
+    }
+    return @($variants | Select-Object -Unique)
+}
 function Resolve-LegacyTexture([string]$TexturePath) {
-    $candidates = @(
-        (Join-Path $legacyPath "src/main/resources/assets/thaumcraft/$TexturePath"),
-        (Join-Path $legacyPath "src/main/resources/assets/thaumcraft/$($TexturePath.Replace('textures/', 'textures/'))"),
-        (Join-Path $legacyPath "assets/thaumcraft/$TexturePath"),
-        (Join-Path $legacyPath "resources/assets/thaumcraft/$TexturePath")
-    )
+    $pathVariants = @(Get-LegacyTexturePathVariants $TexturePath)
+    $candidates = foreach ($variant in $pathVariants) {
+        Join-Path $legacyPath "src/main/resources/assets/thaumcraft/$variant"
+        Join-Path $legacyPath "assets/thaumcraft/$variant"
+        Join-Path $legacyPath "resources/assets/thaumcraft/$variant"
+    }
     foreach ($candidate in $candidates | Select-Object -Unique) {
         if (Test-Path -LiteralPath $candidate -PathType Leaf) {
             return [pscustomobject][ordered]@{ source = "legacy_root"; fullPath = $candidate; exists = $true; archiveEntry = $null }
@@ -85,9 +103,10 @@ function Resolve-LegacyTexture([string]$TexturePath) {
             Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction SilentlyContinue
             $zip = [System.IO.Compression.ZipFile]::OpenRead($originalJarPath)
             try {
-                $entryName = "assets/thaumcraft/$($TexturePath.Replace('\\','/'))"
-                $entry = $zip.Entries | Where-Object { $_.FullName -eq $entryName } | Select-Object -First 1
-                if ($entry) {
+                foreach ($variant in $pathVariants) {
+                    $entryName = "assets/thaumcraft/$($variant.Replace('\\','/'))"
+                    $entry = $zip.Entries | Where-Object { $_.FullName -eq $entryName } | Select-Object -First 1
+                    if (-not $entry) { continue }
                     $tempRoot = Join-Path $RepoRoot "tools/reports/local/item-block-parity/legacy-texture-cache"
                     New-Item -ItemType Directory -Force -Path $tempRoot | Out-Null
                     $safeName = ($entryName -replace '[^A-Za-z0-9_.-]', '_')

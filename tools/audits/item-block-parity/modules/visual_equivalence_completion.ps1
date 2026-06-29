@@ -93,14 +93,23 @@ foreach ($ruleFile in $requiredRuleFiles) {
 }
 
 $visualReportPath = Join-Path $ReportRoot "item_block_visual_model_transform_report.json"
+$itemVisualReportPath = Join-Path $ReportRoot "item_block_item_visual_parity_report.json"
+$legacyShapeReportPath = Join-Path $ReportRoot "item_block_legacy_shape_parity_report.json"
+$legacyVisualCollisionReportPath = Join-Path $ReportRoot "item_block_legacy_visual_collision_parity_report.json"
 $textureReportPath = Join-Path $ReportRoot "item_block_texture_color_report.json"
 $soundReportPath = Join-Path $ReportRoot "item_block_sound_particle_fx_report.json"
 $visualReport = Read-JsonFileOrNull $visualReportPath
+$itemVisualReport = Read-JsonFileOrNull $itemVisualReportPath
+$legacyShapeReport = Read-JsonFileOrNull $legacyShapeReportPath
+$legacyVisualCollisionReport = Read-JsonFileOrNull $legacyVisualCollisionReportPath
 $textureReport = Read-JsonFileOrNull $textureReportPath
 $soundReport = Read-JsonFileOrNull $soundReportPath
 
 foreach ($reportInfo in @(
     [pscustomobject]@{ area = "visual_model_report"; path = $visualReportPath; report = $visualReport },
+    [pscustomobject]@{ area = "item_visual_report"; path = $itemVisualReportPath; report = $itemVisualReport },
+    [pscustomobject]@{ area = "legacy_shape_report"; path = $legacyShapeReportPath; report = $legacyShapeReport },
+    [pscustomobject]@{ area = "legacy_visual_collision_report"; path = $legacyVisualCollisionReportPath; report = $legacyVisualCollisionReport },
     [pscustomobject]@{ area = "texture_color_report"; path = $textureReportPath; report = $textureReport },
     [pscustomobject]@{ area = "sound_particle_fx_report"; path = $soundReportPath; report = $soundReport }
 )) {
@@ -124,6 +133,33 @@ if ($visualReport) {
     $status = if ($reviewNeeded -eq 0 -and $missing -eq 0) { $passStatus } else { $reviewStatus }
     $severity = if ($status -eq $passStatus) { "info" } else { "review" }
     Add-Row $rows "model_transform_completion" $status $severity "Model/transform visual report classified; strict mode blocked until review/missing rows are resolved or rule-accepted." ([ordered]@{ reviewNeeded = $reviewNeeded; missing = $missing; ruleAccepted = $ruleAccepted; report = ConvertTo-RelativeRepoPath $visualReportPath })
+}
+
+if ($itemVisualReport) {
+    $reviewNeeded = Get-SummaryInt $itemVisualReport "reviewNeeded"
+    $missing = Get-SummaryInt $itemVisualReport "missing"
+    $uniqueItems = Get-SummaryInt $itemVisualReport "uniqueItems"
+    $status = if ($reviewNeeded -eq 0 -and $missing -eq 0) { $passStatus } else { $reviewStatus }
+    $severity = if ($status -eq $passStatus) { "info" } else { "review" }
+    Add-Row $rows "item_visual_completion" $status $severity "Registered item visual report classified; strict mode blocked until missing models, placeholder visuals and flat BlockItem/front-view risks are resolved or accepted." ([ordered]@{ reviewNeeded = $reviewNeeded; missing = $missing; uniqueItems = $uniqueItems; report = ConvertTo-RelativeRepoPath $itemVisualReportPath })
+}
+
+if ($legacyShapeReport) {
+    $reviewNeeded = Get-SummaryInt $legacyShapeReport "reviewNeeded"
+    $defaultFullCubeRisks = Get-SummaryInt $legacyShapeReport "portDefaultFullCubeRisks"
+    $legacyNonFullOrCustom = Get-SummaryInt $legacyShapeReport "legacyNonFullOrCustom"
+    $status = if ($reviewNeeded -eq 0) { $passStatus } else { $reviewStatus }
+    $severity = if ($status -eq $passStatus) { "info" } else { "review" }
+    Add-Row $rows "legacy_shape_completion" $status $severity "Legacy shape report classified; strict mode blocked until non-full/custom/TESR/tile shape review rows are resolved or explicitly documented." ([ordered]@{ reviewNeeded = $reviewNeeded; portDefaultFullCubeRisks = $defaultFullCubeRisks; legacyNonFullOrCustom = $legacyNonFullOrCustom; report = ConvertTo-RelativeRepoPath $legacyShapeReportPath })
+}
+
+if ($legacyVisualCollisionReport) {
+    $mismatch = Get-SummaryInt $legacyVisualCollisionReport "mismatch"
+    $missing = Get-SummaryInt $legacyVisualCollisionReport "missing"
+    $unknown = Get-SummaryInt $legacyVisualCollisionReport "unknown"
+    $status = if ($mismatch -eq 0 -and $missing -eq 0 -and $unknown -eq 0) { $passStatus } else { $reviewStatus }
+    $severity = if ($status -eq $passStatus) { "info" } else { "review" }
+    Add-Row $rows "legacy_visual_collision_completion" $status $severity "Strict legacy visual/collision report classified; mismatch or missing rows are real port gaps, and unknown rows must be classified before claiming exact visual parity." ([ordered]@{ mismatch = $mismatch; missing = $missing; unknown = $unknown; report = ConvertTo-RelativeRepoPath $legacyVisualCollisionReportPath })
 }
 
 if ($textureReport) {

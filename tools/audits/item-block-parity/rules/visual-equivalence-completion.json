@@ -10,6 +10,9 @@
   ],
   "requiredReports": [
     "item_block_visual_model_transform_report.json",
+    "item_block_item_visual_parity_report.json",
+    "item_block_legacy_shape_parity_report.json",
+    "item_block_legacy_visual_collision_parity_report.json",
     "item_block_texture_color_report.json",
     "item_block_sound_particle_fx_report.json"
   ],
@@ -21,6 +24,30 @@
       "passStatuses": ["VISUAL_EVIDENCE", "VISUAL_RULE_ACCEPTED"],
       "reviewStatuses": ["VISUAL_REVIEW_NEEDED", "VISUAL_MODEL_MISSING"],
       "strictPromotion": "blocked_until_review_or_missing_rows_are_zero_or_explicitly_rule_accepted"
+    },
+    {
+      "name": "item_visual_completion",
+      "report": "item_block_item_visual_parity_report.json",
+      "summaryFields": ["rows", "pass", "reviewNeeded", "missing", "uniqueItems", "bySubcheck"],
+      "passStatuses": ["ITEM_VISUAL_PASS"],
+      "reviewStatuses": ["ITEM_VISUAL_REVIEW_NEEDED", "ITEM_VISUAL_MISSING"],
+      "strictPromotion": "blocked_until_registered_item_visual_review_and_missing_rows_are_zero_or_explicitly_rule_accepted"
+    },
+    {
+      "name": "legacy_shape_completion",
+      "report": "item_block_legacy_shape_parity_report.json",
+      "summaryFields": ["rows", "pass", "reviewNeeded", "legacyNonFullOrCustom", "portDefaultFullCubeRisks", "byLegacyShape"],
+      "passStatuses": ["LEGACY_SHAPE_PASS"],
+      "reviewStatuses": ["LEGACY_SHAPE_REVIEW_NEEDED"],
+      "strictPromotion": "blocked_until_non_full_custom_and_tile_shape_review_rows_are_resolved_or_documented"
+    },
+    {
+      "name": "legacy_visual_collision_completion",
+      "report": "item_block_legacy_visual_collision_parity_report.json",
+      "summaryFields": ["rows", "match", "mismatch", "missing", "unknown", "bySubcheck"],
+      "passStatuses": ["LEGACY_PARITY_MATCH"],
+      "reviewStatuses": ["LEGACY_PARITY_MISMATCH", "LEGACY_PARITY_MISSING", "LEGACY_PARITY_UNKNOWN"],
+      "strictPromotion": "blocked_until_mismatch_missing_rows_are_zero_and_unknown_rows_are_classified_or_out_of_scope"
     },
     {
       "name": "texture_color_completion",
@@ -47,6 +74,9 @@
     ],
     "requiredForStrictMode": [
       "model transform reviewNeeded and missing counts are zero or covered by reviewed rules",
+      "registered item visual reviewNeeded and missing counts are zero or covered by reviewed rules",
+      "legacy shape review rows are resolved or explicitly documented",
+      "legacy visual/collision mismatch and missing rows are zero; unknown rows are classified before claiming exact visual parity",
       "texture reviewNeeded count is zero or all review rows are intentionally classified",
       "sound/particle/FX review rows are classified as evidence, rule accepted, intentional, superseded, blocked or out of scope"
     ]
