@@ -65,7 +65,7 @@ public final class TCEssentiaTransportBehaviorAudit {
         lines.add("- Covers TC6 normal, buffer, filter, one-way, restrict and redstone-valve transport semantics.");
         lines.add("- Covers Warded Jar top-face suction and five-tick one-point transfer.");
         lines.add("- Covers smelter tier formulas, sided inventory, fuel data, Alembic-column routing, auxiliaries and vent attachment selection.");
-        lines.add("- Bellows dynamic rendering, label/phial interaction and caster sub-part interaction remain separate visual/item slices.");
+        lines.add("- Bellows device behavior/rendering is covered by the dedicated Bellows audit; label/phial interaction and caster sub-part interaction remain separate visual/item slices.");
         Files.write(output, lines);
         return report;
     }

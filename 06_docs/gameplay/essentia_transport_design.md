@@ -72,6 +72,7 @@ Behavior is checked against:
 - Basic, Thaumium and Void smelter machine tiers.
 - Fuel/cook/aspect conversion, efficiency loss and aura pollution.
 - Bellows count input for smelter duration.
+- Bellows focused device slice: real BlockEntity, legacy client animation, tube-buffer extension render, tube-buffer pressure ownership and vanilla-furnace cook-progress boost.
 - Cumulative facing-aware vent mitigation and vent event FX.
 - Facing/attachment-aware auxiliary output.
 - Sided item automation.
@@ -103,12 +104,11 @@ The exporter validates:
 
 ## Deferred owning slices
 
-1. Real Bellows BlockEntity and client animation, including tube-buffer and vanilla-furnace behavior.
-2. Alembic label application/removal and label renderer.
-3. Phial/jar direct transfer using the current aspect Data Component model.
-4. Caster tube sub-part ray tracing, side closure/choke/facing controls.
-5. Final valve wheel, vent and Bellows measured visual parity.
-6. Void Jar overflow and remaining importer/exporter/Thaumatorium consumers.
+1. Alembic label application/removal and label renderer.
+2. Phial/jar direct transfer using the current aspect Data Component model.
+3. Caster tube sub-part ray tracing, side closure/choke/facing controls.
+4. Final valve wheel, vent and Bellows measured visual parity.
+5. Void Jar overflow and remaining importer/exporter/Thaumatorium consumers.
 
 ## Non-negotiable constraints
 

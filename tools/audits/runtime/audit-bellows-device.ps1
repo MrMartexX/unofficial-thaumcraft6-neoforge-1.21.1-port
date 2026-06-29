@@ -40,22 +40,28 @@ $errorStatus = "BELLOWS_DEVICE_ERROR"
 
 $blockPath = "05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCBellowsBlock.java"
 $bePath = "05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCBellowsBlockEntity.java"
+$furnaceAccessorPath = "05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCVanillaFurnaceBellowsAccessor.java"
 $registryPath = "05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java"
+$rendererRegistryPath = "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java"
+$rendererPath = "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBellowsRenderer.java"
 $smelterPath = "05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCSmelterBlockEntity.java"
 $tubePath = "05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/blockentity/TCLegacyTubeBlockEntity.java"
 $designPath = "06_docs/gameplay/bellows_device_design.md"
 
 $blockText = Read-TextOrEmpty $blockPath
 $beText = Read-TextOrEmpty $bePath
+$furnaceAccessorText = Read-TextOrEmpty $furnaceAccessorPath
 $registryText = Read-TextOrEmpty $registryPath
+$rendererRegistryText = Read-TextOrEmpty $rendererRegistryPath
+$rendererText = Read-TextOrEmpty $rendererPath
 $smelterText = Read-TextOrEmpty $smelterPath
 $tubeText = Read-TextOrEmpty $tubePath
 $designText = Read-TextOrEmpty $designPath
 
-if (Test-ContainsAll $blockText @("implements EntityBlock", "new TCBellowsBlockEntity", "TCBellowsBlockEntity.serverTick", "TCBlockEntities.BELLOWS")) {
-    Add-Row $rows "block_wiring" $pass "info" "Bellows block owns a server-side BlockEntity ticker." @{ path = $blockPath }
+if (Test-ContainsAll $blockText @("implements EntityBlock", "new TCBellowsBlockEntity", "TCBellowsBlockEntity.serverTick", "TCBellowsBlockEntity.clientTick", "RenderShape.ENTITYBLOCK_ANIMATED", "TCBlockEntities.BELLOWS")) {
+    Add-Row $rows "block_wiring" $pass "info" "Bellows block owns BlockEntity tickers and renders through the animated tile path." @{ path = $blockPath }
 } else {
-    Add-Row $rows "block_wiring" $errorStatus "error" "Bellows block is missing EntityBlock/ticker wiring." @{ path = $blockPath }
+    Add-Row $rows "block_wiring" $errorStatus "error" "Bellows block is missing EntityBlock/ticker/animated-render wiring." @{ path = $blockPath }
 }
 
 if (Test-ContainsAll $registryText @("BlockEntityType<TCBellowsBlockEntity>> BELLOWS", 'BLOCK_ENTITY_TYPES.register("bellows"', "TCBlocks.BELLOWS")) {
@@ -64,10 +70,28 @@ if (Test-ContainsAll $registryText @("BlockEntityType<TCBellowsBlockEntity>> BEL
     Add-Row $rows "registry_wiring" $errorStatus "error" "Bellows BlockEntityType registration is missing." @{ path = $registryPath }
 }
 
-if (Test-ContainsAll $beText @("class TCBellowsBlockEntity extends BlockEntity", "resolveTargetKind", '"smelter"', '"tube_buffer"', '"vanilla_furnace"', "saveAdditional", "loadAdditional")) {
-    Add-Row $rows "device_state" $pass "info" "Bellows device state persists target and animation counters." @{ path = $bePath }
+if (Test-ContainsAll $rendererRegistryText @("TCBlockEntities.BELLOWS.get()", "TCBellowsRenderer::new")) {
+    Add-Row $rows "renderer_registration" $pass "info" "Bellows BlockEntityRenderer is registered on the client event bus." @{ path = $rendererRegistryPath }
+} else {
+    Add-Row $rows "renderer_registration" $errorStatus "error" "Bellows BlockEntityRenderer registration is missing." @{ path = $rendererRegistryPath }
+}
+
+if (Test-ContainsAll $beText @("class TCBellowsBlockEntity extends BlockEntity", "clientTick", "tickClient", "inflation", "firstClientRun", "resolveTargetKind", '"smelter"', '"tube_buffer"', '"vanilla_furnace"', "saveAdditional", "loadAdditional")) {
+    Add-Row $rows "device_state" $pass "info" "Bellows device state owns persisted target counters and the legacy client inflation cycle." @{ path = $bePath }
 } else {
     Add-Row $rows "device_state" $errorStatus "error" "Bellows device state is incomplete." @{ path = $bePath }
+}
+
+if (Test-ContainsAll $furnaceAccessorText @("AbstractFurnaceBlockEntity", '"cookingProgress"', '"cookingTotalTime"', "boostCookProgress", "setAccessible(true)")) {
+    Add-Row $rows "vanilla_furnace_accessor" $pass "info" "Vanilla furnace cook-time boost is isolated behind a single reflected accessor." @{ path = $furnaceAccessorPath }
+} else {
+    Add-Row $rows "vanilla_furnace_accessor" $errorStatus "error" "Vanilla furnace cook-time boost accessor is missing or not isolated." @{ path = $furnaceAccessorPath }
+}
+
+if (Test-ContainsAll $beText @("boostVanillaFurnace", "TCVanillaFurnaceBellowsAccessor.boostCookProgress", "serverDelay >= 2", "vanillaFurnaceBoosts++")) {
+    Add-Row $rows "vanilla_furnace_consumer" $pass "info" "Bellows applies the legacy every-two-ticks vanilla furnace progress boost." @{ path = $bePath }
+} else {
+    Add-Row $rows "vanilla_furnace_consumer" $errorStatus "error" "Bellows vanilla furnace boost path is missing." @{ path = $bePath }
 }
 
 if (Test-ContainsAll $smelterText @("refreshBellows", "TCBlocks.BELLOWS", "TCBellowsBlock.ENABLED", "TCBellowsBlock.FACING", "smeltTimeForVis")) {
@@ -82,21 +106,27 @@ if (Test-ContainsAll $tubeText @("refreshBellowsPressure", "TCBlocks.BELLOWS", "
     Add-Row $rows "tube_buffer_consumer" $errorStatus "error" "Tube buffer Bellows pressure boundary is missing." @{ path = $tubePath }
 }
 
-if (Test-ContainsAll $designText @("Bellows device boundary", "Out of scope", "vanilla_furnace", "tube_buffer")) {
+if (Test-ContainsAll $rendererText @("class TCBellowsRenderer", "textures/blocks/bellows.png", "textures/models/bore.png", "hasTubeBufferExtension", "translateFromOrientation", "createBellowsModel", "createBoreNozzleModel")) {
+    Add-Row $rows "client_renderer" $pass "info" "Bellows renderer owns the legacy model texture, orientation transform, inflation parts and tube-buffer extension." @{ path = $rendererPath }
+} else {
+    Add-Row $rows "client_renderer" $errorStatus "error" "Bellows client renderer is missing legacy model/extension coverage." @{ path = $rendererPath }
+}
+
+if (Test-ContainsAll $designText @("Bellows device boundary", "vanilla_furnace", "tube_buffer", "client animation")) {
     Add-Row $rows "design_doc" $pass "info" "Bellows device design note exists and records scope boundaries." @{ path = $designPath }
 } else {
     Add-Row $rows "design_doc" $review "review" "Bellows device design note is missing or incomplete." @{ path = $designPath }
 }
 
 $commonClientLeaks = @()
-foreach ($relativePath in @($blockPath, $bePath, $registryPath, $smelterPath, $tubePath)) {
+foreach ($relativePath in @($blockPath, $bePath, $furnaceAccessorPath, $registryPath, $smelterPath, $tubePath)) {
     $text = Read-TextOrEmpty $relativePath
     if ($text -match "import\s+net\.minecraft\.client\.") {
         $commonClientLeaks += $relativePath
     }
 }
 if ($commonClientLeaks.Count -eq 0) {
-    Add-Row $rows "client_server_safety" $pass "info" "Bellows server/common boundary has no net.minecraft.client imports." @{ filesChecked = 5 }
+    Add-Row $rows "client_server_safety" $pass "info" "Bellows server/common boundary has no net.minecraft.client imports." @{ filesChecked = 6 }
 } else {
     Add-Row $rows "client_server_safety" $errorStatus "error" "Client imports leaked into Bellows common/server boundary." @{ files = @($commonClientLeaks) }
 }
@@ -111,7 +141,7 @@ $summary = [ordered]@{
 $output = [ordered]@{
     schemaVersion = 1
     generatedAtUtc = [DateTime]::UtcNow.ToString("o")
-    policy = "Bellows device boundary audit. This validates wiring and ownership boundaries, not final pixel-level visual parity."
+    policy = "Bellows device boundary audit. This validates wiring, legacy behavior ownership and renderer coverage, not final pixel-level screenshot parity."
     summary = $summary
     results = @($orderedRows)
 }

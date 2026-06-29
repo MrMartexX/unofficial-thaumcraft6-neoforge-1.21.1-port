@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -81,8 +82,17 @@ public class TCBellowsBlock extends Block implements EntityBlock {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide || type != TCBlockEntities.BELLOWS.get()) {
+        if (type != TCBlockEntities.BELLOWS.get()) {
             return null;
+        }
+        if (level.isClientSide) {
+            return (tickerLevel, pos, tickerState, blockEntity) ->
+                    TCBellowsBlockEntity.clientTick(
+                            tickerLevel,
+                            pos,
+                            tickerState,
+                            (TCBellowsBlockEntity) blockEntity
+                    );
         }
         return (tickerLevel, pos, tickerState, blockEntity) ->
                 TCBellowsBlockEntity.serverTick(
@@ -93,6 +103,10 @@ public class TCBellowsBlock extends Block implements EntityBlock {
                 );
     }
 
+    @Override
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.ENTITYBLOCK_ANIMATED;
+    }
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {

@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-06-22
+Last updated: 2026-06-29
 
 ## Current branch
 
@@ -25,6 +25,7 @@ Last updated: 2026-06-22
 - The infusion boundary now includes server-owned two-click caster activation, live bounded surroundings refresh, inactive stability charging, researched recipe start without pre-supplied essentia, persisted craft-cycle/stability state, exact five-tick default cadence, one-point nearest-source drain, the legacy 200-tick failed-source rescan delay, six-cycle component timing, result placement/damage carry-over, component remainders, completion/failure sounds, the two clientbound legacy FX message contracts, exact structure modifiers, exact stability math, all 24 executable instability rolls, Flux Goo/harm dependencies, inlay/Stabilizer pedestal mitigation, client matrix animation/halo, eight-sided essentia streams and item/block source debris. The runtime audit passes `95/95`.
 - The first real essentia transport slice now has legacy capacities/cadence/suction formulas for all six tube variants, Warded Jar transfer, sided NeoForge capability access, persisted directional state and legacy multipart tube geometry. The dedicated-server runtime audit passes `23/23`.
 - The Alembic/smelter machine batch now replaces the incremental placeholder path: all three smelter tiers share the server-owned two-slot machine state, exact tier efficiency/output intervals, Alumentum boost, fuel remainders, cumulative vent mitigation, direct plus attached auxiliary Alembic routing, modern sided item capability, legacy-layout menu/screen and detailed legacy-derived models. The combined transport/machine runtime audit passes `37/37`.
+- Bellows is now a focused device slice: placed Bellows uses a real BlockEntity/client renderer, legacy inflation animation, tube-buffer extension render, smelter/tube-buffer ownership, and a dedicated vanilla furnace cook-progress bridge. Keep `audit-bellows-device.ps1` green after changes.
 - The item/block parity framework quick preset is executable with registry/resource checks plus `texture_color`, `item_visual_parity`, `legacy_shape_parity`, and `legacy_visual_collision_parity`. Use the focused `visual` preset for model/shape/outline/texture/FX certification evidence. Current report-only `visual` summary: `legacy_shape_parity` has `114` rows / `10` review rows; `legacy_visual_collision_parity` has `585` rows, `2` facing-domain mismatches (`golem_builder`, `research_table`), `0` missing rows, `341` unknown rows, and `outline_contract` has `68` match / `0` mismatch / `46` unknown; `item_visual_parity` has `34` missing item models and `219` item visual review rows; `texture_color` has `201` active texture refs with `176` exact matches and `25` review rows; `visual_equivalence_completion` has `17` rows with `11` pass / `6` review / `0` errors.
 
 ## Do not change without explicit request
@@ -38,10 +39,10 @@ Last updated: 2026-06-22
 
 1. Continue essentia transport from `06_docs/gameplay/essentia_transport_design.md`:
    - Keep the combined tube/jar/Alembic/smelter runtime audit at `37/37`.
+   - Keep the dedicated Bellows audit at `0` errors after Bellows/block/render changes.
    - Keep smelters internal slurry machines; only tubes, jars and Alembics expose `TCEssentiaCapabilities.BLOCK`.
-   - Port the real Bellows BlockEntity/client animation and its tube-buffer/vanilla-furnace interactions as the next focused device batch.
-   - Port Alembic label/phial handling only over the existing aspect Data Components; do not reintroduce stack NBT.
-   - Keep caster tube sub-part interaction and remaining vent/valve rendering in their owning follow-up slices.
+   - Port Alembic label/phial handling as the next focused batch, only over the existing aspect Data Components; do not reintroduce stack NBT.
+   - Then port caster tube sub-part interaction and remaining vent/valve rendering in their owning follow-up slices.
 2. Continue item/block parity automation from `06_docs/audits/item_block_parity_framework.md`:
    - Classify known renames, legacy metadata variants, intentional no-item/no-loot entries, missing item models, item visual review rows, and allowed modern extras before enabling safe CI failures.
    - Treat `golem_builder` and `research_table` facing-domain mismatches from `legacy_visual_collision_parity` as focused visual/blockstate parity candidates, not as framework errors.
@@ -50,6 +51,7 @@ Last updated: 2026-06-22
 3. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
 4. Keep reusable audit scripts under `tools/audits/`.
 5. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.
+6. Use `06_docs/migration/remaining_subsystem_unblock_plan.md` as the current subsystem unblock order after Bellows.
 
 ## CI smoke note
 
