@@ -75,6 +75,9 @@ The item/block parity framework is the current work product. Porting fixes are a
 | 53 | Closed: visual equivalence completion criteria classifies model, texture and FX review blockers before strict visual certification | Visual equivalence completion criteria |
 | 54 | Closed: CI strict/safe policy matrix keeps report-only default, safe mechanical hard-fail and strict manual certification boundaries | CI strict/safe matrix policy |
 | 55 | Closed: final production-grade framework completion audit (`final_framework_completion`) validates registry, owner, report, verifier, CI and strict-blocker policy consistency | Final framework completion audit |
+| 62 | Closed: report-only legacy shape parity audit classifies legacy non-full/custom source and current port shape evidence without treating review rows as mechanical failures | Legacy shape parity audit |
+| 63 | Closed: report-only item visual parity audit inventories registered item model existence, placeholder implementations and risky block-item display inheritance | Item visual asset parity audit |
+| 64 | Closed: report-only original-jar/source-backed legacy visual/collision parity audit inventories block model geometry, facing domains, occlusion/collision contracts and block-item display transforms | Legacy visual/collision parity audit |
 
 ## Roadmap numbering note
 
@@ -146,3 +149,5 @@ Batch 53 closure: visual equivalence completion validation is report-only visual
 Batch 54 closure: CI strict/safe policy validation is report-only workflow hardening; it documents report-only, safe and strict policy boundaries, keeps strict certification manual/opt-in and adds a policy audit report consumed by verifier v2.
 
 Batch 55 closure: `final_framework_completion` validation is report-only framework certification hardening; it verifies that all registered checks are implemented, owned, documented, report-backed, verifier-covered and CI-policy consistent while preserving the boundary that this is not a gameplay parity completion claim.
+
+Batch 62-64 closure: visual-boundary hardening now has three separate report-only layers. `legacy_shape_parity` is the conservative source/manifest classifier, `item_visual_parity` is the all-registered-item asset/model placeholder audit, and `legacy_visual_collision_parity` is the stricter original-jar/source-backed comparator. Current known report rows include `research_table` and `golem_builder` facing-domain mismatches, plus item visual missing/review rows; these are parity blockers for future focused fixes, not framework wiring errors.

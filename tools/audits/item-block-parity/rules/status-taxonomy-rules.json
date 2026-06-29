@@ -47,7 +47,27 @@
     "CHECK_INVOCATION_ERROR": "error",
     "STATUS_TAXONOMY_PASS": "pass",
     "STATUS_TAXONOMY_REVIEW_NEEDED": "review",
-    "STATUS_TAXONOMY_ERROR": "error"
+    "STATUS_TAXONOMY_ERROR": "error",
+    "LEGACY_PARITY_MATCH": "pass",
+    "LEGACY_PARITY_MISMATCH": "review",
+    "LEGACY_PARITY_MISSING": "review",
+    "LEGACY_PARITY_UNKNOWN": "not_evaluated",
+    "RENAMED_WITH_MAPPING": "intentional",
+    "VARIANT_MAPPED": "intentional",
+    "VISUAL_EVIDENCE": "info",
+    "REVIEWNEEDED": "review",
+    "BOUNDARY_GAP": "review",
+    "BLOCK_PROPERTY_NOT_EVIDENCED": "review",
+    "BLOCK_PROPERTY_VALUE_MISMATCH": "review",
+    "CLIENT_SERVER_EVIDENCE": "info",
+    "DROP_NOT_EVIDENCED": "review",
+    "DROP_VALUE_MISMATCH": "review",
+    "ITEM_PROPERTY_VALUE_MISMATCH": "review",
+    "PRIMARY_SOURCE_GAP": "review",
+    "SOUND_FX_NOT_EVIDENCED": "review",
+    "CLOSED_BY_ALIGNMENT_BATCH": "intentional",
+    "MISSING_IN_FRAMEWORK": "review",
+    "PARTIAL_EXISTING": "review"
   },
   "statusPatterns": [
     {

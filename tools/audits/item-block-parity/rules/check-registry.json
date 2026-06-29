@@ -321,16 +321,22 @@
       "reason": "Batch 55 report-only final production-grade framework completion audit"
     },
     {
-      "name": "visual_collision_risk",
-      "reason": "Batch 61 report-only generic visual/collision risk audit for non-full model shape, occlusion, item display and directional blockstate rotation issues",
-      "status": "implemented",
-      "layer": "visual_boundary"
-    },
-    {
       "name": "legacy_shape_parity",
       "layer": "visual_boundary",
       "status": "implemented",
       "reason": "Batch 62 report-only legacy-vs-port shape classification audit to catch false-safe full-cube ports for legacy custom/non-full blocks"
+    },
+    {
+      "name": "item_visual_parity",
+      "reason": "Report-only universal item visual model graph audit for all port items: missing models/textures, placeholder references, risky block-item display inheritance, custom-loader scale risks and display transform sanity",
+      "status": "implemented",
+      "layer": "visual_boundary"
+    },
+    {
+      "name": "legacy_visual_collision_parity",
+      "reason": "Report-only original-jar/source-backed legacy-vs-port visual, facing, occlusion and collision parity audit for registered blocks and block items",
+      "status": "implemented",
+      "layer": "visual_boundary"
     }
   ]
 }

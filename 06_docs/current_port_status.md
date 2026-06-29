@@ -1,7 +1,7 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
 Last reviewed branch: `main`
-Last reviewed checkpoint: `2026-06-22` legacy Alembic/smelter parity and item/block audit framework baseline
+Last reviewed checkpoint: `2026-06-29` item/block parity framework wiring review and visual-boundary audit repair
 Reviewed target module: `05_neoforge_port`
 
 ## State Snapshot
@@ -13,7 +13,7 @@ This section records the current repository state. The lower "Changelog Notes" s
 - Aspect, item-level scan, and entity-level scan parity dumps are clean for all comparable runtime keys.
 - Thaumometer scan-key mutation and legacy-shaped client highlight/overlay behavior are active for the current predicate layer.
 - Current comparable item aspect parity is `1139/1139`; item-level scan parity is `1139/1139`; entity scan parity has `83/85` parity-ok rows plus `2` documented expected modern entity-policy rows.
-- The cross-cutting item/block framework now extracts a fingerprinted primary legacy manifest and a live port manifest, then validates registry/resource reports. Initial full results are `1245 PASS`, `3 RENAMED_WITH_MAPPING`, `196 MISSING`, including `118` unclassified safe resource-boundary failures. This baseline explicitly does not evaluate variants, texture graphs, data references, behavior, runtime or visuals. The selected completed smelter/Alembic family resource run is `42/42`.
+- The cross-cutting item/block framework now extracts a fingerprinted primary legacy manifest and a live port manifest, then validates registry/resource, source-quality, behavior/data-boundary and visual-boundary reports. The `quick` preset is executable with `item_visual_parity`, `legacy_shape_parity` and `legacy_visual_collision_parity` wired through the orchestrator. Current `quick` report is report-only: `legacy_shape_parity` has `114` rows with `10` review rows, `legacy_visual_collision_parity` has `471` rows with `2` facing-domain mismatches (`golem_builder`, `research_table`) and `295` unknown rows, `item_visual_parity` has `2009` rows with `34` missing item models and `219` review rows, and the comparer summary is `2149 PASS`, `5 RENAMED_WITH_MAPPING`, `2 VARIANT_MAPPED`, `1 INTENTIONAL`, `301 MISSING`, `103` safe resource-boundary failures. These reports still do not claim full gameplay or measured visual parity.
 
 ### Research, scanning and theorycraft
 

@@ -1,8 +1,8 @@
 # Item/block parity baseline summary
 
-Generated: 2026-06-23T13:23:21.7450603Z
+Generated: 2026-06-29T13:19:46.5690961Z
 
-The executable baseline produced 1558 evaluated results: 1351 pass, 5 mapped rename, 2 variant mapped, 2 intentional missing and 198 missing.
+The executable baseline produced 2458 evaluated results: 2149 pass, 5 mapped rename, 2 variant mapped, 1 intentional missing and 301 missing.
 
 Of the missing results, 103 currently fall into safe resource-boundary checks. The baseline is intentionally generated with FailMode off until the rule overrides are reviewed.
 
@@ -11,15 +11,21 @@ There are 106 legacy source entries whose IDs were inferred from symbols and the
 Intentional missing results by implemented check:
 
 - block_item_pairs: 1
-- loot: 1
+
+Deferred results by implemented check:
+
+- none: 0
 
 Missing results by implemented check:
 
 - lang: 69
-- loot: 21
 - models: 34
+- orphan_references: 62
 - registry: 74
+- textures: 62
 
-This milestone covers only: registry, duplicate_registry_id, block_item_pairs, blockstates, models, lang, loot. It does not claim behavior, runtime or visual parity.
+The comparer portion of this milestone covers: registry, duplicate_registry_id, block_item_pairs, blockstates, models, textures, lang, orphan_references.
+
+The `quick` preset also generated report-only visual-boundary subreports: `legacy_shape_parity`, `legacy_visual_collision_parity`, and `item_visual_parity`. These subreports identify review/mismatch rows, but they do not claim strict behavior, runtime, measured in-game visual, or pixel parity.
 
 Raw details: `tools/reports/local/item-block-parity/item_block_parity_report.md` (local, ignored).

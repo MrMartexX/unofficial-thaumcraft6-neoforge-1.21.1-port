@@ -321,16 +321,22 @@
       "name": "final_framework_completion"
     },
     {
-      "name": "visual_collision_risk",
-      "ownerType": "module",
-      "ownerPath": "modules/visual_collision_risk.ps1",
-      "invocation": "visualCollisionRiskChecks"
-    },
-    {
       "invocation": "legacyShapeParityChecks",
       "ownerType": "module",
       "ownerPath": "modules/legacy_shape_parity.ps1",
       "name": "legacy_shape_parity"
+    },
+    {
+      "invocation": "itemVisualParityChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/item_visual_parity.ps1",
+      "name": "item_visual_parity"
+    },
+    {
+      "invocation": "legacyVisualCollisionParityChecks",
+      "ownerType": "module",
+      "ownerPath": "modules/legacy_visual_collision_parity.ps1",
+      "name": "legacy_visual_collision_parity"
     }
   ]
 }
