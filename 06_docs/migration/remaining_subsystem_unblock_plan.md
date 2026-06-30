@@ -13,20 +13,49 @@ Basis: `06_docs/migration/NeoForge_legacy_migration_guide.md`, `06_docs/migratio
 
 ## Ordered Blocks
 
+This is a blocker-removal order, not a promise that every row is one commit. Several rows should be implemented as two or three large, related batches when the dependency graph is clear.
+
 | Order | Subsystem block | Why this order | Required validation | Main blockers removed |
 |---:|---|---|---|---|
-| 1 | Bellows device boundary | Already selected next device; closes smelter/tube/furnace Bellows blocker. | `audit-bellows-device.ps1`, build, server smoke, in-client visual check. | Bellows dynamic behavior/rendering. |
-| 2 | Alembic label/phial transfer | Depends on the now-stable jar/Alembic aspect Data Components and transport storage. | Warded Jar/Alembic runtime checks plus new label/phial audit. | Aspect container item interaction, labeled jar UX. |
-| 3 | Tube caster sub-parts and vent/valve visuals | Depends on tube state/shape already being stable; needed before polishing essentia network interaction. | Tube interaction audit, visual shape audit, runClient. | Caster controls, valve state clarity, vent visual parity. |
-| 4 | Arcane Workbench remaining recipe families and discount bridge | Workbench behavior exists and can now absorb exact recipe batches without destabilizing research. | Arcane recipe audit, workbench behavior audit, aspect generated-cache diff. | Remaining arcane page/recipe gaps, equipment discount blocker. |
-| 5 | Thaumonomicon final navigation polish | Research data/protocol/page catalog are stable; UI can now be expanded without guessing data semantics. | Thaumonomicon protocol audit, research page catalog audit, runClient visual pass. | Search, drilldown/history, final page renderer gaps. |
-| 6 | Crucible special alchemy effects | Crucible recipe/page data and in-world manual/collision behavior exist; special outputs need their own safe side-effect plan. | Crucible behavior audit, aura flux checks, recipe data audit. | Bath Salts, Bottled Taint, Liquid Death, Sane Soap and related behavior. |
-| 7 | Flux Goo, taint transforms and rifts | Depends on aura, crucible pollution, particles and world mutation rules; high-risk world behavior should not precede those. | Dedicated flux/taint/rift design, server smoke, world mutation audit. | Full flux ecology and taint/rift blockers. |
-| 8 | Infusion remaining instability/dependency rolls and measured visual parity | Core infusion cycle is audited; the remaining six dependency-owned rolls need their subsystem effects. | Infusion behavior audit, FX payload audit, runClient visual pass. | Infusion residual parity gaps. |
-| 9 | Golems and custom Thaumcraft entities | Needs stable research, items, rendering and saved data; large AI/render system should come after machine blockers. | Entity registration/AI/render design, scan/aspect exporter update. | Golem logistics, custom mobs, entity scan extensions. |
-| 10 | Worldgen and structures | Needs blocks/items/resources stable enough to generate in real worlds. | Datagen/biome modifier audit, server worldgen smoke. | Biome placement, structures, ores/trees beyond saplings. |
-| 11 | Broad rendering, BEWLR and shader/Fx polish | Depends on final item/block/machine/entity identities; should be iterative after gameplay state is stable. | Visual parity framework, runClient screenshot review, render-state leak checks. | Held-item models, legacy shaders, broad particle polish. |
-| 12 | Integrations | Should be last because APIs and content ids can still shift until core systems settle. | Optional dependency smoke, no-hard-dependency checks. | Curios/accessory/recipe-viewer style integration blockers. |
+| 0 | Keep baseline gates green | Every later subsystem depends on the current parity/audit baseline. | `build`, server smoke when relevant, aspect/scan diffs, research/page catalog audits, item/block quick preset. | Prevents silent regressions while large batches land. |
+| 1 | Bellows device boundary | Completed focused device slice; keep it as a regression guard before expanding essentia devices. | `audit-bellows-device.ps1`, build, server smoke, in-client visual check. | Bellows dynamic behavior/rendering. |
+| 2 | Alembic label/phial/jar item transfer | Depends on stable Warded Jar/Alembic storage and aspect Data Components. This closes the most direct player-facing essentia handling gap. | Warded Jar/Alembic runtime checks plus a new label/phial static/runtime audit. | Label application/removal, labeled jar UX, phial/jar transfer, aspect container item behavior. |
+| 3 | Tube caster sub-parts, valve controls and vent/valve visuals | Depends on stable tube state/shape and Bellows; needed before broader essentia networks can be interacted with reliably. | Tube interaction audit, visual shape audit, runClient, no client imports in common/server. | Caster tube side closure/choke/facing controls, valve state clarity, vent visual parity. |
+| 4 | Remaining essentia utility devices | After transport controls exist, devices that consume/produce essentia can be implemented without inventing ad hoc paths. | Dedicated behavior audits per device family, combined transport audit, server smoke. | Void Jar overflow, importer/exporter if kept, essentia mirror path, Thaumatorium input/output dependency blockers. |
+| 5 | Arcane Workbench remaining recipes and equipment discount bridge | Workbench behavior and recipe/page data exist; recipe families can now land without destabilizing research. Equipment discount should be resolved before many player progression rewards depend on it. | Arcane recipe audit, workbench behavior audit, generated-aspect cache diff, runClient GUI pass. | Remaining arcane page/recipe gaps, equipment/Curios discount, recipe-derived aspect blockers. |
+| 6 | Item/equipment behavior pass | Many registered items currently exist as identities/recipes but still lack real behavior. Close them before focus/golem/worldgen systems depend on them. | Item behavior audit, creative tab check, tooltip/aspect check, runClient smoke. | Goggles/robes/baubles-equivalent behavior, sanity checker, utility item behavior, non-final item placeholders. |
+| 7 | Focus/caster/Focal Manipulator core | Caster/focus is a central gameplay API and blocks many combat, utility and research rewards. It depends on items, aura/vis, research and networking. | Focus data model audit, server-authoritative cast payload audit, client FX leak checks, runClient combat/utility smoke. | Caster gauntlet behavior, focus pouch, focus modifiers, Focal Manipulator, focus recipes/research consumers. |
+| 8 | Thaumonomicon final navigation and page renderers | Research data/protocol/page catalog are stable; the UI can now be expanded over real recipe/device state instead of placeholders. | Thaumonomicon protocol audit, research data/page catalog audits, runClient visual/navigation pass. | Search, drilldown/history, remaining fake/blueprint/special/custom recipe pages, final book UX blockers. |
+| 9 | Crucible special alchemy and automation | Basic crucible behavior and recipe-page data exist; special effects need their own side-effect and world-mutation plan. | Crucible behavior audit, recipe data audit, aura flux checks, item-entity and spill regression tests. | Bath Salts, Bottled Taint, Liquid Death, Sane Soap, item pulling radius, special alchemy side effects, crucible-derived aspect generation. |
+| 10 | Thaumatorium / advanced alchemy machines | Depends on crucible semantics, essentia transport, labels/phials and research pages. Do not implement before those are stable. | Thaumatorium design, recipe/input audit, transport capability audit, server smoke. | Automated alchemy, alchemical construct identities, advanced alchemy machine blockers. |
+| 11 | Flux Goo, taint transforms and rifts | Depends on aura, crucible pollution, particles and safe world mutation rules. High-risk world behavior should not precede those foundations. | Dedicated flux/taint/rift design, aura/world mutation audit, server smoke, runClient FX review. | Flux ecology, finite taint spread/transforms, Flux Rift lifecycle, aura pollution consequences. |
+| 12 | Infusion remaining dependency rolls and measured visual parity | Core infusion cycle is audited; residual instability rolls need their owning systems instead of placeholders. | Infusion behavior audit, FX payload audit, visual comparison pass, performance check around active altars. | Remaining instability effects, dependency-owned mutation rolls, final active altar visual parity. |
+| 13 | Mirrors, lamps, bore, infernal furnace and other standalone devices | These are gameplay machines/devices, but they should land after transport, focus, alchemy and aura rules are less volatile. | One design/audit per family, item/block visual parity, server smoke. | Arcane Bore, Infernal Furnace, Lamp Fertility/Growth, mirrors, Void Siphon and other device blockers. |
+| 14 | Custom Thaumcraft entities and mobs | Needs item/aspect/scan/research/rendering foundations. Entity AI/render is a large server/client split and should not block earlier machine work. | Entity registration/AI/render design, attributes/spawn audit, scan/aspect exporter update, dedicated server safety. | Custom mobs, projectiles, Eldritch/Crimson entities, entity scan/aspect gaps. |
+| 15 | Golems and golem logistics | Golems need custom entities, inventories, item transport semantics, research and a lot of GUI/rendering. They should follow the entity/device foundation. | Golem data/AI task audit, logistics behavior tests, renderer smoke, save/load tests. | Golem Builder, seals/modules, logistics AI, golem inventory/task blockers. |
+| 16 | Worldgen, ores, biomes and structures | Worldgen should wait until generated blocks/items/resources are stable enough to place in real worlds. | Datagen/biome modifier audit, new-world server smoke, structure/feature placement checks. | Biome placement, ore/tree generation beyond saplings, structures and world feature blockers. |
+| 17 | Broad rendering, BEWLR, shaders and final model polish | Final broad visual work depends on stable item/block/entity identities. Keep it iterative and measured. | Visual parity framework, runClient screenshot review, render-state leak checks, dedicated server no-client-import check. | Held item models, legacy shader/Fx replacements, broad particle polish, final visual parity blockers. |
+| 18 | Optional integrations | Integration APIs should be last because content ids and data contracts can still shift until core systems settle. | Optional dependency smoke, no-hard-dependency checks, missing-mod startup check. | Curios/accessory, recipe-viewer and other compatibility blockers. |
+| 19 | Release hardening and migration cleanup | Only after core gameplay is stable enough to test like a mod, not a porting scratchpad. | Full build, client/server smoke, generated report cleanup, performance profiling, docs index review. | Placeholder/debug leakage, oversized generated artifacts, performance and release-readiness blockers. |
+
+## Hard Dependencies
+
+| Dependent work | Must wait for |
+|---|---|
+| Thaumatorium and advanced alchemy machines | Label/phial transfer, crucible semantics, essentia transport, research pages. |
+| Focus/caster gameplay | Item/equipment behavior, aura/vis access, research unlocks, payload validation. |
+| Flux rifts and taint transforms | Aura pollution, crucible spill behavior, particle/world mutation rules. |
+| Golems | Custom entity foundation, item/block behavior, research UI/progression, logistics storage model. |
+| Worldgen/structures | Stable block identities, loot/tags, visual parity for generated blocks, server datapack validation. |
+| Broad rendering polish | Stable gameplay state and final-ish identities; otherwise visuals are reworked repeatedly. |
+
+## Current Blocker Cut Line
+
+The current cut line is between rows 2 and 3:
+
+1. Bellows is implemented and should now be treated as regression-guarded.
+2. The next real blocker is Alembic label/phial/jar item transfer.
+3. Tube caster sub-parts and vent/valve visual controls should follow immediately after, because they unblock comfortable essentia-network testing.
 
 ## Immediate Next Batch
 
@@ -36,3 +65,5 @@ After Bellows validates, the next large safe batch is Alembic label/phial transf
 - make Warded Jar/Alembic item interactions server-owned;
 - add a dedicated runtime/static audit for label/phial behavior;
 - keep caster/tube sub-part work out of that batch unless the audit proves it is required.
+
+The batch after that should be tube caster sub-parts plus valve/vent visual state, not a new unrelated gameplay system.
