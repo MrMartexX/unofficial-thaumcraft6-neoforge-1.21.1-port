@@ -18,5 +18,6 @@ public final class TCBlockEntityRenderers {
         event.registerBlockEntityRenderer(TCBlockEntities.INFUSION_PEDESTAL.get(), TCInfusionPedestalRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.INFUSION_MATRIX.get(), TCInfusionMatrixRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.BELLOWS.get(), TCBellowsRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.TUBE_VALVE.get(), TCTubeValveRenderer::new);
     }
 }

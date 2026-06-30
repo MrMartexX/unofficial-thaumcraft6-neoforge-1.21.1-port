@@ -1,6 +1,6 @@
 # Essentia Transport Design
 
-Last updated: 2026-06-22
+Last updated: 2026-06-30
 
 ## Purpose
 
@@ -38,6 +38,10 @@ Behavior is checked against:
 | Warded Jar | Top face, capacity `250`, suction `32/64`, one point per five ticks |
 | Alembic | Capacity `128`, one aspect, output only, zero suction |
 | Side closure | Open sides persist and reciprocal tube sides synchronize |
+| Labels | Warded Jar and Alembic filter labels preserve aspect/facing state |
+| Phials | Empty phial extracts exactly `10`; filled phial transfers only into jars |
+| Jar item fill | Jar item can fill from Alembic up to capacity `250` while preserving filter/aspect |
+| Caster sub-parts | Side hit toggles tube connection; sneaking buffer hit cycles choke `0/1/2`; center hit rotates directional tubes |
 
 ## Smelter rules
 
@@ -78,6 +82,10 @@ Behavior is checked against:
 - Sided item automation.
 - Legacy-layout smelter menu/screen.
 - Detailed legacy-derived Alembic, Bellows, auxiliary and vent models.
+- Label application/removal for Warded Jars and Alembics.
+- Empty/filled phial transfer and Warded Jar item payload transfer through Data Components.
+- Caster tube sub-part controls for side closure, buffer choking and directional facing.
+- Manual/redstone valve state and vent state sync.
 
 ## Validation
 
@@ -88,7 +96,7 @@ Run:
 ```
 
 This first validates that detailed models have not regressed to cubes, then runs the dedicated-server
-transport/machine fixtures. Current result: **37/37 passed**.
+transport/machine fixtures. Current result: **46/46 passed**.
 
 The exporter validates:
 
@@ -101,14 +109,16 @@ The exporter validates:
 - Alumentum boost;
 - direct plus auxiliary output in the same cycle;
 - vent selection and upgraded tier ownership.
+- Jar/Alembic label filters and blocked label-output face;
+- phial transfer quantum and Warded Jar item Data Component payloads;
+- caster side sub-hit connection toggles, buffer choke cycling and center sub-hit facing rotation;
+- manual valve flow state plus vent sync state.
 
 ## Deferred owning slices
 
-1. Alembic label application/removal and label renderer.
-2. Phial/jar direct transfer using the current aspect Data Component model.
-3. Caster tube sub-part ray tracing, side closure/choke/facing controls.
-4. Final valve wheel, vent and Bellows measured visual parity.
-5. Void Jar overflow and remaining importer/exporter/Thaumatorium consumers.
+1. Final valve wheel, vent and Bellows measured visual parity.
+2. Void Jar overflow and remaining importer/exporter/Thaumatorium consumers.
+3. Any remaining device-specific label renderer polish discovered during screenshot review.
 
 ## Non-negotiable constraints
 

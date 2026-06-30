@@ -28,12 +28,12 @@ This table is a roadmap snapshot, not the live task queue. Use `06_docs/CURRENT_
 | Stage 5. Aura | In progress | Server-side saved data, chunk initialization, update loop, debug commands and Workbench Charger aura usage exist; HUD/FX/rifts/consumers remain deferred. |
 | Stage 6. Research | In progress | Data/progression/page-catalog core, scan knowledge, research table slice and first Thaumonomicon flow exist; full UI/search/warp polish remains blocked. |
 | Stage 7. Crafting | In progress | Vanilla fixtures, exact arcane recipes, Arcane Workbench behavior, crucible gameplay slices, and infusion through structure-derived timing/cost, persistent stability, exact 24-way event selection, essentia/component consumption and output placement are active; six dependency-owned instability rolls and remaining recipe families are deferred. |
-| Stage 8. Tile Entities | In progress | Research Table, Arcane Workbench, Crucible, Infusion Matrix/Pedestals, tubes, Warded Jar, Alembic, Bellows and all three smelter tiers own persisted server state. The combined transport/smelter audit passes `37/37`; Bellows has a dedicated device audit. |
+| Stage 8. Tile Entities | In progress | Research Table, Arcane Workbench, Crucible, Infusion Matrix/Pedestals, tubes, Warded Jar, Alembic, Bellows and all three smelter tiers own persisted server state. The combined transport/smelter/label/phial/caster-control audit passes `46/46`; Bellows has a dedicated device audit. |
 | Stage 9. GUI | In progress | Research Table, Arcane Workbench, smelter and first Thaumonomicon screens exist as functional slices; final visual parity and recipe drilldown remain incomplete. |
 | Stage 10. Networking | In progress | Aura, knowledge, research table, Thaumonomicon and both clientbound infusion FX payload contracts exist; future gameplay payloads need subsystem-specific design. |
 | Stage 11. Entities / Golems | Deferred | Vanilla/entity scan parity is handled; custom Thaumcraft entities, golems, AI and renderers are not started. |
 | Stage 12. Worldgen | In progress | Sapling-grown Greatwood/Silverwood behavior exists; biome/world placement and structures are not started. |
-| Stage 13. Rendering / Particles | In progress | Thaumometer effects, table renderer, infusion FX, crucible FX and legacy multipart tube geometry exist; tube vent/valve BER effects, measured visual parity and broad render/BEWLR/shader work remain high risk. |
+| Stage 13. Rendering / Particles | In progress | Thaumometer effects, table renderer, infusion FX, crucible FX, legacy multipart tube geometry and valve/vent state rendering exist; measured visual parity and broad render/BEWLR/shader work remain high risk. |
 | Stage 14. Integrations | Deferred | Optional accessory/recipe-viewer integrations are intentionally held until core systems stabilize. |
 
 ## Stage 1. Minimal Launch

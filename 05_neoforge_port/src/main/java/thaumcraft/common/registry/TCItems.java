@@ -14,6 +14,9 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.items.ItemAspectVariant;
 import thaumcraft.common.items.ItemLegacyPlaceholder;
+import thaumcraft.common.items.TCJarLabelItem;
+import thaumcraft.common.items.TCPhialItem;
+import thaumcraft.common.items.TCWardedJarBlockItem;
 import thaumcraft.common.items.armor.ItemGoggles;
 import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
@@ -109,7 +112,7 @@ public static final Supplier<BlockItem> SMELTER_VENT = blockItem("smelter_vent",
 
 
 
-public static final Supplier<BlockItem> JAR_NORMAL = blockItem("jar_normal", TCBlocks.JAR_NORMAL);
+public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal", () -> new TCWardedJarBlockItem(TCBlocks.JAR_NORMAL.get(), new Item.Properties()));
     public static final Supplier<BlockItem> ALEMBIC = blockItem("alembic", TCBlocks.ALEMBIC);
     public static final Supplier<BlockItem> SMELTER_THAUMIUM = blockItem("smelter_thaumium", TCBlocks.SMELTER_THAUMIUM);
     public static final Supplier<BlockItem> SMELTER_VOID = blockItem("smelter_void", TCBlocks.SMELTER_VOID);
@@ -189,8 +192,8 @@ public static final Supplier<BlockItem> JAR_NORMAL = blockItem("jar_normal", TCB
     public static final Supplier<Item> THAUMIUM_PICK = simpleItem("thaumium_pick");
     public static final Supplier<Item> THAUMIUM_SHOVEL = simpleItem("thaumium_shovel");
     public static final Supplier<Item> THAUMIUM_SWORD = simpleItem("thaumium_sword");
-    public static final Supplier<Item> PHIAL = simpleItem("phial");
-    public static final Supplier<Item> JAR_LABEL = simpleItem("jar_label");
+    public static final Supplier<Item> PHIAL = ITEMS.register("phial", TCPhialItem::new);
+    public static final Supplier<Item> JAR_LABEL = ITEMS.register("jar_label", () -> new TCJarLabelItem(false));
     public static final Supplier<Item> GOLEM_BELL = simpleItem("golem_bell");
     public static final Supplier<Item> SEAL_PICKUP = simpleItem("seal_pickup");
     public static final Supplier<Item> SEAL_PICKUP_ADVANCED = simpleItem("seal_pickup_advanced");
@@ -242,7 +245,7 @@ public static final Supplier<BlockItem> JAR_NORMAL = blockItem("jar_normal", TCB
     public static final Supplier<Item> ESSENTIA_EXPORTER = simpleItem("essentia_exporter");
     public static final Supplier<Item> ESSENTIA_IMPORTER = simpleItem("essentia_importer");
     public static final Supplier<Item> ALCHEMICAL_CONSTRUCT = simpleItem("alchemical_construct");
-    public static final Supplier<Item> JAR_LABEL_ESSENCE = simpleItem("jar_label_essence");
+    public static final Supplier<Item> JAR_LABEL_ESSENCE = ITEMS.register("jar_label_essence", () -> new TCJarLabelItem(true));
     public static final Supplier<Item> EVERFULL_URN = simpleItem("everfull_urn");
     public static final Supplier<Item> ARCANE_LAMP = simpleItem("arcane_lamp");
     public static final Supplier<Item> HAND_MIRROR = simpleItem("hand_mirror");

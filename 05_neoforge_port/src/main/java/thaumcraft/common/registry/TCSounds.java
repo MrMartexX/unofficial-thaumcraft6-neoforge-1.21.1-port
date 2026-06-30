@@ -15,6 +15,16 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "scan")));
     public static final Supplier<SoundEvent> PAGE = SOUND_EVENTS.register("page", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "page")));
+    public static final Supplier<SoundEvent> JAR = SOUND_EVENTS.register("jar", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "jar")));
+    public static final Supplier<SoundEvent> KEY = SOUND_EVENTS.register("key", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "key")));
+    public static final Supplier<SoundEvent> TOOL = SOUND_EVENTS.register("tool", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "tool")));
+    public static final Supplier<SoundEvent> SQUEEK = SOUND_EVENTS.register("squeek", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "squeek")));
+    public static final Supplier<SoundEvent> CREAK = SOUND_EVENTS.register("creak", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "creak")));
     public static final Supplier<SoundEvent> PAGETURN = SOUND_EVENTS.register("pageturn", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pageturn")));
     public static final Supplier<SoundEvent> WRITE = SOUND_EVENTS.register("write", () ->

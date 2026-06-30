@@ -62,10 +62,14 @@ public final class TCAlembicBlockEntity extends BlockEntity implements TCAspectS
     }
 
     public void setFilterForValidation(Aspect filter) {
-        setFilterForValidation(filter, filter == null ? Direction.DOWN : Direction.NORTH);
+        setFilter(filter, filter == null ? Direction.DOWN : Direction.NORTH);
     }
 
     public void setFilterForValidation(Aspect filter, Direction face) {
+        setFilter(filter, face);
+    }
+
+    public void setFilter(Aspect filter, Direction face) {
         aspectFilter = filter;
         labelFacing = filter == null || face == null || face.getAxis().isVertical() ? Direction.DOWN : face;
         markChangedAndSync();
@@ -153,6 +157,14 @@ public final class TCAlembicBlockEntity extends BlockEntity implements TCAspectS
             markChangedAndSync();
         }
         return emptied;
+    }
+
+    public boolean doesContainerAccept(Aspect requestedAspect) {
+        return requestedAspect != null && (aspectFilter == null || aspectFilter == requestedAspect);
+    }
+
+    public int remainingCapacity() {
+        return CAPACITY - amount;
     }
 
     @Override

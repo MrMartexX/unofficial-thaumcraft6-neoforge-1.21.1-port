@@ -194,6 +194,35 @@ public final class TCFXDispatcher {
         drawLegacyFX(level, data, x, y, z, motionX, motionY, motionZ);
     }
 
+    public static void drawVentParticles(Level level, double x, double y, double z, double motionX, double motionY, double motionZ, int color) {
+        if (!level.isClientSide()) {
+            return;
+        }
+
+        float red = ((color >> 16) & 0xFF) / 255.0F;
+        float green = ((color >> 8) & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+        TCLegacyFXData data = TCLegacyFXData.generic(
+                        16,
+                        1,
+                        5,
+                        1,
+                        64,
+                        false,
+                        1,
+                        red,
+                        green,
+                        blue,
+                        0.4F,
+                        0.05F
+                )
+                .withScale(0.05F, 1.0F)
+                .withAlpha(0.4F, 0.0F)
+                .withMotion(0.85D, 0.0025F, 0.0075D * 5.0D, 0.0075D * 5.0D, 0.0075D * 5.0D, 0.0D, 0.0D);
+
+        drawLegacyFX(level, data, x, y, z, motionX, motionY, motionZ);
+    }
+
     public static void scanHighlight(Level level, BlockPos pos) {
         if (!level.isClientSide()) {
             return;

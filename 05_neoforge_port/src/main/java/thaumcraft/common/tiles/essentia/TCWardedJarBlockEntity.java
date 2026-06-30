@@ -28,6 +28,7 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
     private Aspect aspect;
     private Aspect aspectFilter;
     private int amount;
+    private Direction labelFacing = Direction.NORTH;
     private boolean blocked;
     private int transportTick;
 
@@ -51,6 +52,10 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
         return blocked;
     }
 
+    public Direction labelFacing() {
+        return labelFacing;
+    }
+
     public void setStoredForValidation(Aspect newAspect, int newAmount) {
         aspect = newAspect;
         amount = newAspect == null ? 0 : Math.max(0, Math.min(CAPACITY, newAmount));
@@ -66,7 +71,18 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
     }
 
     public void setFilterForValidation(Aspect filter) {
+        setFilter(filter);
+    }
+
+    public void setFilter(Aspect filter) {
+        setFilter(filter, labelFacing);
+    }
+
+    public void setFilter(Aspect filter, Direction facing) {
         aspectFilter = filter;
+        if (facing != null && facing.getAxis().isHorizontal()) {
+            labelFacing = facing;
+        }
         markChangedAndSync();
     }
 
@@ -95,6 +111,29 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
             markChangedAndSync();
         }
         return drained;
+    }
+
+    public int addToContainer(Aspect requestedAspect, int requestedAmount) {
+        if (requestedAspect == null || requestedAmount <= 0 || blocked) {
+            return requestedAmount;
+        }
+        int accepted = addEssentia(requestedAspect.getTag(), requestedAmount, Direction.UP, false);
+        return requestedAmount - accepted;
+    }
+
+    public boolean takeFromContainer(Aspect requestedAspect, int requestedAmount) {
+        if (requestedAspect == null || requestedAmount <= 0 || blocked) {
+            return false;
+        }
+        return takeEssentia(requestedAspect.getTag(), requestedAmount, Direction.UP, false) == requestedAmount;
+    }
+
+    public boolean doesContainerAccept(Aspect requestedAspect) {
+        return requestedAspect != null && (aspectFilter == null || aspectFilter == requestedAspect);
+    }
+
+    public int remainingCapacity() {
+        return CAPACITY - amount;
     }
 
     @Override
@@ -258,6 +297,7 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
         if (aspectFilter != null) {
             tag.putString("AspectFilter", aspectFilter.getTag());
         }
+        tag.putByte("facing", (byte) labelFacing.get3DDataValue());
         tag.putInt("Amount", amount);
         tag.putBoolean("Blocked", blocked);
     }
@@ -267,6 +307,10 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
         super.loadAdditional(tag, registries);
         aspect = Aspect.getAspect(tag.getString("Aspect"));
         aspectFilter = Aspect.getAspect(tag.getString("AspectFilter"));
+        labelFacing = tag.contains("facing") ? Direction.from3DDataValue(tag.getByte("facing")) : Direction.NORTH;
+        if (labelFacing.getAxis().isVertical()) {
+            labelFacing = Direction.NORTH;
+        }
         amount = aspect == null ? 0 : Math.max(0, Math.min(CAPACITY, tag.getInt("Amount")));
         blocked = tag.getBoolean("Blocked");
     }

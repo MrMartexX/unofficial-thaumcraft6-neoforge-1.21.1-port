@@ -24,6 +24,9 @@ import thaumcraft.common.blocks.essentia.TCSmelterVentBlock;
 import thaumcraft.common.essentia.transport.block.TCLegacyTubeVariant;
 import thaumcraft.common.essentia.transport.blockentity.TCLegacySmelterEndpointBlockEntity;
 import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;
+import thaumcraft.common.items.TCEssentiaItemHelper;
+import thaumcraft.common.items.TCPhialItem;
+import thaumcraft.common.items.TCWardedJarBlockItem;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCItems;
@@ -65,7 +68,8 @@ public final class TCEssentiaTransportBehaviorAudit {
         lines.add("- Covers TC6 normal, buffer, filter, one-way, restrict and redstone-valve transport semantics.");
         lines.add("- Covers Warded Jar top-face suction and five-tick one-point transfer.");
         lines.add("- Covers smelter tier formulas, sided inventory, fuel data, Alembic-column routing, auxiliaries and vent attachment selection.");
-        lines.add("- Bellows device behavior/rendering is covered by the dedicated Bellows audit; label/phial interaction and caster sub-part interaction remain separate visual/item slices.");
+        lines.add("- Covers Alembic/Jar label filters, phial/jar item transfer quanta and tube caster sub-part controls.");
+        lines.add("- Bellows device behavior/rendering is covered by the dedicated Bellows audit; final pixel-level valve/vent visual parity still needs screenshot review.");
         Files.write(output, lines);
         return report;
     }
@@ -287,6 +291,56 @@ public final class TCEssentiaTransportBehaviorAudit {
                             + ", stored=" + restored.transportNode().storage().totalAmount()));
         }
 
+        BlockPos casterPairPos = origin.offset(3, 0, 0);
+        TCLegacyTubeBlockEntity casterLeft = placeTube(level, casterPairPos, TCLegacyTubeVariant.TUBE);
+        TCLegacyTubeBlockEntity casterRight = placeTube(level, casterPairPos.east(), TCLegacyTubeVariant.TUBE);
+        if (casterLeft != null && casterRight != null) {
+            casterLeft.refreshConnectionState();
+            casterRight.refreshConnectionState();
+            boolean initiallyConnected = casterLeft.isSideOpen(Direction.EAST)
+                    && casterRight.isSideOpen(Direction.WEST)
+                    && casterLeft.getBlockState().getValue(thaumcraft.common.essentia.transport.block.TCLegacyTubeBlock.EAST)
+                    && casterRight.getBlockState().getValue(thaumcraft.common.essentia.transport.block.TCLegacyTubeBlock.WEST);
+            casterLeft.casterToggleSide(Direction.EAST, false);
+            boolean closedByCaster = !casterLeft.isSideOpen(Direction.EAST)
+                    && !casterRight.isSideOpen(Direction.WEST)
+                    && !casterLeft.getBlockState().getValue(thaumcraft.common.essentia.transport.block.TCLegacyTubeBlock.EAST)
+                    && !casterRight.getBlockState().getValue(thaumcraft.common.essentia.transport.block.TCLegacyTubeBlock.WEST);
+            casterLeft.casterToggleSide(Direction.EAST, false);
+            boolean reopenedByCaster = casterLeft.isSideOpen(Direction.EAST)
+                    && casterRight.isSideOpen(Direction.WEST)
+                    && casterLeft.getBlockState().getValue(thaumcraft.common.essentia.transport.block.TCLegacyTubeBlock.EAST)
+                    && casterRight.getBlockState().getValue(thaumcraft.common.essentia.transport.block.TCLegacyTubeBlock.WEST);
+            checks.add(check("caster_side_subhit_toggles_tube_connection_pair",
+                    initiallyConnected && closedByCaster && reopenedByCaster,
+                    "initial=" + initiallyConnected + ", closed=" + closedByCaster
+                            + ", reopened=" + reopenedByCaster));
+        }
+
+        TCLegacyTubeBlockEntity casterBuffer = placeTube(level, origin.offset(6, 0, 0), TCLegacyTubeVariant.BUFFER);
+        if (casterBuffer != null) {
+            casterBuffer.casterToggleSide(Direction.NORTH, true);
+            int chokeOne = casterBuffer.chokedSide(Direction.NORTH);
+            casterBuffer.casterToggleSide(Direction.NORTH, true);
+            int chokeTwo = casterBuffer.chokedSide(Direction.NORTH);
+            casterBuffer.casterToggleSide(Direction.NORTH, true);
+            int chokeReset = casterBuffer.chokedSide(Direction.NORTH);
+            checks.add(check("caster_sneak_side_subhit_cycles_buffer_choke",
+                    chokeOne == 1 && chokeTwo == 2 && chokeReset == 0,
+                    "cycle=" + chokeOne + ">" + chokeTwo + ">" + chokeReset));
+        }
+
+        BlockPos casterRotatePos = origin.offset(9, 0, 0);
+        TCLegacyTubeBlockEntity casterOneWay = placeTube(level, casterRotatePos, TCLegacyTubeVariant.ONEWAY);
+        placeTube(level, casterRotatePos.north(), TCLegacyTubeVariant.TUBE);
+        if (casterOneWay != null) {
+            casterOneWay.setFacing(Direction.NORTH);
+            boolean rotated = casterOneWay.casterRotateCenter();
+            checks.add(check("caster_center_subhit_rotates_directional_tube_to_connectable_side",
+                    rotated && casterOneWay.facing() == Direction.SOUTH,
+                    "rotated=" + rotated + ", facing=" + casterOneWay.facing()));
+        }
+
         BlockPos valvePos = origin.offset(0, 0, 3);
         TCLegacyTubeBlockEntity valve = placeTube(level, valvePos, TCLegacyTubeVariant.VALVE);
         if (valve != null) {
@@ -297,6 +351,36 @@ public final class TCEssentiaTransportBehaviorAudit {
             checks.add(check("valve_excludes_handle_face_and_closes_when_powered",
                     faceRule && !valve.allowsFlow() && valve.getSuction(Direction.SOUTH).amount() == 0,
                     "faceRule=" + faceRule + ", flow=" + valve.allowsFlow()));
+        }
+
+        TCLegacyTubeBlockEntity manualValve = placeTube(level, origin.offset(3, 0, 3), TCLegacyTubeVariant.VALVE);
+        if (manualValve != null) {
+            manualValve.setFacing(Direction.NORTH);
+            manualValve.setSuctionForValidation(Aspect.AIR.getTag(), 32);
+            manualValve.setAllowFlow(false);
+            CompoundTag closedTag = manualValve.getUpdateTag(level.registryAccess());
+            boolean closed = !manualValve.allowsFlow()
+                    && manualValve.getSuction(Direction.SOUTH).amount() == 0
+                    && closedTag.contains("AllowFlow")
+                    && !closedTag.getBoolean("AllowFlow");
+            manualValve.setAllowFlow(true);
+            manualValve.setVentingForValidation(7);
+            CompoundTag openedTag = manualValve.getUpdateTag(level.registryAccess());
+            TCLegacyTubeBlockEntity restoredValve = TCBlockEntities.createTubeBlockEntity(
+                    TCLegacyTubeVariant.VALVE,
+                    origin.offset(3, 1, 3),
+                    TCBlocks.TUBE_VALVE.get().defaultBlockState()
+            );
+            restoredValve.handleUpdateTag(openedTag, level.registryAccess());
+            checks.add(check("manual_valve_toggle_and_vent_state_sync",
+                    closed
+                            && manualValve.allowsFlow()
+                            && openedTag.getBoolean("AllowFlow")
+                            && openedTag.getInt("Venting") == 7
+                            && restoredValve.allowsFlow()
+                            && restoredValve.ventingTicks() == 7,
+                    "closed=" + closed + ", reopened=" + manualValve.allowsFlow()
+                            + ", venting=" + restoredValve.ventingTicks()));
         }
     }
 
@@ -347,6 +431,25 @@ public final class TCEssentiaTransportBehaviorAudit {
                         && !alembic.canOutputTo(Direction.NORTH)
                         && alembic.canOutputTo(Direction.EAST),
                 "rejected=" + rejected + ", accepted=" + accepted + ", amount=" + alembic.storedAmount()));
+
+        CompoundTag labelTag = alembic.getUpdateTag(level.registryAccess());
+        TCAlembicBlockEntity restoredAlembic = new TCAlembicBlockEntity(
+                origin.offset(0, 1, 0),
+                TCBlocks.ALEMBIC.get().defaultBlockState()
+        );
+        restoredAlembic.handleUpdateTag(labelTag, level.registryAccess());
+        checks.add(check("alembic_label_filter_sync_preserves_filter_and_blocked_face",
+                restoredAlembic.aspectFilter() == Aspect.FIRE
+                        && restoredAlembic.labelFacing() == Direction.NORTH
+                        && !restoredAlembic.canOutputTo(Direction.NORTH)
+                        && restoredAlembic.canOutputTo(Direction.EAST),
+                "filter=" + restoredAlembic.aspectFilter() + ", facing=" + restoredAlembic.labelFacing()));
+
+        alembic.setStoredForValidation(Aspect.AIR, TCPhialItem.BASE_AMOUNT);
+        boolean phialQuantum = alembic.takeFromContainer(Aspect.AIR, TCPhialItem.BASE_AMOUNT);
+        checks.add(check("empty_phial_extracts_exactly_ten_from_alembic",
+                phialQuantum && alembic.storedAmount() == 0 && alembic.storedAspect() == null,
+                "drained=" + phialQuantum + ", remaining=" + alembic.storedAmount()));
     }
 
     private static void addSmelterChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
@@ -496,6 +599,50 @@ public final class TCEssentiaTransportBehaviorAudit {
                 jar.getMinimumSuction() == 64 && jar.getSuction(Direction.UP).amount() == 64
                         && Aspect.FIRE.getTag().equals(jar.getSuction(Direction.UP).aspect()),
                 "minimum=" + jar.getMinimumSuction() + ", suction=" + jar.getSuction(Direction.UP).amount()));
+
+        jar.setFilter(null);
+        jar.setStoredForValidation(Aspect.AIR, TCPhialItem.BASE_AMOUNT * 2);
+        boolean phialDrain = jar.takeFromContainer(Aspect.AIR, TCPhialItem.BASE_AMOUNT);
+        int mixedRemainder = jar.addToContainer(Aspect.FIRE, TCPhialItem.BASE_AMOUNT);
+        checks.add(check("warded_jar_phial_quantum_and_single_aspect_rule",
+                phialDrain
+                        && jar.storedAspect() == Aspect.AIR
+                        && jar.storedAmount() == TCPhialItem.BASE_AMOUNT
+                        && mixedRemainder == TCPhialItem.BASE_AMOUNT,
+                "drained=" + phialDrain + ", aspect=" + jar.storedAspect()
+                        + ", amount=" + jar.storedAmount() + ", mixedRemainder=" + mixedRemainder));
+
+        jar.setStoredForValidation(null, 0);
+        jar.setFilter(Aspect.FIRE, Direction.WEST);
+        int rejected = jar.addToContainer(Aspect.AIR, TCPhialItem.BASE_AMOUNT);
+        int accepted = jar.addToContainer(Aspect.FIRE, TCPhialItem.BASE_AMOUNT);
+        ItemStack carriedJar = TCWardedJarBlockItem.stackFromJar(jar);
+        checks.add(check("warded_jar_label_filter_and_item_stack_components_match_legacy",
+                rejected == TCPhialItem.BASE_AMOUNT
+                        && accepted == 0
+                        && jar.aspectFilter() == Aspect.FIRE
+                        && jar.labelFacing() == Direction.WEST
+                        && carriedJar.is(TCItems.JAR_NORMAL.get())
+                        && TCEssentiaItemHelper.aspectFromStack(carriedJar) == Aspect.FIRE
+                        && TCEssentiaItemHelper.aspectAmount(carriedJar) == TCPhialItem.BASE_AMOUNT
+                        && TCEssentiaItemHelper.filterAspect(carriedJar) == Aspect.FIRE,
+                "rejected=" + rejected + ", accepted=" + accepted + ", facing=" + jar.labelFacing()
+                        + ", stackAspect=" + TCEssentiaItemHelper.aspectFromStack(carriedJar)
+                        + ", stackAmount=" + TCEssentiaItemHelper.aspectAmount(carriedJar)));
+
+        CompoundTag tag = jar.getUpdateTag(level.registryAccess());
+        TCWardedJarBlockEntity restoredJar = new TCWardedJarBlockEntity(
+                origin.offset(1, 0, 0),
+                TCBlocks.JAR_NORMAL.get().defaultBlockState()
+        );
+        restoredJar.handleUpdateTag(tag, level.registryAccess());
+        checks.add(check("warded_jar_label_filter_sync_preserves_facing_and_payload",
+                restoredJar.aspectFilter() == Aspect.FIRE
+                        && restoredJar.labelFacing() == Direction.WEST
+                        && restoredJar.storedAspect() == Aspect.FIRE
+                        && restoredJar.storedAmount() == TCPhialItem.BASE_AMOUNT,
+                "filter=" + restoredJar.aspectFilter() + ", facing=" + restoredJar.labelFacing()
+                        + ", amount=" + restoredJar.storedAmount()));
     }
 
     private static TCLegacyTubeBlockEntity placeTube(ServerLevel level, BlockPos pos, TCLegacyTubeVariant variant) {

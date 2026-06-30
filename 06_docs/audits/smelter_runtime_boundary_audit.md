@@ -1,6 +1,6 @@
 # Smelter Runtime Boundary Audit
 
-Updated: 2026-06-22
+Updated: 2026-06-30
 
 ## Scope
 
@@ -39,10 +39,11 @@ against legacy `TileSmelter`, `TileAlembic`, `BlockSmelterAux`, `BlockSmelterVen
 ## Runtime result
 
 `tools/audits/audit-smelter-runtime-boundary.ps1` validates detailed resources and runs the combined
-transport/machine exporter. Current result: **37/37 passed**.
+transport/machine exporter. Current combined result after the later Alembic/Jar item-transfer and
+tube-caster control closure: **46/46 passed**.
 
 ## Deferred owning slices
 
-- Bellows dynamic BlockEntity animation and its vanilla-furnace/tube-buffer behavior.
-- Alembic label application/removal, phial/jar transfer and label rendering.
-- Caster tube sub-part interaction and final valve/vent visual parity.
+- Final measured Bellows/valve/vent visual parity.
+- Void Jar overflow and remaining importer/exporter/Thaumatorium consumers.
+- Any remaining device-specific label renderer polish discovered during screenshot review.

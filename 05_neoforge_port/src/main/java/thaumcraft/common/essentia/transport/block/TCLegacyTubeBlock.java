@@ -3,7 +3,12 @@ package thaumcraft.common.essentia.transport.block;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -18,12 +23,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.common.items.TCEssentiaItemHelper;
 import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.registry.TCSounds;
 
 /** Block shell and connection geometry for the TC6 tube family. */
 public class TCLegacyTubeBlock extends Block implements EntityBlock {
@@ -75,8 +86,17 @@ public class TCLegacyTubeBlock extends Block implements EntityBlock {
             BlockState state,
             BlockEntityType<T> type
     ) {
-        if (level.isClientSide || type != TCBlockEntities.typeForTube(variant)) {
+        if (type != TCBlockEntities.typeForTube(variant)) {
             return null;
+        }
+        if (level.isClientSide) {
+            return (tickerLevel, pos, tickerState, blockEntity) ->
+                    TCLegacyTubeBlockEntity.clientTick(
+                            tickerLevel,
+                            pos,
+                            tickerState,
+                            (TCLegacyTubeBlockEntity) blockEntity
+                    );
         }
         return (tickerLevel, pos, tickerState, blockEntity) ->
                 TCLegacyTubeBlockEntity.serverTick(
@@ -138,6 +158,96 @@ public class TCLegacyTubeBlock extends Block implements EntityBlock {
     }
 
     @Override
+    protected ItemInteractionResult useItemOn(
+            ItemStack stack,
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            InteractionHand hand,
+            BlockHitResult hitResult
+    ) {
+        if (!(level.getBlockEntity(pos) instanceof TCLegacyTubeBlockEntity tube)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+
+        if (isCaster(stack)) {
+            TubeSubHit subHit = traceSubHit(tube, pos, hitResult);
+            if (subHit.kind == TubeSubHit.Kind.SIDE) {
+                if (!level.isClientSide && tube.casterToggleSide(subHit.side, player.isShiftKeyDown())) {
+                    level.playSound(
+                            null,
+                            pos,
+                            tube.variant() == TCLegacyTubeVariant.BUFFER && player.isShiftKeyDown()
+                                    ? TCSounds.SQUEEK.get()
+                                    : TCSounds.TOOL.get(),
+                            SoundSource.BLOCKS,
+                            tube.variant() == TCLegacyTubeVariant.BUFFER && player.isShiftKeyDown() ? 0.6F : 0.5F,
+                            tube.variant() == TCLegacyTubeVariant.BUFFER && player.isShiftKeyDown()
+                                    ? 2.0F + level.random.nextFloat() * 0.2F
+                                    : 0.9F + level.random.nextFloat() * 0.2F
+                    );
+                }
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+            if (subHit.kind == TubeSubHit.Kind.CENTER) {
+                if (!level.isClientSide && tube.casterRotateCenter()) {
+                    level.playSound(null, pos, TCSounds.TOOL.get(), SoundSource.BLOCKS, 0.5F, 0.9F + level.random.nextFloat() * 0.2F);
+                }
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+        }
+
+        if (tube.variant() == TCLegacyTubeVariant.FILTER) {
+            if (player.isShiftKeyDown() && !tube.filterAspect().isBlank()) {
+                if (!level.isClientSide) {
+                    tube.setFilterAspect("");
+                    level.playSound(null, pos, TCSounds.KEY.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                }
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+            Aspect aspect = TCEssentiaItemHelper.aspectFromStack(stack);
+            if (aspect != null && tube.filterAspect().isBlank()) {
+                if (!level.isClientSide) {
+                    tube.setFilterAspect(aspect.getTag());
+                    level.playSound(null, pos, TCSounds.KEY.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                }
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+        }
+
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            BlockHitResult hitResult
+    ) {
+        if (!(level.getBlockEntity(pos) instanceof TCLegacyTubeBlockEntity tube)) {
+            return InteractionResult.PASS;
+        }
+        if (tube.variant() == TCLegacyTubeVariant.VALVE) {
+            if (!level.isClientSide) {
+                tube.setAllowFlow(!tube.allowsFlow());
+                level.playSound(null, pos, TCSounds.SQUEEK.get(), SoundSource.BLOCKS, 0.7F, 0.9F + level.random.nextFloat() * 0.2F);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        if (tube.variant() == TCLegacyTubeVariant.FILTER && player.isShiftKeyDown() && !tube.filterAspect().isBlank()) {
+            if (!level.isClientSide) {
+                tube.setFilterAspect("");
+                level.playSound(null, pos, TCSounds.KEY.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        return InteractionResult.PASS;
+    }
+
+    @Override
     protected boolean hasAnalogOutputSignal(BlockState state) {
         return variant == TCLegacyTubeVariant.BUFFER;
     }
@@ -150,6 +260,61 @@ public class TCLegacyTubeBlock extends Block implements EntityBlock {
         }
         int amount = tube.transportNode().storage().totalAmount();
         return amount <= 0 ? 0 : Math.min(15, 1 + (int) Math.floor(amount / 10.0D * 14.0D));
+    }
+
+    private static boolean isCaster(ItemStack stack) {
+        return stack.is(TCItems.CASTER_BASIC.get());
+    }
+
+    private TubeSubHit traceSubHit(TCLegacyTubeBlockEntity tube, BlockPos pos, BlockHitResult hitResult) {
+        Vec3 local = hitResult.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
+        boolean buffer = tube.variant() == TCLegacyTubeVariant.BUFFER;
+        double min = buffer ? 0.375D : 0.375D;
+        double max = buffer ? 0.625D : 0.625D;
+        double sideEnd = buffer ? 0.5D : 0.375D;
+        for (Direction direction : Direction.values()) {
+            if (tube.hasConnectableNeighbour(direction) && containsSide(direction, local, min, max, sideEnd)) {
+                return TubeSubHit.side(direction);
+            }
+        }
+        double centerMin = buffer ? 0.25D : 0.375D;
+        double centerMax = buffer ? 0.75D : 0.625D;
+        if (between(local.x, centerMin, centerMax)
+                && between(local.y, centerMin, centerMax)
+                && between(local.z, centerMin, centerMax)) {
+            return TubeSubHit.center();
+        }
+        return TubeSubHit.side(hitResult.getDirection());
+    }
+
+    private static boolean containsSide(Direction direction, Vec3 local, double min, double max, double sideEnd) {
+        return switch (direction) {
+            case DOWN -> between(local.x, min, max) && between(local.z, min, max) && between(local.y, 0.0D, sideEnd);
+            case UP -> between(local.x, min, max) && between(local.z, min, max) && between(local.y, 1.0D - sideEnd, 1.0D);
+            case NORTH -> between(local.x, min, max) && between(local.y, min, max) && between(local.z, 0.0D, sideEnd);
+            case SOUTH -> between(local.x, min, max) && between(local.y, min, max) && between(local.z, 1.0D - sideEnd, 1.0D);
+            case WEST -> between(local.y, min, max) && between(local.z, min, max) && between(local.x, 0.0D, sideEnd);
+            case EAST -> between(local.y, min, max) && between(local.z, min, max) && between(local.x, 1.0D - sideEnd, 1.0D);
+        };
+    }
+
+    private static boolean between(double value, double min, double max) {
+        return value >= min - 1.0E-4D && value <= max + 1.0E-4D;
+    }
+
+    private record TubeSubHit(Kind kind, Direction side) {
+        private static TubeSubHit side(Direction side) {
+            return new TubeSubHit(Kind.SIDE, side);
+        }
+
+        private static TubeSubHit center() {
+            return new TubeSubHit(Kind.CENTER, null);
+        }
+
+        private enum Kind {
+            SIDE,
+            CENTER
+        }
     }
 
     @Override

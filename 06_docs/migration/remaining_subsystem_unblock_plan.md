@@ -1,6 +1,6 @@
 # Remaining Subsystem Unblock Plan
 
-Status: working order after the Bellows device slice.
+Status: working order after the Alembic/Jar item-transfer and tube-caster control closure.
 
 Basis: `06_docs/migration/NeoForge_legacy_migration_guide.md`, `06_docs/migration/migration_matrix.md`, `06_docs/migration/porting_order.md`, `06_docs/current_port_status.md`.
 
@@ -19,8 +19,8 @@ This is a blocker-removal order, not a promise that every row is one commit. Sev
 |---:|---|---|---|---|
 | 0 | Keep baseline gates green | Every later subsystem depends on the current parity/audit baseline. | `build`, server smoke when relevant, aspect/scan diffs, research/page catalog audits, item/block quick preset. | Prevents silent regressions while large batches land. |
 | 1 | Bellows device boundary | Completed focused device slice; keep it as a regression guard before expanding essentia devices. | `audit-bellows-device.ps1`, build, server smoke, in-client visual check. | Bellows dynamic behavior/rendering. |
-| 2 | Alembic label/phial/jar item transfer | Depends on stable Warded Jar/Alembic storage and aspect Data Components. This closes the most direct player-facing essentia handling gap. | Warded Jar/Alembic runtime checks plus a new label/phial static/runtime audit. | Label application/removal, labeled jar UX, phial/jar transfer, aspect container item behavior. |
-| 3 | Tube caster sub-parts, valve controls and vent/valve visuals | Depends on stable tube state/shape and Bellows; needed before broader essentia networks can be interacted with reliably. | Tube interaction audit, visual shape audit, runClient, no client imports in common/server. | Caster tube side closure/choke/facing controls, valve state clarity, vent visual parity. |
+| 2 | Alembic label/phial/jar item transfer | Completed behavior slice over stable Warded Jar/Alembic storage and aspect Data Components. | Combined transport/machine runtime audit `46/46`. | Label application/removal, labeled jar UX, phial/jar transfer, aspect container item behavior. |
+| 3 | Tube caster sub-parts, valve controls and vent/valve visuals | Completed behavior/state slice over stable tube state/shape and Bellows. Final measured visual parity remains under row 17. | Combined transport/machine runtime audit `46/46`, visual shape audit, runClient visual review when polishing. | Caster tube side closure/choke/facing controls, valve state clarity, vent state sync. |
 | 4 | Remaining essentia utility devices | After transport controls exist, devices that consume/produce essentia can be implemented without inventing ad hoc paths. | Dedicated behavior audits per device family, combined transport audit, server smoke. | Void Jar overflow, importer/exporter if kept, essentia mirror path, Thaumatorium input/output dependency blockers. |
 | 5 | Arcane Workbench remaining recipes and equipment discount bridge | Workbench behavior and recipe/page data exist; recipe families can now land without destabilizing research. Equipment discount should be resolved before many player progression rewards depend on it. | Arcane recipe audit, workbench behavior audit, generated-aspect cache diff, runClient GUI pass. | Remaining arcane page/recipe gaps, equipment/Curios discount, recipe-derived aspect blockers. |
 | 6 | Item/equipment behavior pass | Many registered items currently exist as identities/recipes but still lack real behavior. Close them before focus/golem/worldgen systems depend on them. | Item behavior audit, creative tab check, tooltip/aspect check, runClient smoke. | Goggles/robes/baubles-equivalent behavior, sanity checker, utility item behavior, non-final item placeholders. |
@@ -51,19 +51,21 @@ This is a blocker-removal order, not a promise that every row is one commit. Sev
 
 ## Current Blocker Cut Line
 
-The current cut line is between rows 2 and 3:
+The current cut line is after row 3:
 
-1. Bellows is implemented and should now be treated as regression-guarded.
-2. The next real blocker is Alembic label/phial/jar item transfer.
-3. Tube caster sub-parts and vent/valve visual controls should follow immediately after, because they unblock comfortable essentia-network testing.
+1. Bellows is implemented and should remain regression-guarded.
+2. Alembic/Jar label filters, phial transfer and jar item transfer are implemented through Data Components and covered by the combined runtime audit.
+3. Tube caster side/choke/facing controls, manual/redstone valve state and vent state sync are implemented and covered by the combined runtime audit.
+4. The next real blocker is row 4: remaining essentia utility devices and consumers, especially behavior that depends on stable labels, phials, jars, tubes and Alembics.
 
 ## Immediate Next Batch
 
-After Bellows validates, the next large safe batch is Alembic label/phial transfer:
+The next large safe batch should start row 4, not reopen rows 2/3:
 
-- preserve aspect identity through existing aspect Data Components, not NBT;
-- make Warded Jar/Alembic item interactions server-owned;
-- add a dedicated runtime/static audit for label/phial behavior;
-- keep caster/tube sub-part work out of that batch unless the audit proves it is required.
+- choose one remaining essentia utility device family;
+- write a short legacy source audit for that family before coding;
+- reuse `TCEssentiaCapabilities.BLOCK` and current jar/Alembic/phial Data Component behavior;
+- extend the combined transport runtime audit or add a focused device audit;
+- keep Thaumatorium, mirrors and broad alchemy automation separate unless the dependency graph proves they must land together.
 
-The batch after that should be tube caster sub-parts plus valve/vent visual state, not a new unrelated gameplay system.
+Final valve/vent visual parity should be handled under row 17 with screenshot or pixel-level evidence, because the behavior/state contract is already closed.

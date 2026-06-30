@@ -1,7 +1,7 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
 Last reviewed branch: `main`
-Last reviewed checkpoint: `2026-06-30` Bellows closure and remaining subsystem unblock plan
+Last reviewed checkpoint: `2026-06-30` Alembic/Jar transfer and tube caster/valve behavior closure
 Reviewed target module: `05_neoforge_port`
 
 ## State Snapshot
@@ -47,12 +47,15 @@ This section records the current repository state. The lower "Changelog Notes" s
 - The six registered tube variants have server tickers, exact normal/buffer capacities (`1`/`10`), two/five-tick cadence, compatible suction propagation, restrict halving, filter/one-way/valve/choke rules, six persisted open sides, facing/filter/flow state, reciprocal side closure and comparator output for the buffer.
 - Tube and Warded Jar sided access is exposed through `TCEssentiaCapabilities.BLOCK`; internal neighbor discovery uses the NeoForge capability boundary.
 - Warded Jar preserves top-only access, capacity `250`, suction `32`/filtered `64`, all-or-nothing transport take and one-point pull every five ticks.
-- The runtime behavior audit passes `23/23`, including venting pause, multipart state, capability visibility and NBT round-trip.
-- Alembic and all three smelter tiers now have their real server-owned machine boundary: two-slot inventory, aspect slurry conversion, exact tier efficiency/output cadence, Alumentum fuel boost, cumulative vent mitigation, matching-first Alembic columns, attached auxiliary output, sided item automation and legacy-layout menu/screen. The combined transport/machine runtime audit passes `37/37`. Bellows now has a focused device/rendering slice with legacy client inflation, tube-buffer extension, smelter/tube-buffer ownership and vanilla-furnace cook-progress boost. Label/phial interaction, caster sub-part interaction and final vent/valve rendering remain incomplete.
+- Alembic and all three smelter tiers now have their real server-owned machine boundary: two-slot inventory, aspect slurry conversion, exact tier efficiency/output cadence, Alumentum fuel boost, cumulative vent mitigation, matching-first Alembic columns, attached auxiliary output, sided item automation and legacy-layout menu/screen.
+- Alembic/Jar label filters, empty phial extraction, filled-phial-to-jar transfer, jar-item filling from Alembics, caster tube sub-part side/choke/facing controls, manual/redstone valve state and vent sync are implemented over modern Data Components and BlockEntity sync.
+- The combined transport/machine runtime audit passes `46/46`, including venting pause, multipart state, capability visibility, NBT round-trip, label/filter sync, phial transfer quanta and caster sub-hit controls.
+- Bellows now has a focused device/rendering slice with legacy client inflation, tube-buffer extension, smelter/tube-buffer ownership and vanilla-furnace cook-progress boost.
+- Final measured valve/vent pixel parity remains an in-client visual review task.
 
 ### Deferred boundaries
 
-- Special alchemy side effects, crucible-derived aspect generation, item pulling radius, Thaumatorium/mirror integration, caster tube controls, Alembic label/phial transfer, finite Flux Goo spreading/taint transforms, Flux Rift stabilization, full custom entity/golem systems, broad worldgen, broad rendering polish, full equipment/Curios discount integration, and remaining dependency-heavy recipe/page families remain deferred.
+- Special alchemy side effects, crucible-derived aspect generation, item pulling radius, Thaumatorium/mirror integration, finite Flux Goo spreading/taint transforms, Flux Rift stabilization, full custom entity/golem systems, broad worldgen, broad rendering polish, full equipment/Curios discount integration, remaining dependency-heavy recipe/page families, and final measured valve/vent visual parity remain deferred.
 
 ## Purpose
 
@@ -115,10 +118,10 @@ This is the current implementation status document. Use it together with the mig
 
 | Bucket | Current contents | Notes |
 |---|---|---|
-| Ready | Aspect/scan parity harnesses, reload-safe research data, current Thaumometer scan path, knowledge sync, research table and first server-authoritative Thaumonomicon flow, current exact Arcane Workbench recipes/behavior, crucible behavior slices, infusion recipe/page data, persistent Warded Jar storage, the `37/37` tube/jar/Alembic/smelter runtime boundary, the focused Bellows device/rendering audit, and the audited default infusion cycle through output placement. | Keep these covered by build/server/client smoke checks before expanding consumers. |
+| Ready | Aspect/scan parity harnesses, reload-safe research data, current Thaumometer scan path, knowledge sync, research table and first server-authoritative Thaumonomicon flow, current exact Arcane Workbench recipes/behavior, crucible behavior slices, infusion recipe/page data, persistent Warded Jar storage, the `46/46` tube/jar/Alembic/smelter/label/phial/caster-control runtime boundary, the focused Bellows device/rendering audit, and the audited default infusion cycle through output placement. | Keep these covered by build/server/client smoke checks before expanding consumers. |
 | Placeholder / Bridge | Remaining research requirement bridges, unfinished advanced theorycraft cards/aids, minimal warp storage, unresolved machine/entity identities, and unreviewed machine/entity visual identities. Research bridge recipes, generated parity reports, and debug-only completion commands remain tooling. | These are scaffolds for validation and migration. Do not treat them as final gameplay or visual parity. |
-| Blocked | Thaumonomicon final search/visual parity, recipe drilldown/history, final Arcane Workbench GUI polish, full equipment/Curios discount integration, remaining arcane recipes, full Flux Goo flow/taint transforms, measured infusion visual parity, blueprint/fake recipe systems, full warp effects/sync, Alembic label/phial transfer, custom entities, caster/mirror behavior, and ScanSky celestial-note side effects. | These need focused design and validation slices. |
-| Next subsystem | Port Alembic label/phial transfer over aspect Data Components. | Bellows is now its own focused device slice; keep caster tube sub-part interaction and vent/valve rendering for the follow-up slice. |
+| Blocked | Thaumonomicon final search/visual parity, recipe drilldown/history, final Arcane Workbench GUI polish, full equipment/Curios discount integration, remaining arcane recipes, full Flux Goo flow/taint transforms, measured infusion visual parity, blueprint/fake recipe systems, full warp effects/sync, custom entities, focus/caster gameplay, mirror behavior, remaining essentia utility devices and ScanSky celestial-note side effects. | These need focused design and validation slices. |
+| Next subsystem | Start row 4 from `06_docs/migration/remaining_subsystem_unblock_plan.md`: remaining essentia utility devices and consumers. | Use the closed `46/46` transport boundary; keep final valve/vent pixel parity as measured visual review work. |
 
 ## Legacy asset corpus import
 
@@ -249,7 +252,13 @@ Do not implement or expand aura, research, arcane crafting, crucible/alchemy, in
 
 - Added the focused Bellows device/rendering slice: `RenderShape.ENTITYBLOCK_ANIMATED`, client/server BlockEntity tickers, legacy inflation cycle, legacy-texture BlockEntityRenderer, tube-buffer bore extension, and an isolated vanilla furnace cook-progress bridge.
 - Expanded `audit-bellows-device.ps1` to require the renderer registration, client animation state, tube-buffer extension and furnace bridge instead of accepting a static placeholder.
-- Added `06_docs/migration/remaining_subsystem_unblock_plan.md`; next focused subsystem is Alembic label/phial transfer, followed by caster tube controls and vent/valve rendering.
+- Added `06_docs/migration/remaining_subsystem_unblock_plan.md`; the following Alembic/Jar item-transfer and tube-caster control closure moved the current cut line after rows 2 and 3.
+
+### Latest Alembic/Jar and tube-control closure
+
+- Added Data Component-backed Alembic/Jar label filters, empty phial extraction, filled-phial-to-jar transfer and Warded Jar item payload transfer.
+- Added tube caster side/choke/facing controls, fixed buffer choke cycling to match legacy `0 -> 1 -> 2 -> 0`, and synced manual/redstone valve plus vent state.
+- Expanded the combined transport/machine runtime audit to cover these interactions; current result is `46/46`.
 
 ## Local validation commands
 
@@ -775,4 +784,4 @@ The sections below are historical update notes. They should not be read as the c
 - Replaced the incremental placeholder result with one reviewed legacy-parity batch.
 - Corrected Alumentum/fuel handling, cumulative vent mitigation, aux facing, matching-first Alembic columns and upgraded-smelter ownership.
 - Restored detailed legacy-derived Bellows/aux/vent models, added the smelter menu/screen and registered sided item automation.
-- Combined tube/jar/Alembic/smelter runtime result: `37/37`.
+- Combined tube/jar/Alembic/smelter runtime result later expanded with label/phial/caster controls: `46/46`.

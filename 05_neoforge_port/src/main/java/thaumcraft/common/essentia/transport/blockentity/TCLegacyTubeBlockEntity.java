@@ -8,6 +8,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -20,6 +22,7 @@ import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.essentia.transport.block.TCLegacyTubeVariant;
 import thaumcraft.common.essentia.transport.block.TCLegacyTubeBlock;
 import thaumcraft.common.blocks.essentia.TCBellowsBlock;
+import thaumcraft.common.lib.fx.TCFXDispatcher;
 import thaumcraft.common.registry.TCBlocks;
 
 /**
@@ -47,6 +50,8 @@ public class TCLegacyTubeBlockEntity extends TCAbstractEssentiaTransportBlockEnt
     private int venting;
     private int ventColor = 0xAAAAAA;
     private int bellows;
+    private float valveRotation;
+    private float previousValveRotation;
 
     public TCLegacyTubeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, TCLegacyTubeVariant variant) {
         super(type, pos, state, variant.mode(), variant.storageCapacity());
@@ -95,7 +100,11 @@ public class TCLegacyTubeBlockEntity extends TCAbstractEssentiaTransportBlockEnt
         if (side == null || variant != TCLegacyTubeVariant.BUFFER) {
             return;
         }
-        byte normalized = (byte) Math.max(0, Math.min(2, choke));
+        int wrapped = choke % 3;
+        if (wrapped < 0) {
+            wrapped += 3;
+        }
+        byte normalized = (byte) wrapped;
         if (chokedSides[side.get3DDataValue()] != normalized) {
             chokedSides[side.get3DDataValue()] = normalized;
             markTransportDirty();
@@ -118,6 +127,17 @@ public class TCLegacyTubeBlockEntity extends TCAbstractEssentiaTransportBlockEnt
         return allowFlow;
     }
 
+    public void setAllowFlow(boolean allowFlow) {
+        if (variant != TCLegacyTubeVariant.VALVE || this.allowFlow == allowFlow) {
+            return;
+        }
+        this.allowFlow = allowFlow;
+        if (!allowFlow) {
+            setCalculatedSuction("", 0);
+        }
+        markTransportDirty();
+    }
+
     public int ventingTicks() {
         return venting;
     }
@@ -131,6 +151,47 @@ public class TCLegacyTubeBlockEntity extends TCAbstractEssentiaTransportBlockEnt
             return;
         }
         tube.tickTransportServer();
+    }
+
+    public static void clientTick(Level level, BlockPos pos, BlockState state, TCLegacyTubeBlockEntity tube) {
+        if (level == null || !level.isClientSide) {
+            return;
+        }
+        tube.tickTransportClient();
+    }
+
+    private void tickTransportClient() {
+        previousValveRotation = valveRotation;
+        if (variant == TCLegacyTubeVariant.VALVE) {
+            if (!allowFlow && valveRotation < 360.0F) {
+                valveRotation = Math.min(360.0F, valveRotation + 20.0F);
+            } else if (allowFlow && valveRotation > 0.0F) {
+                valveRotation = Math.max(0.0F, valveRotation - 20.0F);
+            }
+        }
+        if (venting > 0 && level != null) {
+            venting--;
+            RandomSource random = level.getRandom();
+            float pitch = random.nextFloat() * 360.0F;
+            float yaw = random.nextFloat() * 360.0F;
+            double motionX = -Mth.sin(yaw / 180.0F * Mth.PI) * Mth.cos(pitch / 180.0F * Mth.PI) / 5.0D;
+            double motionZ = Mth.cos(yaw / 180.0F * Mth.PI) * Mth.cos(pitch / 180.0F * Mth.PI) / 5.0D;
+            double motionY = -Mth.sin(pitch / 180.0F * Mth.PI) / 5.0D;
+            TCFXDispatcher.drawVentParticles(
+                    level,
+                    worldPosition.getX() + 0.5D,
+                    worldPosition.getY() + 0.5D,
+                    worldPosition.getZ() + 0.5D,
+                    motionX,
+                    motionY,
+                    motionZ,
+                    ventColor
+            );
+        }
+    }
+
+    public float valveRotation(float partialTick) {
+        return Mth.lerp(partialTick, previousValveRotation, valveRotation);
     }
 
     @Override
@@ -355,7 +416,7 @@ public class TCLegacyTubeBlockEntity extends TCAbstractEssentiaTransportBlockEnt
     }
 
     private void setCalculatedSuction(String aspect, int amount) {
-        if (variant == TCLegacyTubeVariant.VALVE && !allowFlow) {
+        if (variant == TCLegacyTubeVariant.VALVE && !allowFlow && amount > 0) {
             return;
         }
         suctionAspect = aspect == null ? "" : aspect;
@@ -387,6 +448,59 @@ public class TCLegacyTubeBlockEntity extends TCAbstractEssentiaTransportBlockEnt
                 level.invalidateCapabilities(tube.worldPosition);
             }
         }
+    }
+
+    public boolean hasConnectableNeighbour(Direction side) {
+        if (level == null || side == null) {
+            return false;
+        }
+        return level.getCapability(
+                TCEssentiaCapabilities.BLOCK,
+                worldPosition.relative(side),
+                side.getOpposite()
+        ) != null;
+    }
+
+    public boolean casterToggleSide(Direction side, boolean sneaking) {
+        if (side == null) {
+            return false;
+        }
+        if (variant == TCLegacyTubeVariant.BUFFER && sneaking) {
+            setChokedSide(side, chokedSide(side) + 1);
+            return true;
+        }
+        setSideOpen(side, !isSideOpen(side));
+        refreshConnectionState();
+        BlockEntity neighbour = level == null ? null : level.getBlockEntity(worldPosition.relative(side));
+        if (neighbour instanceof TCLegacyTubeBlockEntity tube) {
+            tube.refreshConnectionState();
+        }
+        return true;
+    }
+
+    public boolean casterRotateCenter() {
+        if (variant == TCLegacyTubeVariant.BUFFER) {
+            return false;
+        }
+        int start = facing.get3DDataValue();
+        for (int step = 1; step < 20; step++) {
+            Direction candidate = Direction.from3DDataValue((start + step) % 6);
+            if (variant == TCLegacyTubeVariant.VALVE) {
+                if (!hasConnectableNeighbour(candidate)) {
+                    setFacing(candidate);
+                    refreshConnectionState();
+                    return true;
+                }
+            } else {
+                Direction acceptedSide = candidate.getOpposite();
+                if (hasConnectableNeighbour(acceptedSide) && isSideOpen(acceptedSide)) {
+                    setFacing(candidate);
+                    refreshConnectionState();
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
