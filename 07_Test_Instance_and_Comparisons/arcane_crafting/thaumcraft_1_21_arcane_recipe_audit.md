@@ -2,7 +2,11 @@
 
 | Check | Status | Detail |
 |---|---|---|
-| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=14 |
+| `arcane_recipe_type_has_loaded_recipes` | `PASS` | count=89 |
+| `arcane_recipe_type_matches_legacy_1_12_id_set` | `PASS` | count=89, expected=89, missing=[], extra=[] |
+| `all_loaded_arcane_recipes_build_page_snapshots` | `PASS` | count=89 |
+| `arcane_recipe_results_have_no_empty_or_missing_ids` | `PASS` | count=89 |
+| `robe_recipes_output_legacy_cloth_items` | `PASS` | boots=thaumcraft:cloth_boots, chest=thaumcraft:cloth_chest, legs=thaumcraft:cloth_legs |
 | `thaumometer_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/thaumometer |
 | `vis_resonator_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/vis_resonator |
 | `wand_workbench_wrong_vanilla_bridge_removed` | `PASS` | thaumcraft:research_bridge/wand_workbench |
@@ -108,4 +112,4 @@
 | `infusionmatrix_shaped_pattern` | `PASS` | width=3, height=3 |
 | `infusionmatrix_catalog_arcane_snapshot_ready` | `PASS` | availability=READY |
 
-- Loaded arcane recipes: `14`
+- Loaded arcane recipes: `89`

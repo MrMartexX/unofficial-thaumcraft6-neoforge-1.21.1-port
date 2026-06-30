@@ -4,22 +4,27 @@
 
 This slice establishes the NeoForge 1.21.1 data and serializer boundary for
 Thaumcraft 6 arcane recipes and the first server-authoritative Arcane
-Workbench crafting path. It deliberately does not implement broad recipe
-import, full caster-equipment/Curios integration, recipe-book integration, or
-the special void-jar recipe behavior. The current slice does include the first
-legacy-style player vis-discount service and Workbench Charger 3 x 3 aura
-query/drain behavior because both directly affect Arcane Workbench correctness.
+Workbench crafting path. It now covers the full regular legacy TC6 arcane
+recipe id set and the first legacy equipment-discount bridge. It deliberately
+does not implement recipe-book integration, the special void-jar stack-copy
+recipe behavior, or final optional accessory/Curios slot integration. The
+current slice does include the legacy-style player vis-discount service and
+Workbench Charger 3 x 3 aura query/drain behavior because both directly affect
+Arcane Workbench correctness.
 It also includes the legacy missing-vis ghost output boundary: the screen may
 show the recipe result as a blocked ghost when only vis is missing, but the
 server result remains non-pickup and non-craftable.
 
 ## Authoritative legacy behavior
 
-The original runtime contains `73` arcane recipe catalog entries:
+The original runtime contains `89` regular `thaumcraft:arcane` recipes:
 
-- `63` regular shaped recipes;
+- `80` regular shaped recipes;
 - `9` regular shapeless recipes;
-- `1` special shaped void-jar recipe with additional stack behavior.
+
+`ShapedArcaneVoidJar` has additional stack-copy semantics in legacy code. The
+current data path contains the `jarvoid` recipe id and output, but the special
+stack-copy behavior remains a focused follow-up.
 
 The public `IArcaneRecipe` contract exposes:
 
@@ -61,7 +66,11 @@ On output take, the server:
 
 ## Exact fixtures
 
-Current exact arcane recipe fixtures:
+The current runtime audit enforces the complete `89`-recipe legacy id set, all
+loaded arcane recipes building Thaumonomicon page snapshots, and all arcane
+recipe outputs resolving to real non-empty item ids. The table below lists the
+earlier high-risk fixtures that remain individually asserted because they are
+common dependency anchors:
 
 | Recipe id | Shape | Research | Vis | Crystals |
 |---|---|---|---:|---|
@@ -143,10 +152,10 @@ through the same legacy ingredient formula used by normal crafting:
 5. add `praecantatio` from `sqrt(1 + vis / 2) / output count`.
 
 Exact/tag/manual/runtime-parity assignments still win before generated values.
-The first reload-validated arcane-generated outputs are `filter` and
-`morphic_resonator`. Broad remaining arcane imports must still be added by
-audited dependency family; crucible and infusion recipe-derived aspect
-generation remain blocked until those serializers and machine models exist.
+All currently loaded regular arcane recipes feed this generated cache after
+server datapack reload. Crucible and infusion recipe-derived aspect generation
+remain blocked until those serializers and machine models own their exact
+ingredient/remaining-item semantics.
 
 ## Arcane Workbench server model
 
@@ -232,20 +241,27 @@ Current checks cover:
 - output take consuming matrix ingredients, required crystals, and current-chunk
   vis;
 - 5% Goggles of Revealing discount reducing the resolved cost and drained aura;
+- legacy Thaumaturge robe discounts: boots `2%`, chest `3%`, legs `3%`;
+- legacy Void robe discounts: helm/chest/legs `5%` each;
+- external discount stack provider contribution, used as the modern bridge for
+  future Baubles/Curios-like equipment slots without a hard optional dependency;
+- combined discount cap at the public API limit of `50%`;
+- combined equipment/provider discount applying to the same integer-truncated
+  vis-cost formula used by legacy code;
 - vanilla 3 x 3 fallback crafting for the current exact `iron_plate` fixture.
 - server-owned Arcane Workbench menu feedback for resolved cost/aura, discounted
   cost, missing vis, missing crystals, and vanilla fallback staying costless.
 
-Current runtime result: `23/23` Arcane Workbench behavior checks pass. The
-separate arcane recipe audit currently passes `105/105` checks with `14` loaded
-arcane recipes. The research recipe/page catalog reports `113 READY`,
-`86 DEFERRED`, and `4 LEGACY_MISSING` live references after the first
-crucible page-data boundary; this does not make in-world crucible behavior part
-of the arcane workbench slice.
+Current runtime result: `28/28` Arcane Workbench behavior checks pass. The
+separate arcane recipe audit currently passes `109/109` checks with `89` loaded
+arcane recipes and an exact legacy 1.12 id-set match. The research recipe/page
+catalog is still the owner of broader page availability; this does not make
+deferred recipe-page renderer families part of the arcane workbench slice.
 
 Run from `05_neoforge_port`:
 
 ```powershell
+.\gradlew.bat runServer --no-daemon -PtcArcaneRecipeAudit=true "-PtcArcaneRecipeAuditPath=D:\Thaumcraft_6_port_to_1.21.1\07_Test_Instance_and_Comparisons\arcane_crafting\thaumcraft_1_21_arcane_recipe_audit.md"
 .\gradlew.bat runServer --no-daemon -PtcArcaneWorkbenchAudit=true "-PtcArcaneWorkbenchAuditPath=D:\Thaumcraft_6_port_to_1.21.1\07_Test_Instance_and_Comparisons\arcane_crafting\thaumcraft_1_21_arcane_workbench_audit.md"
 ```
 
@@ -262,11 +278,9 @@ same recipe data consumed by the first Arcane Workbench server crafting path.
 
 ## Blocked behavior
 
-- Full equipment integration for robes, goggles variants, Baubles/Curios-style
-  slots, and vis-exhaustion penalties. Current discount support is limited to
-  the first vanilla armor-slot marker service and Goggles fixture.
+- Final item/equipment behavior for wearing/rendering robes, goggles variants,
+  Baubles/Curios-style slot adapter wiring, and vis-exhaustion penalties.
+  Current discount support covers vanilla armor slots and a provider bridge.
 - Exact GUI polish: final visual tuning beyond the current server-owned
   aura/cost labels, missing-vis ghost output and crystal glow overlays.
 - Special `ShapedArcaneVoidJar` stack-copy behavior.
-- The remaining `63` legacy recipes until their exact outputs and ingredients
-  exist and can be mapped without placeholders.

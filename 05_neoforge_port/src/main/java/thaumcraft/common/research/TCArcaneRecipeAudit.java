@@ -8,6 +8,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -37,6 +40,18 @@ final class TCArcaneRecipeAudit {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "wand_workbench");
     private static final ResourceLocation CASTER_BASIC =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "caster_basic");
+    private static final ResourceLocation ROBE_BOOTS =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "robeboots");
+    private static final ResourceLocation ROBE_CHEST =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "robechest");
+    private static final ResourceLocation ROBE_LEGS =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "robelegs");
+    private static final ResourceLocation CLOTH_BOOTS =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "cloth_boots");
+    private static final ResourceLocation CLOTH_CHEST =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "cloth_chest");
+    private static final ResourceLocation CLOTH_LEGS =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "cloth_legs");
     private static final ResourceLocation ENCHANTED_FABRIC =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "enchantedfabric");
     private static final ResourceLocation MIRROR_GLASS =
@@ -71,6 +86,97 @@ final class TCArcaneRecipeAudit {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "research_bridge/caster_basic");
     private static final ResourceLocation MIRRORED_GLASS_BRIDGE =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "research_bridge/mirrored_glass");
+    private static final List<String> LEGACY_ARCANE_RECIPE_IDS = List.of(
+            "thaumcraft:activatorrail",
+            "thaumcraft:advalchemyconstruct",
+            "thaumcraft:advancedcrossbow",
+            "thaumcraft:alchemicalconstruct",
+            "thaumcraft:alembic",
+            "thaumcraft:ancientpedestal",
+            "thaumcraft:arcaneear",
+            "thaumcraft:arcanelamp",
+            "thaumcraft:arcanepedestal",
+            "thaumcraft:arcanespa",
+            "thaumcraft:automatedcrossbow",
+            "thaumcraft:bannerblack",
+            "thaumcraft:bannerblue",
+            "thaumcraft:bannerbrown",
+            "thaumcraft:bannercyan",
+            "thaumcraft:bannergray",
+            "thaumcraft:bannergreen",
+            "thaumcraft:banneryellow",
+            "thaumcraft:bannerlightblue",
+            "thaumcraft:bannerlime",
+            "thaumcraft:bannermagenta",
+            "thaumcraft:bannerorange",
+            "thaumcraft:bannerpink",
+            "thaumcraft:bannerpurple",
+            "thaumcraft:bannerred",
+            "thaumcraft:bannersilver",
+            "thaumcraft:bannerwhite",
+            "thaumcraft:bellows",
+            "thaumcraft:caster_basic",
+            "thaumcraft:centrifuge",
+            "thaumcraft:condenser",
+            "thaumcraft:condenserlattice",
+            "thaumcraft:dioptra",
+            "thaumcraft:eldritchpedestal",
+            "thaumcraft:enchantedfabric",
+            "thaumcraft:essentiasmelter",
+            "thaumcraft:essentiasmelterthaumium",
+            "thaumcraft:essentiasmeltervoid",
+            "thaumcraft:essentiatransportin",
+            "thaumcraft:essentiatransportout",
+            "thaumcraft:filter",
+            "thaumcraft:focuspouch",
+            "thaumcraft:goggles",
+            "thaumcraft:grapplegun",
+            "thaumcraft:grapplegunspool",
+            "thaumcraft:grappleguntip",
+            "thaumcraft:hungrychest",
+            "thaumcraft:infusionmatrix",
+            "thaumcraft:jarvoid",
+            "thaumcraft:levitator",
+            "thaumcraft:matrixcost",
+            "thaumcraft:matrixmotion",
+            "thaumcraft:mechanism_complex",
+            "thaumcraft:mechanism_simple",
+            "thaumcraft:mindclockwork",
+            "thaumcraft:mirrorglass",
+            "thaumcraft:mnemonicmatrix",
+            "thaumcraft:modaggression",
+            "thaumcraft:modvision",
+            "thaumcraft:morphicresonator",
+            "thaumcraft:patterncrafter",
+            "thaumcraft:pavebarrier",
+            "thaumcraft:pavetravel",
+            "thaumcraft:potionsprayer",
+            "thaumcraft:rechargepedestal",
+            "thaumcraft:redstoneinlay",
+            "thaumcraft:redstonerelay",
+            "thaumcraft:resonator",
+            "thaumcraft:robeboots",
+            "thaumcraft:robechest",
+            "thaumcraft:robelegs",
+            "thaumcraft:sanitychecker",
+            "thaumcraft:sealblank",
+            "thaumcraft:smelteraux",
+            "thaumcraft:smeltervent",
+            "thaumcraft:stabilizer",
+            "thaumcraft:thaumometer",
+            "thaumcraft:tube",
+            "thaumcraft:tubebuffer",
+            "thaumcraft:tubefilter",
+            "thaumcraft:tubeoneway",
+            "thaumcraft:tuberestrict",
+            "thaumcraft:tubevalve",
+            "thaumcraft:vis_resonator",
+            "thaumcraft:visbattery",
+            "thaumcraft:visgenerator",
+            "thaumcraft:wand_workbench",
+            "thaumcraft:wardedjar",
+            "thaumcraft:workbenchcharger"
+    );
 
     private TCArcaneRecipeAudit() {
     }
@@ -97,6 +203,41 @@ final class TCArcaneRecipeAudit {
         ArrayList<Check> checks = new ArrayList<>();
         int arcaneRecipeCount = recipeManager.getAllRecipesFor(TCRecipes.ARCANE_TYPE.get()).size();
         checks.add(check("arcane_recipe_type_has_loaded_recipes", arcaneRecipeCount >= 14, "count=" + arcaneRecipeCount));
+        Set<String> loadedArcaneRecipeIds = loadedArcaneRecipeIds(recipeManager);
+        Set<String> expectedArcaneRecipeIds = new TreeSet<>(LEGACY_ARCANE_RECIPE_IDS);
+        Set<String> missingArcaneRecipeIds = new TreeSet<>(expectedArcaneRecipeIds);
+        missingArcaneRecipeIds.removeAll(loadedArcaneRecipeIds);
+        Set<String> extraArcaneRecipeIds = new TreeSet<>(loadedArcaneRecipeIds);
+        extraArcaneRecipeIds.removeAll(expectedArcaneRecipeIds);
+        checks.add(check(
+                "arcane_recipe_type_matches_legacy_1_12_id_set",
+                arcaneRecipeCount == expectedArcaneRecipeIds.size()
+                        && missingArcaneRecipeIds.isEmpty()
+                        && extraArcaneRecipeIds.isEmpty(),
+                "count=" + arcaneRecipeCount
+                        + ", expected=" + expectedArcaneRecipeIds.size()
+                        + ", missing=" + missingArcaneRecipeIds
+                        + ", extra=" + extraArcaneRecipeIds
+        ));
+        checks.add(check(
+                "all_loaded_arcane_recipes_build_page_snapshots",
+                allLoadedArcaneRecipesBuildPageSnapshots(loadedArcaneRecipeIds, recipeManager, registries),
+                "count=" + loadedArcaneRecipeIds.size()
+        ));
+        checks.add(check(
+                "arcane_recipe_results_have_no_empty_or_missing_ids",
+                arcaneRecipeResultsHaveNoEmptyOrMissingIds(recipeManager, registries),
+                "count=" + loadedArcaneRecipeIds.size()
+        ));
+        checks.add(check(
+                "robe_recipes_output_legacy_cloth_items",
+                recipeResultId(recipeManager, ROBE_BOOTS, registries).equals(CLOTH_BOOTS)
+                        && recipeResultId(recipeManager, ROBE_CHEST, registries).equals(CLOTH_CHEST)
+                        && recipeResultId(recipeManager, ROBE_LEGS, registries).equals(CLOTH_LEGS),
+                "boots=" + recipeResultId(recipeManager, ROBE_BOOTS, registries)
+                        + ", chest=" + recipeResultId(recipeManager, ROBE_CHEST, registries)
+                        + ", legs=" + recipeResultId(recipeManager, ROBE_LEGS, registries)
+        ));
         checks.add(check(
                 "thaumometer_wrong_vanilla_bridge_removed",
                 recipeManager.byKey(THAUMOMETER_BRIDGE).isEmpty(),
@@ -813,6 +954,52 @@ final class TCArcaneRecipeAudit {
         ));
 
         return new Report(checks, arcaneRecipeCount);
+    }
+
+    private static Set<String> loadedArcaneRecipeIds(RecipeManager recipeManager) {
+        return recipeManager.getAllRecipesFor(TCRecipes.ARCANE_TYPE.get()).stream()
+                .map(holder -> holder.id().toString())
+                .collect(Collectors.toCollection(TreeSet::new));
+    }
+
+    private static boolean allLoadedArcaneRecipesBuildPageSnapshots(
+            Set<String> loadedArcaneRecipeIds,
+            RecipeManager recipeManager,
+            HolderLookup.Provider registries
+    ) {
+        for (String recipeId : loadedArcaneRecipeIds) {
+            ResourceLocation id = ResourceLocation.parse(recipeId);
+            if (TCResearchPageCatalogManager.availability(recipeId, recipeManager) != TCResearchPageAvailability.READY
+                    || TCResearchPageCatalogManager.buildArcanePage(id, recipeManager, registries).isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean arcaneRecipeResultsHaveNoEmptyOrMissingIds(
+            RecipeManager recipeManager,
+            HolderLookup.Provider registries
+    ) {
+        for (var holder : recipeManager.getAllRecipesFor(TCRecipes.ARCANE_TYPE.get())) {
+            ItemStack result = holder.value().getResultItem(registries);
+            if (result.isEmpty() || result.is(Items.AIR)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static ResourceLocation recipeResultId(
+            RecipeManager recipeManager,
+            ResourceLocation recipeId,
+            HolderLookup.Provider registries
+    ) {
+        return recipeManager.byKey(recipeId)
+                .filter(holder -> holder.value() instanceof TCArcaneRecipe)
+                .map(holder -> (TCArcaneRecipe) holder.value())
+                .map(recipe -> BuiltInRegistries.ITEM.getKey(recipe.getResultItem(registries).getItem()))
+                .orElse(ResourceLocation.withDefaultNamespace("air"));
     }
 
     private static List<String> crystalSummary(TCArcaneRecipe recipe) {

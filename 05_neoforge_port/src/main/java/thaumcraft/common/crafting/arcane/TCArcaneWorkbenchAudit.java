@@ -20,6 +20,7 @@ import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
+import thaumcraft.common.items.casters.CasterManager;
 import thaumcraft.common.items.TCAspectVariantStacks;
 import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
 import thaumcraft.common.registry.TCBlocks;
@@ -159,6 +160,31 @@ public final class TCArcaneWorkbenchAudit {
                     "discounted_arcane_craft_drains_discounted_vis",
                     discountedArcaneCraftDrainsDiscountedVis(player, level, workbench),
                     "vis=" + AuraHandler.getVis(level, AUDIT_POS)
+            ));
+            checks.add(check(
+                    "thaumaturge_robes_discount_matches_legacy",
+                    thaumaturgeRobesDiscountMatchesLegacy(player, level, workbench),
+                    "expectedDiscount=8"
+            ));
+            checks.add(check(
+                    "void_robes_discount_matches_legacy",
+                    voidRobesDiscountMatchesLegacy(player, level, workbench),
+                    "expectedDiscount=15"
+            ));
+            checks.add(check(
+                    "external_discount_provider_contributes_like_baubles",
+                    externalDiscountProviderContributesLikeBaubles(player, level, workbench),
+                    "expectedDiscount=5"
+            ));
+            checks.add(check(
+                    "combined_discount_is_capped_at_legacy_api_limit",
+                    combinedDiscountIsCapped(player, level, workbench),
+                    "expectedDiscount=50"
+            ));
+            checks.add(check(
+                    "arcane_cost_uses_combined_equipment_and_provider_discount",
+                    arcaneCostUsesCombinedEquipmentAndProviderDiscount(player, level, workbench),
+                    "expectedDiscount=18, expectedCost=41"
             ));
             checks.add(check(
                     "vanilla_fallback_ironplate_output_and_consumption",
@@ -410,6 +436,99 @@ public final class TCArcaneWorkbenchAudit {
         return crafted && (int) AuraHandler.getVis(level, AUDIT_POS) == 53;
     }
 
+    private static boolean thaumaturgeRobesDiscountMatchesLegacy(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, player, workbench);
+        setArmor(player, 0, new ItemStack(TCItems.CLOTH_BOOTS.get()));
+        setArmor(player, 1, new ItemStack(TCItems.CLOTH_LEGS.get()));
+        setArmor(player, 2, new ItemStack(TCItems.CLOTH_CHEST.get()));
+        return CasterManager.getTotalVisDiscountPercent(player) == 8;
+    }
+
+    private static boolean voidRobesDiscountMatchesLegacy(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, player, workbench);
+        setArmor(player, 1, new ItemStack(TCItems.VOID_ROBE_LEGS.get()));
+        setArmor(player, 2, new ItemStack(TCItems.VOID_ROBE_CHEST.get()));
+        setArmor(player, 3, new ItemStack(TCItems.VOID_ROBE_HELM.get()));
+        return CasterManager.getTotalVisDiscountPercent(player) == 15;
+    }
+
+    private static boolean externalDiscountProviderContributesLikeBaubles(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, player, workbench);
+        try (AutoCloseable ignored = CasterManager.registerVisDiscountStackProvider(
+                providerPlayer -> providerPlayer == player ? List.of(new ItemStack(TCItems.GOGGLES.get())) : List.of()
+        )) {
+            return CasterManager.getTotalVisDiscountPercent(player) == 5;
+        } catch (Exception exception) {
+            return false;
+        }
+    }
+
+    private static boolean combinedDiscountIsCapped(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, player, workbench);
+        setArmor(player, 1, new ItemStack(TCItems.VOID_ROBE_LEGS.get()));
+        setArmor(player, 2, new ItemStack(TCItems.VOID_ROBE_CHEST.get()));
+        setArmor(player, 3, new ItemStack(TCItems.VOID_ROBE_HELM.get()));
+        try (AutoCloseable ignored = CasterManager.registerVisDiscountStackProvider(
+                providerPlayer -> providerPlayer == player ? List.of(
+                        new ItemStack(TCItems.GOGGLES.get()),
+                        new ItemStack(TCItems.GOGGLES.get()),
+                        new ItemStack(TCItems.GOGGLES.get()),
+                        new ItemStack(TCItems.GOGGLES.get()),
+                        new ItemStack(TCItems.GOGGLES.get()),
+                        new ItemStack(TCItems.GOGGLES.get()),
+                        new ItemStack(TCItems.GOGGLES.get()),
+                        new ItemStack(TCItems.GOGGLES.get())
+                ) : List.of()
+        )) {
+            return CasterManager.getTotalVisDiscountPercent(player) == CasterManager.MAX_VIS_DISCOUNT_PERCENT;
+        } catch (Exception exception) {
+            return false;
+        }
+    }
+
+    private static boolean arcaneCostUsesCombinedEquipmentAndProviderDiscount(
+            ServerPlayer player,
+            ServerLevel level,
+            TCArcaneWorkbenchBlockEntity workbench
+    ) {
+        clearDiscountGear(level, player, workbench);
+        setResearch(player, true);
+        setArmor(player, 0, new ItemStack(TCItems.CLOTH_BOOTS.get()));
+        setArmor(player, 1, new ItemStack(TCItems.CLOTH_LEGS.get()));
+        setArmor(player, 2, new ItemStack(TCItems.CLOTH_CHEST.get()));
+        setArmor(player, 3, new ItemStack(TCItems.GOGGLES.get()));
+        AuraHandler.seedAuraChunk(level, AUDIT_POS, 100);
+        prepareVisResonator(workbench, true, true);
+        try (AutoCloseable ignored = CasterManager.registerVisDiscountStackProvider(
+                providerPlayer -> providerPlayer == player ? List.of(new ItemStack(TCItems.GOGGLES.get())) : List.of()
+        )) {
+            TCArcaneWorkbenchCrafting.ResolvedCraft craft = TCArcaneWorkbenchCrafting.resolve(player, workbench);
+            return craft.kind() == TCArcaneWorkbenchCrafting.Kind.ARCANE
+                    && CasterManager.getTotalVisDiscountPercent(player) == 18
+                    && craft.baseVis() == 50
+                    && craft.vis() == 41
+                    && craft.hasVis();
+        } catch (Exception exception) {
+            return false;
+        }
+    }
+
     private static boolean vanillaFallbackIronPlateCrafts(
             ServerPlayer player,
             ServerLevel level,
@@ -555,9 +674,15 @@ public final class TCArcaneWorkbenchAudit {
     ) {
         setCharger(level, false);
         if (player != null) {
-            player.getInventory().armor.set(3, ItemStack.EMPTY);
+            for (int slot = 0; slot < player.getInventory().armor.size(); slot++) {
+                player.getInventory().armor.set(slot, ItemStack.EMPTY);
+            }
         }
         resetWorkbench(workbench);
+    }
+
+    private static void setArmor(ServerPlayer player, int slot, ItemStack stack) {
+        player.getInventory().armor.set(slot, stack);
     }
 
     private static void setGogglesInHeadSlot(ServerPlayer player) {

@@ -19,6 +19,11 @@
 | `vis_resonator_craft_consumes_matrix_crystals_and_vis` | `PASS` | vis=50.0 |
 | `vis_discount_reduces_arcane_cost` | `PASS` | cost=47 |
 | `discounted_arcane_craft_drains_discounted_vis` | `PASS` | vis=53.0 |
+| `thaumaturge_robes_discount_matches_legacy` | `PASS` | expectedDiscount=8 |
+| `void_robes_discount_matches_legacy` | `PASS` | expectedDiscount=15 |
+| `external_discount_provider_contributes_like_baubles` | `PASS` | expectedDiscount=5 |
+| `combined_discount_is_capped_at_legacy_api_limit` | `PASS` | expectedDiscount=50 |
+| `arcane_cost_uses_combined_equipment_and_provider_discount` | `PASS` | expectedDiscount=18, expectedCost=41 |
 | `vanilla_fallback_ironplate_output_and_consumption` | `PASS` | vis=100.0 |
 | `menu_feedback_reports_arcane_cost_and_aura` | `PASS` | cost=50 |
 | `menu_feedback_reports_discounted_arcane_cost` | `PASS` | cost=47 |
@@ -26,5 +31,5 @@
 | `menu_feedback_marks_missing_crystals` | `PASS` | mask=5 |
 | `menu_feedback_keeps_vanilla_fallback_costless` | `PASS` | kind=3 |
 
-- Passed: `23`
+- Passed: `28`
 - Failed: `0`

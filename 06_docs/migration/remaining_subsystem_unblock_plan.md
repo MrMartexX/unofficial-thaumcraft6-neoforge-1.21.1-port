@@ -1,6 +1,6 @@
 # Remaining Subsystem Unblock Plan
 
-Status: working order after the Alembic/Jar item-transfer and tube-caster control closure.
+Status: working order after the Arcane Workbench regular-recipe and equipment-discount bridge closure.
 
 Basis: `06_docs/migration/NeoForge_legacy_migration_guide.md`, `06_docs/migration/migration_matrix.md`, `06_docs/migration/porting_order.md`, `06_docs/current_port_status.md`.
 
@@ -22,7 +22,7 @@ This is a blocker-removal order, not a promise that every row is one commit. Sev
 | 2 | Alembic label/phial/jar item transfer | Completed behavior slice over stable Warded Jar/Alembic storage and aspect Data Components. | Combined transport/machine runtime audit `46/46`. | Label application/removal, labeled jar UX, phial/jar transfer, aspect container item behavior. |
 | 3 | Tube caster sub-parts, valve controls and vent/valve visuals | Completed behavior/state slice over stable tube state/shape and Bellows. Final measured visual parity remains under row 17. | Combined transport/machine runtime audit `46/46`, visual shape audit, runClient visual review when polishing. | Caster tube side closure/choke/facing controls, valve state clarity, vent state sync. |
 | 4 | Remaining essentia utility devices | After transport controls exist, devices that consume/produce essentia can be implemented without inventing ad hoc paths. | Dedicated behavior audits per device family, combined transport audit, server smoke. | Void Jar overflow, importer/exporter if kept, essentia mirror path, Thaumatorium input/output dependency blockers. |
-| 5 | Arcane Workbench remaining recipes and equipment discount bridge | Workbench behavior and recipe/page data exist; recipe families can now land without destabilizing research. Equipment discount should be resolved before many player progression rewards depend on it. | Arcane recipe audit, workbench behavior audit, generated-aspect cache diff, runClient GUI pass. | Remaining arcane page/recipe gaps, equipment/Curios discount, recipe-derived aspect blockers. |
+| 5 | Arcane Workbench remaining recipes and equipment discount bridge | Completed for the regular legacy recipe id set and first equipment-discount bridge. Keep this row as a regression guard before item/equipment behavior work. | Arcane recipe audit `109/109`, workbench behavior audit `28/28`, generated-aspect cache reload count, runClient GUI pass for final visual review. | Regular arcane page/recipe gaps, vanilla armor-slot vis discount, first accessory-provider bridge, recipe-derived aspect blockers. |
 | 6 | Item/equipment behavior pass | Many registered items currently exist as identities/recipes but still lack real behavior. Close them before focus/golem/worldgen systems depend on them. | Item behavior audit, creative tab check, tooltip/aspect check, runClient smoke. | Goggles/robes/baubles-equivalent behavior, sanity checker, utility item behavior, non-final item placeholders. |
 | 7 | Focus/caster/Focal Manipulator core | Caster/focus is a central gameplay API and blocks many combat, utility and research rewards. It depends on items, aura/vis, research and networking. | Focus data model audit, server-authoritative cast payload audit, client FX leak checks, runClient combat/utility smoke. | Caster gauntlet behavior, focus pouch, focus modifiers, Focal Manipulator, focus recipes/research consumers. |
 | 8 | Thaumonomicon final navigation and page renderers | Research data/protocol/page catalog are stable; the UI can now be expanded over real recipe/device state instead of placeholders. | Thaumonomicon protocol audit, research data/page catalog audits, runClient visual/navigation pass. | Search, drilldown/history, remaining fake/blueprint/special/custom recipe pages, final book UX blockers. |
@@ -51,21 +51,23 @@ This is a blocker-removal order, not a promise that every row is one commit. Sev
 
 ## Current Blocker Cut Line
 
-The current cut line is after row 3:
+The current cut line is after row 5:
 
 1. Bellows is implemented and should remain regression-guarded.
 2. Alembic/Jar label filters, phial transfer and jar item transfer are implemented through Data Components and covered by the combined runtime audit.
 3. Tube caster side/choke/facing controls, manual/redstone valve state and vent state sync are implemented and covered by the combined runtime audit.
-4. The next real blocker is row 4: remaining essentia utility devices and consumers, especially behavior that depends on stable labels, phials, jars, tubes and Alembics.
+4. Remaining essentia utility devices have already been partially advanced by later batches; keep any unfinished devices scoped to row 4 audits.
+5. Arcane Workbench regular recipes are parity-closed at `89/89`; the recipe audit passes `109/109`, and the workbench behavior audit passes `28/28` including goggles, cloth robe, void robe and provider-bridge vis discounts.
+6. The next real blocker is row 6: item/equipment behavior pass.
 
 ## Immediate Next Batch
 
-The next large safe batch should start row 4, not reopen rows 2/3:
+The next large safe batch should start row 6, not reopen row 5:
 
-- choose one remaining essentia utility device family;
-- write a short legacy source audit for that family before coding;
-- reuse `TCEssentiaCapabilities.BLOCK` and current jar/Alembic/phial Data Component behavior;
-- extend the combined transport runtime audit or add a focused device audit;
-- keep Thaumatorium, mirrors and broad alchemy automation separate unless the dependency graph proves they must land together.
+- audit the registered item/equipment identities that still behave as placeholders;
+- implement behavior by dependency family, starting with safe wearable/utility items before focus/caster gameplay;
+- keep robe/goggles wearable/rendering behavior separate from the already-audited vis-discount math;
+- add item behavior audit coverage and creative-tab/tooltip checks with each family;
+- do not start Focus/Focal Manipulator gameplay until row 6 confirms the required item/equipment contracts.
 
-Final valve/vent visual parity should be handled under row 17 with screenshot or pixel-level evidence, because the behavior/state contract is already closed.
+Final valve/vent and Arcane Workbench visual parity should be handled under row 17 with screenshot or pixel-level evidence, because their behavior/state contracts are already closed.

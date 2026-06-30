@@ -18,6 +18,7 @@ import thaumcraft.common.items.TCJarLabelItem;
 import thaumcraft.common.items.TCPhialItem;
 import thaumcraft.common.items.TCWardedJarBlockItem;
 import thaumcraft.common.items.armor.ItemGoggles;
+import thaumcraft.common.items.armor.ItemVisDiscountGear;
 import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.items.consumables.ItemZombieBrain;
@@ -257,12 +258,12 @@ public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal"
     public static final Supplier<Item> ARCANE_BORE = simpleItem("arcane_bore");
     public static final Supplier<Item> PRIMAL_CRUSHER = simpleItem("primal_crusher");
     public static final Supplier<Item> VOIDSEER_PEARL = simpleItem("voidseer_pearl");
-    public static final Supplier<Item> VOID_ROBE_LEGS = simpleItem("void_robe_legs");
-    public static final Supplier<Item> VOID_ROBE_CHEST = simpleItem("void_robe_chest");
-    public static final Supplier<Item> VOID_ROBE_HELM = simpleItem("void_robe_helm");
-    public static final Supplier<Item> CLOTH_LEGS = simpleItem("cloth_legs");
-    public static final Supplier<Item> CLOTH_CHEST = simpleItem("cloth_chest");
-    public static final Supplier<Item> CLOTH_HELM = simpleItem("cloth_helm");
+    public static final Supplier<Item> VOID_ROBE_LEGS = visDiscountItem("void_robe_legs", 5);
+    public static final Supplier<Item> VOID_ROBE_CHEST = visDiscountItem("void_robe_chest", 5);
+    public static final Supplier<Item> VOID_ROBE_HELM = visDiscountItem("void_robe_helm", 5);
+    public static final Supplier<Item> CLOTH_LEGS = visDiscountItem("cloth_legs", 3);
+    public static final Supplier<Item> CLOTH_CHEST = visDiscountItem("cloth_chest", 3);
+    public static final Supplier<Item> CLOTH_BOOTS = visDiscountItem("cloth_boots", 2);
     public static final Supplier<Item> VOID_SEED = simpleItem("void_seed");
     public static final Supplier<Item> ARCANE_EAR_TOGGLE = simpleItem("arcane_ear_toggle");
     public static final Supplier<Item> BAUBLE_AMULET = simpleItem("bauble_amulet");
@@ -373,6 +374,10 @@ public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal"
 
     private static Supplier<Item> simpleItem(String id) {
         return ITEMS.register(id, () -> createSimpleItem(id));
+    }
+
+    private static Supplier<Item> visDiscountItem(String id, int visDiscount) {
+        return ITEMS.register(id, () -> new ItemVisDiscountGear(visDiscount));
     }
 
     private static Item createSimpleItem(String id) {
