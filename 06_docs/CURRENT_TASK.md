@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-07-01
+Last updated: 2026-07-02
 
 ## Current branch
 
@@ -28,6 +28,7 @@ Last updated: 2026-07-01
 - Bellows is now a focused device slice: placed Bellows uses a real BlockEntity/client renderer, legacy inflation animation, tube-buffer extension render, smelter/tube-buffer ownership, and a dedicated vanilla furnace cook-progress bridge. Keep `audit-bellows-device.ps1` green after changes.
 - The item/equipment behavior pass is closed for the first safe wearable/utility slice. Goggles, cloth robes and void robes are real armor/equipment items with legacy vis/reveal/warp contracts; `sanity_checker`, `sane_soap` and `curio_rites` have their first server-side behavior contracts; the runtime item/equipment audit passes `17/17`.
 - Focus/caster/Focal Manipulator core is closed for the first data/behavior slice. `caster_basic`, `focus_1`, `focus_2`, `focus_3` and `focus_pouch` are real items; caster focus state and focus package data use Data Components; `wand_workbench` has a server-owned Focal Manipulator BlockEntity/menu/screen and a validated design-intent payload; the runtime focus/caster core audit passes `10/10`.
+- The first focus cast-effect execution slice is active for legacy `ROOT -> TOUCH -> FIRE`. Unsupported focus packages fail before vis/aura drain; supported caster use drains aura and sets cooldown; Fire effect mutates entities and blocks with the audited legacy formulas. Runtime focus cast execution audit passes `5/5`.
 - The item/block parity framework quick preset is executable with registry/resource checks plus `texture_color`, `item_visual_parity`, `legacy_shape_parity`, and `legacy_visual_collision_parity`. Use the focused `visual` preset for model/shape/outline/texture/FX certification evidence. Current report-only `visual` summary: `legacy_shape_parity` has `114` rows / `10` review rows; `legacy_visual_collision_parity` has `585` rows, `2` facing-domain mismatches (`golem_builder`, `research_table`), `0` missing rows, `341` unknown rows, and `outline_contract` has `68` match / `0` mismatch / `46` unknown; `item_visual_parity` has `34` missing item models and `219` item visual review rows; `texture_color` has `201` active texture refs with `176` exact matches and `25` review rows; `visual_equivalence_completion` has `17` rows with `11` pass / `6` review / `0` errors.
 
 ## Do not change without explicit request
@@ -39,9 +40,9 @@ Last updated: 2026-07-01
 
 ## Near-term tasks
 
-1. Continue row 7 from `06_docs/migration/remaining_subsystem_unblock_plan.md` with focus cast-effect execution over the now-audited core.
+1. Continue row 7 from `06_docs/migration/remaining_subsystem_unblock_plan.md` with the next focus medium/effect execution family over the now-audited `TOUCH/FIRE` path.
    - Use `06_docs/gameplay/focus_caster_core_design.md` as the current boundary document.
-   - Start with server-owned `TOUCH` plus one simple effect family before projectile/cloud/mine behavior.
+   - Keep projectile/cloud/mine behavior in separate audited slices unless the next medium/effect family explicitly requires one of them.
    - Do not treat the minimal Focal Manipulator screen as final visual/editor parity.
    - Keep `TCEquipmentHelper` as the current bridge for armor and future accessory stack discovery when calculating vis discounts, goggles and revealers.
 2. Keep already closed behavior audits green after related changes:
@@ -49,6 +50,7 @@ Last updated: 2026-07-01
    - Dedicated Bellows audit: `0` errors.
    - Item/equipment behavior audit: `17/17`.
    - Focus/caster core audit: `10/10`.
+   - Focus cast execution audit: `5/5`.
    - Keep final measured valve/vent and armor pixel parity as visual review work, not behavior blockers.
 3. Continue item/block parity automation from `06_docs/audits/item_block_parity_framework.md`:
    - Classify known renames, legacy metadata variants, intentional no-item/no-loot entries, missing item models, item visual review rows, and allowed modern extras before enabling safe CI failures.

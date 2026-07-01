@@ -97,12 +97,19 @@ public class ItemCaster extends Item implements ICaster {
         if (!(player instanceof ServerPlayer serverPlayer) || CasterManager.isOnCooldown(serverPlayer)) {
             return InteractionResultHolder.consume(stack);
         }
+        TCFocusCastExecutor.CastPlan castPlan = TCFocusCastExecutor.plan(focus);
+        if (!castPlan.supported()) {
+            level.playSound(null, serverPlayer.blockPosition(), TCSounds.WANDFAIL.get(), SoundSource.PLAYERS, 0.4F, 1.0F);
+            return InteractionResultHolder.fail(stack);
+        }
         float visCost = focusItem.getVisCost(focus);
         if (!consumeVis(stack, serverPlayer, visCost, false, false)) {
             level.playSound(null, serverPlayer.blockPosition(), TCSounds.WANDFAIL.get(), SoundSource.PLAYERS, 0.4F, 1.0F);
             return InteractionResultHolder.fail(stack);
         }
         CasterManager.setCooldown(serverPlayer, stack, focusItem.getActivationTime(focus));
+        TCFocusCastExecutor.cast(serverPlayer, hand, focus);
+        serverPlayer.swing(hand, true);
         level.playSound(null, serverPlayer.blockPosition(), TCSounds.WAND.get(), SoundSource.PLAYERS, 0.35F, 1.0F);
         return InteractionResultHolder.consume(stack);
     }

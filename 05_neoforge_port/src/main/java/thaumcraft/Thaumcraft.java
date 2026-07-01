@@ -30,6 +30,7 @@ import thaumcraft.common.capabilities.TCMachineCapabilities;
 import thaumcraft.common.items.TCFuelEvents;
 import thaumcraft.common.crafting.arcane.TCArcaneWorkbenchAuditExporter;
 import thaumcraft.common.items.casters.TCFocusCasterCoreAuditExporter;
+import thaumcraft.common.items.casters.TCFocusCastExecutionAuditExporter;
 import thaumcraft.common.items.casters.TCFocalManipulatorNetwork;
 import thaumcraft.common.items.equipment.TCItemEquipmentBehaviorAuditExporter;
 import thaumcraft.common.registry.TCBlockEntities;
@@ -126,6 +127,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCEssentiaTransportBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCItemEquipmentBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCasterCoreAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCFocusCastExecutionAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCMinimalGameTestFixtureExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditCommands::onRegisterCommands);

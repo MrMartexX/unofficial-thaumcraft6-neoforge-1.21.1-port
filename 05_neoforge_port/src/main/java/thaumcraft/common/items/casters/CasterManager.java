@@ -84,6 +84,16 @@ public final class CasterManager {
         }
     }
 
+    public static void clearCooldown(Player player, ItemStack casterStack) {
+        if (player == null) {
+            return;
+        }
+        COOLDOWNS.remove(player.getUUID());
+        if (!casterStack.isEmpty()) {
+            player.getCooldowns().removeCooldown(casterStack.getItem());
+        }
+    }
+
     public static float getAuraPool(ItemCaster caster, ItemStack stack, Player player) {
         if (caster == null || player == null || !(player.level() instanceof ServerLevel serverLevel)) {
             return 0.0F;
