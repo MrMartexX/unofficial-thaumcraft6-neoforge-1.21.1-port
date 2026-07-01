@@ -39,6 +39,10 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "poof")));
     public static final Supplier<SoundEvent> WAND = SOUND_EVENTS.register("wand", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "wand")));
+    public static final Supplier<SoundEvent> WANDFAIL = SOUND_EVENTS.register("wandfail", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "wandfail")));
+    public static final Supplier<SoundEvent> TICKS = SOUND_EVENTS.register("ticks", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "ticks")));
     public static final Supplier<SoundEvent> CRAFTSTART = SOUND_EVENTS.register("craftstart", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "craftstart")));
     public static final Supplier<SoundEvent> CRAFTFAIL = SOUND_EVENTS.register("craftfail", () ->

@@ -27,6 +27,7 @@ Last updated: 2026-07-01
 - The Alembic/smelter machine batch now replaces the incremental placeholder path: all three smelter tiers share the server-owned two-slot machine state, exact tier efficiency/output intervals, Alumentum boost, fuel remainders, cumulative vent mitigation, direct plus attached auxiliary Alembic routing, modern sided item capability, legacy-layout menu/screen and detailed legacy-derived models. Its checks are now included in the combined transport/machine runtime audit at `46/46`.
 - Bellows is now a focused device slice: placed Bellows uses a real BlockEntity/client renderer, legacy inflation animation, tube-buffer extension render, smelter/tube-buffer ownership, and a dedicated vanilla furnace cook-progress bridge. Keep `audit-bellows-device.ps1` green after changes.
 - The item/equipment behavior pass is closed for the first safe wearable/utility slice. Goggles, cloth robes and void robes are real armor/equipment items with legacy vis/reveal/warp contracts; `sanity_checker`, `sane_soap` and `curio_rites` have their first server-side behavior contracts; the runtime item/equipment audit passes `17/17`.
+- Focus/caster/Focal Manipulator core is closed for the first data/behavior slice. `caster_basic`, `focus_1`, `focus_2`, `focus_3` and `focus_pouch` are real items; caster focus state and focus package data use Data Components; `wand_workbench` has a server-owned Focal Manipulator BlockEntity/menu/screen and a validated design-intent payload; the runtime focus/caster core audit passes `10/10`.
 - The item/block parity framework quick preset is executable with registry/resource checks plus `texture_color`, `item_visual_parity`, `legacy_shape_parity`, and `legacy_visual_collision_parity`. Use the focused `visual` preset for model/shape/outline/texture/FX certification evidence. Current report-only `visual` summary: `legacy_shape_parity` has `114` rows / `10` review rows; `legacy_visual_collision_parity` has `585` rows, `2` facing-domain mismatches (`golem_builder`, `research_table`), `0` missing rows, `341` unknown rows, and `outline_contract` has `68` match / `0` mismatch / `46` unknown; `item_visual_parity` has `34` missing item models and `219` item visual review rows; `texture_color` has `201` active texture refs with `176` exact matches and `25` review rows; `visual_equivalence_completion` has `17` rows with `11` pass / `6` review / `0` errors.
 
 ## Do not change without explicit request
@@ -38,14 +39,16 @@ Last updated: 2026-07-01
 
 ## Near-term tasks
 
-1. Start row 7 from `06_docs/migration/remaining_subsystem_unblock_plan.md`: Focus/caster/Focal Manipulator core.
-   - Base the first slice on audited item/equipment contracts, aura/vis access, research unlock checks and server-authoritative payload validation.
-   - Begin with source/data/runtime audits for caster/focus identities and legacy behavior boundaries; do not connect broad cast effects before the focus/caster state model is validated.
+1. Continue row 7 from `06_docs/migration/remaining_subsystem_unblock_plan.md` with focus cast-effect execution over the now-audited core.
+   - Use `06_docs/gameplay/focus_caster_core_design.md` as the current boundary document.
+   - Start with server-owned `TOUCH` plus one simple effect family before projectile/cloud/mine behavior.
+   - Do not treat the minimal Focal Manipulator screen as final visual/editor parity.
    - Keep `TCEquipmentHelper` as the current bridge for armor and future accessory stack discovery when calculating vis discounts, goggles and revealers.
 2. Keep already closed behavior audits green after related changes:
    - Combined tube/jar/Alembic/smelter runtime audit: `46/46`.
    - Dedicated Bellows audit: `0` errors.
    - Item/equipment behavior audit: `17/17`.
+   - Focus/caster core audit: `10/10`.
    - Keep final measured valve/vent and armor pixel parity as visual review work, not behavior blockers.
 3. Continue item/block parity automation from `06_docs/audits/item_block_parity_framework.md`:
    - Classify known renames, legacy metadata variants, intentional no-item/no-loot entries, missing item models, item visual review rows, and allowed modern extras before enabling safe CI failures.

@@ -21,6 +21,7 @@ import thaumcraft.common.tiles.crafting.TCArcaneWorkbenchBlockEntity;
 import thaumcraft.common.tiles.crafting.TCCrucibleBlockEntity;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
+import thaumcraft.common.tiles.crafting.TCFocalManipulatorBlockEntity;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 import thaumcraft.common.tiles.essentia.TCSmelterBlockEntity;
 import thaumcraft.common.tiles.essentia.TCAlembicBlockEntity;
@@ -39,6 +40,9 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCArcaneWorkbenchBlockEntity>> ARCANE_WORKBENCH =
             BLOCK_ENTITY_TYPES.register("arcane_workbench", () ->
                     BlockEntityType.Builder.of(TCArcaneWorkbenchBlockEntity::new, TCBlocks.ARCANE_WORKBENCH.get()).build(null));
+    public static final Supplier<BlockEntityType<TCFocalManipulatorBlockEntity>> FOCAL_MANIPULATOR =
+            BLOCK_ENTITY_TYPES.register("wand_workbench", () ->
+                    BlockEntityType.Builder.of(TCFocalManipulatorBlockEntity::new, TCBlocks.WAND_WORKBENCH.get()).build(null));
     public static final Supplier<BlockEntityType<TCCrucibleBlockEntity>> CRUCIBLE =
             BLOCK_ENTITY_TYPES.register("crucible", () ->
                     BlockEntityType.Builder.of(TCCrucibleBlockEntity::new, TCBlocks.CRUCIBLE.get()).build(null));

@@ -22,15 +22,15 @@ This table is a roadmap snapshot, not the live task queue. Use `06_docs/CURRENT_
 | Stage | Status | Current note |
 |---|---|---|
 | Stage 1. Minimal Launch | Done | Client and dedicated server bootstrap exist and remain guarded by build/server smoke checks. |
-| Stage 2. Items / Materials | In progress | Identity, bridge items, selected materials, models, lang, tags, creative ordering and the first audited wearable/utility behavior contracts are active; many dependency-heavy item behaviors remain deferred. |
+| Stage 2. Items / Materials | In progress | Identity, bridge items, selected materials, models, lang, tags, creative ordering, the first audited wearable/utility behavior contracts and the first caster/focus item Data Component core are active; many dependency-heavy item behaviors remain deferred. |
 | Stage 3. Blocks / Basic Resources | In progress | Basic blocks, candles, tables and Arcane Workbench exist; all six tube blocks now use legacy multipart connection topology and shapes. Broad machine behavior remains incomplete. |
 | Stage 4. Aspects | In progress | Core aspect model, item/entity assignments, parity harnesses and current generated cache are active; gameplay-heavy consumers remain staged. |
 | Stage 5. Aura | In progress | Server-side saved data, chunk initialization, update loop, debug commands and Workbench Charger aura usage exist; HUD/FX/rifts/consumers remain deferred. |
 | Stage 6. Research | In progress | Data/progression/page-catalog core, scan knowledge, research table slice and first Thaumonomicon flow exist; full UI/search/warp polish remains blocked. |
 | Stage 7. Crafting | In progress | Vanilla fixtures, exact arcane recipes, Arcane Workbench behavior, crucible gameplay slices, and infusion through structure-derived timing/cost, persistent stability, exact 24-way event selection, essentia/component consumption and output placement are active; six dependency-owned instability rolls and remaining recipe families are deferred. |
-| Stage 8. Tile Entities | In progress | Research Table, Arcane Workbench, Crucible, Infusion Matrix/Pedestals, tubes, Warded Jar, Alembic, Bellows and all three smelter tiers own persisted server state. The combined transport/smelter/label/phial/caster-control audit passes `46/46`; Bellows has a dedicated device audit. |
-| Stage 9. GUI | In progress | Research Table, Arcane Workbench, smelter and first Thaumonomicon screens exist as functional slices; final visual parity and recipe drilldown remain incomplete. |
-| Stage 10. Networking | In progress | Aura, knowledge, research table, Thaumonomicon and both clientbound infusion FX payload contracts exist; future gameplay payloads need subsystem-specific design. |
+| Stage 8. Tile Entities | In progress | Research Table, Arcane Workbench, Crucible, Infusion Matrix/Pedestals, Focal Manipulator, tubes, Warded Jar, Alembic, Bellows and all three smelter tiers own persisted server state. The combined transport/smelter/label/phial/caster-control audit passes `46/46`; Bellows and focus/caster core have dedicated audits. |
+| Stage 9. GUI | In progress | Research Table, Arcane Workbench, smelter, Focal Manipulator minimal core screen and first Thaumonomicon screens exist as functional slices; final visual parity and recipe drilldown remain incomplete. |
+| Stage 10. Networking | In progress | Aura, knowledge, research table, Thaumonomicon, both clientbound infusion FX payload contracts and the Focal Manipulator design-intent payload exist; future gameplay payloads need subsystem-specific design. |
 | Stage 11. Entities / Golems | Deferred | Vanilla/entity scan parity is handled; custom Thaumcraft entities, golems, AI and renderers are not started. |
 | Stage 12. Worldgen | In progress | Sapling-grown Greatwood/Silverwood behavior exists; biome/world placement and structures are not started. |
 | Stage 13. Rendering / Particles | In progress | Thaumometer effects, table renderer, infusion FX, crucible FX, legacy multipart tube geometry and valve/vent state rendering exist; measured visual parity and broad render/BEWLR/shader work remain high risk. |
@@ -124,6 +124,7 @@ Establish the item/material identity layer before block entities, recipes, resea
 - Basic items register and appear in a creative tab.
 - Materials compile without old Forge 1.12.2 APIs.
 - Goggles, robe armor, sanity checker, sane soap and Crimson Rites behavior contracts stay covered by the item/equipment runtime audit.
+- Caster/focus item identity and core focus package/selected-focus Data Components stay covered by the focus/caster runtime audit before cast effects expand.
 - The base item/material layer does not require broad recipe, aspect, aura or research systems; any targeted behavior coupling must have dedicated audit coverage.
 
 ## Stage 3. Blocks / Basic Resources

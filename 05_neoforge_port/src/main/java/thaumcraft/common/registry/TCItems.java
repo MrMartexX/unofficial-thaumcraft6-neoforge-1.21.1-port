@@ -25,6 +25,9 @@ import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.items.consumables.ItemSanitySoap;
 import thaumcraft.common.items.consumables.ItemZombieBrain;
+import thaumcraft.common.items.casters.ItemCaster;
+import thaumcraft.common.items.casters.ItemFocus;
+import thaumcraft.common.items.casters.ItemFocusPouch;
 import thaumcraft.common.items.curios.ItemCurioRites;
 import thaumcraft.common.items.curios.ItemThaumonomicon;
 import thaumcraft.common.items.tools.ItemSanityChecker;
@@ -190,10 +193,11 @@ public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal"
     public static final Supplier<Item> CURIO_RITES = ITEMS.register("curio_rites", ItemCurioRites::new);
     public static final Supplier<Item> SANITY_CHECKER = ITEMS.register("sanity_checker", ItemSanityChecker::new);
     public static final Supplier<Item> SCRIBING_TOOLS = simpleItem("scribing_tools");
-    public static final Supplier<Item> CASTER_BASIC = simpleItem("caster_basic");
-    public static final Supplier<Item> FOCUS_1 = simpleItem("focus_1");
-    public static final Supplier<Item> FOCUS_2 = simpleItem("focus_2");
-    public static final Supplier<Item> FOCUS_3 = simpleItem("focus_3");
+    public static final Supplier<Item> CASTER_BASIC = ITEMS.register("caster_basic", () -> new ItemCaster(0));
+    public static final Supplier<Item> FOCUS_1 = ITEMS.register("focus_1", () -> new ItemFocus(15));
+    public static final Supplier<Item> FOCUS_2 = ITEMS.register("focus_2", () -> new ItemFocus(25));
+    public static final Supplier<Item> FOCUS_3 = ITEMS.register("focus_3", () -> new ItemFocus(50));
+    public static final Supplier<Item> FOCUS_POUCH = ITEMS.register("focus_pouch", ItemFocusPouch::new);
     public static final Supplier<Item> THAUMIUM_AXE = simpleItem("thaumium_axe");
     public static final Supplier<Item> THAUMIUM_HOE = simpleItem("thaumium_hoe");
     public static final Supplier<Item> THAUMIUM_PICK = simpleItem("thaumium_pick");
@@ -419,18 +423,6 @@ public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal"
             case "thaumium_pick" -> new PickaxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(PickaxeItem.createAttributes(TCToolTiers.THAUMIUM, 1.0F, -2.8F)));
             case "thaumium_shovel" -> new ShovelItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(ShovelItem.createAttributes(TCToolTiers.THAUMIUM, 1.5F, -3.0F)));
             case "thaumium_sword" -> new SwordItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(SwordItem.createAttributes(TCToolTiers.THAUMIUM, 3, -2.4F)));
-            case "caster_basic" -> new ItemLegacyPlaceholder(
-                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
-                    "tc.placeholder.caster_basic"
-            );
-            case "focus_1" -> new ItemLegacyPlaceholder(
-                    new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON),
-                    "tc.placeholder.focus"
-            );
-            case "focus_2", "focus_3" -> new ItemLegacyPlaceholder(
-                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE),
-                    "tc.placeholder.focus"
-            );
             case "enchanted_placeholder_protection_1" -> legacyMagicPlaceholder("protection");
             case "enchanted_placeholder_sharpness_1" -> legacyMagicPlaceholder("sharpness");
             case "enchanted_placeholder_silk_touch_1" -> legacyMagicPlaceholder("silk_touch");

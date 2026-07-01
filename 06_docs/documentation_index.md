@@ -1,6 +1,6 @@
 # Documentation Index
 
-Last updated: 2026-06-18
+Last updated: 2026-07-01
 
 This is the navigation map for `06_docs/`. It records where documents live after the docs-folder restructuring.
 
@@ -35,7 +35,7 @@ Only high-traffic navigation and state files should stay directly under `06_docs
 | `data/aspects/` | Aspect model, assignments, runtime parity, vanilla policy and entity-aspect audit docs. | `aspects_design.md`, `aspect_*`, `vanilla_*`, `entity_aspect_assignment_audit.md` |
 | `research/` | Research, scanning, Thaumonomicon, research table and requirement docs. | `research_*`, `scanning_*`, `scannable_data_format.md`, `thaumonomicon_ui_design.md` |
 | `crafting/` | Recipe, crafting and page-data design docs. | `arcane_crafting_design.md` |
-| `gameplay/` | Gameplay subsystem design docs that are not pure data/crafting/research. | `aura_design.md`, `crucible_in_world_behavior_design.md` |
+| `gameplay/` | Gameplay subsystem design docs that are not pure data/crafting/research. | `aura_design.md`, `crucible_in_world_behavior_design.md`, `focus_caster_core_design.md` |
 | `resources/` | Asset import/runtime audits, block parity and creative order references. | `runtime_asset_audit.md`, `asset_bulk_import_manifest.txt`, `block_parity_audit.md`, `creative_tab_order_reference.md` |
 | `rendering/` | FX, model, overlay and visual parity docs/assets. | `legacy_fx_engine.md`, `rendering_model_pipeline_audit.md`, `fx_preview/` |
 | `raw_legacy/` | Large raw extracts, source excerpts and evidence files. These are reference material, not current task docs. | `sapling_tree_generation_research.md`, `research_knowledge_scanning_legacy_audit.txt`, legacy source folders |

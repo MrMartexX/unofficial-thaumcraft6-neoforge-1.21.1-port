@@ -183,6 +183,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.FOCUS_1.get());
         acceptVisible(output, TCItems.FOCUS_2.get());
         acceptVisible(output, TCItems.FOCUS_3.get());
+        acceptVisible(output, TCItems.FOCUS_POUCH.get());
     }
 
     private static void addCrystalEssenceVariants(CreativeModeTab.Output output) {

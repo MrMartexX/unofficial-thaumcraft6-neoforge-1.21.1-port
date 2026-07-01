@@ -34,6 +34,7 @@ import thaumcraft.common.blocks.essentia.TCBellowsBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCCrucibleBlock;
+import thaumcraft.common.blocks.crafting.TCFocalManipulatorBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionMatrixBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionModifierBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionPedestalBlock;
@@ -207,8 +208,9 @@ public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", (
     }
 
     private static Block workbenchBlock() {
-        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
-                .strength(2.5F, 2.5F));
+        return new TCFocalManipulatorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
+                .strength(2.5F, 2.5F)
+                .noOcclusion());
     }
 
     private static Block arcaneWorkbenchBlock() {
