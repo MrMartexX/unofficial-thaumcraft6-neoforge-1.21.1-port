@@ -1,6 +1,6 @@
 # Remaining Subsystem Unblock Plan
 
-Status: working order after the Arcane Workbench regular-recipe and equipment-discount bridge closure.
+Status: working order after the Arcane Workbench regular-recipe/equipment-discount bridge and item/equipment behavior closure.
 
 Basis: `06_docs/migration/NeoForge_legacy_migration_guide.md`, `06_docs/migration/migration_matrix.md`, `06_docs/migration/porting_order.md`, `06_docs/current_port_status.md`.
 
@@ -23,7 +23,7 @@ This is a blocker-removal order, not a promise that every row is one commit. Sev
 | 3 | Tube caster sub-parts, valve controls and vent/valve visuals | Completed behavior/state slice over stable tube state/shape and Bellows. Final measured visual parity remains under row 17. | Combined transport/machine runtime audit `46/46`, visual shape audit, runClient visual review when polishing. | Caster tube side closure/choke/facing controls, valve state clarity, vent state sync. |
 | 4 | Remaining essentia utility devices | After transport controls exist, devices that consume/produce essentia can be implemented without inventing ad hoc paths. | Dedicated behavior audits per device family, combined transport audit, server smoke. | Void Jar overflow, importer/exporter if kept, essentia mirror path, Thaumatorium input/output dependency blockers. |
 | 5 | Arcane Workbench remaining recipes and equipment discount bridge | Completed for the regular legacy recipe id set and first equipment-discount bridge. Keep this row as a regression guard before item/equipment behavior work. | Arcane recipe audit `109/109`, workbench behavior audit `28/28`, generated-aspect cache reload count, runClient GUI pass for final visual review. | Regular arcane page/recipe gaps, vanilla armor-slot vis discount, first accessory-provider bridge, recipe-derived aspect blockers. |
-| 6 | Item/equipment behavior pass | Many registered items currently exist as identities/recipes but still lack real behavior. Close them before focus/golem/worldgen systems depend on them. | Item behavior audit, creative tab check, tooltip/aspect check, runClient smoke. | Goggles/robes/baubles-equivalent behavior, sanity checker, utility item behavior, non-final item placeholders. |
+| 6 | Item/equipment behavior pass | Completed for the first safe wearable/utility contract slice. Keep it as a regression guard before focus/caster gameplay depends on it. | Item/equipment behavior audit `17/17`, Arcane Workbench behavior audit `28/28`, build, server smoke; final armor model geometry remains row 17. | Goggles and robe ArmorItem contracts, legacy vis/warp/reveal interfaces, sanity checker identity, sanity soap warp cleansing, Crimson Rites gate, accessory-provider bridge. |
 | 7 | Focus/caster/Focal Manipulator core | Caster/focus is a central gameplay API and blocks many combat, utility and research rewards. It depends on items, aura/vis, research and networking. | Focus data model audit, server-authoritative cast payload audit, client FX leak checks, runClient combat/utility smoke. | Caster gauntlet behavior, focus pouch, focus modifiers, Focal Manipulator, focus recipes/research consumers. |
 | 8 | Thaumonomicon final navigation and page renderers | Research data/protocol/page catalog are stable; the UI can now be expanded over real recipe/device state instead of placeholders. | Thaumonomicon protocol audit, research data/page catalog audits, runClient visual/navigation pass. | Search, drilldown/history, remaining fake/blueprint/special/custom recipe pages, final book UX blockers. |
 | 9 | Crucible special alchemy and automation | Basic crucible behavior and recipe-page data exist; special effects need their own side-effect and world-mutation plan. | Crucible behavior audit, recipe data audit, aura flux checks, item-entity and spill regression tests. | Bath Salts, Bottled Taint, Liquid Death, Sane Soap, item pulling radius, special alchemy side effects, crucible-derived aspect generation. |
@@ -51,23 +51,23 @@ This is a blocker-removal order, not a promise that every row is one commit. Sev
 
 ## Current Blocker Cut Line
 
-The current cut line is after row 5:
+The current cut line is after row 6:
 
 1. Bellows is implemented and should remain regression-guarded.
 2. Alembic/Jar label filters, phial transfer and jar item transfer are implemented through Data Components and covered by the combined runtime audit.
 3. Tube caster side/choke/facing controls, manual/redstone valve state and vent state sync are implemented and covered by the combined runtime audit.
 4. Remaining essentia utility devices have already been partially advanced by later batches; keep any unfinished devices scoped to row 4 audits.
 5. Arcane Workbench regular recipes are parity-closed at `89/89`; the recipe audit passes `109/109`, and the workbench behavior audit passes `28/28` including goggles, cloth robe, void robe and provider-bridge vis discounts.
-6. The next real blocker is row 6: item/equipment behavior pass.
+6. Item/equipment behavior contracts are closed for goggles, cloth robes, void robes, sanity checker, sane soap and Crimson Rites. The runtime item/equipment audit passes `17/17`; the Arcane Workbench audit remains `28/28` after the armor conversion.
+7. The next real blocker is row 7: Focus/caster/Focal Manipulator core.
 
 ## Immediate Next Batch
 
-The next large safe batch should start row 6, not reopen row 5:
+The next large safe batch should start row 7, not reopen row 6:
 
-- audit the registered item/equipment identities that still behave as placeholders;
-- implement behavior by dependency family, starting with safe wearable/utility items before focus/caster gameplay;
-- keep robe/goggles wearable/rendering behavior separate from the already-audited vis-discount math;
-- add item behavior audit coverage and creative-tab/tooltip checks with each family;
-- do not start Focus/Focal Manipulator gameplay until row 6 confirms the required item/equipment contracts.
+- design and implement the focus/caster data model before adding cast effects;
+- keep server-authoritative cast payloads, focus stack data components, and aura/vis costs covered by audits;
+- keep Focus Pouch and optional Curios/accessory integration as separate bridges unless the focus core needs them;
+- do not copy the legacy focus package wholesale; port node/modifier semantics into modern data and payload boundaries.
 
-Final valve/vent and Arcane Workbench visual parity should be handled under row 17 with screenshot or pixel-level evidence, because their behavior/state contracts are already closed.
+Final valve/vent, robe/goggles armor model geometry and Arcane Workbench visual parity should be handled under row 17 with screenshot or pixel-level evidence, because their behavior/state contracts are already closed.

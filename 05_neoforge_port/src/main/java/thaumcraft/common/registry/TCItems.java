@@ -2,6 +2,7 @@ package thaumcraft.common.registry;
 
 import java.util.function.Supplier;
 import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
@@ -18,11 +19,15 @@ import thaumcraft.common.items.TCJarLabelItem;
 import thaumcraft.common.items.TCPhialItem;
 import thaumcraft.common.items.TCWardedJarBlockItem;
 import thaumcraft.common.items.armor.ItemGoggles;
-import thaumcraft.common.items.armor.ItemVisDiscountGear;
+import thaumcraft.common.items.armor.ItemRobeArmor;
+import thaumcraft.common.items.armor.ItemVoidRobeArmor;
 import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
+import thaumcraft.common.items.consumables.ItemSanitySoap;
 import thaumcraft.common.items.consumables.ItemZombieBrain;
+import thaumcraft.common.items.curios.ItemCurioRites;
 import thaumcraft.common.items.curios.ItemThaumonomicon;
+import thaumcraft.common.items.tools.ItemSanityChecker;
 import thaumcraft.common.items.tools.ItemScribingTools;
 import thaumcraft.common.items.tools.ItemThaumometer;
 import thaumcraft.common.items.tools.TCToolTiers;
@@ -180,9 +185,10 @@ public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal"
     public static final Supplier<Item> BATH_SALTS = simpleItem("bath_salts");
     public static final Supplier<Item> BOTTLE_TAINT = simpleItem("bottle_taint");
     public static final Supplier<Item> LIQUID_DEATH_BUCKET = simpleItem("liquid_death_bucket");
-    public static final Supplier<Item> SANE_SOAP = simpleItem("sane_soap");
+    public static final Supplier<Item> SANE_SOAP = ITEMS.register("sane_soap", ItemSanitySoap::new);
     public static final Supplier<Item> FLESH_BLOCK = simpleItem("flesh_block");
-    public static final Supplier<Item> CURIO_RITES = simpleItem("curio_rites");
+    public static final Supplier<Item> CURIO_RITES = ITEMS.register("curio_rites", ItemCurioRites::new);
+    public static final Supplier<Item> SANITY_CHECKER = ITEMS.register("sanity_checker", ItemSanityChecker::new);
     public static final Supplier<Item> SCRIBING_TOOLS = simpleItem("scribing_tools");
     public static final Supplier<Item> CASTER_BASIC = simpleItem("caster_basic");
     public static final Supplier<Item> FOCUS_1 = simpleItem("focus_1");
@@ -258,12 +264,12 @@ public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal"
     public static final Supplier<Item> ARCANE_BORE = simpleItem("arcane_bore");
     public static final Supplier<Item> PRIMAL_CRUSHER = simpleItem("primal_crusher");
     public static final Supplier<Item> VOIDSEER_PEARL = simpleItem("voidseer_pearl");
-    public static final Supplier<Item> VOID_ROBE_LEGS = visDiscountItem("void_robe_legs", 5);
-    public static final Supplier<Item> VOID_ROBE_CHEST = visDiscountItem("void_robe_chest", 5);
-    public static final Supplier<Item> VOID_ROBE_HELM = visDiscountItem("void_robe_helm", 5);
-    public static final Supplier<Item> CLOTH_LEGS = visDiscountItem("cloth_legs", 3);
-    public static final Supplier<Item> CLOTH_CHEST = visDiscountItem("cloth_chest", 3);
-    public static final Supplier<Item> CLOTH_BOOTS = visDiscountItem("cloth_boots", 2);
+    public static final Supplier<Item> VOID_ROBE_LEGS = ITEMS.register("void_robe_legs", () -> new ItemVoidRobeArmor(ArmorItem.Type.LEGGINGS));
+    public static final Supplier<Item> VOID_ROBE_CHEST = ITEMS.register("void_robe_chest", () -> new ItemVoidRobeArmor(ArmorItem.Type.CHESTPLATE));
+    public static final Supplier<Item> VOID_ROBE_HELM = ITEMS.register("void_robe_helm", () -> new ItemVoidRobeArmor(ArmorItem.Type.HELMET));
+    public static final Supplier<Item> CLOTH_LEGS = ITEMS.register("cloth_legs", () -> new ItemRobeArmor(ArmorItem.Type.LEGGINGS));
+    public static final Supplier<Item> CLOTH_CHEST = ITEMS.register("cloth_chest", () -> new ItemRobeArmor(ArmorItem.Type.CHESTPLATE));
+    public static final Supplier<Item> CLOTH_BOOTS = ITEMS.register("cloth_boots", () -> new ItemRobeArmor(ArmorItem.Type.BOOTS));
     public static final Supplier<Item> VOID_SEED = simpleItem("void_seed");
     public static final Supplier<Item> ARCANE_EAR_TOGGLE = simpleItem("arcane_ear_toggle");
     public static final Supplier<Item> BAUBLE_AMULET = simpleItem("bauble_amulet");
@@ -376,10 +382,6 @@ public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal"
         return ITEMS.register(id, () -> createSimpleItem(id));
     }
 
-    private static Supplier<Item> visDiscountItem(String id, int visDiscount) {
-        return ITEMS.register(id, () -> new ItemVisDiscountGear(visDiscount));
-    }
-
     private static Item createSimpleItem(String id) {
         if (id.startsWith("crystal_essence_")) {
             String aspect = id.substring("crystal_essence_".length());
@@ -404,7 +406,6 @@ public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal"
             case "primordial_pearl" -> legacyItem("primordial_pearl", "normal", 0);
             case "quicksilver_nugget" -> legacyItem("nugget", "quicksilver", 5);
             case "mindclockwork_advanced" -> legacyItem("mind", "advanced", 1);
-            case "curio_rites" -> legacyItem("curio", "rites", 6);
             case "salis_mundus" -> new ItemLegacyPlaceholder(
                     new Item.Properties(),
                     "tc.placeholder.salis_mundus"
@@ -535,7 +536,6 @@ public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_STABILIZER = STABILI
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBEBOOTS = ITEMS.register("robeboots", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBECHEST = ITEMS.register("robechest", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBELEGS = ITEMS.register("robelegs", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_SANITYCHECKER = ITEMS.register("sanitychecker", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_SEALBLANK = ITEMS.register("sealblank", () -> new Item(new Item.Properties()));
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERTHAUMIUM = SMELTER_THAUMIUM;
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERVOID = SMELTER_VOID;

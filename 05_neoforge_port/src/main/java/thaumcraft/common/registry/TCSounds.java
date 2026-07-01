@@ -27,6 +27,8 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "creak")));
     public static final Supplier<SoundEvent> PAGETURN = SOUND_EVENTS.register("pageturn", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pageturn")));
+    public static final Supplier<SoundEvent> LEARN = SOUND_EVENTS.register("learn", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "learn")));
     public static final Supplier<SoundEvent> WRITE = SOUND_EVENTS.register("write", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "write")));
     public static final Supplier<SoundEvent> BUBBLE = SOUND_EVENTS.register("bubble", () ->

@@ -28,8 +28,10 @@ import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.capabilities.TCMachineCapabilities;
 import thaumcraft.common.items.TCFuelEvents;
 import thaumcraft.common.crafting.arcane.TCArcaneWorkbenchAuditExporter;
+import thaumcraft.common.items.equipment.TCItemEquipmentBehaviorAuditExporter;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
+import thaumcraft.common.registry.TCArmorMaterials;
 import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
@@ -70,6 +72,7 @@ public final class Thaumcraft {
         TCBlocks.BLOCKS.register(modEventBus);
         TCBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         TCMobEffects.MOB_EFFECTS.register(modEventBus);
+        TCArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
         TCItems.ITEMS.register(modEventBus);
         TCMenus.MENUS.register(modEventBus);
         TCRecipes.RECIPE_TYPES.register(modEventBus);
@@ -116,6 +119,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCCrucibleBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCInfusionBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCEssentiaTransportBehaviorAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCItemEquipmentBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCMinimalGameTestFixtureExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditCommands::onRegisterCommands);

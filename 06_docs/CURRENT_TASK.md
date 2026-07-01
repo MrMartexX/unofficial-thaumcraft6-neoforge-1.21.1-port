@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-06-29
+Last updated: 2026-07-01
 
 ## Current branch
 
@@ -26,6 +26,7 @@ Last updated: 2026-06-29
 - The first real essentia transport slice now has legacy capacities/cadence/suction formulas for all six tube variants, Warded Jar transfer, sided NeoForge capability access, persisted directional state, legacy multipart tube geometry, Alembic/Jar label filters, phial/jar item transfer quanta, caster tube sub-part side/choke/facing controls, manual/redstone valve state and vent sync. The dedicated-server runtime audit passes `46/46`.
 - The Alembic/smelter machine batch now replaces the incremental placeholder path: all three smelter tiers share the server-owned two-slot machine state, exact tier efficiency/output intervals, Alumentum boost, fuel remainders, cumulative vent mitigation, direct plus attached auxiliary Alembic routing, modern sided item capability, legacy-layout menu/screen and detailed legacy-derived models. Its checks are now included in the combined transport/machine runtime audit at `46/46`.
 - Bellows is now a focused device slice: placed Bellows uses a real BlockEntity/client renderer, legacy inflation animation, tube-buffer extension render, smelter/tube-buffer ownership, and a dedicated vanilla furnace cook-progress bridge. Keep `audit-bellows-device.ps1` green after changes.
+- The item/equipment behavior pass is closed for the first safe wearable/utility slice. Goggles, cloth robes and void robes are real armor/equipment items with legacy vis/reveal/warp contracts; `sanity_checker`, `sane_soap` and `curio_rites` have their first server-side behavior contracts; the runtime item/equipment audit passes `17/17`.
 - The item/block parity framework quick preset is executable with registry/resource checks plus `texture_color`, `item_visual_parity`, `legacy_shape_parity`, and `legacy_visual_collision_parity`. Use the focused `visual` preset for model/shape/outline/texture/FX certification evidence. Current report-only `visual` summary: `legacy_shape_parity` has `114` rows / `10` review rows; `legacy_visual_collision_parity` has `585` rows, `2` facing-domain mismatches (`golem_builder`, `research_table`), `0` missing rows, `341` unknown rows, and `outline_contract` has `68` match / `0` mismatch / `46` unknown; `item_visual_parity` has `34` missing item models and `219` item visual review rows; `texture_color` has `201` active texture refs with `176` exact matches and `25` review rows; `visual_equivalence_completion` has `17` rows with `11` pass / `6` review / `0` errors.
 
 ## Do not change without explicit request
@@ -37,21 +38,24 @@ Last updated: 2026-06-29
 
 ## Near-term tasks
 
-1. Continue essentia transport from `06_docs/gameplay/essentia_transport_design.md`:
-   - Keep the combined tube/jar/Alembic/smelter runtime audit at `46/46`.
-   - Keep the dedicated Bellows audit at `0` errors after Bellows/block/render changes.
-   - Keep smelters internal slurry machines; only tubes, jars and Alembics expose `TCEssentiaCapabilities.BLOCK`.
-   - Treat Alembic/Jar label filters, empty phial extraction, filled-phial-to-jar transfer, jar-item fill from Alembic, caster tube side/choke/facing controls and valve state sync as closed behavior slices.
-   - Keep final measured valve/vent pixel parity as visual review work, not as a blocker for the behavior contract.
-2. Continue item/block parity automation from `06_docs/audits/item_block_parity_framework.md`:
+1. Start row 7 from `06_docs/migration/remaining_subsystem_unblock_plan.md`: Focus/caster/Focal Manipulator core.
+   - Base the first slice on audited item/equipment contracts, aura/vis access, research unlock checks and server-authoritative payload validation.
+   - Begin with source/data/runtime audits for caster/focus identities and legacy behavior boundaries; do not connect broad cast effects before the focus/caster state model is validated.
+   - Keep `TCEquipmentHelper` as the current bridge for armor and future accessory stack discovery when calculating vis discounts, goggles and revealers.
+2. Keep already closed behavior audits green after related changes:
+   - Combined tube/jar/Alembic/smelter runtime audit: `46/46`.
+   - Dedicated Bellows audit: `0` errors.
+   - Item/equipment behavior audit: `17/17`.
+   - Keep final measured valve/vent and armor pixel parity as visual review work, not behavior blockers.
+3. Continue item/block parity automation from `06_docs/audits/item_block_parity_framework.md`:
    - Classify known renames, legacy metadata variants, intentional no-item/no-loot entries, missing item models, item visual review rows, and allowed modern extras before enabling safe CI failures.
    - Treat `golem_builder` and `research_table` facing-domain mismatches from `legacy_visual_collision_parity` as focused visual/blockstate parity candidates, not as framework errors.
    - Keep inferred legacy IDs review-only until confirmed by class source, secondary decompile, original jar or runtime evidence.
    - Do not call report-only visual-boundary evidence strict visual parity until targeted fixes and in-game comparison are done.
-3. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
-4. Keep reusable audit scripts under `tools/audits/`.
-5. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.
-6. Use `06_docs/migration/remaining_subsystem_unblock_plan.md` as the current subsystem unblock order after Bellows.
+4. Keep bridge/placeholder outputs clearly marked as non-gameplay implementations until their subsystems exist.
+5. Keep reusable audit scripts under `tools/audits/`.
+6. Keep local/generated audit output under ignored `tools/reports/local/` or curate it into `06_docs/audits/` only when useful.
+7. Use `06_docs/migration/remaining_subsystem_unblock_plan.md` as the current subsystem unblock order after Bellows and item/equipment.
 
 ## CI smoke note
 

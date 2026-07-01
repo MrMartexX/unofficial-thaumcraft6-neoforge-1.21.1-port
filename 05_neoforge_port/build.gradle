@@ -96,6 +96,8 @@ neoForge {
             def researchTableAuditPath = providers.gradleProperty('tcResearchTableAuditPath').orNull ?: System.getProperty('tc.researchTableAuditPath')
             def essentiaTransportBehaviorAuditEnabled = providers.gradleProperty('tcEssentiaTransportBehaviorAudit').orNull ?: System.getProperty('tc.essentiaTransportBehaviorAudit')
             def essentiaTransportBehaviorAuditPath = providers.gradleProperty('tcEssentiaTransportBehaviorAuditPath').orNull ?: System.getProperty('tc.essentiaTransportBehaviorAuditPath')
+            def itemEquipmentBehaviorAuditEnabled = providers.gradleProperty('tcItemEquipmentBehaviorAudit').orNull ?: System.getProperty('tc.itemEquipmentBehaviorAudit')
+            def itemEquipmentBehaviorAuditPath = providers.gradleProperty('tcItemEquipmentBehaviorAuditPath').orNull ?: System.getProperty('tc.itemEquipmentBehaviorAuditPath')
             def minimalGameTestFixtureEnabled = providers.gradleProperty('tcMinimalGameTestFixture').orNull ?: System.getProperty('tc.minimalGameTestFixture')
             def minimalGameTestFixturePath = providers.gradleProperty('tcMinimalGameTestFixturePath').orNull ?: System.getProperty('tc.minimalGameTestFixturePath')
             if (aspectDumpEnabled != null) {
@@ -178,6 +180,12 @@ neoForge {
             }
             if (essentiaTransportBehaviorAuditPath != null) {
                 systemProperty 'tc.essentiaTransportBehaviorAuditPath', essentiaTransportBehaviorAuditPath
+            }
+            if (itemEquipmentBehaviorAuditEnabled != null) {
+                systemProperty 'tc.itemEquipmentBehaviorAudit', itemEquipmentBehaviorAuditEnabled
+            }
+            if (itemEquipmentBehaviorAuditPath != null) {
+                systemProperty 'tc.itemEquipmentBehaviorAuditPath', itemEquipmentBehaviorAuditPath
             }
             if (minimalGameTestFixtureEnabled != null) {
                 systemProperty 'tc.minimalGameTestFixture', minimalGameTestFixtureEnabled

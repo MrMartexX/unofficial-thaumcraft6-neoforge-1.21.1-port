@@ -159,9 +159,11 @@ public final class TCCreativeTabOrder {
         addPhialVariants(output);
 
         acceptVisible(output, TCItems.ALUMENTUM.get());
+        acceptVisible(output, TCItems.SANE_SOAP.get());
 
         acceptVisible(output, TCItems.SCRIBING_TOOLS.get());
         acceptVisible(output, TCItems.THAUMOMETER.get());
+        acceptVisible(output, TCItems.SANITY_CHECKER.get());
 
         acceptVisible(output, TCItems.THAUMIUM_AXE.get());
         acceptVisible(output, TCItems.THAUMIUM_SWORD.get());
@@ -170,6 +172,12 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.THAUMIUM_HOE.get());
 
         acceptVisible(output, TCItems.GOGGLES.get());
+        acceptVisible(output, TCItems.CLOTH_BOOTS.get());
+        acceptVisible(output, TCItems.CLOTH_LEGS.get());
+        acceptVisible(output, TCItems.CLOTH_CHEST.get());
+        acceptVisible(output, TCItems.VOID_ROBE_HELM.get());
+        acceptVisible(output, TCItems.VOID_ROBE_CHEST.get());
+        acceptVisible(output, TCItems.VOID_ROBE_LEGS.get());
 
         acceptVisible(output, TCItems.CASTER_BASIC.get());
         acceptVisible(output, TCItems.FOCUS_1.get());

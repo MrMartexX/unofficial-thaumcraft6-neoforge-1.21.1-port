@@ -22,7 +22,7 @@ This table is a roadmap snapshot, not the live task queue. Use `06_docs/CURRENT_
 | Stage | Status | Current note |
 |---|---|---|
 | Stage 1. Minimal Launch | Done | Client and dedicated server bootstrap exist and remain guarded by build/server smoke checks. |
-| Stage 2. Items / Materials | In progress | Identity, bridge items, selected materials, models, lang, tags and creative ordering are active; many item behaviors remain deferred. |
+| Stage 2. Items / Materials | In progress | Identity, bridge items, selected materials, models, lang, tags, creative ordering and the first audited wearable/utility behavior contracts are active; many dependency-heavy item behaviors remain deferred. |
 | Stage 3. Blocks / Basic Resources | In progress | Basic blocks, candles, tables and Arcane Workbench exist; all six tube blocks now use legacy multipart connection topology and shapes. Broad machine behavior remains incomplete. |
 | Stage 4. Aspects | In progress | Core aspect model, item/entity assignments, parity harnesses and current generated cache are active; gameplay-heavy consumers remain staged. |
 | Stage 5. Aura | In progress | Server-side saved data, chunk initialization, update loop, debug commands and Workbench Charger aura usage exist; HUD/FX/rifts/consumers remain deferred. |
@@ -90,6 +90,7 @@ Establish the item/material identity layer before block entities, recipes, resea
 - Basic item registry.
 - Materials and tool/armor constants.
 - Simple item classes with minimal behavior.
+- First safe wearable/utility behavior contracts where dependencies are available.
 - Item tags.
 - Data component strategy for old item NBT.
 - Placeholder creative tab contents.
@@ -122,7 +123,8 @@ Establish the item/material identity layer before block entities, recipes, resea
 
 - Basic items register and appear in a creative tab.
 - Materials compile without old Forge 1.12.2 APIs.
-- No recipe, aspect, aura, or research logic is required yet.
+- Goggles, robe armor, sanity checker, sane soap and Crimson Rites behavior contracts stay covered by the item/equipment runtime audit.
+- The base item/material layer does not require broad recipe, aspect, aura or research systems; any targeted behavior coupling must have dedicated audit coverage.
 
 ## Stage 3. Blocks / Basic Resources
 
