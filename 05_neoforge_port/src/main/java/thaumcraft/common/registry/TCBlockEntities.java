@@ -30,6 +30,7 @@ import thaumcraft.common.tiles.essentia.TCEssentiaTransfuserBlockEntity;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 import thaumcraft.common.tiles.misc.TCNitorBlockEntity;
 import thaumcraft.common.tiles.devices.TCStabilizerBlockEntity;
+import thaumcraft.common.tiles.devices.TCMirrorEssentiaBlockEntity;
 
 public final class TCBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
@@ -56,6 +57,15 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCWardedJarBlockEntity>> WARDED_JAR =
             BLOCK_ENTITY_TYPES.register("jar_normal", () ->
                     BlockEntityType.Builder.of(TCWardedJarBlockEntity::new, TCBlocks.JAR_NORMAL.get()).build(null));
+    public static final Supplier<BlockEntityType<TCWardedJarBlockEntity>> JAR_VOID =
+            BLOCK_ENTITY_TYPES.register("jar_void", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCWardedJarBlockEntity(
+                                    TCBlockEntities.JAR_VOID.get(),
+                                    pos,
+                                    state,
+                                    TCWardedJarBlockEntity.Kind.VOID),
+                            TCBlocks.JAR_VOID.get()).build(null));
     public static final Supplier<BlockEntityType<TCAlembicBlockEntity>> ALEMBIC =
             BLOCK_ENTITY_TYPES.register("alembic", () ->
                     BlockEntityType.Builder.of(TCAlembicBlockEntity::new, TCBlocks.ALEMBIC.get()).build(null));
@@ -90,6 +100,9 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCStabilizerBlockEntity>> STABILIZER =
             BLOCK_ENTITY_TYPES.register("stabilizer", () ->
                     BlockEntityType.Builder.of(TCStabilizerBlockEntity::new, TCBlocks.STABILIZER.get()).build(null));
+    public static final Supplier<BlockEntityType<TCMirrorEssentiaBlockEntity>> MIRROR_ESSENTIA =
+            BLOCK_ENTITY_TYPES.register("mirror_essentia", () ->
+                    BlockEntityType.Builder.of(TCMirrorEssentiaBlockEntity::new, TCBlocks.MIRROR_ESSENTIA.get()).build(null));
 
     public static final Supplier<BlockEntityType<TCNitorBlockEntity>> NITOR =
             BLOCK_ENTITY_TYPES.register("nitor", () ->
@@ -199,6 +212,24 @@ public final class TCBlockEntities {
         return switch (kind) {
             case INPUT -> ESSENTIA_TRANSPORT_IN.get();
             case OUTPUT -> ESSENTIA_TRANSPORT_OUT.get();
+        };
+    }
+
+    public static TCWardedJarBlockEntity createWardedJarBlockEntity(
+            TCWardedJarBlockEntity.Kind kind,
+            BlockPos pos,
+            BlockState state
+    ) {
+        return switch (kind) {
+            case NORMAL -> new TCWardedJarBlockEntity(WARDED_JAR.get(), pos, state, kind);
+            case VOID -> new TCWardedJarBlockEntity(JAR_VOID.get(), pos, state, kind);
+        };
+    }
+
+    public static BlockEntityType<TCWardedJarBlockEntity> typeForWardedJar(TCWardedJarBlockEntity.Kind kind) {
+        return switch (kind) {
+            case NORMAL -> WARDED_JAR.get();
+            case VOID -> JAR_VOID.get();
         };
     }
     private TCBlockEntities() {

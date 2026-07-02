@@ -40,15 +40,17 @@ import java.util.List;
 
 public final class TCWardedJarBlock extends Block implements EntityBlock, ILabelable {
     private static final VoxelShape SHAPE = box(3.0D, 0.0D, 3.0D, 13.0D, 14.0D, 13.0D);
+    private final TCWardedJarBlockEntity.Kind kind;
 
-    public TCWardedJarBlock(BlockBehaviour.Properties properties) {
+    public TCWardedJarBlock(BlockBehaviour.Properties properties, TCWardedJarBlockEntity.Kind kind) {
         super(properties);
+        this.kind = kind == null ? TCWardedJarBlockEntity.Kind.NORMAL : kind;
     }
 
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TCWardedJarBlockEntity(pos, state);
+        return TCBlockEntities.createWardedJarBlockEntity(kind, pos, state);
     }
 
     @Nullable
@@ -59,7 +61,7 @@ public final class TCWardedJarBlock extends Block implements EntityBlock, ILabel
             BlockState state,
             BlockEntityType<T> type
     ) {
-        if (level.isClientSide || type != TCBlockEntities.WARDED_JAR.get()) {
+        if (level.isClientSide || type != TCBlockEntities.typeForWardedJar(kind)) {
             return null;
         }
         return (tickerLevel, pos, tickerState, blockEntity) ->
@@ -109,8 +111,7 @@ public final class TCWardedJarBlock extends Block implements EntityBlock, ILabel
 
         if (TCEssentiaItemHelper.isFilledPhial(stack)) {
             Aspect aspect = TCEssentiaItemHelper.aspectFromStack(stack);
-            if (aspect == null || jar.remainingCapacity() < TCPhialItem.BASE_AMOUNT || !jar.doesContainerAccept(aspect)
-                    || jar.storedAspect() != null && jar.storedAspect() != aspect) {
+            if (!jar.canAcceptManual(aspect, TCPhialItem.BASE_AMOUNT)) {
                 return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             }
             if (!level.isClientSide && jar.addToContainer(aspect, TCPhialItem.BASE_AMOUNT) == 0) {

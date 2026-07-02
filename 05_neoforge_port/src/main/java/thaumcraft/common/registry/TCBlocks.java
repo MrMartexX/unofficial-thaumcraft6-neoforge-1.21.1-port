@@ -44,8 +44,10 @@ import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
 import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
 import thaumcraft.common.blocks.devices.TCInlayBlock;
+import thaumcraft.common.blocks.devices.TCMirrorBlock;
 import thaumcraft.common.blocks.devices.TCStabilizerBlock;
 import thaumcraft.common.tiles.essentia.TCEssentiaTransfuserBlockEntity;
+import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 
 public final class TCBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Thaumcraft.MODID);
@@ -141,22 +143,25 @@ public final class TCBlocks {
                     .sound(SoundType.METAL)
                     .noOcclusion()
                     .requiresCorrectToolForDrops()));
-public static final Supplier<Block> BELLOWS = BLOCKS.register("bellows",
+    public static final Supplier<Block> BELLOWS = BLOCKS.register("bellows",
             () -> new TCBellowsBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                     .strength(1.5F, 3.0F)));
-public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal", () -> wardedJarBlock());
+    public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal",
+            () -> wardedJarBlock(TCWardedJarBlockEntity.Kind.NORMAL));
+    public static final Supplier<Block> JAR_VOID = BLOCKS.register("jar_void",
+            () -> wardedJarBlock(TCWardedJarBlockEntity.Kind.VOID));
     public static final Supplier<Block> ALEMBIC = BLOCKS.register("alembic", () -> alembicBlock());
     public static final Supplier<Block> ESSENTIA_TRANSPORT_IN = BLOCKS.register("essentiatransportin",
             () -> essentiaTransportBlock(TCEssentiaTransfuserBlockEntity.Kind.INPUT));
     public static final Supplier<Block> ESSENTIA_TRANSPORT_OUT = BLOCKS.register("essentiatransportout",
             () -> essentiaTransportBlock(TCEssentiaTransfuserBlockEntity.Kind.OUTPUT));
     // Legacy-aligned transport/essentia blocks.
-public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));
-public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tube_buffer", () -> tubeBlock(TCLegacyTubeVariant.BUFFER));
-public static final Supplier<Block> TUBE_FILTER = BLOCKS.register("tube_filter", () -> tubeBlock(TCLegacyTubeVariant.FILTER));
-public static final Supplier<Block> TUBE_ONEWAY = BLOCKS.register("tube_oneway", () -> tubeBlock(TCLegacyTubeVariant.ONEWAY));
-public static final Supplier<Block> TUBE_RESTRICT = BLOCKS.register("tube_restrict", () -> tubeBlock(TCLegacyTubeVariant.RESTRICT));
-public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", () -> tubeBlock(TCLegacyTubeVariant.VALVE));
+    public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));
+    public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tube_buffer", () -> tubeBlock(TCLegacyTubeVariant.BUFFER));
+    public static final Supplier<Block> TUBE_FILTER = BLOCKS.register("tube_filter", () -> tubeBlock(TCLegacyTubeVariant.FILTER));
+    public static final Supplier<Block> TUBE_ONEWAY = BLOCKS.register("tube_oneway", () -> tubeBlock(TCLegacyTubeVariant.ONEWAY));
+    public static final Supplier<Block> TUBE_RESTRICT = BLOCKS.register("tube_restrict", () -> tubeBlock(TCLegacyTubeVariant.RESTRICT));
+    public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", () -> tubeBlock(TCLegacyTubeVariant.VALVE));
     public static final Supplier<Block> SMELTER_THAUMIUM = BLOCKS.register("smelter_thaumium", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.THAUMIUM));
     public static final Supplier<Block> SMELTER_VOID = BLOCKS.register("smelter_void", () -> smelterEndpointBlock(TCLegacySmelterEndpoint.VOID));
     public static final Supplier<Block> WAND_WORKBENCH = BLOCKS.register("wand_workbench", () -> workbenchBlock());
@@ -172,6 +177,7 @@ public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", (
     public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
     public static final Supplier<Block> INLAY = BLOCKS.register("inlay", () -> inlayBlock());
     public static final Supplier<Block> STABILIZER = BLOCKS.register("stabilizer", () -> stabilizerBlock());
+    public static final Supplier<Block> MIRROR_ESSENTIA = BLOCKS.register("mirror_essentia", () -> mirrorBlock());
     public static final Supplier<Block> FLUX_GOO = BLOCKS.register("flux_goo", () -> fluxGooBlock());
 
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
@@ -274,6 +280,13 @@ public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", (
                 .noOcclusion());
     }
 
+    private static Block mirrorBlock() {
+        return new TCMirrorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(0.1F, 0.1F)
+                .sound(SoundType.GLASS)
+                .noOcclusion());
+    }
+
     private static Block infusionMatrixBlock() {
         return new TCInfusionMatrixBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                 .strength(5.0F, 1200.0F)
@@ -318,11 +331,11 @@ public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", (
                 .requiresCorrectToolForDrops()
                 .noOcclusion());
     }
-    private static Block wardedJarBlock() {
+    private static Block wardedJarBlock(TCWardedJarBlockEntity.Kind kind) {
         return new TCWardedJarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                 .strength(0.3F, 0.3F)
                 .sound(SoundType.GLASS)
-                .noOcclusion());
+                .noOcclusion(), kind);
     }
 
     private static Block essentiaTransportBlock(TCEssentiaTransfuserBlockEntity.Kind kind) {

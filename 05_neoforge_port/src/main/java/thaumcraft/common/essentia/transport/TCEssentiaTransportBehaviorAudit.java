@@ -24,15 +24,19 @@ import thaumcraft.common.blocks.essentia.TCEssentiaTransportBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterAuxBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterVentBlock;
+import thaumcraft.common.blocks.devices.TCMirrorBlock;
 import thaumcraft.common.essentia.transport.block.TCLegacyTubeVariant;
 import thaumcraft.common.essentia.transport.blockentity.TCLegacySmelterEndpointBlockEntity;
 import thaumcraft.common.essentia.transport.blockentity.TCLegacyTubeBlockEntity;
+import thaumcraft.common.items.TCMirrorBlockItem;
 import thaumcraft.common.items.TCEssentiaItemHelper;
 import thaumcraft.common.items.TCPhialItem;
 import thaumcraft.common.items.TCWardedJarBlockItem;
+import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.tiles.devices.TCMirrorEssentiaBlockEntity;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 import thaumcraft.common.tiles.essentia.TCAlembicBlockEntity;
 import thaumcraft.common.tiles.essentia.TCSmelterBlockEntity;
@@ -73,6 +77,7 @@ public final class TCEssentiaTransportBehaviorAudit {
         lines.add("- Covers Warded Jar top-face suction and five-tick one-point transfer.");
         lines.add("- Covers smelter tier formulas, sided inventory, fuel data, Alembic-column routing, auxiliaries and vent attachment selection.");
         lines.add("- Covers Alembic/Jar label filters, phial/jar item transfer quanta and tube caster sub-part controls.");
+        lines.add("- Covers Void Jar overflow/continuing suction and Essentia Mirror linked remote source semantics.");
         lines.add("- Covers Essentia Input/Output transfuser identity, sided capability, shapes and five-tick remote source transfer.");
         lines.add("- Bellows device behavior/rendering is covered by the dedicated Bellows audit; final pixel-level valve/vent visual parity still needs screenshot review.");
         Files.write(output, lines);
@@ -150,6 +155,7 @@ public final class TCEssentiaTransportBehaviorAudit {
         addTransferChecks(level, origin.offset(0, 0, 12), checks);
         addSideAndValveChecks(level, origin.offset(8, 0, 0), checks);
         addJarChecks(level, origin.offset(8, 0, 10), checks);
+        addVoidJarAndMirrorChecks(level, origin.offset(18, 0, -10), checks);
         addEssentiaTransfuserChecks(level, origin.offset(18, 0, 10), checks);
         addAlembicChecks(level, origin.offset(12, 0, 18), checks);
         addSmelterChecks(level, origin.offset(-12, 0, 18), checks);
@@ -649,6 +655,134 @@ public final class TCEssentiaTransportBehaviorAudit {
                         && restoredJar.storedAmount() == TCPhialItem.BASE_AMOUNT,
                 "filter=" + restoredJar.aspectFilter() + ", facing=" + restoredJar.labelFacing()
                         + ", amount=" + restoredJar.storedAmount()));
+    }
+
+    private static void addVoidJarAndMirrorChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
+        boolean voidJarRegistered = TCBlocks.JAR_VOID.get() instanceof thaumcraft.common.blocks.essentia.TCWardedJarBlock
+                && TCItems.JAR_VOID.get() instanceof TCWardedJarBlockItem;
+        checks.add(check("void_jar_is_registered_as_real_block_and_block_item",
+                voidJarRegistered,
+                "block=" + TCBlocks.JAR_VOID.get().getClass().getSimpleName()
+                        + ", item=" + TCItems.JAR_VOID.get().getClass().getSimpleName()));
+
+        level.setBlock(origin, TCBlocks.JAR_VOID.get().defaultBlockState(), 3);
+        TCWardedJarBlockEntity voidJar = blockEntity(level, origin, TCWardedJarBlockEntity.class);
+        if (voidJar == null) {
+            checks.add(check("runtime_void_jar_block_entity_created", false, "void jar missing"));
+            return;
+        }
+
+        voidJar.setStoredForValidation(Aspect.AIR, TCWardedJarBlockEntity.CAPACITY);
+        int fullUnfilteredSuction = voidJar.getSuction(Direction.UP).amount();
+        voidJar.setFilter(Aspect.AIR, Direction.NORTH);
+        int fullFilteredSuction = voidJar.getSuction(Direction.UP).amount();
+        int filteredMinimum = voidJar.getMinimumSuction();
+        voidJar.setStoredForValidation(Aspect.AIR, TCWardedJarBlockEntity.CAPACITY - 1);
+        int partialFilteredSuction = voidJar.getSuction(Direction.UP).amount();
+        int overflowRemainder = voidJar.addToContainer(Aspect.AIR, 10);
+        ItemStack carriedVoidJar = TCWardedJarBlockItem.stackFromJar(voidJar);
+        checks.add(check("void_jar_overflow_and_suction_match_legacy",
+                voidJar.kind() == TCWardedJarBlockEntity.Kind.VOID
+                        && fullUnfilteredSuction == 32
+                        && fullFilteredSuction == 32
+                        && filteredMinimum == 48
+                        && partialFilteredSuction == 48
+                        && overflowRemainder == 0
+                        && voidJar.storedAmount() == TCWardedJarBlockEntity.CAPACITY
+                        && carriedVoidJar.is(TCItems.JAR_VOID.get())
+                        && TCEssentiaItemHelper.aspectAmount(carriedVoidJar) == TCWardedJarBlockEntity.CAPACITY,
+                "fullUnfiltered=" + fullUnfilteredSuction + ", fullFiltered=" + fullFilteredSuction
+                        + ", partialFiltered=" + partialFilteredSuction + ", minimum=" + filteredMinimum
+                        + ", overflowRemainder=" + overflowRemainder + ", stored=" + voidJar.storedAmount()));
+
+        TCEssentiaTransport voidJarCapability = level.getCapability(TCEssentiaCapabilities.BLOCK, origin, Direction.UP);
+        checks.add(check("void_jar_exposes_top_transport_capability",
+                voidJarCapability == voidJar,
+                "capability=" + (voidJarCapability != null)));
+
+        boolean mirrorRegistered = TCBlocks.MIRROR_ESSENTIA.get() instanceof TCMirrorBlock
+                && TCItems.MIRROR_ESSENTIA.get() instanceof TCMirrorBlockItem;
+        checks.add(check("essentia_mirror_is_registered_as_real_block_and_block_item",
+                mirrorRegistered,
+                "block=" + TCBlocks.MIRROR_ESSENTIA.get().getClass().getSimpleName()
+                        + ", item=" + TCItems.MIRROR_ESSENTIA.get().getClass().getSimpleName()));
+
+        BlockState mirrorUp = TCBlocks.MIRROR_ESSENTIA.get().defaultBlockState().setValue(TCMirrorBlock.FACING, Direction.UP);
+        BlockState mirrorDown = TCBlocks.MIRROR_ESSENTIA.get().defaultBlockState().setValue(TCMirrorBlock.FACING, Direction.DOWN);
+        BlockState mirrorNorth = TCBlocks.MIRROR_ESSENTIA.get().defaultBlockState().setValue(TCMirrorBlock.FACING, Direction.NORTH);
+        BlockState mirrorSouth = TCBlocks.MIRROR_ESSENTIA.get().defaultBlockState().setValue(TCMirrorBlock.FACING, Direction.SOUTH);
+        BlockState mirrorWest = TCBlocks.MIRROR_ESSENTIA.get().defaultBlockState().setValue(TCMirrorBlock.FACING, Direction.WEST);
+        BlockState mirrorEast = TCBlocks.MIRROR_ESSENTIA.get().defaultBlockState().setValue(TCMirrorBlock.FACING, Direction.EAST);
+        checks.add(check("essentia_mirror_shapes_match_legacy_facing_boxes",
+                sameBounds(mirrorDown.getShape(level, origin).bounds(), 0, 14, 0, 16, 16, 16)
+                        && sameBounds(mirrorUp.getShape(level, origin).bounds(), 0, 0, 0, 16, 2, 16)
+                        && sameBounds(mirrorNorth.getShape(level, origin).bounds(), 0, 0, 14, 16, 16, 16)
+                        && sameBounds(mirrorSouth.getShape(level, origin).bounds(), 0, 0, 0, 16, 16, 2)
+                        && sameBounds(mirrorWest.getShape(level, origin).bounds(), 14, 0, 0, 16, 16, 16)
+                        && sameBounds(mirrorEast.getShape(level, origin).bounds(), 0, 0, 0, 2, 16, 16),
+                "legacy AABB set verified for UP/DOWN/NORTH/SOUTH/WEST/EAST"));
+
+        BlockPos localSupport = origin.offset(4, 0, 0);
+        BlockPos localPos = localSupport.north();
+        BlockPos remoteSupport = origin.offset(14, 0, 0);
+        BlockPos remotePos = remoteSupport.north();
+        BlockPos remoteJarPos = remotePos.north(3);
+        level.setBlock(localSupport, Blocks.STONE.defaultBlockState(), 3);
+        level.setBlock(remoteSupport, Blocks.STONE.defaultBlockState(), 3);
+        level.setBlock(localPos, mirrorNorth, 3);
+        level.setBlock(remotePos, mirrorNorth, 3);
+        level.setBlock(remoteJarPos, TCBlocks.JAR_NORMAL.get().defaultBlockState(), 3);
+        TCMirrorEssentiaBlockEntity localMirror = blockEntity(level, localPos, TCMirrorEssentiaBlockEntity.class);
+        TCMirrorEssentiaBlockEntity remoteMirror = blockEntity(level, remotePos, TCMirrorEssentiaBlockEntity.class);
+        TCWardedJarBlockEntity remoteJar = blockEntity(level, remoteJarPos, TCWardedJarBlockEntity.class);
+        if (localMirror == null || remoteMirror == null || remoteJar == null) {
+            checks.add(check("runtime_essentia_mirror_fixture_created", false,
+                    "local=" + (localMirror != null) + ", remote=" + (remoteMirror != null)
+                            + ", jar=" + (remoteJar != null)));
+            return;
+        }
+        localMirror.setLinkedTargetForValidation(level, remotePos);
+        remoteJar.setStoredForValidation(Aspect.AIR, 2);
+        boolean linkValid = localMirror.isLinkValidSimple()
+                && remoteMirror.isLinkValidSimple()
+                && localMirror.linkPos().equals(remotePos)
+                && remoteMirror.linkPos().equals(localPos)
+                && localMirror.linkedFacing() == Direction.NORTH;
+        checks.add(check("essentia_mirror_restores_bidirectional_legacy_link",
+                linkValid,
+                "localLinked=" + localMirror.isLinkValidSimple() + ", remoteLinked=" + remoteMirror.isLinkValidSimple()
+                        + ", facing=" + localMirror.linkedFacing()));
+
+        TCEssentiaTransport mirrorCapability = level.getCapability(TCEssentiaCapabilities.BLOCK, localPos, Direction.NORTH);
+        checks.add(check("essentia_mirror_is_not_direct_pipe_endpoint",
+                mirrorCapability == null,
+                "transportCapability=" + (mirrorCapability != null)));
+
+        int availableBefore = localMirror.storedAspects().getAmount(Aspect.AIR);
+        int simulated = localMirror.drainAspect(Aspect.AIR, 1, true);
+        int drained = localMirror.drainAspect(Aspect.AIR, 1, false);
+        int addRemainder = localMirror.addToContainer(Aspect.AIR, 1);
+        int multiRemainder = localMirror.addToContainer(Aspect.AIR, 2);
+        ItemStack linkedStack = TCMirrorBlockItem.stackFromMirror(localMirror);
+        checks.add(check("essentia_mirror_bridges_remote_sources_one_point_at_a_time",
+                availableBefore == 2
+                        && simulated == 1
+                        && drained == 1
+                        && addRemainder == 0
+                        && multiRemainder == 2
+                        && remoteJar.storedAmount() == 2
+                        && localMirror.instability() == 2
+                        && linkedStack.has(TCDataComponents.MIRROR_LINK.get()),
+                "available=" + availableBefore + ", simulated=" + simulated + ", drained=" + drained
+                        + ", addRemainder=" + addRemainder + ", multiRemainder=" + multiRemainder
+                        + ", remoteJar=" + remoteJar.storedAmount()
+                        + ", instability=" + localMirror.instability()));
+
+        localMirror.setInstabilityForValidation(65);
+        TCMirrorEssentiaBlockEntity.serverTick(level, localPos, localMirror.getBlockState(), localMirror);
+        checks.add(check("essentia_mirror_instability_pollutes_and_decays_like_legacy",
+                localMirror.instability() == 0,
+                "instabilityAfterTick=" + localMirror.instability()));
     }
 
     private static void addEssentiaTransfuserChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {

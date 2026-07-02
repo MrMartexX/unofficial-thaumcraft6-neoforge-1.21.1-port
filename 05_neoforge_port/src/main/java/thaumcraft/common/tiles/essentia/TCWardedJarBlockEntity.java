@@ -10,10 +10,12 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.common.essentia.container.TCAspectSourceContainer;
 import thaumcraft.common.essentia.transport.TCEssentiaStack;
 import thaumcraft.common.essentia.transport.TCEssentiaSuction;
@@ -31,9 +33,23 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
     private Direction labelFacing = Direction.NORTH;
     private boolean blocked;
     private int transportTick;
+    private final Kind kind;
 
     public TCWardedJarBlockEntity(BlockPos pos, BlockState state) {
-        super(TCBlockEntities.WARDED_JAR.get(), pos, state);
+        this(TCBlockEntities.WARDED_JAR.get(), pos, state, Kind.NORMAL);
+    }
+
+    public TCWardedJarBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, Kind kind) {
+        super(type, pos, state);
+        this.kind = kind == null ? Kind.NORMAL : kind;
+    }
+
+    public Kind kind() {
+        return kind;
+    }
+
+    public boolean isVoidJar() {
+        return kind == Kind.VOID;
     }
 
     public Aspect storedAspect() {
@@ -132,6 +148,16 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
         return requestedAspect != null && (aspectFilter == null || aspectFilter == requestedAspect);
     }
 
+    public boolean canAcceptManual(Aspect requestedAspect, int requestedAmount) {
+        if (requestedAspect == null || requestedAmount <= 0 || blocked || !doesContainerAccept(requestedAspect)) {
+            return false;
+        }
+        if (aspect != null && aspect != requestedAspect) {
+            return false;
+        }
+        return isVoidJar() || amount + requestedAmount <= CAPACITY;
+    }
+
     public int remainingCapacity() {
         return CAPACITY - amount;
     }
@@ -153,15 +179,19 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
 
     @Override
     public TCEssentiaSuction getSuction(Direction face) {
-        if (!isConnectable(face) || amount >= CAPACITY) {
+        if (!isConnectable(face) || !isVoidJar() && amount >= CAPACITY) {
             return TCEssentiaSuction.NONE;
         }
         Aspect suctionAspect = aspectFilter != null ? aspectFilter : aspect;
-        return new TCEssentiaSuction(suctionAspect == null ? "" : suctionAspect.getTag(), aspectFilter != null ? 64 : 32);
+        int suction = isVoidJar() ? voidJarSuction() : (aspectFilter != null ? 64 : 32);
+        return new TCEssentiaSuction(suctionAspect == null ? "" : suctionAspect.getTag(), suction);
     }
 
     @Override
     public int getMinimumSuction() {
+        if (isVoidJar()) {
+            return aspectFilter != null ? 48 : 32;
+        }
         return aspectFilter != null ? 64 : 32;
     }
 
@@ -184,10 +214,16 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
         if (aspect != null && aspect != requestedAspect) {
             return 0;
         }
-        int accepted = Math.min(requestedAmount, CAPACITY - amount);
+        int accepted = isVoidJar() ? requestedAmount : Math.min(requestedAmount, CAPACITY - amount);
         if (!simulate && accepted > 0) {
             aspect = requestedAspect;
             amount += accepted;
+            if (amount > CAPACITY) {
+                if (isVoidJar() && level != null && level.random.nextInt(250) == 0) {
+                    AuraHelper.polluteAura(level, worldPosition, 1.0F, true);
+                }
+                amount = CAPACITY;
+            }
             markChangedAndSync();
         }
         return accepted;
@@ -222,10 +258,15 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TCWardedJarBlockEntity jar) {
-        if (level == null || level.isClientSide || ++jar.transportTick % 5 != 0 || jar.amount >= CAPACITY) {
+        if (level == null || level.isClientSide || ++jar.transportTick % 5 != 0
+                || !jar.isVoidJar() && jar.amount >= CAPACITY) {
             return;
         }
         jar.fillFromAbove();
+    }
+
+    private int voidJarSuction() {
+        return aspectFilter != null && amount < CAPACITY ? 48 : 32;
     }
 
     private void fillFromAbove() {
@@ -313,5 +354,10 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
         }
         amount = aspect == null ? 0 : Math.max(0, Math.min(CAPACITY, tag.getInt("Amount")));
         blocked = tag.getBoolean("Blocked");
+    }
+
+    public enum Kind {
+        NORMAL,
+        VOID
     }
 }

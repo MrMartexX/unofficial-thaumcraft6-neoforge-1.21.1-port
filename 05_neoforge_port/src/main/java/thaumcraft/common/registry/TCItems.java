@@ -16,6 +16,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.items.ItemAspectVariant;
 import thaumcraft.common.items.ItemLegacyPlaceholder;
 import thaumcraft.common.items.TCJarLabelItem;
+import thaumcraft.common.items.TCMirrorBlockItem;
 import thaumcraft.common.items.TCPhialItem;
 import thaumcraft.common.items.TCWardedJarBlockItem;
 import thaumcraft.common.items.armor.ItemGoggles;
@@ -116,12 +117,11 @@ public final class TCItems {
     public static final Supplier<BlockItem> CRUCIBLE = blockItem("crucible", TCBlocks.CRUCIBLE);
     public static final Supplier<BlockItem> SMELTER_BASIC = blockItem("smelter_basic", TCBlocks.SMELTER_BASIC);
     public static final Supplier<BlockItem> BELLOWS = blockItem("bellows", TCBlocks.BELLOWS);
-public static final Supplier<BlockItem> SMELTER_VENT = blockItem("smelter_vent", TCBlocks.SMELTER_VENT);
+    public static final Supplier<BlockItem> SMELTER_VENT = blockItem("smelter_vent", TCBlocks.SMELTER_VENT);
     public static final Supplier<BlockItem> SMELTER_AUX = blockItem("smelter_aux", TCBlocks.SMELTER_AUX);
 
-
-
-public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal", () -> new TCWardedJarBlockItem(TCBlocks.JAR_NORMAL.get(), new Item.Properties()));
+    public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal", () -> new TCWardedJarBlockItem(TCBlocks.JAR_NORMAL.get(), new Item.Properties()));
+    public static final Supplier<BlockItem> JAR_VOID = ITEMS.register("jar_void", () -> new TCWardedJarBlockItem(TCBlocks.JAR_VOID.get(), new Item.Properties()));
     public static final Supplier<BlockItem> ALEMBIC = blockItem("alembic", TCBlocks.ALEMBIC);
     public static final Supplier<BlockItem> ESSENTIA_TRANSPORT_IN = blockItem("essentiatransportin", TCBlocks.ESSENTIA_TRANSPORT_IN);
     public static final Supplier<BlockItem> ESSENTIA_TRANSPORT_OUT = blockItem("essentiatransportout", TCBlocks.ESSENTIA_TRANSPORT_OUT);
@@ -262,7 +262,7 @@ public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal"
     public static final Supplier<Item> EVERFULL_URN = simpleItem("everfull_urn");
     public static final Supplier<Item> ARCANE_LAMP = simpleItem("arcane_lamp");
     public static final Supplier<Item> HAND_MIRROR = simpleItem("hand_mirror");
-    public static final Supplier<Item> MIRROR_ESSENTIA = simpleItem("mirror_essentia");
+    public static final Supplier<BlockItem> MIRROR_ESSENTIA = ITEMS.register("mirror_essentia", () -> new TCMirrorBlockItem(TCBlocks.MIRROR_ESSENTIA.get(), new Item.Properties()));
     public static final Supplier<Item> MIRROR = simpleItem("mirror");
     public static final Supplier<Item> LAMP_FERTILITY = simpleItem("lamp_fertility");
     public static final Supplier<Item> LAMP_GROWTH = simpleItem("lamp_growth");

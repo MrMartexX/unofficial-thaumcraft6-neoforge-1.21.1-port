@@ -1,5 +1,6 @@
 {
     "ambientocclusion": false,
+    "render_type": "minecraft:translucent",
     "textures": {
         "side": "thaumcraft:block/jar_side_void",
         "bottom": "thaumcraft:block/jar_bottom",

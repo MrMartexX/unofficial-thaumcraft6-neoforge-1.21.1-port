@@ -1,7 +1,7 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
 Last reviewed branch: `main`
-Last reviewed checkpoint: `2026-07-02` essentia input/output transfuser slice
+Last reviewed checkpoint: `2026-07-02` Void Jar and essentia mirror utility slice
 Reviewed target module: `05_neoforge_port`
 
 ## State Snapshot
@@ -68,13 +68,15 @@ This section records the current repository state. The lower "Changelog Notes" s
 - Alembic and all three smelter tiers now have their real server-owned machine boundary: two-slot inventory, aspect slurry conversion, exact tier efficiency/output cadence, Alumentum fuel boost, cumulative vent mitigation, matching-first Alembic columns, attached auxiliary output, sided item automation and legacy-layout menu/screen.
 - Alembic/Jar label filters, empty phial extraction, filled-phial-to-jar transfer, jar-item filling from Alembics, caster tube sub-part side/choke/facing controls, manual/redstone valve state and vent sync are implemented over modern Data Components and BlockEntity sync.
 - Essentia Input and Essentia Output are now real blocks/BlockItems behind the current `essentiatransportin` / `essentiatransportout` recipe ids. They use the legacy `essentia_input` / `essentia_output` model assets, clicked-face placement, exact six-facing AABBs, sided capability only on the back face, input suction `128`, output suction `0`, the legacy 16-block source prism and five-tick one-point transfer cadence.
-- The combined transport/machine runtime audit passes `52/52`, including venting pause, multipart state, capability visibility, NBT round-trip, label/filter sync, phial transfer quanta, caster sub-hit controls, transfuser shape/capability checks, input-to-remote-container transfer and output-from-remote-container transfer.
+- Void Jar is now a real `jar_void` block/BlockItem with its own BlockEntityType, top transport capability, legacy filtered/unfiltered suction behavior while full, overflow clamping to `250`, and modern item fill predicate resources. The `jarvoid` recipe id remains the legacy recipe/page key, but its active output is now `thaumcraft:jar_void`.
+- Essentia Mirror is now a real wall-mounted `mirror_essentia` block/BlockItem with legacy six-facing AABBs, Data Component link payloads, bidirectional link restore, remote source-zone aspect bridge, one-point add/drain semantics, instability flux cadence, and no direct pipe endpoint capability. Normal item mirrors and hand mirrors remain separate device work.
+- The combined transport/machine runtime audit passes `61/61`, including venting pause, multipart state, capability visibility, NBT round-trip, label/filter sync, phial transfer quanta, caster sub-hit controls, Void Jar overflow/suction, essentia mirror link/source checks, transfuser shape/capability checks, input-to-remote-container transfer and output-from-remote-container transfer.
 - Bellows now has a focused device/rendering slice with legacy client inflation, tube-buffer extension, smelter/tube-buffer ownership and vanilla-furnace cook-progress boost.
 - Final measured valve/vent pixel parity remains an in-client visual review task.
 
 ### Deferred boundaries
 
-- Special alchemy side effects, crucible-derived aspect generation, item pulling radius, Thaumatorium machine behavior, Void Jar overflow, essentia mirror integration, finite Flux Goo spreading/taint transforms, Flux Rift stabilization, full custom entity/golem systems, broad worldgen, broad rendering polish, full equipment/Curios discount integration, remaining dependency-heavy recipe/page families, and final measured valve/vent visual parity remain deferred.
+- Special alchemy side effects, crucible-derived aspect generation, item pulling radius, Thaumatorium machine behavior, special void-jar stack-copy crafting, normal item mirror/hand mirror behavior, finite Flux Goo spreading/taint transforms, Flux Rift stabilization, full custom entity/golem systems, broad worldgen, broad rendering polish, full equipment/Curios discount integration, remaining dependency-heavy recipe/page families, and final measured valve/vent/mirror visual parity remain deferred.
 
 ## Purpose
 
@@ -137,9 +139,9 @@ This is the current implementation status document. Use it together with the mig
 
 | Bucket | Current contents | Notes |
 |---|---|---|
-| Ready | Aspect/scan parity harnesses, reload-safe research data, current Thaumometer scan path, knowledge sync, research table and first server-authoritative Thaumonomicon flow, complete regular `89/89` Arcane Workbench recipe id set/behavior, crucible behavior slices, infusion recipe/page data, persistent Warded Jar storage, the `52/52` tube/jar/Alembic/smelter/transfuser/label/phial/caster-control runtime boundary, the focused Bellows device/rendering audit, the audited default infusion cycle through output placement, the first focus/caster/Focal Manipulator core, and the audited `ROOT -> TOUCH -> FIRE` cast execution slice. | Keep these covered by build/server/client smoke checks before expanding consumers. |
+| Ready | Aspect/scan parity harnesses, reload-safe research data, current Thaumometer scan path, knowledge sync, research table and first server-authoritative Thaumonomicon flow, complete regular `89/89` Arcane Workbench recipe id set/behavior, crucible behavior slices, infusion recipe/page data, persistent Warded Jar/Void Jar storage, the `61/61` tube/jar/Alembic/smelter/transfuser/label/phial/caster-control/Void-Jar/essentia-mirror runtime boundary, the focused Bellows device/rendering audit, the audited default infusion cycle through output placement, the first focus/caster/Focal Manipulator core, and the audited `ROOT -> TOUCH -> FIRE` cast execution slice. | Keep these covered by build/server/client smoke checks before expanding consumers. |
 | Placeholder / Bridge | Remaining research requirement bridges, unfinished advanced theorycraft cards/aids, minimal warp storage, unresolved machine/entity identities, and unreviewed machine/entity visual identities. Research bridge recipes, generated parity reports, and debug-only completion commands remain tooling. | These are scaffolds for validation and migration. Do not treat them as final gameplay or visual parity. |
-| Blocked | Thaumonomicon final search/visual parity, recipe drilldown/history, final Arcane Workbench GUI polish, optional Curios/accessory slot adapter wiring, final robe/goggles armor model geometry, special void-jar stack-copy behavior, full Flux Goo flow/taint transforms, measured infusion visual parity, blueprint/fake recipe systems, full warp effects/sync, custom entities, remaining focus effect execution/projectiles/clouds/mines, Focus Pouch GUI, Void Jar overflow, essentia mirror behavior, Thaumatorium machine behavior and ScanSky celestial-note side effects. | These need focused design and validation slices. |
+| Blocked | Thaumonomicon final search/visual parity, recipe drilldown/history, final Arcane Workbench GUI polish, optional Curios/accessory slot adapter wiring, final robe/goggles armor model geometry, special void-jar stack-copy behavior, normal item mirror/hand mirror behavior, full Flux Goo flow/taint transforms, measured infusion/mirror visual parity, blueprint/fake recipe systems, full warp effects/sync, custom entities, remaining focus effect execution/projectiles/clouds/mines, Focus Pouch GUI, Thaumatorium machine behavior and ScanSky celestial-note side effects. | These need focused design and validation slices. |
 | Next subsystem | Continue non-focus blocker removal from `06_docs/migration/remaining_subsystem_unblock_plan.md`: finish row-4 utility-device decisions, then design row-10 Thaumatorium. | Focus/caster row 7 is paused by user request; do not expand medium/effect execution until explicitly resumed. |
 
 ## Legacy asset corpus import
@@ -814,4 +816,11 @@ The sections below are historical update notes. They should not be read as the c
 - Replaced the incremental placeholder result with one reviewed legacy-parity batch.
 - Corrected Alumentum/fuel handling, cumulative vent mitigation, aux facing, matching-first Alembic columns and upgraded-smelter ownership.
 - Restored detailed legacy-derived Bellows/aux/vent models, added the smelter menu/screen and registered sided item automation.
-- Combined tube/jar/Alembic/smelter runtime result later expanded with label/phial/caster controls and Essentia Input/Output transfusers: `52/52`.
+- Combined tube/jar/Alembic/smelter runtime result later expanded with label/phial/caster controls and Essentia Input/Output transfusers: `52/52`; Void Jar and Essentia Mirror then expanded the same audit to `61/61`.
+
+## Void Jar and essentia mirror utility note
+
+- Added real `jar_void` Block/BlockItem/BlockEntityType behavior with legacy overflow, suction, top capability and modern fill item predicates.
+- Added real `mirror_essentia` Block/BlockItem/BlockEntity behavior with Data Component link payloads, legacy wall shapes, remote source-zone bridge, one-point add/drain behavior and instability flux checks.
+- The combined essentia transport/machine audit now passes `61/61`.
+- Remaining mirror work is normal item mirror/hand mirror transport and final BER/pixel parity, not the essentia mirror source blocker.

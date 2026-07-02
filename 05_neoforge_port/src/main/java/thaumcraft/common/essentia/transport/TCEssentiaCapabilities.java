@@ -27,6 +27,7 @@ public final class TCEssentiaCapabilities {
         event.registerBlockEntity(BLOCK, TCBlockEntities.TUBE_RESTRICT.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.TUBE_VALVE.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.WARDED_JAR.get(), TCEssentiaCapabilities::forSide);
+        event.registerBlockEntity(BLOCK, TCBlockEntities.JAR_VOID.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.ALEMBIC.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.ESSENTIA_TRANSPORT_IN.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.ESSENTIA_TRANSPORT_OUT.get(), TCEssentiaCapabilities::forSide);
