@@ -1,7 +1,5 @@
 package thaumcraft.common.crafting.infusion;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
@@ -9,6 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.essentia.container.TCAspectSourceContainer;
+import thaumcraft.common.essentia.container.TCEssentiaSourceSearch;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 
 /**
@@ -51,23 +50,7 @@ public final class TCInfusionAspectSourceResolver {
         }
         Level level = matrix.getLevel();
         BlockPos matrixPos = matrix.getBlockPos();
-        List<Candidate> candidates = new ArrayList<>();
-        for (int x = -LEGACY_SOURCE_RANGE; x <= LEGACY_SOURCE_RANGE; x++) {
-            for (int z = -LEGACY_SOURCE_RANGE; z <= LEGACY_SOURCE_RANGE; z++) {
-                for (int y = -LEGACY_SOURCE_RANGE; y < LEGACY_SOURCE_RANGE; y++) {
-                    if (x == 0 && y == 0 && z == 0) {
-                        continue;
-                    }
-                    BlockPos sourcePos = matrixPos.offset(x, y, z);
-                    BlockEntity blockEntity = level.getBlockEntity(sourcePos);
-                    if (blockEntity instanceof TCAspectSourceContainer) {
-                        candidates.add(new Candidate(sourcePos));
-                    }
-                }
-            }
-        }
-        candidates.sort(Comparator.comparingDouble(candidate -> candidate.pos().distSqr(matrixPos)));
-        return candidates.stream().map(Candidate::pos).toList();
+        return TCEssentiaSourceSearch.discover(level, matrixPos, null, LEGACY_SOURCE_RANGE);
     }
 
     public static OnePointDrainResult drainOne(
@@ -103,9 +86,6 @@ public final class TCInfusionAspectSourceResolver {
 
     public static String unavailableReason() {
         return NO_SUPPORTED_SOURCE_FOUND;
-    }
-
-    private record Candidate(BlockPos pos) {
     }
 
     public record OnePointDrainResult(boolean success, String reason, Aspect aspect, BlockPos sourcePos) {

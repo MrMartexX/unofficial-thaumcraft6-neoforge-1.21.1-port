@@ -21,3 +21,10 @@ The static/full-cube tube placeholders were replaced with modern-path adaptation
 ## Remaining boundary
 
 This batch does not mark Bellows, caster sub-part interaction, vent/valve client rendering, Alembic or smelter gameplay complete. See `06_docs/gameplay/essentia_transport_design.md`.
+
+## 2026-07-02 Transfuser Extension
+
+- Dedicated-server runtime audit now passes `52/52`.
+- `essentiatransportin` and `essentiatransportout` are real blocks/block items instead of catalog-only item placeholders.
+- The port now covers legacy Essentia Input/Output placement, six-facing AABBs, back-face-only capability access, input suction `128`, output suction `0`, five-tick transfer cadence, and 16-block remote source-container search.
+- Thaumatorium recipe components now point at the real transport input/output ids instead of temporary `essentia_importer` / `essentia_exporter` placeholders.

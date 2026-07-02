@@ -31,6 +31,7 @@ import thaumcraft.common.blocks.essentia.TCSmelterVentBlock;
 import thaumcraft.common.blocks.essentia.TCWardedJarBlock;
 import thaumcraft.common.blocks.essentia.TCAlembicBlock;
 import thaumcraft.common.blocks.essentia.TCBellowsBlock;
+import thaumcraft.common.blocks.essentia.TCEssentiaTransportBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCCrucibleBlock;
@@ -44,6 +45,7 @@ import thaumcraft.common.blocks.misc.TCNitorBlock;
 import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
 import thaumcraft.common.blocks.devices.TCInlayBlock;
 import thaumcraft.common.blocks.devices.TCStabilizerBlock;
+import thaumcraft.common.tiles.essentia.TCEssentiaTransfuserBlockEntity;
 
 public final class TCBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Thaumcraft.MODID);
@@ -144,6 +146,10 @@ public static final Supplier<Block> BELLOWS = BLOCKS.register("bellows",
                     .strength(1.5F, 3.0F)));
 public static final Supplier<Block> JAR_NORMAL = BLOCKS.register("jar_normal", () -> wardedJarBlock());
     public static final Supplier<Block> ALEMBIC = BLOCKS.register("alembic", () -> alembicBlock());
+    public static final Supplier<Block> ESSENTIA_TRANSPORT_IN = BLOCKS.register("essentiatransportin",
+            () -> essentiaTransportBlock(TCEssentiaTransfuserBlockEntity.Kind.INPUT));
+    public static final Supplier<Block> ESSENTIA_TRANSPORT_OUT = BLOCKS.register("essentiatransportout",
+            () -> essentiaTransportBlock(TCEssentiaTransfuserBlockEntity.Kind.OUTPUT));
     // Legacy-aligned transport/essentia blocks.
 public static final Supplier<Block> TUBE = BLOCKS.register("tube", () -> tubeBlock(TCLegacyTubeVariant.TUBE));
 public static final Supplier<Block> TUBE_BUFFER = BLOCKS.register("tube_buffer", () -> tubeBlock(TCLegacyTubeVariant.BUFFER));
@@ -317,6 +323,14 @@ public static final Supplier<Block> TUBE_VALVE = BLOCKS.register("tube_valve", (
                 .strength(0.3F, 0.3F)
                 .sound(SoundType.GLASS)
                 .noOcclusion());
+    }
+
+    private static Block essentiaTransportBlock(TCEssentiaTransfuserBlockEntity.Kind kind) {
+        return new TCEssentiaTransportBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(1.0F, 10.0F)
+                .sound(SoundType.METAL)
+                .requiresCorrectToolForDrops()
+                .noOcclusion(), kind);
     }
 
     private static BlockBehaviour.Properties smelterProperties() {

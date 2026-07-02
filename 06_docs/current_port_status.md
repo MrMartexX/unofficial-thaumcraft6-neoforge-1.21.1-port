@@ -1,7 +1,7 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
 Last reviewed branch: `main`
-Last reviewed checkpoint: `2026-07-02` first focus cast execution slice
+Last reviewed checkpoint: `2026-07-02` essentia input/output transfuser slice
 Reviewed target module: `05_neoforge_port`
 
 ## State Snapshot
@@ -67,13 +67,14 @@ This section records the current repository state. The lower "Changelog Notes" s
 - Warded Jar preserves top-only access, capacity `250`, suction `32`/filtered `64`, all-or-nothing transport take and one-point pull every five ticks.
 - Alembic and all three smelter tiers now have their real server-owned machine boundary: two-slot inventory, aspect slurry conversion, exact tier efficiency/output cadence, Alumentum fuel boost, cumulative vent mitigation, matching-first Alembic columns, attached auxiliary output, sided item automation and legacy-layout menu/screen.
 - Alembic/Jar label filters, empty phial extraction, filled-phial-to-jar transfer, jar-item filling from Alembics, caster tube sub-part side/choke/facing controls, manual/redstone valve state and vent sync are implemented over modern Data Components and BlockEntity sync.
-- The combined transport/machine runtime audit passes `46/46`, including venting pause, multipart state, capability visibility, NBT round-trip, label/filter sync, phial transfer quanta and caster sub-hit controls.
+- Essentia Input and Essentia Output are now real blocks/BlockItems behind the current `essentiatransportin` / `essentiatransportout` recipe ids. They use the legacy `essentia_input` / `essentia_output` model assets, clicked-face placement, exact six-facing AABBs, sided capability only on the back face, input suction `128`, output suction `0`, the legacy 16-block source prism and five-tick one-point transfer cadence.
+- The combined transport/machine runtime audit passes `52/52`, including venting pause, multipart state, capability visibility, NBT round-trip, label/filter sync, phial transfer quanta, caster sub-hit controls, transfuser shape/capability checks, input-to-remote-container transfer and output-from-remote-container transfer.
 - Bellows now has a focused device/rendering slice with legacy client inflation, tube-buffer extension, smelter/tube-buffer ownership and vanilla-furnace cook-progress boost.
 - Final measured valve/vent pixel parity remains an in-client visual review task.
 
 ### Deferred boundaries
 
-- Special alchemy side effects, crucible-derived aspect generation, item pulling radius, Thaumatorium/mirror integration, finite Flux Goo spreading/taint transforms, Flux Rift stabilization, full custom entity/golem systems, broad worldgen, broad rendering polish, full equipment/Curios discount integration, remaining dependency-heavy recipe/page families, and final measured valve/vent visual parity remain deferred.
+- Special alchemy side effects, crucible-derived aspect generation, item pulling radius, Thaumatorium machine behavior, Void Jar overflow, essentia mirror integration, finite Flux Goo spreading/taint transforms, Flux Rift stabilization, full custom entity/golem systems, broad worldgen, broad rendering polish, full equipment/Curios discount integration, remaining dependency-heavy recipe/page families, and final measured valve/vent visual parity remain deferred.
 
 ## Purpose
 
@@ -136,10 +137,10 @@ This is the current implementation status document. Use it together with the mig
 
 | Bucket | Current contents | Notes |
 |---|---|---|
-| Ready | Aspect/scan parity harnesses, reload-safe research data, current Thaumometer scan path, knowledge sync, research table and first server-authoritative Thaumonomicon flow, complete regular `89/89` Arcane Workbench recipe id set/behavior, crucible behavior slices, infusion recipe/page data, persistent Warded Jar storage, the `46/46` tube/jar/Alembic/smelter/label/phial/caster-control runtime boundary, the focused Bellows device/rendering audit, the audited default infusion cycle through output placement, the first focus/caster/Focal Manipulator core, and the audited `ROOT -> TOUCH -> FIRE` cast execution slice. | Keep these covered by build/server/client smoke checks before expanding consumers. |
+| Ready | Aspect/scan parity harnesses, reload-safe research data, current Thaumometer scan path, knowledge sync, research table and first server-authoritative Thaumonomicon flow, complete regular `89/89` Arcane Workbench recipe id set/behavior, crucible behavior slices, infusion recipe/page data, persistent Warded Jar storage, the `52/52` tube/jar/Alembic/smelter/transfuser/label/phial/caster-control runtime boundary, the focused Bellows device/rendering audit, the audited default infusion cycle through output placement, the first focus/caster/Focal Manipulator core, and the audited `ROOT -> TOUCH -> FIRE` cast execution slice. | Keep these covered by build/server/client smoke checks before expanding consumers. |
 | Placeholder / Bridge | Remaining research requirement bridges, unfinished advanced theorycraft cards/aids, minimal warp storage, unresolved machine/entity identities, and unreviewed machine/entity visual identities. Research bridge recipes, generated parity reports, and debug-only completion commands remain tooling. | These are scaffolds for validation and migration. Do not treat them as final gameplay or visual parity. |
-| Blocked | Thaumonomicon final search/visual parity, recipe drilldown/history, final Arcane Workbench GUI polish, optional Curios/accessory slot adapter wiring, final robe/goggles armor model geometry, special void-jar stack-copy behavior, full Flux Goo flow/taint transforms, measured infusion visual parity, blueprint/fake recipe systems, full warp effects/sync, custom entities, remaining focus effect execution/projectiles/clouds/mines, Focus Pouch GUI, mirror behavior, remaining essentia utility devices and ScanSky celestial-note side effects. | These need focused design and validation slices. |
-| Next subsystem | Continue row 7 from `06_docs/migration/remaining_subsystem_unblock_plan.md`: expand focus cast execution beyond audited `TOUCH/FIRE`. | Add one medium/effect family per audited batch; projectile/cloud/mine behavior needs its own payload, cooldown, aura, lifetime and failure-behavior audit. |
+| Blocked | Thaumonomicon final search/visual parity, recipe drilldown/history, final Arcane Workbench GUI polish, optional Curios/accessory slot adapter wiring, final robe/goggles armor model geometry, special void-jar stack-copy behavior, full Flux Goo flow/taint transforms, measured infusion visual parity, blueprint/fake recipe systems, full warp effects/sync, custom entities, remaining focus effect execution/projectiles/clouds/mines, Focus Pouch GUI, Void Jar overflow, essentia mirror behavior, Thaumatorium machine behavior and ScanSky celestial-note side effects. | These need focused design and validation slices. |
+| Next subsystem | Continue non-focus blocker removal from `06_docs/migration/remaining_subsystem_unblock_plan.md`: finish row-4 utility-device decisions, then design row-10 Thaumatorium. | Focus/caster row 7 is paused by user request; do not expand medium/effect execution until explicitly resumed. |
 
 ## Legacy asset corpus import
 
@@ -192,7 +193,7 @@ The runtime asset audit is `06_docs/resources/runtime_asset_audit.md`.
 | Stone blocks | `stone_arcane`, `stone_arcane_brick`, `stone_ancient`, `stone_ancient_tile`, `stone_ancient_rock`, `stone_ancient_glyphed`, `stone_ancient_doorway`, `stone_eldritch_tile`, `stone_porous` |
 | Stairs and slabs | `stairs_arcane`, `stairs_arcane_brick`, `stairs_ancient`, `stairs_greatwood`, `stairs_silverwood`, `slab_arcane_stone`, `slab_arcane_brick`, `slab_ancient`, `slab_eldritch`, `slab_greatwood`, `slab_silverwood` |
 | Wood, leaves, plants | `log_greatwood`, `log_silverwood`, `leaves_greatwood`, `leaves_silverwood`, `sapling_greatwood`, `sapling_silverwood`, `shimmerleaf`, `cinderpearl`, `vishroom`, `plank_greatwood`, `plank_silverwood` |
-| Other blocks/items | `amber_block`, `amber_brick`, `table_wood`, `table_stone`, `research_table`, `arcane_workbench`, `arcane_workbench_charger`, `wand_workbench`, `golem_builder`, `smelter_basic`, `smelter_thaumium`, `smelter_void`, `tube`, `tube_buffer`, `tube_filter`, `tube_oneway`, `tube_restrict`, `tube_valve`, `infusion_matrix`, `arcane_pedestal`, `ancient_pedestal`, `eldritch_pedestal`, all registered `nitor_*` and `candle_*` color variants, `thaumometer`, `vis_resonator`, `goggles`, `sanity_checker`, `sane_soap`, `curio_rites`, `caster_basic`, `focus_1`, `focus_2`, `focus_3`, `focus_pouch`, `mirrored_glass`, `amber`, `quicksilver`, `fabric`, `salis_mundus`, `alumentum`, `rare_earth`, `filter`, `morphic_resonator`, `cloth_boots`, `cloth_chest`, `cloth_legs`, `void_robe_helm`, `void_robe_chest`, `void_robe_legs`, `iron_plate`, `brass_plate`, `thaumium_plate`, `void_plate`, `mechanism_simple`, `mechanism_complex`, placeholder `smelter_aux`, and placeholder `smelter_vent` |
+| Other blocks/items | `amber_block`, `amber_brick`, `table_wood`, `table_stone`, `research_table`, `arcane_workbench`, `arcane_workbench_charger`, `wand_workbench`, `golem_builder`, `smelter_basic`, `smelter_thaumium`, `smelter_void`, `essentiatransportin`, `essentiatransportout`, `tube`, `tube_buffer`, `tube_filter`, `tube_oneway`, `tube_restrict`, `tube_valve`, `infusion_matrix`, `arcane_pedestal`, `ancient_pedestal`, `eldritch_pedestal`, all registered `nitor_*` and `candle_*` color variants, `thaumometer`, `vis_resonator`, `goggles`, `sanity_checker`, `sane_soap`, `curio_rites`, `caster_basic`, `focus_1`, `focus_2`, `focus_3`, `focus_pouch`, `mirrored_glass`, `amber`, `quicksilver`, `fabric`, `salis_mundus`, `alumentum`, `rare_earth`, `filter`, `morphic_resonator`, `cloth_boots`, `cloth_chest`, `cloth_legs`, `void_robe_helm`, `void_robe_chest`, `void_robe_legs`, `iron_plate`, `brass_plate`, `thaumium_plate`, `void_plate`, `mechanism_simple`, `mechanism_complex`, placeholder `smelter_aux`, and placeholder `smelter_vent` |
 | Research/progression bridge identities | Thaumium/brass materials, aspect crystal essence variants, phial variants, stored-enchantment requirements and legacy metadata-family requirements now carry component-level semantics for requirement matching. Scribing tools and research table now have their first legacy-backed storage/conversion slice, `arcane_workbench` has its server-owned regular legacy `89/89` arcane recipe crafting path, `arcane_workbench_charger` has its Workbench 3 x 3 aura behavior and exact recipe, `goggles`, `cloth_*` and `void_robe_*` are real armor/equipment items with legacy discount/reveal/warp contracts, `sane_soap` has its current warp-cleansing behavior, `curio_rites` has its Crimson Rites gate/knowledge/warp behavior, `wand_workbench` is the TC6 Focal Manipulator id with its exact legacy arcane recipe, page snapshot and first audited BlockEntity/menu/focus-craft cycle, `caster_basic` and all three focus items own the first Data Component/aura-cost core, `golem_builder` exists as the hidden Golem Press identity for Basic Golemancy aid detection, and Alumentum/Salis Mundus exist as identity/requirement items for theorycraft, but their real behavior is not implemented. Filter/resonator behavior, full focus effect execution, Focus Pouch inventory GUI, optional Curios/accessory slot adapter wiring, Golem Press multiblock/GUI/essentia logic, special thaumium tool behavior, mirror and broader curio/brain behavior remain subsystem bridges until their behavior slices are implemented. |
 
 ## Aspect assignment data resources
@@ -259,7 +260,7 @@ Do not implement or expand aura, research, arcane crafting, crucible/alchemy, in
 5. Add future registered item/block aspect values through `data/thaumcraft/aspect_assignments`; entity aspects currently use a legacy Java table until an entity assignment datapack format is designed.
 6. Keep vanilla item coverage at `0 missing` after every aspect/tag change; do not broaden third-party modded generated outputs until an addon policy exists.
 7. For new arcane, crucible or equipment behavior families, add validation coverage alongside the import so the recipe/page/data path cannot silently accept wrong ingredient mapping; keep crucible recipe-derived aspect generation and infusion recipe-derived generation blocked until their machines and ingredient mappings exist.
-8. For the next crucible gameplay batch, audit legacy alchemy side-effect calls before wiring flux rifts, taint spread, liquid death, Thaumatorium, alembic, jar or tube behavior.
+8. For the next crucible/Thaumatorium gameplay batch, audit legacy alchemy side-effect and Thaumatorium machine calls before wiring flux rifts, taint spread, liquid death or automation behavior.
 8. Continue vanilla aspect changes only from `ConfigAspects`, audited legacy OreDictionary-to-tag bridges, recipe-derived cache behavior, or documented 1.21-only category policy.
 9. Keep parity validation and reload validation passing before expanding aspect consumers.
 10. Do not expand aura beyond saved-data/query/debug-command/autogenerated chunk state, and do not begin essentia, broad GUI, broad networking, crafting costs, or gameplay-heavy systems without their own design notes.
@@ -281,6 +282,13 @@ Do not implement or expand aura, research, arcane crafting, crucible/alchemy, in
 - Added Data Component-backed Alembic/Jar label filters, empty phial extraction, filled-phial-to-jar transfer and Warded Jar item payload transfer.
 - Added tube caster side/choke/facing controls, fixed buffer choke cycling to match legacy `0 -> 1 -> 2 -> 0`, and synced manual/redstone valve plus vent state.
 - Expanded the combined transport/machine runtime audit to cover these interactions; current result is `46/46`.
+
+### Latest Essentia Input/Output transfuser closure
+
+- Replaced the `essentiatransportin` / `essentiatransportout` catalog placeholders with real BlockItems backed by `TCEssentiaTransportBlock` and `TCEssentiaTransfuserBlockEntity`.
+- Ported the legacy `TileEssentiaInput` / `TileEssentiaOutput` contract: clicked-face placement, back-face-only connectivity, input suction `128`, output demand relay, five-tick cadence, and the 16-block `EssentiaHandler.getSources` prism ordered by distance.
+- Updated the Thaumatorium infusion recipe components to use the real transport input/output ids instead of the temporary `essentia_importer` / `essentia_exporter` placeholder items.
+- Expanded the combined transport/machine runtime audit to cover transfuser registration, shape, capability and transfer behavior; current result is `52/52`.
 
 ## Local validation commands
 
@@ -585,7 +593,7 @@ The sections below are historical update notes. They should not be read as the c
 - This script integrates audit refresh after successful build/smoke.
 ## Remaining non-fake page recipe repair note
 
-- Registered alchemical_construct, essentia_importer, and essentia_exporter bridge item ids used by thaumatorium.json.
+- Registered alchemical_construct, essentia_importer, and essentia_exporter bridge item ids. Thaumatorium recipe components now use the real `essentiatransportin` / `essentiatransportout` block ids; importer/exporter are no longer active recipe dependencies.
 - This repairs the previous server smoke datapack parse failure and keeps the same batch commit target.
 ### Latest blueprint page placeholder batch
 
@@ -806,4 +814,4 @@ The sections below are historical update notes. They should not be read as the c
 - Replaced the incremental placeholder result with one reviewed legacy-parity batch.
 - Corrected Alumentum/fuel handling, cumulative vent mitigation, aux facing, matching-first Alembic columns and upgraded-smelter ownership.
 - Restored detailed legacy-derived Bellows/aux/vent models, added the smelter menu/screen and registered sided item automation.
-- Combined tube/jar/Alembic/smelter runtime result later expanded with label/phial/caster controls: `46/46`.
+- Combined tube/jar/Alembic/smelter runtime result later expanded with label/phial/caster controls and Essentia Input/Output transfusers: `52/52`.

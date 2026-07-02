@@ -10,10 +10,10 @@
       "item": "thaumcraft:alembic"
     },
     {
-      "item": "thaumcraft:essentia_importer"
+      "item": "thaumcraft:essentiatransportin"
     },
     {
-      "item": "thaumcraft:essentia_exporter"
+      "item": "thaumcraft:essentiatransportout"
     },
     {
       "item": "thaumcraft:mechanism_complex"

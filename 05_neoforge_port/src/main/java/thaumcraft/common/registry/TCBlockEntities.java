@@ -26,6 +26,7 @@ import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 import thaumcraft.common.tiles.essentia.TCSmelterBlockEntity;
 import thaumcraft.common.tiles.essentia.TCAlembicBlockEntity;
 import thaumcraft.common.tiles.essentia.TCBellowsBlockEntity;
+import thaumcraft.common.tiles.essentia.TCEssentiaTransfuserBlockEntity;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 import thaumcraft.common.tiles.misc.TCNitorBlockEntity;
 import thaumcraft.common.tiles.devices.TCStabilizerBlockEntity;
@@ -58,6 +59,24 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCAlembicBlockEntity>> ALEMBIC =
             BLOCK_ENTITY_TYPES.register("alembic", () ->
                     BlockEntityType.Builder.of(TCAlembicBlockEntity::new, TCBlocks.ALEMBIC.get()).build(null));
+    public static final Supplier<BlockEntityType<TCEssentiaTransfuserBlockEntity>> ESSENTIA_TRANSPORT_IN =
+            BLOCK_ENTITY_TYPES.register("essentiatransportin", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCEssentiaTransfuserBlockEntity(
+                                    TCBlockEntities.ESSENTIA_TRANSPORT_IN.get(),
+                                    pos,
+                                    state,
+                                    TCEssentiaTransfuserBlockEntity.Kind.INPUT),
+                            TCBlocks.ESSENTIA_TRANSPORT_IN.get()).build(null));
+    public static final Supplier<BlockEntityType<TCEssentiaTransfuserBlockEntity>> ESSENTIA_TRANSPORT_OUT =
+            BLOCK_ENTITY_TYPES.register("essentiatransportout", () ->
+                    BlockEntityType.Builder.of(
+                            (pos, state) -> new TCEssentiaTransfuserBlockEntity(
+                                    TCBlockEntities.ESSENTIA_TRANSPORT_OUT.get(),
+                                    pos,
+                                    state,
+                                    TCEssentiaTransfuserBlockEntity.Kind.OUTPUT),
+                            TCBlocks.ESSENTIA_TRANSPORT_OUT.get()).build(null));
     public static final Supplier<BlockEntityType<TCInfusionMatrixBlockEntity>> INFUSION_MATRIX =
             BLOCK_ENTITY_TYPES.register("infusion_matrix", () ->
                     BlockEntityType.Builder.of(TCInfusionMatrixBlockEntity::new, TCBlocks.INFUSION_MATRIX.get()).build(null));
@@ -160,6 +179,26 @@ public final class TCBlockEntities {
         return switch (endpoint) {
             case THAUMIUM -> new TCLegacySmelterEndpointBlockEntity(SMELTER_THAUMIUM.get(), pos, state, endpoint);
             case VOID -> new TCLegacySmelterEndpointBlockEntity(SMELTER_VOID.get(), pos, state, endpoint);
+        };
+    }
+
+    public static TCEssentiaTransfuserBlockEntity createEssentiaTransfuserBlockEntity(
+            TCEssentiaTransfuserBlockEntity.Kind kind,
+            BlockPos pos,
+            BlockState state
+    ) {
+        return switch (kind) {
+            case INPUT -> new TCEssentiaTransfuserBlockEntity(ESSENTIA_TRANSPORT_IN.get(), pos, state, kind);
+            case OUTPUT -> new TCEssentiaTransfuserBlockEntity(ESSENTIA_TRANSPORT_OUT.get(), pos, state, kind);
+        };
+    }
+
+    public static BlockEntityType<TCEssentiaTransfuserBlockEntity> typeForEssentiaTransfuser(
+            TCEssentiaTransfuserBlockEntity.Kind kind
+    ) {
+        return switch (kind) {
+            case INPUT -> ESSENTIA_TRANSPORT_IN.get();
+            case OUTPUT -> ESSENTIA_TRANSPORT_OUT.get();
         };
     }
     private TCBlockEntities() {

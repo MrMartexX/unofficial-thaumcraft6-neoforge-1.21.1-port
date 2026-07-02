@@ -14,10 +14,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.blocks.essentia.TCEssentiaTransportBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterAuxBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterVentBlock;
@@ -33,6 +36,7 @@ import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 import thaumcraft.common.tiles.essentia.TCAlembicBlockEntity;
 import thaumcraft.common.tiles.essentia.TCSmelterBlockEntity;
+import thaumcraft.common.tiles.essentia.TCEssentiaTransfuserBlockEntity;
 
 /** Runtime checks for the legacy TileTube/TileJar transport contract. */
 public final class TCEssentiaTransportBehaviorAudit {
@@ -69,6 +73,7 @@ public final class TCEssentiaTransportBehaviorAudit {
         lines.add("- Covers Warded Jar top-face suction and five-tick one-point transfer.");
         lines.add("- Covers smelter tier formulas, sided inventory, fuel data, Alembic-column routing, auxiliaries and vent attachment selection.");
         lines.add("- Covers Alembic/Jar label filters, phial/jar item transfer quanta and tube caster sub-part controls.");
+        lines.add("- Covers Essentia Input/Output transfuser identity, sided capability, shapes and five-tick remote source transfer.");
         lines.add("- Bellows device behavior/rendering is covered by the dedicated Bellows audit; final pixel-level valve/vent visual parity still needs screenshot review.");
         Files.write(output, lines);
         return report;
@@ -145,6 +150,7 @@ public final class TCEssentiaTransportBehaviorAudit {
         addTransferChecks(level, origin.offset(0, 0, 12), checks);
         addSideAndValveChecks(level, origin.offset(8, 0, 0), checks);
         addJarChecks(level, origin.offset(8, 0, 10), checks);
+        addEssentiaTransfuserChecks(level, origin.offset(18, 0, 10), checks);
         addAlembicChecks(level, origin.offset(12, 0, 18), checks);
         addSmelterChecks(level, origin.offset(-12, 0, 18), checks);
         clearArea(level, origin, 24);
@@ -645,9 +651,149 @@ public final class TCEssentiaTransportBehaviorAudit {
                         + ", amount=" + restoredJar.storedAmount()));
     }
 
+    private static void addEssentiaTransfuserChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
+        boolean registered = TCBlocks.ESSENTIA_TRANSPORT_IN.get() instanceof TCEssentiaTransportBlock
+                && TCBlocks.ESSENTIA_TRANSPORT_OUT.get() instanceof TCEssentiaTransportBlock
+                && TCItems.ESSENTIA_TRANSPORT_IN.get() instanceof BlockItem
+                && TCItems.ESSENTIA_TRANSPORT_OUT.get() instanceof BlockItem;
+        checks.add(check("essentia_transfusers_are_registered_as_real_blocks_and_block_items",
+                registered,
+                "inputBlock=" + TCBlocks.ESSENTIA_TRANSPORT_IN.get().getClass().getSimpleName()
+                        + ", outputBlock=" + TCBlocks.ESSENTIA_TRANSPORT_OUT.get().getClass().getSimpleName()));
+
+        BlockState inputUp = TCBlocks.ESSENTIA_TRANSPORT_IN.get().defaultBlockState()
+                .setValue(TCEssentiaTransportBlock.FACING, Direction.UP);
+        BlockState inputDown = TCBlocks.ESSENTIA_TRANSPORT_IN.get().defaultBlockState()
+                .setValue(TCEssentiaTransportBlock.FACING, Direction.DOWN);
+        BlockState inputNorth = TCBlocks.ESSENTIA_TRANSPORT_IN.get().defaultBlockState()
+                .setValue(TCEssentiaTransportBlock.FACING, Direction.NORTH);
+        BlockState inputSouth = TCBlocks.ESSENTIA_TRANSPORT_IN.get().defaultBlockState()
+                .setValue(TCEssentiaTransportBlock.FACING, Direction.SOUTH);
+        BlockState inputWest = TCBlocks.ESSENTIA_TRANSPORT_IN.get().defaultBlockState()
+                .setValue(TCEssentiaTransportBlock.FACING, Direction.WEST);
+        BlockState inputEast = TCBlocks.ESSENTIA_TRANSPORT_IN.get().defaultBlockState()
+                .setValue(TCEssentiaTransportBlock.FACING, Direction.EAST);
+        checks.add(check("essentia_transfuser_shapes_match_legacy_facing_boxes",
+                sameBounds(inputUp.getShape(level, origin).bounds(), 4, 0, 4, 12, 8, 12)
+                        && sameBounds(inputDown.getShape(level, origin).bounds(), 4, 8, 4, 12, 16, 12)
+                        && sameBounds(inputNorth.getShape(level, origin).bounds(), 4, 4, 8, 12, 12, 16)
+                        && sameBounds(inputSouth.getShape(level, origin).bounds(), 4, 4, 0, 12, 12, 8)
+                        && sameBounds(inputWest.getShape(level, origin).bounds(), 8, 4, 4, 16, 12, 12)
+                        && sameBounds(inputEast.getShape(level, origin).bounds(), 0, 4, 4, 8, 12, 12),
+                "legacy AABB set verified for UP/DOWN/NORTH/SOUTH/WEST/EAST"));
+
+        BlockPos inputPos = origin;
+        TCEssentiaTransfuserBlockEntity input = placeTransfuser(
+                level,
+                inputPos,
+                TCEssentiaTransfuserBlockEntity.Kind.INPUT,
+                Direction.NORTH
+        );
+        TCEssentiaTransfuserBlockEntity output = placeTransfuser(
+                level,
+                origin.offset(6, 0, 0),
+                TCEssentiaTransfuserBlockEntity.Kind.OUTPUT,
+                Direction.NORTH
+        );
+        if (input == null || output == null) {
+            checks.add(check("runtime_essentia_transfuser_block_entities_created", false,
+                    "input=" + (input != null) + ", output=" + (output != null)));
+            return;
+        }
+
+        TCEssentiaTransport inputBack = level.getCapability(TCEssentiaCapabilities.BLOCK, inputPos, Direction.SOUTH);
+        TCEssentiaTransport inputFront = level.getCapability(TCEssentiaCapabilities.BLOCK, inputPos, Direction.NORTH);
+        TCEssentiaTransport outputBack = level.getCapability(TCEssentiaCapabilities.BLOCK, origin.offset(6, 0, 0), Direction.SOUTH);
+        TCEssentiaTransport outputFront = level.getCapability(TCEssentiaCapabilities.BLOCK, origin.offset(6, 0, 0), Direction.NORTH);
+        checks.add(check("essentia_transfuser_capability_is_back_face_only",
+                inputBack == input && inputFront == null && outputBack == output && outputFront == null,
+                "inputBack=" + (inputBack != null) + ", inputFront=" + (inputFront != null)
+                        + ", outputBack=" + (outputBack != null) + ", outputFront=" + (outputFront != null)));
+        checks.add(check("essentia_transfuser_io_contract_matches_legacy",
+                input.canInputFrom(Direction.SOUTH)
+                        && !input.canOutputTo(Direction.SOUTH)
+                        && input.getSuction(Direction.SOUTH).amount() == 128
+                        && output.canOutputTo(Direction.SOUTH)
+                        && !output.canInputFrom(Direction.SOUTH)
+                        && output.getSuction(Direction.SOUTH).amount() == 0,
+                "inputSuction=" + input.getSuction(Direction.SOUTH).amount()
+                        + ", outputSuction=" + output.getSuction(Direction.SOUTH).amount()));
+
+        TCLegacyTubeBlockEntity source = placeTube(level, inputPos.south(), TCLegacyTubeVariant.BUFFER);
+        level.setBlock(inputPos.north(3), TCBlocks.JAR_NORMAL.get().defaultBlockState(), 3);
+        TCWardedJarBlockEntity jar = blockEntity(level, inputPos.north(3), TCWardedJarBlockEntity.class);
+        if (source != null && jar != null) {
+            source.addEssentia(Aspect.AIR.getTag(), 1, Direction.NORTH, false);
+            source.addEssentia(Aspect.AIR.getTag(), 1, Direction.NORTH, false);
+            for (int tick = 0; tick < 4; tick++) {
+                TCEssentiaTransfuserBlockEntity.serverTick(level, inputPos, input.getBlockState(), input);
+            }
+            boolean unchangedBeforeFifth = jar.storedAmount() == 0;
+            TCEssentiaTransfuserBlockEntity.serverTick(level, inputPos, input.getBlockState(), input);
+            checks.add(check("essentia_input_moves_one_point_from_adjacent_transport_to_remote_source",
+                    unchangedBeforeFifth
+                            && jar.storedAspect() == Aspect.AIR
+                            && jar.storedAmount() == 1
+                            && source.transportNode().storage().amount(Aspect.AIR.getTag()) == 1,
+                    "jar=" + jar.storedAmount() + ", source="
+                            + source.transportNode().storage().amount(Aspect.AIR.getTag())));
+        } else {
+            checks.add(check("runtime_essentia_input_fixture_created", false,
+                    "source=" + (source != null) + ", jar=" + (jar != null)));
+        }
+
+        BlockPos outputPos = origin.offset(6, 0, 0);
+        TCLegacyTubeBlockEntity target = placeTube(level, outputPos.south(), TCLegacyTubeVariant.TUBE);
+        level.setBlock(outputPos.north(3), TCBlocks.JAR_NORMAL.get().defaultBlockState(), 3);
+        TCWardedJarBlockEntity sourceJar = blockEntity(level, outputPos.north(3), TCWardedJarBlockEntity.class);
+        if (target != null && sourceJar != null) {
+            target.setSuctionForValidation(Aspect.AIR.getTag(), 32);
+            sourceJar.setStoredForValidation(Aspect.AIR, 1);
+            for (int tick = 0; tick < 5; tick++) {
+                TCEssentiaTransfuserBlockEntity.serverTick(level, outputPos, output.getBlockState(), output);
+            }
+            checks.add(check("essentia_output_drains_remote_source_into_adjacent_transport_demand",
+                    sourceJar.storedAmount() == 0
+                            && sourceJar.storedAspect() == null
+                            && target.transportNode().storage().amount(Aspect.AIR.getTag()) == 1,
+                    "jar=" + sourceJar.storedAmount() + ", target="
+                            + target.transportNode().storage().amount(Aspect.AIR.getTag())));
+        } else {
+            checks.add(check("runtime_essentia_output_fixture_created", false,
+                    "target=" + (target != null) + ", jar=" + (sourceJar != null)));
+        }
+    }
+
     private static TCLegacyTubeBlockEntity placeTube(ServerLevel level, BlockPos pos, TCLegacyTubeVariant variant) {
         level.setBlock(pos, blockFor(variant).defaultBlockState(), 3);
         return blockEntity(level, pos, TCLegacyTubeBlockEntity.class);
+    }
+
+    private static TCEssentiaTransfuserBlockEntity placeTransfuser(
+            ServerLevel level,
+            BlockPos pos,
+            TCEssentiaTransfuserBlockEntity.Kind kind,
+            Direction facing
+    ) {
+        net.minecraft.world.level.block.Block block = kind == TCEssentiaTransfuserBlockEntity.Kind.INPUT
+                ? TCBlocks.ESSENTIA_TRANSPORT_IN.get()
+                : TCBlocks.ESSENTIA_TRANSPORT_OUT.get();
+        level.setBlock(
+                pos,
+                block.defaultBlockState().setValue(TCEssentiaTransportBlock.FACING, facing),
+                3
+        );
+        return blockEntity(level, pos, TCEssentiaTransfuserBlockEntity.class);
+    }
+
+    private static boolean sameBounds(AABB bounds, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+        double scale = 1.0D / 16.0D;
+        return Math.abs(bounds.minX - minX * scale) < 0.0001D
+                && Math.abs(bounds.minY - minY * scale) < 0.0001D
+                && Math.abs(bounds.minZ - minZ * scale) < 0.0001D
+                && Math.abs(bounds.maxX - maxX * scale) < 0.0001D
+                && Math.abs(bounds.maxY - maxY * scale) < 0.0001D
+                && Math.abs(bounds.maxZ - maxZ * scale) < 0.0001D;
     }
 
     private static net.minecraft.world.level.block.Block blockFor(TCLegacyTubeVariant variant) {

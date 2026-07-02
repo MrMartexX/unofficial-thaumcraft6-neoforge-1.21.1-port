@@ -23,8 +23,8 @@ Last updated: 2026-07-02
 - The seven legacy dynamic HEDGE_ALCHEMY crucible costs are now explicit JSON aspect costs resolved from the current parity data, and `audit-crucible-recipe-data.ps1` reports `77/77` valid recipe files.
 - The crucible client slice now includes the synced liquid surface, exact fluid-height/recolor formulas, boil/froth/overflow/bubble particles and legacy dissolution/craft/spill block-event FX. Runtime behavior audit passes `16/16`.
 - The infusion boundary now includes server-owned two-click caster activation, live bounded surroundings refresh, inactive stability charging, researched recipe start without pre-supplied essentia, persisted craft-cycle/stability state, exact five-tick default cadence, one-point nearest-source drain, the legacy 200-tick failed-source rescan delay, six-cycle component timing, result placement/damage carry-over, component remainders, completion/failure sounds, the two clientbound legacy FX message contracts, exact structure modifiers, exact stability math, all 24 executable instability rolls, Flux Goo/harm dependencies, inlay/Stabilizer pedestal mitigation, client matrix animation/halo, eight-sided essentia streams and item/block source debris. The runtime audit passes `95/95`.
-- The first real essentia transport slice now has legacy capacities/cadence/suction formulas for all six tube variants, Warded Jar transfer, sided NeoForge capability access, persisted directional state, legacy multipart tube geometry, Alembic/Jar label filters, phial/jar item transfer quanta, caster tube sub-part side/choke/facing controls, manual/redstone valve state and vent sync. The dedicated-server runtime audit passes `46/46`.
-- The Alembic/smelter machine batch now replaces the incremental placeholder path: all three smelter tiers share the server-owned two-slot machine state, exact tier efficiency/output intervals, Alumentum boost, fuel remainders, cumulative vent mitigation, direct plus attached auxiliary Alembic routing, modern sided item capability, legacy-layout menu/screen and detailed legacy-derived models. Its checks are now included in the combined transport/machine runtime audit at `46/46`.
+- The first real essentia transport slice now has legacy capacities/cadence/suction formulas for all six tube variants, Warded Jar transfer, sided NeoForge capability access, persisted directional state, legacy multipart tube geometry, Alembic/Jar label filters, phial/jar item transfer quanta, caster tube sub-part side/choke/facing controls, manual/redstone valve state, vent sync, and real Essentia Input/Output transfuser blocks. The dedicated-server runtime audit passes `52/52`.
+- The Alembic/smelter machine batch now replaces the incremental placeholder path: all three smelter tiers share the server-owned two-slot machine state, exact tier efficiency/output intervals, Alumentum boost, fuel remainders, cumulative vent mitigation, direct plus attached auxiliary Alembic routing, modern sided item capability, legacy-layout menu/screen and detailed legacy-derived models. Its checks are now included in the combined transport/machine/transfuser runtime audit at `52/52`.
 - Bellows is now a focused device slice: placed Bellows uses a real BlockEntity/client renderer, legacy inflation animation, tube-buffer extension render, smelter/tube-buffer ownership, and a dedicated vanilla furnace cook-progress bridge. Keep `audit-bellows-device.ps1` green after changes.
 - The item/equipment behavior pass is closed for the first safe wearable/utility slice. Goggles, cloth robes and void robes are real armor/equipment items with legacy vis/reveal/warp contracts; `sanity_checker`, `sane_soap` and `curio_rites` have their first server-side behavior contracts; the runtime item/equipment audit passes `17/17`.
 - Focus/caster/Focal Manipulator core is closed for the first data/behavior slice. `caster_basic`, `focus_1`, `focus_2`, `focus_3` and `focus_pouch` are real items; caster focus state and focus package data use Data Components; `wand_workbench` has a server-owned Focal Manipulator BlockEntity/menu/screen and a validated design-intent payload; the runtime focus/caster core audit passes `10/10`.
@@ -40,13 +40,13 @@ Last updated: 2026-07-02
 
 ## Near-term tasks
 
-1. Continue row 7 from `06_docs/migration/remaining_subsystem_unblock_plan.md` with the next focus medium/effect execution family over the now-audited `TOUCH/FIRE` path.
-   - Use `06_docs/gameplay/focus_caster_core_design.md` as the current boundary document.
-   - Keep projectile/cloud/mine behavior in separate audited slices unless the next medium/effect family explicitly requires one of them.
-   - Do not treat the minimal Focal Manipulator screen as final visual/editor parity.
-   - Keep `TCEquipmentHelper` as the current bridge for armor and future accessory stack discovery when calculating vis discounts, goggles and revealers.
+1. Continue blocker-removal work outside the focus/caster layer unless explicitly requested.
+   - Row 4 now has real `essentiatransportin` / `essentiatransportout` blocks, BlockEntities, sided capability, modern blockstates/item models and runtime transfer checks.
+   - Next row-4 candidates are Void Jar overflow behavior, essentia mirror path, and deciding whether the old `essentia_importer` / `essentia_exporter` placeholders should remain as reference-only aliases or be removed from player-facing flows.
+   - After row-4 utility blockers are stable, plan the Thaumatorium row-10 slice over real crucible, jar/alembic/phial and transport behavior.
+   - Keep focus medium/effect expansion paused until the user explicitly returns to row 7.
 2. Keep already closed behavior audits green after related changes:
-   - Combined tube/jar/Alembic/smelter runtime audit: `46/46`.
+   - Combined tube/jar/Alembic/smelter/transfuser runtime audit: `52/52`.
    - Dedicated Bellows audit: `0` errors.
    - Item/equipment behavior audit: `17/17`.
    - Focus/caster core audit: `10/10`.
@@ -237,7 +237,7 @@ Last updated: 2026-07-02
 - Fake/synthetic pages, infusion altar variants, and GolemPress remain separate targeted work.
 ## Remaining non-fake page recipe repair note
 
-- Registered alchemical_construct, essentia_importer, and essentia_exporter bridge item ids used by thaumatorium.json.
+- Registered alchemical_construct, essentia_importer, and essentia_exporter bridge item ids. Thaumatorium recipe components now use the real `essentiatransportin` / `essentiatransportout` block ids; importer/exporter are no longer active recipe dependencies.
 - This repairs the previous server smoke datapack parse failure and keeps the same batch commit target.
 ## Blueprint page placeholder note
 

@@ -15,4 +15,16 @@ public interface TCAspectSourceContainer {
     AspectList storedAspects();
 
     int drainAspect(Aspect aspect, int amount, boolean simulate);
+
+    default boolean doesContainerAccept(Aspect aspect) {
+        return false;
+    }
+
+    default int addToContainer(Aspect aspect, int amount) {
+        return amount;
+    }
+
+    default boolean takeFromContainer(Aspect aspect, int amount) {
+        return drainAspect(aspect, amount, false) == amount;
+    }
 }
