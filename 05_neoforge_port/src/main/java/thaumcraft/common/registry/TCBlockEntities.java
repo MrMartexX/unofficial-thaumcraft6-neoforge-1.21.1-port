@@ -28,6 +28,8 @@ import thaumcraft.common.tiles.essentia.TCAlembicBlockEntity;
 import thaumcraft.common.tiles.essentia.TCBellowsBlockEntity;
 import thaumcraft.common.tiles.essentia.TCEssentiaTransfuserBlockEntity;
 import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
+import thaumcraft.common.tiles.crafting.TCThaumatoriumBlockEntity;
+import thaumcraft.common.tiles.crafting.TCThaumatoriumTopBlockEntity;
 import thaumcraft.common.tiles.misc.TCNitorBlockEntity;
 import thaumcraft.common.tiles.devices.TCStabilizerBlockEntity;
 import thaumcraft.common.tiles.devices.TCMirrorEssentiaBlockEntity;
@@ -103,6 +105,12 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCMirrorEssentiaBlockEntity>> MIRROR_ESSENTIA =
             BLOCK_ENTITY_TYPES.register("mirror_essentia", () ->
                     BlockEntityType.Builder.of(TCMirrorEssentiaBlockEntity::new, TCBlocks.MIRROR_ESSENTIA.get()).build(null));
+    public static final Supplier<BlockEntityType<TCThaumatoriumBlockEntity>> THAUMATORIUM =
+            BLOCK_ENTITY_TYPES.register("thaumatorium", () ->
+                    BlockEntityType.Builder.of(TCThaumatoriumBlockEntity::new, TCBlocks.THAUMATORIUM.get()).build(null));
+    public static final Supplier<BlockEntityType<TCThaumatoriumTopBlockEntity>> THAUMATORIUM_TOP =
+            BLOCK_ENTITY_TYPES.register("thaumatorium_top", () ->
+                    BlockEntityType.Builder.of(TCThaumatoriumTopBlockEntity::new, TCBlocks.THAUMATORIUM_TOP.get()).build(null));
 
     public static final Supplier<BlockEntityType<TCNitorBlockEntity>> NITOR =
             BLOCK_ENTITY_TYPES.register("nitor", () ->

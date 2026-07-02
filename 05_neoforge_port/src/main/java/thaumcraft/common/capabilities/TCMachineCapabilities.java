@@ -25,5 +25,15 @@ public final class TCMachineCapabilities {
                 TCBlockEntities.SMELTER_VOID.get(),
                 (smelter, side) -> smelter.itemHandler(side)
         );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                TCBlockEntities.THAUMATORIUM.get(),
+                (thaumatorium, side) -> thaumatorium.itemHandler(side)
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                TCBlockEntities.THAUMATORIUM_TOP.get(),
+                (thaumatoriumTop, side) -> thaumatoriumTop.itemHandler(side)
+        );
     }
 }

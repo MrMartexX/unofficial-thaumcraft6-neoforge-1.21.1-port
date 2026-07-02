@@ -22,6 +22,8 @@ import thaumcraft.common.crafting.infusion.TCInfusionBehaviorAuditExporter;
 import thaumcraft.common.crafting.infusion.TCInfusionNetwork;
 import thaumcraft.common.aspects.TCGeneratedAspectRecipeGenerator;
 import thaumcraft.common.crafting.crucible.TCCrucibleBehaviorAuditExporter;
+import thaumcraft.common.crafting.crucible.TCThaumatoriumBehaviorAuditExporter;
+import thaumcraft.common.crafting.crucible.TCThaumatoriumNetwork;
 import thaumcraft.common.essentia.transport.TCEssentiaTransportBehaviorAuditExporter;
 import thaumcraft.common.runtime.TCMinimalGameTestFixtureExporter;
 import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
@@ -92,6 +94,7 @@ public final class Thaumcraft {
         }
         modEventBus.addListener(TCAuraNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCInfusionNetwork::onRegisterPayloadHandlers);
+        modEventBus.addListener(TCThaumatoriumNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCKnowledgeNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCResearchTableNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCThaumonomiconNetwork::onRegisterPayloadHandlers);
@@ -123,6 +126,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCArcaneRecipeAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCArcaneWorkbenchAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCCrucibleBehaviorAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCThaumatoriumBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCInfusionBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCEssentiaTransportBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCItemEquipmentBehaviorAuditExporter::onServerStarted);

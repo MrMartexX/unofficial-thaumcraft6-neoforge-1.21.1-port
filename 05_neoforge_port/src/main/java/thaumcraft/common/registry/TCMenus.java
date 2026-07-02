@@ -10,6 +10,7 @@ import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
 import thaumcraft.common.menu.TCFocalManipulatorMenu;
 import thaumcraft.common.menu.TCResearchTableMenu;
 import thaumcraft.common.menu.TCSmelterMenu;
+import thaumcraft.common.menu.TCThaumatoriumMenu;
 
 public final class TCMenus {
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, Thaumcraft.MODID);
@@ -22,6 +23,8 @@ public final class TCMenus {
             MENUS.register("focal_manipulator", () -> IMenuTypeExtension.create(TCFocalManipulatorMenu::new));
     public static final Supplier<MenuType<TCSmelterMenu>> SMELTER =
             MENUS.register("smelter", () -> IMenuTypeExtension.create(TCSmelterMenu::new));
+    public static final Supplier<MenuType<TCThaumatoriumMenu>> THAUMATORIUM =
+            MENUS.register("thaumatorium", () -> IMenuTypeExtension.create(TCThaumatoriumMenu::new));
 
     private TCMenus() {
     }

@@ -41,6 +41,7 @@ import thaumcraft.common.blocks.crafting.TCInfusionModifierBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionPedestalBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionPillarBlock;
 import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
+import thaumcraft.common.blocks.crafting.TCThaumatoriumBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
 import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
 import thaumcraft.common.blocks.devices.TCInlayBlock;
@@ -178,6 +179,8 @@ public final class TCBlocks {
     public static final Supplier<Block> INLAY = BLOCKS.register("inlay", () -> inlayBlock());
     public static final Supplier<Block> STABILIZER = BLOCKS.register("stabilizer", () -> stabilizerBlock());
     public static final Supplier<Block> MIRROR_ESSENTIA = BLOCKS.register("mirror_essentia", () -> mirrorBlock());
+    public static final Supplier<Block> THAUMATORIUM = BLOCKS.register("thaumatorium", () -> thaumatoriumBlock(false));
+    public static final Supplier<Block> THAUMATORIUM_TOP = BLOCKS.register("thaumatorium_top", () -> thaumatoriumBlock(true));
     public static final Supplier<Block> FLUX_GOO = BLOCKS.register("flux_goo", () -> fluxGooBlock());
 
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
@@ -285,6 +288,14 @@ public final class TCBlocks {
                 .strength(0.1F, 0.1F)
                 .sound(SoundType.GLASS)
                 .noOcclusion());
+    }
+
+    private static Block thaumatoriumBlock(boolean top) {
+        return new TCThaumatoriumBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(5.0F, 10.0F)
+                .sound(SoundType.METAL)
+                .requiresCorrectToolForDrops()
+                .noOcclusion(), top);
     }
 
     private static Block infusionMatrixBlock() {
