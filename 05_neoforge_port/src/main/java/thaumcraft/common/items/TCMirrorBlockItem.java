@@ -19,6 +19,7 @@ import thaumcraft.common.items.components.TCMirrorLinkComponent;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCSounds;
+import thaumcraft.common.tiles.devices.TCMirrorBlockEntity;
 import thaumcraft.common.tiles.devices.TCMirrorEssentiaBlockEntity;
 
 /** BlockItem bridge for legacy mirror linking NBT using 1.21 Data Components. */
@@ -31,7 +32,9 @@ public final class TCMirrorBlockItem extends BlockItem {
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         BlockState clickedState = level.getBlockState(context.getClickedPos());
-        if (!clickedState.is(TCBlocks.MIRROR_ESSENTIA.get())) {
+        boolean itemMirrorLink = getBlock() == TCBlocks.MIRROR.get() && clickedState.is(TCBlocks.MIRROR.get());
+        boolean essentiaMirrorLink = getBlock() == TCBlocks.MIRROR_ESSENTIA.get() && clickedState.is(TCBlocks.MIRROR_ESSENTIA.get());
+        if (!itemMirrorLink && !essentiaMirrorLink) {
             return super.useOn(context);
         }
 
@@ -43,8 +46,7 @@ public final class TCMirrorBlockItem extends BlockItem {
             return InteractionResult.SUCCESS;
         }
 
-        if (level.getBlockEntity(context.getClickedPos()) instanceof TCMirrorEssentiaBlockEntity mirror
-                && !mirror.isLinkValid()) {
+        if (canLink(level, context.getClickedPos(), itemMirrorLink)) {
             ItemStack linkedStack = context.getItemInHand().copyWithCount(1);
             linkedStack.set(TCDataComponents.MIRROR_LINK.get(), TCMirrorLinkComponent.of(level, context.getClickedPos()));
             level.playSound(null, context.getClickedPos(), TCSounds.JAR.get(), SoundSource.BLOCKS, 1.0F, 2.0F);
@@ -67,6 +69,13 @@ public final class TCMirrorBlockItem extends BlockItem {
         return InteractionResult.CONSUME;
     }
 
+    private static boolean canLink(Level level, net.minecraft.core.BlockPos pos, boolean itemMirror) {
+        if (itemMirror) {
+            return level.getBlockEntity(pos) instanceof TCMirrorBlockEntity mirror && !mirror.isLinkValid();
+        }
+        return level.getBlockEntity(pos) instanceof TCMirrorEssentiaBlockEntity mirror && !mirror.isLinkValid();
+    }
+
     @Override
     protected boolean placeBlock(BlockPlaceContext context, BlockState state) {
         boolean placed = super.placeBlock(context, state);
@@ -74,9 +83,13 @@ public final class TCMirrorBlockItem extends BlockItem {
             return false;
         }
         Level level = context.getLevel();
-        if (!level.isClientSide
-                && level.getBlockEntity(context.getClickedPos()) instanceof TCMirrorEssentiaBlockEntity mirror) {
-            mirror.applyLinkComponent(context.getItemInHand().get(TCDataComponents.MIRROR_LINK.get()));
+        if (!level.isClientSide) {
+            TCMirrorLinkComponent link = context.getItemInHand().get(TCDataComponents.MIRROR_LINK.get());
+            if (level.getBlockEntity(context.getClickedPos()) instanceof TCMirrorBlockEntity mirror) {
+                mirror.applyLinkComponent(link);
+            } else if (level.getBlockEntity(context.getClickedPos()) instanceof TCMirrorEssentiaBlockEntity mirror) {
+                mirror.applyLinkComponent(link);
+            }
         }
         return true;
     }
@@ -94,6 +107,14 @@ public final class TCMirrorBlockItem extends BlockItem {
     @Override
     public boolean isFoil(ItemStack stack) {
         return stack.has(TCDataComponents.MIRROR_LINK.get()) || super.isFoil(stack);
+    }
+
+    public static ItemStack stackFromMirror(TCMirrorBlockEntity mirror) {
+        ItemStack stack = new ItemStack(TCBlocks.MIRROR.get());
+        if (mirror.isLinked()) {
+            stack.set(TCDataComponents.MIRROR_LINK.get(), mirror.linkComponent());
+        }
+        return stack;
     }
 
     public static ItemStack stackFromMirror(TCMirrorEssentiaBlockEntity mirror) {

@@ -25,6 +25,7 @@ import thaumcraft.common.crafting.crucible.TCCrucibleBehaviorAuditExporter;
 import thaumcraft.common.crafting.crucible.TCThaumatoriumBehaviorAuditExporter;
 import thaumcraft.common.crafting.crucible.TCThaumatoriumNetwork;
 import thaumcraft.common.essentia.transport.TCEssentiaTransportBehaviorAuditExporter;
+import thaumcraft.common.tiles.devices.TCMirrorBehaviorAuditExporter;
 import thaumcraft.common.runtime.TCMinimalGameTestFixtureExporter;
 import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.config.TCConfig;
@@ -129,6 +130,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCThaumatoriumBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCInfusionBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCEssentiaTransportBehaviorAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCMirrorBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCItemEquipmentBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCasterCoreAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCastExecutionAuditExporter::onServerStarted);

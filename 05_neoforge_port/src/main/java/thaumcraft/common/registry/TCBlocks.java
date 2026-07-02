@@ -178,7 +178,8 @@ public final class TCBlocks {
     public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
     public static final Supplier<Block> INLAY = BLOCKS.register("inlay", () -> inlayBlock());
     public static final Supplier<Block> STABILIZER = BLOCKS.register("stabilizer", () -> stabilizerBlock());
-    public static final Supplier<Block> MIRROR_ESSENTIA = BLOCKS.register("mirror_essentia", () -> mirrorBlock());
+    public static final Supplier<Block> MIRROR = BLOCKS.register("mirror", () -> mirrorBlock(TCMirrorBlock.Kind.ITEM));
+    public static final Supplier<Block> MIRROR_ESSENTIA = BLOCKS.register("mirror_essentia", () -> mirrorBlock(TCMirrorBlock.Kind.ESSENTIA));
     public static final Supplier<Block> THAUMATORIUM = BLOCKS.register("thaumatorium", () -> thaumatoriumBlock(false));
     public static final Supplier<Block> THAUMATORIUM_TOP = BLOCKS.register("thaumatorium_top", () -> thaumatoriumBlock(true));
     public static final Supplier<Block> FLUX_GOO = BLOCKS.register("flux_goo", () -> fluxGooBlock());
@@ -283,11 +284,11 @@ public final class TCBlocks {
                 .noOcclusion());
     }
 
-    private static Block mirrorBlock() {
+    private static Block mirrorBlock(TCMirrorBlock.Kind kind) {
         return new TCMirrorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
                 .strength(0.1F, 0.1F)
                 .sound(SoundType.GLASS)
-                .noOcclusion());
+                .noOcclusion(), kind);
     }
 
     private static Block thaumatoriumBlock(boolean top) {

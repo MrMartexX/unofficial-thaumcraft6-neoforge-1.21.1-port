@@ -5,6 +5,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -26,9 +28,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.common.items.TCMirrorBlockItem;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.tiles.devices.TCMirrorBlockEntity;
 import thaumcraft.common.tiles.devices.TCMirrorEssentiaBlockEntity;
 
 public final class TCMirrorBlock extends Block implements EntityBlock {
+    public enum Kind {
+        ITEM,
+        ESSENTIA
+    }
+
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     private static final VoxelShape DOWN_SHAPE = box(0.0D, 14.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     private static final VoxelShape UP_SHAPE = box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D);
@@ -36,10 +44,16 @@ public final class TCMirrorBlock extends Block implements EntityBlock {
     private static final VoxelShape SOUTH_SHAPE = box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 2.0D);
     private static final VoxelShape WEST_SHAPE = box(14.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     private static final VoxelShape EAST_SHAPE = box(0.0D, 0.0D, 0.0D, 2.0D, 16.0D, 16.0D);
+    private final Kind kind;
 
-    public TCMirrorBlock(BlockBehaviour.Properties properties) {
+    public TCMirrorBlock(BlockBehaviour.Properties properties, Kind kind) {
         super(properties);
+        this.kind = kind;
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.DOWN));
+    }
+
+    public Kind kind() {
+        return kind;
     }
 
     @Override
@@ -72,22 +86,36 @@ public final class TCMirrorBlock extends Block implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TCMirrorEssentiaBlockEntity(pos, state);
+        return switch (kind) {
+            case ITEM -> new TCMirrorBlockEntity(pos, state);
+            case ESSENTIA -> new TCMirrorEssentiaBlockEntity(pos, state);
+        };
     }
 
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide || type != TCBlockEntities.MIRROR_ESSENTIA.get()) {
+        if (level.isClientSide) {
             return null;
         }
-        return (tickerLevel, pos, tickerState, blockEntity) -> TCMirrorEssentiaBlockEntity.serverTick(
-                tickerLevel,
-                pos,
-                tickerState,
-                (TCMirrorEssentiaBlockEntity) blockEntity
-        );
+        if (kind == Kind.ITEM && type == TCBlockEntities.MIRROR.get()) {
+            return (tickerLevel, pos, tickerState, blockEntity) -> TCMirrorBlockEntity.serverTick(
+                    tickerLevel,
+                    pos,
+                    tickerState,
+                    (TCMirrorBlockEntity) blockEntity
+            );
+        }
+        if (kind == Kind.ESSENTIA && type == TCBlockEntities.MIRROR_ESSENTIA.get()) {
+            return (tickerLevel, pos, tickerState, blockEntity) -> TCMirrorEssentiaBlockEntity.serverTick(
+                    tickerLevel,
+                    pos,
+                    tickerState,
+                    (TCMirrorEssentiaBlockEntity) blockEntity
+            );
+        }
+        return null;
     }
 
     @Override
@@ -108,10 +136,28 @@ public final class TCMirrorBlock extends Block implements EntityBlock {
     }
 
     @Override
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        if (!level.isClientSide
+                && kind == Kind.ITEM
+                && entity instanceof ItemEntity itemEntity
+                && level.getBlockEntity(pos) instanceof TCMirrorBlockEntity mirror) {
+            mirror.transportEntity(itemEntity);
+        }
+        super.entityInside(state, level, pos, entity);
+    }
+
+    @Override
     protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         BlockEntity blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (blockEntity instanceof TCMirrorBlockEntity mirror) {
+            ItemStack drop = TCMirrorBlockItem.stackFromMirror(mirror);
+            mirror.invalidateLink();
+            return List.of(drop);
+        }
         if (blockEntity instanceof TCMirrorEssentiaBlockEntity mirror) {
-            return List.of(TCMirrorBlockItem.stackFromMirror(mirror));
+            ItemStack drop = TCMirrorBlockItem.stackFromMirror(mirror);
+            mirror.invalidateLink();
+            return List.of(drop);
         }
         return super.getDrops(state, params);
     }

@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
 import thaumcraft.common.menu.TCFocalManipulatorMenu;
+import thaumcraft.common.menu.TCHandMirrorMenu;
 import thaumcraft.common.menu.TCResearchTableMenu;
 import thaumcraft.common.menu.TCSmelterMenu;
 import thaumcraft.common.menu.TCThaumatoriumMenu;
@@ -25,6 +26,8 @@ public final class TCMenus {
             MENUS.register("smelter", () -> IMenuTypeExtension.create(TCSmelterMenu::new));
     public static final Supplier<MenuType<TCThaumatoriumMenu>> THAUMATORIUM =
             MENUS.register("thaumatorium", () -> IMenuTypeExtension.create(TCThaumatoriumMenu::new));
+    public static final Supplier<MenuType<TCHandMirrorMenu>> HAND_MIRROR =
+            MENUS.register("hand_mirror", () -> IMenuTypeExtension.create(TCHandMirrorMenu::new));
 
     private TCMenus() {
     }

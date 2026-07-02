@@ -118,6 +118,8 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.ESSENTIA_TRANSPORT_IN.get());
         acceptVisible(output, TCItems.ESSENTIA_TRANSPORT_OUT.get());
         acceptVisible(output, TCItems.THAUMATORIUM.get());
+        acceptVisible(output, TCItems.MIRROR.get());
+        acceptVisible(output, TCItems.MIRROR_ESSENTIA.get());
         acceptVisible(output, TCItems.WAND_WORKBENCH.get());
         acceptVisible(output, TCItems.INFUSION_MATRIX.get());
         acceptVisible(output, TCItems.PILLAR_ARCANE.get());
@@ -155,6 +157,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.MORPHIC_RESONATOR.get());
         acceptVisible(output, TCItems.SALIS_MUNDUS.get());
         acceptVisible(output, TCItems.MIRRORED_GLASS.get());
+        acceptVisible(output, TCItems.HAND_MIRROR.get());
 
         addCrystalEssenceVariants(output);
 

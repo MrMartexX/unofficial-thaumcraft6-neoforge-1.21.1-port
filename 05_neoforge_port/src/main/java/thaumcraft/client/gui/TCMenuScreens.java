@@ -18,5 +18,6 @@ public final class TCMenuScreens {
         event.register(TCMenus.FOCAL_MANIPULATOR.get(), TCFocalManipulatorScreen::new);
         event.register(TCMenus.SMELTER.get(), TCSmelterScreen::new);
         event.register(TCMenus.THAUMATORIUM.get(), TCThaumatoriumScreen::new);
+        event.register(TCMenus.HAND_MIRROR.get(), TCHandMirrorScreen::new);
     }
 }

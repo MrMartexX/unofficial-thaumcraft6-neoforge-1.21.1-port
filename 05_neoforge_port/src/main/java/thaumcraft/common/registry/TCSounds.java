@@ -17,6 +17,8 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "page")));
     public static final Supplier<SoundEvent> JAR = SOUND_EVENTS.register("jar", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "jar")));
+    public static final Supplier<SoundEvent> ZAP = SOUND_EVENTS.register("zap", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "zap")));
     public static final Supplier<SoundEvent> KEY = SOUND_EVENTS.register("key", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "key")));
     public static final Supplier<SoundEvent> TOOL = SOUND_EVENTS.register("tool", () ->

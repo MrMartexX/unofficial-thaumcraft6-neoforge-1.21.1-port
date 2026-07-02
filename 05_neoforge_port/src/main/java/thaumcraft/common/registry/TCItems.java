@@ -33,6 +33,7 @@ import thaumcraft.common.items.curios.ItemCurioRites;
 import thaumcraft.common.items.curios.ItemThaumonomicon;
 import thaumcraft.common.items.tools.ItemSanityChecker;
 import thaumcraft.common.items.tools.ItemScribingTools;
+import thaumcraft.common.items.tools.ItemHandMirror;
 import thaumcraft.common.items.tools.ItemThaumometer;
 import thaumcraft.common.items.tools.TCToolTiers;
 
@@ -261,9 +262,9 @@ public final class TCItems {
     public static final Supplier<Item> JAR_LABEL_ESSENCE = ITEMS.register("jar_label_essence", () -> new TCJarLabelItem(true));
     public static final Supplier<Item> EVERFULL_URN = simpleItem("everfull_urn");
     public static final Supplier<Item> ARCANE_LAMP = simpleItem("arcane_lamp");
-    public static final Supplier<Item> HAND_MIRROR = simpleItem("hand_mirror");
-    public static final Supplier<BlockItem> MIRROR_ESSENTIA = ITEMS.register("mirror_essentia", () -> new TCMirrorBlockItem(TCBlocks.MIRROR_ESSENTIA.get(), new Item.Properties()));
-    public static final Supplier<Item> MIRROR = simpleItem("mirror");
+    public static final Supplier<Item> HAND_MIRROR = ITEMS.register("hand_mirror", ItemHandMirror::new);
+    public static final Supplier<BlockItem> MIRROR = ITEMS.register("mirror", () -> new TCMirrorBlockItem(TCBlocks.MIRROR.get(), new Item.Properties().rarity(Rarity.UNCOMMON)));
+    public static final Supplier<BlockItem> MIRROR_ESSENTIA = ITEMS.register("mirror_essentia", () -> new TCMirrorBlockItem(TCBlocks.MIRROR_ESSENTIA.get(), new Item.Properties().rarity(Rarity.UNCOMMON)));
     public static final Supplier<Item> LAMP_FERTILITY = simpleItem("lamp_fertility");
     public static final Supplier<Item> LAMP_GROWTH = simpleItem("lamp_growth");
     public static final Supplier<Item> INFERNAL_FURNACE = simpleItem("infernal_furnace");
