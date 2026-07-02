@@ -33,6 +33,7 @@ public final class TCEssentiaCapabilities {
         event.registerBlockEntity(BLOCK, TCBlockEntities.ESSENTIA_TRANSPORT_OUT.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.THAUMATORIUM.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.THAUMATORIUM_TOP.get(), TCEssentiaCapabilities::forSide);
+        event.registerBlockEntity(BLOCK, TCBlockEntities.LAMP.get(), TCEssentiaCapabilities::forSide);
     }
 
     private static TCEssentiaTransport forSide(TCEssentiaTransport transport, @Nullable Direction side) {

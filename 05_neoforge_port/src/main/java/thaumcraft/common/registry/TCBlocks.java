@@ -45,6 +45,8 @@ import thaumcraft.common.blocks.crafting.TCThaumatoriumBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
 import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
 import thaumcraft.common.blocks.devices.TCInlayBlock;
+import thaumcraft.common.blocks.devices.TCEffectGlimmerBlock;
+import thaumcraft.common.blocks.devices.TCLampBlock;
 import thaumcraft.common.blocks.devices.TCMirrorBlock;
 import thaumcraft.common.blocks.devices.TCStabilizerBlock;
 import thaumcraft.common.tiles.essentia.TCEssentiaTransfuserBlockEntity;
@@ -180,8 +182,12 @@ public final class TCBlocks {
     public static final Supplier<Block> STABILIZER = BLOCKS.register("stabilizer", () -> stabilizerBlock());
     public static final Supplier<Block> MIRROR = BLOCKS.register("mirror", () -> mirrorBlock(TCMirrorBlock.Kind.ITEM));
     public static final Supplier<Block> MIRROR_ESSENTIA = BLOCKS.register("mirror_essentia", () -> mirrorBlock(TCMirrorBlock.Kind.ESSENTIA));
+    public static final Supplier<Block> LAMP_ARCANE = BLOCKS.register("lamp_arcane", () -> lampBlock(TCLampBlock.Kind.ARCANE));
+    public static final Supplier<Block> LAMP_GROWTH = BLOCKS.register("lamp_growth", () -> lampBlock(TCLampBlock.Kind.GROWTH));
+    public static final Supplier<Block> LAMP_FERTILITY = BLOCKS.register("lamp_fertility", () -> lampBlock(TCLampBlock.Kind.FERTILITY));
     public static final Supplier<Block> THAUMATORIUM = BLOCKS.register("thaumatorium", () -> thaumatoriumBlock(false));
     public static final Supplier<Block> THAUMATORIUM_TOP = BLOCKS.register("thaumatorium_top", () -> thaumatoriumBlock(true));
+    public static final Supplier<Block> EFFECT_GLIMMER = BLOCKS.register("effect_glimmer", () -> effectGlimmerBlock());
     public static final Supplier<Block> FLUX_GOO = BLOCKS.register("flux_goo", () -> fluxGooBlock());
 
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
@@ -289,6 +295,23 @@ public final class TCBlocks {
                 .strength(0.1F, 0.1F)
                 .sound(SoundType.GLASS)
                 .noOcclusion(), kind);
+    }
+
+    private static Block lampBlock(TCLampBlock.Kind kind) {
+        return new TCLampBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(1.0F, 10.0F)
+                .sound(SoundType.METAL)
+                .noOcclusion()
+                .lightLevel(state -> state.hasProperty(TCLampBlock.ENABLED) && state.getValue(TCLampBlock.ENABLED) ? 15 : 0), kind);
+    }
+
+    private static Block effectGlimmerBlock() {
+        return new TCEffectGlimmerBlock(BlockBehaviour.Properties.of()
+                .noCollission()
+                .noOcclusion()
+                .replaceable()
+                .noLootTable()
+                .lightLevel(state -> 15));
     }
 
     private static Block thaumatoriumBlock(boolean top) {

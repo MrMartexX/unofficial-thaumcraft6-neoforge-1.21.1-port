@@ -32,6 +32,7 @@ import thaumcraft.common.tiles.crafting.TCThaumatoriumBlockEntity;
 import thaumcraft.common.tiles.crafting.TCThaumatoriumTopBlockEntity;
 import thaumcraft.common.tiles.misc.TCNitorBlockEntity;
 import thaumcraft.common.tiles.devices.TCStabilizerBlockEntity;
+import thaumcraft.common.tiles.devices.TCLampBlockEntity;
 import thaumcraft.common.tiles.devices.TCMirrorBlockEntity;
 import thaumcraft.common.tiles.devices.TCMirrorEssentiaBlockEntity;
 
@@ -109,6 +110,13 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCMirrorEssentiaBlockEntity>> MIRROR_ESSENTIA =
             BLOCK_ENTITY_TYPES.register("mirror_essentia", () ->
                     BlockEntityType.Builder.of(TCMirrorEssentiaBlockEntity::new, TCBlocks.MIRROR_ESSENTIA.get()).build(null));
+    public static final Supplier<BlockEntityType<TCLampBlockEntity>> LAMP =
+            BLOCK_ENTITY_TYPES.register("lamp", () ->
+                    BlockEntityType.Builder.of(
+                            TCLampBlockEntity::new,
+                            TCBlocks.LAMP_ARCANE.get(),
+                            TCBlocks.LAMP_GROWTH.get(),
+                            TCBlocks.LAMP_FERTILITY.get()).build(null));
     public static final Supplier<BlockEntityType<TCThaumatoriumBlockEntity>> THAUMATORIUM =
             BLOCK_ENTITY_TYPES.register("thaumatorium", () ->
                     BlockEntityType.Builder.of(TCThaumatoriumBlockEntity::new, TCBlocks.THAUMATORIUM.get()).build(null));

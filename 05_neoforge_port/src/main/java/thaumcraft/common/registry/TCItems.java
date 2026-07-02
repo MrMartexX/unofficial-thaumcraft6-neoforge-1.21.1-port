@@ -261,12 +261,12 @@ public final class TCItems {
     public static final Supplier<Item> ALCHEMICAL_CONSTRUCT = simpleItem("alchemical_construct");
     public static final Supplier<Item> JAR_LABEL_ESSENCE = ITEMS.register("jar_label_essence", () -> new TCJarLabelItem(true));
     public static final Supplier<Item> EVERFULL_URN = simpleItem("everfull_urn");
-    public static final Supplier<Item> ARCANE_LAMP = simpleItem("arcane_lamp");
+    public static final Supplier<BlockItem> LAMP_ARCANE = blockItem("lamp_arcane", TCBlocks.LAMP_ARCANE);
     public static final Supplier<Item> HAND_MIRROR = ITEMS.register("hand_mirror", ItemHandMirror::new);
     public static final Supplier<BlockItem> MIRROR = ITEMS.register("mirror", () -> new TCMirrorBlockItem(TCBlocks.MIRROR.get(), new Item.Properties().rarity(Rarity.UNCOMMON)));
     public static final Supplier<BlockItem> MIRROR_ESSENTIA = ITEMS.register("mirror_essentia", () -> new TCMirrorBlockItem(TCBlocks.MIRROR_ESSENTIA.get(), new Item.Properties().rarity(Rarity.UNCOMMON)));
-    public static final Supplier<Item> LAMP_FERTILITY = simpleItem("lamp_fertility");
-    public static final Supplier<Item> LAMP_GROWTH = simpleItem("lamp_growth");
+    public static final Supplier<BlockItem> LAMP_FERTILITY = blockItem("lamp_fertility", TCBlocks.LAMP_FERTILITY);
+    public static final Supplier<BlockItem> LAMP_GROWTH = blockItem("lamp_growth", TCBlocks.LAMP_GROWTH);
     public static final Supplier<Item> INFERNAL_FURNACE = simpleItem("infernal_furnace");
     public static final Supplier<Item> ARCANE_BORE = simpleItem("arcane_bore");
     public static final Supplier<Item> PRIMAL_CRUSHER = simpleItem("primal_crusher");
@@ -474,7 +474,6 @@ public final class TCItems {
     // Catalog bridge placeholder output items. These keep Thaumonomicon recipe pages on thaumcraft:* outputs
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ACTIVATORRAIL = ITEMS.register("activatorrail", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ANCIENTPEDESTAL = ITEMS.register("ancientpedestal", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANELAMP = ITEMS.register("arcanelamp", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANEPEDESTAL = ITEMS.register("arcanepedestal", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBLACK = ITEMS.register("bannerblack", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBLUE = ITEMS.register("bannerblue", () -> new Item(new Item.Properties()));

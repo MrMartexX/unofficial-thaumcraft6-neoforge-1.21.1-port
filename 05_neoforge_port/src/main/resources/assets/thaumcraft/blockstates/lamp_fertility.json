@@ -1,27 +1,12 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "textures": {
-            "particle": "thaumcraft:blocks/lamp_fert_off", 
-            "side": "thaumcraft:blocks/lamp_fert_off"
-           },
-        "model": "thaumcraft:lamp",
-        "transform": "forge:default-block"
-    },
-    "variants": {
-        "inventory": [{}], "normal": [{}],        
-        "facing": {
-            "up":       {"submodel": "thaumcraft:lamp_stand","textures": {"side": "thaumcraft:blocks/base_metal"}, "x": 180},
-            "down":     {"submodel": "thaumcraft:lamp_stand","textures": {"side": "thaumcraft:blocks/base_metal"} },
-            "north":    {"submodel": "thaumcraft:lamp_stand","textures": {"side": "thaumcraft:blocks/base_metal"}, "y": 180, "x": 90},
-            "south":    {"submodel": "thaumcraft:lamp_stand","textures": {"side": "thaumcraft:blocks/base_metal"}, "x": 90},
-            "east":     {"submodel": "thaumcraft:lamp_stand","textures": {"side": "thaumcraft:blocks/base_metal"}, "y": 270, "x": 90},
-            "west":     {"submodel": "thaumcraft:lamp_stand","textures": {"side": "thaumcraft:blocks/base_metal"}, "y": 90, "x": 90}
-        },
-        "enabled": {
-            "true":     {"textures": {"side": "thaumcraft:blocks/lamp_fert_on"}},
-            "false":    {"textures": {"side": "thaumcraft:blocks/lamp_fert_off"}}
-        }
-    }    
+  "multipart": [
+    { "when": { "enabled": "true" }, "apply": { "model": "thaumcraft:block/lamp_fertility_on" } },
+    { "when": { "enabled": "false" }, "apply": { "model": "thaumcraft:block/lamp_fertility_off" } },
+    { "when": { "facing": "up" }, "apply": { "model": "thaumcraft:block/lamp_stand", "x": 180 } },
+    { "when": { "facing": "down" }, "apply": { "model": "thaumcraft:block/lamp_stand" } },
+    { "when": { "facing": "north" }, "apply": { "model": "thaumcraft:block/lamp_stand", "x": 90, "y": 180 } },
+    { "when": { "facing": "south" }, "apply": { "model": "thaumcraft:block/lamp_stand", "x": 90 } },
+    { "when": { "facing": "east" }, "apply": { "model": "thaumcraft:block/lamp_stand", "x": 90, "y": 270 } },
+    { "when": { "facing": "west" }, "apply": { "model": "thaumcraft:block/lamp_stand", "x": 90, "y": 90 } }
+  ]
 }
-

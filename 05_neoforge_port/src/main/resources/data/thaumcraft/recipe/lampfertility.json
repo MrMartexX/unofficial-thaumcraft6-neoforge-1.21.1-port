@@ -3,7 +3,7 @@
   "research": "LAMPFERTILITY",
   "instability": 3,
   "catalyst": {
-    "item": "thaumcraft:arcane_lamp"
+    "item": "thaumcraft:lamp_arcane"
   },
   "components": [
     {

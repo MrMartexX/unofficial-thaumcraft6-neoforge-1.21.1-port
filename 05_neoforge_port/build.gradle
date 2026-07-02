@@ -94,6 +94,8 @@ neoForge {
             def thaumatoriumBehaviorAuditPath = providers.gradleProperty('tcThaumatoriumBehaviorAuditPath').orNull ?: System.getProperty('tc.thaumatoriumBehaviorAuditPath')
             def mirrorBehaviorAuditEnabled = providers.gradleProperty('tcMirrorBehaviorAudit').orNull ?: System.getProperty('tc.mirrorBehaviorAudit')
             def mirrorBehaviorAuditPath = providers.gradleProperty('tcMirrorBehaviorAuditPath').orNull ?: System.getProperty('tc.mirrorBehaviorAuditPath')
+            def lampDeviceAuditEnabled = providers.gradleProperty('tcLampDeviceAudit').orNull ?: System.getProperty('tc.lampDeviceAudit')
+            def lampDeviceAuditPath = providers.gradleProperty('tcLampDeviceAuditPath').orNull ?: System.getProperty('tc.lampDeviceAuditPath')
             def entityFoundationAuditEnabled = providers.gradleProperty('tcEntityFoundationAudit').orNull ?: System.getProperty('tc.entityFoundationAudit')
             def entityFoundationAuditPath = providers.gradleProperty('tcEntityFoundationAuditPath').orNull ?: System.getProperty('tc.entityFoundationAuditPath')
             def infusionBehaviorAuditEnabled = providers.gradleProperty('tcInfusionBehaviorAudit').orNull ?: System.getProperty('tc.infusionBehaviorAudit')
@@ -184,6 +186,12 @@ neoForge {
             }
             if (mirrorBehaviorAuditPath != null) {
                 systemProperty 'tc.mirrorBehaviorAuditPath', mirrorBehaviorAuditPath
+            }
+            if (lampDeviceAuditEnabled != null) {
+                systemProperty 'tc.lampDeviceAudit', lampDeviceAuditEnabled
+            }
+            if (lampDeviceAuditPath != null) {
+                systemProperty 'tc.lampDeviceAuditPath', lampDeviceAuditPath
             }
             if (entityFoundationAuditEnabled != null) {
                 systemProperty 'tc.entityFoundationAudit', entityFoundationAuditEnabled
