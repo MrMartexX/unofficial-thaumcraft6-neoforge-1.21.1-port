@@ -17,5 +17,6 @@ public final class TCMenuScreens {
         event.register(TCMenus.ARCANE_WORKBENCH.get(), TCArcaneWorkbenchScreen::new);
         event.register(TCMenus.FOCAL_MANIPULATOR.get(), TCFocalManipulatorScreen::new);
         event.register(TCMenus.SMELTER.get(), TCSmelterScreen::new);
+        event.register(TCMenus.THAUMATORIUM.get(), TCThaumatoriumScreen::new);
     }
 }

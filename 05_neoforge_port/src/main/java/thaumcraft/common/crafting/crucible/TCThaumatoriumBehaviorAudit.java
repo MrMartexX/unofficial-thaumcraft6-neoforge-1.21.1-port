@@ -11,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.Thaumcraft;
@@ -33,6 +35,7 @@ import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCRecipes;
+import thaumcraft.common.research.TCPlayerKnowledgeStore;
 import thaumcraft.common.tiles.crafting.TCThaumatoriumBlockEntity;
 import thaumcraft.common.tiles.crafting.TCThaumatoriumTopBlockEntity;
 
@@ -170,6 +173,28 @@ public final class TCThaumatoriumBehaviorAudit {
             clearArea(level, origin, 8);
             return new Report(List.copyOf(checks));
         }
+
+        ServerPlayer player = FakePlayerFactory.getMinecraft(level);
+        player.getInventory().clearContent();
+        thaumatorium.setCatalystForValidation(new ItemStack(Items.COAL, 1));
+        checks.add(check("thaumatorium_recipe_list_is_research_gated",
+                thaumatorium.availableRecipes(player).stream().noneMatch(holder -> holder.id().equals(ALUMENTUM)),
+                "beforeResearch=" + thaumatorium.availableRecipes(player).size()));
+        TCPlayerKnowledgeStore.mutate(player, knowledge -> {
+            knowledge.addResearch("ALUMENTUM");
+            knowledge.setResearchStage("ALUMENTUM", 99);
+        }, false);
+        checks.add(check("thaumatorium_recipe_list_exposes_known_catalyst_recipe",
+                thaumatorium.availableRecipes(player).stream().anyMatch(holder -> holder.id().equals(ALUMENTUM)),
+                "afterResearch=" + thaumatorium.availableRecipes(player).size()));
+        boolean selected = thaumatorium.toggleRecipe(player, ALUMENTUM);
+        boolean removedByToggle = thaumatorium.toggleRecipe(player, ALUMENTUM);
+        checks.add(check("thaumatorium_menu_toggle_selects_and_removes_recipe",
+                selected
+                        && removedByToggle
+                        && thaumatorium.selectedRecipeCount() == 0,
+                "selected=" + selected + ", removed=" + removedByToggle
+                        + ", count=" + thaumatorium.selectedRecipeCount()));
 
         thaumatorium.setHeatedForValidation(true);
         thaumatorium.setCatalystForValidation(new ItemStack(Items.COAL, 3));
