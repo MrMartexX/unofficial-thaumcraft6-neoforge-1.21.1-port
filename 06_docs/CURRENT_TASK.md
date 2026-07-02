@@ -31,6 +31,7 @@ Last updated: 2026-07-02
 - The item/equipment behavior pass is closed for the first safe wearable/utility slice. Goggles, cloth robes and void robes are real armor/equipment items with legacy vis/reveal/warp contracts; `sanity_checker`, `sane_soap` and `curio_rites` have their first server-side behavior contracts; the runtime item/equipment audit passes `17/17`.
 - Focus/caster/Focal Manipulator core is closed for the first data/behavior slice. `caster_basic`, `focus_1`, `focus_2`, `focus_3` and `focus_pouch` are real items; caster focus state and focus package data use Data Components; `wand_workbench` has a server-owned Focal Manipulator BlockEntity/menu/screen and a validated design-intent payload; the runtime focus/caster core audit passes `10/10`.
 - The first focus cast-effect execution slice is active for legacy `ROOT -> TOUCH -> FIRE`. Unsupported focus packages fail before vis/aura drain; supported caster use drains aura and sets cooldown; Fire effect mutates entities and blocks with the audited legacy formulas. Runtime focus cast execution audit passes `5/5`.
+- The first custom entity foundation blocker is closed without broad AI/render scope: `TCEntityTypes` now registers `SpecialItem` and `FollowItem`, preserves the 43-entry legacy entity registry catalog as explicit metadata, renders the two item-entity types through the vanilla item renderer, and writes `06_docs/audits/generated/thaumcraft_1_21_entity_foundation_audit.md`. The dedicated audit passes `7/7`.
 - The item/block parity framework quick preset is executable with registry/resource checks plus `texture_color`, `item_visual_parity`, `legacy_shape_parity`, and `legacy_visual_collision_parity`. Use the focused `visual` preset for model/shape/outline/texture/FX certification evidence. Current report-only `visual` summary: `legacy_shape_parity` has `114` rows / `10` review rows; `legacy_visual_collision_parity` has `585` rows, `2` facing-domain mismatches (`golem_builder`, `research_table`), `0` missing rows, `341` unknown rows, and `outline_contract` has `68` match / `0` mismatch / `46` unknown; `item_visual_parity` has `34` missing item models and `219` item visual review rows; `texture_color` has `201` active texture refs with `176` exact matches and `25` review rows; `visual_equivalence_completion` has `17` rows with `11` pass / `6` review / `0` errors.
 
 ## Do not change without explicit request
@@ -46,6 +47,7 @@ Last updated: 2026-07-02
    - Row 4 now has real `essentiatransportin` / `essentiatransportout`, `jar_void`, and `mirror_essentia` blocks/BlockEntities where applicable, sided capability boundaries, modern blockstates/item models and runtime transfer/source checks.
    - The old `essentia_importer` / `essentia_exporter` ids stay as non-block, non-player-facing reference aliases; active recipes use real transport ids.
    - Row 13 now has the first closed standalone device sub-slice for normal item Mirror and Magic Hand Mirror. Continue row 13 with the next isolated device family instead of returning to focus/caster.
+   - Row 14 now has an entity registry foundation and two safe legacy item-entity implementations. Do not expand this into mob AI, golems, rifts, focus projectiles/clouds/mines, Arcane Bore or custom renderers without a focused design/audit slice.
    - Row 10 now has the first real Thaumatorium server machine foundation and functional GUI/screen recipe selection. Next blocker-removal candidate: exact Thaumatorium model/renderer parity under visual work, or move to the next non-focus standalone device blocker if visual polish is deferred.
    - Keep focus medium/effect expansion paused until the user explicitly returns to row 7.
 2. Keep already closed behavior audits green after related changes:
@@ -56,6 +58,7 @@ Last updated: 2026-07-02
    - Item/equipment behavior audit: `17/17`.
    - Focus/caster core audit: `10/10`.
    - Focus cast execution audit: `5/5`.
+   - Entity foundation audit: `7/7`.
    - Keep final measured valve/vent and armor pixel parity as visual review work, not behavior blockers.
 3. Continue item/block parity automation from `06_docs/audits/item_block_parity_framework.md`:
    - Classify known renames, legacy metadata variants, intentional no-item/no-loot entries, missing item models, item visual review rows, and allowed modern extras before enabling safe CI failures.

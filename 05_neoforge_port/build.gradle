@@ -94,6 +94,8 @@ neoForge {
             def thaumatoriumBehaviorAuditPath = providers.gradleProperty('tcThaumatoriumBehaviorAuditPath').orNull ?: System.getProperty('tc.thaumatoriumBehaviorAuditPath')
             def mirrorBehaviorAuditEnabled = providers.gradleProperty('tcMirrorBehaviorAudit').orNull ?: System.getProperty('tc.mirrorBehaviorAudit')
             def mirrorBehaviorAuditPath = providers.gradleProperty('tcMirrorBehaviorAuditPath').orNull ?: System.getProperty('tc.mirrorBehaviorAuditPath')
+            def entityFoundationAuditEnabled = providers.gradleProperty('tcEntityFoundationAudit').orNull ?: System.getProperty('tc.entityFoundationAudit')
+            def entityFoundationAuditPath = providers.gradleProperty('tcEntityFoundationAuditPath').orNull ?: System.getProperty('tc.entityFoundationAuditPath')
             def infusionBehaviorAuditEnabled = providers.gradleProperty('tcInfusionBehaviorAudit').orNull ?: System.getProperty('tc.infusionBehaviorAudit')
             def infusionBehaviorAuditPath = providers.gradleProperty('tcInfusionBehaviorAuditPath').orNull ?: System.getProperty('tc.infusionBehaviorAuditPath')
             def researchTableAuditEnabled = providers.gradleProperty('tcResearchTableAudit').orNull ?: System.getProperty('tc.researchTableAudit')
@@ -182,6 +184,12 @@ neoForge {
             }
             if (mirrorBehaviorAuditPath != null) {
                 systemProperty 'tc.mirrorBehaviorAuditPath', mirrorBehaviorAuditPath
+            }
+            if (entityFoundationAuditEnabled != null) {
+                systemProperty 'tc.entityFoundationAudit', entityFoundationAuditEnabled
+            }
+            if (entityFoundationAuditPath != null) {
+                systemProperty 'tc.entityFoundationAuditPath', entityFoundationAuditPath
             }
             if (infusionBehaviorAuditEnabled != null) {
                 systemProperty 'tc.infusionBehaviorAudit', infusionBehaviorAuditEnabled

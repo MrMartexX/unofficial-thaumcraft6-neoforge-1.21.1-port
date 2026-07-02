@@ -15,6 +15,7 @@ import thaumcraft.client.TCItemProperties;
 import thaumcraft.client.gui.TCClientTooltipComponents;
 import thaumcraft.client.gui.TCMenuScreens;
 import thaumcraft.client.renderer.TCBlockEntityRenderers;
+import thaumcraft.client.renderer.TCEntityRenderers;
 import thaumcraft.common.aspects.TCAspectAssignments;
 import thaumcraft.common.aspects.TCAspectDumpExporter;
 import thaumcraft.common.aspects.TCAspectReloadValidator;
@@ -24,6 +25,7 @@ import thaumcraft.common.aspects.TCGeneratedAspectRecipeGenerator;
 import thaumcraft.common.crafting.crucible.TCCrucibleBehaviorAuditExporter;
 import thaumcraft.common.crafting.crucible.TCThaumatoriumBehaviorAuditExporter;
 import thaumcraft.common.crafting.crucible.TCThaumatoriumNetwork;
+import thaumcraft.common.entities.TCEntityFoundationAuditExporter;
 import thaumcraft.common.essentia.transport.TCEssentiaTransportBehaviorAuditExporter;
 import thaumcraft.common.tiles.devices.TCMirrorBehaviorAuditExporter;
 import thaumcraft.common.runtime.TCMinimalGameTestFixtureExporter;
@@ -41,6 +43,7 @@ import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCArmorMaterials;
 import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCDataComponents;
+import thaumcraft.common.registry.TCEntityTypes;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMenus;
 import thaumcraft.common.registry.TCMobEffects;
@@ -79,6 +82,7 @@ public final class Thaumcraft {
         TCBlocks.BLOCKS.register(modEventBus);
         TCBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         TCMobEffects.MOB_EFFECTS.register(modEventBus);
+        TCEntityTypes.ENTITY_TYPES.register(modEventBus);
         TCArmorMaterials.ARMOR_MATERIALS.register(modEventBus);
         TCItems.ITEMS.register(modEventBus);
         TCMenus.MENUS.register(modEventBus);
@@ -90,6 +94,7 @@ public final class Thaumcraft {
             TCClientTooltipComponents.register(modEventBus);
             TCMenuScreens.register(modEventBus);
             TCBlockEntityRenderers.register(modEventBus);
+            TCEntityRenderers.register(modEventBus);
             TCKnowledgeGainHud.register(modEventBus);
             TCItemProperties.register(modEventBus);
         }
@@ -131,6 +136,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCInfusionBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCEssentiaTransportBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCMirrorBehaviorAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCEntityFoundationAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCItemEquipmentBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCasterCoreAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCastExecutionAuditExporter::onServerStarted);
