@@ -210,13 +210,19 @@ final class TCAspectParityValidator {
 
     private static void validateDirectAssignments() {
         Map<ResourceLocation, AspectList> tags = TCAspectAssignments.directObjectTags();
-        expectEquals(694, tags.size(), "direct object assignment count");
+        expectEquals(700, tags.size(), "direct object assignment count");
 
         expectDirect(tags, "ore_quartz", amount(Aspect.EARTH, 5), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "ore_cinnabar", amount(Aspect.EARTH, 5), amount(Aspect.METAL, 10), amount(Aspect.ALCHEMY, 5), amount(Aspect.DEATH, 5));
         expectDirect(tags, "ore_amber", amount(Aspect.EARTH, 5), amount(Aspect.TRAP, 10), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "quicksilver", amount(Aspect.METAL, 10), amount(Aspect.DEATH, 5), amount(Aspect.ALCHEMY, 5));
         expectDirect(tags, "rare_earth", amount(Aspect.EARTH, 5), amount(Aspect.ORDER, 5), amount(Aspect.METAL, 5));
+        expectDirect(tags, "chunk_beef", amount(Aspect.LIFE, 5), amount(Aspect.ENTROPY, 1));
+        expectDirect(tags, "chunk_chicken", amount(Aspect.LIFE, 5), amount(Aspect.ENTROPY, 1));
+        expectDirect(tags, "chunk_fish", amount(Aspect.LIFE, 5), amount(Aspect.ENTROPY, 1));
+        expectDirect(tags, "chunk_mutton", amount(Aspect.LIFE, 5), amount(Aspect.ENTROPY, 1));
+        expectDirect(tags, "chunk_pork", amount(Aspect.LIFE, 5), amount(Aspect.ENTROPY, 1));
+        expectDirect(tags, "chunk_rabbit", amount(Aspect.LIFE, 5), amount(Aspect.ENTROPY, 1));
         expectDirect(tags, "amber", amount(Aspect.TRAP, 10), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "table_wood", amount(Aspect.TOOL, 1), amount(Aspect.PLANT, 6));
         expectDirect(tags, "table_stone", amount(Aspect.TOOL, 1), amount(Aspect.EARTH, 9));

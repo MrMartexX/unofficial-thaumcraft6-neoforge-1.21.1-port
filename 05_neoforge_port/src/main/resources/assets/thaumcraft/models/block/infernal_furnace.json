@@ -3,8 +3,8 @@
     "ambientocclusion": false,
     "textures": {
         "side": "thaumcraft:block/infernal_furnace",
-        "core": "blocks/lava_still",
-        "fire": "blocks/fire_layer_0"
+        "core": "minecraft:block/lava_still",
+        "fire": "minecraft:block/fire_0"
     },
     "elements": [
         

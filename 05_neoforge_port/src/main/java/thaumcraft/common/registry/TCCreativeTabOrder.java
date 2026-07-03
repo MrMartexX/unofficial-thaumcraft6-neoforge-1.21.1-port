@@ -123,6 +123,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.LAMP_ARCANE.get());
         acceptVisible(output, TCItems.LAMP_GROWTH.get());
         acceptVisible(output, TCItems.LAMP_FERTILITY.get());
+        acceptVisible(output, TCItems.INFERNAL_FURNACE.get());
         acceptVisible(output, TCItems.WAND_WORKBENCH.get());
         acceptVisible(output, TCItems.INFUSION_MATRIX.get());
         acceptVisible(output, TCItems.PILLAR_ARCANE.get());
@@ -146,6 +147,14 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.QUICKSILVER.get());
         acceptVisible(output, TCItems.THAUMIUM_INGOT.get());
         acceptVisible(output, TCItems.BRASS_INGOT.get());
+        acceptVisible(output, TCItems.BRASS_NUGGET.get());
+        acceptVisible(output, TCItems.COPPER_NUGGET.get());
+        acceptVisible(output, TCItems.TIN_NUGGET.get());
+        acceptVisible(output, TCItems.SILVER_NUGGET.get());
+        acceptVisible(output, TCItems.LEAD_NUGGET.get());
+        acceptVisible(output, TCItems.THAUMIUM_NUGGET.get());
+        acceptVisible(output, TCItems.VOID_NUGGET.get());
+        acceptVisible(output, TCItems.QUARTZ_NUGGET.get());
         acceptVisible(output, TCItems.RARE_EARTH.get());
         acceptVisible(output, TCItems.FABRIC.get());
         acceptVisible(output, TCItems.VIS_RESONATOR.get());
@@ -169,6 +178,12 @@ public final class TCCreativeTabOrder {
         addPhialVariants(output);
 
         acceptVisible(output, TCItems.ALUMENTUM.get());
+        acceptVisible(output, TCItems.CHUNK_CHICKEN.get());
+        acceptVisible(output, TCItems.CHUNK_BEEF.get());
+        acceptVisible(output, TCItems.CHUNK_PORK.get());
+        acceptVisible(output, TCItems.CHUNK_FISH.get());
+        acceptVisible(output, TCItems.CHUNK_RABBIT.get());
+        acceptVisible(output, TCItems.CHUNK_MUTTON.get());
         acceptVisible(output, TCItems.SANE_SOAP.get());
 
         acceptVisible(output, TCItems.SCRIBING_TOOLS.get());

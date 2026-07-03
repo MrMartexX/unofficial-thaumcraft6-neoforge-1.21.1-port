@@ -46,6 +46,7 @@ import thaumcraft.common.blocks.misc.TCNitorBlock;
 import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
 import thaumcraft.common.blocks.devices.TCInlayBlock;
 import thaumcraft.common.blocks.devices.TCEffectGlimmerBlock;
+import thaumcraft.common.blocks.devices.TCInfernalFurnaceBlock;
 import thaumcraft.common.blocks.devices.TCLampBlock;
 import thaumcraft.common.blocks.devices.TCMirrorBlock;
 import thaumcraft.common.blocks.devices.TCStabilizerBlock;
@@ -185,6 +186,7 @@ public final class TCBlocks {
     public static final Supplier<Block> LAMP_ARCANE = BLOCKS.register("lamp_arcane", () -> lampBlock(TCLampBlock.Kind.ARCANE));
     public static final Supplier<Block> LAMP_GROWTH = BLOCKS.register("lamp_growth", () -> lampBlock(TCLampBlock.Kind.GROWTH));
     public static final Supplier<Block> LAMP_FERTILITY = BLOCKS.register("lamp_fertility", () -> lampBlock(TCLampBlock.Kind.FERTILITY));
+    public static final Supplier<Block> INFERNAL_FURNACE = BLOCKS.register("infernal_furnace", () -> infernalFurnaceBlock());
     public static final Supplier<Block> THAUMATORIUM = BLOCKS.register("thaumatorium", () -> thaumatoriumBlock(false));
     public static final Supplier<Block> THAUMATORIUM_TOP = BLOCKS.register("thaumatorium_top", () -> thaumatoriumBlock(true));
     public static final Supplier<Block> EFFECT_GLIMMER = BLOCKS.register("effect_glimmer", () -> effectGlimmerBlock());
@@ -233,6 +235,15 @@ public final class TCBlocks {
         return new TCFocalManipulatorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CRAFTING_TABLE)
                 .strength(2.5F, 2.5F)
                 .noOcclusion());
+    }
+
+    private static Block infernalFurnaceBlock() {
+        return new TCInfernalFurnaceBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICKS)
+                .strength(2.5F, 10.0F)
+                .sound(SoundType.STONE)
+                .lightLevel(state -> 14)
+                .noOcclusion()
+                .requiresCorrectToolForDrops());
     }
 
     private static Block arcaneWorkbenchBlock() {

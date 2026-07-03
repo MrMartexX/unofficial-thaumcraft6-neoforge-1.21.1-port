@@ -96,6 +96,8 @@ neoForge {
             def mirrorBehaviorAuditPath = providers.gradleProperty('tcMirrorBehaviorAuditPath').orNull ?: System.getProperty('tc.mirrorBehaviorAuditPath')
             def lampDeviceAuditEnabled = providers.gradleProperty('tcLampDeviceAudit').orNull ?: System.getProperty('tc.lampDeviceAudit')
             def lampDeviceAuditPath = providers.gradleProperty('tcLampDeviceAuditPath').orNull ?: System.getProperty('tc.lampDeviceAuditPath')
+            def infernalFurnaceBehaviorAuditEnabled = providers.gradleProperty('tcInfernalFurnaceBehaviorAudit').orNull ?: System.getProperty('tc.infernalFurnaceBehaviorAudit')
+            def infernalFurnaceBehaviorAuditPath = providers.gradleProperty('tcInfernalFurnaceBehaviorAuditPath').orNull ?: System.getProperty('tc.infernalFurnaceBehaviorAuditPath')
             def entityFoundationAuditEnabled = providers.gradleProperty('tcEntityFoundationAudit').orNull ?: System.getProperty('tc.entityFoundationAudit')
             def entityFoundationAuditPath = providers.gradleProperty('tcEntityFoundationAuditPath').orNull ?: System.getProperty('tc.entityFoundationAuditPath')
             def infusionBehaviorAuditEnabled = providers.gradleProperty('tcInfusionBehaviorAudit').orNull ?: System.getProperty('tc.infusionBehaviorAudit')
@@ -192,6 +194,12 @@ neoForge {
             }
             if (lampDeviceAuditPath != null) {
                 systemProperty 'tc.lampDeviceAuditPath', lampDeviceAuditPath
+            }
+            if (infernalFurnaceBehaviorAuditEnabled != null) {
+                systemProperty 'tc.infernalFurnaceBehaviorAudit', infernalFurnaceBehaviorAuditEnabled
+            }
+            if (infernalFurnaceBehaviorAuditPath != null) {
+                systemProperty 'tc.infernalFurnaceBehaviorAuditPath', infernalFurnaceBehaviorAuditPath
             }
             if (entityFoundationAuditEnabled != null) {
                 systemProperty 'tc.entityFoundationAudit', entityFoundationAuditEnabled

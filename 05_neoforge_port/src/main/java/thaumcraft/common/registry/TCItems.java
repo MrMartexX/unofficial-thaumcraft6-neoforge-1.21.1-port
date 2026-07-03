@@ -165,6 +165,13 @@ public final class TCItems {
     public static final Supplier<Item> THAUMIUM_INGOT = simpleItem("thaumium_ingot");
     public static final Supplier<Item> BRASS_INGOT = simpleItem("brass_ingot");
     public static final Supplier<Item> BRASS_NUGGET = simpleItem("brass_nugget");
+    public static final Supplier<Item> COPPER_NUGGET = simpleItem("copper_nugget");
+    public static final Supplier<Item> TIN_NUGGET = simpleItem("tin_nugget");
+    public static final Supplier<Item> SILVER_NUGGET = simpleItem("silver_nugget");
+    public static final Supplier<Item> LEAD_NUGGET = simpleItem("lead_nugget");
+    public static final Supplier<Item> THAUMIUM_NUGGET = simpleItem("thaumium_nugget");
+    public static final Supplier<Item> VOID_NUGGET = simpleItem("void_nugget");
+    public static final Supplier<Item> QUARTZ_NUGGET = simpleItem("quartz_nugget");
     public static final Supplier<Item> BRASS_PLATE = simpleItem("brass_plate");
     public static final Supplier<Item> IRON_PLATE = simpleItem("iron_plate");
     public static final Supplier<Item> THAUMIUM_PLATE = simpleItem("thaumium_plate");
@@ -188,6 +195,12 @@ public final class TCItems {
     public static final Supplier<Item> MIRRORED_GLASS = simpleItem("mirrored_glass");
     public static final Supplier<Item> BRAIN = simpleItem("brain");
     public static final Supplier<Item> ALUMENTUM = simpleItem("alumentum");
+    public static final Supplier<Item> CHUNK_CHICKEN = simpleItem("chunk_chicken");
+    public static final Supplier<Item> CHUNK_BEEF = simpleItem("chunk_beef");
+    public static final Supplier<Item> CHUNK_PORK = simpleItem("chunk_pork");
+    public static final Supplier<Item> CHUNK_FISH = simpleItem("chunk_fish");
+    public static final Supplier<Item> CHUNK_RABBIT = simpleItem("chunk_rabbit");
+    public static final Supplier<Item> CHUNK_MUTTON = simpleItem("chunk_mutton");
     public static final Supplier<Item> BATH_SALTS = simpleItem("bath_salts");
     public static final Supplier<Item> BOTTLE_TAINT = simpleItem("bottle_taint");
     public static final Supplier<Item> LIQUID_DEATH_BUCKET = simpleItem("liquid_death_bucket");
@@ -267,7 +280,7 @@ public final class TCItems {
     public static final Supplier<BlockItem> MIRROR_ESSENTIA = ITEMS.register("mirror_essentia", () -> new TCMirrorBlockItem(TCBlocks.MIRROR_ESSENTIA.get(), new Item.Properties().rarity(Rarity.UNCOMMON)));
     public static final Supplier<BlockItem> LAMP_FERTILITY = blockItem("lamp_fertility", TCBlocks.LAMP_FERTILITY);
     public static final Supplier<BlockItem> LAMP_GROWTH = blockItem("lamp_growth", TCBlocks.LAMP_GROWTH);
-    public static final Supplier<Item> INFERNAL_FURNACE = simpleItem("infernal_furnace");
+    public static final Supplier<BlockItem> INFERNAL_FURNACE = blockItem("infernal_furnace", TCBlocks.INFERNAL_FURNACE);
     public static final Supplier<Item> ARCANE_BORE = simpleItem("arcane_bore");
     public static final Supplier<Item> PRIMAL_CRUSHER = simpleItem("primal_crusher");
     public static final Supplier<Item> VOIDSEER_PEARL = simpleItem("voidseer_pearl");
@@ -405,6 +418,13 @@ public final class TCItems {
             case "thaumium_ingot" -> legacyItem("ingot", "thaumium", 0);
             case "brass_ingot" -> legacyItem("ingot", "brass", 2);
             case "brass_nugget" -> legacyItem("nugget", "brass", 8);
+            case "copper_nugget" -> legacyItem("nugget", "copper", 1);
+            case "tin_nugget" -> legacyItem("nugget", "tin", 2);
+            case "silver_nugget" -> legacyItem("nugget", "silver", 3);
+            case "lead_nugget" -> legacyItem("nugget", "lead", 4);
+            case "thaumium_nugget" -> legacyItem("nugget", "thaumium", 6);
+            case "void_nugget" -> legacyItem("nugget", "void", 7);
+            case "quartz_nugget" -> legacyItem("nugget", "quartz", 9);
             case "brass_plate" -> legacyItem("plate", "brass", 0);
             case "iron_plate" -> legacyItem("plate", "iron", 1);
             case "thaumium_plate" -> legacyItem("plate", "thaumium", 2);
@@ -413,6 +433,12 @@ public final class TCItems {
             case "primordial_pearl" -> legacyItem("primordial_pearl", "normal", 0);
             case "quicksilver_nugget" -> legacyItem("nugget", "quicksilver", 5);
             case "mindclockwork_advanced" -> legacyItem("mind", "advanced", 1);
+            case "chunk_chicken" -> legacyItem("chunk", "chicken", 1);
+            case "chunk_beef" -> legacyItem("chunk", "beef", 0);
+            case "chunk_pork" -> legacyItem("chunk", "pork", 2);
+            case "chunk_fish" -> legacyItem("chunk", "fish", 3);
+            case "chunk_rabbit" -> legacyItem("chunk", "rabbit", 4);
+            case "chunk_mutton" -> legacyItem("chunk", "mutton", 5);
             case "salis_mundus" -> new ItemLegacyPlaceholder(
                     new Item.Properties(),
                     "tc.placeholder.salis_mundus"

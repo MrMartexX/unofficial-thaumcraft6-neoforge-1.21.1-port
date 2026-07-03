@@ -1,16 +1,19 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "thaumcraft:infernal_furnace",
-        "transform": "forge:default-block"
-     },
-    "variants": {
-        "facing=north": [{}], 
-        "facing=south": [{"y": 180}], 
-        "facing=east": [{"y": 90}], 
-        "facing=west": [{"y": 270}], 
-        "inventory": [{"transform": {       
-                "gui": { "translation": [0, 0, 0], "scale": 0.275 , "rotation": [{ "x": 300 },{ "z": 45 }] }
-            }}]
+  "variants": {
+    "facing=north": {
+      "model": "thaumcraft:block/infernal_furnace"
+    },
+    "facing=south": {
+      "model": "thaumcraft:block/infernal_furnace",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "thaumcraft:block/infernal_furnace",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "thaumcraft:block/infernal_furnace",
+      "y": 270
     }
+  }
 }

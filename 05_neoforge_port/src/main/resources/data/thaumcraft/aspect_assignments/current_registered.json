@@ -42,6 +42,48 @@
       ]
     },
     {
+      "item": "thaumcraft:chunk_beef",
+      "aspects": [
+        { "aspect": "thaumcraft:victus", "amount": 5 },
+        { "aspect": "thaumcraft:perditio", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:chunk_chicken",
+      "aspects": [
+        { "aspect": "thaumcraft:victus", "amount": 5 },
+        { "aspect": "thaumcraft:perditio", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:chunk_fish",
+      "aspects": [
+        { "aspect": "thaumcraft:victus", "amount": 5 },
+        { "aspect": "thaumcraft:perditio", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:chunk_mutton",
+      "aspects": [
+        { "aspect": "thaumcraft:victus", "amount": 5 },
+        { "aspect": "thaumcraft:perditio", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:chunk_pork",
+      "aspects": [
+        { "aspect": "thaumcraft:victus", "amount": 5 },
+        { "aspect": "thaumcraft:perditio", "amount": 1 }
+      ]
+    },
+    {
+      "item": "thaumcraft:chunk_rabbit",
+      "aspects": [
+        { "aspect": "thaumcraft:victus", "amount": 5 },
+        { "aspect": "thaumcraft:perditio", "amount": 1 }
+      ]
+    },
+    {
       "item": "thaumcraft:amber",
       "aspects": [
         { "aspect": "thaumcraft:vinculum", "amount": 10 },

@@ -35,5 +35,10 @@ public final class TCMachineCapabilities {
                 TCBlockEntities.THAUMATORIUM_TOP.get(),
                 (thaumatoriumTop, side) -> thaumatoriumTop.itemHandler(side)
         );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                TCBlockEntities.INFERNAL_FURNACE.get(),
+                (infernalFurnace, side) -> infernalFurnace.itemHandler(side)
+        );
     }
 }

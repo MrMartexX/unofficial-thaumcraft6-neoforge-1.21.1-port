@@ -13,3 +13,5 @@ Suggested folders:
 Generated output should usually go to `tools/reports/` or be curated into `06_docs/audits/`.
 
 The item/block framework now includes registry, resource, data/behavior/source-quality and report-only visual-boundary checks. Use `item-block-parity/audit-item-block-parity.ps1 -Preset visual -FailMode off` for the focused visual evidence pass. Read `../../06_docs/audits/item_block_parity_framework.md` before treating any output as a parity verdict; report-only visual evidence is not strict in-game visual parity.
+
+Focused runtime scripts currently include `audit-infernal-furnace-behavior.ps1`, which writes the curated Infernal Furnace blocker report under `06_docs/audits/generated/`.
