@@ -14,7 +14,12 @@ import thaumcraft.common.entities.TCArcaneBoreEntity;
 import thaumcraft.common.entities.TCFollowingItemEntity;
 import thaumcraft.common.entities.TCFluxRiftEntity;
 import thaumcraft.common.entities.TCSpecialItemEntity;
+import thaumcraft.common.entities.TCTaintCrawlerEntity;
 import thaumcraft.common.entities.TCTaintSeedEntity;
+import thaumcraft.common.entities.TCTaintSwarmEntity;
+import thaumcraft.common.entities.TCTaintacleEntity;
+import thaumcraft.common.entities.TCTaintacleTinyEntity;
+import thaumcraft.common.entities.TCThaumicSlimeEntity;
 
 public final class TCEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
@@ -68,6 +73,46 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(false)
                     .build(Thaumcraft.MODID + ":taint_seed_prime"));
 
+    public static final Supplier<EntityType<TCThaumicSlimeEntity>> THAUM_SLIME = ENTITY_TYPES.register("thaum_slime", () ->
+            EntityType.Builder.<TCThaumicSlimeEntity>of(TCThaumicSlimeEntity::new, MobCategory.MONSTER)
+                    .sized(2.04F, 2.04F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":thaum_slime"));
+
+    public static final Supplier<EntityType<TCTaintCrawlerEntity>> TAINT_CRAWLER = ENTITY_TYPES.register("taint_crawler", () ->
+            EntityType.Builder.<TCTaintCrawlerEntity>of(TCTaintCrawlerEntity::new, MobCategory.MONSTER)
+                    .sized(0.5F, 0.4F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":taint_crawler"));
+
+    public static final Supplier<EntityType<TCTaintacleEntity>> TAINTACLE = ENTITY_TYPES.register("taintacle", () ->
+            EntityType.Builder.<TCTaintacleEntity>of(TCTaintacleEntity::new, MobCategory.MONSTER)
+                    .sized(0.8F, 3.0F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build(Thaumcraft.MODID + ":taintacle"));
+
+    public static final Supplier<EntityType<TCTaintacleTinyEntity>> TAINTACLE_TINY = ENTITY_TYPES.register("taintacle_tiny", () ->
+            EntityType.Builder.<TCTaintacleTinyEntity>of(TCTaintacleTinyEntity::new, MobCategory.MONSTER)
+                    .sized(0.22F, 1.0F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build(Thaumcraft.MODID + ":taintacle_tiny"));
+
+    public static final Supplier<EntityType<TCTaintSwarmEntity>> TAINT_SWARM = ENTITY_TYPES.register("taint_swarm", () ->
+            EntityType.Builder.<TCTaintSwarmEntity>of(TCTaintSwarmEntity::new, MobCategory.MONSTER)
+                    .sized(2.0F, 2.0F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build(Thaumcraft.MODID + ":taint_swarm"));
+
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
             spec("CultistPortalGreater", "EntityCultistPortalGreater", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
             spec("CultistPortalLesser", "EntityCultistPortalLesser", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
@@ -105,11 +150,11 @@ public final class TCEntityTypes {
             spec("CultistCleric", "EntityCultistCleric", null, 64, 3, true, "defer", "Cultist mob AI and renderer"),
             spec("EldritchCrab", "EntityEldritchCrab", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),
             spec("InhabitedZombie", "EntityInhabitedZombie", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),
-            spec("ThaumSlime", "EntityThaumicSlime", null, 64, 3, true, "defer", "Slime variant AI and renderer"),
-            spec("TaintCrawler", "EntityTaintCrawler", null, 64, 3, true, "defer", "Taint mob AI and renderer"),
-            spec("Taintacle", "EntityTaintacle", null, 64, 3, false, "defer", "Taint mob AI and renderer"),
-            spec("TaintacleTiny", "EntityTaintacleSmall", null, 64, 3, false, "defer", "Taint mob AI and renderer"),
-            spec("TaintSwarm", "EntityTaintSwarm", null, 64, 3, false, "defer", "Taint mob AI and renderer"),
+            spec("ThaumSlime", "EntityThaumicSlime", "thaum_slime", 64, 3, true, "registered_foundation", "Thaumic Slime size/xp, ranged spit foundation and scan/aspect identity"),
+            spec("TaintCrawler", "EntityTaintCrawler", "taint_crawler", 64, 3, true, "registered_foundation", "Crawler AI foundation, fibre trail, Flux Taint bite and break-spawn hook"),
+            spec("Taintacle", "EntityTaintacle", "taintacle", 64, 3, false, "registered_foundation", "Stationary taintacle AI foundation and tiny-spawn hook"),
+            spec("TaintacleTiny", "EntityTaintacleSmall", "taintacle_tiny", 64, 3, false, "registered_foundation", "Temporary small taintacle lifetime contract"),
+            spec("TaintSwarm", "EntityTaintSwarm", "taint_swarm", 64, 3, false, "registered_foundation", "Swarm flight/summoned-state foundation and geyser spawn hook"),
             spec("TaintSeed", "EntityTaintSeed", "taint_seed", 64, 20, false, "registered_foundation", "Taint spread seed registry, radius and server spread loop"),
             spec("TaintSeedPrime", "EntityTaintSeedPrime", "taint_seed_prime", 64, 20, false, "registered_foundation", "Prime Taint Seed spread area, health and damage variant")
     );
@@ -137,6 +182,11 @@ public final class TCEntityTypes {
         event.put(ARCANE_BORE.get(), TCArcaneBoreEntity.createAttributes().build());
         event.put(TAINT_SEED.get(), TCTaintSeedEntity.createAttributes().build());
         event.put(TAINT_SEED_PRIME.get(), TCTaintSeedEntity.createPrimeAttributes().build());
+        event.put(THAUM_SLIME.get(), TCThaumicSlimeEntity.createAttributes().build());
+        event.put(TAINT_CRAWLER.get(), TCTaintCrawlerEntity.createAttributes().build());
+        event.put(TAINTACLE.get(), TCTaintacleEntity.createAttributes().build());
+        event.put(TAINTACLE_TINY.get(), TCTaintacleTinyEntity.createAttributes().build());
+        event.put(TAINT_SWARM.get(), TCTaintSwarmEntity.createAttributes().build());
     }
 
     private static LegacyEntitySpec spec(

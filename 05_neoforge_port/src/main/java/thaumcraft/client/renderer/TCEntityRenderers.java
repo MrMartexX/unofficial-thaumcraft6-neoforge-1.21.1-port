@@ -20,5 +20,10 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.ARCANE_BORE.get(), TCArcaneBoreRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINT_SEED.get(), TCTaintSeedRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINT_SEED_PRIME.get(), TCTaintSeedRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.THAUM_SLIME.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.TAINT_CRAWLER.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.TAINTACLE.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.TAINTACLE_TINY.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.TAINT_SWARM.get(), TCInvisibleEntityRenderer::new);
     }
 }

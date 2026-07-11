@@ -184,7 +184,7 @@ public final class TCTaintHelper {
         return false;
     }
 
-    static boolean isTaintState(BlockState state) {
+    public static boolean isTaintState(BlockState state) {
         Block block = state.getBlock();
         return block == TCBlocks.TAINT_FIBRE.get()
                 || block == TCBlocks.FLUX_GOO.get()
@@ -194,6 +194,18 @@ public final class TCTaintHelper {
                 || block == TCBlocks.TAINT_GEYSER.get()
                 || block == TCBlocks.TAINT_FEATURE.get()
                 || block == TCBlocks.TAINT_LOG.get();
+    }
+
+    public static boolean placeCrawlerFibre(Level level, BlockPos target) {
+        if (level == null || level.isClientSide) {
+            return false;
+        }
+        BlockState state = level.getBlockState(target);
+        if (canMutate(level, target, state) && shouldBecomeSurfaceFibre(level, target, state)) {
+            setTaintFibre(level, target);
+            return true;
+        }
+        return false;
     }
 
     public static int taintSpreadArea() {

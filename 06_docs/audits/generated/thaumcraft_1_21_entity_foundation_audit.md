@@ -7,15 +7,25 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Check | Status | Notes |
 | --- | --- | --- |
 | legacy entity catalog count | PASS | expected 43, got 43 |
-| registered foundation count | PASS | expected SpecialItem, FollowItem, FluxRift, ArcaneBore, TaintSeed and TaintSeedPrime |
+| registered foundation count | PASS | expected item entities, FluxRift, ArcaneBore, TaintSeed pair and five taint mob foundations |
 | SpecialItem registry id | PASS | expected thaumcraft:special_item, got thaumcraft:special_item |
 | FollowItem registry id | PASS | expected thaumcraft:follow_item, got thaumcraft:follow_item |
 | FluxRift registry id | PASS | expected thaumcraft:flux_rift, got thaumcraft:flux_rift |
 | ArcaneBore registry id | PASS | expected thaumcraft:arcane_bore, got thaumcraft:arcane_bore |
 | TaintSeed registry id | PASS | expected thaumcraft:taint_seed, got thaumcraft:taint_seed |
 | TaintSeedPrime registry id | PASS | expected thaumcraft:taint_seed_prime, got thaumcraft:taint_seed_prime |
+| ThaumSlime registry id | PASS | expected thaumcraft:thaum_slime, got thaumcraft:thaum_slime |
+| TaintCrawler registry id | PASS | expected thaumcraft:taint_crawler, got thaumcraft:taint_crawler |
+| Taintacle registry id | PASS | expected thaumcraft:taintacle, got thaumcraft:taintacle |
+| TaintacleTiny registry id | PASS | expected thaumcraft:taintacle_tiny, got thaumcraft:taintacle_tiny |
+| TaintSwarm registry id | PASS | expected thaumcraft:taint_swarm, got thaumcraft:taint_swarm |
 | SpecialItem type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | FollowItem type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=false |
+| ThaumSlime mob type parameters | PASS | category=MONSTER, size=2.04x2.04, tracking=64, update=3, velocity=true |
+| TaintCrawler mob type parameters | PASS | category=MONSTER, size=0.5x0.4, tracking=64, update=3, velocity=true |
+| Taintacle mob type parameters | PASS | category=MONSTER, size=0.8x3.0, tracking=64, update=3, velocity=false |
+| TaintacleTiny mob type parameters | PASS | category=MONSTER, size=0.22x1.0, tracking=64, update=3, velocity=false |
+| TaintSwarm mob type parameters | PASS | category=MONSTER, size=2.0x2.0, tracking=64, update=3, velocity=false |
 | foundation constructors | PASS | registry factories plus special/follow item stack and target coordinates |
 
 ## Legacy entity catalog
@@ -58,10 +68,10 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | CultistCleric | EntityCultistCleric |  | 64 | 3 | true | defer | Cultist mob AI and renderer |
 | EldritchCrab | EntityEldritchCrab |  | 64 | 3 | true | defer | Eldritch mob AI and renderer |
 | InhabitedZombie | EntityInhabitedZombie |  | 64 | 3 | true | defer | Eldritch mob AI and renderer |
-| ThaumSlime | EntityThaumicSlime |  | 64 | 3 | true | defer | Slime variant AI and renderer |
-| TaintCrawler | EntityTaintCrawler |  | 64 | 3 | true | defer | Taint mob AI and renderer |
-| Taintacle | EntityTaintacle |  | 64 | 3 | false | defer | Taint mob AI and renderer |
-| TaintacleTiny | EntityTaintacleSmall |  | 64 | 3 | false | defer | Taint mob AI and renderer |
-| TaintSwarm | EntityTaintSwarm |  | 64 | 3 | false | defer | Taint mob AI and renderer |
+| ThaumSlime | EntityThaumicSlime | thaumcraft:thaum_slime | 64 | 3 | true | registered_foundation | Thaumic Slime size/xp, ranged spit foundation and scan/aspect identity |
+| TaintCrawler | EntityTaintCrawler | thaumcraft:taint_crawler | 64 | 3 | true | registered_foundation | Crawler AI foundation, fibre trail, Flux Taint bite and break-spawn hook |
+| Taintacle | EntityTaintacle | thaumcraft:taintacle | 64 | 3 | false | registered_foundation | Stationary taintacle AI foundation and tiny-spawn hook |
+| TaintacleTiny | EntityTaintacleSmall | thaumcraft:taintacle_tiny | 64 | 3 | false | registered_foundation | Temporary small taintacle lifetime contract |
+| TaintSwarm | EntityTaintSwarm | thaumcraft:taint_swarm | 64 | 3 | false | registered_foundation | Swarm flight/summoned-state foundation and geyser spawn hook |
 | TaintSeed | EntityTaintSeed | thaumcraft:taint_seed | 64 | 20 | false | registered_foundation | Taint spread seed registry, radius and server spread loop |
 | TaintSeedPrime | EntityTaintSeedPrime | thaumcraft:taint_seed_prime | 64 | 20 | false | registered_foundation | Prime Taint Seed spread area, health and damage variant |

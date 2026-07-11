@@ -62,7 +62,7 @@ public final class TCFluxTaintBlockerAudit {
         lines.add("");
         lines.add("- Implemented: Taint Fibre registration, block item, creative visibility, 10-property legacy state, deterministic growth, face/growth shapes, light levels, walk taint and Flux Goo level-zero alternate result.");
         lines.add("- Implemented: resource path modernization for Taint Fibre multipart blockstate and growth models.");
-        lines.add("- Deferred: TaintSeed registry, full TaintHelper.spreadFibres transforms, taint crust/soil/rock/log/geyser/feature blocks, taint mobs and Thaumic Slime spawning.");
+        lines.add("- Deferred from this earlier Flux Goo/Taint Fibre audit: later TaintSeed/terrain ecology and taint mob server-foundation hooks are covered by their focused audits; FallingTaint crust physics and final taint visuals remain separate blockers.");
         lines.add("- Until TaintSeed exists, Taint Fibre intentionally withers on random tick just like legacy fibres outside seed range.");
         Files.write(output, lines);
         return report;

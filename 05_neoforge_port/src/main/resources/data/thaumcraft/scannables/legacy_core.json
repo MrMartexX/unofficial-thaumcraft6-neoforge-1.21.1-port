@@ -271,12 +271,42 @@
     },
     {
       "type": "entity",
+      "research": "!ThaumSlime",
+      "entities": [
+        "thaumcraft:thaum_slime"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "!TaintCrawler",
+      "entities": [
+        "thaumcraft:taint_crawler"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "!Taintacle",
+      "entities": [
+        "thaumcraft:taintacle",
+        "thaumcraft:taintacle_tiny"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "!TaintSwarm",
+      "entities": [
+        "thaumcraft:taint_swarm"
+      ]
+    },
+    {
+      "type": "entity",
       "research": "f_FLY",
       "entities": [
         "minecraft:bat",
         "minecraft:parrot",
         "minecraft:ghast",
-        "minecraft:blaze"
+        "minecraft:blaze",
+        "thaumcraft:taint_swarm"
       ]
     }
   ]

@@ -1,15 +1,20 @@
 package thaumcraft.common.aspects;
 
 import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Creeper;
+import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 
 public final class TCEntityAspectAssignments {
     private static final Map<EntityType<?>, AspectList> LEGACY_VANILLA_ASSIGNMENTS = createAssignments();
+    private static final Map<ResourceLocation, AspectList> LEGACY_CUSTOM_ASSIGNMENTS = createCustomAssignments();
 
     private TCEntityAspectAssignments() {
     }
@@ -17,7 +22,10 @@ public final class TCEntityAspectAssignments {
     public static AspectList getEntityAspects(Entity entity) {
         AspectList aspects = LEGACY_VANILLA_ASSIGNMENTS.get(entity.getType());
         if (aspects == null) {
-            return null;
+            aspects = LEGACY_CUSTOM_ASSIGNMENTS.get(BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()));
+            if (aspects == null) {
+                return null;
+            }
         }
 
         AspectList copy = aspects.copy();
@@ -29,6 +37,9 @@ public final class TCEntityAspectAssignments {
 
     public static AspectList getEntityTypeAspectsForValidation(EntityType<?> type) {
         AspectList aspects = LEGACY_VANILLA_ASSIGNMENTS.get(type);
+        if (aspects == null) {
+            aspects = LEGACY_CUSTOM_ASSIGNMENTS.get(BuiltInRegistries.ENTITY_TYPE.getKey(type));
+        }
         return aspects == null ? null : aspects.copy();
     }
 
@@ -129,8 +140,24 @@ public final class TCEntityAspectAssignments {
         return Map.copyOf(map);
     }
 
+    private static Map<ResourceLocation, AspectList> createCustomAssignments() {
+        HashMap<ResourceLocation, AspectList> map = new HashMap<>();
+
+        // Exact Thaumcraft 6 custom taint mob contracts from legacy ConfigAspects.
+        put(map, "thaum_slime", tags(Aspect.LIFE, 5, Aspect.WATER, 5, Aspect.FLUX, 5, Aspect.ALCHEMY, 5));
+        put(map, "taintacle", tags(Aspect.FLUX, 15, Aspect.BEAST, 10));
+        put(map, "taintacle_tiny", tags(Aspect.FLUX, 5, Aspect.BEAST, 5));
+        put(map, "taint_swarm", tags(Aspect.FLUX, 15, Aspect.AIR, 5));
+
+        return Map.copyOf(map);
+    }
+
     private static void put(Map<EntityType<?>, AspectList> map, EntityType<?> type, AspectList aspects) {
         map.put(type, aspects);
+    }
+
+    private static void put(Map<ResourceLocation, AspectList> map, String path, AspectList aspects) {
+        map.put(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, path), aspects);
     }
 
     private static AspectList tags(Object... pairs) {

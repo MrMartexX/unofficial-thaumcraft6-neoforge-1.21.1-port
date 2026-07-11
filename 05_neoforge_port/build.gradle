@@ -120,6 +120,8 @@ neoForge {
             def fluxTaintBlockerAuditPath = providers.gradleProperty('tcFluxTaintBlockerAuditPath').orNull ?: System.getProperty('tc.fluxTaintBlockerAuditPath')
             def taintEcologyBlockerAuditEnabled = providers.gradleProperty('tcTaintEcologyBlockerAudit').orNull ?: System.getProperty('tc.taintEcologyBlockerAudit')
             def taintEcologyBlockerAuditPath = providers.gradleProperty('tcTaintEcologyBlockerAuditPath').orNull ?: System.getProperty('tc.taintEcologyBlockerAuditPath')
+            def taintMobBlockerAuditEnabled = providers.gradleProperty('tcTaintMobBlockerAudit').orNull ?: System.getProperty('tc.taintMobBlockerAudit')
+            def taintMobBlockerAuditPath = providers.gradleProperty('tcTaintMobBlockerAuditPath').orNull ?: System.getProperty('tc.taintMobBlockerAuditPath')
             def minimalGameTestFixtureEnabled = providers.gradleProperty('tcMinimalGameTestFixture').orNull ?: System.getProperty('tc.minimalGameTestFixture')
             def minimalGameTestFixturePath = providers.gradleProperty('tcMinimalGameTestFixturePath').orNull ?: System.getProperty('tc.minimalGameTestFixturePath')
             if (aspectDumpEnabled != null) {
@@ -274,6 +276,12 @@ neoForge {
             }
             if (taintEcologyBlockerAuditPath != null) {
                 systemProperty 'tc.taintEcologyBlockerAuditPath', taintEcologyBlockerAuditPath
+            }
+            if (taintMobBlockerAuditEnabled != null) {
+                systemProperty 'tc.taintMobBlockerAudit', taintMobBlockerAuditEnabled
+            }
+            if (taintMobBlockerAuditPath != null) {
+                systemProperty 'tc.taintMobBlockerAuditPath', taintMobBlockerAuditPath
             }
             if (minimalGameTestFixtureEnabled != null) {
                 systemProperty 'tc.minimalGameTestFixture', minimalGameTestFixtureEnabled

@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -18,9 +19,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aura.AuraHelper;
+import thaumcraft.common.entities.TCTaintCrawlerEntity;
 import thaumcraft.common.registry.TCBlocks;
+import thaumcraft.common.registry.TCEntityTypes;
 
-/** Swollen taint orb/feature growth. TaintCrawler spawning is deferred until taint mob AI lands. */
+/** Swollen taint orb/feature growth with the TC6 break-spawn crawler hook. */
 public final class TCTaintFeatureBlock extends DirectionalBlock {
     public static final DirectionProperty FACING = DirectionalBlock.FACING;
     public static final MapCodec<TCTaintFeatureBlock> CODEC = simpleCodec(TCTaintFeatureBlock::new);
@@ -74,7 +77,11 @@ public final class TCTaintFeatureBlock extends DirectionalBlock {
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!level.isClientSide && !state.is(newState.getBlock())) {
-            AuraHelper.polluteAura(level, pos, 1.0F, true);
+            if (level.getRandom().nextFloat() < 0.333F) {
+                spawnCrawler(level, pos);
+            } else {
+                AuraHelper.polluteAura(level, pos, 1.0F, true);
+            }
         }
         super.onRemove(state, level, pos, newState, movedByPiston);
     }
@@ -92,5 +99,19 @@ public final class TCTaintFeatureBlock extends DirectionalBlock {
 
     public static void die(Level level, BlockPos pos) {
         level.setBlock(pos, TCBlocks.FLUX_GOO.get().defaultBlockState(), Block.UPDATE_ALL);
+    }
+
+    public static boolean spawnCrawlerForValidation(Level level, BlockPos pos) {
+        return spawnCrawler(level, pos);
+    }
+
+    private static boolean spawnCrawler(Level level, BlockPos pos) {
+        Entity crawler = TCEntityTypes.TAINT_CRAWLER.get().create(level);
+        if (!(crawler instanceof TCTaintCrawlerEntity)) {
+            return false;
+        }
+        crawler.moveTo(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, level.getRandom().nextInt(360), 0.0F);
+        level.addFreshEntity(crawler);
+        return true;
     }
 }
