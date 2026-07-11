@@ -12,6 +12,7 @@ import thaumcraft.common.menu.TCHandMirrorMenu;
 import thaumcraft.common.menu.TCResearchTableMenu;
 import thaumcraft.common.menu.TCSmelterMenu;
 import thaumcraft.common.menu.TCThaumatoriumMenu;
+import thaumcraft.common.menu.TCVoidSiphonMenu;
 
 public final class TCMenus {
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, Thaumcraft.MODID);
@@ -28,6 +29,8 @@ public final class TCMenus {
             MENUS.register("thaumatorium", () -> IMenuTypeExtension.create(TCThaumatoriumMenu::new));
     public static final Supplier<MenuType<TCHandMirrorMenu>> HAND_MIRROR =
             MENUS.register("hand_mirror", () -> IMenuTypeExtension.create(TCHandMirrorMenu::new));
+    public static final Supplier<MenuType<TCVoidSiphonMenu>> VOID_SIPHON =
+            MENUS.register("void_siphon", () -> IMenuTypeExtension.create(TCVoidSiphonMenu::new));
 
     private TCMenus() {
     }

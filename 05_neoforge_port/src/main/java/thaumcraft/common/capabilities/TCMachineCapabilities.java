@@ -40,5 +40,10 @@ public final class TCMachineCapabilities {
                 TCBlockEntities.INFERNAL_FURNACE.get(),
                 (infernalFurnace, side) -> infernalFurnace.itemHandler(side)
         );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                TCBlockEntities.VOID_SIPHON.get(),
+                (voidSiphon, side) -> voidSiphon.itemHandler(side)
+        );
     }
 }

@@ -36,6 +36,7 @@ import thaumcraft.common.tiles.devices.TCLampBlockEntity;
 import thaumcraft.common.tiles.devices.TCMirrorBlockEntity;
 import thaumcraft.common.tiles.devices.TCMirrorEssentiaBlockEntity;
 import thaumcraft.common.tiles.devices.TCInfernalFurnaceBlockEntity;
+import thaumcraft.common.tiles.devices.TCVoidSiphonBlockEntity;
 
 public final class TCBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
@@ -121,6 +122,9 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCInfernalFurnaceBlockEntity>> INFERNAL_FURNACE =
             BLOCK_ENTITY_TYPES.register("infernal_furnace", () ->
                     BlockEntityType.Builder.of(TCInfernalFurnaceBlockEntity::new, TCBlocks.INFERNAL_FURNACE.get()).build(null));
+    public static final Supplier<BlockEntityType<TCVoidSiphonBlockEntity>> VOID_SIPHON =
+            BLOCK_ENTITY_TYPES.register("void_siphon", () ->
+                    BlockEntityType.Builder.of(TCVoidSiphonBlockEntity::new, TCBlocks.VOID_SIPHON.get()).build(null));
     public static final Supplier<BlockEntityType<TCThaumatoriumBlockEntity>> THAUMATORIUM =
             BLOCK_ENTITY_TYPES.register("thaumatorium", () ->
                     BlockEntityType.Builder.of(TCThaumatoriumBlockEntity::new, TCBlocks.THAUMATORIUM.get()).build(null));

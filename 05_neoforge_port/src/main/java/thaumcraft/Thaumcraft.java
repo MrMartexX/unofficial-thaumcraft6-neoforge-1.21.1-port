@@ -30,6 +30,7 @@ import thaumcraft.common.essentia.transport.TCEssentiaTransportBehaviorAuditExpo
 import thaumcraft.common.tiles.devices.TCLampDeviceAuditExporter;
 import thaumcraft.common.tiles.devices.TCInfernalFurnaceBehaviorAuditExporter;
 import thaumcraft.common.tiles.devices.TCMirrorBehaviorAuditExporter;
+import thaumcraft.common.tiles.devices.TCStandaloneDeviceBlockerAuditExporter;
 import thaumcraft.common.runtime.TCMinimalGameTestFixtureExporter;
 import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.config.TCConfig;
@@ -140,6 +141,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCMirrorBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCLampDeviceAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCInfernalFurnaceBehaviorAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCStandaloneDeviceBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCEntityFoundationAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCItemEquipmentBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCasterCoreAuditExporter::onServerStarted);

@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-07-03
+Last updated: 2026-07-11
 
 ## Current branch
 
@@ -26,7 +26,8 @@ Last updated: 2026-07-03
 - The first real essentia transport slice now has legacy capacities/cadence/suction formulas for all six tube variants, Warded Jar and Void Jar transfer/overflow, sided NeoForge capability access, persisted directional state, legacy multipart tube geometry, Alembic/Jar label filters, phial/jar item transfer quanta, caster tube sub-part side/choke/facing controls, manual/redstone valve state, vent sync, real Essentia Input/Output transfuser blocks, and the first real Essentia Mirror source bridge. The dedicated-server runtime audit passes `61/61`.
 - Normal item Mirror and Magic Hand Mirror now have the first real standalone device slice: wall-mounted six-facing normal mirror block, linked mirror BlockItem Data Component preservation, bidirectional link restore, item-entity transport/ejection, instability flux cadence, hand-mirror one-slot sender menu/screen, self-rejection, missing-target link break and dedicated runtime audit `12/12`.
 - Arcane Lamp, Lamp of Growth and Lamp of Fertility now have the next real standalone device slice: real blocks/BlockItems/BlockEntity, legacy lamp shape/light/redstone support checks, Arcane Lamp `effect_glimmer` placement/removal, Growth Lamp Herba suction/charge/plant tick behavior, Fertility Lamp Desiderium suction/animal-love behavior, and dedicated runtime audit `10/10`.
-- Infernal Furnace now has the next row-13 runtime device slice: `infernal_furnace` block/BlockItem/BlockEntity, half-height/light/facing contract, 32-slot top-only item buffer, vanilla smelting/ejection/XP, aura-speed drain, distance-2 Bellows formula, non-smeltable lava destruction, internal legacy default bonus table with flattened nugget/chunk outputs, and dedicated runtime audit `12/12`. Salis Mundus multiblock/dust activation and final pixel parity remain separate slices.
+- Infernal Furnace now has the next row-13 runtime device slice: `infernal_furnace` block/BlockItem/BlockEntity, half-height/light/facing contract, 32-slot top-only item buffer, vanilla smelting/ejection/XP, aura-speed drain, distance-2 Bellows formula, non-smeltable lava destruction, internal legacy default bonus table with flattened nugget/chunk outputs, and dedicated runtime audit `12/12`. Salis Mundus now owns the legacy IDustTrigger-style Infernal Furnace multiblock activation/placeholder/rollback slice.
+- Void Siphon now has its first row-13 standalone device slice: real `void_siphon` block/BlockItem/BlockEntity/menu/screen, legacy shape and redstone-enabled state, extract-only void-seed slot, progress persistence, rift-drain math and a future `TCVoidSiphonRiftAccess` adapter boundary. The standalone device blocker audit passes `9/9`; full Flux Rift lifecycle/rendering remains row 11/14 work.
 - The first Thaumatorium machine foundation and functional recipe-selection screen are active: `thaumatorium` is a real two-block Block/BlockItem/BlockEntity/menu/transport endpoint, `thaumatorium_top` delegates inventory and essentia input, heat is read two blocks below through the crucible base, redstone pauses filling, suction is `128` for the first missing recipe aspect, selected crucible recipes consume one catalyst and eject output, the legacy GUI texture screen lists researched catalyst-matching recipes, and the dedicated runtime audit passes `19/19`. Exact legacy model/renderer/pixel parity remains separate visual work.
 - The Alembic/smelter machine batch now replaces the incremental placeholder path: all three smelter tiers share the server-owned two-slot machine state, exact tier efficiency/output intervals, Alumentum boost, fuel remainders, cumulative vent mitigation, direct plus attached auxiliary Alembic routing, modern sided item capability, legacy-layout menu/screen and detailed legacy-derived models. Its checks are now included in the combined transport/machine/transfuser/Void-Jar/essentia-mirror runtime audit at `61/61`.
 - Bellows is now a focused device slice: placed Bellows uses a real BlockEntity/client renderer, legacy inflation animation, tube-buffer extension render, smelter/tube-buffer ownership, and a dedicated vanilla furnace cook-progress bridge. Keep `audit-bellows-device.ps1` green after changes.
@@ -48,7 +49,7 @@ Last updated: 2026-07-03
 1. Continue blocker-removal work outside the focus/caster layer unless explicitly requested.
    - Row 4 now has real `essentiatransportin` / `essentiatransportout`, `jar_void`, and `mirror_essentia` blocks/BlockEntities where applicable, sided capability boundaries, modern blockstates/item models and runtime transfer/source checks.
    - The old `essentia_importer` / `essentia_exporter` ids stay as non-block, non-player-facing reference aliases; active recipes use real transport ids.
-   - Row 13 now has closed standalone device sub-slices for normal item Mirror/Magic Hand Mirror, Arcane/Growth/Fertility Lamps, and Infernal Furnace. Continue row 13 with the next isolated device family instead of returning to focus/caster; remaining candidates include Arcane Bore, Void Siphon and any explicit Infernal Furnace multiblock activation slice.
+   - Row 13 now has closed standalone device sub-slices for normal item Mirror/Magic Hand Mirror, Arcane/Growth/Fertility Lamps, Infernal Furnace runtime, Infernal Furnace Salis Mundus multiblock activation/rollback, and Void Siphon foundation/runtime math. Continue with Arcane Bore only as a focused row-13/14 device-entity slice, or move to row 11 Flux Rift if Void Siphon needs real in-world rift sources.
    - Row 14 now has an entity registry foundation and two safe legacy item-entity implementations. Do not expand this into mob AI, golems, rifts, focus projectiles/clouds/mines, Arcane Bore or custom renderers without a focused design/audit slice.
    - Row 10 now has the first real Thaumatorium server machine foundation and functional GUI/screen recipe selection. Next blocker-removal candidate: exact Thaumatorium model/renderer parity under visual work, or move to the next non-focus standalone device blocker if visual polish is deferred.
    - Keep focus medium/effect expansion paused until the user explicitly returns to row 7.
@@ -57,6 +58,7 @@ Last updated: 2026-07-03
    - Normal mirror/hand mirror behavior audit: `12/12`.
    - Lamp device behavior audit: `10/10`.
    - Infernal Furnace behavior audit: `12/12`.
+   - Standalone device blocker audit for Salis Mundus + Void Siphon: `9/9`.
    - Thaumatorium behavior audit: `19/19`.
    - Dedicated Bellows audit: `0` errors.
    - Item/equipment behavior audit: `17/17`.

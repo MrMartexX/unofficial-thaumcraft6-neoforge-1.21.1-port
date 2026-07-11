@@ -9,6 +9,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.RenderShape;
@@ -26,12 +27,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.tiles.devices.TCInfernalFurnaceBlockEntity;
 
 /** Legacy Infernal Furnace shell: horizontal facing, half-height collision and item/living contact handling. */
 public final class TCInfernalFurnaceBlock extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D);
+    private static boolean destroyingStructure;
 
     public TCInfernalFurnaceBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -105,6 +108,53 @@ public final class TCInfernalFurnaceBlock extends Block implements EntityBlock {
             }
         }
         super.entityInside(state, level, pos, entity);
+    }
+
+    @Override
+    protected void onRemove(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            BlockState newState,
+            boolean movedByPiston
+    ) {
+        if (!state.is(newState.getBlock()) && !destroyingStructure) {
+            destroyStructure(level, pos, state);
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    public static boolean isDestroyingStructure() {
+        return destroyingStructure;
+    }
+
+    public static void destroyStructure(Level level, BlockPos furnacePos, BlockState furnaceState) {
+        if (level.isClientSide || destroyingStructure) {
+            return;
+        }
+
+        destroyingStructure = true;
+        try {
+            for (BlockPos target : BlockPos.betweenClosed(furnacePos.offset(-1, -1, -1), furnacePos.offset(1, 1, 1))) {
+                BlockState targetState = level.getBlockState(target);
+                if (targetState.is(TCBlocks.PLACEHOLDER_NETHER_BRICK.get())) {
+                    level.setBlock(target, Blocks.NETHER_BRICKS.defaultBlockState(), Block.UPDATE_ALL);
+                } else if (targetState.is(TCBlocks.PLACEHOLDER_OBSIDIAN.get())) {
+                    level.setBlock(target, Blocks.OBSIDIAN.defaultBlockState(), Block.UPDATE_ALL);
+                }
+            }
+
+            Direction output = furnaceState.hasProperty(FACING)
+                    ? furnaceState.getValue(FACING).getOpposite()
+                    : Direction.SOUTH;
+            BlockPos outputPos = furnacePos.relative(output);
+            if (level.getBlockState(outputPos).isAir()) {
+                level.setBlock(outputPos, Blocks.IRON_BARS.defaultBlockState(), Block.UPDATE_ALL);
+            }
+            level.setBlock(furnacePos, Blocks.LAVA.defaultBlockState(), Block.UPDATE_ALL);
+        } finally {
+            destroyingStructure = false;
+        }
     }
 
     private static void nudgeTowardCenter(BlockPos pos, Entity entity) {

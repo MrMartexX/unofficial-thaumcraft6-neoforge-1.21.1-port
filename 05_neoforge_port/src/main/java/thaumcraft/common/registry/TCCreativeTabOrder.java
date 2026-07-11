@@ -124,6 +124,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.LAMP_GROWTH.get());
         acceptVisible(output, TCItems.LAMP_FERTILITY.get());
         acceptVisible(output, TCItems.INFERNAL_FURNACE.get());
+        acceptVisible(output, TCItems.VOID_SIPHON.get());
         acceptVisible(output, TCItems.WAND_WORKBENCH.get());
         acceptVisible(output, TCItems.INFUSION_MATRIX.get());
         acceptVisible(output, TCItems.PILLAR_ARCANE.get());

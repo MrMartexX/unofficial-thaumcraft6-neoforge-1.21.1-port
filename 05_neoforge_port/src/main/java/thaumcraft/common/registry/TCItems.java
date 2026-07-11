@@ -30,6 +30,7 @@ import thaumcraft.common.items.casters.ItemCaster;
 import thaumcraft.common.items.casters.ItemFocus;
 import thaumcraft.common.items.casters.ItemFocusPouch;
 import thaumcraft.common.items.curios.ItemCurioRites;
+import thaumcraft.common.items.resources.ItemSalisMundus;
 import thaumcraft.common.items.curios.ItemThaumonomicon;
 import thaumcraft.common.items.tools.ItemSanityChecker;
 import thaumcraft.common.items.tools.ItemScribingTools;
@@ -267,7 +268,7 @@ public final class TCItems {
     public static final Supplier<BlockItem> ANCIENT_PEDESTAL = blockItem("ancient_pedestal", TCBlocks.ANCIENT_PEDESTAL);
     public static final Supplier<BlockItem> ARCANE_PEDESTAL = blockItem("arcane_pedestal", TCBlocks.ARCANE_PEDESTAL);
     public static final Supplier<Item> CAUSALITY_COLLAPSER = simpleItem("causality_collapser");
-    public static final Supplier<Item> VOID_SIPHON = simpleItem("void_siphon");
+    public static final Supplier<BlockItem> VOID_SIPHON = blockItem("void_siphon", TCBlocks.VOID_SIPHON);
     public static final Supplier<BlockItem> THAUMATORIUM = blockItem("thaumatorium", TCBlocks.THAUMATORIUM);
     public static final Supplier<Item> ESSENTIA_EXPORTER = simpleItem("essentia_exporter");
     public static final Supplier<Item> ESSENTIA_IMPORTER = simpleItem("essentia_importer");
@@ -439,10 +440,7 @@ public final class TCItems {
             case "chunk_fish" -> legacyItem("chunk", "fish", 3);
             case "chunk_rabbit" -> legacyItem("chunk", "rabbit", 4);
             case "chunk_mutton" -> legacyItem("chunk", "mutton", 5);
-            case "salis_mundus" -> new ItemLegacyPlaceholder(
-                    new Item.Properties(),
-                    "tc.placeholder.salis_mundus"
-            );
+            case "salis_mundus" -> new ItemSalisMundus();
             case "alumentum" -> new ItemLegacyPlaceholder(
                     new Item.Properties(),
                     "tc.placeholder.alumentum"

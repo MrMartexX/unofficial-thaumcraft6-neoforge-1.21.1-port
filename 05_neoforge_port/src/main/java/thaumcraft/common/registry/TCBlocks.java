@@ -47,9 +47,11 @@ import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
 import thaumcraft.common.blocks.devices.TCInlayBlock;
 import thaumcraft.common.blocks.devices.TCEffectGlimmerBlock;
 import thaumcraft.common.blocks.devices.TCInfernalFurnaceBlock;
+import thaumcraft.common.blocks.devices.TCInfernalFurnacePlaceholderBlock;
 import thaumcraft.common.blocks.devices.TCLampBlock;
 import thaumcraft.common.blocks.devices.TCMirrorBlock;
 import thaumcraft.common.blocks.devices.TCStabilizerBlock;
+import thaumcraft.common.blocks.devices.TCVoidSiphonBlock;
 import thaumcraft.common.tiles.essentia.TCEssentiaTransfuserBlockEntity;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 
@@ -187,6 +189,11 @@ public final class TCBlocks {
     public static final Supplier<Block> LAMP_GROWTH = BLOCKS.register("lamp_growth", () -> lampBlock(TCLampBlock.Kind.GROWTH));
     public static final Supplier<Block> LAMP_FERTILITY = BLOCKS.register("lamp_fertility", () -> lampBlock(TCLampBlock.Kind.FERTILITY));
     public static final Supplier<Block> INFERNAL_FURNACE = BLOCKS.register("infernal_furnace", () -> infernalFurnaceBlock());
+    public static final Supplier<Block> PLACEHOLDER_NETHER_BRICK = BLOCKS.register("placeholder_brick",
+            () -> infernalFurnacePlaceholderBlock(TCInfernalFurnacePlaceholderBlock.Kind.NETHER_BRICK));
+    public static final Supplier<Block> PLACEHOLDER_OBSIDIAN = BLOCKS.register("placeholder_obsidian",
+            () -> infernalFurnacePlaceholderBlock(TCInfernalFurnacePlaceholderBlock.Kind.OBSIDIAN));
+    public static final Supplier<Block> VOID_SIPHON = BLOCKS.register("void_siphon", () -> voidSiphonBlock());
     public static final Supplier<Block> THAUMATORIUM = BLOCKS.register("thaumatorium", () -> thaumatoriumBlock(false));
     public static final Supplier<Block> THAUMATORIUM_TOP = BLOCKS.register("thaumatorium_top", () -> thaumatoriumBlock(true));
     public static final Supplier<Block> EFFECT_GLIMMER = BLOCKS.register("effect_glimmer", () -> effectGlimmerBlock());
@@ -242,6 +249,23 @@ public final class TCBlocks {
                 .strength(2.5F, 10.0F)
                 .sound(SoundType.STONE)
                 .lightLevel(state -> 14)
+                .noOcclusion()
+                .requiresCorrectToolForDrops());
+    }
+
+    private static Block infernalFurnacePlaceholderBlock(TCInfernalFurnacePlaceholderBlock.Kind kind) {
+        return new TCInfernalFurnacePlaceholderBlock(BlockBehaviour.Properties.ofFullCopy(
+                kind == TCInfernalFurnacePlaceholderBlock.Kind.NETHER_BRICK ? Blocks.NETHER_BRICKS : Blocks.OBSIDIAN)
+                .strength(2.5F, 10.0F)
+                .sound(SoundType.STONE)
+                .noOcclusion()
+                .requiresCorrectToolForDrops(), kind);
+    }
+
+    private static Block voidSiphonBlock() {
+        return new TCVoidSiphonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(5.0F, 10.0F)
+                .sound(SoundType.METAL)
                 .noOcclusion()
                 .requiresCorrectToolForDrops());
     }
