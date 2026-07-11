@@ -138,6 +138,8 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.INLAY.get());
         acceptVisible(output, TCItems.STABILIZER.get());
         acceptVisible(output, TCItems.GOLEM_BUILDER.get());
+        acceptVisible(output, TCItems.FLUX_GOO.get());
+        acceptVisible(output, TCItems.TAINT_FIBRE.get());
     }
 
     private static void addLegacyItemSequence(CreativeModeTab.Output output) {

@@ -116,6 +116,8 @@ neoForge {
             def focusCastExecutionAuditPath = providers.gradleProperty('tcFocusCastExecutionAuditPath').orNull ?: System.getProperty('tc.focusCastExecutionAuditPath')
             def fluxBoreThaumatoriumAuditEnabled = providers.gradleProperty('tcFluxBoreThaumatoriumAudit').orNull ?: System.getProperty('tc.fluxBoreThaumatoriumAudit')
             def fluxBoreThaumatoriumAuditPath = providers.gradleProperty('tcFluxBoreThaumatoriumAuditPath').orNull ?: System.getProperty('tc.fluxBoreThaumatoriumAuditPath')
+            def fluxTaintBlockerAuditEnabled = providers.gradleProperty('tcFluxTaintBlockerAudit').orNull ?: System.getProperty('tc.fluxTaintBlockerAudit')
+            def fluxTaintBlockerAuditPath = providers.gradleProperty('tcFluxTaintBlockerAuditPath').orNull ?: System.getProperty('tc.fluxTaintBlockerAuditPath')
             def minimalGameTestFixtureEnabled = providers.gradleProperty('tcMinimalGameTestFixture').orNull ?: System.getProperty('tc.minimalGameTestFixture')
             def minimalGameTestFixturePath = providers.gradleProperty('tcMinimalGameTestFixturePath').orNull ?: System.getProperty('tc.minimalGameTestFixturePath')
             if (aspectDumpEnabled != null) {
@@ -258,6 +260,12 @@ neoForge {
             }
             if (fluxBoreThaumatoriumAuditPath != null) {
                 systemProperty 'tc.fluxBoreThaumatoriumAuditPath', fluxBoreThaumatoriumAuditPath
+            }
+            if (fluxTaintBlockerAuditEnabled != null) {
+                systemProperty 'tc.fluxTaintBlockerAudit', fluxTaintBlockerAuditEnabled
+            }
+            if (fluxTaintBlockerAuditPath != null) {
+                systemProperty 'tc.fluxTaintBlockerAuditPath', fluxTaintBlockerAuditPath
             }
             if (minimalGameTestFixtureEnabled != null) {
                 systemProperty 'tc.minimalGameTestFixture', minimalGameTestFixtureEnabled

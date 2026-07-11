@@ -44,6 +44,7 @@ import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
 import thaumcraft.common.blocks.crafting.TCThaumatoriumBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
 import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
+import thaumcraft.common.blocks.world.taint.TCTaintFibreBlock;
 import thaumcraft.common.blocks.devices.TCInlayBlock;
 import thaumcraft.common.blocks.devices.TCEffectGlimmerBlock;
 import thaumcraft.common.blocks.devices.TCInfernalFurnaceBlock;
@@ -198,6 +199,7 @@ public final class TCBlocks {
     public static final Supplier<Block> THAUMATORIUM_TOP = BLOCKS.register("thaumatorium_top", () -> thaumatoriumBlock(true));
     public static final Supplier<Block> EFFECT_GLIMMER = BLOCKS.register("effect_glimmer", () -> effectGlimmerBlock());
     public static final Supplier<Block> FLUX_GOO = BLOCKS.register("flux_goo", () -> fluxGooBlock());
+    public static final Supplier<Block> TAINT_FIBRE = BLOCKS.register("taint_fibre", () -> taintFibreBlock());
 
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
@@ -308,6 +310,19 @@ public final class TCBlocks {
                 .noCollission()
                 .noOcclusion()
                 .strength(100.0F));
+    }
+
+    private static Block taintFibreBlock() {
+        return new TCTaintFibreBlock(BlockBehaviour.Properties.of()
+                .mapColor(net.minecraft.world.level.material.MapColor.COLOR_PURPLE)
+                .randomTicks()
+                .replaceable()
+                .noCollission()
+                .noOcclusion()
+                .noLootTable()
+                .strength(1.0F)
+                .sound(SoundType.SCULK)
+                .lightLevel(TCTaintFibreBlock::lightForState));
     }
 
     private static Block inlayBlock() {

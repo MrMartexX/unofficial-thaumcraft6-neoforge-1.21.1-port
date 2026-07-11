@@ -19,6 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thaumcraft.api.aura.AuraHelper;
+import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCMobEffects;
 
 /** Finite legacy Flux Goo state used by infusion and taint world behavior. */
@@ -72,8 +73,16 @@ public final class TCFluxGooBlock extends Block {
         } else if (random.nextBoolean()) {
             AuraHelper.polluteAura(level, pos, 1.0F, true);
             level.removeBlock(pos, false);
+        } else {
+            level.setBlock(pos, taintFibreState(level, pos), Block.UPDATE_CLIENTS);
         }
-        // The alternate level-zero result is taint fibre; it stays deferred until that block exists.
+    }
+
+    public BlockState taintFibreState(Level level, BlockPos pos) {
+        if (TCBlocks.TAINT_FIBRE.get() instanceof TCTaintFibreBlock taintFibre) {
+            return taintFibre.stateForWorld(level, pos);
+        }
+        return TCBlocks.TAINT_FIBRE.get().defaultBlockState();
     }
 
     @Override

@@ -140,6 +140,8 @@ public final class TCItems {
     public static final Supplier<BlockItem> GOLEM_BUILDER = blockItem("golem_builder", TCBlocks.GOLEM_BUILDER);
     public static final Supplier<BlockItem> INLAY = blockItem("inlay", TCBlocks.INLAY);
     public static final Supplier<BlockItem> STABILIZER = blockItem("stabilizer", TCBlocks.STABILIZER);
+    public static final Supplier<BlockItem> FLUX_GOO = blockItem("flux_goo", TCBlocks.FLUX_GOO);
+    public static final Supplier<BlockItem> TAINT_FIBRE = blockItem("taint_fibre", TCBlocks.TAINT_FIBRE);
     public static final Supplier<BlockItem> LOG_GREATWOOD = blockItem("log_greatwood", TCBlocks.LOG_GREATWOOD);
     public static final Supplier<BlockItem> LOG_SILVERWOOD = blockItem("log_silverwood", TCBlocks.LOG_SILVERWOOD);
     public static final Supplier<BlockItem> LEAVES_GREATWOOD = blockItem("leaves_greatwood", TCBlocks.LEAVES_GREATWOOD);
