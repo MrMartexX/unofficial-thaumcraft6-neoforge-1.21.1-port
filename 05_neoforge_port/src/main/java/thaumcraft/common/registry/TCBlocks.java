@@ -45,6 +45,9 @@ import thaumcraft.common.blocks.crafting.TCThaumatoriumBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
 import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
 import thaumcraft.common.blocks.world.taint.TCTaintFibreBlock;
+import thaumcraft.common.blocks.world.taint.TCTaintFeatureBlock;
+import thaumcraft.common.blocks.world.taint.TCTaintLogBlock;
+import thaumcraft.common.blocks.world.taint.TCTaintTerrainBlock;
 import thaumcraft.common.blocks.devices.TCInlayBlock;
 import thaumcraft.common.blocks.devices.TCEffectGlimmerBlock;
 import thaumcraft.common.blocks.devices.TCInfernalFurnaceBlock;
@@ -200,6 +203,12 @@ public final class TCBlocks {
     public static final Supplier<Block> EFFECT_GLIMMER = BLOCKS.register("effect_glimmer", () -> effectGlimmerBlock());
     public static final Supplier<Block> FLUX_GOO = BLOCKS.register("flux_goo", () -> fluxGooBlock());
     public static final Supplier<Block> TAINT_FIBRE = BLOCKS.register("taint_fibre", () -> taintFibreBlock());
+    public static final Supplier<Block> TAINT_CRUST = BLOCKS.register("taint_crust", () -> taintTerrainBlock(TCTaintTerrainBlock.Kind.CRUST));
+    public static final Supplier<Block> TAINT_SOIL = BLOCKS.register("taint_soil", () -> taintTerrainBlock(TCTaintTerrainBlock.Kind.SOIL));
+    public static final Supplier<Block> TAINT_ROCK = BLOCKS.register("taint_rock", () -> taintTerrainBlock(TCTaintTerrainBlock.Kind.ROCK));
+    public static final Supplier<Block> TAINT_GEYSER = BLOCKS.register("taint_geyser", () -> taintTerrainBlock(TCTaintTerrainBlock.Kind.GEYSER));
+    public static final Supplier<Block> TAINT_LOG = BLOCKS.register("taint_log", () -> taintLogBlock());
+    public static final Supplier<Block> TAINT_FEATURE = BLOCKS.register("taint_feature", () -> taintFeatureBlock());
 
     public static final Supplier<Block> LOG_GREATWOOD = BLOCKS.register("log_greatwood", () -> logBlock(false));
     public static final Supplier<Block> LOG_SILVERWOOD = BLOCKS.register("log_silverwood", () -> logBlock(true));
@@ -323,6 +332,33 @@ public final class TCBlocks {
                 .strength(1.0F)
                 .sound(SoundType.SCULK)
                 .lightLevel(TCTaintFibreBlock::lightForState));
+    }
+
+    private static Block taintTerrainBlock(TCTaintTerrainBlock.Kind kind) {
+        return new TCTaintTerrainBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SCULK)
+                .mapColor(net.minecraft.world.level.material.MapColor.COLOR_PURPLE)
+                .randomTicks()
+                .strength(kind == TCTaintTerrainBlock.Kind.GEYSER ? 10.0F : 1.5F, 100.0F)
+                .sound(SoundType.SCULK)
+                .requiresCorrectToolForDrops(), kind);
+    }
+
+    private static Block taintLogBlock() {
+        return new TCTaintLogBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_LOG)
+                .mapColor(net.minecraft.world.level.material.MapColor.COLOR_PURPLE)
+                .randomTicks()
+                .strength(3.0F, 100.0F)
+                .sound(SoundType.SCULK));
+    }
+
+    private static Block taintFeatureBlock() {
+        return new TCTaintFeatureBlock(BlockBehaviour.Properties.of()
+                .mapColor(net.minecraft.world.level.material.MapColor.COLOR_PURPLE)
+                .randomTicks()
+                .strength(0.1F, 0.1F)
+                .sound(SoundType.SCULK)
+                .lightLevel(state -> 10)
+                .noOcclusion());
     }
 
     private static Block inlayBlock() {

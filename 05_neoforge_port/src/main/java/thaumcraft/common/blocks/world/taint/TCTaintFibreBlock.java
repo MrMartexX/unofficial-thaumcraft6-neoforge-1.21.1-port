@@ -32,7 +32,7 @@ import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMobEffects;
 
-/** Legacy TC6 taint fibre surface/growth block. Full spread remains owned by the taint seed subsystem. */
+/** Legacy TC6 taint fibre surface/growth block. */
 public final class TCTaintFibreBlock extends Block {
     public static final BooleanProperty NORTH = BooleanProperty.create("north");
     public static final BooleanProperty EAST = BooleanProperty.create("east");
@@ -176,6 +176,16 @@ public final class TCTaintFibreBlock extends Block {
         return applyWalkTaint(living);
     }
 
+    public static boolean applyWalkTaint(LivingEntity living) {
+        if (living.getType().is(EntityTypeTags.UNDEAD)) {
+            return false;
+        }
+        MobEffectInstance effect = new MobEffectInstance(TCMobEffects.FLUX_TAINT, 200, 0, false, true);
+        effect.getCures().clear();
+        living.addEffect(effect);
+        return true;
+    }
+
     public static VoxelShape shapeForState(BlockState state) {
         VoxelShape shape = Shapes.empty();
         if (state.getValue(UP)) {
@@ -250,7 +260,7 @@ public final class TCTaintFibreBlock extends Block {
     }
 
     public static boolean isNearTaintSeed(LevelReader level, BlockPos pos) {
-        return false;
+        return TCTaintHelper.isNearTaintSeed(level, pos);
     }
 
     private static int legacyGrowth(LevelReader level, BlockPos pos) {
@@ -281,8 +291,7 @@ public final class TCTaintFibreBlock extends Block {
 
     private static boolean isTaintState(BlockState state) {
         Block block = state.getBlock();
-        return block == TCBlocks.TAINT_FIBRE.get()
-                || block == TCBlocks.FLUX_GOO.get();
+        return TCTaintHelper.isTaintState(state);
     }
 
     private static boolean hasNoGrowth(BlockState state) {
@@ -290,16 +299,6 @@ public final class TCTaintFibreBlock extends Block {
                 && !state.getValue(GROWTH2)
                 && !state.getValue(GROWTH3)
                 && !state.getValue(GROWTH4);
-    }
-
-    private static boolean applyWalkTaint(LivingEntity living) {
-        if (living.getType().is(EntityTypeTags.UNDEAD)) {
-            return false;
-        }
-        MobEffectInstance effect = new MobEffectInstance(TCMobEffects.FLUX_TAINT, 200, 0, false, true);
-        effect.getCures().clear();
-        living.addEffect(effect);
-        return true;
     }
 
     private static void die(Level level, BlockPos pos) {

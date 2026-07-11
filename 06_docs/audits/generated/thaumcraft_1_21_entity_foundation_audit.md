@@ -7,9 +7,13 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Check | Status | Notes |
 | --- | --- | --- |
 | legacy entity catalog count | PASS | expected 43, got 43 |
-| registered foundation count | PASS | expected SpecialItem and FollowItem only in this batch |
+| registered foundation count | PASS | expected SpecialItem, FollowItem, FluxRift, ArcaneBore, TaintSeed and TaintSeedPrime |
 | SpecialItem registry id | PASS | expected thaumcraft:special_item, got thaumcraft:special_item |
 | FollowItem registry id | PASS | expected thaumcraft:follow_item, got thaumcraft:follow_item |
+| FluxRift registry id | PASS | expected thaumcraft:flux_rift, got thaumcraft:flux_rift |
+| ArcaneBore registry id | PASS | expected thaumcraft:arcane_bore, got thaumcraft:arcane_bore |
+| TaintSeed registry id | PASS | expected thaumcraft:taint_seed, got thaumcraft:taint_seed |
+| TaintSeedPrime registry id | PASS | expected thaumcraft:taint_seed_prime, got thaumcraft:taint_seed_prime |
 | SpecialItem type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | FollowItem type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=false |
 | foundation constructors | PASS | registry factories plus special/follow item stack and target coordinates |
@@ -20,7 +24,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | --- | --- | --- | ---: | ---: | --- | --- | --- |
 | CultistPortalGreater | EntityCultistPortalGreater |  | 64 | 20 | false | defer | Eldritch/cult portal behavior and renderer |
 | CultistPortalLesser | EntityCultistPortalLesser |  | 64 | 20 | false | defer | Eldritch/cult portal behavior and renderer |
-| FluxRift | EntityFluxRift |  | 64 | 20 | false | defer | Flux/aura pollution and rift renderer |
+| FluxRift | EntityFluxRift | thaumcraft:flux_rift | 64 | 20 | false | registered_foundation | Flux/aura lifecycle, collapse and rift renderer foundation |
 | SpecialItem | EntitySpecialItem | thaumcraft:special_item | 64 | 20 | true | registered_foundation | Legacy item-entity lift and explosion immunity |
 | FollowItem | EntityFollowingItem | thaumcraft:follow_item | 64 | 20 | false | registered_foundation | Legacy following item movement and spawn data |
 | FallingTaint | EntityFallingTaint |  | 64 | 3 | true | defer | Taint block physics and taint world mutation |
@@ -36,7 +40,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Focusmine | EntityFocusMine |  | 64 | 20 | true | defer | Focus/caster mine execution |
 | TurretBasic | EntityTurretCrossbow |  | 64 | 3 | true | defer | Construct/turret AI and renderer |
 | TurretAdvanced | EntityTurretCrossbowAdvanced |  | 64 | 3 | true | defer | Construct/turret AI and renderer |
-| ArcaneBore | EntityArcaneBore |  | 64 | 3 | true | defer | Arcane Bore mining and renderer |
+| ArcaneBore | EntityArcaneBore | thaumcraft:arcane_bore | 64 | 3 | true | registered_foundation | Arcane Bore entity, menu, vis mining and renderer foundation |
 | Golem | EntityThaumcraftGolem |  | 64 | 3 | true | defer | Golem material/part/AI/seal subsystem |
 | EldritchWarden | EntityEldritchWarden |  | 64 | 3 | true | defer | Eldritch boss AI and renderer |
 | EldritchGolem | EntityEldritchGolem |  | 64 | 3 | true | defer | Eldritch boss AI and renderer |
@@ -59,5 +63,5 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Taintacle | EntityTaintacle |  | 64 | 3 | false | defer | Taint mob AI and renderer |
 | TaintacleTiny | EntityTaintacleSmall |  | 64 | 3 | false | defer | Taint mob AI and renderer |
 | TaintSwarm | EntityTaintSwarm |  | 64 | 3 | false | defer | Taint mob AI and renderer |
-| TaintSeed | EntityTaintSeed |  | 64 | 20 | false | defer | Taint spread and seed AI |
-| TaintSeedPrime | EntityTaintSeedPrime |  | 64 | 20 | false | defer | Taint spread and seed AI |
+| TaintSeed | EntityTaintSeed | thaumcraft:taint_seed | 64 | 20 | false | registered_foundation | Taint spread seed registry, radius and server spread loop |
+| TaintSeedPrime | EntityTaintSeedPrime | thaumcraft:taint_seed_prime | 64 | 20 | false | registered_foundation | Prime Taint Seed spread area, health and damage variant |

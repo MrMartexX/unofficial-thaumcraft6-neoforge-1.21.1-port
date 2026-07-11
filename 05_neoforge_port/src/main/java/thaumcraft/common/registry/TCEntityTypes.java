@@ -14,6 +14,7 @@ import thaumcraft.common.entities.TCArcaneBoreEntity;
 import thaumcraft.common.entities.TCFollowingItemEntity;
 import thaumcraft.common.entities.TCFluxRiftEntity;
 import thaumcraft.common.entities.TCSpecialItemEntity;
+import thaumcraft.common.entities.TCTaintSeedEntity;
 
 public final class TCEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
@@ -50,6 +51,22 @@ public final class TCEntityTypes {
                     .setUpdateInterval(3)
                     .setShouldReceiveVelocityUpdates(true)
                     .build(Thaumcraft.MODID + ":arcane_bore"));
+
+    public static final Supplier<EntityType<TCTaintSeedEntity>> TAINT_SEED = ENTITY_TYPES.register("taint_seed", () ->
+            EntityType.Builder.<TCTaintSeedEntity>of(TCTaintSeedEntity::new, MobCategory.MONSTER)
+                    .sized(1.5F, 1.25F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build(Thaumcraft.MODID + ":taint_seed"));
+
+    public static final Supplier<EntityType<TCTaintSeedEntity>> TAINT_SEED_PRIME = ENTITY_TYPES.register("taint_seed_prime", () ->
+            EntityType.Builder.<TCTaintSeedEntity>of(TCTaintSeedEntity::new, MobCategory.MONSTER)
+                    .sized(2.0F, 2.0F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build(Thaumcraft.MODID + ":taint_seed_prime"));
 
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
             spec("CultistPortalGreater", "EntityCultistPortalGreater", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
@@ -93,8 +110,8 @@ public final class TCEntityTypes {
             spec("Taintacle", "EntityTaintacle", null, 64, 3, false, "defer", "Taint mob AI and renderer"),
             spec("TaintacleTiny", "EntityTaintacleSmall", null, 64, 3, false, "defer", "Taint mob AI and renderer"),
             spec("TaintSwarm", "EntityTaintSwarm", null, 64, 3, false, "defer", "Taint mob AI and renderer"),
-            spec("TaintSeed", "EntityTaintSeed", null, 64, 20, false, "defer", "Taint spread and seed AI"),
-            spec("TaintSeedPrime", "EntityTaintSeedPrime", null, 64, 20, false, "defer", "Taint spread and seed AI")
+            spec("TaintSeed", "EntityTaintSeed", "taint_seed", 64, 20, false, "registered_foundation", "Taint spread seed registry, radius and server spread loop"),
+            spec("TaintSeedPrime", "EntityTaintSeedPrime", "taint_seed_prime", 64, 20, false, "registered_foundation", "Prime Taint Seed spread area, health and damage variant")
     );
 
     private TCEntityTypes() {
@@ -118,6 +135,8 @@ public final class TCEntityTypes {
 
     public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
         event.put(ARCANE_BORE.get(), TCArcaneBoreEntity.createAttributes().build());
+        event.put(TAINT_SEED.get(), TCTaintSeedEntity.createAttributes().build());
+        event.put(TAINT_SEED_PRIME.get(), TCTaintSeedEntity.createPrimeAttributes().build());
     }
 
     private static LegacyEntitySpec spec(

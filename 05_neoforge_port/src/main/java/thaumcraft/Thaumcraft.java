@@ -20,6 +20,7 @@ import thaumcraft.common.aspects.TCAspectAssignments;
 import thaumcraft.common.aspects.TCAspectDumpExporter;
 import thaumcraft.common.aspects.TCAspectReloadValidator;
 import thaumcraft.common.blocks.world.taint.TCFluxTaintBlockerAuditExporter;
+import thaumcraft.common.blocks.world.taint.TCTaintEcologyBlockerAuditExporter;
 import thaumcraft.common.crafting.infusion.TCInfusionBehaviorAuditExporter;
 import thaumcraft.common.crafting.infusion.TCInfusionNetwork;
 import thaumcraft.common.aspects.TCGeneratedAspectRecipeGenerator;
@@ -148,6 +149,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCEntityFoundationAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFluxBoreThaumatoriumBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFluxTaintBlockerAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCTaintEcologyBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCItemEquipmentBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCasterCoreAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCastExecutionAuditExporter::onServerStarted);

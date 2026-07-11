@@ -24,7 +24,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 2;
+    private static final int REGISTERED_FOUNDATION_COUNT = 6;
 
     private TCEntityFoundationAudit() {
     }
@@ -90,11 +90,15 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected SpecialItem and FollowItem only in this batch"
+                "expected SpecialItem, FollowItem, FluxRift, ArcaneBore, TaintSeed and TaintSeedPrime"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
         checks.add(checkRegisteredType("FollowItem", TCEntityTypes.FOLLOW_ITEM.get()));
+        checks.add(checkRegisteredType("FluxRift", TCEntityTypes.FLUX_RIFT.get()));
+        checks.add(checkRegisteredType("ArcaneBore", TCEntityTypes.ARCANE_BORE.get()));
+        checks.add(checkRegisteredType("TaintSeed", TCEntityTypes.TAINT_SEED.get()));
+        checks.add(checkRegisteredType("TaintSeedPrime", TCEntityTypes.TAINT_SEED_PRIME.get()));
         checks.add(checkTypeShape("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get(), 64, 20, true));
         checks.add(checkTypeShape("FollowItem", TCEntityTypes.FOLLOW_ITEM.get(), 64, 20, false));
         checks.add(checkConstructors(server.overworld()));

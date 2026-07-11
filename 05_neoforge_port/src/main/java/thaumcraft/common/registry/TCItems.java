@@ -142,6 +142,12 @@ public final class TCItems {
     public static final Supplier<BlockItem> STABILIZER = blockItem("stabilizer", TCBlocks.STABILIZER);
     public static final Supplier<BlockItem> FLUX_GOO = blockItem("flux_goo", TCBlocks.FLUX_GOO);
     public static final Supplier<BlockItem> TAINT_FIBRE = blockItem("taint_fibre", TCBlocks.TAINT_FIBRE);
+    public static final Supplier<BlockItem> TAINT_CRUST = blockItem("taint_crust", TCBlocks.TAINT_CRUST);
+    public static final Supplier<BlockItem> TAINT_SOIL = blockItem("taint_soil", TCBlocks.TAINT_SOIL);
+    public static final Supplier<BlockItem> TAINT_ROCK = blockItem("taint_rock", TCBlocks.TAINT_ROCK);
+    public static final Supplier<BlockItem> TAINT_GEYSER = blockItem("taint_geyser", TCBlocks.TAINT_GEYSER);
+    public static final Supplier<BlockItem> TAINT_LOG = blockItem("taint_log", TCBlocks.TAINT_LOG);
+    public static final Supplier<BlockItem> TAINT_FEATURE = blockItem("taint_feature", TCBlocks.TAINT_FEATURE);
     public static final Supplier<BlockItem> LOG_GREATWOOD = blockItem("log_greatwood", TCBlocks.LOG_GREATWOOD);
     public static final Supplier<BlockItem> LOG_SILVERWOOD = blockItem("log_silverwood", TCBlocks.LOG_SILVERWOOD);
     public static final Supplier<BlockItem> LEAVES_GREATWOOD = blockItem("leaves_greatwood", TCBlocks.LEAVES_GREATWOOD);

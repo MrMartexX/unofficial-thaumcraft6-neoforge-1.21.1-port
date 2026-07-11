@@ -38,6 +38,14 @@ public final class TCConfig {
             .comment("Matches the legacy Thaumcraft wussMode option: research progression does not award warp.")
             .define("wussMode", false);
 
+    public static final ModConfigSpec.DoubleValue TAINT_SPREAD_RATE = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.taintSpreadRate. 100 means normal TC6 spread rate.")
+            .defineInRange("taintSpreadRate", 100.0D, 0.0D, 1000.0D);
+
+    public static final ModConfigSpec.IntValue TAINT_SPREAD_AREA = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.taintSpreadArea radius used by Taint Seeds.")
+            .defineInRange("taintSpreadArea", 32, 1, 256);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private TCConfig() {
