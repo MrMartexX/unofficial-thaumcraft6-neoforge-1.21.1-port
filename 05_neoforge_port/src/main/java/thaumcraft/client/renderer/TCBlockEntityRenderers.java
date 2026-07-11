@@ -19,5 +19,6 @@ public final class TCBlockEntityRenderers {
         event.registerBlockEntityRenderer(TCBlockEntities.INFUSION_MATRIX.get(), TCInfusionMatrixRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.BELLOWS.get(), TCBellowsRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.TUBE_VALVE.get(), TCTubeValveRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.THAUMATORIUM.get(), TCThaumatoriumRenderer::new);
     }
 }

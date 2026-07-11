@@ -7,9 +7,12 @@ import java.util.function.Supplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.entities.TCArcaneBoreEntity;
 import thaumcraft.common.entities.TCFollowingItemEntity;
+import thaumcraft.common.entities.TCFluxRiftEntity;
 import thaumcraft.common.entities.TCSpecialItemEntity;
 
 public final class TCEntityTypes {
@@ -32,10 +35,26 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(false)
                     .build(Thaumcraft.MODID + ":follow_item"));
 
+    public static final Supplier<EntityType<TCFluxRiftEntity>> FLUX_RIFT = ENTITY_TYPES.register("flux_rift", () ->
+            EntityType.Builder.<TCFluxRiftEntity>of(TCFluxRiftEntity::new, MobCategory.MISC)
+                    .sized(2.0F, 2.0F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build(Thaumcraft.MODID + ":flux_rift"));
+
+    public static final Supplier<EntityType<TCArcaneBoreEntity>> ARCANE_BORE = ENTITY_TYPES.register("arcane_bore", () ->
+            EntityType.Builder.<TCArcaneBoreEntity>of(TCArcaneBoreEntity::new, MobCategory.MISC)
+                    .sized(0.9F, 0.9F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":arcane_bore"));
+
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
             spec("CultistPortalGreater", "EntityCultistPortalGreater", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
             spec("CultistPortalLesser", "EntityCultistPortalLesser", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
-            spec("FluxRift", "EntityFluxRift", null, 64, 20, false, "defer", "Flux/aura pollution and rift renderer"),
+            spec("FluxRift", "EntityFluxRift", "flux_rift", 64, 20, false, "registered_foundation", "Flux/aura lifecycle, collapse and rift renderer foundation"),
             spec("SpecialItem", "EntitySpecialItem", "special_item", 64, 20, true, "registered_foundation", "Legacy item-entity lift and explosion immunity"),
             spec("FollowItem", "EntityFollowingItem", "follow_item", 64, 20, false, "registered_foundation", "Legacy following item movement and spawn data"),
             spec("FallingTaint", "EntityFallingTaint", null, 64, 3, true, "defer", "Taint block physics and taint world mutation"),
@@ -51,7 +70,7 @@ public final class TCEntityTypes {
             spec("Focusmine", "EntityFocusMine", null, 64, 20, true, "defer", "Focus/caster mine execution"),
             spec("TurretBasic", "EntityTurretCrossbow", null, 64, 3, true, "defer", "Construct/turret AI and renderer"),
             spec("TurretAdvanced", "EntityTurretCrossbowAdvanced", null, 64, 3, true, "defer", "Construct/turret AI and renderer"),
-            spec("ArcaneBore", "EntityArcaneBore", null, 64, 3, true, "defer", "Arcane Bore mining and renderer"),
+            spec("ArcaneBore", "EntityArcaneBore", "arcane_bore", 64, 3, true, "registered_foundation", "Arcane Bore entity, menu, vis mining and renderer foundation"),
             spec("Golem", "EntityThaumcraftGolem", null, 64, 3, true, "defer", "Golem material/part/AI/seal subsystem"),
             spec("EldritchWarden", "EntityEldritchWarden", null, 64, 3, true, "defer", "Eldritch boss AI and renderer"),
             spec("EldritchGolem", "EntityEldritchGolem", null, 64, 3, true, "defer", "Eldritch boss AI and renderer"),
@@ -95,6 +114,10 @@ public final class TCEntityTypes {
         return LEGACY_ENTITY_SPECS.stream()
                 .filter(spec -> spec.legacyId().equalsIgnoreCase(legacyId))
                 .findFirst();
+    }
+
+    public static void onEntityAttributeCreation(EntityAttributeCreationEvent event) {
+        event.put(ARCANE_BORE.get(), TCArcaneBoreEntity.createAttributes().build());
     }
 
     private static LegacyEntitySpec spec(

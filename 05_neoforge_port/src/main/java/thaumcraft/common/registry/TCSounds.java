@@ -53,6 +53,10 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "infuser")));
     public static final Supplier<SoundEvent> INFUSERSTART = SOUND_EVENTS.register("infuserstart", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "infuserstart")));
+    public static final Supplier<SoundEvent> RUMBLE = SOUND_EVENTS.register("rumble", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "rumble")));
+    public static final Supplier<SoundEvent> EVILPORTAL = SOUND_EVENTS.register("evilportal", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "evilportal")));
 
     private TCSounds() {
     }

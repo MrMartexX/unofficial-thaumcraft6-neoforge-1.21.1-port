@@ -20,5 +20,6 @@ public final class TCMenuScreens {
         event.register(TCMenus.THAUMATORIUM.get(), TCThaumatoriumScreen::new);
         event.register(TCMenus.HAND_MIRROR.get(), TCHandMirrorScreen::new);
         event.register(TCMenus.VOID_SIPHON.get(), TCVoidSiphonScreen::new);
+        event.register(TCMenus.ARCANE_BORE.get(), TCArcaneBoreScreen::new);
     }
 }

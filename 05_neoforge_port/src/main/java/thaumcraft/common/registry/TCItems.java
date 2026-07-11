@@ -34,6 +34,7 @@ import thaumcraft.common.items.resources.ItemSalisMundus;
 import thaumcraft.common.items.curios.ItemThaumonomicon;
 import thaumcraft.common.items.tools.ItemSanityChecker;
 import thaumcraft.common.items.tools.ItemScribingTools;
+import thaumcraft.common.items.tools.ItemArcaneBore;
 import thaumcraft.common.items.tools.ItemHandMirror;
 import thaumcraft.common.items.tools.ItemThaumometer;
 import thaumcraft.common.items.tools.TCToolTiers;
@@ -282,7 +283,7 @@ public final class TCItems {
     public static final Supplier<BlockItem> LAMP_FERTILITY = blockItem("lamp_fertility", TCBlocks.LAMP_FERTILITY);
     public static final Supplier<BlockItem> LAMP_GROWTH = blockItem("lamp_growth", TCBlocks.LAMP_GROWTH);
     public static final Supplier<BlockItem> INFERNAL_FURNACE = blockItem("infernal_furnace", TCBlocks.INFERNAL_FURNACE);
-    public static final Supplier<Item> ARCANE_BORE = simpleItem("arcane_bore");
+    public static final Supplier<Item> ARCANE_BORE = ITEMS.register("arcane_bore", ItemArcaneBore::new);
     public static final Supplier<Item> PRIMAL_CRUSHER = simpleItem("primal_crusher");
     public static final Supplier<Item> VOIDSEER_PEARL = simpleItem("voidseer_pearl");
     public static final Supplier<Item> VOID_ROBE_LEGS = ITEMS.register("void_robe_legs", () -> new ItemVoidRobeArmor(ArmorItem.Type.LEGGINGS));

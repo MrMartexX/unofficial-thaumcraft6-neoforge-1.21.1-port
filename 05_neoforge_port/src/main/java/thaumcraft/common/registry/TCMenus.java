@@ -7,6 +7,7 @@ import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
+import thaumcraft.common.menu.TCArcaneBoreMenu;
 import thaumcraft.common.menu.TCFocalManipulatorMenu;
 import thaumcraft.common.menu.TCHandMirrorMenu;
 import thaumcraft.common.menu.TCResearchTableMenu;
@@ -31,6 +32,8 @@ public final class TCMenus {
             MENUS.register("hand_mirror", () -> IMenuTypeExtension.create(TCHandMirrorMenu::new));
     public static final Supplier<MenuType<TCVoidSiphonMenu>> VOID_SIPHON =
             MENUS.register("void_siphon", () -> IMenuTypeExtension.create(TCVoidSiphonMenu::new));
+    public static final Supplier<MenuType<TCArcaneBoreMenu>> ARCANE_BORE =
+            MENUS.register("arcane_bore", () -> IMenuTypeExtension.create(TCArcaneBoreMenu::new));
 
     private TCMenus() {
     }

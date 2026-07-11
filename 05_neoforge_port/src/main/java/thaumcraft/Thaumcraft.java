@@ -26,6 +26,7 @@ import thaumcraft.common.crafting.crucible.TCCrucibleBehaviorAuditExporter;
 import thaumcraft.common.crafting.crucible.TCThaumatoriumBehaviorAuditExporter;
 import thaumcraft.common.crafting.crucible.TCThaumatoriumNetwork;
 import thaumcraft.common.entities.TCEntityFoundationAuditExporter;
+import thaumcraft.common.entities.TCFluxBoreThaumatoriumBlockerAuditExporter;
 import thaumcraft.common.essentia.transport.TCEssentiaTransportBehaviorAuditExporter;
 import thaumcraft.common.tiles.devices.TCLampDeviceAuditExporter;
 import thaumcraft.common.tiles.devices.TCInfernalFurnaceBehaviorAuditExporter;
@@ -93,6 +94,7 @@ public final class Thaumcraft {
         TCRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         TCSounds.SOUND_EVENTS.register(modEventBus);
         TCCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+        modEventBus.addListener(TCEntityTypes::onEntityAttributeCreation);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             TCClientTooltipComponents.register(modEventBus);
             TCMenuScreens.register(modEventBus);
@@ -143,6 +145,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCInfernalFurnaceBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCStandaloneDeviceBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCEntityFoundationAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCFluxBoreThaumatoriumBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCItemEquipmentBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCasterCoreAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCastExecutionAuditExporter::onServerStarted);

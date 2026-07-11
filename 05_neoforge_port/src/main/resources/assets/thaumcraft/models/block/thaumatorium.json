@@ -1,22 +1,13 @@
 {
-  "parent": "minecraft:block/block",
+  "loader": "neoforge:obj",
+  "model": "thaumcraft:models/block/thaumatorium.obj",
+  "automatic_culling": false,
+  "shade_quads": true,
+  "flip_v": false,
+  "emissive_ambient": false,
   "textures": {
     "particle": "thaumcraft:block/thaumatorium",
-    "body": "thaumcraft:block/thaumatorium",
-    "metal": "thaumcraft:block/metal_alchemical"
+    "texture": "thaumcraft:block/thaumatorium"
   },
-  "elements": [
-    {
-      "from": [0, 0, 0],
-      "to": [16, 16, 16],
-      "faces": {
-        "north": {"texture": "#body"},
-        "east": {"texture": "#body"},
-        "south": {"texture": "#body"},
-        "west": {"texture": "#body"},
-        "up": {"texture": "#metal"},
-        "down": {"texture": "#metal"}
-      }
-    }
-  ]
+  "mtl_override": "thaumcraft:models/block/thaumatorium.mtl"
 }

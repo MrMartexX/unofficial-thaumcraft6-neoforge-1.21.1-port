@@ -16,5 +16,7 @@ public final class TCEntityRenderers {
     private static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(TCEntityTypes.SPECIAL_ITEM.get(), ItemEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FOLLOW_ITEM.get(), ItemEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.FLUX_RIFT.get(), TCFluxRiftRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.ARCANE_BORE.get(), TCArcaneBoreRenderer::new);
     }
 }

@@ -176,6 +176,18 @@ public class TCThaumatoriumBlockEntity extends BlockEntity implements WorldlyCon
         return List.copyOf(selectedRecipes);
     }
 
+    public ItemStack displayRecipeOutput() {
+        if (level == null || selectedRecipes.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        int index = currentCraft >= 0 && currentCraft < selectedRecipes.size()
+                ? currentCraft
+                : (int) ((level.getGameTime() / 20L) % selectedRecipes.size());
+        return recipeById(selectedRecipes.get(index))
+                .map(holder -> holder.value().result())
+                .orElse(ItemStack.EMPTY);
+    }
+
     public List<RecipeHolder<TCCrucibleRecipe>> availableRecipes(ServerPlayer player) {
         if (level == null || player == null || getItem(SLOT_CATALYST).isEmpty()) {
             return List.of();
