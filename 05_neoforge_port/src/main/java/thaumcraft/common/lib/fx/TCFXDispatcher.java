@@ -151,6 +151,53 @@ public final class TCFXDispatcher {
         drawLegacyFX(level, data, x, y, z, motionX, motionY, motionZ);
     }
 
+    public static void drawWispParticles(
+            Level level,
+            double x,
+            double y,
+            double z,
+            double motionX,
+            double motionY,
+            double motionZ,
+            int color,
+            int delay
+    ) {
+        if (!level.isClientSide()) {
+            return;
+        }
+
+        RandomSource random = level.random;
+        float red = ((color >> 16) & 0xFF) / 255.0F;
+        float green = ((color >> 8) & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+        float scale = 1.0F + random.nextFloat() * 0.25F;
+        TCLegacyFXData data = TCLegacyFXData.generic(
+                10 + random.nextInt(5),
+                264,
+                8,
+                1,
+                64,
+                true,
+                0,
+                red,
+                green,
+                blue,
+                0.5F,
+                scale
+        ).withScale(scale, 0.05F)
+                .withMotion(
+                        TCLegacyFXData.LEGACY_DEFAULT_SLOWDOWN,
+                        0.0F,
+                        0.0025D,
+                        0.0D,
+                        0.0025D,
+                        2.5E-4D,
+                        0.0D
+                );
+
+        drawLegacyFXWithDelay(level, data, x, y, z, motionX, motionY, motionZ, delay);
+    }
+
     public static void drawGenericParticles(
             Level level,
             double x,

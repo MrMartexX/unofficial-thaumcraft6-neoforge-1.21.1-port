@@ -158,7 +158,7 @@ public final class TCEntityTypes {
             spec("TaintacleGiant", "EntityTaintacleGiant", null, 96, 3, false, "defer", "Taint mob AI and renderer"),
             spec("BrainyZombie", "EntityBrainyZombie", null, 64, 3, true, "defer", "Thaumcraft mob AI, loot and spawn rules"),
             spec("GiantBrainyZombie", "EntityGiantBrainyZombie", null, 64, 3, true, "defer", "Thaumcraft mob AI, loot and spawn rules"),
-            spec("Wisp", "EntityWisp", "wisp", 64, 3, false, "registered_foundation", "Wisp type/aspect persistence, rift-event spawn dependency and minimal server foundation; full AI/render remains deferred"),
+            spec("Wisp", "EntityWisp", "wisp", 64, 3, false, "registered_foundation", "Wisp type/aspect persistence, rift-event spawn dependency, legacy flight/target/zap AI, billboard render contract and PacketFXWispZap-equivalent payload"),
             spec("Firebat", "EntityFireBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
             spec("Spellbat", "EntitySpellBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
             spec("Pech", "EntityPech", null, 64, 3, true, "defer", "Pech AI, trading and renderer"),

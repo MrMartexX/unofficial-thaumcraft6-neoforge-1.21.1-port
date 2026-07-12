@@ -118,6 +118,8 @@ neoForge {
             def fluxBoreThaumatoriumAuditPath = providers.gradleProperty('tcFluxBoreThaumatoriumAuditPath').orNull ?: System.getProperty('tc.fluxBoreThaumatoriumAuditPath')
             def fluxRiftConsequenceAuditEnabled = providers.gradleProperty('tcFluxRiftConsequenceAudit').orNull ?: System.getProperty('tc.fluxRiftConsequenceAudit')
             def fluxRiftConsequenceAuditPath = providers.gradleProperty('tcFluxRiftConsequenceAuditPath').orNull ?: System.getProperty('tc.fluxRiftConsequenceAuditPath')
+            def wispBehaviorAuditEnabled = providers.gradleProperty('tcWispBehaviorAudit').orNull ?: System.getProperty('tc.wispBehaviorAudit')
+            def wispBehaviorAuditPath = providers.gradleProperty('tcWispBehaviorAuditPath').orNull ?: System.getProperty('tc.wispBehaviorAuditPath')
             def fluxTaintBlockerAuditEnabled = providers.gradleProperty('tcFluxTaintBlockerAudit').orNull ?: System.getProperty('tc.fluxTaintBlockerAudit')
             def fluxTaintBlockerAuditPath = providers.gradleProperty('tcFluxTaintBlockerAuditPath').orNull ?: System.getProperty('tc.fluxTaintBlockerAuditPath')
             def taintEcologyBlockerAuditEnabled = providers.gradleProperty('tcTaintEcologyBlockerAudit').orNull ?: System.getProperty('tc.taintEcologyBlockerAudit')
@@ -274,6 +276,12 @@ neoForge {
             }
             if (fluxRiftConsequenceAuditPath != null) {
                 systemProperty 'tc.fluxRiftConsequenceAuditPath', fluxRiftConsequenceAuditPath
+            }
+            if (wispBehaviorAuditEnabled != null) {
+                systemProperty 'tc.wispBehaviorAudit', wispBehaviorAuditEnabled
+            }
+            if (wispBehaviorAuditPath != null) {
+                systemProperty 'tc.wispBehaviorAuditPath', wispBehaviorAuditPath
             }
             if (fluxTaintBlockerAuditEnabled != null) {
                 systemProperty 'tc.fluxTaintBlockerAudit', fluxTaintBlockerAuditEnabled

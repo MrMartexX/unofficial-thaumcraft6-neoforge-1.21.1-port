@@ -28,10 +28,12 @@ import thaumcraft.common.crafting.crucible.TCCrucibleBehaviorAuditExporter;
 import thaumcraft.common.crafting.crucible.TCThaumatoriumBehaviorAuditExporter;
 import thaumcraft.common.crafting.crucible.TCThaumatoriumNetwork;
 import thaumcraft.common.entities.TCEntityFoundationAuditExporter;
+import thaumcraft.common.entities.TCEntityFXNetwork;
 import thaumcraft.common.entities.TCFallingTaintBlockerAuditExporter;
 import thaumcraft.common.entities.TCFluxBoreThaumatoriumBlockerAuditExporter;
 import thaumcraft.common.entities.TCFluxRiftConsequenceAuditExporter;
 import thaumcraft.common.entities.TCTaintMobBlockerAuditExporter;
+import thaumcraft.common.entities.TCWispBehaviorAuditExporter;
 import thaumcraft.common.essentia.transport.TCEssentiaTransportBehaviorAuditExporter;
 import thaumcraft.common.tiles.devices.TCLampDeviceAuditExporter;
 import thaumcraft.common.tiles.devices.TCInfernalFurnaceBehaviorAuditExporter;
@@ -115,6 +117,7 @@ public final class Thaumcraft {
         modEventBus.addListener(TCResearchTableNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCThaumonomiconNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCFocalManipulatorNetwork::onRegisterPayloadHandlers);
+        modEventBus.addListener(TCEntityFXNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCEssentiaCapabilities::register);
         modEventBus.addListener(TCMachineCapabilities::register);
         modContainer.registerConfig(ModConfig.Type.COMMON, TCConfig.SPEC);
@@ -152,6 +155,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCEntityFoundationAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFluxBoreThaumatoriumBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFluxRiftConsequenceAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCWispBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFluxTaintBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCTaintEcologyBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCTaintMobBlockerAuditExporter::onServerStarted);

@@ -62,7 +62,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | TaintacleGiant | EntityTaintacleGiant |  | 96 | 3 | false | defer | Taint mob AI and renderer |
 | BrainyZombie | EntityBrainyZombie |  | 64 | 3 | true | defer | Thaumcraft mob AI, loot and spawn rules |
 | GiantBrainyZombie | EntityGiantBrainyZombie |  | 64 | 3 | true | defer | Thaumcraft mob AI, loot and spawn rules |
-| Wisp | EntityWisp | thaumcraft:wisp | 64 | 3 | false | registered_foundation | Wisp type/aspect persistence, rift-event spawn dependency and minimal server foundation; full AI/render remains deferred |
+| Wisp | EntityWisp | thaumcraft:wisp | 64 | 3 | false | registered_foundation | Wisp type/aspect persistence, rift-event spawn dependency, legacy flight/target/zap AI, billboard render contract and PacketFXWispZap-equivalent payload |
 | Firebat | EntityFireBat |  | 64 | 3 | false | defer | Bat AI variant and renderer |
 | Spellbat | EntitySpellBat |  | 64 | 3 | false | defer | Bat AI variant and renderer |
 | Pech | EntityPech |  | 64 | 3 | true | defer | Pech AI, trading and renderer |

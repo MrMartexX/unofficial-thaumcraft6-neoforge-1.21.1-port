@@ -9,7 +9,9 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.client.fx.legacy.TCLegacyParticleEngine;
 import thaumcraft.client.fx.TCInfusionClientEffects;
+import thaumcraft.client.fx.TCWispClientEffects;
 import thaumcraft.client.gui.TCThaumonomiconClientController;
+import thaumcraft.common.entities.TCEntityFXNetwork;
 import thaumcraft.common.lib.fx.TCFXDispatcher;
 import thaumcraft.common.crafting.infusion.TCInfusionClientFXCache;
 import thaumcraft.common.research.TCKnowledgeClientCache;
@@ -20,6 +22,7 @@ import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
 public final class TCClientEvents {
     static {
         TCFXDispatcher.setClientSink(TCLegacyParticleEngine::addEffect);
+        TCEntityFXNetwork.setWispZapSink(TCWispClientEffects::accept);
     }
 
     private TCClientEvents() {
@@ -34,10 +37,12 @@ public final class TCClientEvents {
             TCResearchTableClientCache.clear();
             TCInfusionClientFXCache.clear();
             TCInfusionClientEffects.clear();
+            TCWispClientEffects.clear();
             return;
         }
 
         TCLegacyParticleEngine.tick();
+        TCWispClientEffects.tick();
         TCInfusionClientEffects.tick(Minecraft.getInstance().level);
         TCThaumometerClientEffects.onClientTick(Minecraft.getInstance());
         TCThaumonomiconClientController.tick(Minecraft.getInstance());
@@ -51,6 +56,10 @@ public final class TCClientEvents {
                     event.getPartialTick().getGameTimeDeltaPartialTick(false)
             );
             TCInfusionClientEffects.render(
+                    event.getCamera(),
+                    event.getPartialTick().getGameTimeDeltaPartialTick(false)
+            );
+            TCWispClientEffects.render(
                     event.getCamera(),
                     event.getPartialTick().getGameTimeDeltaPartialTick(false)
             );
