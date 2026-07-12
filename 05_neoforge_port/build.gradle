@@ -100,6 +100,8 @@ neoForge {
             def lampDeviceAuditPath = providers.gradleProperty('tcLampDeviceAuditPath').orNull ?: System.getProperty('tc.lampDeviceAuditPath')
             def infernalFurnaceBehaviorAuditEnabled = providers.gradleProperty('tcInfernalFurnaceBehaviorAudit').orNull ?: System.getProperty('tc.infernalFurnaceBehaviorAudit')
             def infernalFurnaceBehaviorAuditPath = providers.gradleProperty('tcInfernalFurnaceBehaviorAuditPath').orNull ?: System.getProperty('tc.infernalFurnaceBehaviorAuditPath')
+            def alchemyAutomationDeviceAuditEnabled = providers.gradleProperty('tcAlchemyAutomationDeviceAudit').orNull ?: System.getProperty('tc.alchemyAutomationDeviceAudit')
+            def alchemyAutomationDeviceAuditPath = providers.gradleProperty('tcAlchemyAutomationDeviceAuditPath').orNull ?: System.getProperty('tc.alchemyAutomationDeviceAuditPath')
             def standaloneDeviceBlockerAuditEnabled = providers.gradleProperty('tcStandaloneDeviceBlockerAudit').orNull ?: System.getProperty('tc.standaloneDeviceBlockerAudit')
             def standaloneDeviceBlockerAuditPath = providers.gradleProperty('tcStandaloneDeviceBlockerAuditPath').orNull ?: System.getProperty('tc.standaloneDeviceBlockerAuditPath')
             def entityFoundationAuditEnabled = providers.gradleProperty('tcEntityFoundationAudit').orNull ?: System.getProperty('tc.entityFoundationAudit')
@@ -226,6 +228,12 @@ neoForge {
             }
             if (infernalFurnaceBehaviorAuditPath != null) {
                 systemProperty 'tc.infernalFurnaceBehaviorAuditPath', infernalFurnaceBehaviorAuditPath
+            }
+            if (alchemyAutomationDeviceAuditEnabled != null) {
+                systemProperty 'tc.alchemyAutomationDeviceAudit', alchemyAutomationDeviceAuditEnabled
+            }
+            if (alchemyAutomationDeviceAuditPath != null) {
+                systemProperty 'tc.alchemyAutomationDeviceAuditPath', alchemyAutomationDeviceAuditPath
             }
             if (standaloneDeviceBlockerAuditEnabled != null) {
                 systemProperty 'tc.standaloneDeviceBlockerAudit', standaloneDeviceBlockerAuditEnabled

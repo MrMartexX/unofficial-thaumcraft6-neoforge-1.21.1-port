@@ -52,12 +52,14 @@ import thaumcraft.common.blocks.world.taint.TCTaintLogBlock;
 import thaumcraft.common.blocks.world.taint.TCTaintTerrainBlock;
 import thaumcraft.common.blocks.devices.TCInlayBlock;
 import thaumcraft.common.blocks.devices.TCEffectGlimmerBlock;
+import thaumcraft.common.blocks.devices.TCArcaneSpaBlock;
 import thaumcraft.common.blocks.devices.TCInfernalFurnaceBlock;
 import thaumcraft.common.blocks.devices.TCInfernalFurnacePlaceholderBlock;
 import thaumcraft.common.blocks.devices.TCLampBlock;
 import thaumcraft.common.blocks.devices.TCMirrorBlock;
 import thaumcraft.common.blocks.devices.TCStabilizerBlock;
 import thaumcraft.common.blocks.devices.TCVoidSiphonBlock;
+import thaumcraft.common.blocks.devices.TCWaterJugBlock;
 import thaumcraft.common.tiles.essentia.TCEssentiaTransfuserBlockEntity;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 
@@ -200,6 +202,8 @@ public final class TCBlocks {
     public static final Supplier<Block> PLACEHOLDER_OBSIDIAN = BLOCKS.register("placeholder_obsidian",
             () -> infernalFurnacePlaceholderBlock(TCInfernalFurnacePlaceholderBlock.Kind.OBSIDIAN));
     public static final Supplier<Block> VOID_SIPHON = BLOCKS.register("void_siphon", () -> voidSiphonBlock());
+    public static final Supplier<Block> SPA = BLOCKS.register("spa", () -> spaBlock());
+    public static final Supplier<Block> EVERFULL_URN = BLOCKS.register("everfull_urn", () -> waterJugBlock());
     public static final Supplier<Block> THAUMATORIUM = BLOCKS.register("thaumatorium", () -> thaumatoriumBlock(false));
     public static final Supplier<Block> THAUMATORIUM_TOP = BLOCKS.register("thaumatorium_top", () -> thaumatoriumBlock(true));
     public static final Supplier<Block> EFFECT_GLIMMER = BLOCKS.register("effect_glimmer", () -> effectGlimmerBlock());
@@ -281,6 +285,21 @@ public final class TCBlocks {
         return new TCVoidSiphonBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
                 .strength(5.0F, 10.0F)
                 .sound(SoundType.METAL)
+                .noOcclusion()
+                .requiresCorrectToolForDrops());
+    }
+
+    private static Block spaBlock() {
+        return new TCArcaneSpaBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(2.0F, 10.0F)
+                .sound(SoundType.STONE)
+                .requiresCorrectToolForDrops());
+    }
+
+    private static Block waterJugBlock() {
+        return new TCWaterJugBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(2.0F, 10.0F)
+                .sound(SoundType.STONE)
                 .noOcclusion()
                 .requiresCorrectToolForDrops());
     }

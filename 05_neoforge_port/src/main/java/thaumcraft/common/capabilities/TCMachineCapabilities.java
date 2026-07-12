@@ -45,5 +45,20 @@ public final class TCMachineCapabilities {
                 TCBlockEntities.VOID_SIPHON.get(),
                 (voidSiphon, side) -> voidSiphon.itemHandler(side)
         );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                TCBlockEntities.SPA.get(),
+                (spa, side) -> spa.itemHandler(side)
+        );
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                TCBlockEntities.SPA.get(),
+                (spa, side) -> spa.fluidHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                TCBlockEntities.EVERFULL_URN.get(),
+                (urn, side) -> urn.fluidHandler(side)
+        );
     }
 }

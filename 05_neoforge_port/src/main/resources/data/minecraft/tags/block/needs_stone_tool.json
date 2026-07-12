@@ -2,12 +2,14 @@
   "replace": false,
   "values": [
     "thaumcraft:ore_amber",
+    "thaumcraft:everfull_urn",
     "thaumcraft:stone_arcane",
     "thaumcraft:stone_arcane_brick",
     "thaumcraft:stone_ancient",
     "thaumcraft:stone_ancient_tile",
     "thaumcraft:stone_ancient_glyphed",
     "thaumcraft:stone_eldritch_tile",
-    "thaumcraft:stone_porous"
+    "thaumcraft:stone_porous",
+    "thaumcraft:spa"
   ]
 }
