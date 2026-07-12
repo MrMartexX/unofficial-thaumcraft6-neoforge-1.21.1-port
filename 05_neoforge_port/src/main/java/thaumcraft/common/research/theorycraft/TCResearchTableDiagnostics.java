@@ -77,7 +77,7 @@ public final class TCResearchTableDiagnostics {
         report.check("finish_theory_penalty_raw", awards.getOrDefault("ALCHEMY", -1) == 2, "10% ALCHEMY after penalty rounds down from 3 to 2 raw.");
 
         report.check("public_api_card_registry_count", registeredCardCount("thaumcraft.api.research.theorycraft.") == 9, "The public/API theorycraft card slice should keep the original 9 card ids.");
-        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 31
+        report.check("safe_bridge_card_registry_count", TCTheorycraftManager.cards().size() == 32
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardMeasure")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardConcentrate")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardReactions")
@@ -100,8 +100,9 @@ public final class TCResearchTableDiagnostics {
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardPortal")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardRevelation")
                         && hasCard("thaumcraft.common.lib.research.theorycraft.CardRealization")
+                        && hasCard("thaumcraft.common.lib.research.theorycraft.CardTruth")
                         && !hasCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg"),
-                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy, Artifice item-option, Basic Auromancy, basic Infusion, Basic Golemancy and safe Eldritch option cards only.");
+                "First common card bridge should add dependency-free, aspect-crystal/phial, vanilla XP/aid, table-inventory, vanilla-item Golemancy, Artifice item-option, Basic Auromancy, basic Infusion, Basic Golemancy and registered Eldritch option cards only.");
         report.check("card_analyze_deferred_by_legacy_bug", !new CardAnalyze().initialize(null, new TCResearchTableData()), "Legacy decompiled CardAnalyze initializes from a null category lookup; kept out of random draws until corrected from a stronger source.");
         addWarpBridgeChecks(report);
         addResearchAidChecks(report);
@@ -196,7 +197,7 @@ public final class TCResearchTableDiagnostics {
                         && portalEnd.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardPortal"))
                         && portalNether != null
                         && portalNether.cardKeys().equals(List.of("thaumcraft.common.lib.research.theorycraft.CardPortal")),
-                "The safe Eldritch aid bridge should contain Glyphed Stone, End portal and Nether portal aids; Brain-in-a-Jar, Crimson portal and Basic Eldritch remain deferred.");
+                "The safe Eldritch aid bridge should contain Glyphed Stone, End portal and Nether portal aids; Brain-in-a-Jar has its own audit, while Crimson portal and Basic Eldritch aid-object ownership remain deferred.");
 
         TCTheorycraftAid basicAlchemy = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_ALCHEMY);
         TCTheorycraftAid basicArtifice = TCTheorycraftManager.aids().get(TCTheorycraftManager.AID_BASIC_ARTIFICE);
@@ -228,7 +229,7 @@ public final class TCResearchTableDiagnostics {
                 "thaumcraft.common.lib.research.theorycraft.CardScripting",
                 "thaumcraft.common.lib.research.theorycraft.CardSynergy"
         );
-        report.check("basic_block_aid_registry", TCTheorycraftManager.aids().size() == 11
+        report.check("basic_block_aid_registry", TCTheorycraftManager.aids().size() == 12
                         && basicAlchemy != null
                         && basicAlchemy.cardKeys().equals(expectedAlchemyCards)
                         && basicArtifice != null
@@ -451,6 +452,18 @@ public final class TCResearchTableDiagnostics {
                         && realizationData.getTotal("ELDRITCH") >= 15
                         && realizationData.getTotal("ELDRITCH") <= 35,
                 "Legacy CardRealization adds 15 ELDRITCH plus 5-10 in two random categories and applies temporary/possible normal warp only with a real player.");
+
+        TCResearchTableData truthData = new TCResearchTableData();
+        CardTruth truth = new CardTruth();
+        truth.setSeed(9L);
+        boolean truthActivated = truth.activate(null, truthData);
+        report.check("card_truth_activation", truthActivated
+                        && truth.getInspirationCost() == 1
+                        && "ELDRITCH".equals(truth.getResearchCategory())
+                        && truthData.getTotal("ELDRITCH") >= 10
+                        && truthData.getTotal("ELDRITCH") <= 25
+                        && truthData.bonusDraws == 1,
+                "Legacy CardTruth adds 10-25 ELDRITCH, grants one bonus draw and applies temporary warp only with a real player.");
 
         report.check("card_dragon_egg_not_registered", !hasCard("thaumcraft.common.lib.research.theorycraft.CardDragonEgg"),
                 "The decompiled CardDragonEgg class is left as reference code only; original ConfigResearch does not register it.");

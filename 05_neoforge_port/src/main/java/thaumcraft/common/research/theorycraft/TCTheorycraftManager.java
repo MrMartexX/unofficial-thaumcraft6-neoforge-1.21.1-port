@@ -72,6 +72,7 @@ public final class TCTheorycraftManager {
         registerCard("thaumcraft.common.lib.research.theorycraft.CardPortal", CardPortal::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardRevelation", CardRevelation::new);
         registerCard("thaumcraft.common.lib.research.theorycraft.CardRealization", CardRealization::new);
+        registerCard("thaumcraft.common.lib.research.theorycraft.CardTruth", CardTruth::new);
 
         registerAid(TCTheorycraftAid.block(
                 AID_BOOKSHELF,
