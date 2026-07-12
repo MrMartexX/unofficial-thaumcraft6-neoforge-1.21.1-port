@@ -25,6 +25,7 @@ public final class TCTheorycraftManager {
     public static final String AID_BASIC_AUROMANCY = "thaumcraft.common.lib.research.theorycraft.AidBasicAuromancy";
     public static final String AID_BASIC_INFUSION = "thaumcraft.common.lib.research.theorycraft.AidBasicInfusion";
     public static final String AID_BASIC_GOLEMANCY = "thaumcraft.common.lib.research.theorycraft.AidBasicGolemancy";
+    public static final String AID_BRAIN_IN_A_JAR = "thaumcraft.common.lib.research.theorycraft.AidBrainInAJar";
     public static final String AID_ENCHANTMENT_TABLE = "thaumcraft.common.lib.research.theorycraft.AidEnchantmentTable";
     public static final String AID_BEACON = "thaumcraft.common.lib.research.theorycraft.AidBeacon";
     static final int AID_HORIZONTAL_RADIUS = 4;
@@ -152,6 +153,12 @@ public final class TCTheorycraftManager {
                         "thaumcraft.common.lib.research.theorycraft.CardScripting",
                         "thaumcraft.common.lib.research.theorycraft.CardSynergy"
                 )
+        ));
+        registerAid(TCTheorycraftAid.block(
+                AID_BRAIN_IN_A_JAR,
+                () -> new ItemStack(TCBlocks.JAR_BRAIN.get()),
+                state -> state.is(TCBlocks.JAR_BRAIN.get()),
+                List.of("thaumcraft.common.lib.research.theorycraft.CardDarkWhispers")
         ));
         registerAid(TCTheorycraftAid.block(
                 AID_ENCHANTMENT_TABLE,

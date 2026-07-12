@@ -29,6 +29,7 @@ import thaumcraft.common.blocks.essentia.TCSmelterBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterAuxBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterVentBlock;
 import thaumcraft.common.blocks.essentia.TCWardedJarBlock;
+import thaumcraft.common.blocks.essentia.TCBrainJarBlock;
 import thaumcraft.common.blocks.essentia.TCAlembicBlock;
 import thaumcraft.common.blocks.essentia.TCBellowsBlock;
 import thaumcraft.common.blocks.essentia.TCEssentiaTransportBlock;
@@ -164,6 +165,7 @@ public final class TCBlocks {
             () -> wardedJarBlock(TCWardedJarBlockEntity.Kind.NORMAL));
     public static final Supplier<Block> JAR_VOID = BLOCKS.register("jar_void",
             () -> wardedJarBlock(TCWardedJarBlockEntity.Kind.VOID));
+    public static final Supplier<Block> JAR_BRAIN = BLOCKS.register("jar_brain", () -> brainJarBlock());
     public static final Supplier<Block> ALEMBIC = BLOCKS.register("alembic", () -> alembicBlock());
     public static final Supplier<Block> ESSENTIA_TRANSPORT_IN = BLOCKS.register("essentiatransportin",
             () -> essentiaTransportBlock(TCEssentiaTransfuserBlockEntity.Kind.INPUT));
@@ -498,6 +500,13 @@ public final class TCBlocks {
                 .strength(0.3F, 0.3F)
                 .sound(SoundType.GLASS)
                 .noOcclusion(), kind);
+    }
+
+    private static Block brainJarBlock() {
+        return new TCBrainJarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                .strength(0.3F, 0.3F)
+                .sound(SoundType.GLASS)
+                .noOcclusion());
     }
 
     private static Block essentiaTransportBlock(TCEssentiaTransfuserBlockEntity.Kind kind) {

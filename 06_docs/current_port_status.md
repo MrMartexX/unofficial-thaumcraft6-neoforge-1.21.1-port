@@ -1,7 +1,7 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
 Last reviewed branch: `main`
-Last reviewed checkpoint: `2026-07-12` alchemy automation device slice
+Last reviewed checkpoint: `2026-07-12` Brain-in-a-Jar behavior blocker slice
 Reviewed target module: `05_neoforge_port`
 
 ## State Snapshot
@@ -19,6 +19,7 @@ This section records the current repository state. The lower "Changelog Notes" s
 
 - The research-table/scribing-tools slice includes storage, conversion, the first modern menu/screen boundary, server-owned theory data, validated table action payloads, server action-result screen refresh, and legacy-asset card-sheet choice rendering.
 - Current research aids/cards include the first vanilla bookshelf/enchanting-table/beacon family, safe Eldritch glyphed-stone/Nether-portal/End-portal aids, basic block aids for crucible/arcane workbench/infusion matrix/Focal Manipulator/golem press, first Artifice, Basic Auromancy, Basic Golemancy, safe Eldritch theory cards, `CardInfuse`, `CardScripting`, and `CardAwareness`.
+- Brain-in-a-Jar is now a real theorycraft aid source: `jar_brain` registers a real block, BlockItem and BlockEntity, preserves legacy XP storage/pull/absorb/release behavior, exposes the legacy comparator/enchanting bonus contracts, preserves XP on the item stack, and contributes `CardDarkWhispers` through `AidBrainInAJar`. `TCBrainJarBehaviorAudit` passes `10/10`. Exact animated brain rendering, item-warp registry and broader golem/mind systems remain separate follow-up work.
 - Minimal server-side warp storage exists only as a bridge for current warp-side-effect cards.
 
 ### Crafting, recipes and page data
@@ -107,7 +108,7 @@ This section records the current repository state. The lower "Changelog Notes" s
 
 ### Deferred boundaries
 
-- Remaining alchemy automation families beyond Arcane Spa and Everfull Urn, crucible-derived aspect generation, Spa GUI/Botania support, exact Thaumatorium model/renderer/pixel parity, special void-jar stack-copy crafting, exact FallingTaint landing particles/render pixel parity, final taint mob renderer/animation/natural-spawn parity, custom projectile/construct/golem AI and renderers, broad worldgen, broad rendering polish, full equipment/Curios discount integration, remaining dependency-heavy recipe/page families, exact client fluid particles/render translucency, and final measured valve/vent/mirror/Spa/Thaumatorium visual parity remain deferred.
+- Remaining alchemy automation families beyond Arcane Spa and Everfull Urn, crucible-derived aspect generation, Spa GUI/Botania support, Brain-in-a-Jar animated brain/pixel parity and item-warp registry, exact Thaumatorium model/renderer/pixel parity, special void-jar stack-copy crafting, exact FallingTaint landing particles/render pixel parity, final taint mob renderer/animation/natural-spawn parity, custom projectile/construct/golem AI and renderers, broad worldgen, broad rendering polish, full equipment/Curios discount integration, remaining dependency-heavy recipe/page families, exact client fluid particles/render translucency, and final measured valve/vent/mirror/Spa/Thaumatorium visual parity remain deferred.
 
 ## Purpose
 
@@ -417,6 +418,14 @@ Next:
 ## Changelog Notes
 
 The sections below are historical update notes. They should not be read as the current task queue; use `06_docs/CURRENT_TASK.md` for current priorities and the `State Snapshot` plus `High-level status` sections above for current state.
+
+### Latest Brain-in-a-Jar behavior blocker slice
+
+- Replaced the previous JarBrain recipe/page-only boundary with a real `jar_brain` block, BlockItem and BlockEntity.
+- Ported the legacy server contracts for XP storage key/max, XP orb pull and close absorption, right-click XP release delay/value split, comparator signal, enchanting bonus and item-stack XP preservation.
+- Registered `AidBrainInAJar` so the placed jar contributes `CardDarkWhispers` to theorycraft.
+- Added `TCBrainJarBehaviorAudit`; latest runtime report passes `10/10`.
+- Kept animated brain model/rotation/sigh behavior, exact spark pixel parity, legacy item-warp registry and broader golem/mind behavior out of this focused blocker slice.
 
 ### Latest server smoke hardening update
 

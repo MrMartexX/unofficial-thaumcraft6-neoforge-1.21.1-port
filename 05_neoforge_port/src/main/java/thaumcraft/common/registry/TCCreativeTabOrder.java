@@ -115,6 +115,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.ALEMBIC.get());
         acceptVisible(output, TCItems.JAR_NORMAL.get());
         acceptVisible(output, TCItems.JAR_VOID.get());
+        acceptVisible(output, TCItems.JAR_BRAIN.get());
         acceptVisible(output, TCItems.ESSENTIA_TRANSPORT_IN.get());
         acceptVisible(output, TCItems.ESSENTIA_TRANSPORT_OUT.get());
         acceptVisible(output, TCItems.THAUMATORIUM.get());

@@ -20,6 +20,7 @@ import thaumcraft.common.items.ItemLegacyPlaceholder;
 import thaumcraft.common.items.TCJarLabelItem;
 import thaumcraft.common.items.TCMirrorBlockItem;
 import thaumcraft.common.items.TCPhialItem;
+import thaumcraft.common.items.TCBrainJarBlockItem;
 import thaumcraft.common.items.TCWardedJarBlockItem;
 import thaumcraft.common.items.armor.ItemGoggles;
 import thaumcraft.common.items.armor.ItemRobeArmor;
@@ -259,7 +260,7 @@ public final class TCItems {
     public static final Supplier<Item> SEAL_PROVIDER = simpleItem("seal_provider");
     public static final Supplier<Item> SEAL_STOCK = simpleItem("seal_stock");
     public static final Supplier<Item> SEAL_USE = simpleItem("seal_use");
-    public static final Supplier<Item> JAR_BRAIN = simpleItem("jar_brain");
+    public static final Supplier<BlockItem> JAR_BRAIN = ITEMS.register("jar_brain", () -> new TCBrainJarBlockItem(TCBlocks.JAR_BRAIN.get(), new Item.Properties()));
     public static final Supplier<Item> SEAL_BUTCHER = simpleItem("seal_butcher");
     public static final Supplier<Item> SEAL_HARVEST = simpleItem("seal_harvest");
     public static final Supplier<Item> TRAVELLER_BOOTS = simpleItem("traveller_boots");

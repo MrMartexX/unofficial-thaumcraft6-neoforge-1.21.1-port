@@ -39,6 +39,7 @@ import thaumcraft.common.tiles.devices.TCInfernalFurnaceBlockEntity;
 import thaumcraft.common.tiles.devices.TCVoidSiphonBlockEntity;
 import thaumcraft.common.tiles.devices.TCArcaneSpaBlockEntity;
 import thaumcraft.common.tiles.devices.TCWaterJugBlockEntity;
+import thaumcraft.common.tiles.devices.TCBrainJarBlockEntity;
 
 public final class TCBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
@@ -74,6 +75,9 @@ public final class TCBlockEntities {
                                     state,
                                     TCWardedJarBlockEntity.Kind.VOID),
                             TCBlocks.JAR_VOID.get()).build(null));
+    public static final Supplier<BlockEntityType<TCBrainJarBlockEntity>> JAR_BRAIN =
+            BLOCK_ENTITY_TYPES.register("jar_brain", () ->
+                    BlockEntityType.Builder.of(TCBrainJarBlockEntity::new, TCBlocks.JAR_BRAIN.get()).build(null));
     public static final Supplier<BlockEntityType<TCAlembicBlockEntity>> ALEMBIC =
             BLOCK_ENTITY_TYPES.register("alembic", () ->
                     BlockEntityType.Builder.of(TCAlembicBlockEntity::new, TCBlocks.ALEMBIC.get()).build(null));

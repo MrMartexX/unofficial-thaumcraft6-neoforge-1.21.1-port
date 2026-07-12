@@ -102,6 +102,8 @@ neoForge {
             def infernalFurnaceBehaviorAuditPath = providers.gradleProperty('tcInfernalFurnaceBehaviorAuditPath').orNull ?: System.getProperty('tc.infernalFurnaceBehaviorAuditPath')
             def alchemyAutomationDeviceAuditEnabled = providers.gradleProperty('tcAlchemyAutomationDeviceAudit').orNull ?: System.getProperty('tc.alchemyAutomationDeviceAudit')
             def alchemyAutomationDeviceAuditPath = providers.gradleProperty('tcAlchemyAutomationDeviceAuditPath').orNull ?: System.getProperty('tc.alchemyAutomationDeviceAuditPath')
+            def brainJarBehaviorAuditEnabled = providers.gradleProperty('tcBrainJarBehaviorAudit').orNull ?: System.getProperty('tcBrainJarBehaviorAudit')
+            def brainJarBehaviorAuditPath = providers.gradleProperty('tcBrainJarBehaviorAuditPath').orNull ?: System.getProperty('tcBrainJarBehaviorAuditPath')
             def standaloneDeviceBlockerAuditEnabled = providers.gradleProperty('tcStandaloneDeviceBlockerAudit').orNull ?: System.getProperty('tc.standaloneDeviceBlockerAudit')
             def standaloneDeviceBlockerAuditPath = providers.gradleProperty('tcStandaloneDeviceBlockerAuditPath').orNull ?: System.getProperty('tc.standaloneDeviceBlockerAuditPath')
             def entityFoundationAuditEnabled = providers.gradleProperty('tcEntityFoundationAudit').orNull ?: System.getProperty('tc.entityFoundationAudit')
@@ -234,6 +236,12 @@ neoForge {
             }
             if (alchemyAutomationDeviceAuditPath != null) {
                 systemProperty 'tc.alchemyAutomationDeviceAuditPath', alchemyAutomationDeviceAuditPath
+            }
+            if (brainJarBehaviorAuditEnabled != null) {
+                systemProperty 'tcBrainJarBehaviorAudit', brainJarBehaviorAuditEnabled
+            }
+            if (brainJarBehaviorAuditPath != null) {
+                systemProperty 'tcBrainJarBehaviorAuditPath', brainJarBehaviorAuditPath
             }
             if (standaloneDeviceBlockerAuditEnabled != null) {
                 systemProperty 'tc.standaloneDeviceBlockerAudit', standaloneDeviceBlockerAuditEnabled
