@@ -11,6 +11,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.entities.TCArcaneBoreEntity;
+import thaumcraft.common.entities.TCBottleTaintEntity;
 import thaumcraft.common.entities.TCFallingTaintEntity;
 import thaumcraft.common.entities.TCFollowingItemEntity;
 import thaumcraft.common.entities.TCFluxRiftEntity;
@@ -131,6 +132,14 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(false)
                     .build(Thaumcraft.MODID + ":wisp"));
 
+    public static final Supplier<EntityType<TCBottleTaintEntity>> BOTTLE_TAINT = ENTITY_TYPES.register("bottle_taint", () ->
+            EntityType.Builder.<TCBottleTaintEntity>of(TCBottleTaintEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":bottle_taint"));
+
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
             spec("CultistPortalGreater", "EntityCultistPortalGreater", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
             spec("CultistPortalLesser", "EntityCultistPortalLesser", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
@@ -141,7 +150,7 @@ public final class TCEntityTypes {
             spec("Alumentum", "EntityAlumentum", null, 64, 20, true, "defer", "Projectile item behavior and impact effects"),
             spec("GolemDart", "EntityGolemDart", null, 64, 20, false, "defer", "Golem ranged combat"),
             spec("EldritchOrb", "EntityEldritchOrb", null, 64, 20, true, "defer", "Eldritch projectile behavior and renderer"),
-            spec("BottleTaint", "EntityBottleTaint", null, 64, 20, true, "defer", "Taint bottle projectile and taint spread"),
+            spec("BottleTaint", "EntityBottleTaint", "bottle_taint", 64, 20, true, "registered_foundation", "Taint bottle projectile item behavior, Flux Taint splash and Flux Goo spread"),
             spec("GolemOrb", "EntityGolemOrb", null, 64, 3, true, "defer", "Golem combat/projectile behavior"),
             spec("Grapple", "EntityGrapple", null, 64, 20, true, "defer", "Grapple tool physics and rope renderer"),
             spec("CausalityCollapser", "EntityCausalityCollapser", null, 64, 20, true, "defer", "Rift/causality item projectile effects"),

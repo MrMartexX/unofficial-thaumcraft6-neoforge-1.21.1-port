@@ -55,7 +55,8 @@ public final class TCCrucibleBehaviorAudit {
         lines.add("");
         lines.add("- This validates the server-owned crucible behavior slices currently wired into the block entity.");
         lines.add("- It validates manual item use, item-entity absorption boundaries, special-item ignore marking and server-side spill pollution.");
-        lines.add("- It does not validate particles, Thaumatorium, jars, tubes, alembics, liquid death or special alchemy effects.");
+        lines.add("- It does not validate particles, Thaumatorium, jars, tubes, alembics, real LiquidDeath/PurifyingFluid/WarpWard fluids/effects, or Bath Salts water conversion.");
+        lines.add("- Bath Salts item lifespan and Bottled Taint item/projectile side effects are covered by TCSpecialAlchemyBehaviorAudit.");
 
         Files.write(output, lines);
         return report;

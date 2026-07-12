@@ -1,6 +1,7 @@
 package thaumcraft.client.renderer;
 
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import thaumcraft.common.registry.TCEntityTypes;
@@ -27,5 +28,6 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.TAINTACLE_TINY.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINT_SWARM.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.WISP.get(), TCWispRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.BOTTLE_TAINT.get(), ThrownItemRenderer::new);
     }
 }

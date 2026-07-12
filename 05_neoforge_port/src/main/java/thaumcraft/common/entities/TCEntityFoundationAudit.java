@@ -24,7 +24,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 13;
+    private static final int REGISTERED_FOUNDATION_COUNT = 14;
 
     private TCEntityFoundationAudit() {
     }
@@ -90,7 +90,7 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair and five taint mob foundations"
+                "expected item entities, BottleTaint, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair and five taint mob foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
@@ -106,6 +106,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("Taintacle", TCEntityTypes.TAINTACLE.get()));
         checks.add(checkRegisteredType("TaintacleTiny", TCEntityTypes.TAINTACLE_TINY.get()));
         checks.add(checkRegisteredType("TaintSwarm", TCEntityTypes.TAINT_SWARM.get()));
+        checks.add(checkRegisteredType("BottleTaint", TCEntityTypes.BOTTLE_TAINT.get()));
         checks.add(checkTypeShape("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get(), 64, 20, true));
         checks.add(checkTypeShape("FollowItem", TCEntityTypes.FOLLOW_ITEM.get(), 64, 20, false));
         checks.add(checkTypeShape("FallingTaint", TCEntityTypes.FALLING_TAINT.get(), 64, 3, true, 0.98F, 0.98F));
@@ -115,6 +116,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkMobTypeShape("Taintacle", TCEntityTypes.TAINTACLE.get(), 0.8F, 3.0F, 64, 3, false));
         checks.add(checkMobTypeShape("TaintacleTiny", TCEntityTypes.TAINTACLE_TINY.get(), 0.22F, 1.0F, 64, 3, false));
         checks.add(checkMobTypeShape("TaintSwarm", TCEntityTypes.TAINT_SWARM.get(), 2.0F, 2.0F, 64, 3, false));
+        checks.add(checkTypeShape("BottleTaint", TCEntityTypes.BOTTLE_TAINT.get(), 64, 20, true));
         checks.add(checkConstructors(server.overworld()));
         return checks;
     }

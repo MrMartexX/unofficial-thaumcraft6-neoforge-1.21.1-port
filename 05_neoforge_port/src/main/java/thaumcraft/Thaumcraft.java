@@ -25,6 +25,7 @@ import thaumcraft.common.crafting.infusion.TCInfusionBehaviorAuditExporter;
 import thaumcraft.common.crafting.infusion.TCInfusionNetwork;
 import thaumcraft.common.aspects.TCGeneratedAspectRecipeGenerator;
 import thaumcraft.common.crafting.crucible.TCCrucibleBehaviorAuditExporter;
+import thaumcraft.common.crafting.crucible.TCSpecialAlchemyBehaviorAuditExporter;
 import thaumcraft.common.crafting.crucible.TCThaumatoriumBehaviorAuditExporter;
 import thaumcraft.common.crafting.crucible.TCThaumatoriumNetwork;
 import thaumcraft.common.entities.TCEntityFoundationAuditExporter;
@@ -148,6 +149,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCArcaneRecipeAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCArcaneWorkbenchAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCCrucibleBehaviorAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCSpecialAlchemyBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCThaumatoriumBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCInfusionBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCEssentiaTransportBehaviorAuditExporter::onServerStarted);

@@ -90,6 +90,8 @@ neoForge {
             def arcaneWorkbenchAuditPath = providers.gradleProperty('tcArcaneWorkbenchAuditPath').orNull ?: System.getProperty('tc.arcaneWorkbenchAuditPath')
             def crucibleBehaviorAuditEnabled = providers.gradleProperty('tcCrucibleBehaviorAudit').orNull ?: System.getProperty('tc.crucibleBehaviorAudit')
             def crucibleBehaviorAuditPath = providers.gradleProperty('tcCrucibleBehaviorAuditPath').orNull ?: System.getProperty('tc.crucibleBehaviorAuditPath')
+            def specialAlchemyBehaviorAuditEnabled = providers.gradleProperty('tcSpecialAlchemyBehaviorAudit').orNull ?: System.getProperty('tc.specialAlchemyBehaviorAudit')
+            def specialAlchemyBehaviorAuditPath = providers.gradleProperty('tcSpecialAlchemyBehaviorAuditPath').orNull ?: System.getProperty('tc.specialAlchemyBehaviorAuditPath')
             def thaumatoriumBehaviorAuditEnabled = providers.gradleProperty('tcThaumatoriumBehaviorAudit').orNull ?: System.getProperty('tc.thaumatoriumBehaviorAudit')
             def thaumatoriumBehaviorAuditPath = providers.gradleProperty('tcThaumatoriumBehaviorAuditPath').orNull ?: System.getProperty('tc.thaumatoriumBehaviorAuditPath')
             def mirrorBehaviorAuditEnabled = providers.gradleProperty('tcMirrorBehaviorAudit').orNull ?: System.getProperty('tc.mirrorBehaviorAudit')
@@ -194,6 +196,12 @@ neoForge {
             }
             if (crucibleBehaviorAuditPath != null) {
                 systemProperty 'tc.crucibleBehaviorAuditPath', crucibleBehaviorAuditPath
+            }
+            if (specialAlchemyBehaviorAuditEnabled != null) {
+                systemProperty 'tc.specialAlchemyBehaviorAudit', specialAlchemyBehaviorAuditEnabled
+            }
+            if (specialAlchemyBehaviorAuditPath != null) {
+                systemProperty 'tc.specialAlchemyBehaviorAuditPath', specialAlchemyBehaviorAuditPath
             }
             if (thaumatoriumBehaviorAuditEnabled != null) {
                 systemProperty 'tc.thaumatoriumBehaviorAudit', thaumatoriumBehaviorAuditEnabled
