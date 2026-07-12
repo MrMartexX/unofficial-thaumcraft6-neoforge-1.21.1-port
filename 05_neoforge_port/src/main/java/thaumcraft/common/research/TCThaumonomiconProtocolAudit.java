@@ -10,7 +10,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 
 final class TCThaumonomiconProtocolAudit {
     private static final Set<String> FAKE_CRAFTING_CATALOG_IDS = Set.of(
@@ -543,6 +545,76 @@ final class TCThaumonomiconProtocolAudit {
                 "open_once=" + explicitOpenIntent + ", refresh_open=" + !refreshDoesNotOpen
         ));
 
+        CompoundTag beforeDrilldownKnowledge = TCPlayerKnowledgeStore.get(player).save();
+        Optional<DrilldownAuditSample> drilldownSample = prepareDrilldownSample(player);
+        Optional<ItemStack> drilldownStack = drilldownSample.map(DrilldownAuditSample::stack);
+        int drilldownRevision = drilldownSample.map(DrilldownAuditSample::revision).orElse(index.revision());
+        Optional<TCThaumonomiconNetwork.DrilldownResult> drilldownResult = drilldownStack.map(stack ->
+                TCThaumonomiconNetwork.processDrilldown(
+                        player,
+                        new TCThaumonomiconDrilldownRequestPayload(stack, drilldownRevision)
+                )
+        );
+        boolean recipeDrilldownServerResolved = drilldownResult
+                .filter(TCThaumonomiconNetwork.DrilldownResult::accepted)
+                .flatMap(TCThaumonomiconNetwork.DrilldownResult::result)
+                .filter(result -> result.pageIndex() >= 0
+                        && result.pageIndex() < result.bookmark().pages().size())
+                .map(result -> recipeOutputMatches(
+                        result.bookmark().pages().get(result.pageIndex()),
+                        drilldownStack.orElse(ItemStack.EMPTY)
+                ))
+                .orElse(false);
+        checks.add(check(
+                "recipe_drilldown_resolves_output_stack_server_side",
+                recipeDrilldownServerResolved,
+                "sample_stack=" + drilldownStack.map(stack -> stack.getItem().toString()).orElse("none")
+        ));
+
+        boolean clientCacheAcceptsDrilldown = false;
+        if (drilldownResult.isPresent() && drilldownStack.isPresent()) {
+            TCThaumonomiconNetwork.DrilldownResult result = drilldownResult.get();
+            TCThaumonomiconClientCache.accept(new TCThaumonomiconDrilldownPayload(
+                    result.accepted(),
+                    result.resultKey(),
+                    drilldownStack.get(),
+                    result.result().map(TCResearchPageDrilldownResult::bookmark),
+                    result.result().map(TCResearchPageDrilldownResult::pageIndex).orElse(0)
+            ));
+            TCThaumonomiconDrilldownPayload cached = TCThaumonomiconClientCache.pollLastDrilldownResult();
+            clientCacheAcceptsDrilldown = cached != null
+                    && cached.accepted() == result.accepted()
+                    && cached.bookmark().isPresent() == result.result().isPresent();
+            TCThaumonomiconClientCache.clear();
+        }
+        checks.add(check(
+                "client_cache_accepts_drilldown_payload",
+                clientCacheAcceptsDrilldown,
+                "sample_present=" + drilldownStack.isPresent()
+        ));
+
+        boolean staleDrilldownRejectedWithoutMutation = false;
+        if (drilldownStack.isPresent()) {
+            int staleRevision = drilldownRevision == 0 ? 1 : 0;
+            String beforeKnowledge = TCPlayerKnowledgeStore.get(player).save().toString();
+            TCThaumonomiconNetwork.DrilldownResult staleDrilldown = TCThaumonomiconNetwork.processDrilldown(
+                    player,
+                    new TCThaumonomiconDrilldownRequestPayload(drilldownStack.get(), staleRevision)
+            );
+            String afterKnowledge = TCPlayerKnowledgeStore.get(player).save().toString();
+            staleDrilldownRejectedWithoutMutation = !staleDrilldown.accepted()
+                    && staleDrilldown.refreshIndex()
+                    && "stale_revision".equals(staleDrilldown.resultKey())
+                    && beforeKnowledge.equals(afterKnowledge);
+        }
+        checks.add(check(
+                "stale_drilldown_revision_rejected_without_mutation",
+                staleDrilldownRejectedWithoutMutation,
+                "sample_present=" + drilldownStack.isPresent()
+        ));
+        TCPlayerKnowledgeStore.set(player, TCPlayerKnowledge.load(beforeDrilldownKnowledge), false);
+        TCThaumonomiconClientCache.clear();
+
         Optional<TCThaumonomiconResearchView> staleCandidate = index.entries().stream().findFirst();
         boolean staleActionRejectedWithoutMutation = false;
         if (staleCandidate.isPresent()) {
@@ -689,6 +761,80 @@ final class TCThaumonomiconProtocolAudit {
         };
     }
 
+    private static Optional<ItemStack> recipeOutput(TCResearchPageView page) {
+        if (page.craftingRecipe().isPresent()) {
+            return Optional.of(page.craftingRecipe().get().result());
+        }
+        if (page.arcaneRecipe().isPresent()) {
+            return Optional.of(page.arcaneRecipe().get().result());
+        }
+        if (page.crucibleRecipe().isPresent()) {
+            return Optional.of(page.crucibleRecipe().get().result());
+        }
+        if (page.infusionRecipe().isPresent()) {
+            return Optional.of(page.infusionRecipe().get().result());
+        }
+        return Optional.empty();
+    }
+
+    private static boolean recipeOutputMatches(TCResearchPageView page, ItemStack stack) {
+        return recipeOutput(page)
+                .filter(output -> !output.isEmpty() && stack != null && !stack.isEmpty())
+                .map(output -> output.is(stack.getItem()))
+                .orElse(false);
+    }
+
+    private static Optional<DrilldownAuditSample> prepareDrilldownSample(ServerPlayer player) {
+        for (TCResearchPageCatalogEntry entry : TCResearchPageCatalogManager.entries()) {
+            if (!entry.directReference() || entry.kind() == TCResearchPageKind.GROUP) {
+                continue;
+            }
+            if (TCResearchPageCatalogManager.availability(entry.id().toString(), player.server.getRecipeManager())
+                    != TCResearchPageAvailability.READY) {
+                continue;
+            }
+
+            Optional<ItemStack> output = catalogOutput(player, entry);
+            if (output.isEmpty() || output.get().isEmpty()) {
+                continue;
+            }
+            if (!entry.requiredResearch().isBlank()) {
+                satisfyReference(player, entry.requiredResearch(), new HashSet<>());
+            }
+            return Optional.of(new DrilldownAuditSample(
+                    output.get().copyWithCount(1),
+                    TCThaumonomiconService.buildRevision(player)
+            ));
+        }
+        return Optional.empty();
+    }
+
+    private static Optional<ItemStack> catalogOutput(ServerPlayer player, TCResearchPageCatalogEntry entry) {
+        return switch (entry.kind()) {
+            case CRAFTING -> TCResearchPageCatalogManager.buildCraftingPage(
+                    entry.id(),
+                    player.server.getRecipeManager(),
+                    player.server.registryAccess()
+            ).map(TCCraftingRecipePageView::result);
+            case ARCANE -> TCResearchPageCatalogManager.buildArcanePage(
+                    entry.id(),
+                    player.server.getRecipeManager(),
+                    player.server.registryAccess()
+            ).map(TCArcaneRecipePageView::result);
+            case CRUCIBLE -> TCResearchPageCatalogManager.buildCruciblePage(
+                    entry.id(),
+                    player.server.getRecipeManager(),
+                    player.server.registryAccess()
+            ).map(TCCrucibleRecipePageView::result);
+            case INFUSION -> TCResearchPageCatalogManager.buildInfusionPage(
+                    entry.id(),
+                    player.server.getRecipeManager(),
+                    player.server.registryAccess()
+            ).map(TCInfusionRecipePageView::result);
+            default -> Optional.empty();
+        };
+    }
+
     private static String classifyDeferredArcaneCatalogEntry(String catalogId) {
         String normalized = catalogId == null ? "" : catalogId.toLowerCase();
         if (containsAny(normalized, ARCANE_TRANSPORT_HINTS)) {
@@ -774,6 +920,9 @@ final class TCThaumonomiconProtocolAudit {
     }
 
     record Check(String name, boolean passed, String detail) {
+    }
+
+    private record DrilldownAuditSample(ItemStack stack, int revision) {
     }
 
     record Report(

@@ -45,6 +45,7 @@ Every index also carries a server-built revision over the current research data,
 - Entry stage text, visible addenda, requirement results, stage state, bookmarks, book asset, page navigation, and checked stage advance are active.
 - Renderable crafting bookmarks open a legacy-style paper recipe page. The server snapshot owns the real result stack, shaped/shapeless kind, shaped dimensions, ingredient slots, and ingredient variants; the client only cycles and renders those values.
 - Live vanilla crafting, arcane, crucible and infusion catalog entries produce valid server snapshots. Direct-reference live availability remains catalog-owned; deferred or legacy-missing groups stay non-interactive until their subsystem or mapping exists.
+- Recipe stack click-through is server-authoritative: the client sends the hovered stack and current index revision, the server resolves the first visible matching research recipe page, stale revisions are rejected without mutation, and the client keeps only local page history for Back/Escape/right-click navigation.
 - Thaumonomicon has its exact legacy runtime aspect result from the 1.12 exporter dump.
 - Legacy `research.*` English translations required by the active screen are present in modern `en_us.json`.
 
@@ -52,7 +53,6 @@ Every index also carries a server-built revision over the current research data,
 
 - Exact arrow shapes, forbidden/warp marker, category completion percentages, popup animation, and final browser visual parity tuning.
 - Aspect and knowledge side pages.
-- Recipe drilldown/history.
 - Blueprint, fake/display-only, special and missing recipe-page renderers.
 - Cheat Thaumonomicon variant.
 
@@ -60,14 +60,14 @@ Deferred recipe pages are shown only as catalog bookmarks with their authoritati
 
 ## Validation
 
-- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, and the `READY` crafting/arcane/crucible/infusion snapshot boundary. The report deliberately records stable revision match labels instead of raw hash values.
-- Latest protocol result: `31/31` checks passed; live vanilla crafting, arcane, crucible and infusion catalog entries produce valid server snapshots.
-- `gradlew build` passes after the first browser search/filter slice.
+- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action and stale-drilldown rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, server-side drilldown output matching, and the `READY` crafting/arcane/crucible/infusion snapshot boundary. The report deliberately records stable revision match labels instead of raw hash values.
+- Latest protocol result: `34/34` checks passed; live vanilla crafting, arcane, crucible and infusion catalog entries produce valid server snapshots, and recipe drilldown/history validates server-side output-stack resolution, client-cache acceptance and stale-revision rejection.
+- `gradlew build` passes after the browser search/filter and recipe drilldown/history slices.
 - Dedicated-server reload passes with `687` exact aspect assignments and the Thaumonomicon protocol audit.
 
 ## Next boundary
 
 1. Keep `DEFERRED` and `LEGACY_MISSING` pages non-interactive until their crafting subsystem or mapping is implemented.
 2. Keep remaining custom recipe pages catalog-gated. Vanilla crafting, arcane, crucible and real infusion page snapshots have first-pass boundaries; blueprint, fake/display and special pages still need focused design slices before rendering.
-3. Add recipe drilldown/history only after server-authoritative page snapshots can represent the referenced recipe family.
+3. Keep recipe drilldown limited to server-returned snapshots; do not let the client resolve hidden or deferred recipes independently.
 4. Run a focused visual parity pass against the legacy browser, entry page, and crafting paper page before calling the UI final.

@@ -95,7 +95,7 @@ Latest validation:
   `325` total entries including group members, `0` field differences;
 - runtime structural validation: `0` missing catalog references, unresolved
   group targets, or cycles;
-- Thaumonomicon protocol audit: `31/31` checks passed. The first real item/open/browser/entry flow, server-snapshot-backed vanilla crafting page renderer, exact arcane page renderer, crucible page renderer, infusion page renderer, server-built index revision, and stale-action rejection without mutation are active; remaining blueprint, fake/display and special recipe-page rendering remains catalog-gated.
+- Thaumonomicon protocol audit: `34/34` checks passed. The first real item/open/browser/entry/search/drilldown flow, server-snapshot-backed vanilla crafting page renderer, exact arcane page renderer, crucible page renderer, infusion page renderer, server-built index revision, stale-action/stale-drilldown rejection without mutation, and server-side recipe output-stack drilldown resolution are active; remaining blueprint, fake/display and special recipe-page rendering remains catalog-gated.
 
 ## Remaining boundary
 

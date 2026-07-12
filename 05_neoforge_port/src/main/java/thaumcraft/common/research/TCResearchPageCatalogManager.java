@@ -107,19 +107,39 @@ public final class TCResearchPageCatalogManager {
                 continue;
             }
 
-            ArrayList<TCResearchPageView> pages = new ArrayList<>();
-            if (catalogEntry.kind() == TCResearchPageKind.GROUP) {
-                for (ResourceLocation target : catalogEntry.targets()) {
-                    addVisiblePage(pages, target, recipeManager, player.server.registryAccess(), knowledge);
-                }
-            } else {
-                addVisiblePage(pages, bookmarkId, recipeManager, player.server.registryAccess(), knowledge);
-            }
+            List<TCResearchPageView> pages = visiblePagesForReference(player, bookmarkId, recipeManager, knowledge);
             if (!pages.isEmpty()) {
                 bookmarks.add(new TCResearchPageBookmark(bookmarkId, pages));
             }
         }
         return List.copyOf(bookmarks);
+    }
+
+    static Optional<TCResearchPageDrilldownResult> findRecipeDrilldown(ServerPlayer player, ItemStack stack) {
+        if (player == null || stack == null || stack.isEmpty()) {
+            return Optional.empty();
+        }
+
+        RecipeManager recipeManager = player.server.getRecipeManager();
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        for (TCResearchEntryDefinition entry : TCResearchManager.entries()) {
+            for (TCResearchStageDefinition stage : entry.stages()) {
+                for (String reference : stage.recipes()) {
+                    ResourceLocation bookmarkId = canonicalId(reference);
+                    Optional<TCResearchPageDrilldownResult> result = findRecipeDrilldown(
+                            player,
+                            bookmarkId,
+                            stack,
+                            recipeManager,
+                            knowledge
+                    );
+                    if (result.isPresent()) {
+                        return result;
+                    }
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     static Optional<TCResearchPageStageSelection> selectCurrentStage(ServerPlayer player, String researchKey) {
@@ -172,6 +192,69 @@ public final class TCResearchPageCatalogManager {
             throw new IllegalArgumentException("Invalid research page catalog id: " + rawId);
         }
         return id;
+    }
+
+    private static Optional<TCResearchPageDrilldownResult> findRecipeDrilldown(
+            ServerPlayer player,
+            ResourceLocation bookmarkId,
+            ItemStack stack,
+            RecipeManager recipeManager,
+            TCPlayerKnowledge knowledge
+    ) {
+        List<TCResearchPageView> pages = visiblePagesForReference(player, bookmarkId, recipeManager, knowledge);
+        for (int pageIndex = 0; pageIndex < pages.size(); pageIndex++) {
+            TCResearchPageView page = pages.get(pageIndex);
+            if (page.availability() == TCResearchPageAvailability.READY && recipeOutputMatches(page, stack)) {
+                return Optional.of(new TCResearchPageDrilldownResult(
+                        new TCResearchPageBookmark(bookmarkId, pages),
+                        pageIndex
+                ));
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static List<TCResearchPageView> visiblePagesForReference(
+            ServerPlayer player,
+            ResourceLocation bookmarkId,
+            RecipeManager recipeManager,
+            TCPlayerKnowledge knowledge
+    ) {
+        TCResearchPageCatalogEntry catalogEntry = activeData.entries().get(bookmarkId);
+        if (catalogEntry == null || catalogEntry.legacySource() == TCResearchPageLegacySource.MISSING) {
+            return List.of();
+        }
+
+        ArrayList<TCResearchPageView> pages = new ArrayList<>();
+        if (catalogEntry.kind() == TCResearchPageKind.GROUP) {
+            for (ResourceLocation target : catalogEntry.targets()) {
+                addVisiblePage(pages, target, recipeManager, player.server.registryAccess(), knowledge);
+            }
+        } else {
+            addVisiblePage(pages, bookmarkId, recipeManager, player.server.registryAccess(), knowledge);
+        }
+        return List.copyOf(pages);
+    }
+
+    private static boolean recipeOutputMatches(TCResearchPageView page, ItemStack stack) {
+        Optional<ItemStack> output = recipeOutput(page);
+        return output.isPresent() && !output.get().isEmpty() && output.get().is(stack.getItem());
+    }
+
+    private static Optional<ItemStack> recipeOutput(TCResearchPageView page) {
+        if (page.craftingRecipe().isPresent()) {
+            return Optional.of(page.craftingRecipe().get().result());
+        }
+        if (page.arcaneRecipe().isPresent()) {
+            return Optional.of(page.arcaneRecipe().get().result());
+        }
+        if (page.crucibleRecipe().isPresent()) {
+            return Optional.of(page.crucibleRecipe().get().result());
+        }
+        if (page.infusionRecipe().isPresent()) {
+            return Optional.of(page.infusionRecipe().get().result());
+        }
+        return Optional.empty();
     }
 
     private static void addVisiblePage(

@@ -2,6 +2,8 @@ package thaumcraft.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -23,6 +25,8 @@ import thaumcraft.common.research.TCResearchPageBookmark;
 import thaumcraft.common.research.TCResearchPageView;
 import thaumcraft.common.research.TCThaumonomiconActionPayload;
 import thaumcraft.common.research.TCThaumonomiconClientCache;
+import thaumcraft.common.research.TCThaumonomiconDrilldownPayload;
+import thaumcraft.common.research.TCThaumonomiconDrilldownRequestPayload;
 import thaumcraft.common.research.TCThaumonomiconEntryPayload;
 import thaumcraft.common.research.TCThaumonomiconEntryView;
 
@@ -47,9 +51,12 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private boolean pendingAdvance;
     private Component lastResult = Component.empty();
     private TCResearchPageBookmark hoveredBookmark;
+    private ResourceLocation activeRecipeId;
     private List<TCResearchPageView> activeRecipePages = List.of();
     private int activeRecipeIndex;
+    private final Deque<RecipePageState> recipeHistory = new ArrayDeque<>();
     private ItemStack hoveredRecipeStack = ItemStack.EMPTY;
+    private boolean pendingDrilldown;
 
     public TCThaumonomiconEntryScreen(TCThaumonomiconEntryView entry) {
         super(Component.translatable(entry.research().name()));
@@ -64,16 +71,25 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     @Override
     public void tick() {
         TCThaumonomiconEntryPayload result = TCThaumonomiconClientCache.pollLastEntryResult();
-        if (result == null || !result.researchKey().equals(entry.research().key())) {
+        if (result != null && result.researchKey().equals(entry.research().key())) {
+            pendingAdvance = false;
+            lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.result." + result.resultKey());
+            if (result.accepted() && result.entry().isPresent()) {
+                entry = result.entry().get();
+                spread = 0;
+                closeRecipePage();
+                rebuildLines();
+            }
+        }
+
+        TCThaumonomiconDrilldownPayload drilldown = TCThaumonomiconClientCache.pollLastDrilldownResult();
+        if (drilldown == null) {
             return;
         }
-        pendingAdvance = false;
-        lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.result." + result.resultKey());
-        if (result.accepted() && result.entry().isPresent()) {
-            entry = result.entry().get();
-            spread = 0;
-            closeRecipePage();
-            rebuildLines();
+        pendingDrilldown = false;
+        lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.result." + drilldown.resultKey());
+        if (drilldown.accepted() && drilldown.bookmark().isPresent()) {
+            openDrilldown(drilldown.bookmark().get(), drilldown.pageIndex());
         }
     }
 
@@ -93,7 +109,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (!activeRecipePages.isEmpty()) {
             renderRecipePage(graphics, mouseX, mouseY);
             if (!hoveredRecipeStack.isEmpty()) {
-                graphics.renderTooltip(font, hoveredRecipeStack, mouseX, mouseY);
+                renderRecipeStackTooltip(graphics, mouseX, mouseY);
             }
             return;
         }
@@ -106,7 +122,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!activeRecipePages.isEmpty()) {
             if (button == 1) {
-                closeRecipePage();
+                goBackRecipePage();
                 playPage();
                 return true;
             }
@@ -156,7 +172,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (keyCode == GLFW.GLFW_KEY_ESCAPE && !activeRecipePages.isEmpty()) {
-            closeRecipePage();
+            goBackRecipePage();
             playPage();
             return true;
         }
@@ -327,8 +343,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.recipe_unavailable");
             return;
         }
-        activeRecipePages = renderable;
-        activeRecipeIndex = 0;
+        openRecipePages(bookmark.id(), renderable, 0, true);
         playPage();
     }
 
@@ -336,7 +351,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         int x = recipePageX();
         int y = recipePageY();
         if (inside(mouseX, mouseY, x + 96, y + 236, 64, 16)) {
-            closeRecipePage();
+            goBackRecipePage();
             playPage();
             return true;
         }
@@ -351,13 +366,88 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             playPageTurn();
             return true;
         }
+        if (!hoveredRecipeStack.isEmpty() && !pendingDrilldown) {
+            pendingDrilldown = true;
+            lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.loading");
+            PacketDistributor.sendToServer(new TCThaumonomiconDrilldownRequestPayload(
+                    hoveredRecipeStack,
+                    TCThaumonomiconClientCache.revision()
+            ));
+            playPage();
+            return true;
+        }
         return false;
     }
 
     private void closeRecipePage() {
+        closeRecipePage(true);
+    }
+
+    private void closeRecipePage(boolean clearHistory) {
+        activeRecipeId = null;
         activeRecipePages = List.of();
         activeRecipeIndex = 0;
+        if (clearHistory) {
+            recipeHistory.clear();
+        }
         hoveredRecipeStack = ItemStack.EMPTY;
+        pendingDrilldown = false;
+    }
+
+    private void goBackRecipePage() {
+        if (!recipeHistory.isEmpty()) {
+            RecipePageState state = recipeHistory.pop();
+            activeRecipeId = state.id();
+            activeRecipePages = state.pages();
+            activeRecipeIndex = Math.max(0, Math.min(state.pageIndex(), Math.max(0, activeRecipePages.size() - 1)));
+            hoveredRecipeStack = ItemStack.EMPTY;
+            pendingDrilldown = false;
+            return;
+        }
+        closeRecipePage(false);
+    }
+
+    private void openDrilldown(TCResearchPageBookmark bookmark, int pageIndex) {
+        List<TCResearchPageView> renderable = bookmark.pages().stream()
+                .filter(page -> page.availability() == TCResearchPageAvailability.READY)
+                .filter(TCThaumonomiconEntryScreen::hasRenderableRecipe)
+                .toList();
+        if (renderable.isEmpty()) {
+            lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.recipe_unavailable");
+            return;
+        }
+        if (!activeRecipePages.isEmpty()) {
+            recipeHistory.push(new RecipePageState(activeRecipeId, activeRecipePages, activeRecipeIndex));
+        }
+        openRecipePages(bookmark.id(), renderable, renderableIndex(bookmark.pages(), pageIndex), false);
+        playPage();
+    }
+
+    private void openRecipePages(
+            ResourceLocation id,
+            List<TCResearchPageView> pages,
+            int pageIndex,
+            boolean clearHistory
+    ) {
+        activeRecipeId = id;
+        activeRecipePages = List.copyOf(pages);
+        activeRecipeIndex = Math.max(0, Math.min(pageIndex, Math.max(0, activeRecipePages.size() - 1)));
+        if (clearHistory) {
+            recipeHistory.clear();
+        }
+        hoveredRecipeStack = ItemStack.EMPTY;
+        pendingDrilldown = false;
+    }
+
+    private int renderableIndex(List<TCResearchPageView> pages, int rawPageIndex) {
+        int index = 0;
+        for (int raw = 0; raw < pages.size() && raw < rawPageIndex; raw++) {
+            TCResearchPageView page = pages.get(raw);
+            if (page.availability() == TCResearchPageAvailability.READY && hasRenderableRecipe(page)) {
+                index++;
+            }
+        }
+        return index;
     }
 
     private void renderRecipePage(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -599,6 +689,18 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
     }
 
+    private void renderRecipeStackTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        ArrayList<Component> lines = new ArrayList<>(getTooltipFromItem(minecraft, hoveredRecipeStack));
+        if (pendingDrilldown) {
+            lines.add(Component.translatable("gui.thaumcraft.thaumonomicon.loading")
+                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        } else {
+            lines.add(Component.translatable("recipe.clickthrough")
+                    .withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC));
+        }
+        graphics.renderComponentTooltip(font, lines, mouseX, mouseY);
+    }
+
     private void renderRecipeNavigation(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
         if (activeRecipeIndex > 0) {
             blit(graphics, BROWSER, x + 40, y + 232, 0, 184, 12, 8, 256, 256);
@@ -671,6 +773,16 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private static boolean inside(double mouseX, double mouseY, int x, int y, int width, int height) {
         return mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
+    }
+
+    private record RecipePageState(
+            ResourceLocation id,
+            List<TCResearchPageView> pages,
+            int pageIndex
+    ) {
+        private RecipePageState {
+            pages = List.copyOf(pages);
+        }
     }
 
     private static void blit(

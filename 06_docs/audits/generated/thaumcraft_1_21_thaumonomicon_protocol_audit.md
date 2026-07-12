@@ -29,6 +29,9 @@
 | `client_cache_stores_authoritative_revision` | `PASS` | revision=stored |
 | `index_refresh_invalidates_entry_cache` | `PASS` | sample_present=true |
 | `explicit_open_intent_is_separate_from_refresh` | `PASS` | open_once=true, refresh_open=false |
+| `recipe_drilldown_resolves_output_stack_server_side` | `PASS` | sample_stack=thaumcraft:arcane_bore |
+| `client_cache_accepts_drilldown_payload` | `PASS` | sample_present=true |
+| `stale_drilldown_revision_rejected_without_mutation` | `PASS` | sample_present=true |
 | `stale_action_revision_rejected_without_mutation` | `PASS` | candidate=FIRSTSTEPS |
 | `legacy_start_action_semantics` | `PASS` | candidate=FIRSTSTEPS |
 | `legacy_acknowledge_action_semantics` | `PASS` | candidate=FIRSTSTEPS |

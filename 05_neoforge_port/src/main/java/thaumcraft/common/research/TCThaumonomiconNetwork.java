@@ -7,7 +7,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public final class TCThaumonomiconNetwork {
-    private static final String NETWORK_VERSION = "5";
+    private static final String NETWORK_VERSION = "6";
 
     private TCThaumonomiconNetwork() {
     }
@@ -29,6 +29,11 @@ public final class TCThaumonomiconNetwork {
                 TCThaumonomiconActionPayload.STREAM_CODEC,
                 TCThaumonomiconNetwork::handleAction
         );
+        registrar.playToServer(
+                TCThaumonomiconDrilldownRequestPayload.TYPE,
+                TCThaumonomiconDrilldownRequestPayload.STREAM_CODEC,
+                TCThaumonomiconNetwork::handleDrilldownRequest
+        );
         registrar.playToClient(
                 TCThaumonomiconIndexPayload.TYPE,
                 TCThaumonomiconIndexPayload.STREAM_CODEC,
@@ -38,6 +43,11 @@ public final class TCThaumonomiconNetwork {
                 TCThaumonomiconEntryPayload.TYPE,
                 TCThaumonomiconEntryPayload.STREAM_CODEC,
                 TCThaumonomiconNetwork::handleEntry
+        );
+        registrar.playToClient(
+                TCThaumonomiconDrilldownPayload.TYPE,
+                TCThaumonomiconDrilldownPayload.STREAM_CODEC,
+                TCThaumonomiconNetwork::handleDrilldown
         );
     }
 
@@ -114,6 +124,25 @@ public final class TCThaumonomiconNetwork {
         });
     }
 
+    private static void handleDrilldownRequest(TCThaumonomiconDrilldownRequestPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (!(context.player() instanceof ServerPlayer player)) {
+                return;
+            }
+            DrilldownResult result = processDrilldown(player, payload);
+            if (result.refreshIndex()) {
+                sendIndex(player);
+            }
+            PacketDistributor.sendToPlayer(player, new TCThaumonomiconDrilldownPayload(
+                    result.accepted(),
+                    result.resultKey(),
+                    payload.stack(),
+                    result.result().map(TCResearchPageDrilldownResult::bookmark),
+                    result.result().map(TCResearchPageDrilldownResult::pageIndex).orElse(0)
+            ));
+        });
+    }
+
     static ActionResult processAction(ServerPlayer player, TCThaumonomiconActionPayload payload) {
         if (!TCThaumonomiconService.isRevisionCurrent(player, payload.clientRevision())) {
             return new ActionResult(false, "stale_revision", true);
@@ -145,6 +174,22 @@ public final class TCThaumonomiconNetwork {
         };
     }
 
+    static DrilldownResult processDrilldown(ServerPlayer player, TCThaumonomiconDrilldownRequestPayload payload) {
+        if (!TCThaumonomiconService.isRevisionCurrent(player, payload.clientRevision())) {
+            return new DrilldownResult(false, "stale_revision", true, Optional.empty());
+        }
+        if (payload.stack().isEmpty()) {
+            return new DrilldownResult(false, "recipe_unavailable", false, Optional.empty());
+        }
+        Optional<TCResearchPageDrilldownResult> result = TCResearchPageCatalogManager.findRecipeDrilldown(
+                player,
+                payload.stack()
+        );
+        return result
+                .map(value -> new DrilldownResult(true, "recipe_loaded", false, Optional.of(value)))
+                .orElseGet(() -> new DrilldownResult(false, "recipe_unavailable", false, Optional.empty()));
+    }
+
     private static void handleIndex(TCThaumonomiconIndexPayload payload, IPayloadContext context) {
         TCThaumonomiconClientCache.accept(payload);
     }
@@ -153,6 +198,18 @@ public final class TCThaumonomiconNetwork {
         TCThaumonomiconClientCache.accept(payload);
     }
 
+    private static void handleDrilldown(TCThaumonomiconDrilldownPayload payload, IPayloadContext context) {
+        TCThaumonomiconClientCache.accept(payload);
+    }
+
     record ActionResult(boolean accepted, String resultKey, boolean refreshIndex) {
+    }
+
+    record DrilldownResult(
+            boolean accepted,
+            String resultKey,
+            boolean refreshIndex,
+            Optional<TCResearchPageDrilldownResult> result
+    ) {
     }
 }

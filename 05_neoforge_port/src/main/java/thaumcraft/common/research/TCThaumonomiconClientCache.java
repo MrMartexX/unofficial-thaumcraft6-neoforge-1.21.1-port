@@ -8,6 +8,7 @@ public final class TCThaumonomiconClientCache {
     private static TCThaumonomiconIndexPayload index = new TCThaumonomiconIndexPayload(java.util.List.of(), java.util.List.of());
     private static Map<String, TCThaumonomiconEntryView> entries = Map.of();
     private static TCThaumonomiconEntryPayload lastEntryResult;
+    private static TCThaumonomiconDrilldownPayload lastDrilldownResult;
     private static boolean openRequested;
 
     private TCThaumonomiconClientCache() {
@@ -19,6 +20,7 @@ public final class TCThaumonomiconClientCache {
                 : payload;
         entries = Map.of();
         lastEntryResult = null;
+        lastDrilldownResult = null;
         openRequested |= payload != null && payload.openScreen();
     }
 
@@ -34,6 +36,13 @@ public final class TCThaumonomiconClientCache {
         }
         entries = Map.copyOf(updated);
         lastEntryResult = payload;
+    }
+
+    public static void accept(TCThaumonomiconDrilldownPayload payload) {
+        if (payload == null) {
+            return;
+        }
+        lastDrilldownResult = payload;
     }
 
     public static TCThaumonomiconIndexPayload index() {
@@ -54,6 +63,12 @@ public final class TCThaumonomiconClientCache {
         return result;
     }
 
+    public static TCThaumonomiconDrilldownPayload pollLastDrilldownResult() {
+        TCThaumonomiconDrilldownPayload result = lastDrilldownResult;
+        lastDrilldownResult = null;
+        return result;
+    }
+
     public static boolean pollOpenRequested() {
         boolean requested = openRequested;
         openRequested = false;
@@ -64,6 +79,7 @@ public final class TCThaumonomiconClientCache {
         index = new TCThaumonomiconIndexPayload(java.util.List.of(), java.util.List.of());
         entries = Map.of();
         lastEntryResult = null;
+        lastDrilldownResult = null;
         openRequested = false;
     }
 }

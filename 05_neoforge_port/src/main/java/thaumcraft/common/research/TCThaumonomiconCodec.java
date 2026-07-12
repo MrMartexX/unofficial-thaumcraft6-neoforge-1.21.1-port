@@ -69,6 +69,26 @@ final class TCThaumonomiconCodec {
         return new TCThaumonomiconEntryPayload(accepted, resultKey, researchKey, entry);
     }
 
+    static void writeDrilldownPayload(RegistryFriendlyByteBuf buffer, TCThaumonomiconDrilldownPayload payload) {
+        buffer.writeBoolean(payload.accepted());
+        writeString(buffer, payload.resultKey(), MAX_RESULT_LENGTH, "drilldown result key");
+        ItemStack.STREAM_CODEC.encode(buffer, payload.requestedStack());
+        buffer.writeBoolean(payload.bookmark().isPresent());
+        payload.bookmark().ifPresent(bookmark -> writeBookmark(buffer, bookmark));
+        buffer.writeVarInt(payload.pageIndex());
+    }
+
+    static TCThaumonomiconDrilldownPayload readDrilldownPayload(RegistryFriendlyByteBuf buffer) {
+        boolean accepted = buffer.readBoolean();
+        String resultKey = readString(buffer, MAX_RESULT_LENGTH);
+        ItemStack requestedStack = ItemStack.STREAM_CODEC.decode(buffer);
+        Optional<TCResearchPageBookmark> bookmark = buffer.readBoolean()
+                ? Optional.of(readBookmark(buffer))
+                : Optional.empty();
+        int pageIndex = buffer.readVarInt();
+        return new TCThaumonomiconDrilldownPayload(accepted, resultKey, requestedStack, bookmark, pageIndex);
+    }
+
     private static void writeCategory(RegistryFriendlyByteBuf buffer, TCThaumonomiconCategoryView category) {
         writeString(buffer, category.key(), MAX_KEY_LENGTH, "category key");
         writeString(buffer, category.requiredResearch(), MAX_KEY_LENGTH, "category required research");
