@@ -24,7 +24,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 11;
+    private static final int REGISTERED_FOUNDATION_COUNT = 12;
 
     private TCEntityFoundationAudit() {
     }
@@ -90,13 +90,14 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, FluxRift, ArcaneBore, TaintSeed pair and five taint mob foundations"
+                "expected item entities, FluxRift, ArcaneBore, FallingTaint, TaintSeed pair and five taint mob foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
         checks.add(checkRegisteredType("FollowItem", TCEntityTypes.FOLLOW_ITEM.get()));
         checks.add(checkRegisteredType("FluxRift", TCEntityTypes.FLUX_RIFT.get()));
         checks.add(checkRegisteredType("ArcaneBore", TCEntityTypes.ARCANE_BORE.get()));
+        checks.add(checkRegisteredType("FallingTaint", TCEntityTypes.FALLING_TAINT.get()));
         checks.add(checkRegisteredType("TaintSeed", TCEntityTypes.TAINT_SEED.get()));
         checks.add(checkRegisteredType("TaintSeedPrime", TCEntityTypes.TAINT_SEED_PRIME.get()));
         checks.add(checkRegisteredType("ThaumSlime", TCEntityTypes.THAUM_SLIME.get()));
@@ -106,6 +107,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("TaintSwarm", TCEntityTypes.TAINT_SWARM.get()));
         checks.add(checkTypeShape("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get(), 64, 20, true));
         checks.add(checkTypeShape("FollowItem", TCEntityTypes.FOLLOW_ITEM.get(), 64, 20, false));
+        checks.add(checkTypeShape("FallingTaint", TCEntityTypes.FALLING_TAINT.get(), 64, 3, true, 0.98F, 0.98F));
         checks.add(checkMobTypeShape("ThaumSlime", TCEntityTypes.THAUM_SLIME.get(), 2.04F, 2.04F, 64, 3, true));
         checks.add(checkMobTypeShape("TaintCrawler", TCEntityTypes.TAINT_CRAWLER.get(), 0.5F, 0.4F, 64, 3, true));
         checks.add(checkMobTypeShape("Taintacle", TCEntityTypes.TAINTACLE.get(), 0.8F, 3.0F, 64, 3, false));
@@ -128,9 +130,13 @@ public final class TCEntityFoundationAudit {
     }
 
     private static Check checkTypeShape(String legacyId, EntityType<?> type, int trackingRange, int updateInterval, boolean velocityUpdates) {
+        return checkTypeShape(legacyId, type, trackingRange, updateInterval, velocityUpdates, 0.25F, 0.25F);
+    }
+
+    private static Check checkTypeShape(String legacyId, EntityType<?> type, int trackingRange, int updateInterval, boolean velocityUpdates, float width, float height) {
         boolean passed = type.getCategory() == MobCategory.MISC
-                && Float.compare(type.getWidth(), 0.25F) == 0
-                && Float.compare(type.getHeight(), 0.25F) == 0
+                && Float.compare(type.getWidth(), width) == 0
+                && Float.compare(type.getHeight(), height) == 0
                 && type.clientTrackingRange() == trackingRange
                 && type.updateInterval() == updateInterval
                 && type.trackDeltas() == velocityUpdates;

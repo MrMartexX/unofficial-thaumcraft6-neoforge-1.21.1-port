@@ -68,7 +68,7 @@ public final class TCTaintEcologyBlockerAudit {
         lines.add("- Implemented: `taint_seed` and `taint_seed_prime` entity registration, attributes, boost save/load, seed-radius map, near/edge checks, flux-gated spread loop and Flux Taint healing for tainted mobs.");
         lines.add("- Implemented: `taint_crust`, `taint_soil`, `taint_rock`, `taint_geyser`, `taint_log` and `taint_feature` registration with BlockItems, creative visibility and modern block/item models.");
         lines.add("- Implemented: deterministic validation for TC6-style spread target categories: surface fibre, dirt -> taint soil, stone -> taint rock, log -> taint log and log-adjacent leaves -> taint feature/fibre.");
-        lines.add("- Deferred from this ecology audit: FallingTaint crust physics, GORE sound parity, exact animated TaintSeed model parity and final taint mob renderer/natural-spawn parity. Taint mob server-foundation hooks are covered by TCTaintMobBlockerAudit.");
+        lines.add("- Covered separately: FallingTaint crust physics and GORE sound parity are covered by TCFallingTaintBlockerAudit; taint mob server-foundation hooks are covered by TCTaintMobBlockerAudit. Deferred from this ecology audit: exact animated TaintSeed model parity and final taint mob renderer/natural-spawn parity.");
         Files.write(output, lines, StandardCharsets.UTF_8);
         return report;
     }

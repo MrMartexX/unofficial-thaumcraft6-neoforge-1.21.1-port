@@ -2,7 +2,10 @@ package thaumcraft.common.blocks.world.taint;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,11 +13,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thaumcraft.api.aura.AuraHelper;
+import thaumcraft.common.entities.TCFallingTaintEntity;
 import thaumcraft.common.entities.TCTaintSwarmEntity;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCEntityTypes;
@@ -52,6 +57,13 @@ public final class TCTaintTerrainBlock extends Block {
         }
         if (kind == Kind.ROCK) {
             TCTaintHelper.spreadFibres(level, pos);
+        } else if (kind == Kind.CRUST) {
+            if (tryToFall(level, pos, pos)) {
+                return;
+            }
+            if (level.isEmptyBlock(pos.above())) {
+                tryOverhangFall(level, pos, Direction.from2DDataValue(random.nextInt(4)));
+            }
         } else if (kind == Kind.GEYSER) {
             if (trySpawnSwarm(level, pos, random)) {
                 return;
@@ -83,13 +95,85 @@ public final class TCTaintTerrainBlock extends Block {
     public void die(Level level, BlockPos pos, BlockState state) {
         switch (kind) {
             case ROCK -> level.setBlock(pos, TCBlocks.STONE_POROUS.get().defaultBlockState(), Block.UPDATE_ALL);
-            case SOIL -> level.setBlock(pos, net.minecraft.world.level.block.Blocks.DIRT.defaultBlockState(), Block.UPDATE_ALL);
+            case SOIL -> level.setBlock(pos, Blocks.DIRT.defaultBlockState(), Block.UPDATE_ALL);
             case CRUST, GEYSER -> level.setBlock(pos, TCBlocks.FLUX_GOO.get().defaultBlockState(), Block.UPDATE_ALL);
         }
     }
 
+    public boolean tryToFallForValidation(ServerLevel level, BlockPos pos, BlockPos target) {
+        return tryToFall(level, pos, target);
+    }
+
+    public boolean tryOverhangFallForValidation(ServerLevel level, BlockPos pos, Direction direction) {
+        return tryOverhangFall(level, pos, direction);
+    }
+
+    public static boolean canFallBelow(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        for (BlockPos scan : BlockPos.betweenClosed(pos.offset(-1, -1, -1), pos.offset(1, 1, 1))) {
+            if (level.getBlockState(scan).is(BlockTags.LOGS)) {
+                return false;
+            }
+        }
+        boolean fluxGooAllowed = !state.is(TCBlocks.FLUX_GOO.get())
+                || (state.hasProperty(TCFluxGooBlock.LEVEL) && state.getValue(TCFluxGooBlock.LEVEL) < 4);
+        return state.isAir()
+                || (fluxGooAllowed
+                && (state.is(Blocks.FIRE)
+                || state.is(TCBlocks.TAINT_FIBRE.get())
+                || state.canBeReplaced()
+                || state.getFluidState().is(FluidTags.WATER)
+                || state.getFluidState().is(FluidTags.LAVA)));
+    }
+
     public static boolean trySpawnSwarmForValidation(ServerLevel level, BlockPos pos) {
         return spawnSwarm(level, pos);
+    }
+
+    private boolean tryToFall(ServerLevel level, BlockPos pos, BlockPos target) {
+        if (!TCTaintFibreBlock.isOnlyAdjacentToTaint(level, pos)) {
+            return false;
+        }
+        if (!canFallBelow(level, target.below()) || target.getY() < level.getMinBuildHeight()) {
+            return false;
+        }
+        if (level.isAreaLoaded(target, 32)) {
+            TCFallingTaintEntity falling = new TCFallingTaintEntity(
+                    level,
+                    target.getX() + 0.5D,
+                    target.getY() + 0.5D,
+                    target.getZ() + 0.5D,
+                    level.getBlockState(pos),
+                    pos
+            );
+            level.addFreshEntity(falling);
+            return true;
+        }
+
+        level.removeBlock(pos, false);
+        BlockPos landing = target;
+        while (canFallBelow(level, landing.below()) && landing.getY() > level.getMinBuildHeight()) {
+            landing = landing.below();
+        }
+        if (landing.getY() > level.getMinBuildHeight()) {
+            level.setBlock(landing, TCBlocks.TAINT_CRUST.get().defaultBlockState(), Block.UPDATE_ALL);
+        }
+        return false;
+    }
+
+    private boolean tryOverhangFall(ServerLevel level, BlockPos pos, Direction direction) {
+        if (!level.isEmptyBlock(pos.above())) {
+            return false;
+        }
+        boolean clear = true;
+        for (int depth = 1; depth < 4; depth++) {
+            if (!level.isEmptyBlock(pos.relative(direction).below(depth))
+                    || !level.getBlockState(pos.below(depth)).is(this)) {
+                clear = false;
+                break;
+            }
+        }
+        return clear && tryToFall(level, pos, pos.relative(direction));
     }
 
     private static boolean trySpawnSwarm(ServerLevel level, BlockPos pos, RandomSource random) {

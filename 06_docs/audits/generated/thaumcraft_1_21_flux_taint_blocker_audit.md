@@ -32,5 +32,5 @@ decay can now produce Taint Fibre, and Taint Fibre keeps the TC6 state, shape an
 
 - Implemented: Taint Fibre registration, block item, creative visibility, 10-property legacy state, deterministic growth, face/growth shapes, light levels, walk taint and Flux Goo level-zero alternate result.
 - Implemented: resource path modernization for Taint Fibre multipart blockstate and growth models.
-- Deferred from this earlier Flux Goo/Taint Fibre audit: later TaintSeed/terrain ecology and taint mob server-foundation hooks are covered by their focused audits; FallingTaint crust physics and final taint visuals remain separate blockers.
+- Covered separately from this earlier Flux Goo/Taint Fibre audit: later TaintSeed/terrain ecology, taint mob server-foundation hooks and FallingTaint crust physics are covered by their focused audits; final taint visuals remain separate blockers.
 - Until TaintSeed exists, Taint Fibre intentionally withers on random tick just like legacy fibres outside seed range.

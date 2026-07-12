@@ -57,6 +57,8 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "rumble")));
     public static final Supplier<SoundEvent> EVILPORTAL = SOUND_EVENTS.register("evilportal", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "evilportal")));
+    public static final Supplier<SoundEvent> GORE = SOUND_EVENTS.register("gore", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "gore")));
 
     private TCSounds() {
     }

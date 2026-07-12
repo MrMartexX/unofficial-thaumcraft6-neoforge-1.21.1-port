@@ -11,6 +11,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.entities.TCArcaneBoreEntity;
+import thaumcraft.common.entities.TCFallingTaintEntity;
 import thaumcraft.common.entities.TCFollowingItemEntity;
 import thaumcraft.common.entities.TCFluxRiftEntity;
 import thaumcraft.common.entities.TCSpecialItemEntity;
@@ -56,6 +57,14 @@ public final class TCEntityTypes {
                     .setUpdateInterval(3)
                     .setShouldReceiveVelocityUpdates(true)
                     .build(Thaumcraft.MODID + ":arcane_bore"));
+
+    public static final Supplier<EntityType<TCFallingTaintEntity>> FALLING_TAINT = ENTITY_TYPES.register("falling_taint", () ->
+            EntityType.Builder.<TCFallingTaintEntity>of(TCFallingTaintEntity::new, MobCategory.MISC)
+                    .sized(0.98F, 0.98F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":falling_taint"));
 
     public static final Supplier<EntityType<TCTaintSeedEntity>> TAINT_SEED = ENTITY_TYPES.register("taint_seed", () ->
             EntityType.Builder.<TCTaintSeedEntity>of(TCTaintSeedEntity::new, MobCategory.MONSTER)
@@ -119,7 +128,7 @@ public final class TCEntityTypes {
             spec("FluxRift", "EntityFluxRift", "flux_rift", 64, 20, false, "registered_foundation", "Flux/aura lifecycle, collapse and rift renderer foundation"),
             spec("SpecialItem", "EntitySpecialItem", "special_item", 64, 20, true, "registered_foundation", "Legacy item-entity lift and explosion immunity"),
             spec("FollowItem", "EntityFollowingItem", "follow_item", 64, 20, false, "registered_foundation", "Legacy following item movement and spawn data"),
-            spec("FallingTaint", "EntityFallingTaint", null, 64, 3, true, "defer", "Taint block physics and taint world mutation"),
+            spec("FallingTaint", "EntityFallingTaint", "falling_taint", 64, 3, true, "registered_foundation", "Taint crust falling physics and taint world mutation"),
             spec("Alumentum", "EntityAlumentum", null, 64, 20, true, "defer", "Projectile item behavior and impact effects"),
             spec("GolemDart", "EntityGolemDart", null, 64, 20, false, "defer", "Golem ranged combat"),
             spec("EldritchOrb", "EntityEldritchOrb", null, 64, 20, true, "defer", "Eldritch projectile behavior and renderer"),

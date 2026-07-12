@@ -70,7 +70,7 @@ public final class TCTaintMobBlockerAudit {
         lines.add("- Implemented: `thaum_slime`, `taint_crawler`, `taintacle`, `taintacle_tiny` and `taint_swarm` entity types with TC6 tracking/update/velocity values.");
         lines.add("- Implemented: server-side foundations for crawler fibre trail/Flux Taint bite, feature break crawler spawn, geyser swarm spawn, taintacle tiny spawn/lifetime, swarm summoned NBT and Thaumic Slime ranged split.");
         lines.add("- Implemented: legacy scan keys for custom taint mobs and exact ConfigAspects assignments where legacy provided explicit entity tags.");
-        lines.add("- Deferred: measured mob model/animation renderer parity, full taint swarm particle renderer, FallingTaint crust physics and broad natural spawn placement tables.");
+        lines.add("- Covered separately: FallingTaint crust physics is covered by TCFallingTaintBlockerAudit. Deferred: measured mob model/animation renderer parity, full taint swarm particle renderer and broad natural spawn placement tables.");
         Files.write(output, lines, StandardCharsets.UTF_8);
         return report;
     }
