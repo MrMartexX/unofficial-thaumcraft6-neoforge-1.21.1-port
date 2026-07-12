@@ -14,9 +14,9 @@
 
 | Value | Count |
 |---|---:|
+| `FAKE_CATALOG` | `13` |
 | `CRAFTING_REGISTRY` | `83` |
 | `RECIPE_GROUP` | `9` |
-| `FAKE_CATALOG` | `13` |
 | `THAUMCRAFT_CATALOG` | `98` |
 
 ## Direct-reference page kinds
@@ -24,15 +24,14 @@
 | Value | Count |
 |---|---:|
 | `INFUSION` | `53` |
-| `GROUP` | `9` |
 | `CRUCIBLE` | `40` |
-| `CRAFTING` | `28` |
 | `ARCANE` | `73` |
+| `CRAFTING` | `28` |
+| `GROUP` | `9` |
 
 ## Direct-reference live availability
 
 | Value | Count |
 |---|---:|
-| `DEFERRED` | `13` |
-| `READY` | `190` |
+| `READY` | `203` |
 

@@ -28,6 +28,7 @@ final class TCThaumonomiconCodec {
     private static final int MAX_INFUSION_CATALYST_VARIANTS = 1024;
     private static final int MAX_INFUSION_COMPONENTS = 64;
     private static final int MAX_INFUSION_COMPONENT_VARIANTS = 1024;
+    private static final int MAX_DISPLAY_STACKS = 64;
     private static final int MAX_RESEARCH_FLAGS = 32;
 
     private TCThaumonomiconCodec() {
@@ -217,6 +218,8 @@ final class TCThaumonomiconCodec {
         page.crucibleRecipe().ifPresent(recipe -> writeCrucibleRecipe(buffer, recipe));
         buffer.writeBoolean(page.infusionRecipe().isPresent());
         page.infusionRecipe().ifPresent(recipe -> writeInfusionRecipe(buffer, recipe));
+        buffer.writeBoolean(page.displayRecipe().isPresent());
+        page.displayRecipe().ifPresent(recipe -> writeDisplayRecipe(buffer, recipe));
     }
 
     private static TCResearchPageView readPage(RegistryFriendlyByteBuf buffer) {
@@ -243,6 +246,9 @@ final class TCThaumonomiconCodec {
         Optional<TCInfusionRecipePageView> infusionRecipe = buffer.readBoolean()
                 ? Optional.of(readInfusionRecipe(buffer))
                 : Optional.empty();
+        Optional<TCDisplayRecipePageView> displayRecipe = buffer.readBoolean()
+                ? Optional.of(readDisplayRecipe(buffer))
+                : Optional.empty();
         return new TCResearchPageView(
                 id,
                 kind,
@@ -252,7 +258,8 @@ final class TCThaumonomiconCodec {
                 craftingRecipe,
                 arcaneRecipe,
                 crucibleRecipe,
-                infusionRecipe
+                infusionRecipe,
+                displayRecipe
         );
     }
 
@@ -433,6 +440,48 @@ final class TCThaumonomiconCodec {
                         )
                 ),
                 readList(buffer, MAX_INFUSION_ASPECTS, "infusion aspects", ItemStack.STREAM_CODEC::decode),
+                readString(buffer, MAX_KEY_LENGTH),
+                buffer.readVarInt()
+        );
+    }
+
+    private static void writeDisplayRecipe(RegistryFriendlyByteBuf buffer, TCDisplayRecipePageView recipe) {
+        writeResourceLocation(buffer, recipe.recipeId());
+        writeEnum(buffer, recipe.type());
+        ItemStack.STREAM_CODEC.encode(buffer, recipe.result());
+        writeList(
+                buffer,
+                recipe.catalystStacks(),
+                MAX_DISPLAY_STACKS,
+                "display catalysts",
+                ItemStack.STREAM_CODEC::encode
+        );
+        writeList(
+                buffer,
+                recipe.componentStacks(),
+                MAX_DISPLAY_STACKS,
+                "display components",
+                ItemStack.STREAM_CODEC::encode
+        );
+        writeList(
+                buffer,
+                recipe.aspectStacks(),
+                MAX_DISPLAY_STACKS,
+                "display aspects",
+                ItemStack.STREAM_CODEC::encode
+        );
+        writeString(buffer, recipe.titleKey(), MAX_KEY_LENGTH, "display title key");
+        buffer.writeVarInt(recipe.instability());
+    }
+
+    private static TCDisplayRecipePageView readDisplayRecipe(RegistryFriendlyByteBuf buffer) {
+        return new TCDisplayRecipePageView(
+                readResourceLocation(buffer),
+                readEnum(buffer, TCDisplayRecipePageType.values(), "display recipe type"),
+                ItemStack.STREAM_CODEC.decode(buffer),
+                readList(buffer, MAX_DISPLAY_STACKS, "display catalysts", ItemStack.STREAM_CODEC::decode),
+                readList(buffer, MAX_DISPLAY_STACKS, "display components", ItemStack.STREAM_CODEC::decode),
+                readList(buffer, MAX_DISPLAY_STACKS, "display aspects", ItemStack.STREAM_CODEC::decode),
                 readString(buffer, MAX_KEY_LENGTH),
                 buffer.readVarInt()
         );

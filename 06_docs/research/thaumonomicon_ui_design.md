@@ -53,7 +53,7 @@ Every index also carries a server-built revision over the current research data,
 
 - Exact arrow shapes, forbidden/warp marker, category completion percentages, popup animation, and final browser visual parity tuning.
 - Aspect and knowledge side pages.
-- Blueprint, fake/display-only, special and missing recipe-page renderers.
+- Blueprint, special and missing recipe-page renderers.
 - Cheat Thaumonomicon variant.
 
 Deferred recipe pages are shown only as catalog bookmarks with their authoritative kind/availability. Only `READY` pages carrying a matching server snapshot are interactive; the UI does not invent recipe contents.
@@ -61,13 +61,13 @@ Deferred recipe pages are shown only as catalog bookmarks with their authoritati
 ## Validation
 
 - `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action and stale-drilldown rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, server-side drilldown output matching, and the `READY` crafting/arcane/crucible/infusion snapshot boundary. The report deliberately records stable revision match labels instead of raw hash values.
-- Latest protocol result: `34/34` checks passed; live vanilla crafting, arcane, crucible and infusion catalog entries produce valid server snapshots, and recipe drilldown/history validates server-side output-stack resolution, client-cache acceptance and stale-revision rejection.
+- Latest protocol result: `36/36` checks passed; live vanilla crafting, arcane, crucible, infusion and fake/display catalog entries produce valid server snapshots, and recipe drilldown/history validates server-side output-stack resolution, client-cache acceptance and stale-revision rejection.
 - `gradlew build` passes after the browser search/filter and recipe drilldown/history slices.
 - Dedicated-server reload passes with `687` exact aspect assignments and the Thaumonomicon protocol audit.
 
 ## Next boundary
 
 1. Keep `DEFERRED` and `LEGACY_MISSING` pages non-interactive until their crafting subsystem or mapping is implemented.
-2. Keep remaining custom recipe pages catalog-gated. Vanilla crafting, arcane, crucible and real infusion page snapshots have first-pass boundaries; blueprint, fake/display and special pages still need focused design slices before rendering.
+2. Keep remaining custom recipe pages catalog-gated. Vanilla crafting, arcane, crucible, real infusion and fake/display page snapshots have first-pass boundaries; blueprint and special pages still need focused design slices before rendering.
 3. Keep recipe drilldown limited to server-returned snapshots; do not let the client resolve hidden or deferred recipes independently.
 4. Run a focused visual parity pass against the legacy browser, entry page, and crafting paper page before calling the UI final.

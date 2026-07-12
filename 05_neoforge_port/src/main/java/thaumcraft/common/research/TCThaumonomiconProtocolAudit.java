@@ -20,6 +20,25 @@ final class TCThaumonomiconProtocolAudit {
             "thaumcraft:triplemeattreatfake"
     );
 
+    private static final Set<String> FAKE_INFUSION_CATALOG_IDS = Set.of(
+            "thaumcraft:iearcingfake",
+            "thaumcraft:ieburrowingfake",
+            "thaumcraft:iecollectorfake",
+            "thaumcraft:iedestructivefake",
+            "thaumcraft:ieessencefake",
+            "thaumcraft:ielamplightfake",
+            "thaumcraft:ierefiningfake",
+            "thaumcraft:iesoundingfake",
+            "thaumcraft:runicarmorfake0",
+            "thaumcraft:runicarmorfake1",
+            "thaumcraft:runicarmorfake2"
+    );
+
+    private static final Set<String> FAKE_DISPLAY_CATALOG_IDS = union(
+            FAKE_CRAFTING_CATALOG_IDS,
+            FAKE_INFUSION_CATALOG_IDS
+    );
+
     private static final Set<String> ARCANE_DECORATIVE_HINTS = Set.of(
             "activatorrail",
             "ancientpedestal",
@@ -120,7 +139,7 @@ final class TCThaumonomiconProtocolAudit {
             writer.write("- Bookmarks inspected: `" + report.bookmarksInspected() + "`\n");
             writer.write("- Pages inspected: `" + report.pagesInspected() + "`\n");
             writer.write("- Ready crafting catalog entries: `" + report.readyCraftingEntries() + "`\n");
-            writer.write("- Fake crafting catalog entries: `" + report.fakeCraftingCatalogEntries().size() + "`\n");
+            writer.write("- Fake crafting display catalog entries: `" + report.fakeCraftingCatalogEntries().size() + "`\n");
             writer.write("- Deferred crafting catalog entries: `" + report.deferredCraftingCatalogEntries().size() + "`\n");
             writer.write("- Ready arcane catalog entries: `" + report.readyArcaneEntries() + "`\n");
             writer.write("- Deferred arcane catalog entries: `" + report.deferredArcaneCatalogEntries().size() + "`\n");
@@ -132,8 +151,9 @@ final class TCThaumonomiconProtocolAudit {
             writer.write("- Ready crucible catalog entries: `" + report.readyCrucibleEntries() + "`\n");
             writer.write("- Deferred crucible catalog entries: `" + report.deferredCrucibleCatalogEntries().size() + "`\n");
             writer.write("- Ready infusion catalog entries: `" + report.readyInfusionEntries() + "`\n");
+            writer.write("- Fake infusion display catalog entries: `" + report.fakeInfusionCatalogEntries().size() + "`\n");
             writer.write("- Deferred infusion catalog entries: `" + report.deferredInfusionCatalogEntries().size() + "`\n");
-            writeDeferredList(writer, "Fake crafting catalog ids", report.fakeCraftingCatalogEntries());
+            writeDeferredList(writer, "Fake crafting display catalog ids", report.fakeCraftingCatalogEntries());
             writeDeferredList(writer, "Deferred crafting catalog ids", report.deferredCraftingCatalogEntries());
             writeDeferredList(writer, "Deferred arcane decorative/asset catalog ids", report.deferredArcaneDecorativeCatalogEntries());
             writeDeferredList(writer, "Deferred arcane blockentity catalog ids", report.deferredArcaneBlockEntityCatalogEntries());
@@ -142,6 +162,7 @@ final class TCThaumonomiconProtocolAudit {
             writeDeferredList(writer, "Deferred arcane uncategorized catalog ids", report.deferredArcaneUncategorizedCatalogEntries());
             writeDeferredList(writer, "Deferred arcane catalog ids", report.deferredArcaneCatalogEntries());
             writeDeferredList(writer, "Deferred crucible catalog ids", report.deferredCrucibleCatalogEntries());
+            writeDeferredList(writer, "Fake infusion display catalog ids", report.fakeInfusionCatalogEntries());
             writeDeferredList(writer, "Deferred infusion catalog ids", report.deferredInfusionCatalogEntries());
         }
         return report;
@@ -240,7 +261,8 @@ final class TCThaumonomiconProtocolAudit {
                     }
                     if (page.availability() == TCResearchPageAvailability.READY
                             && page.kind() == TCResearchPageKind.CRAFTING
-                            && page.craftingRecipe().isEmpty()) {
+                            && page.craftingRecipe().isEmpty()
+                            && page.displayRecipe().isEmpty()) {
                         readyCraftingPageViewsHaveSnapshots = false;
                     }
                     if (page.availability() == TCResearchPageAvailability.READY
@@ -255,7 +277,8 @@ final class TCThaumonomiconProtocolAudit {
                     }
                     if (page.availability() == TCResearchPageAvailability.READY
                             && page.kind() == TCResearchPageKind.INFUSION
-                            && page.infusionRecipe().isEmpty()) {
+                            && page.infusionRecipe().isEmpty()
+                            && page.displayRecipe().isEmpty()) {
                         readyInfusionPageViewsHaveSnapshots = false;
                     }
                     if (page.availability() == TCResearchPageAvailability.READY && !hasOnlyMatchingSnapshot(page)) {
@@ -318,20 +341,34 @@ final class TCThaumonomiconProtocolAudit {
                     player.server.getRecipeManager(),
                     player.server.registryAccess()
             );
+            Optional<TCDisplayRecipePageView> displaySnapshot = TCResearchPageCatalogManager.buildDisplayPage(
+                    catalogEntry.id()
+            );
             if (availability == TCResearchPageAvailability.READY) {
                 readyCraftingEntries++;
-                readyCatalogSnapshotsValid &= snapshot.isPresent()
-                        && snapshot.get().recipeId().equals(catalogEntry.id())
-                        && !snapshot.get().result().isEmpty()
-                        && snapshot.get().ingredients().size() <= 9;
+                if (FAKE_CRAFTING_CATALOG_IDS.contains(catalogId)) {
+                    fakeCraftingCatalogEntries.add(catalogId);
+                    readyCatalogSnapshotsValid &= snapshot.isEmpty()
+                            && displaySnapshot.isPresent()
+                            && displaySnapshot.get().type() == TCDisplayRecipePageType.FAKE_CRAFTING
+                            && displaySnapshot.get().recipeId().equals(catalogEntry.id())
+                            && !displaySnapshot.get().result().isEmpty()
+                            && displaySnapshot.get().componentStacks().size() <= 9;
+                } else {
+                    readyCatalogSnapshotsValid &= snapshot.isPresent()
+                            && displaySnapshot.isEmpty()
+                            && snapshot.get().recipeId().equals(catalogEntry.id())
+                            && !snapshot.get().result().isEmpty()
+                            && snapshot.get().ingredients().size() <= 9;
+                }
             } else if (FAKE_CRAFTING_CATALOG_IDS.contains(catalogId)) {
-                fakeCraftingCatalogEntries.add(catalogId);
-                if (snapshot.isPresent()) {
+                deferredCraftingCatalogEntries.add(catalogId);
+                if (snapshot.isPresent() || displaySnapshot.isPresent()) {
                     readyCatalogSnapshotsValid = false;
                 }
             } else {
                 deferredCraftingCatalogEntries.add(catalogId);
-                if (snapshot.isPresent()) {
+                if (snapshot.isPresent() || displaySnapshot.isPresent()) {
                     readyCatalogSnapshotsValid = false;
                 }
             }
@@ -344,7 +381,7 @@ final class TCThaumonomiconProtocolAudit {
                         + ", deferred_crafting_entries=" + deferredCraftingCatalogEntries.size()
         ));
         checks.add(check(
-                "fake_crafting_catalog_entries_are_classified",
+                "fake_crafting_catalog_entries_have_display_snapshots",
                 fakeCraftingCatalogEntries.size() == FAKE_CRAFTING_CATALOG_IDS.size()
                         && deferredCraftingCatalogEntries.stream().noneMatch(FAKE_CRAFTING_CATALOG_IDS::contains),
                 "fake_crafting_entries=" + fakeCraftingCatalogEntries.size()
@@ -451,6 +488,7 @@ final class TCThaumonomiconProtocolAudit {
         ));
 
         int readyInfusionEntries = 0;
+        ArrayList<String> fakeInfusionCatalogEntries = new ArrayList<>();
         ArrayList<String> deferredInfusionCatalogEntries = new ArrayList<>();
         boolean readyInfusionCatalogSnapshotsValid = true;
         for (TCResearchPageCatalogEntry catalogEntry : TCResearchPageCatalogManager.entries()) {
@@ -467,18 +505,35 @@ final class TCThaumonomiconProtocolAudit {
                     player.server.getRecipeManager(),
                     player.server.registryAccess()
             );
+            Optional<TCDisplayRecipePageView> displaySnapshot = TCResearchPageCatalogManager.buildDisplayPage(
+                    catalogEntry.id()
+            );
             if (availability == TCResearchPageAvailability.READY) {
                 readyInfusionEntries++;
-                readyInfusionCatalogSnapshotsValid &= snapshot.isPresent()
-                        && snapshot.get().recipeId().equals(catalogEntry.id())
-                        && !snapshot.get().result().isEmpty()
-                        && !snapshot.get().catalystVariants().isEmpty()
-                        && !snapshot.get().componentVariants().isEmpty()
-                        && !snapshot.get().aspectStacks().isEmpty()
-                        && !snapshot.get().research().isBlank();
+                if (FAKE_INFUSION_CATALOG_IDS.contains(catalogId)) {
+                    fakeInfusionCatalogEntries.add(catalogId);
+                    readyInfusionCatalogSnapshotsValid &= snapshot.isEmpty()
+                            && displaySnapshot.isPresent()
+                            && (displaySnapshot.get().type() == TCDisplayRecipePageType.INFUSION_ENCHANTMENT
+                            || displaySnapshot.get().type() == TCDisplayRecipePageType.RUNIC_AUGMENT)
+                            && displaySnapshot.get().recipeId().equals(catalogEntry.id())
+                            && !displaySnapshot.get().result().isEmpty()
+                            && !displaySnapshot.get().catalystStacks().isEmpty()
+                            && !displaySnapshot.get().componentStacks().isEmpty()
+                            && !displaySnapshot.get().aspectStacks().isEmpty();
+                } else {
+                    readyInfusionCatalogSnapshotsValid &= snapshot.isPresent()
+                            && displaySnapshot.isEmpty()
+                            && snapshot.get().recipeId().equals(catalogEntry.id())
+                            && !snapshot.get().result().isEmpty()
+                            && !snapshot.get().catalystVariants().isEmpty()
+                            && !snapshot.get().componentVariants().isEmpty()
+                            && !snapshot.get().aspectStacks().isEmpty()
+                            && !snapshot.get().research().isBlank();
+                }
             } else {
                 deferredInfusionCatalogEntries.add(catalogId);
-                if (snapshot.isPresent()) {
+                if (snapshot.isPresent() || displaySnapshot.isPresent()) {
                     readyInfusionCatalogSnapshotsValid = false;
                 }
             }
@@ -487,7 +542,22 @@ final class TCThaumonomiconProtocolAudit {
                 "ready_infusion_catalog_entries_have_valid_server_snapshots",
                 readyInfusionCatalogSnapshotsValid && readyInfusionEntries > 0,
                 "ready_infusion_entries=" + readyInfusionEntries
+                        + ", fake_infusion_entries=" + fakeInfusionCatalogEntries.size()
                         + ", deferred_infusion_entries=" + deferredInfusionCatalogEntries.size()
+        ));
+        checks.add(check(
+                "fake_infusion_catalog_entries_have_display_snapshots",
+                fakeInfusionCatalogEntries.size() == FAKE_INFUSION_CATALOG_IDS.size()
+                        && deferredInfusionCatalogEntries.stream().noneMatch(FAKE_INFUSION_CATALOG_IDS::contains),
+                "fake_infusion_entries=" + fakeInfusionCatalogEntries.size()
+        ));
+        checks.add(check(
+                "all_fake_display_catalog_entries_have_server_snapshots",
+                Set.copyOf(fakeCraftingCatalogEntries).containsAll(FAKE_CRAFTING_CATALOG_IDS)
+                        && Set.copyOf(fakeInfusionCatalogEntries).containsAll(FAKE_INFUSION_CATALOG_IDS)
+                        && fakeCraftingCatalogEntries.size() + fakeInfusionCatalogEntries.size()
+                        == FAKE_DISPLAY_CATALOG_IDS.size(),
+                "fake_display_entries=" + (fakeCraftingCatalogEntries.size() + fakeInfusionCatalogEntries.size())
         ));
 
         boolean rejectedUnknown = TCThaumonomiconService.buildEntry(player, "AUDIT_MISSING_RESEARCH").isEmpty();
@@ -732,6 +802,7 @@ final class TCThaumonomiconProtocolAudit {
                 readyCrucibleEntries,
                 deferredCrucibleCatalogEntries,
                 readyInfusionEntries,
+                fakeInfusionCatalogEntries,
                 deferredInfusionCatalogEntries
         );
     }
@@ -740,7 +811,8 @@ final class TCThaumonomiconProtocolAudit {
         return page.craftingRecipe().isPresent()
                 || page.arcaneRecipe().isPresent()
                 || page.crucibleRecipe().isPresent()
-                || page.infusionRecipe().isPresent();
+                || page.infusionRecipe().isPresent()
+                || page.displayRecipe().isPresent();
     }
 
     private static boolean hasOnlyMatchingSnapshot(TCResearchPageView page) {
@@ -748,15 +820,20 @@ final class TCThaumonomiconProtocolAudit {
         boolean arcane = page.arcaneRecipe().isPresent();
         boolean crucible = page.crucibleRecipe().isPresent();
         boolean infusion = page.infusionRecipe().isPresent();
-        int present = (crafting ? 1 : 0) + (arcane ? 1 : 0) + (crucible ? 1 : 0) + (infusion ? 1 : 0);
+        boolean display = page.displayRecipe().isPresent();
+        int present = (crafting ? 1 : 0)
+                + (arcane ? 1 : 0)
+                + (crucible ? 1 : 0)
+                + (infusion ? 1 : 0)
+                + (display ? 1 : 0);
         if (present != 1) {
             return false;
         }
         return switch (page.kind()) {
-            case CRAFTING -> crafting;
+            case CRAFTING -> crafting || display;
             case ARCANE -> arcane;
             case CRUCIBLE -> crucible;
-            case INFUSION -> infusion;
+            case INFUSION -> infusion || display;
             default -> false;
         };
     }
@@ -773,6 +850,9 @@ final class TCThaumonomiconProtocolAudit {
         }
         if (page.infusionRecipe().isPresent()) {
             return Optional.of(page.infusionRecipe().get().result());
+        }
+        if (page.displayRecipe().isPresent()) {
+            return Optional.of(page.displayRecipe().get().result());
         }
         return Optional.empty();
     }
@@ -810,6 +890,10 @@ final class TCThaumonomiconProtocolAudit {
     }
 
     private static Optional<ItemStack> catalogOutput(ServerPlayer player, TCResearchPageCatalogEntry entry) {
+        Optional<TCDisplayRecipePageView> display = TCResearchPageCatalogManager.buildDisplayPage(entry.id());
+        if (display.isPresent()) {
+            return display.map(TCDisplayRecipePageView::result);
+        }
         return switch (entry.kind()) {
             case CRAFTING -> TCResearchPageCatalogManager.buildCraftingPage(
                     entry.id(),
@@ -833,6 +917,12 @@ final class TCThaumonomiconProtocolAudit {
             ).map(TCInfusionRecipePageView::result);
             default -> Optional.empty();
         };
+    }
+
+    private static Set<String> union(Set<String> left, Set<String> right) {
+        HashSet<String> result = new HashSet<>(left);
+        result.addAll(right);
+        return Set.copyOf(result);
     }
 
     private static String classifyDeferredArcaneCatalogEntry(String catalogId) {
@@ -945,6 +1035,7 @@ final class TCThaumonomiconProtocolAudit {
             int readyCrucibleEntries,
             List<String> deferredCrucibleCatalogEntries,
             int readyInfusionEntries,
+            List<String> fakeInfusionCatalogEntries,
             List<String> deferredInfusionCatalogEntries
     ) {
         Report {
@@ -958,6 +1049,7 @@ final class TCThaumonomiconProtocolAudit {
             deferredArcaneTransportCatalogEntries = List.copyOf(deferredArcaneTransportCatalogEntries);
             deferredArcaneUncategorizedCatalogEntries = List.copyOf(deferredArcaneUncategorizedCatalogEntries);
             deferredCrucibleCatalogEntries = List.copyOf(deferredCrucibleCatalogEntries);
+            fakeInfusionCatalogEntries = List.copyOf(fakeInfusionCatalogEntries);
             deferredInfusionCatalogEntries = List.copyOf(deferredInfusionCatalogEntries);
         }
 

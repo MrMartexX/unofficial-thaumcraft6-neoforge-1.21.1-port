@@ -12,10 +12,13 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.crafting.arcane.TCArcaneCrystalCost;
@@ -23,6 +26,7 @@ import thaumcraft.common.crafting.arcane.TCArcaneRecipe;
 import thaumcraft.common.crafting.crucible.TCCrucibleAspectCost;
 import thaumcraft.common.crafting.crucible.TCCrucibleRecipe;
 import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
+import thaumcraft.common.registry.TCItems;
 
 public final class TCResearchPageCatalogManager {
     private static TCResearchPageCatalogData activeData = TCResearchPageCatalogData.empty();
@@ -254,6 +258,9 @@ public final class TCResearchPageCatalogManager {
         if (page.infusionRecipe().isPresent()) {
             return Optional.of(page.infusionRecipe().get().result());
         }
+        if (page.displayRecipe().isPresent()) {
+            return Optional.of(page.displayRecipe().get().result());
+        }
         return Optional.empty();
     }
 
@@ -277,8 +284,11 @@ public final class TCResearchPageCatalogManager {
         Optional<TCArcaneRecipePageView> arcaneRecipe = Optional.empty();
         Optional<TCCrucibleRecipePageView> crucibleRecipe = Optional.empty();
         Optional<TCInfusionRecipePageView> infusionRecipe = Optional.empty();
+        Optional<TCDisplayRecipePageView> displayRecipe = Optional.empty();
         if (availability == TCResearchPageAvailability.READY) {
-            if (entry.kind() == TCResearchPageKind.CRAFTING) {
+            if (entry.legacySource() == TCResearchPageLegacySource.FAKE_CATALOG) {
+                displayRecipe = buildDisplayPage(entry.id());
+            } else if (entry.kind() == TCResearchPageKind.CRAFTING) {
                 craftingRecipe = buildCraftingPage(entry.id(), recipeManager, registries);
             } else if (entry.kind() == TCResearchPageKind.ARCANE) {
                 arcaneRecipe = buildArcanePage(entry.id(), recipeManager, registries);
@@ -292,7 +302,8 @@ public final class TCResearchPageCatalogManager {
                 && craftingRecipe.isEmpty()
                 && arcaneRecipe.isEmpty()
                 && crucibleRecipe.isEmpty()
-                && infusionRecipe.isEmpty()) {
+                && infusionRecipe.isEmpty()
+                && displayRecipe.isEmpty()) {
             availability = TCResearchPageAvailability.DEFERRED;
         }
         pages.add(new TCResearchPageView(
@@ -304,8 +315,174 @@ public final class TCResearchPageCatalogManager {
                 craftingRecipe,
                 arcaneRecipe,
                 crucibleRecipe,
-                infusionRecipe
+                infusionRecipe,
+                displayRecipe
         ));
+    }
+
+    static Optional<TCDisplayRecipePageView> buildDisplayPage(ResourceLocation id) {
+        if (id == null || !Thaumcraft.MODID.equals(id.getNamespace())) {
+            return Optional.empty();
+        }
+        return switch (id.getPath()) {
+            case "salismundusfake" -> Optional.of(displayCrafting(
+                    id,
+                    stack(TCItems.SALIS_MUNDUS.get()),
+                    "recipe.display.thaumcraft.salismundusfake",
+                    stack(Items.FLINT),
+                    stack(Items.BOWL),
+                    stack(Items.REDSTONE),
+                    stack(TCItems.CRYSTAL_ESSENCE_AER.get()),
+                    stack(TCItems.CRYSTAL_ESSENCE_TERRA.get()),
+                    stack(TCItems.CRYSTAL_ESSENCE_IGNIS.get())
+            ));
+            case "triplemeattreatfake" -> Optional.of(displayCrafting(
+                    id,
+                    stack(TCItems.TRIPLE_MEAT_TREAT.get()),
+                    "recipe.display.thaumcraft.triplemeattreatfake",
+                    stack(TCItems.CHUNK_BEEF.get()),
+                    stack(TCItems.CHUNK_PORK.get()),
+                    stack(TCItems.CHUNK_CHICKEN.get()),
+                    stack(Items.SUGAR)
+            ));
+            case "ieburrowingfake" -> Optional.of(displayInfusionEnchantment(
+                    id,
+                    stack(Items.WOODEN_PICKAXE),
+                    "recipe.display.thaumcraft.ieburrowingfake",
+                    stack(Items.RABBIT_FOOT),
+                    aspect("senses", 80),
+                    aspect("earth", 150)
+            ));
+            case "iecollectorfake" -> Optional.of(displayInfusionEnchantment(
+                    id,
+                    stack(Items.STONE_AXE),
+                    "recipe.display.thaumcraft.iecollectorfake",
+                    stack(Items.LEAD),
+                    aspect("desire", 80),
+                    aspect("water", 100)
+            ));
+            case "iedestructivefake" -> Optional.of(displayInfusionEnchantment(
+                    id,
+                    stack(Items.STONE_PICKAXE),
+                    "recipe.display.thaumcraft.iedestructivefake",
+                    stack(Blocks.TNT),
+                    aspect("aversion", 200),
+                    aspect("entropy", 250)
+            ));
+            case "ierefiningfake" -> Optional.of(displayInfusionEnchantment(
+                    id,
+                    stack(Items.IRON_PICKAXE),
+                    "recipe.display.thaumcraft.ierefiningfake",
+                    stack(TCItems.SALIS_MUNDUS.get()),
+                    aspect("order", 80),
+                    aspect("exchange", 60)
+            ));
+            case "iesoundingfake" -> Optional.of(displayInfusionEnchantment(
+                    id,
+                    stack(Items.GOLDEN_PICKAXE),
+                    "recipe.display.thaumcraft.iesoundingfake",
+                    stack(Items.MAP),
+                    aspect("senses", 40),
+                    aspect("fire", 60)
+            ));
+            case "iearcingfake" -> Optional.of(displayInfusionEnchantment(
+                    id,
+                    stack(Items.WOODEN_SWORD),
+                    "recipe.display.thaumcraft.iearcingfake",
+                    stack(Blocks.REDSTONE_BLOCK),
+                    aspect("energy", 40),
+                    aspect("air", 60)
+            ));
+            case "ieessencefake" -> Optional.of(displayInfusionEnchantment(
+                    id,
+                    stack(Items.STONE_SWORD),
+                    "recipe.display.thaumcraft.ieessencefake",
+                    stack(TCItems.CRYSTAL_ESSENCE_AER.get()),
+                    aspect("beast", 40),
+                    aspect("flux", 60)
+            ));
+            case "ielamplightfake" -> Optional.of(displayInfusionEnchantment(
+                    id,
+                    stack(Items.GOLDEN_PICKAXE),
+                    "recipe.display.thaumcraft.ielamplightfake",
+                    stack(TCItems.NITOR_YELLOW.get()),
+                    aspect("light", 80),
+                    aspect("air", 20)
+            ));
+            case "runicarmorfake0" -> Optional.of(displayRunicAugment(id, 0));
+            case "runicarmorfake1" -> Optional.of(displayRunicAugment(id, 1));
+            case "runicarmorfake2" -> Optional.of(displayRunicAugment(id, 2));
+            default -> Optional.empty();
+        };
+    }
+
+    private static TCDisplayRecipePageView displayCrafting(
+            ResourceLocation id,
+            ItemStack result,
+            String titleKey,
+            ItemStack... inputs
+    ) {
+        return new TCDisplayRecipePageView(
+                id,
+                TCDisplayRecipePageType.FAKE_CRAFTING,
+                result,
+                List.of(),
+                List.of(inputs),
+                List.of(),
+                titleKey,
+                0
+        );
+    }
+
+    private static TCDisplayRecipePageView displayInfusionEnchantment(
+            ResourceLocation id,
+            ItemStack base,
+            String titleKey,
+            ItemStack component,
+            ItemStack... aspects
+    ) {
+        return new TCDisplayRecipePageView(
+                id,
+                TCDisplayRecipePageType.INFUSION_ENCHANTMENT,
+                base.copy(),
+                List.of(base),
+                List.of(stack(Items.ENCHANTED_BOOK), component),
+                List.of(aspects),
+                titleKey,
+                4
+        );
+    }
+
+    private static TCDisplayRecipePageView displayRunicAugment(ResourceLocation id, int currentCharge) {
+        ArrayList<ItemStack> components = new ArrayList<>();
+        components.add(stack(TCItems.SALIS_MUNDUS.get()));
+        components.add(stack(TCItems.AMBER.get()));
+        for (int count = 0; count < currentCharge; count++) {
+            components.add(stack(TCItems.AMBER.get()));
+        }
+        int vis = 20 + (int) (20.0D * Math.pow(2.0D, currentCharge));
+        return new TCDisplayRecipePageView(
+                id,
+                TCDisplayRecipePageType.RUNIC_AUGMENT,
+                stack(TCItems.BAUBLE_RING.get()),
+                List.of(stack(TCItems.BAUBLE_RING.get())),
+                components,
+                List.of(
+                        aspect("protect", vis),
+                        aspect("crystal", vis / 2),
+                        aspect("energy", vis / 2)
+                ),
+                "recipe.display.thaumcraft.runicarmorfake" + currentCharge,
+                5 + currentCharge / 2
+        );
+    }
+
+    private static ItemStack stack(ItemLike item) {
+        return new ItemStack(item);
+    }
+
+    private static ItemStack aspect(String aspect, int amount) {
+        return new TCCrucibleAspectCost(aspect, amount).displayStack();
     }
 
     static Optional<TCCraftingRecipePageView> buildCraftingPage(
@@ -457,6 +634,11 @@ public final class TCResearchPageCatalogManager {
         }
 
         try {
+            if (entry.legacySource() == TCResearchPageLegacySource.FAKE_CATALOG) {
+                return buildDisplayPage(entry.id()).isPresent()
+                        ? TCResearchPageAvailability.READY
+                        : TCResearchPageAvailability.DEFERRED;
+            }
             if (entry.kind() == TCResearchPageKind.CRAFTING) {
                 return recipeManager.byKey(entry.id())
                         .filter(holder -> holder.value() instanceof CraftingRecipe)
