@@ -256,6 +256,8 @@
   "gui.thaumcraft.thaumonomicon.locked": "Research requirements are not met.",
   "gui.thaumcraft.thaumonomicon.recipe_unavailable": "This recipe page is not available yet.",
   "gui.thaumcraft.thaumonomicon.requirements": "Requirements",
+  "gui.thaumcraft.thaumonomicon.search": "Search",
+  "gui.thaumcraft.thaumonomicon.search_none": "No visible research matches",
   "gui.thaumcraft.thaumonomicon.result.entry_acknowledged": "Entry acknowledged",
   "gui.thaumcraft.thaumonomicon.result.entry_loaded": "Entry loaded",
   "gui.thaumcraft.thaumonomicon.result.entry_not_known": "Research is not known",

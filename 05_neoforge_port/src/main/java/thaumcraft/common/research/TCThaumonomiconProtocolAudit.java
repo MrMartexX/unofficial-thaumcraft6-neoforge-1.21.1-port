@@ -173,7 +173,7 @@ final class TCThaumonomiconProtocolAudit {
         checks.add(check(
                 "index_revision_matches_server_state",
                 index.revision() == TCThaumonomiconService.buildRevision(player),
-                "revision=" + index.revision()
+                "revision=matches"
         ));
 
         boolean categoriesServerFiltered = true;
@@ -518,7 +518,7 @@ final class TCThaumonomiconProtocolAudit {
         checks.add(check(
                 "client_cache_stores_authoritative_revision",
                 clientCacheStoresRevision,
-                "revision=" + index.revision()
+                "revision=stored"
         ));
         checks.add(check(
                 "index_refresh_invalidates_entry_cache",

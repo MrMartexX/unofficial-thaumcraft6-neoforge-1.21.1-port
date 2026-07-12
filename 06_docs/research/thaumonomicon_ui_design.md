@@ -39,6 +39,7 @@ Every index also carries a server-built revision over the current research data,
 - Right-click sends an authoritative visible research index, syncs player knowledge, plays the page sound, and opens the browser on the client.
 - Browser categories preserve the server/legacy category order.
 - Browser graph uses legacy category backgrounds, overlay, research frame sprites, icon cycling, flags, parent links, pan, and zoom.
+- Browser search filters only the server-sent visible index, so it cannot reveal hidden research. Search-result clicks reuse the same server action/revision payload path as graph clicks.
 - Unknown unlockable entries send `START_RESEARCH`; known entries send `ACKNOWLEDGE_ENTRY`.
 - The entry screen opens only after the server accepts the action and returns an authoritative entry view.
 - Entry stage text, visible addenda, requirement results, stage state, bookmarks, book asset, page navigation, and checked stage advance are active.
@@ -49,10 +50,9 @@ Every index also carries a server-built revision over the current research data,
 
 ## Intentionally deferred
 
-- Search mode and search-result drilldown.
 - Exact arrow shapes, forbidden/warp marker, category completion percentages, popup animation, and final browser visual parity tuning.
 - Aspect and knowledge side pages.
-- Recipe drilldown history.
+- Recipe drilldown/history.
 - Blueprint, fake/display-only, special and missing recipe-page renderers.
 - Cheat Thaumonomicon variant.
 
@@ -60,9 +60,9 @@ Deferred recipe pages are shown only as catalog bookmarks with their authoritati
 
 ## Validation
 
-- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, and the `READY` crafting/arcane/crucible/infusion snapshot boundary.
+- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, and the `READY` crafting/arcane/crucible/infusion snapshot boundary. The report deliberately records stable revision match labels instead of raw hash values.
 - Latest protocol result: `31/31` checks passed; live vanilla crafting, arcane, crucible and infusion catalog entries produce valid server snapshots.
-- `gradlew build` passes.
+- `gradlew build` passes after the first browser search/filter slice.
 - Dedicated-server reload passes with `687` exact aspect assignments and the Thaumonomicon protocol audit.
 
 ## Next boundary

@@ -4,7 +4,7 @@
 |---|---|---|
 | `index_has_visible_category` | `PASS` | count=1 |
 | `index_has_visible_entry` | `PASS` | count=4 |
-| `index_revision_matches_server_state` | `PASS` | revision=-743801823 |
+| `index_revision_matches_server_state` | `PASS` | revision=matches |
 | `category_visibility_server_filtered` | `PASS` | visible=1 |
 | `entry_visibility_server_filtered` | `PASS` | visible=4 |
 | `unlockable_state_server_owned` | `PASS` | visible=4 |
@@ -26,7 +26,7 @@
 | `unknown_entry_rejected` | `PASS` | key=AUDIT_MISSING_RESEARCH |
 | `legacy_resource_location_canonicalization` | `PASS` | uppercase/lowercase lookup |
 | `client_cache_accepts_authoritative_views` | `PASS` | sample_present=true |
-| `client_cache_stores_authoritative_revision` | `PASS` | revision=-743801823 |
+| `client_cache_stores_authoritative_revision` | `PASS` | revision=stored |
 | `index_refresh_invalidates_entry_cache` | `PASS` | sample_present=true |
 | `explicit_open_intent_is_separate_from_refresh` | `PASS` | open_once=true, refresh_open=false |
 | `stale_action_revision_rejected_without_mutation` | `PASS` | candidate=FIRSTSTEPS |

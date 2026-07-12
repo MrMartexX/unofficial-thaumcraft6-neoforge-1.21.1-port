@@ -8,12 +8,14 @@ import java.util.Locale;
 import java.util.Map;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.lwjgl.glfw.GLFW;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.research.TCResearchFlag;
@@ -34,10 +36,14 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
     private static final int VIEWPORT_MARGIN = 16;
     private static final int GRID_SIZE = 24;
     private static final int LEGACY_GUI_UV_SIZE = 256;
+    private static final int SEARCH_WIDTH = 154;
+    private static final int SEARCH_HEIGHT = 16;
+    private static final int SEARCH_RESULT_ROWS = 8;
     private static final double MIN_ZOOM = 1.0D;
     private static final double MAX_ZOOM = 2.0D;
 
     private static String selectedCategory = "";
+    private static String lastSearch = "";
     private static final Map<String, Double> LAST_PAN_X = new HashMap<>();
     private static final Map<String, Double> LAST_PAN_Y = new HashMap<>();
 
@@ -47,6 +53,8 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
     private String pendingResearch = "";
     private TCThaumonomiconResearchView hoveredResearch;
     private TCThaumonomiconCategoryView hoveredCategory;
+    private TCThaumonomiconResearchView hoveredSearchResult;
+    private EditBox searchBox;
 
     public TCThaumonomiconBrowserScreen() {
         super(Component.translatable("item.thaumcraft.thaumonomicon"));
@@ -59,6 +67,18 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         panY = LAST_PAN_Y.getOrDefault(selectedCategory, initialPanY());
         clampPan();
         rememberPan();
+        searchBox = new EditBox(
+                font,
+                searchBoxX(),
+                6,
+                SEARCH_WIDTH,
+                SEARCH_HEIGHT,
+                Component.translatable("gui.thaumcraft.thaumonomicon.search")
+        );
+        searchBox.setMaxLength(64);
+        searchBox.setValue(lastSearch);
+        searchBox.setResponder(value -> lastSearch = value == null ? "" : value);
+        addWidget(searchBox);
     }
 
     @Override
@@ -82,6 +102,7 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         ensureSelectedCategory();
         hoveredResearch = null;
         hoveredCategory = null;
+        hoveredSearchResult = null;
 
         graphics.fill(0, 0, width, height, 0xFF08070B);
         renderCategoryBackground(graphics);
@@ -89,6 +110,7 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         renderResearchNodes(graphics, index, mouseX, mouseY);
         renderFrame(graphics);
         renderLegacyCategories(graphics, index, mouseX, mouseY);
+        renderSearch(graphics, index, mouseX, mouseY, partialTick);
         renderLegacyTooltip(graphics, mouseX, mouseY);
     }
 
@@ -97,34 +119,22 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         if (button != 0) {
             return super.mouseClicked(mouseX, mouseY, button);
         }
+        if (searchBox != null && searchBox.mouseClicked(mouseX, mouseY, button)) {
+            return true;
+        }
+        if (searchBox != null) {
+            searchBox.setFocused(false);
+        }
+        if (hoveredSearchResult != null && activateResearch(hoveredSearchResult)) {
+            return true;
+        }
         if (hoveredCategory != null) {
             selectCategory(hoveredCategory.key());
             playPage();
             return true;
         }
-        if (hoveredResearch != null && pendingResearch.isBlank()) {
-            if (hoveredResearch.status() != TCResearchStatus.UNKNOWN) {
-                var cached = TCThaumonomiconClientCache.entry(hoveredResearch.key());
-                if (cached.isPresent() && minecraft != null) {
-                    playPage();
-                    minecraft.setScreen(new TCThaumonomiconEntryScreen(cached.get()));
-                    return true;
-                }
-            }
-
-            int action = hoveredResearch.status() == TCResearchStatus.UNKNOWN
-                    ? TCThaumonomiconActionPayload.START_RESEARCH
-                    : TCThaumonomiconActionPayload.ACKNOWLEDGE_ENTRY;
-            if (hoveredResearch.status() != TCResearchStatus.UNKNOWN || hoveredResearch.unlockable()) {
-                pendingResearch = hoveredResearch.key();
-                PacketDistributor.sendToServer(new TCThaumonomiconActionPayload(
-                        action,
-                        pendingResearch,
-                        TCThaumonomiconClientCache.revision()
-                ));
-                playPage();
-                return true;
-            }
+        if (hoveredResearch != null && activateResearch(hoveredResearch)) {
+            return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
@@ -154,11 +164,30 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == 268 || keyCode == 72 || keyCode == 82) {
+        if (searchBox != null && searchBox.isFocused()) {
+            if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+                searchBox.setFocused(false);
+                return true;
+            }
+            return searchBox.keyPressed(keyCode, scanCode, modifiers);
+        }
+        if (Screen.hasControlDown() && keyCode == GLFW.GLFW_KEY_F && searchBox != null) {
+            searchBox.setFocused(true);
+            return true;
+        }
+        if (keyCode == GLFW.GLFW_KEY_HOME || keyCode == GLFW.GLFW_KEY_H || keyCode == GLFW.GLFW_KEY_R) {
             resetPan();
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (searchBox != null && searchBox.isFocused()) {
+            return searchBox.charTyped(codePoint, modifiers);
+        }
+        return super.charTyped(codePoint, modifiers);
     }
 
     @Override
@@ -408,43 +437,187 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
     }
 
     private void renderLegacyTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        if (hoveredSearchResult != null) {
+            renderResearchTooltip(graphics, hoveredSearchResult, mouseX, mouseY);
+            return;
+        }
         if (hoveredCategory != null) {
             return;
         }
         if (hoveredResearch == null) {
             return;
         }
+        renderResearchTooltip(graphics, hoveredResearch, mouseX, mouseY);
+    }
+
+    private void renderResearchTooltip(
+            GuiGraphics graphics,
+            TCThaumonomiconResearchView research,
+            int mouseX,
+            int mouseY
+    ) {
         List<Component> lines = new ArrayList<>();
-        lines.add(Component.translatable(hoveredResearch.name()).withStyle(ChatFormatting.GOLD));
-        if (hoveredResearch.status() == TCResearchStatus.UNKNOWN) {
+        lines.add(Component.translatable(research.name()).withStyle(ChatFormatting.GOLD));
+        if (research.status() == TCResearchStatus.UNKNOWN) {
             lines.add(Component.translatable(
-                    hoveredResearch.unlockable()
+                    research.unlockable()
                             ? "gui.thaumcraft.thaumonomicon.begin"
                             : "gui.thaumcraft.thaumonomicon.locked"
-            ).withStyle(hoveredResearch.unlockable() ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY));
-        } else if (hoveredResearch.status() == TCResearchStatus.IN_PROGRESS) {
+            ).withStyle(research.unlockable() ? ChatFormatting.AQUA : ChatFormatting.DARK_GRAY));
+        } else if (research.status() == TCResearchStatus.IN_PROGRESS) {
             lines.add(Component.translatable(
                     "gui.thaumcraft.thaumonomicon.stage",
-                    hoveredResearch.currentStage(),
-                    hoveredResearch.totalStages()
+                    research.currentStage(),
+                    research.totalStages()
             ).withStyle(ChatFormatting.AQUA));
         }
-        if (hoveredResearch.flags().contains(TCResearchFlag.RESEARCH)) {
+        if (research.flags().contains(TCResearchFlag.RESEARCH)) {
             lines.add(Component.translatable("tc.research.newresearch").withStyle(ChatFormatting.GOLD));
         }
-        if (hoveredResearch.flags().contains(TCResearchFlag.PAGE)) {
+        if (research.flags().contains(TCResearchFlag.PAGE)) {
             lines.add(Component.translatable("tc.research.newpage").withStyle(ChatFormatting.GREEN));
         }
-        if (!pendingResearch.isBlank() && pendingResearch.equals(hoveredResearch.key())) {
+        if (!pendingResearch.isBlank() && pendingResearch.equals(research.key())) {
             lines.add(Component.translatable("gui.thaumcraft.thaumonomicon.loading").withStyle(ChatFormatting.GRAY));
         }
         graphics.renderComponentTooltip(font, lines, mouseX, mouseY);
+    }
+
+    private void renderSearch(
+            GuiGraphics graphics,
+            TCThaumonomiconIndexPayload index,
+            int mouseX,
+            int mouseY,
+            float partialTick
+    ) {
+        if (searchBox == null) {
+            return;
+        }
+        searchBox.setX(searchBoxX());
+        searchBox.render(graphics, mouseX, mouseY, partialTick);
+        if (searchBox.getValue().isBlank() && !searchBox.isFocused()) {
+            graphics.drawString(
+                    font,
+                    Component.translatable("gui.thaumcraft.thaumonomicon.search"),
+                    searchBox.getX() + 4,
+                    searchBox.getY() + 4,
+                    0x88777777,
+                    false
+            );
+        }
+
+        String query = normalizedSearchQuery();
+        if (query.isBlank()) {
+            return;
+        }
+
+        List<TCThaumonomiconResearchView> results = searchResults(index, query);
+        int x = searchBox.getX();
+        int y = searchBox.getY() + SEARCH_HEIGHT + 3;
+        int rowHeight = 14;
+        int visibleRows = Math.min(SEARCH_RESULT_ROWS, Math.max(1, results.size()));
+        graphics.fill(x - 2, y - 2, x + SEARCH_WIDTH + 2, y + visibleRows * rowHeight + 2, 0xE0100B16);
+        if (results.isEmpty()) {
+            graphics.drawString(
+                    font,
+                    Component.translatable("gui.thaumcraft.thaumonomicon.search_none"),
+                    x + 4,
+                    y + 3,
+                    0xFF9C8F7B,
+                    false
+            );
+            return;
+        }
+
+        for (int row = 0; row < Math.min(SEARCH_RESULT_ROWS, results.size()); row++) {
+            TCThaumonomiconResearchView result = results.get(row);
+            int rowY = y + row * rowHeight;
+            boolean hovered = mouseX >= x && mouseX < x + SEARCH_WIDTH && mouseY >= rowY && mouseY < rowY + rowHeight;
+            if (hovered) {
+                hoveredSearchResult = result;
+                graphics.fill(x, rowY, x + SEARCH_WIDTH, rowY + rowHeight, 0x803B2D48);
+            }
+            int color = result.status() == TCResearchStatus.COMPLETE
+                    ? 0xFFD8C58A
+                    : result.unlockable() ? 0xFF9FD5A2 : 0xFF8F8678;
+            String title = Component.translatable(result.name()).getString();
+            if (font.width(title) > SEARCH_WIDTH - 8) {
+                title = font.plainSubstrByWidth(title, SEARCH_WIDTH - 20) + "...";
+            }
+            graphics.drawString(font, title, x + 4, rowY + 3, color, false);
+        }
     }
 
     private List<TCThaumonomiconResearchView> categoryEntries(TCThaumonomiconIndexPayload index) {
         return index.entries().stream()
                 .filter(entry -> entry.category().equals(selectedCategory))
                 .toList();
+    }
+
+    private List<TCThaumonomiconResearchView> searchResults(
+            TCThaumonomiconIndexPayload index,
+            String query
+    ) {
+        return index.entries().stream()
+                .filter(entry -> matchesSearch(entry, query))
+                .limit(SEARCH_RESULT_ROWS)
+                .toList();
+    }
+
+    private boolean matchesSearch(TCThaumonomiconResearchView entry, String query) {
+        if (entry.key().toLowerCase(Locale.ROOT).contains(query)) {
+            return true;
+        }
+        if (entry.category().toLowerCase(Locale.ROOT).contains(query)) {
+            return true;
+        }
+        if (Component.translatable(entry.name()).getString().toLowerCase(Locale.ROOT).contains(query)) {
+            return true;
+        }
+        return Component.translatable("tc.research_category." + entry.category())
+                .getString()
+                .toLowerCase(Locale.ROOT)
+                .contains(query);
+    }
+
+    private String normalizedSearchQuery() {
+        return searchBox == null ? "" : searchBox.getValue().trim().toLowerCase(Locale.ROOT);
+    }
+
+    private boolean activateResearch(TCThaumonomiconResearchView research) {
+        if (research == null || !pendingResearch.isBlank()) {
+            return false;
+        }
+        if (!research.category().equals(selectedCategory)) {
+            selectCategory(research.category());
+        }
+        if (research.status() != TCResearchStatus.UNKNOWN) {
+            var cached = TCThaumonomiconClientCache.entry(research.key());
+            if (cached.isPresent() && minecraft != null) {
+                playPage();
+                minecraft.setScreen(new TCThaumonomiconEntryScreen(cached.get()));
+                return true;
+            }
+        }
+
+        int action = research.status() == TCResearchStatus.UNKNOWN
+                ? TCThaumonomiconActionPayload.START_RESEARCH
+                : TCThaumonomiconActionPayload.ACKNOWLEDGE_ENTRY;
+        if (research.status() != TCResearchStatus.UNKNOWN || research.unlockable()) {
+            pendingResearch = research.key();
+            PacketDistributor.sendToServer(new TCThaumonomiconActionPayload(
+                    action,
+                    pendingResearch,
+                    TCThaumonomiconClientCache.revision()
+            ));
+            playPage();
+            return true;
+        }
+        return false;
+    }
+
+    private int searchBoxX() {
+        return Math.max(VIEWPORT_MARGIN + 28, width - SEARCH_WIDTH - 24);
     }
 
     private TCThaumonomiconCategoryView selectedCategoryView() {
