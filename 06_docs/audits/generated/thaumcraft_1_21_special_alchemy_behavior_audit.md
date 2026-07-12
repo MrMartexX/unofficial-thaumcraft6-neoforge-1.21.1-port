@@ -6,7 +6,7 @@ Runtime checks for TC6 special crucible outputs whose gameplay lives on the prod
 
 | Check | Result |
 |---|---:|
-| Passed | 22 |
+| Passed | 24 |
 | Failed | 0 |
 
 ## Checks
@@ -29,6 +29,8 @@ Runtime checks for TC6 special crucible outputs whose gameplay lives on the prod
 | bath_salts_expire_converts_source_water_to_purifying_fluid | PASS | converted=true, block=thaumcraft:purifying_fluid |
 | bath_salts_rejects_flowing_water_and_nonwater | PASS | flowing=false, stone=false |
 | liquid_death_legacy_damage_and_slowdown_formula | PASS | damage0=5.0, damage3=2.0, slowdown0=0.5 |
+| liquid_death_uses_legacy_dissolve_damage_identity | PASS | msgId=dissolve, bypassesArmor=true, exhaustion=0.3 |
+| liquid_death_dissolve_drops_entity_aspect_crystals | PASS | added=2, drops=2 |
 | purifying_fluid_grants_warp_ward_with_legacy_duration_and_consumes_source | PASS | applied=true, duration=20000, block=minecraft:air |
 | sane_soap_uses_legacy_warp_ward_and_purifying_fluid_bonus | PASS | amount=3, normal=2, temp=0 |
 | special_alchemy_recipe_bottletaint | PASS | result=thaumcraft:bottle_taint, research=BOTTLETAINT, aspects=[TCCrucibleAspectCost[aspect=vitium, amount=30], TCCrucibleAspectCost[aspect=aqua, amount=30]] |
@@ -38,6 +40,6 @@ Runtime checks for TC6 special crucible outputs whose gameplay lives on the prod
 
 ## Boundary
 
-- Implemented in this slice: `bath_salts` legacy dropped-item lifespan and water-source conversion, `bottle_taint` stack size/use constants, `bottle_taint` projectile registration, Flux Taint splash predicate/effect and Flux Goo placement support rules, real Liquid Death/Purifying Fluid registries/blocks, Warp Ward effect and Sanity Soap Purifying Fluid/Warp Ward bonuses.
+- Implemented in this slice: `bath_salts` legacy dropped-item lifespan and water-source conversion, `bottle_taint` stack size/use constants, `bottle_taint` projectile registration, Flux Taint splash predicate/effect and Flux Goo placement support rules, real Liquid Death/Purifying Fluid registries/blocks, `thaumcraft:dissolve` Liquid Death damage identity, dissolve-crystal living drop bridge, Warp Ward effect and Sanity Soap Purifying Fluid/Warp Ward bonuses.
 - Already data-backed before this slice: special crucible recipes for BottleTaint, BathSalts, LiquidDeath and SaneSoap.
-- Deferred to later visual/automation slices: exact client fluid particles/render translucency, Liquid Death custom dissolve damage type identity, item-pulling radius and broader alchemy automation consumers.
+- Deferred to later visual/automation slices: exact client fluid particles/render translucency, Arcane Spa/Everfull Urn automation consumers and broader alchemy automation consumers.

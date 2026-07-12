@@ -6,10 +6,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -28,11 +30,15 @@ import thaumcraft.common.blocks.misc.TCLiquidDeathBlock;
 import thaumcraft.common.blocks.misc.TCPurifyingFluidBlock;
 import thaumcraft.common.entities.TCBottleTaintEntity;
 import thaumcraft.common.entities.TCTaintCrawlerEntity;
+import thaumcraft.common.items.components.TCAspectStackComponent;
 import thaumcraft.common.items.consumables.ItemBathSalts;
 import thaumcraft.common.items.consumables.ItemBottleTaint;
 import thaumcraft.common.items.consumables.ItemSanitySoap;
 import thaumcraft.common.items.consumables.TCBathSaltsEvents;
+import thaumcraft.common.items.consumables.TCLiquidDeathEvents;
+import thaumcraft.common.lib.damage.TCDamageTypes;
 import thaumcraft.common.registry.TCBlocks;
+import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCEntityTypes;
 import thaumcraft.common.registry.TCFluids;
 import thaumcraft.common.registry.TCItems;
@@ -74,9 +80,9 @@ public final class TCSpecialAlchemyBehaviorAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- Implemented in this slice: `bath_salts` legacy dropped-item lifespan and water-source conversion, `bottle_taint` stack size/use constants, `bottle_taint` projectile registration, Flux Taint splash predicate/effect and Flux Goo placement support rules, real Liquid Death/Purifying Fluid registries/blocks, Warp Ward effect and Sanity Soap Purifying Fluid/Warp Ward bonuses.");
+        lines.add("- Implemented in this slice: `bath_salts` legacy dropped-item lifespan and water-source conversion, `bottle_taint` stack size/use constants, `bottle_taint` projectile registration, Flux Taint splash predicate/effect and Flux Goo placement support rules, real Liquid Death/Purifying Fluid registries/blocks, `thaumcraft:dissolve` Liquid Death damage identity, dissolve-crystal living drop bridge, Warp Ward effect and Sanity Soap Purifying Fluid/Warp Ward bonuses.");
         lines.add("- Already data-backed before this slice: special crucible recipes for BottleTaint, BathSalts, LiquidDeath and SaneSoap.");
-        lines.add("- Deferred to later visual/automation slices: exact client fluid particles/render translucency, Liquid Death custom dissolve damage type identity, item-pulling radius and broader alchemy automation consumers.");
+        lines.add("- Deferred to later visual/automation slices: exact client fluid particles/render translucency, Arcane Spa/Everfull Urn automation consumers and broader alchemy automation consumers.");
         Files.write(output, lines);
         return report;
     }
@@ -256,6 +262,27 @@ public final class TCSpecialAlchemyBehaviorAudit {
                         + ", damage3=" + TCLiquidDeathBlock.legacyDamageForLevel(3)
                         + ", slowdown0=" + TCLiquidDeathBlock.legacyHorizontalSlowdownMultiplier(0, TCLiquidDeathBlock.LEGACY_QUANTA_PER_BLOCK)));
 
+        DamageSource dissolve = TCDamageTypes.dissolve(level);
+        checks.add(check("liquid_death_uses_legacy_dissolve_damage_identity",
+                dissolve.is(TCDamageTypes.DISSOLVE)
+                        && dissolve.is(DamageTypeTags.BYPASSES_ARMOR)
+                        && "dissolve".equals(dissolve.type().msgId())
+                        && close(dissolve.type().exhaustion(), 0.3F),
+                "msgId=" + dissolve.type().msgId()
+                        + ", bypassesArmor=" + dissolve.is(DamageTypeTags.BYPASSES_ARMOR)
+                        + ", exhaustion=" + dissolve.type().exhaustion()));
+
+        Zombie dissolvedZombie = new Zombie(EntityType.ZOMBIE, level);
+        dissolvedZombie.setPos(origin.getX() + 15.5D, origin.getY(), origin.getZ() + 0.5D);
+        ArrayList<ItemEntity> dissolveDrops = new ArrayList<>();
+        int addedDrops = TCLiquidDeathEvents.addDissolveCrystalDrops(dissolveDrops, dissolvedZombie, dissolve);
+        checks.add(check("liquid_death_dissolve_drops_entity_aspect_crystals",
+                addedDrops >= 1
+                        && addedDrops <= 4
+                        && dissolveDrops.size() == addedDrops
+                        && dissolveDrops.stream().allMatch(TCSpecialAlchemyBehaviorAudit::isAspectCrystalDrop),
+                "added=" + addedDrops + ", drops=" + dissolveDrops.size()));
+
         var fakePlayer = FakePlayerFactory.getMinecraft(level);
         TCPlayerWarpStore.clear(fakePlayer);
         TCPlayerWarpStore.add(fakePlayer, TCWarpType.PERMANENT, 100);
@@ -333,6 +360,19 @@ public final class TCSpecialAlchemyBehaviorAudit {
                 "result=" + itemId(recipe.result().getItem())
                         + ", research=" + recipe.getResearch()
                         + ", aspects=" + recipe.aspectCosts());
+    }
+
+    private static boolean isAspectCrystalDrop(ItemEntity entity) {
+        if (entity == null || entity.getItem().isEmpty()) {
+            return false;
+        }
+        ResourceLocation itemId = itemId(entity.getItem().getItem());
+        TCAspectStackComponent aspectStack = entity.getItem().get(TCDataComponents.ASPECT_STACK.get());
+        return Thaumcraft.MODID.equals(itemId.getNamespace())
+                && itemId.getPath().startsWith("crystal_essence_")
+                && aspectStack != null
+                && aspectStack.amount() == 1
+                && !aspectStack.aspect().isBlank();
     }
 
     private static TCCrucibleAspectCost cost(Aspect aspect, int amount) {

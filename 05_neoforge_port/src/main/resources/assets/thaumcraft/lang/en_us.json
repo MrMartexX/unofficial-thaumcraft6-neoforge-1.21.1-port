@@ -274,6 +274,8 @@
   "block.thaumcraft.lamp_growth": "Lamp of Growth",
   "block.thaumcraft.liquid_death": "Liquid Death",
   "block.thaumcraft.purifying_fluid": "Purifying Fluid",
+  "death.attack.dissolve": "%1$s was dissolved",
+  "death.attack.dissolve.player": "%1$s was dissolved whilst fighting %2$s",
   "effect.thaumcraft.warp_ward": "Warp Ward",
   "fluid_type.thaumcraft.liquid_death": "Liquid Death",
   "fluid_type.thaumcraft.purifying_fluid": "Purifying Fluid",

@@ -51,7 +51,7 @@ The second slice may add collision behavior that is directly present in legacy `
 3. Preserve legacy stack-loop semantics: `attemptSmelt(ItemStack)` mutates the remaining stack counter while iterating, so multi-item entity stacks may consume roughly half the current stack per collision pass rather than exactly one item.
 4. Resolve player ownership from the modern item entity owner when present; if no live server player is available, research-gated recipes must not craft, but ordinary aspect dissolution still works.
 5. Preserve the hot-crucible living contact damage: one `inFire` damage with lava-extinguish sound after the same block-instance collision delay used by legacy.
-6. Do not add client bubbles, spill particles, flux pollution, item pulling radius, hopper behavior or special alchemy side effects in this slice.
+6. Do not add client bubbles, spill particles, flux pollution, hopper behavior or special alchemy side effects in this slice. Legacy `BlockCrucible` / `TileCrucible` only absorb item entities on collision; no radius item-pulling path was found.
 
 ## Third allowed gameplay slice
 

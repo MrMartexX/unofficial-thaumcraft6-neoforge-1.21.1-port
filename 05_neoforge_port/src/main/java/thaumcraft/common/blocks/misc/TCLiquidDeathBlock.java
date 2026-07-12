@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import thaumcraft.common.lib.damage.TCDamageTypes;
 import thaumcraft.common.registry.TCFluids;
 
 public class TCLiquidDeathBlock extends LiquidBlock {
@@ -21,7 +22,7 @@ public class TCLiquidDeathBlock extends LiquidBlock {
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         slowEntityLikeLegacy(state, entity, LEGACY_QUANTA_PER_BLOCK);
         if (!level.isClientSide && entity instanceof LivingEntity livingEntity) {
-            livingEntity.hurt(level.damageSources().magic(), legacyDamageForState(state));
+            livingEntity.hurt(TCDamageTypes.dissolve(level), legacyDamageForState(state));
         }
         super.entityInside(state, level, pos, entity);
     }

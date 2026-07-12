@@ -48,6 +48,7 @@ import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.capabilities.TCMachineCapabilities;
 import thaumcraft.common.items.TCFuelEvents;
 import thaumcraft.common.items.consumables.TCBathSaltsEvents;
+import thaumcraft.common.items.consumables.TCLiquidDeathEvents;
 import thaumcraft.common.crafting.arcane.TCArcaneWorkbenchAuditExporter;
 import thaumcraft.common.items.casters.TCFocusCasterCoreAuditExporter;
 import thaumcraft.common.items.casters.TCFocusCastExecutionAuditExporter;
@@ -131,6 +132,7 @@ public final class Thaumcraft {
         modContainer.registerConfig(ModConfig.Type.COMMON, TCConfig.SPEC);
         NeoForge.EVENT_BUS.addListener(TCAspectAssignments::onAddReloadListeners);
         NeoForge.EVENT_BUS.addListener(TCFuelEvents::onFuelBurnTime);
+        NeoForge.EVENT_BUS.addListener(TCLiquidDeathEvents::onLivingDrops);
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onAddReloadListeners);
         NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogManager::onAddReloadListeners);
         NeoForge.EVENT_BUS.addListener(TCScanningManager::onAddReloadListeners);
