@@ -271,6 +271,13 @@
     },
     {
       "type": "entity",
+      "research": "!Wisp",
+      "entities": [
+        "thaumcraft:wisp"
+      ]
+    },
+    {
+      "type": "entity",
       "research": "!ThaumSlime",
       "entities": [
         "thaumcraft:thaum_slime"
@@ -306,6 +313,7 @@
         "minecraft:parrot",
         "minecraft:ghast",
         "minecraft:blaze",
+        "thaumcraft:wisp",
         "thaumcraft:taint_swarm"
       ]
     }

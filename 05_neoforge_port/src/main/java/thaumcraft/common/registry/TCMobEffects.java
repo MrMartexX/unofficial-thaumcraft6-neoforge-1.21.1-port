@@ -7,6 +7,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.potions.PotionFluxTaint;
 import thaumcraft.api.potions.PotionVisExhaust;
+import thaumcraft.common.lib.potions.PotionInfectiousVisExhaust;
 
 public final class TCMobEffects {
     public static final DeferredRegister<MobEffect> MOB_EFFECTS =
@@ -16,6 +17,8 @@ public final class TCMobEffects {
             MOB_EFFECTS.register("flux_taint", PotionFluxTaint::new);
     public static final DeferredHolder<MobEffect, PotionVisExhaust> VIS_EXHAUST =
             MOB_EFFECTS.register("vis_exhaust", PotionVisExhaust::new);
+    public static final DeferredHolder<MobEffect, PotionInfectiousVisExhaust> INFECTIOUS_VIS_EXHAUST =
+            MOB_EFFECTS.register("infectious_vis_exhaust", PotionInfectiousVisExhaust::new);
 
     private TCMobEffects() {
     }

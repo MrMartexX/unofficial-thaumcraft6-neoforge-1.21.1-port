@@ -24,7 +24,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 12;
+    private static final int REGISTERED_FOUNDATION_COUNT = 13;
 
     private TCEntityFoundationAudit() {
     }
@@ -90,7 +90,7 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, FluxRift, ArcaneBore, FallingTaint, TaintSeed pair and five taint mob foundations"
+                "expected item entities, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair and five taint mob foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
@@ -98,6 +98,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("FluxRift", TCEntityTypes.FLUX_RIFT.get()));
         checks.add(checkRegisteredType("ArcaneBore", TCEntityTypes.ARCANE_BORE.get()));
         checks.add(checkRegisteredType("FallingTaint", TCEntityTypes.FALLING_TAINT.get()));
+        checks.add(checkRegisteredType("Wisp", TCEntityTypes.WISP.get()));
         checks.add(checkRegisteredType("TaintSeed", TCEntityTypes.TAINT_SEED.get()));
         checks.add(checkRegisteredType("TaintSeedPrime", TCEntityTypes.TAINT_SEED_PRIME.get()));
         checks.add(checkRegisteredType("ThaumSlime", TCEntityTypes.THAUM_SLIME.get()));
@@ -108,6 +109,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkTypeShape("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get(), 64, 20, true));
         checks.add(checkTypeShape("FollowItem", TCEntityTypes.FOLLOW_ITEM.get(), 64, 20, false));
         checks.add(checkTypeShape("FallingTaint", TCEntityTypes.FALLING_TAINT.get(), 64, 3, true, 0.98F, 0.98F));
+        checks.add(checkMobTypeShape("Wisp", TCEntityTypes.WISP.get(), 0.9F, 0.9F, 64, 3, false));
         checks.add(checkMobTypeShape("ThaumSlime", TCEntityTypes.THAUM_SLIME.get(), 2.04F, 2.04F, 64, 3, true));
         checks.add(checkMobTypeShape("TaintCrawler", TCEntityTypes.TAINT_CRAWLER.get(), 0.5F, 0.4F, 64, 3, true));
         checks.add(checkMobTypeShape("Taintacle", TCEntityTypes.TAINTACLE.get(), 0.8F, 3.0F, 64, 3, false));

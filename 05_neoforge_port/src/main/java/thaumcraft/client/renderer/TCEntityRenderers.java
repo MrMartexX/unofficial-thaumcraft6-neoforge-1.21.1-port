@@ -26,5 +26,6 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.TAINTACLE.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINTACLE_TINY.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINT_SWARM.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.WISP.get(), TCInvisibleEntityRenderer::new);
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.world.entity.monster.Creeper;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.entities.TCWispEntity;
 
 public final class TCEntityAspectAssignments {
     private static final Map<EntityType<?>, AspectList> LEGACY_VANILLA_ASSIGNMENTS = createAssignments();
@@ -20,6 +21,10 @@ public final class TCEntityAspectAssignments {
     }
 
     public static AspectList getEntityAspects(Entity entity) {
+        if (entity instanceof TCWispEntity wisp) {
+            Aspect type = Aspect.getAspect(wisp.getWispType());
+            return type == null ? null : tags(type, 5, Aspect.AURA, 5, Aspect.FLIGHT, 5);
+        }
         AspectList aspects = LEGACY_VANILLA_ASSIGNMENTS.get(entity.getType());
         if (aspects == null) {
             aspects = LEGACY_CUSTOM_ASSIGNMENTS.get(BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()));

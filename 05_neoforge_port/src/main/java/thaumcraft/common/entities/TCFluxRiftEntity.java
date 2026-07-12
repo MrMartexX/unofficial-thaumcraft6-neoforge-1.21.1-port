@@ -5,14 +5,19 @@ import java.util.List;
 import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,11 +30,16 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aura.AuraHelper;
+import thaumcraft.common.blocks.world.taint.TCTaintHelper;
 import thaumcraft.common.registry.TCEntityTypes;
 import thaumcraft.common.registry.TCItems;
+import thaumcraft.common.registry.TCMobEffects;
 import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.tiles.devices.TCVoidSiphonRiftAccess;
+import thaumcraft.common.warp.TCPlayerWarpStore;
+import thaumcraft.common.warp.TCWarpType;
 
 /** Modern Flux Rift entity retaining TC6's seed/size/stability/collapse contract. */
 public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
@@ -46,6 +56,13 @@ public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
     private final ArrayList<Float> widths = new ArrayList<>();
     private int maxSize;
     private int lastSize = -1;
+    private static final List<FluxEventEntry> EVENTS = List.of(
+            new FluxEventEntry(0, 50, 5, true, "wisp"),
+            new FluxEventEntry(1, 10, 0, false, "taint_seed_prime"),
+            new FluxEventEntry(2, 20, 10, true, "infectious_vis_exhaust"),
+            new FluxEventEntry(3, 20, 10, true, "focus_flux_cloud"),
+            new FluxEventEntry(4, 1, 0, true, "collapse")
+    );
 
     public TCFluxRiftEntity(EntityType<? extends TCFluxRiftEntity> type, Level level) {
         super(type, level);
@@ -170,6 +187,20 @@ public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
 
     public void completeCollapseForValidation() {
         completeCollapse();
+    }
+
+    public FluxEventResult executeRiftEventForValidation(int eventId) {
+        FluxEventEntry entry = EVENTS.stream()
+                .filter(candidate -> candidate.event() == eventId)
+                .findFirst()
+                .orElse(null);
+        return entry == null
+                ? new FluxEventResult(eventId, "missing_event", false, false)
+                : executeRiftEvent(entry);
+    }
+
+    public static List<FluxEventEntry> eventTableForValidation() {
+        return EVENTS;
     }
 
     public static boolean createRift(Level level, BlockPos origin) {
@@ -305,6 +336,17 @@ public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
         } else {
             AuraHelper.polluteAura(level(), blockPosition(), 1.0F, false);
         }
+        if (random.nextInt(10) == 0) {
+            level().explode(
+                    this,
+                    getX() + random.nextGaussian() * 2.0D,
+                    getY() + random.nextGaussian() * 2.0D,
+                    getZ() + random.nextGaussian() * 2.0D,
+                    random.nextFloat() / 2.0F,
+                    false,
+                    Level.ExplosionInteraction.NONE
+            );
+        }
         if (getRiftSize() <= 1) {
             completeCollapse();
         }
@@ -318,11 +360,7 @@ public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
             setRiftSize(getRiftSize() + 1);
         }
         if (getRiftStability() < 0.0F && random.nextInt(1000) < Math.abs(getRiftStability()) + getRiftSize()) {
-            if (random.nextInt(10) == 0) {
-                setCollapse(true);
-            } else {
-                setRiftStability(getRiftStability() + 5.0F);
-            }
+            executeRiftEvent();
         }
     }
 
@@ -355,7 +393,151 @@ public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
         for (int index = 0; index < drops; index++) {
             spawnAtLocation(new ItemStack(TCItems.VOID_SEED.get()));
         }
+        applyCollapseConsequences();
         discard();
+    }
+
+    private FluxEventResult executeRiftEvent() {
+        FluxEventEntry entry = chooseRiftEvent();
+        return entry == null
+                ? new FluxEventResult(-1, "missing_event", false, false)
+                : executeRiftEvent(entry);
+    }
+
+    private FluxEventEntry chooseRiftEvent() {
+        int total = 0;
+        for (FluxEventEntry entry : EVENTS) {
+            total += entry.weight();
+        }
+        if (total <= 0) {
+            return null;
+        }
+        int roll = random.nextInt(total);
+        int cursor = 0;
+        for (FluxEventEntry entry : EVENTS) {
+            cursor += entry.weight();
+            if (roll < cursor) {
+                return entry;
+            }
+        }
+        return EVENTS.get(EVENTS.size() - 1);
+    }
+
+    private FluxEventResult executeRiftEvent(FluxEventEntry entry) {
+        if (!entry.nearTaintAllowed() && TCTaintHelper.isNearTaintSeed(level(), blockPosition())) {
+            return new FluxEventResult(entry.event(), "near_taint_blocked", false, false);
+        }
+
+        boolean didIt = switch (entry.event()) {
+            case 0 -> spawnWispEvent();
+            case 1 -> spawnPrimeSeedEvent();
+            case 2 -> applyInfectiousVisExhaustEvent();
+            case 3 -> false;
+            case 4 -> {
+                setCollapse(true);
+                yield true;
+            }
+            default -> false;
+        };
+
+        if (didIt) {
+            setRiftStability(getRiftStability() + entry.cost());
+        }
+
+        String result = didIt ? "applied" : (entry.event() == 3 ? "deferred_focus_cloud_owner" : "failed");
+        return new FluxEventResult(entry.event(), result, didIt, entry.event() == 3);
+    }
+
+    private boolean spawnWispEvent() {
+        if (!(level() instanceof ServerLevel serverLevel)) {
+            return false;
+        }
+        TCWispEntity wisp = new TCWispEntity(
+                serverLevel,
+                getX() + random.nextGaussian() * 5.0D,
+                getY() + random.nextGaussian() * 5.0D,
+                getZ() + random.nextGaussian() * 5.0D
+        );
+        if (random.nextInt(5) == 0) {
+            wisp.setWispType(Aspect.FLUX.getTag());
+        }
+        return wisp.canSpawnLikeLegacy() && serverLevel.addFreshEntity(wisp);
+    }
+
+    private boolean spawnPrimeSeedEvent() {
+        if (!(level() instanceof ServerLevel serverLevel)) {
+            return false;
+        }
+        BlockPos spawnPos = BlockPos.containing(
+                (int) (getX() + random.nextGaussian() * 5.0D),
+                (int) (getY() + random.nextGaussian() * 5.0D),
+                (int) (getZ() + random.nextGaussian() * 5.0D)
+        );
+        TCTaintSeedEntity seed = new TCTaintSeedEntity(serverLevel, spawnPos, true);
+        seed.setYRot(random.nextInt(360));
+        if (!seed.canSpawnLikeLegacy() || !serverLevel.addFreshEntity(seed)) {
+            return false;
+        }
+        seed.setBoost(getRiftSize());
+        AuraHelper.polluteAura(level(), blockPosition(), getRiftSize() / 2.0F, true);
+        discard();
+        return true;
+    }
+
+    private boolean applyInfectiousVisExhaustEvent() {
+        List<LivingEntity> targets = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(16.0D));
+        if (targets.isEmpty()) {
+            return false;
+        }
+        for (LivingEntity target : targets) {
+            if (target instanceof ServerPlayer player) {
+                player.displayClientMessage(Component.translatable("tc.fluxevent.2")
+                        .withStyle(net.minecraft.ChatFormatting.DARK_PURPLE, net.minecraft.ChatFormatting.ITALIC), true);
+            }
+            MobEffectInstance effect = new MobEffectInstance(TCMobEffects.INFECTIOUS_VIS_EXHAUST, 3000, 2, false, true);
+            effect.getCures().clear();
+            target.addEffect(effect);
+        }
+        return true;
+    }
+
+    private void applyCollapseConsequences() {
+        if (!(level() instanceof ServerLevel)) {
+            return;
+        }
+        List<LivingEntity> targets = level().getEntitiesOfClass(LivingEntity.class, getBoundingBox().inflate(32.0D));
+        Stability stability = getStability();
+        if (stability == Stability.VERY_UNSTABLE) {
+            for (LivingEntity target : targets) {
+                int durationSeconds = collapseDurationSeconds(target, 120.0D);
+                if (durationSeconds > 0) {
+                    target.addEffect(new MobEffectInstance(TCMobEffects.FLUX_TAINT, durationSeconds * 20, 0));
+                }
+            }
+        }
+        if (stability == Stability.VERY_UNSTABLE || stability == Stability.UNSTABLE) {
+            for (LivingEntity target : targets) {
+                int durationSeconds = collapseDurationSeconds(target, 300.0D);
+                if (durationSeconds > 0) {
+                    target.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, durationSeconds * 20, 0));
+                }
+            }
+        }
+        if (stability == Stability.VERY_UNSTABLE || stability == Stability.UNSTABLE || stability == Stability.STABLE) {
+            for (LivingEntity target : targets) {
+                if (target instanceof ServerPlayer player) {
+                    int warp = collapseDurationSeconds(player, 25.0D);
+                    if (warp > 0) {
+                        TCPlayerWarpStore.add(player, TCWarpType.NORMAL, warp);
+                        TCPlayerWarpStore.add(player, TCWarpType.TEMPORARY, warp);
+                    }
+                }
+            }
+        }
+    }
+
+    private int collapseDurationSeconds(LivingEntity target, double scale) {
+        return (int) ((1.0D - target.distanceToSqr(this) / 32.0D) * scale);
     }
 
     private void rebuildGeometry() {
@@ -403,5 +585,11 @@ public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
         STABLE,
         UNSTABLE,
         VERY_UNSTABLE
+    }
+
+    public record FluxEventEntry(int event, int weight, int cost, boolean nearTaintAllowed, String owner) {
+    }
+
+    public record FluxEventResult(int event, String result, boolean applied, boolean deferredOwner) {
     }
 }

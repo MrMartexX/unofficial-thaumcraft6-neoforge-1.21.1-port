@@ -116,6 +116,8 @@ neoForge {
             def focusCastExecutionAuditPath = providers.gradleProperty('tcFocusCastExecutionAuditPath').orNull ?: System.getProperty('tc.focusCastExecutionAuditPath')
             def fluxBoreThaumatoriumAuditEnabled = providers.gradleProperty('tcFluxBoreThaumatoriumAudit').orNull ?: System.getProperty('tc.fluxBoreThaumatoriumAudit')
             def fluxBoreThaumatoriumAuditPath = providers.gradleProperty('tcFluxBoreThaumatoriumAuditPath').orNull ?: System.getProperty('tc.fluxBoreThaumatoriumAuditPath')
+            def fluxRiftConsequenceAuditEnabled = providers.gradleProperty('tcFluxRiftConsequenceAudit').orNull ?: System.getProperty('tc.fluxRiftConsequenceAudit')
+            def fluxRiftConsequenceAuditPath = providers.gradleProperty('tcFluxRiftConsequenceAuditPath').orNull ?: System.getProperty('tc.fluxRiftConsequenceAuditPath')
             def fluxTaintBlockerAuditEnabled = providers.gradleProperty('tcFluxTaintBlockerAudit').orNull ?: System.getProperty('tc.fluxTaintBlockerAudit')
             def fluxTaintBlockerAuditPath = providers.gradleProperty('tcFluxTaintBlockerAuditPath').orNull ?: System.getProperty('tc.fluxTaintBlockerAuditPath')
             def taintEcologyBlockerAuditEnabled = providers.gradleProperty('tcTaintEcologyBlockerAudit').orNull ?: System.getProperty('tc.taintEcologyBlockerAudit')
@@ -266,6 +268,12 @@ neoForge {
             }
             if (fluxBoreThaumatoriumAuditPath != null) {
                 systemProperty 'tc.fluxBoreThaumatoriumAuditPath', fluxBoreThaumatoriumAuditPath
+            }
+            if (fluxRiftConsequenceAuditEnabled != null) {
+                systemProperty 'tc.fluxRiftConsequenceAudit', fluxRiftConsequenceAuditEnabled
+            }
+            if (fluxRiftConsequenceAuditPath != null) {
+                systemProperty 'tc.fluxRiftConsequenceAuditPath', fluxRiftConsequenceAuditPath
             }
             if (fluxTaintBlockerAuditEnabled != null) {
                 systemProperty 'tc.fluxTaintBlockerAudit', fluxTaintBlockerAuditEnabled

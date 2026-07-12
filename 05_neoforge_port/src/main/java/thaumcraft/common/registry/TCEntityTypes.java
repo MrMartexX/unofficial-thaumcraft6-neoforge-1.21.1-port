@@ -21,6 +21,7 @@ import thaumcraft.common.entities.TCTaintSwarmEntity;
 import thaumcraft.common.entities.TCTaintacleEntity;
 import thaumcraft.common.entities.TCTaintacleTinyEntity;
 import thaumcraft.common.entities.TCThaumicSlimeEntity;
+import thaumcraft.common.entities.TCWispEntity;
 
 public final class TCEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
@@ -122,6 +123,14 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(false)
                     .build(Thaumcraft.MODID + ":taint_swarm"));
 
+    public static final Supplier<EntityType<TCWispEntity>> WISP = ENTITY_TYPES.register("wisp", () ->
+            EntityType.Builder.<TCWispEntity>of(TCWispEntity::new, MobCategory.MONSTER)
+                    .sized(0.9F, 0.9F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build(Thaumcraft.MODID + ":wisp"));
+
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
             spec("CultistPortalGreater", "EntityCultistPortalGreater", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
             spec("CultistPortalLesser", "EntityCultistPortalLesser", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
@@ -149,7 +158,7 @@ public final class TCEntityTypes {
             spec("TaintacleGiant", "EntityTaintacleGiant", null, 96, 3, false, "defer", "Taint mob AI and renderer"),
             spec("BrainyZombie", "EntityBrainyZombie", null, 64, 3, true, "defer", "Thaumcraft mob AI, loot and spawn rules"),
             spec("GiantBrainyZombie", "EntityGiantBrainyZombie", null, 64, 3, true, "defer", "Thaumcraft mob AI, loot and spawn rules"),
-            spec("Wisp", "EntityWisp", null, 64, 3, false, "defer", "Wisp AI, aura interaction and renderer"),
+            spec("Wisp", "EntityWisp", "wisp", 64, 3, false, "registered_foundation", "Wisp type/aspect persistence, rift-event spawn dependency and minimal server foundation; full AI/render remains deferred"),
             spec("Firebat", "EntityFireBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
             spec("Spellbat", "EntitySpellBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
             spec("Pech", "EntityPech", null, 64, 3, true, "defer", "Pech AI, trading and renderer"),
@@ -196,6 +205,7 @@ public final class TCEntityTypes {
         event.put(TAINTACLE.get(), TCTaintacleEntity.createAttributes().build());
         event.put(TAINTACLE_TINY.get(), TCTaintacleTinyEntity.createAttributes().build());
         event.put(TAINT_SWARM.get(), TCTaintSwarmEntity.createAttributes().build());
+        event.put(WISP.get(), TCWispEntity.createAttributes().build());
     }
 
     private static LegacyEntitySpec spec(

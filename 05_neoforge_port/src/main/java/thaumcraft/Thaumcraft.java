@@ -30,6 +30,7 @@ import thaumcraft.common.crafting.crucible.TCThaumatoriumNetwork;
 import thaumcraft.common.entities.TCEntityFoundationAuditExporter;
 import thaumcraft.common.entities.TCFallingTaintBlockerAuditExporter;
 import thaumcraft.common.entities.TCFluxBoreThaumatoriumBlockerAuditExporter;
+import thaumcraft.common.entities.TCFluxRiftConsequenceAuditExporter;
 import thaumcraft.common.entities.TCTaintMobBlockerAuditExporter;
 import thaumcraft.common.essentia.transport.TCEssentiaTransportBehaviorAuditExporter;
 import thaumcraft.common.tiles.devices.TCLampDeviceAuditExporter;
@@ -150,6 +151,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCStandaloneDeviceBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCEntityFoundationAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFluxBoreThaumatoriumBlockerAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCFluxRiftConsequenceAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFluxTaintBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCTaintEcologyBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCTaintMobBlockerAuditExporter::onServerStarted);

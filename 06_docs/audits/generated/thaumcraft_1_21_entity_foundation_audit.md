@@ -7,12 +7,13 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Check | Status | Notes |
 | --- | --- | --- |
 | legacy entity catalog count | PASS | expected 43, got 43 |
-| registered foundation count | PASS | expected item entities, FluxRift, ArcaneBore, FallingTaint, TaintSeed pair and five taint mob foundations |
+| registered foundation count | PASS | expected item entities, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair and five taint mob foundations |
 | SpecialItem registry id | PASS | expected thaumcraft:special_item, got thaumcraft:special_item |
 | FollowItem registry id | PASS | expected thaumcraft:follow_item, got thaumcraft:follow_item |
 | FluxRift registry id | PASS | expected thaumcraft:flux_rift, got thaumcraft:flux_rift |
 | ArcaneBore registry id | PASS | expected thaumcraft:arcane_bore, got thaumcraft:arcane_bore |
 | FallingTaint registry id | PASS | expected thaumcraft:falling_taint, got thaumcraft:falling_taint |
+| Wisp registry id | PASS | expected thaumcraft:wisp, got thaumcraft:wisp |
 | TaintSeed registry id | PASS | expected thaumcraft:taint_seed, got thaumcraft:taint_seed |
 | TaintSeedPrime registry id | PASS | expected thaumcraft:taint_seed_prime, got thaumcraft:taint_seed_prime |
 | ThaumSlime registry id | PASS | expected thaumcraft:thaum_slime, got thaumcraft:thaum_slime |
@@ -23,6 +24,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | SpecialItem type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | FollowItem type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=false |
 | FallingTaint type parameters | PASS | category=MISC, size=0.98x0.98, tracking=64, update=3, velocity=true |
+| Wisp mob type parameters | PASS | category=MONSTER, size=0.9x0.9, tracking=64, update=3, velocity=false |
 | ThaumSlime mob type parameters | PASS | category=MONSTER, size=2.04x2.04, tracking=64, update=3, velocity=true |
 | TaintCrawler mob type parameters | PASS | category=MONSTER, size=0.5x0.4, tracking=64, update=3, velocity=true |
 | Taintacle mob type parameters | PASS | category=MONSTER, size=0.8x3.0, tracking=64, update=3, velocity=false |
@@ -60,7 +62,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | TaintacleGiant | EntityTaintacleGiant |  | 96 | 3 | false | defer | Taint mob AI and renderer |
 | BrainyZombie | EntityBrainyZombie |  | 64 | 3 | true | defer | Thaumcraft mob AI, loot and spawn rules |
 | GiantBrainyZombie | EntityGiantBrainyZombie |  | 64 | 3 | true | defer | Thaumcraft mob AI, loot and spawn rules |
-| Wisp | EntityWisp |  | 64 | 3 | false | defer | Wisp AI, aura interaction and renderer |
+| Wisp | EntityWisp | thaumcraft:wisp | 64 | 3 | false | registered_foundation | Wisp type/aspect persistence, rift-event spawn dependency and minimal server foundation; full AI/render remains deferred |
 | Firebat | EntityFireBat |  | 64 | 3 | false | defer | Bat AI variant and renderer |
 | Spellbat | EntitySpellBat |  | 64 | 3 | false | defer | Bat AI variant and renderer |
 | Pech | EntityPech |  | 64 | 3 | true | defer | Pech AI, trading and renderer |
