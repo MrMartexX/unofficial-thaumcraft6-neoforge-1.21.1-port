@@ -26,6 +26,7 @@ The UI is a client-side `Screen`, not an inventory `Menu`. All visibility, unloc
 | Browser | `TCThaumonomiconBrowserScreen` |
 | Entry page | `TCThaumonomiconEntryScreen` |
 | Vanilla crafting page snapshot | `TCCraftingRecipePageView`, built by `TCResearchPageCatalogManager` |
+| Arcane/crucible/infusion page snapshots | `TCArcaneRecipePageView`, `TCCrucibleRecipePageView`, and `TCInfusionRecipePageView`, all server-built by `TCResearchPageCatalogManager` |
 | Authoritative state | `TCThaumonomiconService`, `TCResearchManager`, `TCPlayerKnowledgeStore` |
 | Server actions | `TCThaumonomiconActionPayload` with client revision echo |
 
@@ -42,7 +43,7 @@ Every index also carries a server-built revision over the current research data,
 - The entry screen opens only after the server accepts the action and returns an authoritative entry view.
 - Entry stage text, visible addenda, requirement results, stage state, bookmarks, book asset, page navigation, and checked stage advance are active.
 - Renderable crafting bookmarks open a legacy-style paper recipe page. The server snapshot owns the real result stack, shaped/shapeless kind, shaped dimensions, ingredient slots, and ingredient variants; the client only cycles and renders those values.
-- Five catalog crafting entries and both current arcane catalog entries produce valid server snapshots. Direct-reference live availability remains catalog-owned; deferred or legacy-missing groups stay non-interactive until their subsystem or mapping exists.
+- Live vanilla crafting, arcane, crucible and infusion catalog entries produce valid server snapshots. Direct-reference live availability remains catalog-owned; deferred or legacy-missing groups stay non-interactive until their subsystem or mapping exists.
 - Thaumonomicon has its exact legacy runtime aspect result from the 1.12 exporter dump.
 - Legacy `research.*` English translations required by the active screen are present in modern `en_us.json`.
 
@@ -52,21 +53,21 @@ Every index also carries a server-built revision over the current research data,
 - Exact arrow shapes, forbidden/warp marker, category completion percentages, popup animation, and final browser visual parity tuning.
 - Aspect and knowledge side pages.
 - Recipe drilldown history.
-- Arcane, crucible, infusion, blueprint, fake, and missing recipe-page renderers.
+- Blueprint, fake/display-only, special and missing recipe-page renderers.
 - Cheat Thaumonomicon variant.
 
-Deferred recipe pages are shown only as catalog bookmarks with their authoritative kind/availability. Only `READY` crafting pages carrying a server snapshot are interactive; the UI does not invent recipe contents.
+Deferred recipe pages are shown only as catalog bookmarks with their authoritative kind/availability. Only `READY` pages carrying a matching server snapshot are interactive; the UI does not invent recipe contents.
 
 ## Validation
 
-- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, and the `READY` crafting/arcane/crucible snapshot boundary.
-- Latest protocol result: `27/27` checks passed; live vanilla crafting, arcane and crucible catalog entries produce valid server snapshots.
+- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, and the `READY` crafting/arcane/crucible/infusion snapshot boundary.
+- Latest protocol result: `31/31` checks passed; live vanilla crafting, arcane, crucible and infusion catalog entries produce valid server snapshots.
 - `gradlew build` passes.
 - Dedicated-server reload passes with `687` exact aspect assignments and the Thaumonomicon protocol audit.
 
 ## Next boundary
 
 1. Keep `DEFERRED` and `LEGACY_MISSING` pages non-interactive until their crafting subsystem or mapping is implemented.
-2. Keep further custom recipe pages catalog-gated. Arcane and crucible page snapshots have first-pass boundaries; infusion, blueprint, fake and special pages still need focused design slices before rendering.
+2. Keep remaining custom recipe pages catalog-gated. Vanilla crafting, arcane, crucible and real infusion page snapshots have first-pass boundaries; blueprint, fake/display and special pages still need focused design slices before rendering.
 3. Add recipe drilldown/history only after server-authoritative page snapshots can represent the referenced recipe family.
 4. Run a focused visual parity pass against the legacy browser, entry page, and crafting paper page before calling the UI final.

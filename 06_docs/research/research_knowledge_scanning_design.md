@@ -250,11 +250,10 @@ Started:
   These are server-authoritative diagnostics for the future Thaumonomicon action path, not a final UI.
 
 Not implemented by this skeleton:
-- Thaumonomicon browser/entry rendering. Player-visible filtering is server-authoritative and implemented.
+- Thaumonomicon final visual/search/drilldown parity. Player-visible filtering and first browser/entry rendering are server-authoritative and implemented.
 - Exact direct `required_craft` ItemStack hash parity for legacy marker ids.
 - Producer/container behavior for legacy metadata/NBT-heavy items such as phials, crystal essence, material-family outputs, and unported Thaumcraft ids.
-- Custom recipe-page rendering for arcane, crucible, infusion, blueprint, fake, and grouped pages.
-- Thaumonomicon browser/entry screen rendering.
+- Custom recipe-page rendering for blueprint, fake/display-only, special and grouped pages.
 - Full warp events/effects/client sync and cancellable research/knowledge events.
 
 ## Progression parity closure checkpoint
@@ -264,7 +263,7 @@ Not implemented by this skeleton:
 - `reward_item` and `reward_knowledge` are preserved by the runtime parser even though the built-in TC6 research files do not currently use them.
 - `07_Test_Instance_and_Comparisons/research_data_parity` compares legacy JSON, NeoForge source JSON, NeoForge runtime parser output, and all seven Java-registered legacy categories.
 - Latest parity result: `148/148` entries, `7/7` categories, `0` source differences, `0` runtime differences, and `10/10` progression/parser checks passed.
-- The permanent research recipe/page catalog, server-authoritative Thaumonomicon protocol, real item/open flow, first browser/entry screens, and first vanilla crafting, arcane and crucible page renderers are implemented. The catalog preserves `253` research occurrences, `203` direct references, and `325` entries including group members with `0` parity differences; the protocol audit passes `27/27`, including the legacy known-entry final-stage progression path, explicit-open-versus-refresh separation, server-built index revision, stale-action rejection without mutation, and server-owned crafting/arcane/crucible snapshots.
+- The permanent research recipe/page catalog, server-authoritative Thaumonomicon protocol, real item/open flow, first browser/entry screens, and first vanilla crafting, arcane, crucible and infusion page renderers are implemented. The catalog preserves `253` research occurrences, `203` direct references, and `325` entries including group members with `0` parity differences; the protocol audit passes `31/31`, including the legacy known-entry final-stage progression path, explicit-open-versus-refresh separation, server-built index revision, stale-action rejection without mutation, and server-owned crafting/arcane/crucible/infusion snapshots.
 - The next research/crafting boundary should continue through audited recipe-page families or a focused in-world crucible/alchemy design slice, not client-side recipe resolution or invented deferred content.
 
 Runtime note:

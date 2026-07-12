@@ -3,8 +3,9 @@
 ## Scope
 
 This design closes the data boundary between loaded research stages and the
-future Thaumonomicon page renderer. It does not implement arcane crafting,
-crucible, infusion, multiblock assembly, or the final Thaumonomicon screen.
+Thaumonomicon page renderer. It does not implement in-world arcane workbench,
+crucible, infusion altar, multiblock assembly, or the final Thaumonomicon visual
+polish.
 
 ## Authoritative legacy behavior
 
@@ -94,7 +95,7 @@ Latest validation:
   `325` total entries including group members, `0` field differences;
 - runtime structural validation: `0` missing catalog references, unresolved
   group targets, or cycles;
-- Thaumonomicon protocol audit: `27/27` checks passed. The first real item/open/browser/entry flow, server-snapshot-backed vanilla crafting page renderer, first exact arcane page renderer, first crucible page renderer, server-built index revision, and stale-action rejection without mutation are active; remaining infusion, blueprint, fake and special recipe-page rendering remains catalog-gated.
+- Thaumonomicon protocol audit: `31/31` checks passed. The first real item/open/browser/entry flow, server-snapshot-backed vanilla crafting page renderer, exact arcane page renderer, crucible page renderer, infusion page renderer, server-built index revision, and stale-action rejection without mutation are active; remaining blueprint, fake/display and special recipe-page rendering remains catalog-gated.
 
 ## Remaining boundary
 
@@ -103,8 +104,6 @@ Latest validation:
   `TCCraftingRecipePageView`; do not resolve recipes independently on the client.
 - Keep arcane page contents server-resolved through `TCArcaneRecipePageView`;
 - Keep crucible page contents server-resolved through `TCCrucibleRecipePageView`; do not treat this as in-world crucible behavior.
-  do not let the client infer vis, crystals, research, result, or ingredient
-  variants.
-- Keep remaining arcane recipes plus crucible, infusion, blueprint,
-  fake/display-only, and grouped recipe-page rendering deferred until their
-  exact recipe systems are implemented.
+- Keep infusion page contents server-resolved through `TCInfusionRecipePageView`; do not treat this as in-world infusion altar behavior.
+- Do not let the client infer vis, crystals, research, instability, aspects, result, or ingredient variants.
+- Keep remaining blueprint, fake/display-only, special and grouped recipe-page rendering deferred until their exact page systems are implemented.

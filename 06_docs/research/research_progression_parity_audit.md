@@ -51,7 +51,7 @@ The semantic checks cover gated start, non-final and final warp calculation, emp
 ## Regression results
 
 - Research requirements: `69/69` item, `34/34` craft, `170/170` knowledge resolved; `0` unresolved; `16` documented subsystem bridge warnings.
-- Research Table diagnostics: `58/58` passed.
+- Research Table diagnostics: `59/59` passed.
 - Dedicated server research reload: `7` categories, `148` entries, `271` stages, `16` addenda; `0` unresolved research references.
 
 ## Remaining boundaries
@@ -60,4 +60,4 @@ The semantic checks cover gated start, non-final and final warp calculation, emp
 - Full warp events, effects, client sync, and consequences remain outside the minimal warp storage bridge.
 - Built-in TC6 research JSON does not currently use entry rewards, so reward handling is parser/contract-tested but still needs a real addon/runtime fixture before it is treated as integration-proven.
 - Research recipe references are page/catalog identifiers, not simple vanilla recipe unlock ids. The permanent catalog now preserves all `253` research occurrences, `203` direct references, and `325` entries including group members with `0` comparison differences.
-- Server-authoritative Thaumonomicon index/entry/action payloads, item/open flow, first browser/entry screens, and the first vanilla crafting, arcane and crucible page snapshots/renderers are implemented and the protocol audit passes `27/27`. The audit covers exact legacy browser start, checked stage advance, entry acknowledgement flag semantics and known-entry final-stage progression, visibility filtering, server-owned unlockability/flags, client-cache invalidation, server-built revision freshness, stale-action rejection without mutation, explicit-open-versus-refresh separation, and valid server snapshots for every live crafting/arcane/crucible catalog entry. The remaining boundary is final search/visual parity and remaining infusion/blueprint/fake/special recipe-page systems/renderers.
+- Server-authoritative Thaumonomicon index/entry/action payloads, item/open flow, first browser/entry screens, and the first vanilla crafting, arcane, crucible and infusion page snapshots/renderers are implemented and the protocol audit passes `31/31`. The audit covers exact legacy browser start, checked stage advance, entry acknowledgement flag semantics and known-entry final-stage progression, visibility filtering, server-owned unlockability/flags, client-cache invalidation, server-built revision freshness, stale-action rejection without mutation, explicit-open-versus-refresh separation, and valid server snapshots for every live crafting/arcane/crucible/infusion catalog entry. The remaining boundary is final search/visual parity and remaining blueprint/fake/special recipe-page systems/renderers.

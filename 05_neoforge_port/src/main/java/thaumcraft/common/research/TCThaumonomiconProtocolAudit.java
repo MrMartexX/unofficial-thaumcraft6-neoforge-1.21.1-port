@@ -127,6 +127,10 @@ final class TCThaumonomiconProtocolAudit {
             writer.write("- Deferred arcane gameplay catalog entries: `" + report.deferredArcaneGameplayCatalogEntries().size() + "`\n");
             writer.write("- Deferred arcane transport/essentia catalog entries: `" + report.deferredArcaneTransportCatalogEntries().size() + "`\n");
             writer.write("- Deferred arcane uncategorized catalog entries: `" + report.deferredArcaneUncategorizedCatalogEntries().size() + "`\n");
+            writer.write("- Ready crucible catalog entries: `" + report.readyCrucibleEntries() + "`\n");
+            writer.write("- Deferred crucible catalog entries: `" + report.deferredCrucibleCatalogEntries().size() + "`\n");
+            writer.write("- Ready infusion catalog entries: `" + report.readyInfusionEntries() + "`\n");
+            writer.write("- Deferred infusion catalog entries: `" + report.deferredInfusionCatalogEntries().size() + "`\n");
             writeDeferredList(writer, "Fake crafting catalog ids", report.fakeCraftingCatalogEntries());
             writeDeferredList(writer, "Deferred crafting catalog ids", report.deferredCraftingCatalogEntries());
             writeDeferredList(writer, "Deferred arcane decorative/asset catalog ids", report.deferredArcaneDecorativeCatalogEntries());
@@ -135,6 +139,8 @@ final class TCThaumonomiconProtocolAudit {
             writeDeferredList(writer, "Deferred arcane transport/essentia catalog ids", report.deferredArcaneTransportCatalogEntries());
             writeDeferredList(writer, "Deferred arcane uncategorized catalog ids", report.deferredArcaneUncategorizedCatalogEntries());
             writeDeferredList(writer, "Deferred arcane catalog ids", report.deferredArcaneCatalogEntries());
+            writeDeferredList(writer, "Deferred crucible catalog ids", report.deferredCrucibleCatalogEntries());
+            writeDeferredList(writer, "Deferred infusion catalog ids", report.deferredInfusionCatalogEntries());
         }
         return report;
     }
@@ -207,8 +213,10 @@ final class TCThaumonomiconProtocolAudit {
         int bookmarksInspected = 0;
         int pagesInspected = 0;
         boolean noLegacyMissingPages = true;
-        boolean readyPageViewsHaveSnapshots = true;
+        boolean readyCraftingPageViewsHaveSnapshots = true;
         boolean readyArcanePageViewsHaveSnapshots = true;
+        boolean readyCruciblePageViewsHaveSnapshots = true;
+        boolean readyInfusionPageViewsHaveSnapshots = true;
         boolean readyPageViewsHaveCorrectSnapshotKind = true;
         boolean deferredPageViewsHaveNoSnapshots = true;
         Optional<TCThaumonomiconEntryView> sample = Optional.empty();
@@ -231,19 +239,27 @@ final class TCThaumonomiconProtocolAudit {
                     if (page.availability() == TCResearchPageAvailability.READY
                             && page.kind() == TCResearchPageKind.CRAFTING
                             && page.craftingRecipe().isEmpty()) {
-                        readyPageViewsHaveSnapshots = false;
+                        readyCraftingPageViewsHaveSnapshots = false;
                     }
                     if (page.availability() == TCResearchPageAvailability.READY
                             && page.kind() == TCResearchPageKind.ARCANE
                             && page.arcaneRecipe().isEmpty()) {
                         readyArcanePageViewsHaveSnapshots = false;
                     }
-                    if ((page.kind() == TCResearchPageKind.CRAFTING && page.arcaneRecipe().isPresent())
-                            || (page.kind() == TCResearchPageKind.ARCANE && page.craftingRecipe().isPresent())) {
+                    if (page.availability() == TCResearchPageAvailability.READY
+                            && page.kind() == TCResearchPageKind.CRUCIBLE
+                            && page.crucibleRecipe().isEmpty()) {
+                        readyCruciblePageViewsHaveSnapshots = false;
+                    }
+                    if (page.availability() == TCResearchPageAvailability.READY
+                            && page.kind() == TCResearchPageKind.INFUSION
+                            && page.infusionRecipe().isEmpty()) {
+                        readyInfusionPageViewsHaveSnapshots = false;
+                    }
+                    if (page.availability() == TCResearchPageAvailability.READY && !hasOnlyMatchingSnapshot(page)) {
                         readyPageViewsHaveCorrectSnapshotKind = false;
                     }
-                    if (page.availability() != TCResearchPageAvailability.READY
-                            && (page.craftingRecipe().isPresent() || page.arcaneRecipe().isPresent())) {
+                    if (page.availability() != TCResearchPageAvailability.READY && hasAnyRecipeSnapshot(page)) {
                         deferredPageViewsHaveNoSnapshots = false;
                     }
                 }
@@ -253,12 +269,22 @@ final class TCThaumonomiconProtocolAudit {
         checks.add(check("legacy_missing_pages_filtered", noLegacyMissingPages, "pages=" + pagesInspected));
         checks.add(check(
                 "ready_page_views_have_server_crafting_snapshots",
-                readyPageViewsHaveSnapshots,
+                readyCraftingPageViewsHaveSnapshots,
                 "pages=" + pagesInspected
         ));
         checks.add(check(
                 "ready_page_views_have_server_arcane_snapshots",
                 readyArcanePageViewsHaveSnapshots,
+                "pages=" + pagesInspected
+        ));
+        checks.add(check(
+                "ready_page_views_have_server_crucible_snapshots",
+                readyCruciblePageViewsHaveSnapshots,
+                "pages=" + pagesInspected
+        ));
+        checks.add(check(
+                "ready_page_views_have_server_infusion_snapshots",
+                readyInfusionPageViewsHaveSnapshots,
                 "pages=" + pagesInspected
         ));
         checks.add(check(
@@ -381,6 +407,85 @@ final class TCThaumonomiconProtocolAudit {
                 classifiedDeferredArcaneEntries == deferredArcaneCatalogEntries.size(),
                 "classified=" + classifiedDeferredArcaneEntries
                         + ", deferred_arcane_entries=" + deferredArcaneCatalogEntries.size()
+        ));
+
+        int readyCrucibleEntries = 0;
+        ArrayList<String> deferredCrucibleCatalogEntries = new ArrayList<>();
+        boolean readyCrucibleCatalogSnapshotsValid = true;
+        for (TCResearchPageCatalogEntry catalogEntry : TCResearchPageCatalogManager.entries()) {
+            if (catalogEntry.kind() != TCResearchPageKind.CRUCIBLE) {
+                continue;
+            }
+            String catalogId = catalogEntry.id().toString();
+            TCResearchPageAvailability availability = TCResearchPageCatalogManager.availability(
+                    catalogId,
+                    player.server.getRecipeManager()
+            );
+            Optional<TCCrucibleRecipePageView> snapshot = TCResearchPageCatalogManager.buildCruciblePage(
+                    catalogEntry.id(),
+                    player.server.getRecipeManager(),
+                    player.server.registryAccess()
+            );
+            if (availability == TCResearchPageAvailability.READY) {
+                readyCrucibleEntries++;
+                readyCrucibleCatalogSnapshotsValid &= snapshot.isPresent()
+                        && snapshot.get().recipeId().equals(catalogEntry.id())
+                        && !snapshot.get().result().isEmpty()
+                        && !snapshot.get().catalystVariants().isEmpty()
+                        && !snapshot.get().aspectStacks().isEmpty()
+                        && !snapshot.get().research().isBlank();
+            } else {
+                deferredCrucibleCatalogEntries.add(catalogId);
+                if (snapshot.isPresent()) {
+                    readyCrucibleCatalogSnapshotsValid = false;
+                }
+            }
+        }
+        checks.add(check(
+                "ready_crucible_catalog_entries_have_valid_server_snapshots",
+                readyCrucibleCatalogSnapshotsValid && readyCrucibleEntries > 0,
+                "ready_crucible_entries=" + readyCrucibleEntries
+                        + ", deferred_crucible_entries=" + deferredCrucibleCatalogEntries.size()
+        ));
+
+        int readyInfusionEntries = 0;
+        ArrayList<String> deferredInfusionCatalogEntries = new ArrayList<>();
+        boolean readyInfusionCatalogSnapshotsValid = true;
+        for (TCResearchPageCatalogEntry catalogEntry : TCResearchPageCatalogManager.entries()) {
+            if (catalogEntry.kind() != TCResearchPageKind.INFUSION) {
+                continue;
+            }
+            String catalogId = catalogEntry.id().toString();
+            TCResearchPageAvailability availability = TCResearchPageCatalogManager.availability(
+                    catalogId,
+                    player.server.getRecipeManager()
+            );
+            Optional<TCInfusionRecipePageView> snapshot = TCResearchPageCatalogManager.buildInfusionPage(
+                    catalogEntry.id(),
+                    player.server.getRecipeManager(),
+                    player.server.registryAccess()
+            );
+            if (availability == TCResearchPageAvailability.READY) {
+                readyInfusionEntries++;
+                readyInfusionCatalogSnapshotsValid &= snapshot.isPresent()
+                        && snapshot.get().recipeId().equals(catalogEntry.id())
+                        && !snapshot.get().result().isEmpty()
+                        && !snapshot.get().catalystVariants().isEmpty()
+                        && !snapshot.get().componentVariants().isEmpty()
+                        && !snapshot.get().aspectStacks().isEmpty()
+                        && !snapshot.get().research().isBlank();
+            } else {
+                deferredInfusionCatalogEntries.add(catalogId);
+                if (snapshot.isPresent()) {
+                    readyInfusionCatalogSnapshotsValid = false;
+                }
+            }
+        }
+        checks.add(check(
+                "ready_infusion_catalog_entries_have_valid_server_snapshots",
+                readyInfusionCatalogSnapshotsValid && readyInfusionEntries > 0,
+                "ready_infusion_entries=" + readyInfusionEntries
+                        + ", deferred_infusion_entries=" + deferredInfusionCatalogEntries.size()
         ));
 
         boolean rejectedUnknown = TCThaumonomiconService.buildEntry(player, "AUDIT_MISSING_RESEARCH").isEmpty();
@@ -551,8 +656,37 @@ final class TCThaumonomiconProtocolAudit {
                 deferredArcaneBlockEntityCatalogEntries,
                 deferredArcaneGameplayCatalogEntries,
                 deferredArcaneTransportCatalogEntries,
-                deferredArcaneUncategorizedCatalogEntries
+                deferredArcaneUncategorizedCatalogEntries,
+                readyCrucibleEntries,
+                deferredCrucibleCatalogEntries,
+                readyInfusionEntries,
+                deferredInfusionCatalogEntries
         );
+    }
+
+    private static boolean hasAnyRecipeSnapshot(TCResearchPageView page) {
+        return page.craftingRecipe().isPresent()
+                || page.arcaneRecipe().isPresent()
+                || page.crucibleRecipe().isPresent()
+                || page.infusionRecipe().isPresent();
+    }
+
+    private static boolean hasOnlyMatchingSnapshot(TCResearchPageView page) {
+        boolean crafting = page.craftingRecipe().isPresent();
+        boolean arcane = page.arcaneRecipe().isPresent();
+        boolean crucible = page.crucibleRecipe().isPresent();
+        boolean infusion = page.infusionRecipe().isPresent();
+        int present = (crafting ? 1 : 0) + (arcane ? 1 : 0) + (crucible ? 1 : 0) + (infusion ? 1 : 0);
+        if (present != 1) {
+            return false;
+        }
+        return switch (page.kind()) {
+            case CRAFTING -> crafting;
+            case ARCANE -> arcane;
+            case CRUCIBLE -> crucible;
+            case INFUSION -> infusion;
+            default -> false;
+        };
     }
 
     private static String classifyDeferredArcaneCatalogEntry(String catalogId) {
@@ -658,7 +792,11 @@ final class TCThaumonomiconProtocolAudit {
             List<String> deferredArcaneBlockEntityCatalogEntries,
             List<String> deferredArcaneGameplayCatalogEntries,
             List<String> deferredArcaneTransportCatalogEntries,
-            List<String> deferredArcaneUncategorizedCatalogEntries
+            List<String> deferredArcaneUncategorizedCatalogEntries,
+            int readyCrucibleEntries,
+            List<String> deferredCrucibleCatalogEntries,
+            int readyInfusionEntries,
+            List<String> deferredInfusionCatalogEntries
     ) {
         Report {
             checks = List.copyOf(checks);
@@ -670,6 +808,8 @@ final class TCThaumonomiconProtocolAudit {
             deferredArcaneGameplayCatalogEntries = List.copyOf(deferredArcaneGameplayCatalogEntries);
             deferredArcaneTransportCatalogEntries = List.copyOf(deferredArcaneTransportCatalogEntries);
             deferredArcaneUncategorizedCatalogEntries = List.copyOf(deferredArcaneUncategorizedCatalogEntries);
+            deferredCrucibleCatalogEntries = List.copyOf(deferredCrucibleCatalogEntries);
+            deferredInfusionCatalogEntries = List.copyOf(deferredInfusionCatalogEntries);
         }
 
         int passed() {
