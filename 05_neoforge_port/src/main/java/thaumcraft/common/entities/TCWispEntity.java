@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,15 +16,20 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.items.TCAspectVariantStacks;
 import thaumcraft.common.lib.fx.TCFXDispatcher;
 import thaumcraft.common.registry.TCEntityTypes;
@@ -56,6 +62,56 @@ public class TCWispEntity extends FlyingMob {
                 .add(Attributes.MOVEMENT_SPEED, 0.15D)
                 .add(Attributes.FLYING_SPEED, 0.15D)
                 .add(Attributes.FOLLOW_RANGE, 16.0D);
+    }
+
+    public static boolean checkWispSpawnRules(
+            EntityType<TCWispEntity> type,
+            ServerLevelAccessor level,
+            MobSpawnType spawnType,
+            BlockPos pos,
+            RandomSource random
+    ) {
+        return TCConfig.ALLOW_SPAWN_WISP.get()
+                && canSpawnAtLikeLegacy(type, level, pos, random);
+    }
+
+    public static boolean canSpawnAtLikeLegacy(
+            EntityType<TCWispEntity> type,
+            ServerLevelAccessor level,
+            BlockPos pos,
+            RandomSource random
+    ) {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return false;
+        }
+        double halfWidth = type.getWidth() / 2.0D;
+        AABB spawnBox = new AABB(
+                pos.getX() + 0.5D - halfWidth,
+                pos.getY(),
+                pos.getZ() + 0.5D - halfWidth,
+                pos.getX() + 0.5D + halfWidth,
+                pos.getY() + type.getHeight(),
+                pos.getZ() + 0.5D + halfWidth
+        );
+        return canSpawnBoxLikeLegacy(serverLevel, spawnBox, pos, random, null);
+    }
+
+    public static boolean testLegacySpawnGatesForValidation(
+            Difficulty difficulty,
+            boolean obstructionFree,
+            boolean liquidFree,
+            int nearbyWisps,
+            int skyLight,
+            int localRawBrightness,
+            int skyRoll,
+            int blockRoll
+    ) {
+        return nearbyWisps < 8
+                && difficulty != Difficulty.PEACEFUL
+                && obstructionFree
+                && liquidFree
+                && skyLight <= skyRoll
+                && localRawBrightness <= blockRoll;
     }
 
     @Override
@@ -196,22 +252,42 @@ public class TCWispEntity extends FlyingMob {
     }
 
     public boolean canSpawnLikeLegacy() {
-        int nearby = level().getEntitiesOfClass(TCWispEntity.class, getBoundingBox().inflate(16.0D), wisp -> wisp != this).size();
-        return nearby < 8
-                && level().getDifficulty() != Difficulty.PEACEFUL
-                && level().noCollision(this)
-                && isValidLightLevelLikeLegacy();
+        return canSpawnLikeLegacy(random);
+    }
+
+    public boolean canSpawnLikeLegacy(RandomSource spawnRandom) {
+        if (!(level() instanceof ServerLevel serverLevel)) {
+            return false;
+        }
+        BlockPos lightPos = BlockPos.containing(getX(), getBoundingBox().minY, getZ());
+        return canSpawnBoxLikeLegacy(serverLevel, getBoundingBox(), lightPos, spawnRandom, this);
     }
 
     public int getMaxSpawnClusterSize() {
         return 2;
     }
 
-    private boolean isValidLightLevelLikeLegacy() {
-        if (level().getBrightness(net.minecraft.world.level.LightLayer.SKY, blockPosition()) > random.nextInt(32)) {
+    private static boolean canSpawnBoxLikeLegacy(
+            ServerLevel level,
+            AABB spawnBox,
+            BlockPos lightPos,
+            RandomSource spawnRandom,
+            TCWispEntity self
+    ) {
+        int nearby = level.getEntitiesOfClass(TCWispEntity.class, spawnBox.inflate(16.0D), wisp -> wisp != self).size();
+        return nearby < 8
+                && level.getDifficulty() != Difficulty.PEACEFUL
+                && level.noCollision(spawnBox)
+                && !level.containsAnyLiquid(spawnBox)
+                && isValidLightLevelLikeLegacy(level, lightPos, spawnRandom);
+    }
+
+    private static boolean isValidLightLevelLikeLegacy(ServerLevel level, BlockPos blockPos, RandomSource spawnRandom) {
+        if (level.getBrightness(LightLayer.SKY, blockPos) > spawnRandom.nextInt(32)) {
             return false;
         }
-        return level().getMaxLocalRawBrightness(blockPosition()) <= random.nextInt(8);
+        int skyDarken = level.isThundering() ? 10 : level.getSkyDarken();
+        return level.getMaxLocalRawBrightness(blockPos, skyDarken) <= spawnRandom.nextInt(8);
     }
 
     private void tickLegacyAi() {

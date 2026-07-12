@@ -102,6 +102,8 @@ neoForge {
             def standaloneDeviceBlockerAuditPath = providers.gradleProperty('tcStandaloneDeviceBlockerAuditPath').orNull ?: System.getProperty('tc.standaloneDeviceBlockerAuditPath')
             def entityFoundationAuditEnabled = providers.gradleProperty('tcEntityFoundationAudit').orNull ?: System.getProperty('tc.entityFoundationAudit')
             def entityFoundationAuditPath = providers.gradleProperty('tcEntityFoundationAuditPath').orNull ?: System.getProperty('tc.entityFoundationAuditPath')
+            def entitySpawnPolicyAuditEnabled = providers.gradleProperty('tcEntitySpawnPolicyAudit').orNull ?: System.getProperty('tc.entitySpawnPolicyAudit')
+            def entitySpawnPolicyAuditPath = providers.gradleProperty('tcEntitySpawnPolicyAuditPath').orNull ?: System.getProperty('tc.entitySpawnPolicyAuditPath')
             def infusionBehaviorAuditEnabled = providers.gradleProperty('tcInfusionBehaviorAudit').orNull ?: System.getProperty('tc.infusionBehaviorAudit')
             def infusionBehaviorAuditPath = providers.gradleProperty('tcInfusionBehaviorAuditPath').orNull ?: System.getProperty('tc.infusionBehaviorAuditPath')
             def researchTableAuditEnabled = providers.gradleProperty('tcResearchTableAudit').orNull ?: System.getProperty('tc.researchTableAudit')
@@ -228,6 +230,12 @@ neoForge {
             }
             if (entityFoundationAuditPath != null) {
                 systemProperty 'tc.entityFoundationAuditPath', entityFoundationAuditPath
+            }
+            if (entitySpawnPolicyAuditEnabled != null) {
+                systemProperty 'tc.entitySpawnPolicyAudit', entitySpawnPolicyAuditEnabled
+            }
+            if (entitySpawnPolicyAuditPath != null) {
+                systemProperty 'tc.entitySpawnPolicyAuditPath', entitySpawnPolicyAuditPath
             }
             if (infusionBehaviorAuditEnabled != null) {
                 systemProperty 'tc.infusionBehaviorAudit', infusionBehaviorAuditEnabled

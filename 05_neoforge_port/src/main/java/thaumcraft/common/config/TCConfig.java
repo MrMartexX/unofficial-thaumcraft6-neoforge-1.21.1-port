@@ -46,6 +46,10 @@ public final class TCConfig {
             .comment("Legacy Thaumcraft CONFIG_WORLD.taintSpreadArea radius used by Taint Seeds.")
             .defineInRange("taintSpreadArea", 32, 1, 256);
 
+    public static final ModConfigSpec.BooleanValue ALLOW_SPAWN_WISP = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.allowSpawnWisp. Disables natural Wisp spawn placement when false; rift-spawned Wisps are not controlled by this flag.")
+            .define("allowSpawnWisp", true);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private TCConfig() {
