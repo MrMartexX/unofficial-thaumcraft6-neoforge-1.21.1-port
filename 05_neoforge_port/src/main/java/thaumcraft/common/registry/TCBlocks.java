@@ -43,6 +43,8 @@ import thaumcraft.common.blocks.crafting.TCInfusionPillarBlock;
 import thaumcraft.common.blocks.crafting.TCResearchTableBlock;
 import thaumcraft.common.blocks.crafting.TCThaumatoriumBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
+import thaumcraft.common.blocks.misc.TCLiquidDeathBlock;
+import thaumcraft.common.blocks.misc.TCPurifyingFluidBlock;
 import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
 import thaumcraft.common.blocks.world.taint.TCTaintFibreBlock;
 import thaumcraft.common.blocks.world.taint.TCTaintFeatureBlock;
@@ -201,6 +203,8 @@ public final class TCBlocks {
     public static final Supplier<Block> THAUMATORIUM = BLOCKS.register("thaumatorium", () -> thaumatoriumBlock(false));
     public static final Supplier<Block> THAUMATORIUM_TOP = BLOCKS.register("thaumatorium_top", () -> thaumatoriumBlock(true));
     public static final Supplier<Block> EFFECT_GLIMMER = BLOCKS.register("effect_glimmer", () -> effectGlimmerBlock());
+    public static final Supplier<TCLiquidDeathBlock> LIQUID_DEATH = BLOCKS.register("liquid_death", () -> liquidDeathBlock());
+    public static final Supplier<TCPurifyingFluidBlock> PURIFYING_FLUID = BLOCKS.register("purifying_fluid", () -> purifyingFluidBlock());
     public static final Supplier<Block> FLUX_GOO = BLOCKS.register("flux_goo", () -> fluxGooBlock());
     public static final Supplier<Block> TAINT_FIBRE = BLOCKS.register("taint_fibre", () -> taintFibreBlock());
     public static final Supplier<Block> TAINT_CRUST = BLOCKS.register("taint_crust", () -> taintTerrainBlock(TCTaintTerrainBlock.Kind.CRUST));
@@ -318,6 +322,24 @@ public final class TCBlocks {
                 .randomTicks()
                 .noCollission()
                 .noOcclusion()
+                .strength(100.0F));
+    }
+
+    private static TCLiquidDeathBlock liquidDeathBlock() {
+        return new TCLiquidDeathBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
+                .mapColor(net.minecraft.world.level.material.MapColor.COLOR_PURPLE)
+                .noCollission()
+                .noOcclusion()
+                .noLootTable()
+                .strength(100.0F));
+    }
+
+    private static TCPurifyingFluidBlock purifyingFluidBlock() {
+        return new TCPurifyingFluidBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WATER)
+                .mapColor(net.minecraft.world.level.material.MapColor.COLOR_LIGHT_GRAY)
+                .noCollission()
+                .noOcclusion()
+                .noLootTable()
                 .strength(100.0F));
     }
 

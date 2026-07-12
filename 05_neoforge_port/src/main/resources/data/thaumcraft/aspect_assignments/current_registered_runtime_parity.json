@@ -61,6 +61,24 @@
       ]
     },
     {
+      "item": "thaumcraft:liquid_death_bucket",
+      "aspects": [
+        { "aspect": "thaumcraft:vacuos", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 33 },
+        { "aspect": "thaumcraft:mortuus", "amount": 15 },
+        { "aspect": "thaumcraft:perditio", "amount": 15 }
+      ]
+    },
+    {
+      "item": "thaumcraft:purifying_fluid_bucket",
+      "aspects": [
+        { "aspect": "thaumcraft:vacuos", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 33 },
+        { "aspect": "thaumcraft:cognitio", "amount": 15 },
+        { "aspect": "thaumcraft:ordo", "amount": 15 }
+      ]
+    },
+    {
       "item": "thaumcraft:nitor_yellow",
       "aspects": [
         { "aspect": "thaumcraft:sensus", "amount": 5 },

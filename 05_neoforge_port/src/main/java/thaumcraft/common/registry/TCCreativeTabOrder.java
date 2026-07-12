@@ -193,6 +193,10 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.CHUNK_FISH.get());
         acceptVisible(output, TCItems.CHUNK_RABBIT.get());
         acceptVisible(output, TCItems.CHUNK_MUTTON.get());
+        acceptVisible(output, TCItems.BATH_SALTS.get());
+        acceptVisible(output, TCItems.BOTTLE_TAINT.get());
+        acceptVisible(output, TCItems.LIQUID_DEATH_BUCKET.get());
+        acceptVisible(output, TCItems.PURIFYING_FLUID_BUCKET.get());
         acceptVisible(output, TCItems.SANE_SOAP.get());
 
         acceptVisible(output, TCItems.SCRIBING_TOOLS.get());

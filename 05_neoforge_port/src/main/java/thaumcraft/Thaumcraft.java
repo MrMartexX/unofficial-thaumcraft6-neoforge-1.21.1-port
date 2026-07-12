@@ -47,6 +47,7 @@ import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.capabilities.TCMachineCapabilities;
 import thaumcraft.common.items.TCFuelEvents;
+import thaumcraft.common.items.consumables.TCBathSaltsEvents;
 import thaumcraft.common.crafting.arcane.TCArcaneWorkbenchAuditExporter;
 import thaumcraft.common.items.casters.TCFocusCasterCoreAuditExporter;
 import thaumcraft.common.items.casters.TCFocusCastExecutionAuditExporter;
@@ -58,6 +59,7 @@ import thaumcraft.common.registry.TCArmorMaterials;
 import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCEntityTypes;
+import thaumcraft.common.registry.TCFluids;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMenus;
 import thaumcraft.common.registry.TCMobEffects;
@@ -93,6 +95,8 @@ public final class Thaumcraft {
 
     public Thaumcraft(IEventBus modEventBus, ModContainer modContainer) {
         TCDataComponents.DATA_COMPONENT_TYPES.register(modEventBus);
+        TCFluids.FLUID_TYPES.register(modEventBus);
+        TCFluids.FLUIDS.register(modEventBus);
         TCBlocks.BLOCKS.register(modEventBus);
         TCBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         TCMobEffects.MOB_EFFECTS.register(modEventBus);
@@ -177,6 +181,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCWarpCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCScanningManager::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onItemCrafted);
+        NeoForge.EVENT_BUS.addListener(TCBathSaltsEvents::onItemExpire);
         TCAspectAssignments.bootstrap();
         TCResearchManager.bootstrap();
         TCResearchPageCatalogManager.bootstrap();

@@ -12,23 +12,34 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LiquidBlock;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.common.blocks.misc.TCLiquidDeathBlock;
+import thaumcraft.common.blocks.misc.TCPurifyingFluidBlock;
 import thaumcraft.common.entities.TCBottleTaintEntity;
 import thaumcraft.common.entities.TCTaintCrawlerEntity;
 import thaumcraft.common.items.consumables.ItemBathSalts;
 import thaumcraft.common.items.consumables.ItemBottleTaint;
+import thaumcraft.common.items.consumables.ItemSanitySoap;
+import thaumcraft.common.items.consumables.TCBathSaltsEvents;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCEntityTypes;
+import thaumcraft.common.registry.TCFluids;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMobEffects;
+import thaumcraft.common.warp.TCPlayerWarp;
+import thaumcraft.common.warp.TCPlayerWarpStore;
+import thaumcraft.common.warp.TCWarpType;
 
 /** Runtime audit for special crucible output behavior that is not owned by the crucible tile itself. */
 public final class TCSpecialAlchemyBehaviorAudit {
@@ -63,9 +74,9 @@ public final class TCSpecialAlchemyBehaviorAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- Implemented in this slice: `bath_salts` legacy dropped-item lifespan, `bottle_taint` stack size/use constants, `bottle_taint` projectile registration, Flux Taint splash predicate/effect and Flux Goo placement support rules.");
+        lines.add("- Implemented in this slice: `bath_salts` legacy dropped-item lifespan and water-source conversion, `bottle_taint` stack size/use constants, `bottle_taint` projectile registration, Flux Taint splash predicate/effect and Flux Goo placement support rules, real Liquid Death/Purifying Fluid registries/blocks, Warp Ward effect and Sanity Soap Purifying Fluid/Warp Ward bonuses.");
         lines.add("- Already data-backed before this slice: special crucible recipes for BottleTaint, BathSalts, LiquidDeath and SaneSoap.");
-        lines.add("- Deferred to a later fluid blocker: real `liquid_death` and `purifying_fluid` blocks/fluids, Bath Salts water-source conversion and Warp Ward effect behavior.");
+        lines.add("- Deferred to later visual/automation slices: exact client fluid particles/render translucency, Liquid Death custom dissolve damage type identity, item-pulling radius and broader alchemy automation consumers.");
         Files.write(output, lines);
         return report;
     }
@@ -77,6 +88,7 @@ public final class TCSpecialAlchemyBehaviorAudit {
         cleanup(level, origin);
         addItemChecks(level, checks);
         addProjectileChecks(level, origin, checks);
+        addFluidEffectChecks(level, origin, checks);
         addRecipeChecks(level, checks);
         addBoundaryChecks(checks);
         cleanup(level, origin);
@@ -105,6 +117,18 @@ public final class TCSpecialAlchemyBehaviorAudit {
                 "velocity=" + ItemBottleTaint.LEGACY_THROW_VELOCITY
                         + ", inaccuracy=" + ItemBottleTaint.LEGACY_THROW_INACCURACY
                         + ", xRotOffset=" + ItemBottleTaint.LEGACY_THROW_X_ROT_OFFSET));
+        checks.add(check("liquid_death_bucket_is_real_bucket_for_source_fluid",
+                TCItems.LIQUID_DEATH_BUCKET.get() instanceof BucketItem
+                        && TCFluids.LIQUID_DEATH.get().getBucket() == TCItems.LIQUID_DEATH_BUCKET.get()
+                        && itemId(TCItems.LIQUID_DEATH_BUCKET.get()).equals(id("liquid_death_bucket")),
+                "item=" + itemId(TCItems.LIQUID_DEATH_BUCKET.get())
+                        + ", fluidBucket=" + itemId(TCFluids.LIQUID_DEATH.get().getBucket())));
+        checks.add(check("purifying_fluid_bucket_is_real_bucket_for_source_fluid",
+                TCItems.PURIFYING_FLUID_BUCKET.get() instanceof BucketItem
+                        && TCFluids.PURIFYING_FLUID.get().getBucket() == TCItems.PURIFYING_FLUID_BUCKET.get()
+                        && itemId(TCItems.PURIFYING_FLUID_BUCKET.get()).equals(id("purifying_fluid_bucket")),
+                "item=" + itemId(TCItems.PURIFYING_FLUID_BUCKET.get())
+                        + ", fluidBucket=" + itemId(TCFluids.PURIFYING_FLUID.get().getBucket())));
     }
 
     private static void addProjectileChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
@@ -184,6 +208,95 @@ public final class TCSpecialAlchemyBehaviorAudit {
                 "fallbackPlaced=" + fallbackPlaced + ", fallbackBlock=" + blockId(level.getBlockState(fallbackTop.below()).getBlock())));
     }
 
+    private static void addFluidEffectChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
+        checks.add(check("special_fluids_registered_with_legacy_public_ids",
+                blockId(TCBlocks.LIQUID_DEATH.get()).equals(id("liquid_death"))
+                        && blockId(TCBlocks.PURIFYING_FLUID.get()).equals(id("purifying_fluid"))
+                        && BuiltInRegistries.FLUID.getKey(TCFluids.LIQUID_DEATH.get()).equals(id("liquid_death"))
+                        && BuiltInRegistries.FLUID.getKey(TCFluids.PURIFYING_FLUID.get()).equals(id("purifying_fluid"))
+                        && BuiltInRegistries.FLUID.getKey(TCFluids.FLOWING_LIQUID_DEATH.get()).equals(id("flowing_liquid_death"))
+                        && BuiltInRegistries.FLUID.getKey(TCFluids.FLOWING_PURIFYING_FLUID.get()).equals(id("flowing_purifying_fluid")),
+                "blocks=" + blockId(TCBlocks.LIQUID_DEATH.get()) + "/" + blockId(TCBlocks.PURIFYING_FLUID.get())
+                        + ", fluids=" + BuiltInRegistries.FLUID.getKey(TCFluids.LIQUID_DEATH.get())
+                        + "/" + BuiltInRegistries.FLUID.getKey(TCFluids.PURIFYING_FLUID.get())));
+
+        checks.add(check("warp_ward_effect_registered_with_modern_legacy_id_and_color",
+                BuiltInRegistries.MOB_EFFECT.getKey(TCMobEffects.WARP_WARD.value()).equals(id("warp_ward"))
+                        && TCMobEffects.WARP_WARD.value().getColor() == thaumcraft.common.lib.potions.PotionWarpWard.LEGACY_COLOR,
+                "effect=" + BuiltInRegistries.MOB_EFFECT.getKey(TCMobEffects.WARP_WARD.value())
+                        + ", color=" + TCMobEffects.WARP_WARD.value().getColor()));
+
+        BlockPos water = origin.offset(10, 0, 0);
+        level.setBlock(water, Blocks.WATER.defaultBlockState(), Block.UPDATE_ALL);
+        ItemEntity itemEntity = new ItemEntity(level, water.getX() + 0.5D, water.getY() + 0.2D, water.getZ() + 0.5D, new ItemStack(TCItems.BATH_SALTS.get()));
+        boolean converted = TCBathSaltsEvents.tryConvertBathSaltsWater(level, itemEntity.blockPosition());
+        checks.add(check("bath_salts_expire_converts_source_water_to_purifying_fluid",
+                converted && level.getBlockState(water).is(TCBlocks.PURIFYING_FLUID.get()),
+                "converted=" + converted + ", block=" + blockId(level.getBlockState(water).getBlock())));
+
+        BlockPos flowingWater = origin.offset(11, 0, 0);
+        level.setBlock(flowingWater, Blocks.WATER.defaultBlockState().setValue(LiquidBlock.LEVEL, 1), Block.UPDATE_ALL);
+        boolean convertedFlowing = TCBathSaltsEvents.tryConvertBathSaltsWater(level, flowingWater);
+        BlockPos stone = origin.offset(12, 0, 0);
+        level.setBlock(stone, Blocks.STONE.defaultBlockState(), Block.UPDATE_ALL);
+        boolean convertedStone = TCBathSaltsEvents.tryConvertBathSaltsWater(level, stone);
+        checks.add(check("bath_salts_rejects_flowing_water_and_nonwater",
+                !convertedFlowing && !convertedStone
+                        && level.getBlockState(flowingWater).is(Blocks.WATER)
+                        && level.getBlockState(stone).is(Blocks.STONE),
+                "flowing=" + convertedFlowing + ", stone=" + convertedStone));
+
+        checks.add(check("liquid_death_legacy_damage_and_slowdown_formula",
+                close(TCLiquidDeathBlock.legacyDamageForLevel(0), 5.0F)
+                        && close(TCLiquidDeathBlock.legacyDamageForLevel(3), 2.0F)
+                        && close(TCLiquidDeathBlock.legacyDamageForLevel(4), 1.0F)
+                        && close(TCLiquidDeathBlock.legacyHorizontalSlowdownMultiplier(0, TCLiquidDeathBlock.LEGACY_QUANTA_PER_BLOCK), 0.5D)
+                        && close(TCLiquidDeathBlock.legacyHorizontalSlowdownMultiplier(2, TCLiquidDeathBlock.LEGACY_QUANTA_PER_BLOCK), 0.75D),
+                "damage0=" + TCLiquidDeathBlock.legacyDamageForLevel(0)
+                        + ", damage3=" + TCLiquidDeathBlock.legacyDamageForLevel(3)
+                        + ", slowdown0=" + TCLiquidDeathBlock.legacyHorizontalSlowdownMultiplier(0, TCLiquidDeathBlock.LEGACY_QUANTA_PER_BLOCK)));
+
+        var fakePlayer = FakePlayerFactory.getMinecraft(level);
+        TCPlayerWarpStore.clear(fakePlayer);
+        TCPlayerWarpStore.add(fakePlayer, TCWarpType.PERMANENT, 100);
+        BlockPos pure = origin.offset(13, 0, 0);
+        level.setBlock(pure, TCBlocks.PURIFYING_FLUID.get().defaultBlockState(), Block.UPDATE_ALL);
+        boolean wardApplied = TCPurifyingFluidBlock.applyWarpWardAndConsumeSource(fakePlayer, level, pure);
+        MobEffectInstance ward = fakePlayer.getEffect(TCMobEffects.WARP_WARD);
+        checks.add(check("purifying_fluid_grants_warp_ward_with_legacy_duration_and_consumes_source",
+                wardApplied
+                        && ward != null
+                        && ward.getDuration() == 20000
+                        && level.getBlockState(pure).isAir()
+                        && TCPurifyingFluidBlock.warpWardDurationForPermanentWarp(0) == 32000
+                        && TCPurifyingFluidBlock.warpWardDurationForPermanentWarp(100) == 20000,
+                "applied=" + wardApplied
+                        + ", duration=" + (ward == null ? -1 : ward.getDuration())
+                        + ", block=" + blockId(level.getBlockState(pure).getBlock())));
+
+        fakePlayer.removeEffect(TCMobEffects.WARP_WARD);
+        fakePlayer.addEffect(new MobEffectInstance(TCMobEffects.WARP_WARD, 200, 0, true, true));
+        BlockPos soapFluid = origin.offset(14, 0, 0);
+        level.setBlock(soapFluid, TCBlocks.PURIFYING_FLUID.get().defaultBlockState(), Block.UPDATE_ALL);
+        fakePlayer.setPos(soapFluid.getX() + 0.5D, soapFluid.getY() + 0.1D, soapFluid.getZ() + 0.5D);
+        TCPlayerWarpStore.clear(fakePlayer);
+        TCPlayerWarpStore.add(fakePlayer, TCWarpType.NORMAL, 5);
+        TCPlayerWarpStore.add(fakePlayer, TCWarpType.TEMPORARY, 2);
+        int cleansingAmount = ItemSanitySoap.legacyCleansingAmount(fakePlayer);
+        boolean cleansed = ItemSanitySoap.applyWarpCleansing(fakePlayer);
+        TCPlayerWarp after = TCPlayerWarpStore.get(fakePlayer);
+        checks.add(check("sane_soap_uses_legacy_warp_ward_and_purifying_fluid_bonus",
+                cleansingAmount == 3
+                        && cleansed
+                        && after.get(TCWarpType.NORMAL) == 2
+                        && after.get(TCWarpType.TEMPORARY) == 0,
+                "amount=" + cleansingAmount
+                        + ", normal=" + after.get(TCWarpType.NORMAL)
+                        + ", temp=" + after.get(TCWarpType.TEMPORARY)));
+        TCPlayerWarpStore.clear(fakePlayer);
+        fakePlayer.removeEffect(TCMobEffects.WARP_WARD);
+    }
+
     private static void addRecipeChecks(ServerLevel level, ArrayList<Check> checks) {
         checks.add(checkRecipe(level, "bottletaint", "BOTTLETAINT", TCItems.BOTTLE_TAINT.get(),
                 List.of(cost(Aspect.FLUX, 30), cost(Aspect.WATER, 30))));
@@ -199,8 +312,8 @@ public final class TCSpecialAlchemyBehaviorAudit {
         boolean warpWardRegistered = BuiltInRegistries.MOB_EFFECT.keySet().stream()
                 .anyMatch(location -> Thaumcraft.MODID.equals(location.getNamespace())
                         && ("warp_ward".equals(location.getPath()) || "warpward".equals(location.getPath())));
-        checks.add(check("fluid_specials_remain_explicit_blockers_not_fake_placeholders",
-                !liquidDeathBlockRegistered && !purifyingFluidBlockRegistered && !warpWardRegistered,
+        checks.add(check("fluid_specials_are_real_registered_behaviors_not_fake_placeholders",
+                liquidDeathBlockRegistered && purifyingFluidBlockRegistered && warpWardRegistered,
                 "liquidDeathBlock=" + liquidDeathBlockRegistered
                         + ", purifyingFluidBlock=" + purifyingFluidBlockRegistered
                         + ", warpWard=" + warpWardRegistered));
@@ -249,6 +362,10 @@ public final class TCSpecialAlchemyBehaviorAudit {
 
     private static boolean close(float actual, float expected) {
         return Math.abs(actual - expected) < 0.0001F;
+    }
+
+    private static boolean close(double actual, double expected) {
+        return Math.abs(actual - expected) < 0.0001D;
     }
 
     private static String escape(String value) {

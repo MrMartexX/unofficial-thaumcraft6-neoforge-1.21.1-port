@@ -1,14 +1,20 @@
-{ 
-     "forge_marker": 1, 
-     "defaults": {
-        "model": "forge:fluid",
-        "transform": "forge:default-item"
-     },
-     "variants": { 
-        "inventory":[{}],
-         "fluid": { 
-             "model": "forge:fluid", 
-             "custom": { "fluid": "liquid_death" } 
-         }
-     } 
- }
+{
+  "variants": {
+    "level=0": { "model": "thaumcraft:block/liquid_death" },
+    "level=1": { "model": "thaumcraft:block/liquid_death" },
+    "level=2": { "model": "thaumcraft:block/liquid_death" },
+    "level=3": { "model": "thaumcraft:block/liquid_death" },
+    "level=4": { "model": "thaumcraft:block/liquid_death" },
+    "level=5": { "model": "thaumcraft:block/liquid_death" },
+    "level=6": { "model": "thaumcraft:block/liquid_death" },
+    "level=7": { "model": "thaumcraft:block/liquid_death" },
+    "level=8": { "model": "thaumcraft:block/liquid_death" },
+    "level=9": { "model": "thaumcraft:block/liquid_death" },
+    "level=10": { "model": "thaumcraft:block/liquid_death" },
+    "level=11": { "model": "thaumcraft:block/liquid_death" },
+    "level=12": { "model": "thaumcraft:block/liquid_death" },
+    "level=13": { "model": "thaumcraft:block/liquid_death" },
+    "level=14": { "model": "thaumcraft:block/liquid_death" },
+    "level=15": { "model": "thaumcraft:block/liquid_death" }
+  }
+}

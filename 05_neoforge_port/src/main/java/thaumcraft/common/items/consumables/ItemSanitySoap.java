@@ -9,6 +9,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import thaumcraft.common.registry.TCBlocks;
+import thaumcraft.common.registry.TCMobEffects;
 import thaumcraft.common.warp.TCPlayerWarp;
 import thaumcraft.common.warp.TCPlayerWarpStore;
 import thaumcraft.common.warp.TCWarpType;
@@ -68,12 +70,24 @@ public class ItemSanitySoap extends Item {
             return false;
         }
 
+        int amount = legacyCleansingAmount(player);
         if (normal > 0) {
-            TCPlayerWarpStore.reduce(player, TCWarpType.NORMAL, 1);
+            TCPlayerWarpStore.reduce(player, TCWarpType.NORMAL, amount);
         }
         if (temporary > 0) {
             TCPlayerWarpStore.reduce(player, TCWarpType.TEMPORARY, temporary);
         }
         return true;
+    }
+
+    public static int legacyCleansingAmount(ServerPlayer player) {
+        int amount = 1;
+        if (player.hasEffect(TCMobEffects.WARP_WARD)) {
+            amount++;
+        }
+        if (player.level().getBlockState(player.blockPosition()).is(TCBlocks.PURIFYING_FLUID.get())) {
+            amount++;
+        }
+        return amount;
     }
 }

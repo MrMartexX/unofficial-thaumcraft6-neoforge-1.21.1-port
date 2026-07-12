@@ -4,8 +4,10 @@ import java.util.function.Supplier;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ShovelItem;
@@ -215,7 +217,16 @@ public final class TCItems {
     public static final Supplier<Item> CHUNK_MUTTON = simpleItem("chunk_mutton");
     public static final Supplier<Item> BATH_SALTS = ITEMS.register("bath_salts", ItemBathSalts::new);
     public static final Supplier<Item> BOTTLE_TAINT = ITEMS.register("bottle_taint", ItemBottleTaint::new);
-    public static final Supplier<Item> LIQUID_DEATH_BUCKET = simpleItem("liquid_death_bucket");
+    public static final Supplier<Item> LIQUID_DEATH_BUCKET = ITEMS.register("liquid_death_bucket",
+            () -> new BucketItem(TCFluids.LIQUID_DEATH.get(), new Item.Properties()
+                    .craftRemainder(Items.BUCKET)
+                    .stacksTo(1)
+                    .rarity(Rarity.UNCOMMON)));
+    public static final Supplier<Item> PURIFYING_FLUID_BUCKET = ITEMS.register("purifying_fluid_bucket",
+            () -> new BucketItem(TCFluids.PURIFYING_FLUID.get(), new Item.Properties()
+                    .craftRemainder(Items.BUCKET)
+                    .stacksTo(1)
+                    .rarity(Rarity.UNCOMMON)));
     public static final Supplier<Item> SANE_SOAP = ITEMS.register("sane_soap", ItemSanitySoap::new);
     public static final Supplier<Item> FLESH_BLOCK = simpleItem("flesh_block");
     public static final Supplier<Item> CURIO_RITES = ITEMS.register("curio_rites", ItemCurioRites::new);
