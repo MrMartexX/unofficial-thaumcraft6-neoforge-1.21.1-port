@@ -7,7 +7,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Check | Status | Notes |
 | --- | --- | --- |
 | legacy entity catalog count | PASS | expected 43, got 43 |
-| registered foundation count | PASS | expected item entities, BottleTaint, EldritchOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations and three warp outcome entity foundations |
+| registered foundation count | PASS | expected item entities, BottleTaint, EldritchOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations |
 | SpecialItem registry id | PASS | expected thaumcraft:special_item, got thaumcraft:special_item |
 | FollowItem registry id | PASS | expected thaumcraft:follow_item, got thaumcraft:follow_item |
 | FluxRift registry id | PASS | expected thaumcraft:flux_rift, got thaumcraft:flux_rift |
@@ -17,6 +17,8 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | TaintSeed registry id | PASS | expected thaumcraft:taint_seed, got thaumcraft:taint_seed |
 | TaintSeedPrime registry id | PASS | expected thaumcraft:taint_seed_prime, got thaumcraft:taint_seed_prime |
 | CultistPortalLesser registry id | PASS | expected thaumcraft:cultist_portal_lesser, got thaumcraft:cultist_portal_lesser |
+| CultistKnight registry id | PASS | expected thaumcraft:cultist_knight, got thaumcraft:cultist_knight |
+| CultistCleric registry id | PASS | expected thaumcraft:cultist_cleric, got thaumcraft:cultist_cleric |
 | MindSpider registry id | PASS | expected thaumcraft:mind_spider, got thaumcraft:mind_spider |
 | EldritchGuardian registry id | PASS | expected thaumcraft:eldritch_guardian, got thaumcraft:eldritch_guardian |
 | ThaumSlime registry id | PASS | expected thaumcraft:thaum_slime, got thaumcraft:thaum_slime |
@@ -38,6 +40,8 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | BottleTaint type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | EldritchOrb type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | CultistPortalLesser mob type parameters | PASS | category=MONSTER, size=1.5x3.0, tracking=64, update=20, velocity=false |
+| CultistKnight mob type parameters | PASS | category=MONSTER, size=0.6x1.8, tracking=64, update=3, velocity=true |
+| CultistCleric mob type parameters | PASS | category=MONSTER, size=0.6x1.8, tracking=64, update=3, velocity=true |
 | MindSpider mob type parameters | PASS | category=MONSTER, size=0.7x0.5, tracking=64, update=3, velocity=true |
 | EldritchGuardian mob type parameters | PASS | category=MONSTER, size=0.8x2.25, tracking=64, update=3, velocity=true |
 | foundation constructors | PASS | registry factories plus special/follow item stack and target coordinates |
@@ -47,7 +51,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Legacy id | Legacy class | Modern id | Tracking | Update | Velocity | Status | Notes |
 | --- | --- | --- | ---: | ---: | --- | --- | --- |
 | CultistPortalGreater | EntityCultistPortalGreater |  | 64 | 20 | false | defer | Eldritch/cult portal behavior and renderer |
-| CultistPortalLesser | EntityCultistPortalLesser | thaumcraft:cultist_portal_lesser | 64 | 20 | false | registered_foundation | Lesser cultist portal activation/collision foundation; cultist minion spawn waits for CultistKnight/Cleric |
+| CultistPortalLesser | EntityCultistPortalLesser | thaumcraft:cultist_portal_lesser | 64 | 20 | false | registered_foundation | Lesser cultist portal activation, collision, nearby-cultist budget and minion spawn cadence |
 | FluxRift | EntityFluxRift | thaumcraft:flux_rift | 64 | 20 | false | registered_foundation | Flux/aura lifecycle, collapse and rift renderer foundation |
 | SpecialItem | EntitySpecialItem | thaumcraft:special_item | 64 | 20 | true | registered_foundation | Legacy item-entity lift and explosion immunity |
 | FollowItem | EntityFollowingItem | thaumcraft:follow_item | 64 | 20 | false | registered_foundation | Legacy following item movement and spawn data |
@@ -78,8 +82,8 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Pech | EntityPech |  | 64 | 3 | true | defer | Pech AI, trading and renderer |
 | MindSpider | EntityMindSpider | thaumcraft:mind_spider | 64 | 3 | true | registered_foundation | Mind Spider harmless/viewer hallucination state, lifespan and warp spawn foundation; custom renderer deferred |
 | EldritchGuardian | EntityEldritchGuardian | thaumcraft:eldritch_guardian | 64 | 3 | true | registered_foundation | Eldritch Guardian attributes, team rules, warp spawn, ranged orb attack and curse branch; custom mob renderer deferred |
-| CultistKnight | EntityCultistKnight |  | 64 | 3 | true | defer | Cultist mob AI and renderer |
-| CultistCleric | EntityCultistCleric |  | 64 | 3 | true | defer | Cultist mob AI and renderer |
+| CultistKnight | EntityCultistKnight | thaumcraft:cultist_knight | 64 | 3 | true | registered_foundation | Crimson Knight base attributes, team rules, target AI and portal-spawn equipment foundation; custom mob renderer deferred |
+| CultistCleric | EntityCultistCleric | thaumcraft:cultist_cleric | 64 | 3 | true | registered_foundation | Crimson Cleric base attributes, ritualist state, ranged cadence and portal-spawn foundation; GolemOrb branch/custom renderer deferred |
 | EldritchCrab | EntityEldritchCrab |  | 64 | 3 | true | defer | Eldritch mob AI and renderer |
 | InhabitedZombie | EntityInhabitedZombie |  | 64 | 3 | true | defer | Eldritch mob AI and renderer |
 | ThaumSlime | EntityThaumicSlime | thaumcraft:thaum_slime | 64 | 3 | true | registered_foundation | Thaumic Slime size/xp, ranged spit foundation and scan/aspect identity |

@@ -21,6 +21,9 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.aspects.TCEntityAspectAssignments;
+import thaumcraft.common.entities.TCCultistClericEntity;
+import thaumcraft.common.entities.TCCultistEntity;
+import thaumcraft.common.entities.TCCultistKnightEntity;
 import thaumcraft.common.entities.TCCultistPortalLesserEntity;
 import thaumcraft.common.entities.TCEldritchGuardianEntity;
 import thaumcraft.common.entities.TCEldritchOrbEntity;
@@ -70,9 +73,9 @@ public final class TCWarpEventBehaviorAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds, warp outcome entity spawn foundations and Eldritch Guardian orb projectile path.");
+        lines.add("- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds, warp outcome entity spawn foundations, Eldritch Guardian orb projectile path and lesser cultist portal minion spawning.");
         lines.add("- Implemented: rotten flesh / zombie brain relief path for Unnatural Hunger.");
-        lines.add("- Deferred by missing owners: lesser cultist portal minion spawning until CultistKnight/Cleric exist, PacketMiscEvent client hallucination/stress visuals, exact Guardian/orb mob renderer pixel parity, custom portal renderer and fortress mask mitigation.");
+        lines.add("- Deferred by missing owners: PacketMiscEvent client hallucination/stress visuals, exact Guardian/orb/cultist/portal renderer pixel parity, CultistCleric GolemOrb projectile branch and fortress mask mitigation.");
         Files.write(output, lines, StandardCharsets.UTF_8);
         return report;
     }
@@ -157,7 +160,9 @@ public final class TCWarpEventBehaviorAudit {
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.ELDRITCH_GUARDIAN.get()).equals(id("eldritch_guardian"))
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.ELDRITCH_ORB.get()).equals(id("eldritch_orb"))
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.MIND_SPIDER.get()).equals(id("mind_spider"))
-                        && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.CULTIST_PORTAL_LESSER.get()).equals(id("cultist_portal_lesser")),
+                        && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.CULTIST_PORTAL_LESSER.get()).equals(id("cultist_portal_lesser"))
+                        && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.CULTIST_KNIGHT.get()).equals(id("cultist_knight"))
+                        && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.CULTIST_CLERIC.get()).equals(id("cultist_cleric")),
                 "entity outcomes use real registered foundations"));
     }
 
@@ -177,8 +182,12 @@ public final class TCWarpEventBehaviorAudit {
                         && Float.compare(TCEntityTypes.MIND_SPIDER.get().getHeight(), 0.5F) == 0
                         && Float.compare(TCEntityTypes.MIND_SPIDER.get().getDimensions().eyeHeight(), 0.45F) == 0
                         && Float.compare(TCEntityTypes.CULTIST_PORTAL_LESSER.get().getWidth(), 1.5F) == 0
-                        && Float.compare(TCEntityTypes.CULTIST_PORTAL_LESSER.get().getHeight(), 3.0F) == 0,
-                "guardian=0.8x2.25 eye2.1, spider=0.7x0.5 eye0.45, portal=1.5x3.0"));
+                        && Float.compare(TCEntityTypes.CULTIST_PORTAL_LESSER.get().getHeight(), 3.0F) == 0
+                        && Float.compare(TCEntityTypes.CULTIST_KNIGHT.get().getWidth(), 0.6F) == 0
+                        && Float.compare(TCEntityTypes.CULTIST_KNIGHT.get().getHeight(), 1.8F) == 0
+                        && Float.compare(TCEntityTypes.CULTIST_CLERIC.get().getWidth(), 0.6F) == 0
+                        && Float.compare(TCEntityTypes.CULTIST_CLERIC.get().getHeight(), 1.8F) == 0,
+                "guardian=0.8x2.25 eye2.1, spider=0.7x0.5 eye0.45, portal=1.5x3.0, cultists=0.6x1.8"));
         checks.add(check("legacy_eldritch_orb_type_shape",
                 TCEntityTypes.ELDRITCH_ORB.get().getCategory() == MobCategory.MISC
                         && Float.compare(TCEntityTypes.ELDRITCH_ORB.get().getWidth(), 0.25F) == 0
@@ -190,11 +199,13 @@ public final class TCWarpEventBehaviorAudit {
 
         TCMindSpiderEntity spider = TCEntityTypes.MIND_SPIDER.get().create(server.overworld());
         TCCultistPortalLesserEntity portal = TCEntityTypes.CULTIST_PORTAL_LESSER.get().create(server.overworld());
+        TCCultistKnightEntity knight = TCEntityTypes.CULTIST_KNIGHT.get().create(server.overworld());
+        TCCultistClericEntity cleric = TCEntityTypes.CULTIST_CLERIC.get().create(server.overworld());
         TCEldritchGuardianEntity guardian = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(server.overworld());
         TCEldritchOrbEntity orb = TCEntityTypes.ELDRITCH_ORB.get().create(server.overworld());
         checks.add(check("legacy_entity_foundation_classes_construct",
-                spider != null && portal != null && guardian != null && orb != null,
-                "spider=" + (spider != null) + ", portal=" + (portal != null) + ", guardian=" + (guardian != null) + ", orb=" + (orb != null)));
+                spider != null && portal != null && knight != null && cleric != null && guardian != null && orb != null,
+                "spider=" + (spider != null) + ", portal=" + (portal != null) + ", knight=" + (knight != null) + ", cleric=" + (cleric != null) + ", guardian=" + (guardian != null) + ", orb=" + (orb != null)));
         if (orb != null) {
             checks.add(check("eldritch_orb_projectile_contract",
                     TCEldritchOrbEntity.LEGACY_LIFETIME_TICKS == 100
@@ -248,14 +259,43 @@ public final class TCWarpEventBehaviorAudit {
                             && TCCultistPortalLesserEntity.legacyCultistMinionBudget(net.minecraft.world.Difficulty.NORMAL) == 4
                             && TCCultistPortalLesserEntity.legacyCultistMinionBudget(net.minecraft.world.Difficulty.HARD) == 6,
                     "active=" + portal.isActive() + ", budgets easy/normal/hard=2/4/6"));
+            portal.setPos(0.5D, server.overworld().getSharedSpawnPos().getY() + 2.0D, 0.5D);
+            server.overworld().addFreshEntity(portal);
+            float beforeHealth = portal.getHealth();
+            TCCultistEntity spawned = portal.spawnLegacyMinionForValidation(false);
+            float lostHealth = beforeHealth - portal.getHealth();
+            checks.add(check("lesser_cultist_portal_spawns_knight_and_self_damages",
+                    spawned instanceof TCCultistKnightEntity
+                            && portal.spawnedMinionCountForValidation() == 1
+                            && portal.lastSpawnedMinionTypeForValidation() == TCEntityTypes.CULTIST_KNIGHT.get()
+                            && lostHealth >= 5.0F
+                            && lostHealth <= 9.0F,
+                    "spawned=" + (spawned == null ? "null" : BuiltInRegistries.ENTITY_TYPE.getKey(spawned.getType())) + ", lostHealth=" + lostHealth));
+            if (spawned != null) {
+                spawned.discard();
+            }
+            TCCultistEntity clericSpawned = portal.spawnLegacyMinionForValidation(true);
+            checks.add(check("lesser_cultist_portal_can_force_cleric_spawn_path_for_validation",
+                    clericSpawned instanceof TCCultistClericEntity
+                            && portal.spawnedMinionCountForValidation() == 2
+                            && portal.lastSpawnedMinionTypeForValidation() == TCEntityTypes.CULTIST_CLERIC.get(),
+                    "spawned=" + (clericSpawned == null ? "null" : BuiltInRegistries.ENTITY_TYPE.getKey(clericSpawned.getType()))));
+            if (clericSpawned != null) {
+                clericSpawned.discard();
+            }
+            portal.discard();
         }
 
         checks.add(check("custom_warp_entity_aspect_contracts_match_config_aspects",
                 hasAspects(TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.MIND_SPIDER.get()),
                         Aspect.FLUX, 5, Aspect.FIRE, 5)
                         && hasAspects(TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.ELDRITCH_GUARDIAN.get()),
-                        Aspect.ELDRITCH, 20, Aspect.DEATH, 20, Aspect.UNDEAD, 20),
-                "MindSpider=vitium5/ignis5, EldritchGuardian=alienis20/mortuus20/exanimis20"));
+                        Aspect.ELDRITCH, 20, Aspect.DEATH, 20, Aspect.UNDEAD, 20)
+                        && hasAspects(TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.CULTIST_KNIGHT.get()),
+                        Aspect.ELDRITCH, 5, Aspect.MAN, 15, Aspect.AVERSION, 5)
+                        && hasAspects(TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.CULTIST_CLERIC.get()),
+                        Aspect.ELDRITCH, 5, Aspect.MAN, 15, Aspect.AVERSION, 5),
+                "MindSpider=vitium5/ignis5, EldritchGuardian=alienis20/mortuus20/exanimis20, Cultists=alienis5/humanus15/aversio5"));
     }
 
     private static void addEffectRegistrationChecks(ArrayList<Check> checks) {

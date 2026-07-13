@@ -77,6 +77,8 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "wisplive")));
     public static final Supplier<SoundEvent> WISPDEAD = SOUND_EVENTS.register("wispdead", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "wispdead")));
+    public static final Supplier<SoundEvent> CHANT = SOUND_EVENTS.register("chant", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "chant")));
 
     private TCSounds() {
     }

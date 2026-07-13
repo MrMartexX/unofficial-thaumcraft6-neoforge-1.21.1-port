@@ -62,7 +62,7 @@ $dump='D:\Thaumcraft_6_port_to_1.21.1\07_Test_Instance_and_Comparisons\scan_pari
 Latest modern entity dump result:
 
 - entries: `131`;
-- active scan predicates: `205`;
+- active scan predicates: `225`;
 - scan-found entries: `96`;
 - aspect-bearing entries: `89`;
 - empty/unscannable entries: `35`;

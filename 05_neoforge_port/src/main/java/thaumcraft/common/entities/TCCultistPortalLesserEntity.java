@@ -12,15 +12,17 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import thaumcraft.common.registry.TCEntityTypes;
 import thaumcraft.common.registry.TCSounds;
 
-/** TC6 lesser Crimson portal foundation. Cultist minion spawning waits for the cultist mob family. */
+/** TC6 lesser Crimson portal foundation with legacy activation, collision and minion-spawn cadence. */
 public class TCCultistPortalLesserEntity extends Monster {
     private static final EntityDataAccessor<Boolean> ACTIVE =
             SynchedEntityData.defineId(TCCultistPortalLesserEntity.class, EntityDataSerializers.BOOLEAN);
@@ -28,7 +30,8 @@ public class TCCultistPortalLesserEntity extends Monster {
     private int stageCounter = 100;
     private int activeCounter;
     private int pulse;
-    private int deferredMinionSpawnAttempts;
+    private int spawnedMinionCount;
+    private EntityType<?> lastSpawnedMinionType;
 
     public TCCultistPortalLesserEntity(EntityType<? extends TCCultistPortalLesserEntity> type, Level level) {
         super(type, level);
@@ -75,12 +78,43 @@ public class TCCultistPortalLesserEntity extends Monster {
 
         if (stageCounter-- <= 0) {
             Player player = level().getNearestPlayer(this, 32.0D);
-            if (player != null && hasLineOfSight(player) && cultistMinionBudget() > 0) {
+            if (player != null && hasLineOfSight(player) && cultistMinionBudgetAfterNearbyCultists() > 0) {
                 level().broadcastEntityEvent(this, (byte) 16);
-                deferredMinionSpawnAttempts++;
+                spawnLegacyMinion();
             }
             stageCounter = 50 + random.nextInt(50);
         }
+    }
+
+    private TCCultistEntity spawnLegacyMinion() {
+        return spawnLegacyMinion(random.nextFloat() <= 0.33F);
+    }
+
+    private TCCultistEntity spawnLegacyMinion(boolean cleric) {
+        if (!(level() instanceof ServerLevel serverLevel)) {
+            return null;
+        }
+
+        TCCultistEntity cultist = cleric
+                ? TCEntityTypes.CULTIST_CLERIC.get().create(serverLevel)
+                : TCEntityTypes.CULTIST_KNIGHT.get().create(serverLevel);
+        if (cultist == null) {
+            return null;
+        }
+
+        cultist.setPos(
+                getX() + random.nextFloat() - random.nextFloat(),
+                getY() + 0.25D,
+                getZ() + random.nextFloat() - random.nextFloat()
+        );
+        cultist.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(cultist.blockPosition()), MobSpawnType.MOB_SUMMONED, null);
+        serverLevel.addFreshEntity(cultist);
+        cultist.spawnExplosionParticle();
+        cultist.playSound(TCSounds.WANDFAIL.get(), 1.0F, 1.0F);
+        hurt(damageSources().fellOutOfWorld(), 5.0F + random.nextInt(5));
+        spawnedMinionCount++;
+        lastSpawnedMinionType = cultist.getType();
+        return cultist;
     }
 
     @Override
@@ -202,12 +236,28 @@ public class TCCultistPortalLesserEntity extends Monster {
         return pulse;
     }
 
-    public int deferredMinionSpawnAttemptsForValidation() {
-        return deferredMinionSpawnAttempts;
+    public int spawnedMinionCountForValidation() {
+        return spawnedMinionCount;
+    }
+
+    public EntityType<?> lastSpawnedMinionTypeForValidation() {
+        return lastSpawnedMinionType;
     }
 
     public int cultistMinionBudget() {
         return legacyCultistMinionBudget(level().getDifficulty());
+    }
+
+    public int cultistMinionBudgetAfterNearbyCultists() {
+        int existing = level().getEntitiesOfClass(
+                TCCultistEntity.class,
+                getBoundingBox().inflate(32.0D, 32.0D, 32.0D)
+        ).size();
+        return cultistMinionBudget() - existing;
+    }
+
+    public TCCultistEntity spawnLegacyMinionForValidation(boolean cleric) {
+        return spawnLegacyMinion(cleric);
     }
 
     public static int legacyCultistMinionBudget(Difficulty difficulty) {

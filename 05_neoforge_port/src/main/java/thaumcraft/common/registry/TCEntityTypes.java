@@ -12,6 +12,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.entities.TCArcaneBoreEntity;
 import thaumcraft.common.entities.TCBottleTaintEntity;
+import thaumcraft.common.entities.TCCultistClericEntity;
+import thaumcraft.common.entities.TCCultistKnightEntity;
 import thaumcraft.common.entities.TCCultistPortalLesserEntity;
 import thaumcraft.common.entities.TCEldritchGuardianEntity;
 import thaumcraft.common.entities.TCEldritchOrbEntity;
@@ -65,6 +67,24 @@ public final class TCEntityTypes {
                             .setShouldReceiveVelocityUpdates(false)
                             .fireImmune()
                             .build(Thaumcraft.MODID + ":cultist_portal_lesser"));
+
+    public static final Supplier<EntityType<TCCultistKnightEntity>> CULTIST_KNIGHT =
+            ENTITY_TYPES.register("cultist_knight", () ->
+                    EntityType.Builder.<TCCultistKnightEntity>of(TCCultistKnightEntity::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.8F)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(3)
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build(Thaumcraft.MODID + ":cultist_knight"));
+
+    public static final Supplier<EntityType<TCCultistClericEntity>> CULTIST_CLERIC =
+            ENTITY_TYPES.register("cultist_cleric", () ->
+                    EntityType.Builder.<TCCultistClericEntity>of(TCCultistClericEntity::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.8F)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(3)
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build(Thaumcraft.MODID + ":cultist_cleric"));
 
     public static final Supplier<EntityType<TCArcaneBoreEntity>> ARCANE_BORE = ENTITY_TYPES.register("arcane_bore", () ->
             EntityType.Builder.<TCArcaneBoreEntity>of(TCArcaneBoreEntity::new, MobCategory.MISC)
@@ -183,7 +203,7 @@ public final class TCEntityTypes {
 
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
             spec("CultistPortalGreater", "EntityCultistPortalGreater", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
-            spec("CultistPortalLesser", "EntityCultistPortalLesser", "cultist_portal_lesser", 64, 20, false, "registered_foundation", "Lesser cultist portal activation/collision foundation; cultist minion spawn waits for CultistKnight/Cleric"),
+            spec("CultistPortalLesser", "EntityCultistPortalLesser", "cultist_portal_lesser", 64, 20, false, "registered_foundation", "Lesser cultist portal activation, collision, nearby-cultist budget and minion spawn cadence"),
             spec("FluxRift", "EntityFluxRift", "flux_rift", 64, 20, false, "registered_foundation", "Flux/aura lifecycle, collapse and rift renderer foundation"),
             spec("SpecialItem", "EntitySpecialItem", "special_item", 64, 20, true, "registered_foundation", "Legacy item-entity lift and explosion immunity"),
             spec("FollowItem", "EntityFollowingItem", "follow_item", 64, 20, false, "registered_foundation", "Legacy following item movement and spawn data"),
@@ -214,8 +234,8 @@ public final class TCEntityTypes {
             spec("Pech", "EntityPech", null, 64, 3, true, "defer", "Pech AI, trading and renderer"),
             spec("MindSpider", "EntityMindSpider", "mind_spider", 64, 3, true, "registered_foundation", "Mind Spider harmless/viewer hallucination state, lifespan and warp spawn foundation; custom renderer deferred"),
             spec("EldritchGuardian", "EntityEldritchGuardian", "eldritch_guardian", 64, 3, true, "registered_foundation", "Eldritch Guardian attributes, team rules, warp spawn, ranged orb attack and curse branch; custom mob renderer deferred"),
-            spec("CultistKnight", "EntityCultistKnight", null, 64, 3, true, "defer", "Cultist mob AI and renderer"),
-            spec("CultistCleric", "EntityCultistCleric", null, 64, 3, true, "defer", "Cultist mob AI and renderer"),
+            spec("CultistKnight", "EntityCultistKnight", "cultist_knight", 64, 3, true, "registered_foundation", "Crimson Knight base attributes, team rules, target AI and portal-spawn equipment foundation; custom mob renderer deferred"),
+            spec("CultistCleric", "EntityCultistCleric", "cultist_cleric", 64, 3, true, "registered_foundation", "Crimson Cleric base attributes, ritualist state, ranged cadence and portal-spawn foundation; GolemOrb branch/custom renderer deferred"),
             spec("EldritchCrab", "EntityEldritchCrab", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),
             spec("InhabitedZombie", "EntityInhabitedZombie", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),
             spec("ThaumSlime", "EntityThaumicSlime", "thaum_slime", 64, 3, true, "registered_foundation", "Thaumic Slime size/xp, ranged spit foundation and scan/aspect identity"),
@@ -257,6 +277,8 @@ public final class TCEntityTypes {
         event.put(TAINT_SWARM.get(), TCTaintSwarmEntity.createAttributes().build());
         event.put(WISP.get(), TCWispEntity.createAttributes().build());
         event.put(CULTIST_PORTAL_LESSER.get(), TCCultistPortalLesserEntity.createAttributes().build());
+        event.put(CULTIST_KNIGHT.get(), TCCultistKnightEntity.createAttributes().build());
+        event.put(CULTIST_CLERIC.get(), TCCultistClericEntity.createAttributes().build());
         event.put(MIND_SPIDER.get(), TCMindSpiderEntity.createAttributes().build());
         event.put(ELDRITCH_GUARDIAN.get(), TCEldritchGuardianEntity.createAttributes().build());
     }

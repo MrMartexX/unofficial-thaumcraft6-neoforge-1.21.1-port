@@ -99,7 +99,7 @@ Latest entity report snapshot:
 - legacy entity dump entries: `129`;
 - modern entity dump entries: `131`;
 - legacy active predicates: `214`;
-- modern active predicates: `205`;
+- modern active predicates: `225`;
 - comparable normalized entity keys: `85`;
 - fully parity-ok entity scan/aspect rows: `83`;
 - expected modern entity aspect policy rows: `2` (`minecraft:elder_guardian`, `minecraft:zombie_villager`);

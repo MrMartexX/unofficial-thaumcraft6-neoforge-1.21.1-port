@@ -24,7 +24,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 18;
+    private static final int REGISTERED_FOUNDATION_COUNT = 20;
 
     private TCEntityFoundationAudit() {
     }
@@ -90,7 +90,7 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, BottleTaint, EldritchOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations and three warp outcome entity foundations"
+                "expected item entities, BottleTaint, EldritchOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
@@ -102,6 +102,8 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("TaintSeed", TCEntityTypes.TAINT_SEED.get()));
         checks.add(checkRegisteredType("TaintSeedPrime", TCEntityTypes.TAINT_SEED_PRIME.get()));
         checks.add(checkRegisteredType("CultistPortalLesser", TCEntityTypes.CULTIST_PORTAL_LESSER.get()));
+        checks.add(checkRegisteredType("CultistKnight", TCEntityTypes.CULTIST_KNIGHT.get()));
+        checks.add(checkRegisteredType("CultistCleric", TCEntityTypes.CULTIST_CLERIC.get()));
         checks.add(checkRegisteredType("MindSpider", TCEntityTypes.MIND_SPIDER.get()));
         checks.add(checkRegisteredType("EldritchGuardian", TCEntityTypes.ELDRITCH_GUARDIAN.get()));
         checks.add(checkRegisteredType("ThaumSlime", TCEntityTypes.THAUM_SLIME.get()));
@@ -123,6 +125,8 @@ public final class TCEntityFoundationAudit {
         checks.add(checkTypeShape("BottleTaint", TCEntityTypes.BOTTLE_TAINT.get(), 64, 20, true));
         checks.add(checkTypeShape("EldritchOrb", TCEntityTypes.ELDRITCH_ORB.get(), 64, 20, true));
         checks.add(checkMobTypeShape("CultistPortalLesser", TCEntityTypes.CULTIST_PORTAL_LESSER.get(), 1.5F, 3.0F, 64, 20, false));
+        checks.add(checkMobTypeShape("CultistKnight", TCEntityTypes.CULTIST_KNIGHT.get(), 0.6F, 1.8F, 64, 3, true));
+        checks.add(checkMobTypeShape("CultistCleric", TCEntityTypes.CULTIST_CLERIC.get(), 0.6F, 1.8F, 64, 3, true));
         checks.add(checkMobTypeShape("MindSpider", TCEntityTypes.MIND_SPIDER.get(), 0.7F, 0.5F, 64, 3, true));
         checks.add(checkMobTypeShape("EldritchGuardian", TCEntityTypes.ELDRITCH_GUARDIAN.get(), 0.8F, 2.25F, 64, 3, true));
         checks.add(checkConstructors(server.overworld()));
@@ -180,6 +184,8 @@ public final class TCEntityFoundationAudit {
         Entity followingFactory = TCEntityTypes.FOLLOW_ITEM.get().create(level);
         Entity orbFactory = TCEntityTypes.ELDRITCH_ORB.get().create(level);
         Entity portalFactory = TCEntityTypes.CULTIST_PORTAL_LESSER.get().create(level);
+        Entity knightFactory = TCEntityTypes.CULTIST_KNIGHT.get().create(level);
+        Entity clericFactory = TCEntityTypes.CULTIST_CLERIC.get().create(level);
         Entity spiderFactory = TCEntityTypes.MIND_SPIDER.get().create(level);
         Entity guardianFactory = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(level);
         TCSpecialItemEntity special = new TCSpecialItemEntity(level, 1.0D, 2.0D, 3.0D, new ItemStack(Items.DIAMOND));
@@ -188,6 +194,8 @@ public final class TCEntityFoundationAudit {
                 && followingFactory instanceof TCFollowingItemEntity
                 && orbFactory instanceof TCEldritchOrbEntity
                 && portalFactory instanceof TCCultistPortalLesserEntity
+                && knightFactory instanceof TCCultistKnightEntity
+                && clericFactory instanceof TCCultistClericEntity
                 && spiderFactory instanceof TCMindSpiderEntity
                 && guardianFactory instanceof TCEldritchGuardianEntity
                 && special.getType() == TCEntityTypes.SPECIAL_ITEM.get()
