@@ -120,7 +120,7 @@ public class TCCultistClericEntity extends TCCultistEntity implements RangedAtta
 
         if (random.nextFloat() > LEGACY_GOLEM_ORB_BRANCH_THRESHOLD) {
             lastUsedGolemOrbBranch = true;
-            playSound(TCSounds.EGATTACK.get(), 1.0F, 1.0F + random.nextFloat() * 0.1F);
+            spawnLegacyGolemOrb(target);
             return;
         }
 
@@ -135,6 +135,26 @@ public class TCCultistClericEntity extends TCCultistEntity implements RangedAtta
             fireball.setPos(fireball.getX(), getY() + getBbHeight() / 2.0F + 0.5D, fireball.getZ());
             level().addFreshEntity(fireball);
         }
+    }
+
+    public TCGolemOrbEntity spawnLegacyGolemOrbForValidation(LivingEntity target) {
+        return spawnLegacyGolemOrb(target);
+    }
+
+    private TCGolemOrbEntity spawnLegacyGolemOrb(LivingEntity target) {
+        if (level().isClientSide) {
+            return null;
+        }
+        TCGolemOrbEntity blast = new TCGolemOrbEntity(level(), this, target, true);
+        Vec3 lead = target.position()
+                .add(target.getDeltaMovement().scale(TCGolemOrbEntity.LEGACY_TARGET_MOTION_LEAD))
+                .subtract(position());
+        Vec3 direction = lead.lengthSqr() < 1.0E-6D ? getLookAngle() : lead.normalize();
+        blast.setPos(blast.getX() + direction.x, blast.getY() + direction.y, blast.getZ() + direction.z);
+        blast.shoot(direction.x, direction.y, direction.z, TCGolemOrbEntity.LEGACY_SHOOT_VELOCITY, TCGolemOrbEntity.LEGACY_SHOOT_INACCURACY);
+        playSound(TCSounds.EGATTACK.get(), 1.0F, 1.0F + random.nextFloat() * 0.1F);
+        level().addFreshEntity(blast);
+        return blast;
     }
 
     @Override

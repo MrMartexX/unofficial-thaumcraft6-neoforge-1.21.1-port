@@ -20,6 +20,7 @@ import thaumcraft.common.entities.TCEldritchOrbEntity;
 import thaumcraft.common.entities.TCFallingTaintEntity;
 import thaumcraft.common.entities.TCFollowingItemEntity;
 import thaumcraft.common.entities.TCFluxRiftEntity;
+import thaumcraft.common.entities.TCGolemOrbEntity;
 import thaumcraft.common.entities.TCMindSpiderEntity;
 import thaumcraft.common.entities.TCSpecialItemEntity;
 import thaumcraft.common.entities.TCTaintCrawlerEntity;
@@ -182,6 +183,14 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(true)
                     .build(Thaumcraft.MODID + ":eldritch_orb"));
 
+    public static final Supplier<EntityType<TCGolemOrbEntity>> GOLEM_ORB = ENTITY_TYPES.register("golem_orb", () ->
+            EntityType.Builder.<TCGolemOrbEntity>of(TCGolemOrbEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":golem_orb"));
+
     public static final Supplier<EntityType<TCMindSpiderEntity>> MIND_SPIDER = ENTITY_TYPES.register("mind_spider", () ->
             EntityType.Builder.<TCMindSpiderEntity>of(TCMindSpiderEntity::new, MobCategory.MONSTER)
                     .sized(0.7F, 0.5F)
@@ -212,7 +221,7 @@ public final class TCEntityTypes {
             spec("GolemDart", "EntityGolemDart", null, 64, 20, false, "defer", "Golem ranged combat"),
             spec("EldritchOrb", "EntityEldritchOrb", "eldritch_orb", 64, 20, true, "registered_foundation", "Eldritch Guardian/Warden projectile: no-gravity lifetime, impact AoE and source-informed renderer"),
             spec("BottleTaint", "EntityBottleTaint", "bottle_taint", 64, 20, true, "registered_foundation", "Taint bottle projectile item behavior, Flux Taint splash and Flux Goo spread"),
-            spec("GolemOrb", "EntityGolemOrb", null, 64, 3, true, "defer", "Golem combat/projectile behavior"),
+            spec("GolemOrb", "EntityGolemOrb", "golem_orb", 64, 3, true, "registered_foundation", "Cultist/Golem homing magic orb projectile behavior and electric-orb renderer foundation"),
             spec("Grapple", "EntityGrapple", null, 64, 20, true, "defer", "Grapple tool physics and rope renderer"),
             spec("CausalityCollapser", "EntityCausalityCollapser", null, 64, 20, true, "defer", "Rift/causality item projectile effects"),
             spec("FocusProjectile", "EntityFocusProjectile", null, 64, 20, true, "defer", "Focus/caster execution"),
@@ -235,7 +244,7 @@ public final class TCEntityTypes {
             spec("MindSpider", "EntityMindSpider", "mind_spider", 64, 3, true, "registered_foundation", "Mind Spider harmless/viewer hallucination state, lifespan and warp spawn foundation; custom renderer deferred"),
             spec("EldritchGuardian", "EntityEldritchGuardian", "eldritch_guardian", 64, 3, true, "registered_foundation", "Eldritch Guardian attributes, team rules, warp spawn, ranged orb attack and curse branch; custom mob renderer deferred"),
             spec("CultistKnight", "EntityCultistKnight", "cultist_knight", 64, 3, true, "registered_foundation", "Crimson Knight base attributes, team rules, target AI and portal-spawn equipment foundation; custom mob renderer deferred"),
-            spec("CultistCleric", "EntityCultistCleric", "cultist_cleric", 64, 3, true, "registered_foundation", "Crimson Cleric base attributes, ritualist state, ranged cadence and portal-spawn foundation; GolemOrb branch/custom renderer deferred"),
+            spec("CultistCleric", "EntityCultistCleric", "cultist_cleric", 64, 3, true, "registered_foundation", "Crimson Cleric base attributes, ritualist state, ranged cadence, portal-spawn foundation and GolemOrb branch; custom mob renderer deferred"),
             spec("EldritchCrab", "EntityEldritchCrab", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),
             spec("InhabitedZombie", "EntityInhabitedZombie", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),
             spec("ThaumSlime", "EntityThaumicSlime", "thaum_slime", 64, 3, true, "registered_foundation", "Thaumic Slime size/xp, ranged spit foundation and scan/aspect identity"),

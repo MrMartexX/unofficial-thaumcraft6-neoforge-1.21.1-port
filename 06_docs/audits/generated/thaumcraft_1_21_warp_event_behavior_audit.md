@@ -6,7 +6,7 @@ Runtime parity checks for the first server-side TC6 WarpEvents slice.
 
 | Check | Result |
 |---|---:|
-| Passed | 31 |
+| Passed | 35 |
 | Failed | 0 |
 
 ## Checks
@@ -23,14 +23,18 @@ Runtime parity checks for the first server-side TC6 WarpEvents slice.
 | legacy_guardian_count_formula_and_cap | PASS | one=1, light=warp/30, heavy=warp/15, cap=8 |
 | legacy_entity_type_shapes_for_warp_outcomes | PASS | guardian=0.8x2.25 eye2.1, spider=0.7x0.5 eye0.45, portal=1.5x3.0, cultists=0.6x1.8 |
 | legacy_eldritch_orb_type_shape | PASS | orb=0.25x0.25, tracking=64, update=20, velocity=true |
-| legacy_entity_foundation_classes_construct | PASS | spider=true, portal=true, knight=true, cleric=true, guardian=true, orb=true |
+| legacy_golem_orb_type_shape | PASS | golem_orb=0.25x0.25, tracking=64, update=3, velocity=true |
+| legacy_entity_foundation_classes_construct | PASS | spider=true, portal=true, knight=true, cleric=true, guardian=true, orb=true, golemOrb=true |
 | eldritch_orb_projectile_contract | PASS | life=100, radius=2, damage=attack*0.666, weakness=160, gravity=0.0 |
 | eldritch_orb_renderer_contract | PASS | 12 seeded tendrils, 13-frame particle strip, billboard scale 0.75 |
+| golem_orb_projectile_contract | PASS | life red/blue=240/160, homing=0.2 clamp=0.25, damage red/blue=1.0/0.6 |
+| golem_orb_renderer_contract | PASS | particles.png frames u=1..6/32, redV=6/32, blueV=7/32, alpha=0.8 |
 | eldritch_guardian_ranged_orb_contract | PASS | min=8, speed=1, interval=20..40, radius=24, sonic=15% |
 | mind_spider_harmless_viewer_lifespan_contract | PASS | harmless=true, viewer=FakePlayer, lifespan=1200 |
 | lesser_cultist_portal_active_state_and_budget_contract | PASS | active=true, budgets easy/normal/hard=2/4/6 |
-| lesser_cultist_portal_spawns_knight_and_self_damages | PASS | spawned=thaumcraft:cultist_knight, lostHealth=6.0 |
+| lesser_cultist_portal_spawns_knight_and_self_damages | PASS | spawned=thaumcraft:cultist_knight, lostHealth=8.0 |
 | lesser_cultist_portal_can_force_cleric_spawn_path_for_validation | PASS | spawned=thaumcraft:cultist_cleric |
+| cultist_cleric_golem_orb_branch_spawns_red_targeted_orb | PASS | spawned=thaumcraft:golem_orb, red=true, target=6 |
 | custom_warp_entity_aspect_contracts_match_config_aspects | PASS | MindSpider=vitium5/ignis5, EldritchGuardian=alienis20/mortuus20/exanimis20, Cultists=alienis5/humanus15/aversio5 |
 | unnatural_hunger_effect_registered_with_legacy_color | PASS | id=thaumcraft:unnatural_hunger, color=4482611 |
 | death_gaze_effect_registered_with_legacy_color | PASS | id=thaumcraft:death_gaze, color=6702131 |
@@ -47,6 +51,6 @@ Runtime parity checks for the first server-side TC6 WarpEvents slice.
 
 ## Boundary
 
-- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds, warp outcome entity spawn foundations, Eldritch Guardian orb projectile path and lesser cultist portal minion spawning.
+- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds, warp outcome entity spawn foundations, Eldritch Guardian orb projectile path, lesser cultist portal minion spawning and CultistCleric GolemOrb projectile branch.
 - Implemented: rotten flesh / zombie brain relief path for Unnatural Hunger.
-- Deferred by missing owners: PacketMiscEvent client hallucination/stress visuals, exact Guardian/orb/cultist/portal renderer pixel parity, CultistCleric GolemOrb projectile branch and fortress mask mitigation.
+- Deferred by missing owners: PacketMiscEvent client hallucination/stress visuals, exact Guardian/orb/cultist/portal renderer pixel parity and fortress mask mitigation.

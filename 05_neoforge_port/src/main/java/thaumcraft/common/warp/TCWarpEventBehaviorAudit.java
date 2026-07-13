@@ -28,6 +28,8 @@ import thaumcraft.common.entities.TCCultistPortalLesserEntity;
 import thaumcraft.common.entities.TCEldritchGuardianEntity;
 import thaumcraft.common.entities.TCEldritchOrbEntity;
 import thaumcraft.common.entities.TCEldritchOrbRenderContract;
+import thaumcraft.common.entities.TCGolemOrbEntity;
+import thaumcraft.common.entities.TCGolemOrbRenderContract;
 import thaumcraft.common.entities.TCMindSpiderEntity;
 import thaumcraft.common.lib.potions.PotionBlurredVision;
 import thaumcraft.common.lib.potions.PotionDeathGaze;
@@ -73,9 +75,9 @@ public final class TCWarpEventBehaviorAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds, warp outcome entity spawn foundations, Eldritch Guardian orb projectile path and lesser cultist portal minion spawning.");
+        lines.add("- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds, warp outcome entity spawn foundations, Eldritch Guardian orb projectile path, lesser cultist portal minion spawning and CultistCleric GolemOrb projectile branch.");
         lines.add("- Implemented: rotten flesh / zombie brain relief path for Unnatural Hunger.");
-        lines.add("- Deferred by missing owners: PacketMiscEvent client hallucination/stress visuals, exact Guardian/orb/cultist/portal renderer pixel parity, CultistCleric GolemOrb projectile branch and fortress mask mitigation.");
+        lines.add("- Deferred by missing owners: PacketMiscEvent client hallucination/stress visuals, exact Guardian/orb/cultist/portal renderer pixel parity and fortress mask mitigation.");
         Files.write(output, lines, StandardCharsets.UTF_8);
         return report;
     }
@@ -159,6 +161,7 @@ public final class TCWarpEventBehaviorAudit {
                         && !TCWarpEvents.TCWarpEventOutcome.VIS_EXHAUST.entityOutcome()
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.ELDRITCH_GUARDIAN.get()).equals(id("eldritch_guardian"))
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.ELDRITCH_ORB.get()).equals(id("eldritch_orb"))
+                        && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.GOLEM_ORB.get()).equals(id("golem_orb"))
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.MIND_SPIDER.get()).equals(id("mind_spider"))
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.CULTIST_PORTAL_LESSER.get()).equals(id("cultist_portal_lesser"))
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.CULTIST_KNIGHT.get()).equals(id("cultist_knight"))
@@ -196,6 +199,14 @@ public final class TCWarpEventBehaviorAudit {
                         && TCEntityTypes.ELDRITCH_ORB.get().updateInterval() == 20
                         && TCEntityTypes.ELDRITCH_ORB.get().trackDeltas(),
                 "orb=0.25x0.25, tracking=64, update=20, velocity=true"));
+        checks.add(check("legacy_golem_orb_type_shape",
+                TCEntityTypes.GOLEM_ORB.get().getCategory() == MobCategory.MISC
+                        && Float.compare(TCEntityTypes.GOLEM_ORB.get().getWidth(), 0.25F) == 0
+                        && Float.compare(TCEntityTypes.GOLEM_ORB.get().getHeight(), 0.25F) == 0
+                        && TCEntityTypes.GOLEM_ORB.get().clientTrackingRange() == 64
+                        && TCEntityTypes.GOLEM_ORB.get().updateInterval() == 3
+                        && TCEntityTypes.GOLEM_ORB.get().trackDeltas(),
+                "golem_orb=0.25x0.25, tracking=64, update=3, velocity=true"));
 
         TCMindSpiderEntity spider = TCEntityTypes.MIND_SPIDER.get().create(server.overworld());
         TCCultistPortalLesserEntity portal = TCEntityTypes.CULTIST_PORTAL_LESSER.get().create(server.overworld());
@@ -203,9 +214,10 @@ public final class TCWarpEventBehaviorAudit {
         TCCultistClericEntity cleric = TCEntityTypes.CULTIST_CLERIC.get().create(server.overworld());
         TCEldritchGuardianEntity guardian = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(server.overworld());
         TCEldritchOrbEntity orb = TCEntityTypes.ELDRITCH_ORB.get().create(server.overworld());
+        TCGolemOrbEntity golemOrb = TCEntityTypes.GOLEM_ORB.get().create(server.overworld());
         checks.add(check("legacy_entity_foundation_classes_construct",
-                spider != null && portal != null && knight != null && cleric != null && guardian != null && orb != null,
-                "spider=" + (spider != null) + ", portal=" + (portal != null) + ", knight=" + (knight != null) + ", cleric=" + (cleric != null) + ", guardian=" + (guardian != null) + ", orb=" + (orb != null)));
+                spider != null && portal != null && knight != null && cleric != null && guardian != null && orb != null && golemOrb != null,
+                "spider=" + (spider != null) + ", portal=" + (portal != null) + ", knight=" + (knight != null) + ", cleric=" + (cleric != null) + ", guardian=" + (guardian != null) + ", orb=" + (orb != null) + ", golemOrb=" + (golemOrb != null)));
         if (orb != null) {
             checks.add(check("eldritch_orb_projectile_contract",
                     TCEldritchOrbEntity.LEGACY_LIFETIME_TICKS == 100
@@ -224,6 +236,30 @@ public final class TCWarpEventBehaviorAudit {
                             && TCEldritchOrbRenderContract.LEGACY_FRAME_V == 3
                             && Float.compare(TCEldritchOrbRenderContract.LEGACY_BILLBOARD_SCALE, 0.75F) == 0,
                     "12 seeded tendrils, 13-frame particle strip, billboard scale 0.75"));
+        }
+        if (golemOrb != null) {
+            golemOrb.setRed(true);
+            checks.add(check("golem_orb_projectile_contract",
+                    TCGolemOrbEntity.LEGACY_RED_LIFETIME_TICKS == 240
+                            && TCGolemOrbEntity.LEGACY_BLUE_LIFETIME_TICKS == 160
+                            && Double.compare(TCGolemOrbEntity.LEGACY_HOMING_ACCELERATION, 0.2D) == 0
+                            && Double.compare(TCGolemOrbEntity.LEGACY_MOTION_CLAMP, 0.25D) == 0
+                            && Float.compare(TCGolemOrbEntity.LEGACY_RED_DAMAGE_MULTIPLIER, 1.0F) == 0
+                            && Float.compare(TCGolemOrbEntity.LEGACY_BLUE_DAMAGE_MULTIPLIER, 0.6F) == 0
+                            && Float.compare(TCGolemOrbEntity.LEGACY_SHOOT_VELOCITY, 0.66F) == 0
+                            && Float.compare(TCGolemOrbEntity.LEGACY_SHOOT_INACCURACY, 3.0F) == 0
+                            && Double.compare(golemOrb.gravityForValidation(), 0.0D) == 0
+                            && Math.abs(TCGolemOrbEntity.legacyDamageFromAttack(7.0D, true) - 7.0F) < 0.0001F
+                            && Math.abs(TCGolemOrbEntity.legacyDamageFromAttack(7.0D, false) - 4.2F) < 0.0001F,
+                    "life red/blue=240/160, homing=0.2 clamp=0.25, damage red/blue=1.0/0.6"));
+            checks.add(check("golem_orb_renderer_contract",
+                    TCGolemOrbRenderContract.LEGACY_GRID_SIZE == 32
+                            && TCGolemOrbRenderContract.LEGACY_FRAME_COUNT == 6
+                            && TCGolemOrbRenderContract.LEGACY_FIRST_FRAME_U == 1
+                            && TCGolemOrbRenderContract.LEGACY_RED_V == 6
+                            && TCGolemOrbRenderContract.LEGACY_BLUE_V == 7
+                            && Float.compare(TCGolemOrbRenderContract.LEGACY_ALPHA, 0.8F) == 0,
+                    "particles.png frames u=1..6/32, redV=6/32, blueV=7/32, alpha=0.8"));
         }
         if (guardian != null) {
             checks.add(check("eldritch_guardian_ranged_orb_contract",
@@ -284,6 +320,27 @@ public final class TCWarpEventBehaviorAudit {
                 clericSpawned.discard();
             }
             portal.discard();
+        }
+        if (cleric != null && guardian != null) {
+            cleric.setPos(3.5D, server.overworld().getSharedSpawnPos().getY() + 2.0D, 3.5D);
+            guardian.setPos(8.5D, server.overworld().getSharedSpawnPos().getY() + 2.0D, 3.5D);
+            server.overworld().addFreshEntity(cleric);
+            server.overworld().addFreshEntity(guardian);
+            TCGolemOrbEntity spawnedOrb = cleric.spawnLegacyGolemOrbForValidation(guardian);
+            checks.add(check("cultist_cleric_golem_orb_branch_spawns_red_targeted_orb",
+                    spawnedOrb != null
+                            && spawnedOrb.getType() == TCEntityTypes.GOLEM_ORB.get()
+                            && spawnedOrb.isRed()
+                            && spawnedOrb.targetId() == guardian.getId()
+                            && spawnedOrb.legacyLifetime() == TCGolemOrbEntity.LEGACY_RED_LIFETIME_TICKS,
+                    "spawned=" + (spawnedOrb == null ? "null" : BuiltInRegistries.ENTITY_TYPE.getKey(spawnedOrb.getType()))
+                            + ", red=" + (spawnedOrb != null && spawnedOrb.isRed())
+                            + ", target=" + (spawnedOrb == null ? -1 : spawnedOrb.targetId())));
+            if (spawnedOrb != null) {
+                spawnedOrb.discard();
+            }
+            cleric.discard();
+            guardian.discard();
         }
 
         checks.add(check("custom_warp_entity_aspect_contracts_match_config_aspects",
