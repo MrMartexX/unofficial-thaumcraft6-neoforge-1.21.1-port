@@ -12,9 +12,12 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.entities.TCArcaneBoreEntity;
 import thaumcraft.common.entities.TCBottleTaintEntity;
+import thaumcraft.common.entities.TCCultistPortalLesserEntity;
+import thaumcraft.common.entities.TCEldritchGuardianEntity;
 import thaumcraft.common.entities.TCFallingTaintEntity;
 import thaumcraft.common.entities.TCFollowingItemEntity;
 import thaumcraft.common.entities.TCFluxRiftEntity;
+import thaumcraft.common.entities.TCMindSpiderEntity;
 import thaumcraft.common.entities.TCSpecialItemEntity;
 import thaumcraft.common.entities.TCTaintCrawlerEntity;
 import thaumcraft.common.entities.TCTaintSeedEntity;
@@ -51,6 +54,16 @@ public final class TCEntityTypes {
                     .setUpdateInterval(20)
                     .setShouldReceiveVelocityUpdates(false)
                     .build(Thaumcraft.MODID + ":flux_rift"));
+
+    public static final Supplier<EntityType<TCCultistPortalLesserEntity>> CULTIST_PORTAL_LESSER =
+            ENTITY_TYPES.register("cultist_portal_lesser", () ->
+                    EntityType.Builder.<TCCultistPortalLesserEntity>of(TCCultistPortalLesserEntity::new, MobCategory.MONSTER)
+                            .sized(1.5F, 3.0F)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(20)
+                            .setShouldReceiveVelocityUpdates(false)
+                            .fireImmune()
+                            .build(Thaumcraft.MODID + ":cultist_portal_lesser"));
 
     public static final Supplier<EntityType<TCArcaneBoreEntity>> ARCANE_BORE = ENTITY_TYPES.register("arcane_bore", () ->
             EntityType.Builder.<TCArcaneBoreEntity>of(TCArcaneBoreEntity::new, MobCategory.MISC)
@@ -140,9 +153,28 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(true)
                     .build(Thaumcraft.MODID + ":bottle_taint"));
 
+    public static final Supplier<EntityType<TCMindSpiderEntity>> MIND_SPIDER = ENTITY_TYPES.register("mind_spider", () ->
+            EntityType.Builder.<TCMindSpiderEntity>of(TCMindSpiderEntity::new, MobCategory.MONSTER)
+                    .sized(0.7F, 0.5F)
+                    .eyeHeight(0.45F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":mind_spider"));
+
+    public static final Supplier<EntityType<TCEldritchGuardianEntity>> ELDRITCH_GUARDIAN =
+            ENTITY_TYPES.register("eldritch_guardian", () ->
+                    EntityType.Builder.<TCEldritchGuardianEntity>of(TCEldritchGuardianEntity::new, MobCategory.MONSTER)
+                            .sized(0.8F, 2.25F)
+                            .eyeHeight(2.1F)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(3)
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build(Thaumcraft.MODID + ":eldritch_guardian"));
+
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
             spec("CultistPortalGreater", "EntityCultistPortalGreater", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
-            spec("CultistPortalLesser", "EntityCultistPortalLesser", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
+            spec("CultistPortalLesser", "EntityCultistPortalLesser", "cultist_portal_lesser", 64, 20, false, "registered_foundation", "Lesser cultist portal activation/collision foundation; cultist minion spawn waits for CultistKnight/Cleric"),
             spec("FluxRift", "EntityFluxRift", "flux_rift", 64, 20, false, "registered_foundation", "Flux/aura lifecycle, collapse and rift renderer foundation"),
             spec("SpecialItem", "EntitySpecialItem", "special_item", 64, 20, true, "registered_foundation", "Legacy item-entity lift and explosion immunity"),
             spec("FollowItem", "EntityFollowingItem", "follow_item", 64, 20, false, "registered_foundation", "Legacy following item movement and spawn data"),
@@ -171,8 +203,8 @@ public final class TCEntityTypes {
             spec("Firebat", "EntityFireBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
             spec("Spellbat", "EntitySpellBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
             spec("Pech", "EntityPech", null, 64, 3, true, "defer", "Pech AI, trading and renderer"),
-            spec("MindSpider", "EntityMindSpider", null, 64, 3, true, "defer", "Mob AI/effects and renderer"),
-            spec("EldritchGuardian", "EntityEldritchGuardian", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),
+            spec("MindSpider", "EntityMindSpider", "mind_spider", 64, 3, true, "registered_foundation", "Mind Spider harmless/viewer hallucination state, lifespan and warp spawn foundation; custom renderer deferred"),
+            spec("EldritchGuardian", "EntityEldritchGuardian", "eldritch_guardian", 64, 3, true, "registered_foundation", "Eldritch Guardian attributes, team rules, warp spawn and curse branch; orb projectile/custom renderer deferred"),
             spec("CultistKnight", "EntityCultistKnight", null, 64, 3, true, "defer", "Cultist mob AI and renderer"),
             spec("CultistCleric", "EntityCultistCleric", null, 64, 3, true, "defer", "Cultist mob AI and renderer"),
             spec("EldritchCrab", "EntityEldritchCrab", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),
@@ -215,6 +247,9 @@ public final class TCEntityTypes {
         event.put(TAINTACLE_TINY.get(), TCTaintacleTinyEntity.createAttributes().build());
         event.put(TAINT_SWARM.get(), TCTaintSwarmEntity.createAttributes().build());
         event.put(WISP.get(), TCWispEntity.createAttributes().build());
+        event.put(CULTIST_PORTAL_LESSER.get(), TCCultistPortalLesserEntity.createAttributes().build());
+        event.put(MIND_SPIDER.get(), TCMindSpiderEntity.createAttributes().build());
+        event.put(ELDRITCH_GUARDIAN.get(), TCEldritchGuardianEntity.createAttributes().build());
     }
 
     private static LegacyEntitySpec spec(

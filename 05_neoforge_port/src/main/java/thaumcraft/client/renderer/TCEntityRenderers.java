@@ -29,5 +29,8 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.TAINT_SWARM.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.WISP.get(), TCWispRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.BOTTLE_TAINT.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.CULTIST_PORTAL_LESSER.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.MIND_SPIDER.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.ELDRITCH_GUARDIAN.get(), TCInvisibleEntityRenderer::new);
     }
 }

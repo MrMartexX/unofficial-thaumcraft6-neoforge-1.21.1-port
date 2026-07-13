@@ -1,11 +1,13 @@
 package thaumcraft.common.warp;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -18,7 +20,11 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import thaumcraft.common.config.TCConfig;
+import thaumcraft.common.entities.TCCultistPortalLesserEntity;
+import thaumcraft.common.entities.TCEldritchGuardianEntity;
+import thaumcraft.common.entities.TCMindSpiderEntity;
 import thaumcraft.common.items.equipment.TCEquipmentHelper;
+import thaumcraft.common.registry.TCEntityTypes;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMobEffects;
 import thaumcraft.common.research.TCPlayerKnowledge;
@@ -278,7 +284,10 @@ public final class TCWarpEvents {
             }
             case UNNATURAL_HUNGER_SHORT -> addUnnaturalHunger(player, 5000, adjustedWarp);
             case SOMETHING_FOLLOWING -> status(player, "warp.text.12", ChatFormatting.DARK_PURPLE);
-            case MIST_ONE_GUARDIAN, MIST_GUARDIANS_LIGHT, MIST_GUARDIANS_HEAVY -> status(player, "warp.text.6", ChatFormatting.DARK_PURPLE);
+            case MIST_ONE_GUARDIAN, MIST_GUARDIANS_LIGHT, MIST_GUARDIANS_HEAVY -> {
+                spawnMist(player, adjustedWarp, guardianCountForOutcome(outcome, adjustedWarp));
+                status(player, "warp.text.6", ChatFormatting.DARK_PURPLE);
+            }
             case BLURRED_VISION -> player.addEffect(new MobEffectInstance(TCMobEffects.BLURRED_VISION, Math.min(32000, 10 * adjustedWarp), 0, true, true));
             case SUN_SCORNED -> {
                 player.addEffect(uncured(new MobEffectInstance(TCMobEffects.SUN_SCORNED, 5000, legacyAmplifier(adjustedWarp), true, true)));
@@ -300,7 +309,10 @@ public final class TCWarpEvents {
                 player.addEffect(uncured(new MobEffectInstance(TCMobEffects.DEATH_GAZE, 6000, legacyAmplifier(adjustedWarp), true, true)));
                 status(player, "warp.text.4", ChatFormatting.DARK_PURPLE);
             }
-            case MIND_SPIDERS_FAKE, MIND_SPIDERS_REAL -> status(player, "warp.text.7", ChatFormatting.DARK_PURPLE);
+            case MIND_SPIDERS_FAKE, MIND_SPIDERS_REAL -> {
+                suddenlySpiders(player, adjustedWarp, outcome == TCWarpEventOutcome.MIND_SPIDERS_REAL);
+                status(player, "warp.text.7", ChatFormatting.DARK_PURPLE);
+            }
             case SOMETHING_WATCHING -> status(player, "warp.text.13", ChatFormatting.DARK_PURPLE);
             case BLINDNESS -> player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, Math.min(32000, 5 * adjustedWarp), 0, true, true));
             case MOMENT_OF_CLARITY -> {
@@ -310,10 +322,127 @@ public final class TCWarpEvents {
                 status(player, "warp.text.14", ChatFormatting.DARK_PURPLE);
             }
             case UNNATURAL_HUNGER_LONG -> addUnnaturalHunger(player, 6000, adjustedWarp);
-            case CULTIST_PORTAL -> status(player, "warp.text.16", ChatFormatting.DARK_PURPLE);
+            case CULTIST_PORTAL -> {
+                if (spawnPortal(player)) {
+                    status(player, "warp.text.16", ChatFormatting.DARK_PURPLE);
+                }
+            }
             case NO_EVENT -> {
             }
         }
+    }
+
+    public static int guardianCountForOutcome(TCWarpEventOutcome outcome, int adjustedWarp) {
+        return switch (outcome) {
+            case MIST_ONE_GUARDIAN -> 1;
+            case MIST_GUARDIANS_LIGHT -> adjustedWarp / 30;
+            case MIST_GUARDIANS_HEAVY -> adjustedWarp / 15;
+            default -> 0;
+        };
+    }
+
+    static int boundedGuardianCount(int guardianCount) {
+        return Math.min(8, Math.max(0, guardianCount));
+    }
+
+    private static void spawnMist(ServerPlayer player, int adjustedWarp, int guardianCount) {
+        int count = boundedGuardianCount(guardianCount);
+        for (int i = 0; i < count; i++) {
+            spawnGuardian(player);
+        }
+    }
+
+    private static boolean spawnGuardian(ServerPlayer player) {
+        if (!(player.level() instanceof ServerLevel level)) {
+            return false;
+        }
+        TCEldritchGuardianEntity guardian = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(level);
+        if (guardian == null) {
+            return false;
+        }
+
+        BlockPos origin = player.blockPosition();
+        for (int i = 0; i < 50; i++) {
+            BlockPos candidate = randomLegacyWarpSpawnPos(origin, player.getRandom());
+            guardian.moveTo(candidate.getX(), candidate.getY(), candidate.getZ(), player.getRandom().nextFloat() * 360.0F, 0.0F);
+            if (isLegacyWarpSpawnPositionValid(level, guardian, candidate)) {
+                guardian.setTarget(player);
+                return level.addFreshEntity(guardian);
+            }
+        }
+        return false;
+    }
+
+    private static boolean spawnPortal(ServerPlayer player) {
+        if (!(player.level() instanceof ServerLevel level)) {
+            return false;
+        }
+        TCCultistPortalLesserEntity portal = TCEntityTypes.CULTIST_PORTAL_LESSER.get().create(level);
+        if (portal == null) {
+            return false;
+        }
+
+        BlockPos origin = player.blockPosition();
+        for (int i = 0; i < 50; i++) {
+            BlockPos candidate = randomLegacyWarpSpawnPos(origin, player.getRandom());
+            portal.moveTo(candidate.getX() + 0.5D, candidate.getY() + 1.0D, candidate.getZ() + 0.5D, 0.0F, 0.0F);
+            if (isLegacyWarpSpawnPositionValid(level, portal, candidate)) {
+                return level.addFreshEntity(portal);
+            }
+        }
+        return false;
+    }
+
+    private static int suddenlySpiders(ServerPlayer player, int adjustedWarp, boolean real) {
+        if (!(player.level() instanceof ServerLevel level)) {
+            return 0;
+        }
+
+        int spawned = 0;
+        int spawnCount = Math.min(50, adjustedWarp);
+        BlockPos origin = player.blockPosition();
+        for (int i = 0; i < spawnCount; i++) {
+            TCMindSpiderEntity spider = TCEntityTypes.MIND_SPIDER.get().create(level);
+            if (spider == null) {
+                continue;
+            }
+
+            boolean success = false;
+            for (int attempt = 0; attempt < 50; attempt++) {
+                BlockPos candidate = randomLegacyWarpSpawnPos(origin, player.getRandom());
+                spider.moveTo(candidate.getX(), candidate.getY(), candidate.getZ(), player.getRandom().nextFloat() * 360.0F, 0.0F);
+                if (isLegacyWarpSpawnPositionValid(level, spider, candidate)) {
+                    success = true;
+                    break;
+                }
+            }
+
+            if (success) {
+                spider.setTarget(player);
+                if (!real) {
+                    spider.setViewer(player.getName().getString());
+                    spider.setHarmless(true);
+                }
+                if (level.addFreshEntity(spider)) {
+                    spawned++;
+                }
+            }
+        }
+        return spawned;
+    }
+
+    static BlockPos randomLegacyWarpSpawnPos(BlockPos origin, RandomSource random) {
+        return origin.offset(randomLegacySpawnOffset(random), randomLegacySpawnOffset(random), randomLegacySpawnOffset(random));
+    }
+
+    static int randomLegacySpawnOffset(RandomSource random) {
+        return Mth.nextInt(random, 7, 24) * Mth.nextInt(random, -1, 1);
+    }
+
+    static boolean isLegacyWarpSpawnPositionValid(ServerLevel level, Entity entity, BlockPos candidate) {
+        return level.getBlockState(candidate.below()).isSolid()
+                && level.noCollision(entity)
+                && !level.containsAnyLiquid(entity.getBoundingBox());
     }
 
     private static void addUnnaturalHunger(ServerPlayer player, int duration, int adjustedWarp) {
@@ -360,14 +489,14 @@ public final class TCWarpEvents {
         MIND_SPIDERS_REAL(true),
         MIST_GUARDIANS_HEAVY(true);
 
-        private final boolean deferredEntityWork;
+        private final boolean entityOutcome;
 
-        TCWarpEventOutcome(boolean deferredEntityWork) {
-            this.deferredEntityWork = deferredEntityWork;
+        TCWarpEventOutcome(boolean entityOutcome) {
+            this.entityOutcome = entityOutcome;
         }
 
-        public boolean deferredEntityWork() {
-            return deferredEntityWork;
+        public boolean entityOutcome() {
+            return entityOutcome;
         }
     }
 

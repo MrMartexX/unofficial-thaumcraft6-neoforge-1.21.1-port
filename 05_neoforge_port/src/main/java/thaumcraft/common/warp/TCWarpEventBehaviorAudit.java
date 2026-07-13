@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -17,11 +18,18 @@ import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import thaumcraft.Thaumcraft;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.aspects.TCEntityAspectAssignments;
+import thaumcraft.common.entities.TCCultistPortalLesserEntity;
+import thaumcraft.common.entities.TCEldritchGuardianEntity;
+import thaumcraft.common.entities.TCMindSpiderEntity;
 import thaumcraft.common.lib.potions.PotionBlurredVision;
 import thaumcraft.common.lib.potions.PotionDeathGaze;
 import thaumcraft.common.lib.potions.PotionSunScorned;
 import thaumcraft.common.lib.potions.PotionThaumarhia;
 import thaumcraft.common.lib.potions.PotionUnnaturalHunger;
+import thaumcraft.common.registry.TCEntityTypes;
 import thaumcraft.common.registry.TCMobEffects;
 import thaumcraft.common.research.TCPlayerKnowledge;
 import thaumcraft.common.research.TCPlayerKnowledgeStore;
@@ -60,9 +68,9 @@ public final class TCWarpEventBehaviorAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics and warp research unlock thresholds.");
+        lines.add("- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds and warp outcome entity spawn foundations.");
         lines.add("- Implemented: rotten flesh / zombie brain relief path for Unnatural Hunger.");
-        lines.add("- Deferred by missing owners: real Eldritch Guardian, Mind Spider, lesser cultist portal spawning, PacketMiscEvent client hallucination/stress visuals and fortress mask mitigation.");
+        lines.add("- Deferred by missing owners: Eldritch Guardian orb projectile renderer/path, lesser cultist portal minion spawning until CultistKnight/Cleric exist, PacketMiscEvent client hallucination/stress visuals, custom mob/portal renderers and fortress mask mitigation.");
         Files.write(output, lines, StandardCharsets.UTF_8);
         return report;
     }
@@ -75,6 +83,7 @@ public final class TCWarpEventBehaviorAudit {
 
         addMathChecks(checks);
         addOutcomeChecks(checks);
+        addEntityOutcomeFoundationChecks(server, checks);
         addEffectRegistrationChecks(checks);
         addRuntimeEffectChecks(player, checks);
         addResearchUnlockChecks(player, checks);
@@ -137,13 +146,73 @@ public final class TCWarpEventBehaviorAudit {
                         && TCWarpEvents.outcomeForEffect(81) == TCWarpEvents.TCWarpEventOutcome.CULTIST_PORTAL
                         && TCWarpEvents.outcomeForEffect(93) == TCWarpEvents.TCWarpEventOutcome.MIST_GUARDIANS_HEAVY,
                 "73=" + TCWarpEvents.outcomeForEffect(73) + ", 76=" + TCWarpEvents.outcomeForEffect(76)));
-        checks.add(check("legacy_entity_outcomes_are_marked_deferred_until_entities_exist",
-                TCWarpEvents.TCWarpEventOutcome.MIST_ONE_GUARDIAN.deferredEntityWork()
-                        && TCWarpEvents.TCWarpEventOutcome.MIND_SPIDERS_FAKE.deferredEntityWork()
-                        && TCWarpEvents.TCWarpEventOutcome.CULTIST_PORTAL.deferredEntityWork()
-                        && TCWarpEvents.TCWarpEventOutcome.MIND_SPIDERS_REAL.deferredEntityWork()
-                        && !TCWarpEvents.TCWarpEventOutcome.VIS_EXHAUST.deferredEntityWork(),
-                "deferred outcomes tracked"));
+        checks.add(check("legacy_entity_outcomes_are_backed_by_registered_foundations",
+                TCWarpEvents.TCWarpEventOutcome.MIST_ONE_GUARDIAN.entityOutcome()
+                        && TCWarpEvents.TCWarpEventOutcome.MIND_SPIDERS_FAKE.entityOutcome()
+                        && TCWarpEvents.TCWarpEventOutcome.CULTIST_PORTAL.entityOutcome()
+                        && TCWarpEvents.TCWarpEventOutcome.MIND_SPIDERS_REAL.entityOutcome()
+                        && !TCWarpEvents.TCWarpEventOutcome.VIS_EXHAUST.entityOutcome()
+                        && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.ELDRITCH_GUARDIAN.get()).equals(id("eldritch_guardian"))
+                        && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.MIND_SPIDER.get()).equals(id("mind_spider"))
+                        && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.CULTIST_PORTAL_LESSER.get()).equals(id("cultist_portal_lesser")),
+                "entity outcomes use real registered foundations"));
+    }
+
+    private static void addEntityOutcomeFoundationChecks(MinecraftServer server, ArrayList<Check> checks) {
+        checks.add(check("legacy_guardian_count_formula_and_cap",
+                TCWarpEvents.guardianCountForOutcome(TCWarpEvents.TCWarpEventOutcome.MIST_ONE_GUARDIAN, 45) == 1
+                        && TCWarpEvents.guardianCountForOutcome(TCWarpEvents.TCWarpEventOutcome.MIST_GUARDIANS_LIGHT, 90) == 3
+                        && TCWarpEvents.guardianCountForOutcome(TCWarpEvents.TCWarpEventOutcome.MIST_GUARDIANS_HEAVY, 90) == 6
+                        && TCWarpEvents.boundedGuardianCount(12) == 8,
+                "one=1, light=warp/30, heavy=warp/15, cap=8"));
+        checks.add(check("legacy_entity_type_shapes_for_warp_outcomes",
+                TCEntityTypes.ELDRITCH_GUARDIAN.get().getCategory() == MobCategory.MONSTER
+                        && Float.compare(TCEntityTypes.ELDRITCH_GUARDIAN.get().getWidth(), 0.8F) == 0
+                        && Float.compare(TCEntityTypes.ELDRITCH_GUARDIAN.get().getHeight(), 2.25F) == 0
+                        && Float.compare(TCEntityTypes.ELDRITCH_GUARDIAN.get().getDimensions().eyeHeight(), 2.1F) == 0
+                        && Float.compare(TCEntityTypes.MIND_SPIDER.get().getWidth(), 0.7F) == 0
+                        && Float.compare(TCEntityTypes.MIND_SPIDER.get().getHeight(), 0.5F) == 0
+                        && Float.compare(TCEntityTypes.MIND_SPIDER.get().getDimensions().eyeHeight(), 0.45F) == 0
+                        && Float.compare(TCEntityTypes.CULTIST_PORTAL_LESSER.get().getWidth(), 1.5F) == 0
+                        && Float.compare(TCEntityTypes.CULTIST_PORTAL_LESSER.get().getHeight(), 3.0F) == 0,
+                "guardian=0.8x2.25 eye2.1, spider=0.7x0.5 eye0.45, portal=1.5x3.0"));
+
+        TCMindSpiderEntity spider = TCEntityTypes.MIND_SPIDER.get().create(server.overworld());
+        TCCultistPortalLesserEntity portal = TCEntityTypes.CULTIST_PORTAL_LESSER.get().create(server.overworld());
+        TCEldritchGuardianEntity guardian = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(server.overworld());
+        checks.add(check("legacy_entity_foundation_classes_construct",
+                spider != null && portal != null && guardian != null,
+                "spider=" + (spider != null) + ", portal=" + (portal != null) + ", guardian=" + (guardian != null)));
+        if (spider != null) {
+            spider.setHarmless(true);
+            spider.setViewer("FakePlayer");
+            checks.add(check("mind_spider_harmless_viewer_lifespan_contract",
+                    spider.isHarmless()
+                            && "FakePlayer".equals(spider.getViewer())
+                            && spider.lifespanForValidation() == 1200
+                            && spider.baseExperienceForValidation() == 0,
+                    "harmless=" + spider.isHarmless()
+                            + ", viewer=" + spider.getViewer()
+                            + ", lifespan=" + spider.lifespanForValidation()));
+        }
+        if (portal != null) {
+            portal.setActive(true);
+            checks.add(check("lesser_cultist_portal_active_state_and_budget_contract",
+                    portal.isActive()
+                            && !portal.isPushable()
+                            && portal.fireImmune()
+                            && TCCultistPortalLesserEntity.legacyCultistMinionBudget(net.minecraft.world.Difficulty.EASY) == 2
+                            && TCCultistPortalLesserEntity.legacyCultistMinionBudget(net.minecraft.world.Difficulty.NORMAL) == 4
+                            && TCCultistPortalLesserEntity.legacyCultistMinionBudget(net.minecraft.world.Difficulty.HARD) == 6,
+                    "active=" + portal.isActive() + ", budgets easy/normal/hard=2/4/6"));
+        }
+
+        checks.add(check("custom_warp_entity_aspect_contracts_match_config_aspects",
+                hasAspects(TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.MIND_SPIDER.get()),
+                        Aspect.FLUX, 5, Aspect.FIRE, 5)
+                        && hasAspects(TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.ELDRITCH_GUARDIAN.get()),
+                        Aspect.ELDRITCH, 20, Aspect.DEATH, 20, Aspect.UNDEAD, 20),
+                "MindSpider=vitium5/ignis5, EldritchGuardian=alienis20/mortuus20/exanimis20"));
     }
 
     private static void addEffectRegistrationChecks(ArrayList<Check> checks) {
@@ -238,6 +307,22 @@ public final class TCWarpEventBehaviorAudit {
 
     private static String effectNotes(MobEffectInstance effect) {
         return effect == null ? "missing" : "duration=" + effect.getDuration() + ", amp=" + effect.getAmplifier();
+    }
+
+    private static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, path);
+    }
+
+    private static boolean hasAspects(AspectList list, Object... pairs) {
+        if (list == null || list.size() != pairs.length / 2) {
+            return false;
+        }
+        for (int i = 0; i < pairs.length; i += 2) {
+            if (list.getAmount((Aspect) pairs[i]) != (Integer) pairs[i + 1]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static Check check(String name, boolean passed, String notes) {

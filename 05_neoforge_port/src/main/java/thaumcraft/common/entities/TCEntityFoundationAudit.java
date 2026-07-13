@@ -24,7 +24,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 14;
+    private static final int REGISTERED_FOUNDATION_COUNT = 17;
 
     private TCEntityFoundationAudit() {
     }
@@ -90,7 +90,7 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, BottleTaint, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair and five taint mob foundations"
+                "expected item entities, BottleTaint, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations and three warp outcome entity foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
@@ -101,6 +101,9 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("Wisp", TCEntityTypes.WISP.get()));
         checks.add(checkRegisteredType("TaintSeed", TCEntityTypes.TAINT_SEED.get()));
         checks.add(checkRegisteredType("TaintSeedPrime", TCEntityTypes.TAINT_SEED_PRIME.get()));
+        checks.add(checkRegisteredType("CultistPortalLesser", TCEntityTypes.CULTIST_PORTAL_LESSER.get()));
+        checks.add(checkRegisteredType("MindSpider", TCEntityTypes.MIND_SPIDER.get()));
+        checks.add(checkRegisteredType("EldritchGuardian", TCEntityTypes.ELDRITCH_GUARDIAN.get()));
         checks.add(checkRegisteredType("ThaumSlime", TCEntityTypes.THAUM_SLIME.get()));
         checks.add(checkRegisteredType("TaintCrawler", TCEntityTypes.TAINT_CRAWLER.get()));
         checks.add(checkRegisteredType("Taintacle", TCEntityTypes.TAINTACLE.get()));
@@ -117,6 +120,9 @@ public final class TCEntityFoundationAudit {
         checks.add(checkMobTypeShape("TaintacleTiny", TCEntityTypes.TAINTACLE_TINY.get(), 0.22F, 1.0F, 64, 3, false));
         checks.add(checkMobTypeShape("TaintSwarm", TCEntityTypes.TAINT_SWARM.get(), 2.0F, 2.0F, 64, 3, false));
         checks.add(checkTypeShape("BottleTaint", TCEntityTypes.BOTTLE_TAINT.get(), 64, 20, true));
+        checks.add(checkMobTypeShape("CultistPortalLesser", TCEntityTypes.CULTIST_PORTAL_LESSER.get(), 1.5F, 3.0F, 64, 20, false));
+        checks.add(checkMobTypeShape("MindSpider", TCEntityTypes.MIND_SPIDER.get(), 0.7F, 0.5F, 64, 3, true));
+        checks.add(checkMobTypeShape("EldritchGuardian", TCEntityTypes.ELDRITCH_GUARDIAN.get(), 0.8F, 2.25F, 64, 3, true));
         checks.add(checkConstructors(server.overworld()));
         return checks;
     }
@@ -170,10 +176,16 @@ public final class TCEntityFoundationAudit {
     private static Check checkConstructors(ServerLevel level) {
         Entity specialFactory = TCEntityTypes.SPECIAL_ITEM.get().create(level);
         Entity followingFactory = TCEntityTypes.FOLLOW_ITEM.get().create(level);
+        Entity portalFactory = TCEntityTypes.CULTIST_PORTAL_LESSER.get().create(level);
+        Entity spiderFactory = TCEntityTypes.MIND_SPIDER.get().create(level);
+        Entity guardianFactory = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(level);
         TCSpecialItemEntity special = new TCSpecialItemEntity(level, 1.0D, 2.0D, 3.0D, new ItemStack(Items.DIAMOND));
         TCFollowingItemEntity following = new TCFollowingItemEntity(level, 1.0D, 2.0D, 3.0D, new ItemStack(Items.EMERALD), 4.0D, 5.0D, 6.0D);
         boolean passed = specialFactory instanceof TCSpecialItemEntity
                 && followingFactory instanceof TCFollowingItemEntity
+                && portalFactory instanceof TCCultistPortalLesserEntity
+                && spiderFactory instanceof TCMindSpiderEntity
+                && guardianFactory instanceof TCEldritchGuardianEntity
                 && special.getType() == TCEntityTypes.SPECIAL_ITEM.get()
                 && following.getType() == TCEntityTypes.FOLLOW_ITEM.get()
                 && special.getItem().is(Items.DIAMOND)

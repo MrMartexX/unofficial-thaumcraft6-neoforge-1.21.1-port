@@ -30,7 +30,7 @@ public final class TCEntitySpawnRules {
             new LegacyNaturalSpawn("BrainyZombie", "EntityBrainyZombie", null, "legacy warm/cool/icy/desert monster biomes", 10, 1, 1, false, "BrainyZombie entity is not ported yet"),
             new LegacyNaturalSpawn("MagicalForestWisp", "EntityWisp", "thaumcraft:wisp", "thaumcraft:magical_forest", 20, 1, 2, false, "Thaumcraft Magical Forest biome is not ported yet"),
             new LegacyNaturalSpawn("EerieWisp", "EntityWisp", "thaumcraft:wisp", "thaumcraft:eerie", 3, 1, 1, false, "Thaumcraft Eerie biome is not ported yet"),
-            new LegacyNaturalSpawn("EerieEldritchGuardian", "EntityEldritchGuardian", null, "thaumcraft:eerie", 1, 1, 1, false, "EldritchGuardian entity and Eerie biome are not ported yet")
+            new LegacyNaturalSpawn("EerieEldritchGuardian", "EntityEldritchGuardian", "thaumcraft:eldritch_guardian", "thaumcraft:eerie", 1, 1, 1, false, "Eerie biome is not ported yet")
     );
 
     public static final SpawnPlacementType WISP_PLACEMENT_TYPE = SpawnPlacementTypes.NO_RESTRICTIONS;

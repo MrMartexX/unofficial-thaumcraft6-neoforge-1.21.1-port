@@ -307,6 +307,13 @@
     },
     {
       "type": "entity",
+      "research": "!EldritchGuardian",
+      "entities": [
+        "thaumcraft:eldritch_guardian"
+      ]
+    },
+    {
+      "type": "entity",
       "research": "f_FLY",
       "entities": [
         "minecraft:bat",

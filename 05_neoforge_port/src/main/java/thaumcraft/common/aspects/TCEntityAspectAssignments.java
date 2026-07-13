@@ -153,6 +153,8 @@ public final class TCEntityAspectAssignments {
         put(map, "taintacle", tags(Aspect.FLUX, 15, Aspect.BEAST, 10));
         put(map, "taintacle_tiny", tags(Aspect.FLUX, 5, Aspect.BEAST, 5));
         put(map, "taint_swarm", tags(Aspect.FLUX, 15, Aspect.AIR, 5));
+        put(map, "mind_spider", tags(Aspect.FLUX, 5, Aspect.FIRE, 5));
+        put(map, "eldritch_guardian", tags(Aspect.ELDRITCH, 20, Aspect.DEATH, 20, Aspect.UNDEAD, 20));
 
         return Map.copyOf(map);
     }

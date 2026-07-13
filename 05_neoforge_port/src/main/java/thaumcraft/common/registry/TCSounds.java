@@ -51,6 +51,8 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "craftstart")));
     public static final Supplier<SoundEvent> CRAFTFAIL = SOUND_EVENTS.register("craftfail", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "craftfail")));
+    public static final Supplier<SoundEvent> MONOLITH = SOUND_EVENTS.register("monolith", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "monolith")));
     public static final Supplier<SoundEvent> INFUSER = SOUND_EVENTS.register("infuser", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "infuser")));
     public static final Supplier<SoundEvent> INFUSERSTART = SOUND_EVENTS.register("infuserstart", () ->
@@ -61,6 +63,16 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "evilportal")));
     public static final Supplier<SoundEvent> GORE = SOUND_EVENTS.register("gore", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "gore")));
+    public static final Supplier<SoundEvent> SHOCK = SOUND_EVENTS.register("shock", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "shock")));
+    public static final Supplier<SoundEvent> EGIDLE = SOUND_EVENTS.register("egidle", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "egidle")));
+    public static final Supplier<SoundEvent> EGATTACK = SOUND_EVENTS.register("egattack", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "egattack")));
+    public static final Supplier<SoundEvent> EGDEATH = SOUND_EVENTS.register("egdeath", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "egdeath")));
+    public static final Supplier<SoundEvent> EGSCREECH = SOUND_EVENTS.register("egscreech", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "egscreech")));
     public static final Supplier<SoundEvent> WISPLIVE = SOUND_EVENTS.register("wisplive", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "wisplive")));
     public static final Supplier<SoundEvent> WISPDEAD = SOUND_EVENTS.register("wispdead", () ->
