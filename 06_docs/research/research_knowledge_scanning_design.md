@@ -51,7 +51,7 @@ This phase must not mix knowledge storage, full research GUI, recipe systems and
 
 Legacy commands were exposed mainly through the thaumcraft command root with aliases. The important command groups were research, warp and reload.
 
-For this port, research commands should stay legacy-compatible where the dependent subsystem exists. Warp commands should be reserved but not implemented until the warp subsystem exists.
+For this port, research commands should stay legacy-compatible where the dependent subsystem exists. Warp commands can operate through the focused `TCWarpManager` bridge, but full random `WarpEvents` symptoms/hallucinations remain outside this scanning/research design slice.
 
 Legacy PlayerKnowledge stored several different concepts:
 
@@ -254,7 +254,7 @@ Not implemented by this skeleton:
 - Exact direct `required_craft` ItemStack hash parity for legacy marker ids.
 - Producer/container behavior for legacy metadata/NBT-heavy items such as phials, crystal essence, material-family outputs, and unported Thaumcraft ids.
 - Custom recipe-page rendering for blueprint, special and grouped pages.
-- Full warp events/effects/client sync and cancellable research/knowledge events.
+- Full random `WarpEvents` symptoms/hallucinations and cancellable research/knowledge events.
 
 ## Progression parity closure checkpoint
 

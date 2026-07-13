@@ -17,8 +17,9 @@ The current branch contains a working server-side research/scanning skeleton:
 - read-only scan debug commands;
 - Thaumometer right-click scan mutation;
 - GUI-ready research/knowledge client cache, including completed keys, stages, flags, and raw observation/theory values;
-- scan/audit parity tooling and generated runtime reports.
-- non-interactive research requirement audit export through `-PtcResearchRequirementAudit=true`.
+- scan/audit parity tooling and generated runtime reports;
+- non-interactive research requirement audit export through `-PtcResearchRequirementAudit=true`;
+- focused warp mutation/sync through `TCWarpManager` and dedicated warp payloads.
 
 The local smoke tests after stabilization confirmed build correctness plus client/server startup and reload safety after the latest payload, stage-consumption, scan command text cleanup, and non-interactive requirement audit exporter.
 
@@ -40,7 +41,7 @@ The local smoke tests after stabilization confirmed build correctness plus clien
 
 ## Important current limitation
 
-`TCKnowledgeSyncPayload` is a GUI-ready player knowledge cache payload. It synchronizes completed research keys, stages, flags, and raw observation/theory values. It still does not synchronize the permanent research recipe/page catalog, reward history, popup queue, warp state, or Thaumonomicon page state.
+`TCKnowledgeSyncPayload` is a GUI-ready player knowledge cache payload. It synchronizes completed research keys, stages, flags, and raw observation/theory values. It still does not synchronize reward history, popup queue or Thaumonomicon page state. Current warp values are synchronized separately through `TCWarpNetwork`; full random `WarpEvents` symptoms/hallucinations are still outside this checkpoint.
 
 Thaumometer highlight filtering still consumes only completed research keys. A future Thaumonomicon UI slice should extend or complement the current payload only for data that the browser/page protocol actually needs.
 
@@ -93,9 +94,8 @@ When research requirement mapping changes:
 
 Do not treat the current branch as a full research system yet. These areas remain blocked:
 
-- Thaumonomicon GUI and page interaction flow;
-- permanent research recipe/page catalog;
-- full warp events/effects/client sync;
+- final Thaumonomicon GUI polish and remaining special page renderers;
+- full random `WarpEvents` symptoms/hallucinations;
 - cancellable research/knowledge events;
 - exact legacy direct craft-hash mapping;
 - ScanSky celestial-note side effects;

@@ -67,7 +67,7 @@ The generated report contains the complete warning list. Thaumium tools, impleme
 - Infusion matrix and infusion recipe behavior.
 - Thaumium tools and material behavior.
 - Source recipes/drops for material-family bridge items.
-- Permanent research recipe/page catalog, final Thaumonomicon UI/protocol, full warp behavior, and cancellable research/knowledge events.
+- Final Thaumonomicon UI polish, remaining special page renderers, full random `WarpEvents` symptoms/hallucinations, and cancellable research/knowledge events.
 
 ## Pass criteria
 

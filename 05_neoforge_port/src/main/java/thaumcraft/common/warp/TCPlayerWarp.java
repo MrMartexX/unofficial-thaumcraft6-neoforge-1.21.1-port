@@ -49,6 +49,19 @@ public final class TCPlayerWarp {
         return get(TCWarpType.PERMANENT) + get(TCWarpType.NORMAL);
     }
 
+    public int totalWarp() {
+        return actualWarp() + get(TCWarpType.TEMPORARY);
+    }
+
+    public TCPlayerWarp copy() {
+        TCPlayerWarp copy = new TCPlayerWarp();
+        for (TCWarpType type : TCWarpType.values()) {
+            copy.set(type, get(type));
+        }
+        copy.setCounter(counter);
+        return copy;
+    }
+
     public int getCounter() {
         return counter;
     }

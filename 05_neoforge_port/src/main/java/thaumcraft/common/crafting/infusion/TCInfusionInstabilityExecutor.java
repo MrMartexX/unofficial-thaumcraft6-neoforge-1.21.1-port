@@ -22,7 +22,7 @@ import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCMobEffects;
 import thaumcraft.common.tiles.devices.TCStabilizerBlockEntity;
-import thaumcraft.common.warp.TCPlayerWarpStore;
+import thaumcraft.common.warp.TCWarpManager;
 import thaumcraft.common.warp.TCWarpType;
 
 /** Reviewed server effects for legacy infusion instability events. */
@@ -187,9 +187,9 @@ public final class TCInfusionInstabilityExecutor {
         }
         ServerPlayer target = players.get(random.nextInt(players.size()));
         if (random.nextFloat() < 0.25F) {
-            TCPlayerWarpStore.add(target, TCWarpType.NORMAL, 1);
+            TCWarpManager.add(target, TCWarpType.NORMAL, 1);
         } else {
-            TCPlayerWarpStore.add(target, TCWarpType.TEMPORARY, 2 + random.nextInt(4));
+            TCWarpManager.add(target, TCWarpType.TEMPORARY, 2 + random.nextInt(4));
         }
     }
 

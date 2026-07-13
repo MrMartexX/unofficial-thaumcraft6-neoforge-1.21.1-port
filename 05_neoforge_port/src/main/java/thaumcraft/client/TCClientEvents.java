@@ -17,6 +17,7 @@ import thaumcraft.common.crafting.infusion.TCInfusionClientFXCache;
 import thaumcraft.common.research.TCKnowledgeClientCache;
 import thaumcraft.common.research.TCThaumonomiconClientCache;
 import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
+import thaumcraft.common.warp.TCWarpClientCache;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class TCClientEvents {
@@ -33,6 +34,7 @@ public final class TCClientEvents {
         if (Minecraft.getInstance().level == null) {
             TCLegacyParticleEngine.clear();
             TCKnowledgeClientCache.clear();
+            TCWarpClientCache.clear();
             TCThaumonomiconClientCache.clear();
             TCResearchTableClientCache.clear();
             TCInfusionClientFXCache.clear();
@@ -45,6 +47,7 @@ public final class TCClientEvents {
         TCWispClientEffects.tick();
         TCInfusionClientEffects.tick(Minecraft.getInstance().level);
         TCThaumometerClientEffects.onClientTick(Minecraft.getInstance());
+        TCWarpClientEffects.onClientTick(Minecraft.getInstance());
         TCThaumonomiconClientController.tick(Minecraft.getInstance());
     }
 

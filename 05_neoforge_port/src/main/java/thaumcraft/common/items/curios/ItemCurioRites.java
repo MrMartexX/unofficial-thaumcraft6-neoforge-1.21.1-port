@@ -22,7 +22,7 @@ import thaumcraft.common.research.TCKnowledgeType;
 import thaumcraft.common.research.TCPlayerKnowledgeStore;
 import thaumcraft.common.research.TCResearchCategoryDefinition;
 import thaumcraft.common.research.TCResearchManager;
-import thaumcraft.common.warp.TCPlayerWarpStore;
+import thaumcraft.common.warp.TCWarpManager;
 import thaumcraft.common.warp.TCWarpType;
 
 public class ItemCurioRites extends Item {
@@ -66,7 +66,7 @@ public class ItemCurioRites extends Item {
     }
 
     public static boolean canReadCrimsonRites(ServerPlayer player) {
-        return TCPlayerWarpStore.get(player).actualWarp() > 20;
+        return TCWarpManager.get(player).actualWarp() > 20;
     }
 
     public static void grantLegacyCurioRitesKnowledge(ServerPlayer player) {
@@ -83,10 +83,10 @@ public class ItemCurioRites extends Item {
             addRandomKnowledge(player, TCKnowledgeType.THEORY, randomCategory(player, categories), theoryProgression / 3, theoryProgression / 2);
         }
 
-        TCPlayerWarpStore.add(player, TCWarpType.NORMAL, 1);
-        TCPlayerWarpStore.add(player, TCWarpType.TEMPORARY, 5);
+        TCWarpManager.add(player, TCWarpType.NORMAL, 1);
+        TCWarpManager.add(player, TCWarpType.TEMPORARY, 5);
         if (player.getRandom().nextBoolean()) {
-            TCPlayerWarpStore.add(player, TCWarpType.PERMANENT, 1);
+            TCWarpManager.add(player, TCWarpType.PERMANENT, 1);
         }
     }
 

@@ -13,6 +13,7 @@ import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCMobEffects;
 import thaumcraft.common.warp.TCPlayerWarp;
 import thaumcraft.common.warp.TCPlayerWarpStore;
+import thaumcraft.common.warp.TCWarpManager;
 import thaumcraft.common.warp.TCWarpType;
 
 public class ItemSanitySoap extends Item {
@@ -72,10 +73,10 @@ public class ItemSanitySoap extends Item {
 
         int amount = legacyCleansingAmount(player);
         if (normal > 0) {
-            TCPlayerWarpStore.reduce(player, TCWarpType.NORMAL, amount);
+            TCWarpManager.reduce(player, TCWarpType.NORMAL, amount);
         }
         if (temporary > 0) {
-            TCPlayerWarpStore.reduce(player, TCWarpType.TEMPORARY, temporary);
+            TCWarpManager.reduce(player, TCWarpType.TEMPORARY, temporary);
         }
         return true;
     }

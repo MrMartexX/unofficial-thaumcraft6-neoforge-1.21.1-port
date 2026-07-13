@@ -4,7 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import thaumcraft.common.research.TCResearchManager;
-import thaumcraft.common.warp.TCPlayerWarpStore;
+import thaumcraft.common.warp.TCWarpManager;
 import thaumcraft.common.warp.TCWarpType;
 
 final class CardDarkWhispers extends TCTheorycraftCard {
@@ -50,7 +50,7 @@ final class CardDarkWhispers extends TCTheorycraftCard {
         }
 
         data.addTotal("ELDRITCH", Mth.nextInt(player.getRandom(), Math.max(1, levels / 5), Math.max(5, levels / 2)));
-        TCPlayerWarpStore.add(player, TCWarpType.NORMAL, Math.max(1, (int) Math.sqrt(levels)));
+        TCWarpManager.add(player, TCWarpType.NORMAL, Math.max(1, (int) Math.sqrt(levels)));
         if (player.getRandom().nextBoolean()) {
             data.bonusDraws++;
         }

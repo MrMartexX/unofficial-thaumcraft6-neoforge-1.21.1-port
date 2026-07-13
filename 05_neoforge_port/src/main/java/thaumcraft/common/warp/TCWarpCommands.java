@@ -54,7 +54,7 @@ public final class TCWarpCommands {
 
     private static int getWarp(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         ServerPlayer player = resolvePlayer(context);
-        TCPlayerWarp warp = TCPlayerWarpStore.get(player);
+        TCPlayerWarp warp = TCWarpManager.get(player);
         context.getSource().sendSuccess(() -> Component.literal(
                 "Thaumcraft warp for " + player.getGameProfile().getName()
                         + ": permanent=" + warp.get(TCWarpType.PERMANENT)
@@ -70,20 +70,18 @@ public final class TCWarpCommands {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         TCWarpType type = parseTypeOrFail(context);
         int amount = IntegerArgumentType.getInteger(context, "amount");
-        TCPlayerWarp warp = TCPlayerWarpStore.get(player);
-        warp.set(type, amount);
-        TCPlayerWarpStore.set(player, warp);
+        int updated = TCWarpManager.set(player, type, amount);
         context.getSource().sendSuccess(() -> Component.literal(
-                "Set " + player.getGameProfile().getName() + " " + type.id() + " warp to " + warp.get(type) + "."
+                "Set " + player.getGameProfile().getName() + " " + type.id() + " warp to " + updated + "."
         ), true);
-        return warp.get(type);
+        return updated;
     }
 
     private static int addWarp(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         TCWarpType type = parseTypeOrFail(context);
         int amount = IntegerArgumentType.getInteger(context, "amount");
-        int updated = TCPlayerWarpStore.add(player, type, amount);
+        int updated = TCWarpManager.add(player, type, amount);
         context.getSource().sendSuccess(() -> Component.literal(
                 "Added " + amount + " " + type.id() + " warp to " + player.getGameProfile().getName()
                         + ". Now " + updated + "."
@@ -93,7 +91,7 @@ public final class TCWarpCommands {
 
     private static int clearWarp(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         ServerPlayer player = resolvePlayer(context);
-        TCPlayerWarpStore.clear(player);
+        TCWarpManager.clear(player);
         context.getSource().sendSuccess(() -> Component.literal(
                 "Cleared Thaumcraft warp for " + player.getGameProfile().getName() + "."
         ), true);

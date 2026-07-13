@@ -38,7 +38,7 @@ import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMobEffects;
 import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.tiles.devices.TCVoidSiphonRiftAccess;
-import thaumcraft.common.warp.TCPlayerWarpStore;
+import thaumcraft.common.warp.TCWarpManager;
 import thaumcraft.common.warp.TCWarpType;
 
 /** Modern Flux Rift entity retaining TC6's seed/size/stability/collapse contract. */
@@ -528,8 +528,8 @@ public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
                 if (target instanceof ServerPlayer player) {
                     int warp = collapseDurationSeconds(player, 25.0D);
                     if (warp > 0) {
-                        TCPlayerWarpStore.add(player, TCWarpType.NORMAL, warp);
-                        TCPlayerWarpStore.add(player, TCWarpType.TEMPORARY, warp);
+                        TCWarpManager.add(player, TCWarpType.NORMAL, warp);
+                        TCWarpManager.add(player, TCWarpType.TEMPORARY, warp);
                     }
                 }
             }

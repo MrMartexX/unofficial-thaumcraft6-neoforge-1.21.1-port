@@ -38,7 +38,7 @@ import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirementR
 import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirement;
 import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirementResolution;
 
-import thaumcraft.common.warp.TCPlayerWarpStore;
+import thaumcraft.common.warp.TCWarpManager;
 import thaumcraft.common.warp.TCWarpType;
 public final class TCResearchManager {
     private static TCResearchData activeData = TCResearchData.empty();
@@ -442,10 +442,10 @@ public final class TCResearchManager {
         }
         TCResearchProgressionSemantics.WarpAward award = TCResearchProgressionSemantics.splitWarp(warp);
         if (award.permanent() > 0) {
-            TCPlayerWarpStore.add(player, TCWarpType.PERMANENT, award.permanent());
+            TCWarpManager.add(player, TCWarpType.PERMANENT, award.permanent());
         }
         if (award.normal() > 0) {
-            TCPlayerWarpStore.add(player, TCWarpType.NORMAL, award.normal());
+            TCWarpManager.add(player, TCWarpType.NORMAL, award.normal());
         }
     }
 

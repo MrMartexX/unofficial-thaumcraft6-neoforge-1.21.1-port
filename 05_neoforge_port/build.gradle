@@ -122,6 +122,8 @@ neoForge {
             def focusCasterCoreAuditPath = providers.gradleProperty('tcFocusCasterCoreAuditPath').orNull ?: System.getProperty('tc.focusCasterCoreAuditPath')
             def focusCastExecutionAuditEnabled = providers.gradleProperty('tcFocusCastExecutionAudit').orNull ?: System.getProperty('tc.focusCastExecutionAudit')
             def focusCastExecutionAuditPath = providers.gradleProperty('tcFocusCastExecutionAuditPath').orNull ?: System.getProperty('tc.focusCastExecutionAuditPath')
+            def warpBehaviorAuditEnabled = providers.gradleProperty('tcWarpBehaviorAudit').orNull ?: System.getProperty('tc.warpBehaviorAudit')
+            def warpBehaviorAuditPath = providers.gradleProperty('tcWarpBehaviorAuditPath').orNull ?: System.getProperty('tc.warpBehaviorAuditPath')
             def fluxBoreThaumatoriumAuditEnabled = providers.gradleProperty('tcFluxBoreThaumatoriumAudit').orNull ?: System.getProperty('tc.fluxBoreThaumatoriumAudit')
             def fluxBoreThaumatoriumAuditPath = providers.gradleProperty('tcFluxBoreThaumatoriumAuditPath').orNull ?: System.getProperty('tc.fluxBoreThaumatoriumAuditPath')
             def fluxRiftConsequenceAuditEnabled = providers.gradleProperty('tcFluxRiftConsequenceAudit').orNull ?: System.getProperty('tc.fluxRiftConsequenceAudit')
@@ -296,6 +298,12 @@ neoForge {
             }
             if (focusCastExecutionAuditPath != null) {
                 systemProperty 'tc.focusCastExecutionAuditPath', focusCastExecutionAuditPath
+            }
+            if (warpBehaviorAuditEnabled != null) {
+                systemProperty 'tc.warpBehaviorAudit', warpBehaviorAuditEnabled
+            }
+            if (warpBehaviorAuditPath != null) {
+                systemProperty 'tc.warpBehaviorAuditPath', warpBehaviorAuditPath
             }
             if (fluxBoreThaumatoriumAuditEnabled != null) {
                 systemProperty 'tc.fluxBoreThaumatoriumAudit', fluxBoreThaumatoriumAuditEnabled

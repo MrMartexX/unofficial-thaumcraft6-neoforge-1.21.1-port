@@ -3,7 +3,7 @@ package thaumcraft.common.research.theorycraft;
 import java.util.Random;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import thaumcraft.common.warp.TCPlayerWarpStore;
+import thaumcraft.common.warp.TCWarpManager;
 import thaumcraft.common.warp.TCWarpType;
 
 final class CardPortal extends TCTheorycraftCard {
@@ -40,8 +40,8 @@ final class CardPortal extends TCTheorycraftCard {
         data.addTotal("ELDRITCH", TCTheorycraftRandom.between(player, fallback, 5, 10));
         data.bonusDraws += 2;
         if (player != null) {
-            TCPlayerWarpStore.add(player, TCWarpType.TEMPORARY, 5);
-            TCPlayerWarpStore.add(player, TCWarpType.NORMAL, 1);
+            TCWarpManager.add(player, TCWarpType.TEMPORARY, 5);
+            TCWarpManager.add(player, TCWarpType.NORMAL, 1);
         }
         return true;
     }
