@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,7 +30,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 25;
+    private static final int REGISTERED_FOUNDATION_COUNT = 26;
 
     private TCEntityFoundationAudit() {
     }
@@ -95,7 +96,7 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, BrainyZombie pair, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations"
+                "expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, Firebat, BrainyZombie pair, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
@@ -104,6 +105,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("ArcaneBore", TCEntityTypes.ARCANE_BORE.get()));
         checks.add(checkRegisteredType("FallingTaint", TCEntityTypes.FALLING_TAINT.get()));
         checks.add(checkRegisteredType("Wisp", TCEntityTypes.WISP.get()));
+        checks.add(checkRegisteredType("Firebat", TCEntityTypes.FIREBAT.get()));
         checks.add(checkRegisteredType("BrainyZombie", TCEntityTypes.BRAINY_ZOMBIE.get()));
         checks.add(checkRegisteredType("GiantBrainyZombie", TCEntityTypes.GIANT_BRAINY_ZOMBIE.get()));
         checks.add(checkRegisteredType("TaintSeed", TCEntityTypes.TAINT_SEED.get()));
@@ -127,6 +129,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkTypeShape("FollowItem", TCEntityTypes.FOLLOW_ITEM.get(), 64, 20, false));
         checks.add(checkTypeShape("FallingTaint", TCEntityTypes.FALLING_TAINT.get(), 64, 3, true, 0.98F, 0.98F));
         checks.add(checkMobTypeShape("Wisp", TCEntityTypes.WISP.get(), 0.9F, 0.9F, 64, 3, false));
+        checks.add(checkMobTypeShape("Firebat", TCEntityTypes.FIREBAT.get(), 0.5F, 0.9F, 64, 3, false));
         checks.add(checkMobTypeShape("BrainyZombie", TCEntityTypes.BRAINY_ZOMBIE.get(), 0.6F, 1.95F, 64, 3, true));
         checks.add(checkMobTypeShape("GiantBrainyZombie", TCEntityTypes.GIANT_BRAINY_ZOMBIE.get(), 0.6F, 1.95F, 64, 3, true));
         checks.add(checkMobTypeShape("ThaumSlime", TCEntityTypes.THAUM_SLIME.get(), 2.04F, 2.04F, 64, 3, true));
@@ -146,6 +149,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkMobTypeShape("EldritchGuardian", TCEntityTypes.ELDRITCH_GUARDIAN.get(), 0.8F, 2.25F, 64, 3, true));
         checks.add(checkBrainyZombieContracts(server.overworld()));
         checks.add(checkGiantBrainyZombieContracts(server.overworld()));
+        checks.add(checkFirebatContracts(server.overworld()));
         checks.add(checkConstructors(server.overworld()));
         return checks;
     }
@@ -195,6 +199,31 @@ public final class TCEntityFoundationAudit {
                     && close(giant.getDimensions(Pose.STANDING).eyeHeight(), 5.22D);
         }
         return new Check("GiantBrainyZombie legacy contracts", passed, "attributes, anger damage/size/eye-height, inherited brain drop, rotten flesh loops and ConfigAspects contract");
+    }
+
+    private static Check checkFirebatContracts(ServerLevel level) {
+        TCFirebatEntity firebat = TCEntityTypes.FIREBAT.get().create(level);
+        AspectList aspects = TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.FIREBAT.get());
+        boolean passed = firebat != null
+                && firebat.isResting()
+                && close(firebat.getAttributeValue(Attributes.MAX_HEALTH), TCFirebatEntity.LEGACY_MAX_HEALTH)
+                && close(firebat.getAttributeValue(Attributes.ATTACK_DAMAGE), TCFirebatEntity.LEGACY_ATTACK_DAMAGE)
+                && firebat.attackTimeForValidation() == 0
+                && firebat.damBonusForValidation() == 0
+                && TCFirebatEntity.LEGACY_MIN_FLIGHT_TARGET_Y == 1
+                && TCFirebatEntity.legacyExplosionInteractionForValidation() == net.minecraft.world.level.Level.ExplosionInteraction.NONE
+                && TCFirebatEntity.isLegacyHalloween(LocalDate.of(2026, 10, 31))
+                && !TCFirebatEntity.isLegacyHalloween(LocalDate.of(2026, 11, 1))
+                && TCFirebatEntity.testLegacySpawnGatesForValidation(true, net.minecraft.world.Difficulty.NORMAL, true, 0, 6, true, false, false)
+                && !TCFirebatEntity.testLegacySpawnGatesForValidation(false, net.minecraft.world.Difficulty.NORMAL, true, 0, 6, true, false, false)
+                && !TCFirebatEntity.testLegacySpawnGatesForValidation(true, net.minecraft.world.Difficulty.NORMAL, true, 7, 6, true, false, false)
+                && !TCFirebatEntity.testLegacySpawnGatesForValidation(true, net.minecraft.world.Difficulty.NORMAL, true, 0, 6, false, true, false)
+                && TCFirebatEntity.testLegacySpawnGatesForValidation(true, net.minecraft.world.Difficulty.NORMAL, true, 0, 6, false, true, true)
+                && aspects != null
+                && aspects.getAmount(Aspect.BEAST) == 5
+                && aspects.getAmount(Aspect.FLIGHT) == 5
+                && aspects.getAmount(Aspect.FIRE) == 10;
+        return new Check("Firebat legacy contracts", passed, "resting state, attributes, fire/explosion profile, Halloween gate, light roll gate and ConfigAspects contract");
     }
 
     private static Check checkRegisteredType(String legacyId, EntityType<?> type) {
@@ -255,6 +284,7 @@ public final class TCEntityFoundationAudit {
         Entity clericFactory = TCEntityTypes.CULTIST_CLERIC.get().create(level);
         Entity spiderFactory = TCEntityTypes.MIND_SPIDER.get().create(level);
         Entity guardianFactory = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(level);
+        Entity firebatFactory = TCEntityTypes.FIREBAT.get().create(level);
         Entity brainyFactory = TCEntityTypes.BRAINY_ZOMBIE.get().create(level);
         Entity giantBrainyFactory = TCEntityTypes.GIANT_BRAINY_ZOMBIE.get().create(level);
         TCSpecialItemEntity special = new TCSpecialItemEntity(level, 1.0D, 2.0D, 3.0D, new ItemStack(Items.DIAMOND));
@@ -270,6 +300,7 @@ public final class TCEntityFoundationAudit {
                 && clericFactory instanceof TCCultistClericEntity
                 && spiderFactory instanceof TCMindSpiderEntity
                 && guardianFactory instanceof TCEldritchGuardianEntity
+                && firebatFactory instanceof TCFirebatEntity
                 && brainyFactory instanceof TCBrainyZombieEntity
                 && giantBrainyFactory instanceof TCGiantBrainyZombieEntity
                 && special.getType() == TCEntityTypes.SPECIAL_ITEM.get()

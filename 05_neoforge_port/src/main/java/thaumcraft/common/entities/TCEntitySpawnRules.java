@@ -32,11 +32,36 @@ public final class TCEntitySpawnRules {
             true,
             "ConfigEntities.postInitEntitySpawns allowSpawnAngryZombie warm/cool/icy/desert monster-biome row mapped to a 1.21 land-biome tag"
     );
+    public static final LegacyNaturalSpawn FIREBAT_NETHER = new LegacyNaturalSpawn(
+            "Firebat",
+            "EntityFireBat",
+            "thaumcraft:firebat",
+            "#minecraft:is_nether",
+            10,
+            1,
+            2,
+            true,
+            "ConfigEntities.postInitEntitySpawns allowSpawnFireBat Nether BiomeDictionary entry"
+    );
+    public static final LegacyNaturalSpawn FIREBAT_HALLOWEEN_OVERWORLD = new LegacyNaturalSpawn(
+            "FirebatHalloween",
+            "EntityFireBat",
+            "thaumcraft:firebat",
+            "#thaumcraft:legacy_firebat_halloween_spawn_biomes",
+            5,
+            1,
+            2,
+            true,
+            "ConfigEntities.postInitEntitySpawns Oct 31 warm/cool/icy/desert monster-biome row; predicate gates date"
+    );
 
-    private static final List<LegacyNaturalSpawn> ACTIVE_NATURAL_SPAWNS = List.of(WISP_NETHER, BRAINY_ZOMBIE_OVERWORLD);
+    private static final List<LegacyNaturalSpawn> ACTIVE_NATURAL_SPAWNS = List.of(
+            WISP_NETHER,
+            BRAINY_ZOMBIE_OVERWORLD,
+            FIREBAT_NETHER,
+            FIREBAT_HALLOWEEN_OVERWORLD
+    );
     private static final List<LegacyNaturalSpawn> DEFERRED_NATURAL_SPAWNS = List.of(
-            new LegacyNaturalSpawn("Firebat", "EntityFireBat", null, "#minecraft:is_nether", 10, 1, 2, false, "EntityFireBat is not ported yet"),
-            new LegacyNaturalSpawn("FirebatHalloween", "EntityFireBat", null, "legacy warm/cool/icy/desert biomes on Oct 31", 5, 1, 2, false, "EntityFireBat and calendar gated spawn policy are not ported yet"),
             new LegacyNaturalSpawn("Pech", "EntityPech", null, "legacy BiomeDictionary.Type.MAGICAL", 10, 1, 1, false, "Pech entity and magical-biome mapping are not ported yet"),
             new LegacyNaturalSpawn("EerieBrainyZombie", "EntityBrainyZombie", "thaumcraft:brainy_zombie", "thaumcraft:eerie", 32, 1, 1, false, "Thaumcraft Eerie biome is not ported yet"),
             new LegacyNaturalSpawn("EerieGiantBrainyZombie", "EntityGiantBrainyZombie", "thaumcraft:giant_brainy_zombie", "thaumcraft:eerie", 8, 1, 1, false, "Thaumcraft Eerie biome is not ported yet"),
@@ -49,6 +74,8 @@ public final class TCEntitySpawnRules {
     public static final Heightmap.Types WISP_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
     public static final SpawnPlacementType BRAINY_ZOMBIE_PLACEMENT_TYPE = SpawnPlacementTypes.ON_GROUND;
     public static final Heightmap.Types BRAINY_ZOMBIE_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
+    public static final SpawnPlacementType FIREBAT_PLACEMENT_TYPE = SpawnPlacementTypes.NO_RESTRICTIONS;
+    public static final Heightmap.Types FIREBAT_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
 
     private TCEntitySpawnRules() {
     }
@@ -66,6 +93,13 @@ public final class TCEntitySpawnRules {
                 BRAINY_ZOMBIE_PLACEMENT_TYPE,
                 BRAINY_ZOMBIE_HEIGHTMAP_TYPE,
                 TCBrainyZombieEntity::checkBrainyZombieSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+        event.register(
+                TCEntityTypes.FIREBAT.get(),
+                FIREBAT_PLACEMENT_TYPE,
+                FIREBAT_HEIGHTMAP_TYPE,
+                TCFirebatEntity::checkFirebatSpawnRules,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
         Thaumcraft.LOGGER.debug("Registered Thaumcraft natural spawn placement policies.");

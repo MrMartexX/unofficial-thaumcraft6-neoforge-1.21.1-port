@@ -42,7 +42,7 @@ public final class TCEntitySpawnPolicyAudit {
         lines.add("");
         lines.add("Runtime checks for legacy natural-spawn rows ported to NeoForge 1.21.1.");
         lines.add("Only rows whose entities and server-side behavior have a registered foundation are active:");
-        lines.add("Wisp Nether and Angry Zombie overworld. Thaumcraft-biome rows and unported mob families stay deferred.");
+        lines.add("Wisp Nether, Angry Zombie overworld and Firebat Nether/Halloween rows. Thaumcraft-biome rows and unported mob families stay deferred.");
         lines.add("");
         lines.add("## Summary");
         lines.add("");
@@ -105,10 +105,14 @@ public final class TCEntitySpawnPolicyAudit {
     private static void addMetadataChecks(ArrayList<Check> checks) {
         TCEntitySpawnRules.LegacyNaturalSpawn wisp = TCEntitySpawnRules.WISP_NETHER;
         TCEntitySpawnRules.LegacyNaturalSpawn brainy = TCEntitySpawnRules.BRAINY_ZOMBIE_OVERWORLD;
-        checks.add(check("active_spawn_catalog_contains_safe_wisp_and_brainy_rows",
-                TCEntitySpawnRules.activeNaturalSpawns().size() == 2
+        TCEntitySpawnRules.LegacyNaturalSpawn firebatNether = TCEntitySpawnRules.FIREBAT_NETHER;
+        TCEntitySpawnRules.LegacyNaturalSpawn firebatHalloween = TCEntitySpawnRules.FIREBAT_HALLOWEEN_OVERWORLD;
+        checks.add(check("active_spawn_catalog_contains_safe_wisp_brainy_and_firebat_rows",
+                TCEntitySpawnRules.activeNaturalSpawns().size() == 4
                         && TCEntitySpawnRules.activeNaturalSpawns().contains(wisp)
                         && TCEntitySpawnRules.activeNaturalSpawns().contains(brainy)
+                        && TCEntitySpawnRules.activeNaturalSpawns().contains(firebatNether)
+                        && TCEntitySpawnRules.activeNaturalSpawns().contains(firebatHalloween)
                         && wisp.active()
                         && "Wisp".equals(wisp.legacyId())
                         && "thaumcraft:wisp".equals(wisp.modernEntityId())
@@ -122,11 +126,25 @@ public final class TCEntitySpawnPolicyAudit {
                         && "#thaumcraft:legacy_angry_zombie_spawn_biomes".equals(brainy.biomeSelector())
                         && brainy.weight() == 10
                         && brainy.minCount() == 1
-                        && brainy.maxCount() == 1,
-                "active=" + TCEntitySpawnRules.activeNaturalSpawns().size() + ", wisp=" + wisp + ", brainy=" + brainy));
+                        && brainy.maxCount() == 1
+                        && firebatNether.active()
+                        && "Firebat".equals(firebatNether.legacyId())
+                        && "thaumcraft:firebat".equals(firebatNether.modernEntityId())
+                        && "#minecraft:is_nether".equals(firebatNether.biomeSelector())
+                        && firebatNether.weight() == 10
+                        && firebatNether.minCount() == 1
+                        && firebatNether.maxCount() == 2
+                        && firebatHalloween.active()
+                        && "FirebatHalloween".equals(firebatHalloween.legacyId())
+                        && "thaumcraft:firebat".equals(firebatHalloween.modernEntityId())
+                        && "#thaumcraft:legacy_firebat_halloween_spawn_biomes".equals(firebatHalloween.biomeSelector())
+                        && firebatHalloween.weight() == 5
+                        && firebatHalloween.minCount() == 1
+                        && firebatHalloween.maxCount() == 2,
+                "active=" + TCEntitySpawnRules.activeNaturalSpawns().size() + ", wisp=" + wisp + ", brainy=" + brainy + ", firebatNether=" + firebatNether + ", firebatHalloween=" + firebatHalloween));
         checks.add(check("unsafe_legacy_spawn_rows_remain_deferred",
                 TCEntitySpawnRules.deferredNaturalSpawns().stream().noneMatch(TCEntitySpawnRules.LegacyNaturalSpawn::active)
-                        && TCEntitySpawnRules.deferredNaturalSpawns().size() >= 8,
+                        && TCEntitySpawnRules.deferredNaturalSpawns().size() >= 6,
                 "deferred=" + TCEntitySpawnRules.deferredNaturalSpawns().size()));
     }
 
@@ -175,6 +193,51 @@ public final class TCEntitySpawnPolicyAudit {
         checks.add(check("brainy_zombie_legacy_biome_tag_resource_exists",
                 !brainyTag.isBlank() && brainyTag.contains("\"minecraft:desert\"") && brainyTag.contains("\"minecraft:snowy_plains\""),
                 "data/thaumcraft/tags/worldgen/biome/legacy_angry_zombie_spawn_biomes.json"));
+
+        String firebatNetherResource = resourceText("data/thaumcraft/neoforge/biome_modifier/firebat_nether_spawns.json");
+        checks.add(check("firebat_nether_biome_modifier_resource_exists",
+                !firebatNetherResource.isBlank(),
+                "data/thaumcraft/neoforge/biome_modifier/firebat_nether_spawns.json"));
+        if (!firebatNetherResource.isBlank()) {
+            JsonObject firebatNetherRoot = JsonParser.parseString(firebatNetherResource).getAsJsonObject();
+            JsonObject firebatNetherSpawner = firebatNetherRoot.getAsJsonObject("spawners");
+            boolean firebatNetherPassed = "neoforge:add_spawns".equals(firebatNetherRoot.get("type").getAsString())
+                    && "#minecraft:is_nether".equals(firebatNetherRoot.get("biomes").getAsString())
+                    && "thaumcraft:firebat".equals(firebatNetherSpawner.get("type").getAsString())
+                    && firebatNetherSpawner.get("weight").getAsInt() == 10
+                    && firebatNetherSpawner.get("minCount").getAsInt() == 1
+                    && firebatNetherSpawner.get("maxCount").getAsInt() == 2;
+            checks.add(check("firebat_nether_biome_modifier_matches_legacy_values",
+                    firebatNetherPassed,
+                    "type=" + firebatNetherRoot.get("type").getAsString() + ", biome=" + firebatNetherRoot.get("biomes").getAsString() + ", spawner=" + firebatNetherSpawner));
+        } else {
+            checks.add(check("firebat_nether_biome_modifier_matches_legacy_values", false, "resource missing"));
+        }
+
+        String firebatHalloweenResource = resourceText("data/thaumcraft/neoforge/biome_modifier/firebat_halloween_overworld_spawns.json");
+        checks.add(check("firebat_halloween_biome_modifier_resource_exists",
+                !firebatHalloweenResource.isBlank(),
+                "data/thaumcraft/neoforge/biome_modifier/firebat_halloween_overworld_spawns.json"));
+        if (!firebatHalloweenResource.isBlank()) {
+            JsonObject firebatHalloweenRoot = JsonParser.parseString(firebatHalloweenResource).getAsJsonObject();
+            JsonObject firebatHalloweenSpawner = firebatHalloweenRoot.getAsJsonObject("spawners");
+            boolean firebatHalloweenPassed = "neoforge:add_spawns".equals(firebatHalloweenRoot.get("type").getAsString())
+                    && "#thaumcraft:legacy_firebat_halloween_spawn_biomes".equals(firebatHalloweenRoot.get("biomes").getAsString())
+                    && "thaumcraft:firebat".equals(firebatHalloweenSpawner.get("type").getAsString())
+                    && firebatHalloweenSpawner.get("weight").getAsInt() == 5
+                    && firebatHalloweenSpawner.get("minCount").getAsInt() == 1
+                    && firebatHalloweenSpawner.get("maxCount").getAsInt() == 2;
+            checks.add(check("firebat_halloween_biome_modifier_matches_legacy_values",
+                    firebatHalloweenPassed,
+                    "type=" + firebatHalloweenRoot.get("type").getAsString() + ", biome=" + firebatHalloweenRoot.get("biomes").getAsString() + ", spawner=" + firebatHalloweenSpawner));
+        } else {
+            checks.add(check("firebat_halloween_biome_modifier_matches_legacy_values", false, "resource missing"));
+        }
+
+        String firebatTag = resourceText("data/thaumcraft/tags/worldgen/biome/legacy_firebat_halloween_spawn_biomes.json");
+        checks.add(check("firebat_halloween_legacy_biome_tag_resource_exists",
+                !firebatTag.isBlank() && firebatTag.contains("\"minecraft:desert\"") && firebatTag.contains("\"minecraft:snowy_plains\""),
+                "data/thaumcraft/tags/worldgen/biome/legacy_firebat_halloween_spawn_biomes.json"));
     }
 
     private static void addPlacementRegistrationChecks(ArrayList<Check> checks) {
@@ -190,6 +253,12 @@ public final class TCEntitySpawnPolicyAudit {
                         && SpawnPlacements.getHeightmapType(TCEntityTypes.BRAINY_ZOMBIE.get()) == TCEntitySpawnRules.BRAINY_ZOMBIE_HEIGHTMAP_TYPE,
                 "placement=" + SpawnPlacements.getPlacementType(TCEntityTypes.BRAINY_ZOMBIE.get())
                         + ", heightmap=" + SpawnPlacements.getHeightmapType(TCEntityTypes.BRAINY_ZOMBIE.get())));
+        checks.add(check("firebat_spawn_placement_registered",
+                SpawnPlacements.hasPlacement(TCEntityTypes.FIREBAT.get())
+                        && SpawnPlacements.getPlacementType(TCEntityTypes.FIREBAT.get()) == SpawnPlacementTypes.NO_RESTRICTIONS
+                        && SpawnPlacements.getHeightmapType(TCEntityTypes.FIREBAT.get()) == TCEntitySpawnRules.FIREBAT_HEIGHTMAP_TYPE,
+                "placement=" + SpawnPlacements.getPlacementType(TCEntityTypes.FIREBAT.get())
+                        + ", heightmap=" + SpawnPlacements.getHeightmapType(TCEntityTypes.FIREBAT.get())));
     }
 
     private static void addPredicateChecks(ServerLevel level, BlockPos origin, MinecraftServer server, ArrayList<Check> checks) {
@@ -258,6 +327,39 @@ public final class TCEntitySpawnPolicyAudit {
                 brainyPeacefulDenied,
                 "difficulty=" + level.getDifficulty()));
         server.setDifficulty(previous, true);
+
+        prepareDarkSpawnCell(level, origin);
+        boolean firebatAllowed = checkFirebat(level, origin, 21L);
+        checks.add(check("firebat_spawn_predicate_allows_dark_nether_cell",
+                firebatAllowed,
+                "pos=" + origin + ", dimension=" + level.dimension().location() + ", brightness=" + level.getMaxLocalRawBrightness(origin)));
+
+        boolean firebatConfigDenied = !TCFirebatEntity.testLegacySpawnGatesForValidation(true, Difficulty.NORMAL, true, 7, 6, true, false, false);
+        checks.add(check("firebat_spawn_gate_denies_brightness_above_legacy_roll",
+                firebatConfigDenied,
+                "localRawBrightness=7, roll=6"));
+
+        boolean firebatDisabledDenied = !TCFirebatEntity.testLegacySpawnGatesForValidation(false, Difficulty.NORMAL, true, 0, 6, true, false, false);
+        checks.add(check("firebat_spawn_gate_denies_config_disabled",
+                firebatDisabledDenied,
+                "allowSpawnFireBat=false"));
+
+        boolean firebatHalloweenOutsideDateDenied = !TCFirebatEntity.testLegacySpawnGatesForValidation(true, Difficulty.NORMAL, true, 0, 6, false, true, false);
+        checks.add(check("firebat_spawn_gate_denies_halloween_row_outside_halloween",
+                firebatHalloweenOutsideDateDenied,
+                "halloweenBiome=true, halloweenDate=false"));
+
+        boolean firebatHalloweenAllowed = TCFirebatEntity.testLegacySpawnGatesForValidation(true, Difficulty.NORMAL, true, 0, 6, false, true, true);
+        checks.add(check("firebat_spawn_gate_allows_halloween_row_on_oct_31",
+                firebatHalloweenAllowed,
+                "halloweenBiome=true, halloweenDate=true"));
+
+        server.setDifficulty(Difficulty.PEACEFUL, true);
+        boolean firebatPeacefulDenied = !checkFirebat(level, origin, 22L);
+        checks.add(check("firebat_spawn_predicate_denies_peaceful",
+                firebatPeacefulDenied,
+                "difficulty=" + level.getDifficulty()));
+        server.setDifficulty(previous, true);
     }
 
     private static boolean checkWisp(ServerLevel level, BlockPos pos, long seed) {
@@ -273,6 +375,16 @@ public final class TCEntitySpawnPolicyAudit {
     private static boolean checkBrainy(ServerLevel level, BlockPos pos, long seed) {
         return SpawnPlacements.checkSpawnRules(
                 TCEntityTypes.BRAINY_ZOMBIE.get(),
+                level,
+                MobSpawnType.NATURAL,
+                pos,
+                RandomSource.create(seed)
+        );
+    }
+
+    private static boolean checkFirebat(ServerLevel level, BlockPos pos, long seed) {
+        return SpawnPlacements.checkSpawnRules(
+                TCEntityTypes.FIREBAT.get(),
                 level,
                 MobSpawnType.NATURAL,
                 pos,

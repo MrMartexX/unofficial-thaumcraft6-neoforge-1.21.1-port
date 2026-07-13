@@ -188,7 +188,7 @@ Modern status: standard `RecipeType.CRAFTING` generation is implemented as a rel
 
 | Area | Legacy behavior | Modern status |
 |---|---|---|
-| Entity aspects | `ConfigAspects.registerEntityAspects()` registers vanilla and Thaumcraft entity names with aspect lists and optional NBT predicates. | Vanilla/player rows implemented in `TCEntityAspectAssignments`; Thaumcraft custom entities and Wisp/Pech-style custom NBT rows remain deferred until those entities exist. |
+| Entity aspects | `ConfigAspects.registerEntityAspects()` registers vanilla and Thaumcraft entity names with aspect lists and optional NBT predicates. | Vanilla/player rows and active Thaumcraft custom entity rows are implemented in `TCEntityAspectAssignments`, including Wisp dynamic type aspects, Firebat and the current taint/WarpEvents/cultist foundations. Pech-style and future NBT-predicate rows remain deferred until their entity families exist. |
 | Player aspects | `AspectHelper.getEntityAspects(EntityPlayer)` returns `HUMANUS 4` plus three random aspects at amount `15`, seeded by player name hash. | Implemented for player branch. |
 | Non-player aspects | Scans `CommonInternals.scanEntities`; if NBT predicates match, uses the matching aspect list. Later entries can override earlier ones because the loop does not break. | Needs entity type/predicate data loader. |
 | `ScanGeneric` | Item/block/entity can be scanned when object/entity aspects are non-null and non-empty. Success adds observation knowledge to all research categories by formula. | Deferred. |
@@ -214,12 +214,12 @@ Modern status: the current Shift tooltip is a useful visual check, but it is not
 | Aspect definitions | Close/exact for built-in 37 aspects. | Constructor-side scanning registration intentionally deferred. |
 | `AspectList` | Close/exact for core mutable semantics. | Need parity dump for null-key/zero-amount edge cases if external API compatibility matters. |
 | `AspectHelper` pure methods | Close/exact for cull, combination, primals, aura-aspects, random primal. | Entity aspects now include player branch and vanilla entity assignment lookup. |
-| Built-in direct/tag assignments | Data-driven and validated for current registered ids and vanilla item-id coverage. | Current counts are `676` exact, `46` tag, and `32` complex exact assignments after server reload. Full legacy catalog still depends on unported Thaumcraft items and modded material policy. |
+| Built-in direct/tag assignments | Data-driven and validated for current registered ids and vanilla item-id coverage. | Current counts are `702` exact, `46` tag, and `32` complex exact assignments after server reload. Full legacy catalog still depends on unported Thaumcraft items and modded material policy. |
 | Object lookup | Modern id/tag/generated/bonus service matches the current mapped runtime target. | Wildcard metadata and stripped-NBT behavior are represented only through audited flattened ids or component-aware rules so far. Addon event timing and future stateful/custom stacks remain deferred. |
 | Spawn eggs | Visible no-aspect behavior implemented. | API-level `null` vs empty-list parity must be decided by runtime dump. |
 | Potions | Component-aware carrier behavior implemented, including dump-derived final 1.12 potion carrier/content overrides for comparable regular, splash, lingering, and tipped-arrow stacks. | New 1.21-only potion/component samples remain policy review, not 1.12 parity targets. |
 | Enchantments | Legacy enchantment mapping implemented for current components, including the mapped `sweeping` -> `sweeping_edge` stored-book parity case. | New 1.21-only enchantments remain policy review. |
-| Generated crafting | Standard crafting cache implemented and reload-safe; latest server dump rebuilt `476` generated object assignments after exact runtime parity overrides took ownership of legacy-equivalent flattened vanilla ids and current registered Thaumcraft overrides. | Crucible, infusion, arcane crafting, wildcard/NBT generation for stateful stacks, and third-party namespaces deferred. |
+| Generated crafting | Standard crafting plus current arcane recipe cache implemented and reload-safe; latest server reload rebuilt `636` generated object assignments after exact runtime parity overrides took ownership of legacy-equivalent flattened vanilla ids and current registered Thaumcraft overrides. | Crucible, infusion, wildcard/NBT generation for stateful stacks, and third-party namespaces deferred. |
 
 ## Current Runtime Diff Lessons
 
@@ -231,7 +231,7 @@ Modern status: the current Shift tooltip is a useful visual check, but it is not
 | Potion parity is not a carrier-only problem. | The previous `48` potion gaps closed only after using dump-derived final runtime outputs for the comparable carrier/content variants. | Do not replace those values with heuristic reagent guesses unless a full 1.12 conversion-order trace proves identical output. |
 | Registered Thaumcraft ids must be treated separately from vanilla parity. | The previous `11` registered Thaumcraft ids now match through `current_registered_runtime_parity.json`. | Defer unregistered Thaumcraft legacy-only ids until their content is ported. |
 | Essentia container item aspects | Not implemented. | Requires essentia item/container design. |
-| Entity aspects | Player branch plus vanilla entity rows. | Thaumcraft mobs and Wisp/Pech-style custom NBT predicates deferred. |
+| Entity aspects | Player branch, vanilla entity rows and active Thaumcraft custom entity rows. | Pech-style and future unported custom NBT predicates deferred. |
 
 ## Preservation Decisions
 

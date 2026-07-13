@@ -54,6 +54,10 @@ public final class TCConfig {
             .comment("Legacy Thaumcraft CONFIG_WORLD.allowSpawnAngryZombie. Controls the natural Angry Zombie spawn row; Eerie-biome Angry/Furious Zombie rows remain biome-subsystem gated.")
             .define("allowSpawnAngryZombie", true);
 
+    public static final ModConfigSpec.BooleanValue ALLOW_SPAWN_FIREBAT = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.allowSpawnFireBat. Controls natural Nether Firebat spawns and the Oct 31 overworld Firebat row.")
+            .define("allowSpawnFireBat", true);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private TCConfig() {

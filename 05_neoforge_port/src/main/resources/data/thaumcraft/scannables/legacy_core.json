@@ -266,7 +266,8 @@
       "type": "entity",
       "research": "f_BAT",
       "entities": [
-        "minecraft:bat"
+        "minecraft:bat",
+        "thaumcraft:firebat"
       ]
     },
     {
@@ -281,6 +282,13 @@
       "research": "!ThaumSlime",
       "entities": [
         "thaumcraft:thaum_slime"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "!Firebat",
+      "entities": [
+        "thaumcraft:firebat"
       ]
     },
     {
@@ -328,6 +336,7 @@
         "minecraft:parrot",
         "minecraft:ghast",
         "minecraft:blaze",
+        "thaumcraft:firebat",
         "thaumcraft:wisp",
         "thaumcraft:taint_swarm"
       ]

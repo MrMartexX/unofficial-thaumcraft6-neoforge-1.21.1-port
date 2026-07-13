@@ -65,7 +65,7 @@ These rows are not 1.12 parity rows because the entities did not exist in 1.12.2
 
 | Gap | Status | Reason |
 |---|---|---|
-| Thaumcraft custom entities | Deferred | Firebat, Pech, Wisp, taint mobs, cultists, golems and bosses are not ported/registered yet. Their legacy aspect rows should be copied when the entities exist. |
-| NBT-specific Wisp aspects | Deferred | Requires Thaumcraft Wisp entity and stable modern data field for the aspect type. |
+| Thaumcraft custom entities | Partially implemented | Active registered rows now include Wisp, Firebat, the current taint mobs, WarpEvents outcome mobs/projectiles and cultist minion foundations where legacy source data exists. Pech, golems, bosses and remaining unregistered legacy entities stay deferred until their entity families exist. |
+| NBT-specific Wisp aspects | Implemented for the current Wisp field | Current Wisp aspect lookup uses the stable modern `Type` field for the legacy dynamic aspect row. Future NBT-predicate entity rows still need their own family-specific data design. |
 | Entity scan parity dump | Implemented | Current report has `83/85` comparable rows fully parity-ok, `2` expected modern entity aspect policy rows (`elder_guardian`, `zombie_villager`), and `0` actionable gaps. |
 | Real scan reward mutation | Deferred | `ScanningManager.scanTheThing` exists, but Thaumometer still uses dry-run feedback until research categories/reward sync are exact. |
