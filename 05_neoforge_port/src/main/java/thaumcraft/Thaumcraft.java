@@ -89,6 +89,8 @@ import thaumcraft.common.research.theorycraft.TCTheorycraftManager;
 import thaumcraft.common.warp.TCWarpCommands;
 import thaumcraft.common.warp.TCWarpBehaviorAuditExporter;
 import thaumcraft.common.warp.TCWarpCraftingEvents;
+import thaumcraft.common.warp.TCWarpEventBehaviorAuditExporter;
+import thaumcraft.common.warp.TCWarpEvents;
 import thaumcraft.common.warp.TCWarpItemRegistry;
 import thaumcraft.common.warp.TCWarpNetwork;
 import thaumcraft.common.world.aura.TCAuraDebugCommands;
@@ -157,6 +159,8 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCWarpNetwork::onPlayerLoggedIn);
         NeoForge.EVENT_BUS.addListener(TCWarpNetwork::onPlayerRespawn);
         NeoForge.EVENT_BUS.addListener(TCWarpNetwork::onPlayerChangedDimension);
+        NeoForge.EVENT_BUS.addListener(TCWarpEvents::onServerTick);
+        NeoForge.EVENT_BUS.addListener(TCWarpEvents::onFinishUsingItem);
         NeoForge.EVENT_BUS.addListener(TCResearchRequirementAuditCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchRequirementAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchDataAuditExporter::onServerStarted);
@@ -188,6 +192,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCFocusCasterCoreAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCastExecutionAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCWarpBehaviorAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCWarpEventBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCMinimalGameTestFixtureExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditCommands::onRegisterCommands);

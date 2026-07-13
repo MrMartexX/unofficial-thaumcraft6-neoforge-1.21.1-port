@@ -88,6 +88,16 @@ public final class TCWarpManager {
         TCWarpNetwork.syncToPlayer(player);
     }
 
+    public static void setCounter(ServerPlayer player, int counter) {
+        if (player == null) {
+            return;
+        }
+        TCPlayerWarp warp = TCPlayerWarpStore.get(player);
+        warp.setCounter(counter);
+        TCPlayerWarpStore.set(player, warp);
+        TCWarpNetwork.syncToPlayer(player);
+    }
+
     public static void sync(ServerPlayer player) {
         TCWarpNetwork.syncToPlayer(player);
     }

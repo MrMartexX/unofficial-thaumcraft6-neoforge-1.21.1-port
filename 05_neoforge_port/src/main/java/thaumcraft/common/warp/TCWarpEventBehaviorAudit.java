@@ -1,0 +1,259 @@
+package thaumcraft.common.warp;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
+import thaumcraft.Thaumcraft;
+import thaumcraft.common.lib.potions.PotionBlurredVision;
+import thaumcraft.common.lib.potions.PotionDeathGaze;
+import thaumcraft.common.lib.potions.PotionSunScorned;
+import thaumcraft.common.lib.potions.PotionThaumarhia;
+import thaumcraft.common.lib.potions.PotionUnnaturalHunger;
+import thaumcraft.common.registry.TCMobEffects;
+import thaumcraft.common.research.TCPlayerKnowledge;
+import thaumcraft.common.research.TCPlayerKnowledgeStore;
+
+public final class TCWarpEventBehaviorAudit {
+    public static final String ENABLE_PROPERTY = "tc.warpEventBehaviorAudit";
+    public static final String OUTPUT_PROPERTY = "tc.warpEventBehaviorAuditPath";
+
+    private TCWarpEventBehaviorAudit() {
+    }
+
+    public static Report writeMarkdown(Path output, MinecraftServer server) throws IOException {
+        if (output.getParent() != null) {
+            Files.createDirectories(output.getParent());
+        }
+        Report report = run(server);
+        ArrayList<String> lines = new ArrayList<>();
+        lines.add("# Warp Event Behavior Audit");
+        lines.add("");
+        lines.add("Runtime parity checks for the first server-side TC6 WarpEvents slice.");
+        lines.add("");
+        lines.add("## Summary");
+        lines.add("");
+        lines.add("| Check | Result |");
+        lines.add("|---|---:|");
+        lines.add("| Passed | " + report.passed() + " |");
+        lines.add("| Failed | " + report.failed() + " |");
+        lines.add("");
+        lines.add("## Checks");
+        lines.add("");
+        lines.add("| Name | Result | Notes |");
+        lines.add("|---|---|---|");
+        for (Check check : report.checks()) {
+            lines.add("| " + check.name() + " | " + (check.passed() ? "PASS" : "FAIL") + " | " + check.notes().replace("|", "\\|") + " |");
+        }
+        lines.add("");
+        lines.add("## Boundary");
+        lines.add("");
+        lines.add("- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics and warp research unlock thresholds.");
+        lines.add("- Implemented: rotten flesh / zombie brain relief path for Unnatural Hunger.");
+        lines.add("- Deferred by missing owners: real Eldritch Guardian, Mind Spider, lesser cultist portal spawning, PacketMiscEvent client hallucination/stress visuals and fortress mask mitigation.");
+        Files.write(output, lines, StandardCharsets.UTF_8);
+        return report;
+    }
+
+    private static Report run(MinecraftServer server) {
+        ArrayList<Check> checks = new ArrayList<>();
+        ServerPlayer player = FakePlayerFactory.getMinecraft(server.overworld());
+        TCPlayerWarpStore.clear(player);
+        TCPlayerKnowledgeStore.set(player, new TCPlayerKnowledge(), false);
+
+        addMathChecks(checks);
+        addOutcomeChecks(checks);
+        addEffectRegistrationChecks(checks);
+        addRuntimeEffectChecks(player, checks);
+        addResearchUnlockChecks(player, checks);
+
+        TCPlayerWarpStore.clear(player);
+        player.removeEffect(TCMobEffects.VIS_EXHAUST);
+        player.removeEffect(TCMobEffects.THAUMARHIA);
+        player.removeEffect(TCMobEffects.UNNATURAL_HUNGER);
+        player.removeEffect(TCMobEffects.BLURRED_VISION);
+        player.removeEffect(TCMobEffects.SUN_SCORNED);
+        player.removeEffect(TCMobEffects.INFECTIOUS_VIS_EXHAUST);
+        player.removeEffect(TCMobEffects.DEATH_GAZE);
+        player.removeEffect(MobEffects.DIG_SLOWDOWN);
+        player.removeEffect(MobEffects.NIGHT_VISION);
+        player.removeEffect(MobEffects.BLINDNESS);
+        return new Report(List.copyOf(checks));
+    }
+
+    private static void addMathChecks(ArrayList<Check> checks) {
+        checks.add(check("legacy_interval_constants",
+                TCWarpEvents.CHECK_INTERVAL_TICKS == 2000 && TCWarpEvents.DEATH_GAZE_INTERVAL_TICKS == 20,
+                "warp=" + TCWarpEvents.CHECK_INTERVAL_TICKS + ", gaze=" + TCWarpEvents.DEATH_GAZE_INTERVAL_TICKS));
+        checks.add(check("legacy_trigger_uses_sqrt_counter_threshold",
+                TCWarpEvents.shouldTrigger(16, 30, 4)
+                        && !TCWarpEvents.shouldTrigger(16, 30, 5)
+                        && !TCWarpEvents.shouldTrigger(0, 30, 0)
+                        && !TCWarpEvents.shouldTrigger(16, 0, 0),
+                "counter16 sqrt=4"));
+        checks.add(check("legacy_adjusted_warp_formula_caps_at_100",
+                TCWarpEvents.adjustedWarp(30, 18) == 26
+                        && TCWarpEvents.adjustedWarp(120, 120) == 100,
+                "30/18=" + TCWarpEvents.adjustedWarp(30, 18) + ", cap=" + TCWarpEvents.adjustedWarp(120, 120)));
+        checks.add(check("legacy_counter_reduction_with_gear",
+                TCWarpEvents.reducedCounter(25, 0) == 15
+                        && TCWarpEvents.reducedCounter(25, 3) == 20
+                        && TCWarpEvents.reducedCounter(4, 0) == 0,
+                "25/0=" + TCWarpEvents.reducedCounter(25, 0) + ", 25/3=" + TCWarpEvents.reducedCounter(25, 3)));
+        checks.add(check("legacy_amplifier_and_death_gaze_range_formula",
+                TCWarpEvents.legacyAmplifier(14) == 0
+                        && TCWarpEvents.legacyAmplifier(45) == 3
+                        && TCWarpEvents.legacyAmplifier(100) == 3
+                        && TCWarpEvents.deathGazeRange(0) == 8
+                        && TCWarpEvents.deathGazeRange(3) == 17
+                        && TCWarpEvents.deathGazeRange(10) == 24,
+                "amp45=" + TCWarpEvents.legacyAmplifier(45) + ", range10=" + TCWarpEvents.deathGazeRange(10)));
+    }
+
+    private static void addOutcomeChecks(ArrayList<Check> checks) {
+        checks.add(check("legacy_outcome_threshold_boundaries",
+                TCWarpEvents.outcomeForEffect(4) == TCWarpEvents.TCWarpEventOutcome.CREEPER_SOUND
+                        && TCWarpEvents.outcomeForEffect(5) == TCWarpEvents.TCWarpEventOutcome.EXPLOSION_SOUND
+                        && TCWarpEvents.outcomeForEffect(16) == TCWarpEvents.TCWarpEventOutcome.VIS_EXHAUST
+                        && TCWarpEvents.outcomeForEffect(17) == TCWarpEvents.TCWarpEventOutcome.THAUMARHIA
+                        && TCWarpEvents.outcomeForEffect(52) == TCWarpEvents.TCWarpEventOutcome.NIGHT_VISION
+                        && TCWarpEvents.outcomeForEffect(56) == TCWarpEvents.TCWarpEventOutcome.DEATH_GAZE
+                        && TCWarpEvents.outcomeForEffect(72) == TCWarpEvents.TCWarpEventOutcome.BLINDNESS
+                        && TCWarpEvents.outcomeForEffect(73) == TCWarpEvents.TCWarpEventOutcome.UNNATURAL_HUNGER_LONG
+                        && TCWarpEvents.outcomeForEffect(76) == TCWarpEvents.TCWarpEventOutcome.MOMENT_OF_CLARITY
+                        && TCWarpEvents.outcomeForEffect(80) == TCWarpEvents.TCWarpEventOutcome.UNNATURAL_HUNGER_LONG
+                        && TCWarpEvents.outcomeForEffect(81) == TCWarpEvents.TCWarpEventOutcome.CULTIST_PORTAL
+                        && TCWarpEvents.outcomeForEffect(93) == TCWarpEvents.TCWarpEventOutcome.MIST_GUARDIANS_HEAVY,
+                "73=" + TCWarpEvents.outcomeForEffect(73) + ", 76=" + TCWarpEvents.outcomeForEffect(76)));
+        checks.add(check("legacy_entity_outcomes_are_marked_deferred_until_entities_exist",
+                TCWarpEvents.TCWarpEventOutcome.MIST_ONE_GUARDIAN.deferredEntityWork()
+                        && TCWarpEvents.TCWarpEventOutcome.MIND_SPIDERS_FAKE.deferredEntityWork()
+                        && TCWarpEvents.TCWarpEventOutcome.CULTIST_PORTAL.deferredEntityWork()
+                        && TCWarpEvents.TCWarpEventOutcome.MIND_SPIDERS_REAL.deferredEntityWork()
+                        && !TCWarpEvents.TCWarpEventOutcome.VIS_EXHAUST.deferredEntityWork(),
+                "deferred outcomes tracked"));
+    }
+
+    private static void addEffectRegistrationChecks(ArrayList<Check> checks) {
+        checks.add(effectCheck("unnatural_hunger_effect_registered_with_legacy_color",
+                "unnatural_hunger",
+                PotionUnnaturalHunger.LEGACY_COLOR,
+                TCMobEffects.UNNATURAL_HUNGER.get()));
+        checks.add(effectCheck("death_gaze_effect_registered_with_legacy_color",
+                "death_gaze",
+                PotionDeathGaze.LEGACY_COLOR,
+                TCMobEffects.DEATH_GAZE.get()));
+        checks.add(effectCheck("blurred_vision_effect_registered_with_legacy_color",
+                "blurred_vision",
+                PotionBlurredVision.LEGACY_COLOR,
+                TCMobEffects.BLURRED_VISION.get()));
+        checks.add(effectCheck("sun_scorned_effect_registered_with_legacy_color",
+                "sun_scorned",
+                PotionSunScorned.LEGACY_COLOR,
+                TCMobEffects.SUN_SCORNED.get()));
+        checks.add(effectCheck("thaumarhia_effect_registered_with_legacy_color",
+                "thaumarhia",
+                PotionThaumarhia.LEGACY_COLOR,
+                TCMobEffects.THAUMARHIA.get()));
+    }
+
+    private static void addRuntimeEffectChecks(ServerPlayer player, ArrayList<Check> checks) {
+        TCWarpEvents.executeOutcomeForValidation(player, 45, TCWarpEvents.TCWarpEventOutcome.VIS_EXHAUST);
+        MobEffectInstance vis = player.getEffect(TCMobEffects.VIS_EXHAUST);
+        checks.add(check("vis_exhaust_outcome_matches_legacy_duration_amp",
+                vis != null && vis.getDuration() <= 5000 && vis.getDuration() > 4900 && vis.getAmplifier() == 3,
+                "effect=" + effectNotes(vis)));
+
+        TCWarpEvents.executeOutcomeForValidation(player, 45, TCWarpEvents.TCWarpEventOutcome.DEATH_GAZE);
+        MobEffectInstance gaze = player.getEffect(TCMobEffects.DEATH_GAZE);
+        checks.add(check("death_gaze_outcome_matches_legacy_duration_amp",
+                gaze != null && gaze.getDuration() <= 6000 && gaze.getDuration() > 5900 && gaze.getAmplifier() == 3,
+                "effect=" + effectNotes(gaze)));
+
+        TCWarpEvents.executeOutcomeForValidation(player, 45, TCWarpEvents.TCWarpEventOutcome.UNNATURAL_HUNGER_LONG);
+        MobEffectInstance hunger = player.getEffect(TCMobEffects.UNNATURAL_HUNGER);
+        checks.add(check("long_unnatural_hunger_outcome_matches_legacy_duration_amp",
+                hunger != null && hunger.getDuration() <= 6000 && hunger.getDuration() > 5900 && hunger.getAmplifier() == 3,
+                "effect=" + effectNotes(hunger)));
+
+        player.removeEffect(TCMobEffects.UNNATURAL_HUNGER);
+        player.addEffect(new MobEffectInstance(TCMobEffects.UNNATURAL_HUNGER, 1200, 1, true, true));
+        TCWarpEvents.onFinishUsingItem(new LivingEntityUseItemEvent.Finish(player, new ItemStack(Items.ROTTEN_FLESH), 0, ItemStack.EMPTY));
+        MobEffectInstance relieved = player.getEffect(TCMobEffects.UNNATURAL_HUNGER);
+        checks.add(check("unnatural_hunger_curative_items_reduce_duration_and_amplifier",
+                relieved != null && relieved.getDuration() <= 600 && relieved.getDuration() > 500 && relieved.getAmplifier() == 0,
+                "effect=" + effectNotes(relieved)));
+
+        player.removeEffect(TCMobEffects.UNNATURAL_HUNGER);
+        player.addEffect(new MobEffectInstance(TCMobEffects.UNNATURAL_HUNGER, 1200, 1, true, true));
+        TCWarpEvents.onFinishUsingItem(new LivingEntityUseItemEvent.Finish(player, new ItemStack(Items.APPLE), 0, ItemStack.EMPTY));
+        MobEffectInstance normalFood = player.getEffect(TCMobEffects.UNNATURAL_HUNGER);
+        checks.add(check("normal_food_does_not_relieve_unnatural_hunger",
+                normalFood != null && normalFood.getAmplifier() == 1,
+                "effect=" + effectNotes(normalFood)));
+    }
+
+    private static void addResearchUnlockChecks(ServerPlayer player, ArrayList<Check> checks) {
+        TCPlayerKnowledgeStore.set(player, new TCPlayerKnowledge(), false);
+        boolean lowChanged = TCWarpEvents.unlockWarpResearch(player, 10);
+        TCPlayerKnowledge low = TCPlayerKnowledgeStore.get(player);
+        checks.add(check("actual_warp_10_unlocks_no_eldritch_or_bathsalts",
+                !lowChanged
+                        && !low.hasResearch("!BATHSALTS")
+                        && !low.hasResearch("ELDRITCHMINOR")
+                        && !low.hasResearch("ELDRITCHMAJOR"),
+                "changed=" + lowChanged));
+
+        TCPlayerKnowledgeStore.set(player, new TCPlayerKnowledge(), false);
+        boolean changed = TCWarpEvents.unlockWarpResearch(player, 51);
+        TCPlayerKnowledge high = TCPlayerKnowledgeStore.get(player);
+        checks.add(check("actual_warp_thresholds_unlock_hidden_bathsalts_and_eldritch_research",
+                changed
+                        && high.hasResearch("!BATHSALTS")
+                        && high.hasResearch("ELDRITCHMINOR")
+                        && high.hasResearch("ELDRITCHMAJOR"),
+                "bathsalts=" + high.hasResearch("!BATHSALTS")
+                        + ", minor=" + high.hasResearch("ELDRITCHMINOR")
+                        + ", major=" + high.hasResearch("ELDRITCHMAJOR")));
+    }
+
+    private static Check effectCheck(String name, String path, int color, net.minecraft.world.effect.MobEffect effect) {
+        ResourceLocation id = BuiltInRegistries.MOB_EFFECT.getKey(effect);
+        boolean passed = ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, path).equals(id)
+                && effect.getColor() == color;
+        return check(name, passed, "id=" + id + ", color=" + effect.getColor());
+    }
+
+    private static String effectNotes(MobEffectInstance effect) {
+        return effect == null ? "missing" : "duration=" + effect.getDuration() + ", amp=" + effect.getAmplifier();
+    }
+
+    private static Check check(String name, boolean passed, String notes) {
+        return new Check(name, passed, notes);
+    }
+
+    public record Check(String name, boolean passed, String notes) {
+    }
+
+    public record Report(List<Check> checks) {
+        public long passed() {
+            return checks.stream().filter(Check::passed).count();
+        }
+
+        public long failed() {
+            return checks.size() - passed();
+        }
+    }
+}
