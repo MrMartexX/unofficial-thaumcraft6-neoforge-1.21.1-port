@@ -37,6 +37,7 @@ import thaumcraft.common.items.casters.ItemCaster;
 import thaumcraft.common.items.casters.ItemFocus;
 import thaumcraft.common.items.casters.ItemFocusPouch;
 import thaumcraft.common.items.curios.ItemCurioRites;
+import thaumcraft.common.items.curios.ItemPechWand;
 import thaumcraft.common.items.resources.ItemSalisMundus;
 import thaumcraft.common.items.curios.ItemThaumonomicon;
 import thaumcraft.common.items.tools.ItemSanityChecker;
@@ -233,6 +234,7 @@ public final class TCItems {
     public static final Supplier<Item> SANE_SOAP = ITEMS.register("sane_soap", ItemSanitySoap::new);
     public static final Supplier<Item> FLESH_BLOCK = simpleItem("flesh_block");
     public static final Supplier<Item> CURIO_RITES = ITEMS.register("curio_rites", ItemCurioRites::new);
+    public static final Supplier<Item> PECH_WAND = ITEMS.register("pech_wand", ItemPechWand::new);
     public static final Supplier<Item> SANITY_CHECKER = ITEMS.register("sanity_checker", ItemSanityChecker::new);
     public static final Supplier<Item> SCRIBING_TOOLS = simpleItem("scribing_tools");
     public static final Supplier<Item> CASTER_BASIC = ITEMS.register("caster_basic", () -> new ItemCaster(0));

@@ -154,6 +154,7 @@ public final class TCCreativeTabOrder {
     private static void addLegacyItemSequence(CreativeModeTab.Output output) {
         acceptVisible(output, TCItems.THAUMONOMICON.get());
         acceptVisible(output, TCItems.CURIO_RITES.get());
+        acceptVisible(output, TCItems.PECH_WAND.get());
 
         acceptVisible(output, TCItems.AMBER.get());
         acceptVisible(output, TCItems.QUICKSILVER.get());

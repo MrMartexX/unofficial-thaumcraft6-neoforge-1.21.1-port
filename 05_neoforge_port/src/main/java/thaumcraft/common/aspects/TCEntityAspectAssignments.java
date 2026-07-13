@@ -11,6 +11,7 @@ import net.minecraft.world.entity.monster.Creeper;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.entities.TCPechEntity;
 import thaumcraft.common.entities.TCWispEntity;
 
 public final class TCEntityAspectAssignments {
@@ -24,6 +25,13 @@ public final class TCEntityAspectAssignments {
         if (entity instanceof TCWispEntity wisp) {
             Aspect type = Aspect.getAspect(wisp.getWispType());
             return type == null ? null : tags(type, 5, Aspect.AURA, 5, Aspect.FLIGHT, 5);
+        }
+        if (entity instanceof TCPechEntity pech) {
+            return switch (pech.getPechType()) {
+                case MAGE -> tags(Aspect.MAN, 10, Aspect.AURA, 5, Aspect.EXCHANGE, 10, Aspect.AVERSION, 5);
+                case STALKER -> tags(Aspect.MAN, 10, Aspect.AURA, 5, Aspect.EXCHANGE, 10, Aspect.MAGIC, 5);
+                case FORAGER -> tags(Aspect.MAN, 10, Aspect.AURA, 5, Aspect.EXCHANGE, 10, Aspect.DESIRE, 5);
+            };
         }
         AspectList aspects = LEGACY_VANILLA_ASSIGNMENTS.get(entity.getType());
         if (aspects == null) {
@@ -155,6 +163,7 @@ public final class TCEntityAspectAssignments {
         put(map, "taint_swarm", tags(Aspect.FLUX, 15, Aspect.AIR, 5));
         put(map, "mind_spider", tags(Aspect.FLUX, 5, Aspect.FIRE, 5));
         put(map, "firebat", tags(Aspect.BEAST, 5, Aspect.FLIGHT, 5, Aspect.FIRE, 10));
+        put(map, "pech", tags(Aspect.MAN, 10, Aspect.AURA, 5, Aspect.EXCHANGE, 10, Aspect.DESIRE, 5));
         put(map, "brainy_zombie", tags(Aspect.UNDEAD, 20, Aspect.MAN, 10, Aspect.MIND, 5, Aspect.AVERSION, 5));
         put(map, "giant_brainy_zombie", tags(Aspect.UNDEAD, 25, Aspect.MAN, 15, Aspect.MIND, 5, Aspect.AVERSION, 10));
         put(map, "eldritch_guardian", tags(Aspect.ELDRITCH, 20, Aspect.DEATH, 20, Aspect.UNDEAD, 20));

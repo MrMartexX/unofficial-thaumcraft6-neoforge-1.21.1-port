@@ -30,7 +30,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 26;
+    private static final int REGISTERED_FOUNDATION_COUNT = 27;
 
     private TCEntityFoundationAudit() {
     }
@@ -96,7 +96,7 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, Firebat, BrainyZombie pair, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations"
+                "expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, Firebat, Pech, BrainyZombie pair, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
@@ -106,6 +106,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("FallingTaint", TCEntityTypes.FALLING_TAINT.get()));
         checks.add(checkRegisteredType("Wisp", TCEntityTypes.WISP.get()));
         checks.add(checkRegisteredType("Firebat", TCEntityTypes.FIREBAT.get()));
+        checks.add(checkRegisteredType("Pech", TCEntityTypes.PECH.get()));
         checks.add(checkRegisteredType("BrainyZombie", TCEntityTypes.BRAINY_ZOMBIE.get()));
         checks.add(checkRegisteredType("GiantBrainyZombie", TCEntityTypes.GIANT_BRAINY_ZOMBIE.get()));
         checks.add(checkRegisteredType("TaintSeed", TCEntityTypes.TAINT_SEED.get()));
@@ -130,6 +131,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkTypeShape("FallingTaint", TCEntityTypes.FALLING_TAINT.get(), 64, 3, true, 0.98F, 0.98F));
         checks.add(checkMobTypeShape("Wisp", TCEntityTypes.WISP.get(), 0.9F, 0.9F, 64, 3, false));
         checks.add(checkMobTypeShape("Firebat", TCEntityTypes.FIREBAT.get(), 0.5F, 0.9F, 64, 3, false));
+        checks.add(checkMobTypeShape("Pech", TCEntityTypes.PECH.get(), 0.6F, 1.8F, 64, 3, true));
         checks.add(checkMobTypeShape("BrainyZombie", TCEntityTypes.BRAINY_ZOMBIE.get(), 0.6F, 1.95F, 64, 3, true));
         checks.add(checkMobTypeShape("GiantBrainyZombie", TCEntityTypes.GIANT_BRAINY_ZOMBIE.get(), 0.6F, 1.95F, 64, 3, true));
         checks.add(checkMobTypeShape("ThaumSlime", TCEntityTypes.THAUM_SLIME.get(), 2.04F, 2.04F, 64, 3, true));
@@ -150,6 +152,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkBrainyZombieContracts(server.overworld()));
         checks.add(checkGiantBrainyZombieContracts(server.overworld()));
         checks.add(checkFirebatContracts(server.overworld()));
+        checks.add(checkPechContracts(server.overworld()));
         checks.add(checkConstructors(server.overworld()));
         return checks;
     }
@@ -224,6 +227,46 @@ public final class TCEntityFoundationAudit {
                 && aspects.getAmount(Aspect.FLIGHT) == 5
                 && aspects.getAmount(Aspect.FIRE) == 10;
         return new Check("Firebat legacy contracts", passed, "resting state, attributes, fire/explosion profile, Halloween gate, light roll gate and ConfigAspects contract");
+    }
+
+    private static Check checkPechContracts(ServerLevel level) {
+        TCPechEntity pech = TCEntityTypes.PECH.get().create(level);
+        AspectList foragerAspects = TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.PECH.get());
+        boolean passed = pech != null
+                && pech.getPechType() == TCPechEntity.PechType.FORAGER
+                && !pech.isTamed()
+                && pech.getAnger() == 0
+                && pech.getContainerSize() == TCPechEntity.LEGACY_LOOT_SLOTS
+                && close(pech.getAttributeValue(Attributes.MAX_HEALTH), TCPechEntity.LEGACY_MAX_HEALTH)
+                && close(pech.getAttributeValue(Attributes.ATTACK_DAMAGE), TCPechEntity.LEGACY_ATTACK_DAMAGE)
+                && close(pech.getAttributeValue(Attributes.MOVEMENT_SPEED), TCPechEntity.LEGACY_MOVEMENT_SPEED)
+                && close(pech.getAttributeValue(Attributes.ARMOR), TCPechEntity.LEGACY_ARMOR_BONUS)
+                && pech.getValue(new ItemStack(Items.ENDER_PEARL)) == TCPechEntity.LEGACY_ENDER_PEARL_VALUE
+                && TCPechTradeCatalog.entryCountForValidation(TCPechEntity.PechType.FORAGER) >= 20
+                && TCPechTradeCatalog.hasTierForValidation(TCPechEntity.PechType.FORAGER, 1)
+                && TCPechTradeCatalog.hasTierForValidation(TCPechEntity.PechType.FORAGER, 5)
+                && TCPechTradeCatalog.hasTierForValidation(TCPechEntity.PechType.MAGE, 5)
+                && TCPechTradeCatalog.hasTierForValidation(TCPechEntity.PechType.STALKER, 5)
+                && TCPechEntity.testLegacySpawnGatesForValidation(true, true, true, 3, true)
+                && !TCPechEntity.testLegacySpawnGatesForValidation(true, true, true, 4, true)
+                && !TCPechEntity.testLegacySpawnGatesForValidation(true, false, true, 0, true)
+                && foragerAspects != null
+                && foragerAspects.getAmount(Aspect.MAN) == 10
+                && foragerAspects.getAmount(Aspect.AURA) == 5
+                && foragerAspects.getAmount(Aspect.EXCHANGE) == 10
+                && foragerAspects.getAmount(Aspect.DESIRE) == 5;
+        if (pech != null) {
+            pech.setPechType(TCPechEntity.PechType.MAGE);
+            AspectList mageAspects = TCEntityAspectAssignments.getEntityAspects(pech);
+            pech.setPechType(TCPechEntity.PechType.STALKER);
+            AspectList stalkerAspects = TCEntityAspectAssignments.getEntityAspects(pech);
+            passed = passed
+                    && mageAspects != null
+                    && mageAspects.getAmount(Aspect.AVERSION) == 5
+                    && stalkerAspects != null
+                    && stalkerAspects.getAmount(Aspect.MAGIC) == 5;
+        }
+        return new Check("Pech legacy contracts", passed, "type/tamed/anger state, attributes, pack size, explicit ender pearl value, trade tier coverage, spawn gates and subtype aspects");
     }
 
     private static Check checkRegisteredType(String legacyId, EntityType<?> type) {

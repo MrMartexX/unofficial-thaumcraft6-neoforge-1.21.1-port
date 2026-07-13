@@ -29,6 +29,7 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.TAINT_SWARM.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.WISP.get(), TCWispRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FIREBAT.get(), TCFirebatRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.PECH.get(), TCPechRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.BRAINY_ZOMBIE.get(), TCBrainyZombieRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.GIANT_BRAINY_ZOMBIE.get(), TCBrainyZombieRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.BOTTLE_TAINT.get(), ThrownItemRenderer::new);

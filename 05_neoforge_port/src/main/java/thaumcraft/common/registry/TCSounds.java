@@ -79,6 +79,18 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "wispdead")));
     public static final Supplier<SoundEvent> CHANT = SOUND_EVENTS.register("chant", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "chant")));
+    public static final Supplier<SoundEvent> PECH_IDLE = SOUND_EVENTS.register("pech_idle", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pech_idle")));
+    public static final Supplier<SoundEvent> PECH_TRADE = SOUND_EVENTS.register("pech_trade", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pech_trade")));
+    public static final Supplier<SoundEvent> PECH_DICE = SOUND_EVENTS.register("pech_dice", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pech_dice")));
+    public static final Supplier<SoundEvent> PECH_HIT = SOUND_EVENTS.register("pech_hit", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pech_hit")));
+    public static final Supplier<SoundEvent> PECH_DEATH = SOUND_EVENTS.register("pech_death", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pech_death")));
+    public static final Supplier<SoundEvent> PECH_CHARGE = SOUND_EVENTS.register("pech_charge", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pech_charge")));
 
     private TCSounds() {
     }

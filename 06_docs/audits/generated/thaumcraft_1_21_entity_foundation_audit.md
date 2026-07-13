@@ -7,7 +7,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Check | Status | Notes |
 | --- | --- | --- |
 | legacy entity catalog count | PASS | expected 43, got 43 |
-| registered foundation count | PASS | expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, Firebat, BrainyZombie pair, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations |
+| registered foundation count | PASS | expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, Firebat, Pech, BrainyZombie pair, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations |
 | SpecialItem registry id | PASS | expected thaumcraft:special_item, got thaumcraft:special_item |
 | FollowItem registry id | PASS | expected thaumcraft:follow_item, got thaumcraft:follow_item |
 | FluxRift registry id | PASS | expected thaumcraft:flux_rift, got thaumcraft:flux_rift |
@@ -15,6 +15,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | FallingTaint registry id | PASS | expected thaumcraft:falling_taint, got thaumcraft:falling_taint |
 | Wisp registry id | PASS | expected thaumcraft:wisp, got thaumcraft:wisp |
 | Firebat registry id | PASS | expected thaumcraft:firebat, got thaumcraft:firebat |
+| Pech registry id | PASS | expected thaumcraft:pech, got thaumcraft:pech |
 | BrainyZombie registry id | PASS | expected thaumcraft:brainy_zombie, got thaumcraft:brainy_zombie |
 | GiantBrainyZombie registry id | PASS | expected thaumcraft:giant_brainy_zombie, got thaumcraft:giant_brainy_zombie |
 | TaintSeed registry id | PASS | expected thaumcraft:taint_seed, got thaumcraft:taint_seed |
@@ -39,6 +40,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | FallingTaint type parameters | PASS | category=MISC, size=0.98x0.98, tracking=64, update=3, velocity=true |
 | Wisp mob type parameters | PASS | category=MONSTER, size=0.9x0.9, tracking=64, update=3, velocity=false |
 | Firebat mob type parameters | PASS | category=MONSTER, size=0.5x0.9, tracking=64, update=3, velocity=false |
+| Pech mob type parameters | PASS | category=MONSTER, size=0.6x1.8, tracking=64, update=3, velocity=true |
 | BrainyZombie mob type parameters | PASS | category=MONSTER, size=0.6x1.95, tracking=64, update=3, velocity=true |
 | GiantBrainyZombie mob type parameters | PASS | category=MONSTER, size=0.6x1.95, tracking=64, update=3, velocity=true |
 | ThaumSlime mob type parameters | PASS | category=MONSTER, size=2.04x2.04, tracking=64, update=3, velocity=true |
@@ -59,6 +61,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | BrainyZombie legacy contracts | PASS | attributes, reinforcement gate, brain-drop roll and ConfigAspects contract |
 | GiantBrainyZombie legacy contracts | PASS | attributes, anger damage/size/eye-height, inherited brain drop, rotten flesh loops and ConfigAspects contract |
 | Firebat legacy contracts | PASS | resting state, attributes, fire/explosion profile, Halloween gate, light roll gate and ConfigAspects contract |
+| Pech legacy contracts | PASS | type/tamed/anger state, attributes, pack size, explicit ender pearl value, trade tier coverage, spawn gates and subtype aspects |
 | foundation constructors | PASS | registry factories plus special/follow item stack and target coordinates |
 
 ## Legacy entity catalog
@@ -94,7 +97,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Wisp | EntityWisp | thaumcraft:wisp | 64 | 3 | false | registered_foundation | Wisp type/aspect persistence, rift-event spawn dependency, legacy flight/target/zap AI, billboard render contract and PacketFXWispZap-equivalent payload |
 | Firebat | EntityFireBat | thaumcraft:firebat | 64 | 3 | false | registered_foundation | Firebat AI, hanging flight, Nether/Halloween spawn rows, aspects and renderer foundation |
 | Spellbat | EntitySpellBat |  | 64 | 3 | false | defer | Bat AI variant and renderer |
-| Pech | EntityPech |  | 64 | 3 | true | defer | Pech AI, trading and renderer |
+| Pech | EntityPech | thaumcraft:pech | 64 | 3 | true | registered_foundation | Pech type/anger/tamed state, loot pack, valued-item taming, trade menu, scan/aspect identity and renderer foundation; natural magical-biome spawn remains deferred |
 | MindSpider | EntityMindSpider | thaumcraft:mind_spider | 64 | 3 | true | registered_foundation | Mind Spider harmless/viewer hallucination state, lifespan and warp spawn foundation; custom renderer deferred |
 | EldritchGuardian | EntityEldritchGuardian | thaumcraft:eldritch_guardian | 64 | 3 | true | registered_foundation | Eldritch Guardian attributes, team rules, warp spawn, ranged orb attack and curse branch; custom mob renderer deferred |
 | CultistKnight | EntityCultistKnight | thaumcraft:cultist_knight | 64 | 3 | true | registered_foundation | Crimson Knight base attributes, team rules, target AI and portal-spawn equipment foundation; custom mob renderer deferred |

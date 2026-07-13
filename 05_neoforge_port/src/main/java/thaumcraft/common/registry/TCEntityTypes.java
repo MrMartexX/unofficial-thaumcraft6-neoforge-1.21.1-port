@@ -27,6 +27,7 @@ import thaumcraft.common.entities.TCFluxRiftEntity;
 import thaumcraft.common.entities.TCGiantBrainyZombieEntity;
 import thaumcraft.common.entities.TCGolemOrbEntity;
 import thaumcraft.common.entities.TCMindSpiderEntity;
+import thaumcraft.common.entities.TCPechEntity;
 import thaumcraft.common.entities.TCSpecialItemEntity;
 import thaumcraft.common.entities.TCTaintCrawlerEntity;
 import thaumcraft.common.entities.TCTaintSeedEntity;
@@ -181,6 +182,14 @@ public final class TCEntityTypes {
                     .fireImmune()
                     .build(Thaumcraft.MODID + ":firebat"));
 
+    public static final Supplier<EntityType<TCPechEntity>> PECH = ENTITY_TYPES.register("pech", () ->
+            EntityType.Builder.<TCPechEntity>of(TCPechEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.8F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":pech"));
+
     public static final Supplier<EntityType<TCBrainyZombieEntity>> BRAINY_ZOMBIE =
             ENTITY_TYPES.register("brainy_zombie", () ->
                     EntityType.Builder.<TCBrainyZombieEntity>of(TCBrainyZombieEntity::new, MobCategory.MONSTER)
@@ -288,7 +297,7 @@ public final class TCEntityTypes {
             spec("Wisp", "EntityWisp", "wisp", 64, 3, false, "registered_foundation", "Wisp type/aspect persistence, rift-event spawn dependency, legacy flight/target/zap AI, billboard render contract and PacketFXWispZap-equivalent payload"),
             spec("Firebat", "EntityFireBat", "firebat", 64, 3, false, "registered_foundation", "Firebat AI, hanging flight, Nether/Halloween spawn rows, aspects and renderer foundation"),
             spec("Spellbat", "EntitySpellBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
-            spec("Pech", "EntityPech", null, 64, 3, true, "defer", "Pech AI, trading and renderer"),
+            spec("Pech", "EntityPech", "pech", 64, 3, true, "registered_foundation", "Pech type/anger/tamed state, loot pack, valued-item taming, trade menu, scan/aspect identity and renderer foundation; natural magical-biome spawn remains deferred"),
             spec("MindSpider", "EntityMindSpider", "mind_spider", 64, 3, true, "registered_foundation", "Mind Spider harmless/viewer hallucination state, lifespan and warp spawn foundation; custom renderer deferred"),
             spec("EldritchGuardian", "EntityEldritchGuardian", "eldritch_guardian", 64, 3, true, "registered_foundation", "Eldritch Guardian attributes, team rules, warp spawn, ranged orb attack and curse branch; custom mob renderer deferred"),
             spec("CultistKnight", "EntityCultistKnight", "cultist_knight", 64, 3, true, "registered_foundation", "Crimson Knight base attributes, team rules, target AI and portal-spawn equipment foundation; custom mob renderer deferred"),
@@ -334,6 +343,7 @@ public final class TCEntityTypes {
         event.put(TAINT_SWARM.get(), TCTaintSwarmEntity.createAttributes().build());
         event.put(WISP.get(), TCWispEntity.createAttributes().build());
         event.put(FIREBAT.get(), TCFirebatEntity.createAttributes().build());
+        event.put(PECH.get(), TCPechEntity.createAttributes().build());
         event.put(BRAINY_ZOMBIE.get(), TCBrainyZombieEntity.createAttributes().build());
         event.put(GIANT_BRAINY_ZOMBIE.get(), TCGiantBrainyZombieEntity.createAttributes().build());
         event.put(CULTIST_PORTAL_LESSER.get(), TCCultistPortalLesserEntity.createAttributes().build());

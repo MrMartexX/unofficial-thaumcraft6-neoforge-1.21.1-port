@@ -10,6 +10,7 @@ import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
 import thaumcraft.common.menu.TCArcaneBoreMenu;
 import thaumcraft.common.menu.TCFocalManipulatorMenu;
 import thaumcraft.common.menu.TCHandMirrorMenu;
+import thaumcraft.common.menu.TCPechMenu;
 import thaumcraft.common.menu.TCResearchTableMenu;
 import thaumcraft.common.menu.TCSmelterMenu;
 import thaumcraft.common.menu.TCThaumatoriumMenu;
@@ -34,6 +35,8 @@ public final class TCMenus {
             MENUS.register("void_siphon", () -> IMenuTypeExtension.create(TCVoidSiphonMenu::new));
     public static final Supplier<MenuType<TCArcaneBoreMenu>> ARCANE_BORE =
             MENUS.register("arcane_bore", () -> IMenuTypeExtension.create(TCArcaneBoreMenu::new));
+    public static final Supplier<MenuType<TCPechMenu>> PECH =
+            MENUS.register("pech", () -> IMenuTypeExtension.create(TCPechMenu::new));
 
     private TCMenus() {
     }

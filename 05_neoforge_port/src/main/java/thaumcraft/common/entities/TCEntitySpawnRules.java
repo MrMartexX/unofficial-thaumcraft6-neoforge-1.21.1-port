@@ -62,7 +62,7 @@ public final class TCEntitySpawnRules {
             FIREBAT_HALLOWEEN_OVERWORLD
     );
     private static final List<LegacyNaturalSpawn> DEFERRED_NATURAL_SPAWNS = List.of(
-            new LegacyNaturalSpawn("Pech", "EntityPech", null, "legacy BiomeDictionary.Type.MAGICAL", 10, 1, 1, false, "Pech entity and magical-biome mapping are not ported yet"),
+            new LegacyNaturalSpawn("Pech", "EntityPech", "thaumcraft:pech", "legacy BiomeDictionary.Type.MAGICAL", 10, 1, 1, false, "Pech entity is registered; exact magical-biome mapping, Magical Forest/Eerie dimension exception and nearby-Pech budget are not active as a natural spawn row yet"),
             new LegacyNaturalSpawn("EerieBrainyZombie", "EntityBrainyZombie", "thaumcraft:brainy_zombie", "thaumcraft:eerie", 32, 1, 1, false, "Thaumcraft Eerie biome is not ported yet"),
             new LegacyNaturalSpawn("EerieGiantBrainyZombie", "EntityGiantBrainyZombie", "thaumcraft:giant_brainy_zombie", "thaumcraft:eerie", 8, 1, 1, false, "Thaumcraft Eerie biome is not ported yet"),
             new LegacyNaturalSpawn("MagicalForestWisp", "EntityWisp", "thaumcraft:wisp", "thaumcraft:magical_forest", 20, 1, 2, false, "Thaumcraft Magical Forest biome is not ported yet"),

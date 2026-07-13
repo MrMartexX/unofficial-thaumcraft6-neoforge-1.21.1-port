@@ -27,9 +27,9 @@ Wisp Nether, Angry Zombie overworld and Firebat Nether/Halloween rows. Thaumcraf
 | firebat_halloween_biome_modifier_resource_exists | PASS | data/thaumcraft/neoforge/biome_modifier/firebat_halloween_overworld_spawns.json |
 | firebat_halloween_biome_modifier_matches_legacy_values | PASS | type=neoforge:add_spawns, biome=#thaumcraft:legacy_firebat_halloween_spawn_biomes, spawner={"type":"thaumcraft:firebat","weight":5,"minCount":1,"maxCount":2} |
 | firebat_halloween_legacy_biome_tag_resource_exists | PASS | data/thaumcraft/tags/worldgen/biome/legacy_firebat_halloween_spawn_biomes.json |
-| wisp_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$$Lambda/0x0000000800ea5a50@770294d6, heightmap=MOTION_BLOCKING_NO_LEAVES |
-| brainy_zombie_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$1@174ea432, heightmap=MOTION_BLOCKING_NO_LEAVES |
-| firebat_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$$Lambda/0x0000000800ea5a50@770294d6, heightmap=MOTION_BLOCKING_NO_LEAVES |
+| wisp_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$$Lambda/0x0000000800eafd98@691b6447, heightmap=MOTION_BLOCKING_NO_LEAVES |
+| brainy_zombie_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$1@201da9a5, heightmap=MOTION_BLOCKING_NO_LEAVES |
+| firebat_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$$Lambda/0x0000000800eafd98@691b6447, heightmap=MOTION_BLOCKING_NO_LEAVES |
 | wisp_spawn_predicate_allows_dark_unobstructed_normal_cell | PASS | pos=BlockPos{x=16, y=48, z=16}, brightness=0 |
 | wisp_spawn_predicate_denies_obstructed_cell | PASS | block=Block{minecraft:stone} |
 | wisp_spawn_gates_deny_bright_cell_like_legacy_light_check | PASS | localRawBrightness=15, blockRoll=7 |
@@ -58,7 +58,7 @@ Wisp Nether, Angry Zombie overworld and Firebat Nether/Halloween rows. Thaumcraf
 
 | Legacy id | Class | Modern entity | Biome selector | Weight | Min | Max | Notes |
 |---|---|---|---|---:|---:|---:|---|
-| Pech | EntityPech |  | legacy BiomeDictionary.Type.MAGICAL | 10 | 1 | 1 | Pech entity and magical-biome mapping are not ported yet |
+| Pech | EntityPech | thaumcraft:pech | legacy BiomeDictionary.Type.MAGICAL | 10 | 1 | 1 | Pech entity is registered; exact magical-biome mapping, Magical Forest/Eerie dimension exception and nearby-Pech budget are not active as a natural spawn row yet |
 | EerieBrainyZombie | EntityBrainyZombie | thaumcraft:brainy_zombie | thaumcraft:eerie | 32 | 1 | 1 | Thaumcraft Eerie biome is not ported yet |
 | EerieGiantBrainyZombie | EntityGiantBrainyZombie | thaumcraft:giant_brainy_zombie | thaumcraft:eerie | 8 | 1 | 1 | Thaumcraft Eerie biome is not ported yet |
 | MagicalForestWisp | EntityWisp | thaumcraft:wisp | thaumcraft:magical_forest | 20 | 1 | 2 | Thaumcraft Magical Forest biome is not ported yet |
