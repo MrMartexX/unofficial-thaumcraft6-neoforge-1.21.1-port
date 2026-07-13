@@ -17,10 +17,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -28,6 +31,7 @@ import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.common.aspects.TCEntityAspectAssignments;
 import thaumcraft.common.blocks.world.taint.TCTaintHelper;
 import thaumcraft.common.registry.TCEntityTypes;
+import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMobEffects;
 import thaumcraft.common.world.aura.AuraHandler;
 
@@ -48,7 +52,8 @@ public final class TCFluxRiftConsequenceAudit {
         lines.add("");
         lines.add("Runtime checks for the row-11 Flux Rift event/consequence slice after the initial entity");
         lines.add("foundation. This covers the TC6 weighted event table, Wisp dependency foundation, Prime");
-        lines.add("Taint Seed event, infectious vis exhaustion event and collapse effects. Focus-cloud execution");
+        lines.add("Taint Seed event, infectious vis exhaustion event, collapse effects and the Causality");
+        lines.add("Collapser rift-closing projectile. Focus-cloud execution");
         lines.add("is explicitly left to the paused focus/projectile owner row.");
         lines.add("");
         lines.add("## Summary");
@@ -69,7 +74,7 @@ public final class TCFluxRiftConsequenceAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- Implemented: legacy rift weighted event table `50/10/20/20/1`, near-taint filter, Wisp spawn event, Prime Taint Seed boost/pollution event, infectious vis exhaustion event, collapse aura/explosion/drop/effect path and dynamic Wisp aspect assignment.");
+        lines.add("- Implemented: legacy rift weighted event table `50/10/20/20/1`, near-taint filter, Wisp spawn event, Prime Taint Seed boost/pollution event, infectious vis exhaustion event, collapse aura/explosion/drop/effect path, Causality Collapser throw/explosion/rift-collapse AABB and dynamic Wisp aspect assignment.");
         lines.add("- Implemented dependency: `thaumcraft:wisp` is registered with TC6 tracking values and minimal server state needed by rifts; full Wisp AI/model/particles remain entity/render row work.");
         lines.add("- Deferred by owner, not guessed: event 3 still requires real `EntityFocusCloud` / focus cloud execution before it can be made player-facing.");
         Files.write(output, lines, StandardCharsets.UTF_8);
@@ -89,9 +94,10 @@ public final class TCFluxRiftConsequenceAudit {
             level.getServer().setDifficulty(Difficulty.NORMAL, true);
             level.getGameRules().getRule(GameRules.RULE_MOBGRIEFING).set(false, level.getServer());
             AuraHandler.seedAuraChunk(level, origin, 100);
-            addRegistrationAndDataChecks(checks);
+            addRegistrationAndDataChecks(level, checks);
             addEventChecks(level, origin, checks);
             addCollapseChecks(level, origin.offset(12, 0, 0), checks);
+            addCausalityCollapserChecks(level, origin.offset(20, 0, 0), checks);
         } finally {
             level.getServer().setDifficulty(originalDifficulty, true);
             level.getGameRules().getRule(GameRules.RULE_MOBGRIEFING).set(originalMobGriefing, level.getServer());
@@ -101,7 +107,7 @@ public final class TCFluxRiftConsequenceAudit {
         return new Report(List.copyOf(checks));
     }
 
-    private static void addRegistrationAndDataChecks(ArrayList<Check> checks) {
+    private static void addRegistrationAndDataChecks(ServerLevel level, ArrayList<Check> checks) {
         checks.add(check("infectious_vis_exhaust_effect_registered",
                 BuiltInRegistries.MOB_EFFECT.getKey(TCMobEffects.INFECTIOUS_VIS_EXHAUST.get()).equals(id("infectious_vis_exhaust")),
                 "effect=" + BuiltInRegistries.MOB_EFFECT.getKey(TCMobEffects.INFECTIOUS_VIS_EXHAUST.get())));
@@ -118,6 +124,41 @@ public final class TCFluxRiftConsequenceAudit {
                         && event(3, 20, 10, true, "focus_flux_cloud")
                         && event(4, 1, 0, true, "collapse"),
                 "events=" + TCFluxRiftEntity.eventTableForValidation()));
+        checks.add(check("causality_collapser_item_registered_with_legacy_id_and_stack",
+                itemId(TCItems.CAUSALITY_COLLAPSER.get()).equals(id("causality_collapser"))
+                        && TCItems.CAUSALITY_COLLAPSER.get() instanceof thaumcraft.common.items.consumables.ItemCausalityCollapser
+                        && new ItemStack(TCItems.CAUSALITY_COLLAPSER.get()).getMaxStackSize() == TCCausalityCollapserEntity.LEGACY_MAX_STACK_SIZE,
+                "item=" + itemId(TCItems.CAUSALITY_COLLAPSER.get())
+                        + ", maxStack=" + new ItemStack(TCItems.CAUSALITY_COLLAPSER.get()).getMaxStackSize()));
+        checks.add(check("causality_collapser_entity_registered_with_legacy_tracking",
+                entityId(TCEntityTypes.CAUSALITY_COLLAPSER.get()).equals(id("causality_collapser"))
+                        && legacySpecRegistered("CausalityCollapser", "causality_collapser", 64, 20, true)
+                        && typeShape(TCEntityTypes.CAUSALITY_COLLAPSER.get(), MobCategory.MISC, 0.25F, 0.25F, 64, 20, true),
+                "entity=" + entityId(TCEntityTypes.CAUSALITY_COLLAPSER.get())));
+        TCCausalityCollapserEntity projectile = new TCCausalityCollapserEntity(level, 0.0D, 0.0D, 0.0D);
+        projectile.shoot(1.0D, 0.0D, 0.0D, 0.1F, 0.0F);
+        Vec3 motion = projectile.getDeltaMovement();
+        checks.add(check("causality_collapser_projectile_constants_match_legacy",
+                close(motion.length(), TCCausalityCollapserEntity.LEGACY_PROJECTILE_VELOCITY)
+                        && close(TCCausalityCollapserEntity.LEGACY_THROW_INACCURACY, 2.0F)
+                        && close(TCCausalityCollapserEntity.LEGACY_THROW_X_ROT_OFFSET, -5.0F)
+                        && close(TCCausalityCollapserEntity.LEGACY_EXPLOSION_STRENGTH, 2.0F)
+                        && TCCausalityCollapserEntity.LEGACY_EXPLOSION_CAUSES_FIRE
+                        && TCCausalityCollapserEntity.legacyExplosionInteractionForValidation() == net.minecraft.world.level.Level.ExplosionInteraction.TNT
+                        && close(TCCausalityCollapserEntity.LEGACY_RIFT_COLLAPSE_RANGE, 3.0D),
+                "speed=" + motion.length()
+                        + ", explosion=" + TCCausalityCollapserEntity.LEGACY_EXPLOSION_STRENGTH
+                        + ", range=" + TCCausalityCollapserEntity.LEGACY_RIFT_COLLAPSE_RANGE));
+        checks.add(check("causality_collapser_client_trail_contract_matches_legacy_constants",
+                TCCausalityCollapserEntity.LEGACY_TRAIL_SAMPLES == 3
+                        && close(TCCausalityCollapserEntity.LEGACY_ALUMENTUM_TRAIL_ALPHA, 0.5F)
+                        && close(TCCausalityCollapserEntity.LEGACY_ALUMENTUM_TRAIL_SCALE, 4.0F)
+                        && TCCausalityCollapserEntity.LEGACY_GENERIC_TRAIL_START == 448
+                        && TCCausalityCollapserEntity.LEGACY_GENERIC_TRAIL_FRAMES == 8
+                        && TCCausalityCollapserEntity.LEGACY_GENERIC_TRAIL_AGE == 8
+                        && close(TCCausalityCollapserEntity.LEGACY_GENERIC_TRAIL_ALPHA, 0.7F)
+                        && close(TCCausalityCollapserEntity.LEGACY_GENERIC_TRAIL_SCALE, 0.3F),
+                "samples=3, fireMote alpha/scale=0.5/4.0, generic start=448, frames=8, age=8"));
     }
 
     private static void addEventChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
@@ -223,6 +264,28 @@ public final class TCFluxRiftConsequenceAudit {
                         + ", weakness=" + (fluxTarget != null && fluxTarget.hasEffect(MobEffects.WEAKNESS))));
     }
 
+    private static void addCausalityCollapserChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
+        TCCausalityCollapserEntity collapser = new TCCausalityCollapserEntity(
+                level,
+                origin.getX() + 0.5D,
+                origin.getY(),
+                origin.getZ() + 0.5D
+        );
+        TCFluxRiftEntity center = rift(level, origin, 10, 0.0F);
+        TCFluxRiftEntity edge = rift(level, origin.offset(3, 0, 0), 10, 0.0F);
+        TCFluxRiftEntity far = rift(level, origin.offset(5, 0, 0), 10, 0.0F);
+        int collapsed = collapser.collapseNearbyRiftsForValidation();
+        checks.add(check("causality_collapser_collapses_rifts_in_legacy_aabb_range",
+                collapsed == 2
+                        && center.isCollapsing()
+                        && edge.isCollapsing()
+                        && !far.isCollapsing(),
+                "collapsed=" + collapsed
+                        + ", center=" + center.isCollapsing()
+                        + ", edge=" + edge.isCollapsing()
+                        + ", far=" + far.isCollapsing()));
+    }
+
     private static TCFluxRiftEntity rift(ServerLevel level, BlockPos pos, int size, float stability) {
         TCFluxRiftEntity rift = new TCFluxRiftEntity(level, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
         rift.setRiftSeed(12345 + pos.getX());
@@ -286,6 +349,10 @@ public final class TCFluxRiftConsequenceAudit {
 
     private static ResourceLocation entityId(EntityType<?> type) {
         return BuiltInRegistries.ENTITY_TYPE.getKey(type);
+    }
+
+    private static ResourceLocation itemId(Item item) {
+        return BuiltInRegistries.ITEM.getKey(item);
     }
 
     private static ResourceLocation id(String path) {

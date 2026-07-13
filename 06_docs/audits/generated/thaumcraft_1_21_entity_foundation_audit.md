@@ -7,7 +7,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Check | Status | Notes |
 | --- | --- | --- |
 | legacy entity catalog count | PASS | expected 43, got 43 |
-| registered foundation count | PASS | expected item entities, Alumentum, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations |
+| registered foundation count | PASS | expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations |
 | SpecialItem registry id | PASS | expected thaumcraft:special_item, got thaumcraft:special_item |
 | FollowItem registry id | PASS | expected thaumcraft:follow_item, got thaumcraft:follow_item |
 | FluxRift registry id | PASS | expected thaumcraft:flux_rift, got thaumcraft:flux_rift |
@@ -27,6 +27,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | TaintacleTiny registry id | PASS | expected thaumcraft:taintacle_tiny, got thaumcraft:taintacle_tiny |
 | TaintSwarm registry id | PASS | expected thaumcraft:taint_swarm, got thaumcraft:taint_swarm |
 | Alumentum registry id | PASS | expected thaumcraft:alumentum, got thaumcraft:alumentum |
+| CausalityCollapser registry id | PASS | expected thaumcraft:causality_collapser, got thaumcraft:causality_collapser |
 | BottleTaint registry id | PASS | expected thaumcraft:bottle_taint, got thaumcraft:bottle_taint |
 | EldritchOrb registry id | PASS | expected thaumcraft:eldritch_orb, got thaumcraft:eldritch_orb |
 | GolemOrb registry id | PASS | expected thaumcraft:golem_orb, got thaumcraft:golem_orb |
@@ -40,6 +41,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | TaintacleTiny mob type parameters | PASS | category=MONSTER, size=0.22x1.0, tracking=64, update=3, velocity=false |
 | TaintSwarm mob type parameters | PASS | category=MONSTER, size=2.0x2.0, tracking=64, update=3, velocity=false |
 | Alumentum type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
+| CausalityCollapser type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | BottleTaint type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | EldritchOrb type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | GolemOrb type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=3, velocity=true |
@@ -66,7 +68,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | BottleTaint | EntityBottleTaint | thaumcraft:bottle_taint | 64 | 20 | true | registered_foundation | Taint bottle projectile item behavior, Flux Taint splash and Flux Goo spread |
 | GolemOrb | EntityGolemOrb | thaumcraft:golem_orb | 64 | 3 | true | registered_foundation | Cultist/Golem homing magic orb projectile behavior and electric-orb renderer foundation |
 | Grapple | EntityGrapple |  | 64 | 20 | true | defer | Grapple tool physics and rope renderer |
-| CausalityCollapser | EntityCausalityCollapser |  | 64 | 20 | true | defer | Rift/causality item projectile effects |
+| CausalityCollapser | EntityCausalityCollapser | thaumcraft:causality_collapser | 64 | 20 | true | registered_foundation | Causality Collapser projectile, invisible body, legacy explosive rift-collapse AABB |
 | FocusProjectile | EntityFocusProjectile |  | 64 | 20 | true | defer | Focus/caster execution |
 | FocusCloud | EntityFocusCloud |  | 64 | 20 | true | defer | Focus/caster cloud execution |
 | Focusmine | EntityFocusMine |  | 64 | 20 | true | defer | Focus/caster mine execution |

@@ -24,7 +24,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 22;
+    private static final int REGISTERED_FOUNDATION_COUNT = 23;
 
     private TCEntityFoundationAudit() {
     }
@@ -90,7 +90,7 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, Alumentum, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations"
+                "expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
@@ -112,6 +112,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("TaintacleTiny", TCEntityTypes.TAINTACLE_TINY.get()));
         checks.add(checkRegisteredType("TaintSwarm", TCEntityTypes.TAINT_SWARM.get()));
         checks.add(checkRegisteredType("Alumentum", TCEntityTypes.ALUMENTUM.get()));
+        checks.add(checkRegisteredType("CausalityCollapser", TCEntityTypes.CAUSALITY_COLLAPSER.get()));
         checks.add(checkRegisteredType("BottleTaint", TCEntityTypes.BOTTLE_TAINT.get()));
         checks.add(checkRegisteredType("EldritchOrb", TCEntityTypes.ELDRITCH_ORB.get()));
         checks.add(checkRegisteredType("GolemOrb", TCEntityTypes.GOLEM_ORB.get()));
@@ -125,6 +126,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkMobTypeShape("TaintacleTiny", TCEntityTypes.TAINTACLE_TINY.get(), 0.22F, 1.0F, 64, 3, false));
         checks.add(checkMobTypeShape("TaintSwarm", TCEntityTypes.TAINT_SWARM.get(), 2.0F, 2.0F, 64, 3, false));
         checks.add(checkTypeShape("Alumentum", TCEntityTypes.ALUMENTUM.get(), 64, 20, true));
+        checks.add(checkTypeShape("CausalityCollapser", TCEntityTypes.CAUSALITY_COLLAPSER.get(), 64, 20, true));
         checks.add(checkTypeShape("BottleTaint", TCEntityTypes.BOTTLE_TAINT.get(), 64, 20, true));
         checks.add(checkTypeShape("EldritchOrb", TCEntityTypes.ELDRITCH_ORB.get(), 64, 20, true));
         checks.add(checkTypeShape("GolemOrb", TCEntityTypes.GOLEM_ORB.get(), 64, 3, true));
@@ -187,6 +189,7 @@ public final class TCEntityFoundationAudit {
         Entity specialFactory = TCEntityTypes.SPECIAL_ITEM.get().create(level);
         Entity followingFactory = TCEntityTypes.FOLLOW_ITEM.get().create(level);
         Entity alumentumFactory = TCEntityTypes.ALUMENTUM.get().create(level);
+        Entity causalityFactory = TCEntityTypes.CAUSALITY_COLLAPSER.get().create(level);
         Entity orbFactory = TCEntityTypes.ELDRITCH_ORB.get().create(level);
         Entity golemOrbFactory = TCEntityTypes.GOLEM_ORB.get().create(level);
         Entity portalFactory = TCEntityTypes.CULTIST_PORTAL_LESSER.get().create(level);
@@ -199,6 +202,7 @@ public final class TCEntityFoundationAudit {
         boolean passed = specialFactory instanceof TCSpecialItemEntity
                 && followingFactory instanceof TCFollowingItemEntity
                 && alumentumFactory instanceof TCAlumentumEntity
+                && causalityFactory instanceof TCCausalityCollapserEntity
                 && orbFactory instanceof TCEldritchOrbEntity
                 && golemOrbFactory instanceof TCGolemOrbEntity
                 && portalFactory instanceof TCCultistPortalLesserEntity

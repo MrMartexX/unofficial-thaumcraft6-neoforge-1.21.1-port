@@ -30,6 +30,7 @@ import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.items.consumables.ItemBathSalts;
 import thaumcraft.common.items.consumables.ItemAlumentum;
 import thaumcraft.common.items.consumables.ItemBottleTaint;
+import thaumcraft.common.items.consumables.ItemCausalityCollapser;
 import thaumcraft.common.items.consumables.ItemSanitySoap;
 import thaumcraft.common.items.consumables.ItemZombieBrain;
 import thaumcraft.common.items.casters.ItemCaster;
@@ -291,7 +292,7 @@ public final class TCItems {
     public static final Supplier<BlockItem> ELDRITCH_PEDESTAL = blockItem("eldritch_pedestal", TCBlocks.ELDRITCH_PEDESTAL);
     public static final Supplier<BlockItem> ANCIENT_PEDESTAL = blockItem("ancient_pedestal", TCBlocks.ANCIENT_PEDESTAL);
     public static final Supplier<BlockItem> ARCANE_PEDESTAL = blockItem("arcane_pedestal", TCBlocks.ARCANE_PEDESTAL);
-    public static final Supplier<Item> CAUSALITY_COLLAPSER = simpleItem("causality_collapser");
+    public static final Supplier<Item> CAUSALITY_COLLAPSER = ITEMS.register("causality_collapser", ItemCausalityCollapser::new);
     public static final Supplier<BlockItem> VOID_SIPHON = blockItem("void_siphon", TCBlocks.VOID_SIPHON);
     public static final Supplier<BlockItem> SPA = blockItem("spa", TCBlocks.SPA);
     public static final Supplier<BlockItem> THAUMATORIUM = blockItem("thaumatorium", TCBlocks.THAUMATORIUM);

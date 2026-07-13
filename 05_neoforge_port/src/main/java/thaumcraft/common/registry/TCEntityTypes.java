@@ -13,6 +13,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.entities.TCArcaneBoreEntity;
 import thaumcraft.common.entities.TCAlumentumEntity;
 import thaumcraft.common.entities.TCBottleTaintEntity;
+import thaumcraft.common.entities.TCCausalityCollapserEntity;
 import thaumcraft.common.entities.TCCultistClericEntity;
 import thaumcraft.common.entities.TCCultistKnightEntity;
 import thaumcraft.common.entities.TCCultistPortalLesserEntity;
@@ -184,6 +185,14 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(true)
                     .build(Thaumcraft.MODID + ":alumentum"));
 
+    public static final Supplier<EntityType<TCCausalityCollapserEntity>> CAUSALITY_COLLAPSER = ENTITY_TYPES.register("causality_collapser", () ->
+            EntityType.Builder.<TCCausalityCollapserEntity>of(TCCausalityCollapserEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":causality_collapser"));
+
     public static final Supplier<EntityType<TCEldritchOrbEntity>> ELDRITCH_ORB = ENTITY_TYPES.register("eldritch_orb", () ->
             EntityType.Builder.<TCEldritchOrbEntity>of(TCEldritchOrbEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
@@ -232,7 +241,7 @@ public final class TCEntityTypes {
             spec("BottleTaint", "EntityBottleTaint", "bottle_taint", 64, 20, true, "registered_foundation", "Taint bottle projectile item behavior, Flux Taint splash and Flux Goo spread"),
             spec("GolemOrb", "EntityGolemOrb", "golem_orb", 64, 3, true, "registered_foundation", "Cultist/Golem homing magic orb projectile behavior and electric-orb renderer foundation"),
             spec("Grapple", "EntityGrapple", null, 64, 20, true, "defer", "Grapple tool physics and rope renderer"),
-            spec("CausalityCollapser", "EntityCausalityCollapser", null, 64, 20, true, "defer", "Rift/causality item projectile effects"),
+            spec("CausalityCollapser", "EntityCausalityCollapser", "causality_collapser", 64, 20, true, "registered_foundation", "Causality Collapser projectile, invisible body, legacy explosive rift-collapse AABB"),
             spec("FocusProjectile", "EntityFocusProjectile", null, 64, 20, true, "defer", "Focus/caster execution"),
             spec("FocusCloud", "EntityFocusCloud", null, 64, 20, true, "defer", "Focus/caster cloud execution"),
             spec("Focusmine", "EntityFocusMine", null, 64, 20, true, "defer", "Focus/caster mine execution"),
