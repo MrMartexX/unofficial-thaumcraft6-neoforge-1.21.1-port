@@ -11,6 +11,7 @@ import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.entities.TCArcaneBoreEntity;
+import thaumcraft.common.entities.TCAlumentumEntity;
 import thaumcraft.common.entities.TCBottleTaintEntity;
 import thaumcraft.common.entities.TCCultistClericEntity;
 import thaumcraft.common.entities.TCCultistKnightEntity;
@@ -175,6 +176,14 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(true)
                     .build(Thaumcraft.MODID + ":bottle_taint"));
 
+    public static final Supplier<EntityType<TCAlumentumEntity>> ALUMENTUM = ENTITY_TYPES.register("alumentum", () ->
+            EntityType.Builder.<TCAlumentumEntity>of(TCAlumentumEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":alumentum"));
+
     public static final Supplier<EntityType<TCEldritchOrbEntity>> ELDRITCH_ORB = ENTITY_TYPES.register("eldritch_orb", () ->
             EntityType.Builder.<TCEldritchOrbEntity>of(TCEldritchOrbEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
@@ -217,7 +226,7 @@ public final class TCEntityTypes {
             spec("SpecialItem", "EntitySpecialItem", "special_item", 64, 20, true, "registered_foundation", "Legacy item-entity lift and explosion immunity"),
             spec("FollowItem", "EntityFollowingItem", "follow_item", 64, 20, false, "registered_foundation", "Legacy following item movement and spawn data"),
             spec("FallingTaint", "EntityFallingTaint", "falling_taint", 64, 3, true, "registered_foundation", "Taint crust falling physics and taint world mutation"),
-            spec("Alumentum", "EntityAlumentum", null, 64, 20, true, "defer", "Projectile item behavior and impact effects"),
+            spec("Alumentum", "EntityAlumentum", "alumentum", 64, 20, true, "registered_foundation", "Throwable Alumentum item projectile, invisible body, fiery trail and legacy flaming explosion"),
             spec("GolemDart", "EntityGolemDart", null, 64, 20, false, "defer", "Golem ranged combat"),
             spec("EldritchOrb", "EntityEldritchOrb", "eldritch_orb", 64, 20, true, "registered_foundation", "Eldritch Guardian/Warden projectile: no-gravity lifetime, impact AoE and source-informed renderer"),
             spec("BottleTaint", "EntityBottleTaint", "bottle_taint", 64, 20, true, "registered_foundation", "Taint bottle projectile item behavior, Flux Taint splash and Flux Goo spread"),

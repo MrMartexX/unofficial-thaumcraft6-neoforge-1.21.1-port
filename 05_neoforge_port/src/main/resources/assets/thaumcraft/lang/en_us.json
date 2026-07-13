@@ -1084,7 +1084,6 @@
   "tc.handmirrorlinked": "Link established.",
   "tc.handmirrorlinkedto": "Linked to %s,%s,%s in %s",
   "tc.mirror.already_linked": "That mirror is already linked to a valid destination.",
-  "tc.placeholder.alumentum": "Temporary port placeholder: Alumentum throwing, fuel and blast behaviour are not fully implemented yet.",
   "tc.placeholder.caster_basic": "Temporary port placeholder: caster focus socket and vis-cost logic are not fully implemented yet.",
   "tc.placeholder.enchanted": "Temporary port placeholder: represents a specific legacy enchanted book requirement.",
   "tc.placeholder.focus": "Temporary port placeholder: focus package data and casting behaviour are not fully implemented yet.",

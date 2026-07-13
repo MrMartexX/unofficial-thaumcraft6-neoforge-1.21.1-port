@@ -28,6 +28,7 @@ import thaumcraft.common.items.armor.ItemVoidRobeArmor;
 import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
 import thaumcraft.common.items.consumables.ItemBathSalts;
+import thaumcraft.common.items.consumables.ItemAlumentum;
 import thaumcraft.common.items.consumables.ItemBottleTaint;
 import thaumcraft.common.items.consumables.ItemSanitySoap;
 import thaumcraft.common.items.consumables.ItemZombieBrain;
@@ -465,10 +466,7 @@ public final class TCItems {
             case "chunk_rabbit" -> legacyItem("chunk", "rabbit", 4);
             case "chunk_mutton" -> legacyItem("chunk", "mutton", 5);
             case "salis_mundus" -> new ItemSalisMundus();
-            case "alumentum" -> new ItemLegacyPlaceholder(
-                    new Item.Properties(),
-                    "tc.placeholder.alumentum"
-            );
+            case "alumentum" -> new ItemAlumentum();
             case "thaumium_axe" -> new AxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(AxeItem.createAttributes(TCToolTiers.THAUMIUM, 5.0F, -3.0F)));
             case "thaumium_hoe" -> new HoeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(HoeItem.createAttributes(TCToolTiers.THAUMIUM, -2.0F, -1.0F)));
             case "thaumium_pick" -> new PickaxeItem(TCToolTiers.THAUMIUM, new Item.Properties().attributes(PickaxeItem.createAttributes(TCToolTiers.THAUMIUM, 1.0F, -2.8F)));

@@ -198,6 +198,77 @@ public final class TCFXDispatcher {
         drawLegacyFXWithDelay(level, data, x, y, z, motionX, motionY, motionZ, delay);
     }
 
+    public static void drawAlumentum(
+            Level level,
+            double x,
+            double y,
+            double z,
+            double motionX,
+            double motionY,
+            double motionZ,
+            float red,
+            float green,
+            float blue,
+            float alpha,
+            float scale
+    ) {
+        if (!level.isClientSide()) {
+            return;
+        }
+
+        TCLegacyFXData data = TCLegacyFXData.generic(
+                        12,
+                        320,
+                        16,
+                        1,
+                        64,
+                        true,
+                        1,
+                        red,
+                        green,
+                        blue,
+                        alpha,
+                        scale
+                )
+                .withAlpha(alpha, 0.0F)
+                .withScale(scale, scale / 3.0F)
+                .withMotion(
+                        TCLegacyFXData.LEGACY_DEFAULT_SLOWDOWN,
+                        0.0F,
+                        0.0D,
+                        0.0D,
+                        0.0D,
+                        0.0D,
+                        0.0D
+                );
+
+        drawLegacyFX(level, data, x, y, z, motionX, motionY, motionZ);
+    }
+
+    public static void drawAlumentumGenericTrail(Level level, double x, double y, double z) {
+        drawGenericParticles(
+                level,
+                x,
+                y,
+                z,
+                0.0D,
+                0.0D,
+                0.0D,
+                8,
+                448,
+                8,
+                1,
+                64,
+                false,
+                1,
+                1.0F,
+                1.0F,
+                1.0F,
+                0.7F,
+                0.3F
+        );
+    }
+
     public static void drawGenericParticles(
             Level level,
             double x,

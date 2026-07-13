@@ -7,7 +7,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Check | Status | Notes |
 | --- | --- | --- |
 | legacy entity catalog count | PASS | expected 43, got 43 |
-| registered foundation count | PASS | expected item entities, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations |
+| registered foundation count | PASS | expected item entities, Alumentum, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations |
 | SpecialItem registry id | PASS | expected thaumcraft:special_item, got thaumcraft:special_item |
 | FollowItem registry id | PASS | expected thaumcraft:follow_item, got thaumcraft:follow_item |
 | FluxRift registry id | PASS | expected thaumcraft:flux_rift, got thaumcraft:flux_rift |
@@ -26,6 +26,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Taintacle registry id | PASS | expected thaumcraft:taintacle, got thaumcraft:taintacle |
 | TaintacleTiny registry id | PASS | expected thaumcraft:taintacle_tiny, got thaumcraft:taintacle_tiny |
 | TaintSwarm registry id | PASS | expected thaumcraft:taint_swarm, got thaumcraft:taint_swarm |
+| Alumentum registry id | PASS | expected thaumcraft:alumentum, got thaumcraft:alumentum |
 | BottleTaint registry id | PASS | expected thaumcraft:bottle_taint, got thaumcraft:bottle_taint |
 | EldritchOrb registry id | PASS | expected thaumcraft:eldritch_orb, got thaumcraft:eldritch_orb |
 | GolemOrb registry id | PASS | expected thaumcraft:golem_orb, got thaumcraft:golem_orb |
@@ -38,6 +39,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Taintacle mob type parameters | PASS | category=MONSTER, size=0.8x3.0, tracking=64, update=3, velocity=false |
 | TaintacleTiny mob type parameters | PASS | category=MONSTER, size=0.22x1.0, tracking=64, update=3, velocity=false |
 | TaintSwarm mob type parameters | PASS | category=MONSTER, size=2.0x2.0, tracking=64, update=3, velocity=false |
+| Alumentum type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | BottleTaint type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | EldritchOrb type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | GolemOrb type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=3, velocity=true |
@@ -58,7 +60,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | SpecialItem | EntitySpecialItem | thaumcraft:special_item | 64 | 20 | true | registered_foundation | Legacy item-entity lift and explosion immunity |
 | FollowItem | EntityFollowingItem | thaumcraft:follow_item | 64 | 20 | false | registered_foundation | Legacy following item movement and spawn data |
 | FallingTaint | EntityFallingTaint | thaumcraft:falling_taint | 64 | 3 | true | registered_foundation | Taint crust falling physics and taint world mutation |
-| Alumentum | EntityAlumentum |  | 64 | 20 | true | defer | Projectile item behavior and impact effects |
+| Alumentum | EntityAlumentum | thaumcraft:alumentum | 64 | 20 | true | registered_foundation | Throwable Alumentum item projectile, invisible body, fiery trail and legacy flaming explosion |
 | GolemDart | EntityGolemDart |  | 64 | 20 | false | defer | Golem ranged combat |
 | EldritchOrb | EntityEldritchOrb | thaumcraft:eldritch_orb | 64 | 20 | true | registered_foundation | Eldritch Guardian/Warden projectile: no-gravity lifetime, impact AoE and source-informed renderer |
 | BottleTaint | EntityBottleTaint | thaumcraft:bottle_taint | 64 | 20 | true | registered_foundation | Taint bottle projectile item behavior, Flux Taint splash and Flux Goo spread |

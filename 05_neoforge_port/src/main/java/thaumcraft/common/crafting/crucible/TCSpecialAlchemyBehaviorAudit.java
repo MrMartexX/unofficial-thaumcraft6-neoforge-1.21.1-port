@@ -19,18 +19,22 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileItem;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.blocks.misc.TCLiquidDeathBlock;
 import thaumcraft.common.blocks.misc.TCPurifyingFluidBlock;
+import thaumcraft.common.entities.TCAlumentumEntity;
 import thaumcraft.common.entities.TCBottleTaintEntity;
 import thaumcraft.common.entities.TCTaintCrawlerEntity;
 import thaumcraft.common.items.components.TCAspectStackComponent;
+import thaumcraft.common.items.consumables.ItemAlumentum;
 import thaumcraft.common.items.consumables.ItemBathSalts;
 import thaumcraft.common.items.consumables.ItemBottleTaint;
 import thaumcraft.common.items.consumables.ItemSanitySoap;
@@ -80,9 +84,9 @@ public final class TCSpecialAlchemyBehaviorAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- Implemented in this slice: `bath_salts` legacy dropped-item lifespan and water-source conversion, `bottle_taint` stack size/use constants, `bottle_taint` projectile registration, Flux Taint splash predicate/effect and Flux Goo placement support rules, real Liquid Death/Purifying Fluid registries/blocks, `thaumcraft:dissolve` Liquid Death damage identity, dissolve-crystal living drop bridge, Warp Ward effect and Sanity Soap Purifying Fluid/Warp Ward bonuses.");
-        lines.add("- Already data-backed before this slice: special crucible recipes for BottleTaint, BathSalts, LiquidDeath and SaneSoap.");
-        lines.add("- Deferred to later visual/automation slices: exact client fluid particles/render translucency, Arcane Spa/Everfull Urn automation consumers and broader alchemy automation consumers.");
+        lines.add("- Implemented in this slice: `bath_salts` legacy dropped-item lifespan and water-source conversion, `alumentum` throw/dispenser projectile contract, invisible projectile body, fiery trail bridge and legacy flaming explosion constants, `bottle_taint` stack size/use constants, `bottle_taint` projectile registration, Flux Taint splash predicate/effect and Flux Goo placement support rules, real Liquid Death/Purifying Fluid registries/blocks, `thaumcraft:dissolve` Liquid Death damage identity, dissolve-crystal living drop bridge, Warp Ward effect and Sanity Soap Purifying Fluid/Warp Ward bonuses.");
+        lines.add("- Already data-backed before this slice: special crucible recipes for Alumentum, BottleTaint, BathSalts, LiquidDeath and SaneSoap.");
+        lines.add("- Deferred to later visual/automation slices: exact Alumentum fire-mote pixel parity, exact client fluid particles/render translucency, Arcane Spa/Everfull Urn automation consumers and broader alchemy automation consumers.");
         Files.write(output, lines);
         return report;
     }
@@ -103,6 +107,7 @@ public final class TCSpecialAlchemyBehaviorAudit {
 
     private static void addItemChecks(ServerLevel level, ArrayList<Check> checks) {
         ItemStack bathSalts = new ItemStack(TCItems.BATH_SALTS.get());
+        ItemStack alumentum = new ItemStack(TCItems.ALUMENTUM.get());
         ItemStack bottleTaint = new ItemStack(TCItems.BOTTLE_TAINT.get());
         checks.add(check("bath_salts_item_registered_with_legacy_id_and_lifespan",
                 itemId(TCItems.BATH_SALTS.get()).equals(id("bath_salts"))
@@ -110,6 +115,25 @@ public final class TCSpecialAlchemyBehaviorAudit {
                         && bathSalts.getEntityLifespan(level) == ItemBathSalts.LEGACY_ENTITY_LIFESPAN,
                 "item=" + itemId(TCItems.BATH_SALTS.get())
                         + ", lifespan=" + bathSalts.getEntityLifespan(level)));
+        checks.add(check("alumentum_item_registered_with_legacy_id_stack_and_projectile_interface",
+                itemId(TCItems.ALUMENTUM.get()).equals(id("alumentum"))
+                        && TCItems.ALUMENTUM.get() instanceof ItemAlumentum
+                        && TCItems.ALUMENTUM.get() instanceof ProjectileItem
+                        && alumentum.getMaxStackSize() == 64,
+                "item=" + itemId(TCItems.ALUMENTUM.get())
+                        + ", maxStack=" + alumentum.getMaxStackSize()));
+        checks.add(check("alumentum_throw_constants_match_legacy",
+                close(TCAlumentumEntity.LEGACY_THROW_REQUESTED_VELOCITY, 0.4F)
+                        && close(TCAlumentumEntity.LEGACY_ACTUAL_PROJECTILE_VELOCITY, 0.75F)
+                        && close(TCAlumentumEntity.LEGACY_THROW_INACCURACY, 2.0F)
+                        && close(TCAlumentumEntity.LEGACY_THROW_X_ROT_OFFSET, -5.0F)
+                        && close(TCAlumentumEntity.LEGACY_THROW_SOUND_VOLUME, 0.3F)
+                        && close(TCAlumentumEntity.LEGACY_THROW_SOUND_PITCH_NUMERATOR, 0.4F)
+                        && close(TCAlumentumEntity.LEGACY_THROW_SOUND_RANDOM_MULTIPLIER, 0.4F)
+                        && close(TCAlumentumEntity.LEGACY_THROW_SOUND_BASE, 0.8F),
+                "requestedVelocity=" + TCAlumentumEntity.LEGACY_THROW_REQUESTED_VELOCITY
+                        + ", actualVelocity=" + TCAlumentumEntity.LEGACY_ACTUAL_PROJECTILE_VELOCITY
+                        + ", inaccuracy=" + TCAlumentumEntity.LEGACY_THROW_INACCURACY));
         checks.add(check("bottle_taint_item_registered_with_legacy_id_and_stack_size",
                 itemId(TCItems.BOTTLE_TAINT.get()).equals(id("bottle_taint"))
                         && TCItems.BOTTLE_TAINT.get() instanceof ItemBottleTaint
@@ -138,6 +162,53 @@ public final class TCSpecialAlchemyBehaviorAudit {
     }
 
     private static void addProjectileChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
+        checks.add(check("alumentum_entity_registered_with_legacy_tracking",
+                entityId(TCEntityTypes.ALUMENTUM.get()).equals(id("alumentum"))
+                        && TCEntityTypes.byLegacyId("Alumentum")
+                                .map(spec -> "alumentum".equals(spec.modernId())
+                                        && spec.isRegisteredFoundation()
+                                        && spec.trackingRange() == 64
+                                        && spec.updateInterval() == 20
+                                        && spec.velocityUpdates())
+                                .orElse(false)
+                        && TCEntityTypes.ALUMENTUM.get().getCategory() == net.minecraft.world.entity.MobCategory.MISC
+                        && close(TCEntityTypes.ALUMENTUM.get().getWidth(), 0.25F)
+                        && close(TCEntityTypes.ALUMENTUM.get().getHeight(), 0.25F),
+                "entity=" + entityId(TCEntityTypes.ALUMENTUM.get())
+                        + ", tracking=" + TCEntityTypes.ALUMENTUM.get().clientTrackingRange()
+                        + ", update=" + TCEntityTypes.ALUMENTUM.get().updateInterval()
+                        + ", velocity=" + TCEntityTypes.ALUMENTUM.get().trackDeltas()));
+
+        TCAlumentumEntity alumentum = new TCAlumentumEntity(level, origin.getX() + 0.5D, origin.getY() + 1.0D, origin.getZ() + 0.5D);
+        checks.add(check("alumentum_projectile_default_stack_contract",
+                alumentum.getType() == TCEntityTypes.ALUMENTUM.get()
+                        && alumentum.getItem().is(TCItems.ALUMENTUM.get()),
+                "type=" + entityId(alumentum.getType()) + ", stack=" + itemId(alumentum.getItem().getItem())));
+        alumentum.shoot(1.0D, 0.0D, 0.0D, TCAlumentumEntity.LEGACY_THROW_REQUESTED_VELOCITY, 0.0F);
+        Vec3 alumentumMotion = alumentum.getDeltaMovement();
+        checks.add(check("alumentum_projectile_ignores_requested_velocity_like_legacy",
+                close(alumentumMotion.length(), TCAlumentumEntity.LEGACY_ACTUAL_PROJECTILE_VELOCITY),
+                "speed=" + alumentumMotion.length()
+                        + ", requested=" + TCAlumentumEntity.LEGACY_THROW_REQUESTED_VELOCITY
+                        + ", actual=" + TCAlumentumEntity.LEGACY_ACTUAL_PROJECTILE_VELOCITY));
+        checks.add(check("alumentum_explosion_contract_matches_legacy",
+                close(TCAlumentumEntity.LEGACY_EXPLOSION_STRENGTH, 1.1F)
+                        && TCAlumentumEntity.LEGACY_EXPLOSION_CAUSES_FIRE
+                        && TCAlumentumEntity.legacyExplosionInteractionForValidation() == net.minecraft.world.level.Level.ExplosionInteraction.TNT,
+                "strength=" + TCAlumentumEntity.LEGACY_EXPLOSION_STRENGTH
+                        + ", fire=" + TCAlumentumEntity.LEGACY_EXPLOSION_CAUSES_FIRE
+                        + ", interaction=" + TCAlumentumEntity.legacyExplosionInteractionForValidation()));
+        checks.add(check("alumentum_client_trail_contract_matches_legacy_constants",
+                TCAlumentumEntity.LEGACY_TRAIL_SAMPLES == 3
+                        && close(TCAlumentumEntity.LEGACY_ALUMENTUM_TRAIL_ALPHA, 0.5F)
+                        && close(TCAlumentumEntity.LEGACY_ALUMENTUM_TRAIL_SCALE, 4.0F)
+                        && TCAlumentumEntity.LEGACY_GENERIC_TRAIL_START == 448
+                        && TCAlumentumEntity.LEGACY_GENERIC_TRAIL_FRAMES == 8
+                        && TCAlumentumEntity.LEGACY_GENERIC_TRAIL_AGE == 8
+                        && close(TCAlumentumEntity.LEGACY_GENERIC_TRAIL_ALPHA, 0.7F)
+                        && close(TCAlumentumEntity.LEGACY_GENERIC_TRAIL_SCALE, 0.3F),
+                "samples=3, fireMote alpha/scale=0.5/4.0, generic start=448, frames=8, age=8"));
+
         checks.add(check("bottle_taint_entity_registered_with_legacy_tracking",
                 entityId(TCEntityTypes.BOTTLE_TAINT.get()).equals(id("bottle_taint"))
                         && TCEntityTypes.byLegacyId("BottleTaint")
@@ -325,6 +396,8 @@ public final class TCSpecialAlchemyBehaviorAudit {
     }
 
     private static void addRecipeChecks(ServerLevel level, ArrayList<Check> checks) {
+        checks.add(checkRecipe(level, "alumentum", "ALUMENTUM", TCItems.ALUMENTUM.get(),
+                List.of(cost(Aspect.ENERGY, 10), cost(Aspect.FIRE, 10), cost(Aspect.ENTROPY, 5))));
         checks.add(checkRecipe(level, "bottletaint", "BOTTLETAINT", TCItems.BOTTLE_TAINT.get(),
                 List.of(cost(Aspect.FLUX, 30), cost(Aspect.WATER, 30))));
         checks.add(checkRecipe(level, "bathsalts", "BATHSALTS", TCItems.BATH_SALTS.get(),
