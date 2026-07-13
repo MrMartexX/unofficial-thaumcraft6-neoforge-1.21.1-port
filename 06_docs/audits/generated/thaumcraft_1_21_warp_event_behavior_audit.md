@@ -6,7 +6,7 @@ Runtime parity checks for the first server-side TC6 WarpEvents slice.
 
 | Check | Result |
 |---|---:|
-| Passed | 25 |
+| Passed | 29 |
 | Failed | 0 |
 
 ## Checks
@@ -22,7 +22,11 @@ Runtime parity checks for the first server-side TC6 WarpEvents slice.
 | legacy_entity_outcomes_are_backed_by_registered_foundations | PASS | entity outcomes use real registered foundations |
 | legacy_guardian_count_formula_and_cap | PASS | one=1, light=warp/30, heavy=warp/15, cap=8 |
 | legacy_entity_type_shapes_for_warp_outcomes | PASS | guardian=0.8x2.25 eye2.1, spider=0.7x0.5 eye0.45, portal=1.5x3.0 |
-| legacy_entity_foundation_classes_construct | PASS | spider=true, portal=true, guardian=true |
+| legacy_eldritch_orb_type_shape | PASS | orb=0.25x0.25, tracking=64, update=20, velocity=true |
+| legacy_entity_foundation_classes_construct | PASS | spider=true, portal=true, guardian=true, orb=true |
+| eldritch_orb_projectile_contract | PASS | life=100, radius=2, damage=attack*0.666, weakness=160, gravity=0.0 |
+| eldritch_orb_renderer_contract | PASS | 12 seeded tendrils, 13-frame particle strip, billboard scale 0.75 |
+| eldritch_guardian_ranged_orb_contract | PASS | min=8, speed=1, interval=20..40, radius=24, sonic=15% |
 | mind_spider_harmless_viewer_lifespan_contract | PASS | harmless=true, viewer=FakePlayer, lifespan=1200 |
 | lesser_cultist_portal_active_state_and_budget_contract | PASS | active=true, budgets easy/normal/hard=2/4/6 |
 | custom_warp_entity_aspect_contracts_match_config_aspects | PASS | MindSpider=vitium5/ignis5, EldritchGuardian=alienis20/mortuus20/exanimis20 |
@@ -41,6 +45,6 @@ Runtime parity checks for the first server-side TC6 WarpEvents slice.
 
 ## Boundary
 
-- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds and warp outcome entity spawn foundations.
+- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds, warp outcome entity spawn foundations and Eldritch Guardian orb projectile path.
 - Implemented: rotten flesh / zombie brain relief path for Unnatural Hunger.
-- Deferred by missing owners: Eldritch Guardian orb projectile renderer/path, lesser cultist portal minion spawning until CultistKnight/Cleric exist, PacketMiscEvent client hallucination/stress visuals, custom mob/portal renderers and fortress mask mitigation.
+- Deferred by missing owners: lesser cultist portal minion spawning until CultistKnight/Cleric exist, PacketMiscEvent client hallucination/stress visuals, exact Guardian/orb mob renderer pixel parity, custom portal renderer and fortress mask mitigation.

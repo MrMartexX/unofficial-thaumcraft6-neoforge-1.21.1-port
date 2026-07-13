@@ -24,7 +24,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 17;
+    private static final int REGISTERED_FOUNDATION_COUNT = 18;
 
     private TCEntityFoundationAudit() {
     }
@@ -90,7 +90,7 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, BottleTaint, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations and three warp outcome entity foundations"
+                "expected item entities, BottleTaint, EldritchOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations and three warp outcome entity foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
@@ -110,6 +110,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("TaintacleTiny", TCEntityTypes.TAINTACLE_TINY.get()));
         checks.add(checkRegisteredType("TaintSwarm", TCEntityTypes.TAINT_SWARM.get()));
         checks.add(checkRegisteredType("BottleTaint", TCEntityTypes.BOTTLE_TAINT.get()));
+        checks.add(checkRegisteredType("EldritchOrb", TCEntityTypes.ELDRITCH_ORB.get()));
         checks.add(checkTypeShape("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get(), 64, 20, true));
         checks.add(checkTypeShape("FollowItem", TCEntityTypes.FOLLOW_ITEM.get(), 64, 20, false));
         checks.add(checkTypeShape("FallingTaint", TCEntityTypes.FALLING_TAINT.get(), 64, 3, true, 0.98F, 0.98F));
@@ -120,6 +121,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkMobTypeShape("TaintacleTiny", TCEntityTypes.TAINTACLE_TINY.get(), 0.22F, 1.0F, 64, 3, false));
         checks.add(checkMobTypeShape("TaintSwarm", TCEntityTypes.TAINT_SWARM.get(), 2.0F, 2.0F, 64, 3, false));
         checks.add(checkTypeShape("BottleTaint", TCEntityTypes.BOTTLE_TAINT.get(), 64, 20, true));
+        checks.add(checkTypeShape("EldritchOrb", TCEntityTypes.ELDRITCH_ORB.get(), 64, 20, true));
         checks.add(checkMobTypeShape("CultistPortalLesser", TCEntityTypes.CULTIST_PORTAL_LESSER.get(), 1.5F, 3.0F, 64, 20, false));
         checks.add(checkMobTypeShape("MindSpider", TCEntityTypes.MIND_SPIDER.get(), 0.7F, 0.5F, 64, 3, true));
         checks.add(checkMobTypeShape("EldritchGuardian", TCEntityTypes.ELDRITCH_GUARDIAN.get(), 0.8F, 2.25F, 64, 3, true));
@@ -176,6 +178,7 @@ public final class TCEntityFoundationAudit {
     private static Check checkConstructors(ServerLevel level) {
         Entity specialFactory = TCEntityTypes.SPECIAL_ITEM.get().create(level);
         Entity followingFactory = TCEntityTypes.FOLLOW_ITEM.get().create(level);
+        Entity orbFactory = TCEntityTypes.ELDRITCH_ORB.get().create(level);
         Entity portalFactory = TCEntityTypes.CULTIST_PORTAL_LESSER.get().create(level);
         Entity spiderFactory = TCEntityTypes.MIND_SPIDER.get().create(level);
         Entity guardianFactory = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(level);
@@ -183,6 +186,7 @@ public final class TCEntityFoundationAudit {
         TCFollowingItemEntity following = new TCFollowingItemEntity(level, 1.0D, 2.0D, 3.0D, new ItemStack(Items.EMERALD), 4.0D, 5.0D, 6.0D);
         boolean passed = specialFactory instanceof TCSpecialItemEntity
                 && followingFactory instanceof TCFollowingItemEntity
+                && orbFactory instanceof TCEldritchOrbEntity
                 && portalFactory instanceof TCCultistPortalLesserEntity
                 && spiderFactory instanceof TCMindSpiderEntity
                 && guardianFactory instanceof TCEldritchGuardianEntity

@@ -14,6 +14,7 @@ import thaumcraft.common.entities.TCArcaneBoreEntity;
 import thaumcraft.common.entities.TCBottleTaintEntity;
 import thaumcraft.common.entities.TCCultistPortalLesserEntity;
 import thaumcraft.common.entities.TCEldritchGuardianEntity;
+import thaumcraft.common.entities.TCEldritchOrbEntity;
 import thaumcraft.common.entities.TCFallingTaintEntity;
 import thaumcraft.common.entities.TCFollowingItemEntity;
 import thaumcraft.common.entities.TCFluxRiftEntity;
@@ -153,6 +154,14 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(true)
                     .build(Thaumcraft.MODID + ":bottle_taint"));
 
+    public static final Supplier<EntityType<TCEldritchOrbEntity>> ELDRITCH_ORB = ENTITY_TYPES.register("eldritch_orb", () ->
+            EntityType.Builder.<TCEldritchOrbEntity>of(TCEldritchOrbEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":eldritch_orb"));
+
     public static final Supplier<EntityType<TCMindSpiderEntity>> MIND_SPIDER = ENTITY_TYPES.register("mind_spider", () ->
             EntityType.Builder.<TCMindSpiderEntity>of(TCMindSpiderEntity::new, MobCategory.MONSTER)
                     .sized(0.7F, 0.5F)
@@ -181,7 +190,7 @@ public final class TCEntityTypes {
             spec("FallingTaint", "EntityFallingTaint", "falling_taint", 64, 3, true, "registered_foundation", "Taint crust falling physics and taint world mutation"),
             spec("Alumentum", "EntityAlumentum", null, 64, 20, true, "defer", "Projectile item behavior and impact effects"),
             spec("GolemDart", "EntityGolemDart", null, 64, 20, false, "defer", "Golem ranged combat"),
-            spec("EldritchOrb", "EntityEldritchOrb", null, 64, 20, true, "defer", "Eldritch projectile behavior and renderer"),
+            spec("EldritchOrb", "EntityEldritchOrb", "eldritch_orb", 64, 20, true, "registered_foundation", "Eldritch Guardian/Warden projectile: no-gravity lifetime, impact AoE and source-informed renderer"),
             spec("BottleTaint", "EntityBottleTaint", "bottle_taint", 64, 20, true, "registered_foundation", "Taint bottle projectile item behavior, Flux Taint splash and Flux Goo spread"),
             spec("GolemOrb", "EntityGolemOrb", null, 64, 3, true, "defer", "Golem combat/projectile behavior"),
             spec("Grapple", "EntityGrapple", null, 64, 20, true, "defer", "Grapple tool physics and rope renderer"),
@@ -204,7 +213,7 @@ public final class TCEntityTypes {
             spec("Spellbat", "EntitySpellBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
             spec("Pech", "EntityPech", null, 64, 3, true, "defer", "Pech AI, trading and renderer"),
             spec("MindSpider", "EntityMindSpider", "mind_spider", 64, 3, true, "registered_foundation", "Mind Spider harmless/viewer hallucination state, lifespan and warp spawn foundation; custom renderer deferred"),
-            spec("EldritchGuardian", "EntityEldritchGuardian", "eldritch_guardian", 64, 3, true, "registered_foundation", "Eldritch Guardian attributes, team rules, warp spawn and curse branch; orb projectile/custom renderer deferred"),
+            spec("EldritchGuardian", "EntityEldritchGuardian", "eldritch_guardian", 64, 3, true, "registered_foundation", "Eldritch Guardian attributes, team rules, warp spawn, ranged orb attack and curse branch; custom mob renderer deferred"),
             spec("CultistKnight", "EntityCultistKnight", null, 64, 3, true, "defer", "Cultist mob AI and renderer"),
             spec("CultistCleric", "EntityCultistCleric", null, 64, 3, true, "defer", "Cultist mob AI and renderer"),
             spec("EldritchCrab", "EntityEldritchCrab", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),

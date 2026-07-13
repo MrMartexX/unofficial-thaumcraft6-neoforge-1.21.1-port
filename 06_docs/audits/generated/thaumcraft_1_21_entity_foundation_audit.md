@@ -7,7 +7,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Check | Status | Notes |
 | --- | --- | --- |
 | legacy entity catalog count | PASS | expected 43, got 43 |
-| registered foundation count | PASS | expected item entities, BottleTaint, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations and three warp outcome entity foundations |
+| registered foundation count | PASS | expected item entities, BottleTaint, EldritchOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations and three warp outcome entity foundations |
 | SpecialItem registry id | PASS | expected thaumcraft:special_item, got thaumcraft:special_item |
 | FollowItem registry id | PASS | expected thaumcraft:follow_item, got thaumcraft:follow_item |
 | FluxRift registry id | PASS | expected thaumcraft:flux_rift, got thaumcraft:flux_rift |
@@ -25,6 +25,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | TaintacleTiny registry id | PASS | expected thaumcraft:taintacle_tiny, got thaumcraft:taintacle_tiny |
 | TaintSwarm registry id | PASS | expected thaumcraft:taint_swarm, got thaumcraft:taint_swarm |
 | BottleTaint registry id | PASS | expected thaumcraft:bottle_taint, got thaumcraft:bottle_taint |
+| EldritchOrb registry id | PASS | expected thaumcraft:eldritch_orb, got thaumcraft:eldritch_orb |
 | SpecialItem type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | FollowItem type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=false |
 | FallingTaint type parameters | PASS | category=MISC, size=0.98x0.98, tracking=64, update=3, velocity=true |
@@ -35,6 +36,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | TaintacleTiny mob type parameters | PASS | category=MONSTER, size=0.22x1.0, tracking=64, update=3, velocity=false |
 | TaintSwarm mob type parameters | PASS | category=MONSTER, size=2.0x2.0, tracking=64, update=3, velocity=false |
 | BottleTaint type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
+| EldritchOrb type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | CultistPortalLesser mob type parameters | PASS | category=MONSTER, size=1.5x3.0, tracking=64, update=20, velocity=false |
 | MindSpider mob type parameters | PASS | category=MONSTER, size=0.7x0.5, tracking=64, update=3, velocity=true |
 | EldritchGuardian mob type parameters | PASS | category=MONSTER, size=0.8x2.25, tracking=64, update=3, velocity=true |
@@ -52,7 +54,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | FallingTaint | EntityFallingTaint | thaumcraft:falling_taint | 64 | 3 | true | registered_foundation | Taint crust falling physics and taint world mutation |
 | Alumentum | EntityAlumentum |  | 64 | 20 | true | defer | Projectile item behavior and impact effects |
 | GolemDart | EntityGolemDart |  | 64 | 20 | false | defer | Golem ranged combat |
-| EldritchOrb | EntityEldritchOrb |  | 64 | 20 | true | defer | Eldritch projectile behavior and renderer |
+| EldritchOrb | EntityEldritchOrb | thaumcraft:eldritch_orb | 64 | 20 | true | registered_foundation | Eldritch Guardian/Warden projectile: no-gravity lifetime, impact AoE and source-informed renderer |
 | BottleTaint | EntityBottleTaint | thaumcraft:bottle_taint | 64 | 20 | true | registered_foundation | Taint bottle projectile item behavior, Flux Taint splash and Flux Goo spread |
 | GolemOrb | EntityGolemOrb |  | 64 | 3 | true | defer | Golem combat/projectile behavior |
 | Grapple | EntityGrapple |  | 64 | 20 | true | defer | Grapple tool physics and rope renderer |
@@ -75,7 +77,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Spellbat | EntitySpellBat |  | 64 | 3 | false | defer | Bat AI variant and renderer |
 | Pech | EntityPech |  | 64 | 3 | true | defer | Pech AI, trading and renderer |
 | MindSpider | EntityMindSpider | thaumcraft:mind_spider | 64 | 3 | true | registered_foundation | Mind Spider harmless/viewer hallucination state, lifespan and warp spawn foundation; custom renderer deferred |
-| EldritchGuardian | EntityEldritchGuardian | thaumcraft:eldritch_guardian | 64 | 3 | true | registered_foundation | Eldritch Guardian attributes, team rules, warp spawn and curse branch; orb projectile/custom renderer deferred |
+| EldritchGuardian | EntityEldritchGuardian | thaumcraft:eldritch_guardian | 64 | 3 | true | registered_foundation | Eldritch Guardian attributes, team rules, warp spawn, ranged orb attack and curse branch; custom mob renderer deferred |
 | CultistKnight | EntityCultistKnight |  | 64 | 3 | true | defer | Cultist mob AI and renderer |
 | CultistCleric | EntityCultistCleric |  | 64 | 3 | true | defer | Cultist mob AI and renderer |
 | EldritchCrab | EntityEldritchCrab |  | 64 | 3 | true | defer | Eldritch mob AI and renderer |

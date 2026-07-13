@@ -23,6 +23,8 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.aspects.TCEntityAspectAssignments;
 import thaumcraft.common.entities.TCCultistPortalLesserEntity;
 import thaumcraft.common.entities.TCEldritchGuardianEntity;
+import thaumcraft.common.entities.TCEldritchOrbEntity;
+import thaumcraft.common.entities.TCEldritchOrbRenderContract;
 import thaumcraft.common.entities.TCMindSpiderEntity;
 import thaumcraft.common.lib.potions.PotionBlurredVision;
 import thaumcraft.common.lib.potions.PotionDeathGaze;
@@ -68,9 +70,9 @@ public final class TCWarpEventBehaviorAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds and warp outcome entity spawn foundations.");
+        lines.add("- Implemented: server tick owner, temporary warp decay, legacy trigger/counter math, legacy outcome threshold table, legacy potion/effect outcomes, Death Gaze range/cone basics, warp research unlock thresholds, warp outcome entity spawn foundations and Eldritch Guardian orb projectile path.");
         lines.add("- Implemented: rotten flesh / zombie brain relief path for Unnatural Hunger.");
-        lines.add("- Deferred by missing owners: Eldritch Guardian orb projectile renderer/path, lesser cultist portal minion spawning until CultistKnight/Cleric exist, PacketMiscEvent client hallucination/stress visuals, custom mob/portal renderers and fortress mask mitigation.");
+        lines.add("- Deferred by missing owners: lesser cultist portal minion spawning until CultistKnight/Cleric exist, PacketMiscEvent client hallucination/stress visuals, exact Guardian/orb mob renderer pixel parity, custom portal renderer and fortress mask mitigation.");
         Files.write(output, lines, StandardCharsets.UTF_8);
         return report;
     }
@@ -153,6 +155,7 @@ public final class TCWarpEventBehaviorAudit {
                         && TCWarpEvents.TCWarpEventOutcome.MIND_SPIDERS_REAL.entityOutcome()
                         && !TCWarpEvents.TCWarpEventOutcome.VIS_EXHAUST.entityOutcome()
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.ELDRITCH_GUARDIAN.get()).equals(id("eldritch_guardian"))
+                        && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.ELDRITCH_ORB.get()).equals(id("eldritch_orb"))
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.MIND_SPIDER.get()).equals(id("mind_spider"))
                         && BuiltInRegistries.ENTITY_TYPE.getKey(TCEntityTypes.CULTIST_PORTAL_LESSER.get()).equals(id("cultist_portal_lesser")),
                 "entity outcomes use real registered foundations"));
@@ -176,13 +179,53 @@ public final class TCWarpEventBehaviorAudit {
                         && Float.compare(TCEntityTypes.CULTIST_PORTAL_LESSER.get().getWidth(), 1.5F) == 0
                         && Float.compare(TCEntityTypes.CULTIST_PORTAL_LESSER.get().getHeight(), 3.0F) == 0,
                 "guardian=0.8x2.25 eye2.1, spider=0.7x0.5 eye0.45, portal=1.5x3.0"));
+        checks.add(check("legacy_eldritch_orb_type_shape",
+                TCEntityTypes.ELDRITCH_ORB.get().getCategory() == MobCategory.MISC
+                        && Float.compare(TCEntityTypes.ELDRITCH_ORB.get().getWidth(), 0.25F) == 0
+                        && Float.compare(TCEntityTypes.ELDRITCH_ORB.get().getHeight(), 0.25F) == 0
+                        && TCEntityTypes.ELDRITCH_ORB.get().clientTrackingRange() == 64
+                        && TCEntityTypes.ELDRITCH_ORB.get().updateInterval() == 20
+                        && TCEntityTypes.ELDRITCH_ORB.get().trackDeltas(),
+                "orb=0.25x0.25, tracking=64, update=20, velocity=true"));
 
         TCMindSpiderEntity spider = TCEntityTypes.MIND_SPIDER.get().create(server.overworld());
         TCCultistPortalLesserEntity portal = TCEntityTypes.CULTIST_PORTAL_LESSER.get().create(server.overworld());
         TCEldritchGuardianEntity guardian = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(server.overworld());
+        TCEldritchOrbEntity orb = TCEntityTypes.ELDRITCH_ORB.get().create(server.overworld());
         checks.add(check("legacy_entity_foundation_classes_construct",
-                spider != null && portal != null && guardian != null,
-                "spider=" + (spider != null) + ", portal=" + (portal != null) + ", guardian=" + (guardian != null)));
+                spider != null && portal != null && guardian != null && orb != null,
+                "spider=" + (spider != null) + ", portal=" + (portal != null) + ", guardian=" + (guardian != null) + ", orb=" + (orb != null)));
+        if (orb != null) {
+            checks.add(check("eldritch_orb_projectile_contract",
+                    TCEldritchOrbEntity.LEGACY_LIFETIME_TICKS == 100
+                            && Double.compare(TCEldritchOrbEntity.LEGACY_IMPACT_RADIUS, 2.0D) == 0
+                            && Float.compare(TCEldritchOrbEntity.LEGACY_DAMAGE_MULTIPLIER, 0.666F) == 0
+                            && TCEldritchOrbEntity.LEGACY_WEAKNESS_DURATION == 160
+                            && TCEldritchOrbEntity.LEGACY_WEAKNESS_AMPLIFIER == 0
+                            && Double.compare(orb.gravityForValidation(), 0.0D) == 0
+                            && Math.abs(TCEldritchOrbEntity.legacyDamageFromAttack(7.0D) - 4.662F) < 0.0001F,
+                    "life=100, radius=2, damage=attack*0.666, weakness=160, gravity=" + orb.gravityForValidation()));
+            checks.add(check("eldritch_orb_renderer_contract",
+                    TCEldritchOrbRenderContract.LEGACY_TENDRIL_COUNT == 12
+                            && TCEldritchOrbRenderContract.LEGACY_RANDOM_SEED == 187
+                            && TCEldritchOrbRenderContract.LEGACY_FRAME_COUNT == 13
+                            && TCEldritchOrbRenderContract.LEGACY_GRID_SIZE == 64
+                            && TCEldritchOrbRenderContract.LEGACY_FRAME_V == 3
+                            && Float.compare(TCEldritchOrbRenderContract.LEGACY_BILLBOARD_SCALE, 0.75F) == 0,
+                    "12 seeded tendrils, 13-frame particle strip, billboard scale 0.75"));
+        }
+        if (guardian != null) {
+            checks.add(check("eldritch_guardian_ranged_orb_contract",
+                    Double.compare(TCEldritchGuardianEntity.LEGACY_RANGED_MIN_DISTANCE, 8.0D) == 0
+                            && Double.compare(TCEldritchGuardianEntity.LEGACY_RANGED_SPEED, 1.0D) == 0
+                            && TCEldritchGuardianEntity.LEGACY_RANGED_INTERVAL_MIN == 20
+                            && TCEldritchGuardianEntity.LEGACY_RANGED_INTERVAL_MAX == 40
+                            && Float.compare(TCEldritchGuardianEntity.LEGACY_RANGED_RADIUS, 24.0F) == 0
+                            && Float.compare(TCEldritchGuardianEntity.LEGACY_SONIC_CHANCE, 0.15F) == 0
+                            && Math.abs(TCEldritchGuardianEntity.legacyOrbSideOffset(0.0F, true).x()) < 0.0001D
+                            && Math.abs(TCEldritchGuardianEntity.legacyOrbSideOffset(0.0F, true).z() - 0.5D) < 0.0001D,
+                    "min=8, speed=1, interval=20..40, radius=24, sonic=15%"));
+        }
         if (spider != null) {
             spider.setHarmless(true);
             spider.setViewer("FakePlayer");
