@@ -40,10 +40,9 @@ public final class TCEntitySpawnPolicyAudit {
         ArrayList<String> lines = new ArrayList<>();
         lines.add("# Thaumcraft Entity Spawn Policy Audit");
         lines.add("");
-        lines.add("Runtime checks for the first legacy natural-spawn boundary ported to NeoForge 1.21.1.");
-        lines.add("This intentionally activates only the Wisp Nether spawn that has both a registered modern entity");
-        lines.add("and exact TC6 legacy source evidence. Other legacy spawn rows are cataloged as deferred until their");
-        lines.add("own entities or Thaumcraft biomes exist.");
+        lines.add("Runtime checks for legacy natural-spawn rows ported to NeoForge 1.21.1.");
+        lines.add("Only rows whose entities and server-side behavior have a registered foundation are active:");
+        lines.add("Wisp Nether and Angry Zombie overworld. Thaumcraft-biome rows and unported mob families stay deferred.");
         lines.add("");
         lines.add("## Summary");
         lines.add("");
@@ -105,19 +104,29 @@ public final class TCEntitySpawnPolicyAudit {
 
     private static void addMetadataChecks(ArrayList<Check> checks) {
         TCEntitySpawnRules.LegacyNaturalSpawn wisp = TCEntitySpawnRules.WISP_NETHER;
-        checks.add(check("active_spawn_catalog_contains_only_safe_wisp_nether",
-                TCEntitySpawnRules.activeNaturalSpawns().size() == 1
+        TCEntitySpawnRules.LegacyNaturalSpawn brainy = TCEntitySpawnRules.BRAINY_ZOMBIE_OVERWORLD;
+        checks.add(check("active_spawn_catalog_contains_safe_wisp_and_brainy_rows",
+                TCEntitySpawnRules.activeNaturalSpawns().size() == 2
+                        && TCEntitySpawnRules.activeNaturalSpawns().contains(wisp)
+                        && TCEntitySpawnRules.activeNaturalSpawns().contains(brainy)
                         && wisp.active()
                         && "Wisp".equals(wisp.legacyId())
                         && "thaumcraft:wisp".equals(wisp.modernEntityId())
                         && "#minecraft:is_nether".equals(wisp.biomeSelector())
                         && wisp.weight() == 5
                         && wisp.minCount() == 1
-                        && wisp.maxCount() == 1,
-                "active=" + TCEntitySpawnRules.activeNaturalSpawns().size() + ", row=" + wisp));
+                        && wisp.maxCount() == 1
+                        && brainy.active()
+                        && "BrainyZombie".equals(brainy.legacyId())
+                        && "thaumcraft:brainy_zombie".equals(brainy.modernEntityId())
+                        && "#thaumcraft:legacy_angry_zombie_spawn_biomes".equals(brainy.biomeSelector())
+                        && brainy.weight() == 10
+                        && brainy.minCount() == 1
+                        && brainy.maxCount() == 1,
+                "active=" + TCEntitySpawnRules.activeNaturalSpawns().size() + ", wisp=" + wisp + ", brainy=" + brainy));
         checks.add(check("unsafe_legacy_spawn_rows_remain_deferred",
                 TCEntitySpawnRules.deferredNaturalSpawns().stream().noneMatch(TCEntitySpawnRules.LegacyNaturalSpawn::active)
-                        && TCEntitySpawnRules.deferredNaturalSpawns().size() >= 7,
+                        && TCEntitySpawnRules.deferredNaturalSpawns().size() >= 8,
                 "deferred=" + TCEntitySpawnRules.deferredNaturalSpawns().size()));
     }
 
@@ -141,6 +150,31 @@ public final class TCEntitySpawnPolicyAudit {
         checks.add(check("wisp_nether_biome_modifier_matches_legacy_values",
                 passed,
                 "type=" + root.get("type").getAsString() + ", biome=" + root.get("biomes").getAsString() + ", spawner=" + spawner));
+
+        String brainyResource = resourceText("data/thaumcraft/neoforge/biome_modifier/brainy_zombie_legacy_overworld_spawns.json");
+        checks.add(check("brainy_zombie_biome_modifier_resource_exists",
+                !brainyResource.isBlank(),
+                "data/thaumcraft/neoforge/biome_modifier/brainy_zombie_legacy_overworld_spawns.json"));
+        if (!brainyResource.isBlank()) {
+            JsonObject brainyRoot = JsonParser.parseString(brainyResource).getAsJsonObject();
+            JsonObject brainySpawner = brainyRoot.getAsJsonObject("spawners");
+            boolean brainyPassed = "neoforge:add_spawns".equals(brainyRoot.get("type").getAsString())
+                    && "#thaumcraft:legacy_angry_zombie_spawn_biomes".equals(brainyRoot.get("biomes").getAsString())
+                    && "thaumcraft:brainy_zombie".equals(brainySpawner.get("type").getAsString())
+                    && brainySpawner.get("weight").getAsInt() == 10
+                    && brainySpawner.get("minCount").getAsInt() == 1
+                    && brainySpawner.get("maxCount").getAsInt() == 1;
+            checks.add(check("brainy_zombie_biome_modifier_matches_legacy_values",
+                    brainyPassed,
+                    "type=" + brainyRoot.get("type").getAsString() + ", biome=" + brainyRoot.get("biomes").getAsString() + ", spawner=" + brainySpawner));
+        } else {
+            checks.add(check("brainy_zombie_biome_modifier_matches_legacy_values", false, "resource missing"));
+        }
+
+        String brainyTag = resourceText("data/thaumcraft/tags/worldgen/biome/legacy_angry_zombie_spawn_biomes.json");
+        checks.add(check("brainy_zombie_legacy_biome_tag_resource_exists",
+                !brainyTag.isBlank() && brainyTag.contains("\"minecraft:desert\"") && brainyTag.contains("\"minecraft:snowy_plains\""),
+                "data/thaumcraft/tags/worldgen/biome/legacy_angry_zombie_spawn_biomes.json"));
     }
 
     private static void addPlacementRegistrationChecks(ArrayList<Check> checks) {
@@ -150,6 +184,12 @@ public final class TCEntitySpawnPolicyAudit {
                         && SpawnPlacements.getHeightmapType(TCEntityTypes.WISP.get()) == TCEntitySpawnRules.WISP_HEIGHTMAP_TYPE,
                 "placement=" + SpawnPlacements.getPlacementType(TCEntityTypes.WISP.get())
                         + ", heightmap=" + SpawnPlacements.getHeightmapType(TCEntityTypes.WISP.get())));
+        checks.add(check("brainy_zombie_spawn_placement_registered",
+                SpawnPlacements.hasPlacement(TCEntityTypes.BRAINY_ZOMBIE.get())
+                        && SpawnPlacements.getPlacementType(TCEntityTypes.BRAINY_ZOMBIE.get()) == SpawnPlacementTypes.ON_GROUND
+                        && SpawnPlacements.getHeightmapType(TCEntityTypes.BRAINY_ZOMBIE.get()) == TCEntitySpawnRules.BRAINY_ZOMBIE_HEIGHTMAP_TYPE,
+                "placement=" + SpawnPlacements.getPlacementType(TCEntityTypes.BRAINY_ZOMBIE.get())
+                        + ", heightmap=" + SpawnPlacements.getHeightmapType(TCEntityTypes.BRAINY_ZOMBIE.get())));
     }
 
     private static void addPredicateChecks(ServerLevel level, BlockPos origin, MinecraftServer server, ArrayList<Check> checks) {
@@ -200,11 +240,39 @@ public final class TCEntitySpawnPolicyAudit {
                 peacefulDenied,
                 "difficulty=" + level.getDifficulty()));
         server.setDifficulty(previous, true);
+
+        prepareDarkSpawnCell(level, origin);
+        boolean brainyAllowed = checkBrainy(level, origin, 11L);
+        checks.add(check("brainy_zombie_spawn_predicate_allows_dark_ground_cell",
+                brainyAllowed,
+                "pos=" + origin + ", brightness=" + level.getMaxLocalRawBrightness(origin)));
+
+        boolean brainyConfigDenied = !TCBrainyZombieEntity.testLegacySpawnGatesForValidation(false, Difficulty.NORMAL, true);
+        checks.add(check("brainy_zombie_spawn_gate_denies_config_disabled",
+                brainyConfigDenied,
+                "allowSpawnAngryZombie=false"));
+
+        server.setDifficulty(Difficulty.PEACEFUL, true);
+        boolean brainyPeacefulDenied = !checkBrainy(level, origin, 12L);
+        checks.add(check("brainy_zombie_spawn_predicate_denies_peaceful",
+                brainyPeacefulDenied,
+                "difficulty=" + level.getDifficulty()));
+        server.setDifficulty(previous, true);
     }
 
     private static boolean checkWisp(ServerLevel level, BlockPos pos, long seed) {
         return SpawnPlacements.checkSpawnRules(
                 TCEntityTypes.WISP.get(),
+                level,
+                MobSpawnType.NATURAL,
+                pos,
+                RandomSource.create(seed)
+        );
+    }
+
+    private static boolean checkBrainy(ServerLevel level, BlockPos pos, long seed) {
+        return SpawnPlacements.checkSpawnRules(
+                TCEntityTypes.BRAINY_ZOMBIE.get(),
                 level,
                 MobSpawnType.NATURAL,
                 pos,

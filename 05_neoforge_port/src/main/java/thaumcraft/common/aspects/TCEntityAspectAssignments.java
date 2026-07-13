@@ -154,6 +154,8 @@ public final class TCEntityAspectAssignments {
         put(map, "taintacle_tiny", tags(Aspect.FLUX, 5, Aspect.BEAST, 5));
         put(map, "taint_swarm", tags(Aspect.FLUX, 15, Aspect.AIR, 5));
         put(map, "mind_spider", tags(Aspect.FLUX, 5, Aspect.FIRE, 5));
+        put(map, "brainy_zombie", tags(Aspect.UNDEAD, 20, Aspect.MAN, 10, Aspect.MIND, 5, Aspect.AVERSION, 5));
+        put(map, "giant_brainy_zombie", tags(Aspect.UNDEAD, 25, Aspect.MAN, 15, Aspect.MIND, 5, Aspect.AVERSION, 10));
         put(map, "eldritch_guardian", tags(Aspect.ELDRITCH, 20, Aspect.DEATH, 20, Aspect.UNDEAD, 20));
         put(map, "cultist_knight", tags(Aspect.ELDRITCH, 5, Aspect.MAN, 15, Aspect.AVERSION, 5));
         put(map, "cultist_cleric", tags(Aspect.ELDRITCH, 5, Aspect.MAN, 15, Aspect.AVERSION, 5));

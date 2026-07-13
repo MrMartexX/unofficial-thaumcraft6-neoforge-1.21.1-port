@@ -50,6 +50,10 @@ public final class TCConfig {
             .comment("Legacy Thaumcraft CONFIG_WORLD.allowSpawnWisp. Disables natural Wisp spawn placement when false; rift-spawned Wisps are not controlled by this flag.")
             .define("allowSpawnWisp", true);
 
+    public static final ModConfigSpec.BooleanValue ALLOW_SPAWN_ANGRY_ZOMBIE = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.allowSpawnAngryZombie. Controls the natural Angry Zombie spawn row; Eerie-biome Angry/Furious Zombie rows remain biome-subsystem gated.")
+            .define("allowSpawnAngryZombie", true);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private TCConfig() {

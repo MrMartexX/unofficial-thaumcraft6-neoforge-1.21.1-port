@@ -13,9 +13,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import thaumcraft.Thaumcraft;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.aspects.TCEntityAspectAssignments;
 import thaumcraft.common.registry.TCEntityTypes;
 import thaumcraft.common.registry.TCEntityTypes.LegacyEntitySpec;
 
@@ -24,7 +29,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 23;
+    private static final int REGISTERED_FOUNDATION_COUNT = 25;
 
     private TCEntityFoundationAudit() {
     }
@@ -90,7 +95,7 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations"
+                "expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, BrainyZombie pair, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
@@ -99,6 +104,8 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("ArcaneBore", TCEntityTypes.ARCANE_BORE.get()));
         checks.add(checkRegisteredType("FallingTaint", TCEntityTypes.FALLING_TAINT.get()));
         checks.add(checkRegisteredType("Wisp", TCEntityTypes.WISP.get()));
+        checks.add(checkRegisteredType("BrainyZombie", TCEntityTypes.BRAINY_ZOMBIE.get()));
+        checks.add(checkRegisteredType("GiantBrainyZombie", TCEntityTypes.GIANT_BRAINY_ZOMBIE.get()));
         checks.add(checkRegisteredType("TaintSeed", TCEntityTypes.TAINT_SEED.get()));
         checks.add(checkRegisteredType("TaintSeedPrime", TCEntityTypes.TAINT_SEED_PRIME.get()));
         checks.add(checkRegisteredType("CultistPortalLesser", TCEntityTypes.CULTIST_PORTAL_LESSER.get()));
@@ -120,6 +127,8 @@ public final class TCEntityFoundationAudit {
         checks.add(checkTypeShape("FollowItem", TCEntityTypes.FOLLOW_ITEM.get(), 64, 20, false));
         checks.add(checkTypeShape("FallingTaint", TCEntityTypes.FALLING_TAINT.get(), 64, 3, true, 0.98F, 0.98F));
         checks.add(checkMobTypeShape("Wisp", TCEntityTypes.WISP.get(), 0.9F, 0.9F, 64, 3, false));
+        checks.add(checkMobTypeShape("BrainyZombie", TCEntityTypes.BRAINY_ZOMBIE.get(), 0.6F, 1.95F, 64, 3, true));
+        checks.add(checkMobTypeShape("GiantBrainyZombie", TCEntityTypes.GIANT_BRAINY_ZOMBIE.get(), 0.6F, 1.95F, 64, 3, true));
         checks.add(checkMobTypeShape("ThaumSlime", TCEntityTypes.THAUM_SLIME.get(), 2.04F, 2.04F, 64, 3, true));
         checks.add(checkMobTypeShape("TaintCrawler", TCEntityTypes.TAINT_CRAWLER.get(), 0.5F, 0.4F, 64, 3, true));
         checks.add(checkMobTypeShape("Taintacle", TCEntityTypes.TAINTACLE.get(), 0.8F, 3.0F, 64, 3, false));
@@ -135,8 +144,57 @@ public final class TCEntityFoundationAudit {
         checks.add(checkMobTypeShape("CultistCleric", TCEntityTypes.CULTIST_CLERIC.get(), 0.6F, 1.8F, 64, 3, true));
         checks.add(checkMobTypeShape("MindSpider", TCEntityTypes.MIND_SPIDER.get(), 0.7F, 0.5F, 64, 3, true));
         checks.add(checkMobTypeShape("EldritchGuardian", TCEntityTypes.ELDRITCH_GUARDIAN.get(), 0.8F, 2.25F, 64, 3, true));
+        checks.add(checkBrainyZombieContracts(server.overworld()));
+        checks.add(checkGiantBrainyZombieContracts(server.overworld()));
         checks.add(checkConstructors(server.overworld()));
         return checks;
+    }
+
+    private static Check checkBrainyZombieContracts(ServerLevel level) {
+        TCBrainyZombieEntity brainy = TCEntityTypes.BRAINY_ZOMBIE.get().create(level);
+        AspectList aspects = TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.BRAINY_ZOMBIE.get());
+        boolean passed = brainy != null
+                && close(brainy.getAttributeValue(Attributes.MAX_HEALTH), TCBrainyZombieEntity.LEGACY_MAX_HEALTH)
+                && close(brainy.getAttributeValue(Attributes.ATTACK_DAMAGE), TCBrainyZombieEntity.LEGACY_ATTACK_DAMAGE)
+                && close(brainy.getAttributeValue(Attributes.ARMOR), TCBrainyZombieEntity.LEGACY_ARMOR_BONUS)
+                && close(brainy.getAttributeValue(Attributes.SPAWN_REINFORCEMENTS_CHANCE), TCBrainyZombieEntity.LEGACY_REINFORCEMENT_CHANCE)
+                && TCBrainyZombieEntity.legacyShouldDropBrainRoll(4, 0)
+                && !TCBrainyZombieEntity.legacyShouldDropBrainRoll(5, 0)
+                && TCBrainyZombieEntity.legacyShouldDropBrainRoll(5, 1)
+                && aspects != null
+                && aspects.getAmount(Aspect.UNDEAD) == 20
+                && aspects.getAmount(Aspect.MAN) == 10
+                && aspects.getAmount(Aspect.MIND) == 5
+                && aspects.getAmount(Aspect.AVERSION) == 5;
+        return new Check("BrainyZombie legacy contracts", passed, "attributes, reinforcement gate, brain-drop roll and ConfigAspects contract");
+    }
+
+    private static Check checkGiantBrainyZombieContracts(ServerLevel level) {
+        TCGiantBrainyZombieEntity giant = TCEntityTypes.GIANT_BRAINY_ZOMBIE.get().create(level);
+        AspectList aspects = TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.GIANT_BRAINY_ZOMBIE.get());
+        boolean passed = giant != null
+                && close(giant.getAttributeValue(Attributes.MAX_HEALTH), TCGiantBrainyZombieEntity.LEGACY_MAX_HEALTH)
+                && close(giant.getAttributeValue(Attributes.ATTACK_DAMAGE), TCGiantBrainyZombieEntity.LEGACY_BASE_ATTACK_DAMAGE)
+                && close(TCGiantBrainyZombieEntity.legacyAttackDamageForAnger(0.0F), 2.0D)
+                && close(TCGiantBrainyZombieEntity.legacyAttackDamageForAnger(1.0F), 7.0D)
+                && close(TCGiantBrainyZombieEntity.legacyAttackDamageForAnger(2.0F), 12.0D)
+                && TCBrainyZombieEntity.legacyShouldDropBrainRoll(5, 1)
+                && TCGiantBrainyZombieEntity.LEGACY_ROTTEN_FLESH_LOOPS == 12
+                && TCGiantBrainyZombieEntity.LEGACY_ROTTEN_FLESH_PER_DROP == 2
+                && aspects != null
+                && aspects.getAmount(Aspect.UNDEAD) == 25
+                && aspects.getAmount(Aspect.MAN) == 15
+                && aspects.getAmount(Aspect.MIND) == 5
+                && aspects.getAmount(Aspect.AVERSION) == 10;
+        if (giant != null) {
+            giant.setAnger(2.0F);
+            giant.refreshDimensions();
+            passed = passed
+                    && close(giant.getDimensions(Pose.STANDING).width(), 1.8D)
+                    && close(giant.getDimensions(Pose.STANDING).height(), 5.85D)
+                    && close(giant.getDimensions(Pose.STANDING).eyeHeight(), 5.22D);
+        }
+        return new Check("GiantBrainyZombie legacy contracts", passed, "attributes, anger damage/size/eye-height, inherited brain drop, rotten flesh loops and ConfigAspects contract");
     }
 
     private static Check checkRegisteredType(String legacyId, EntityType<?> type) {
@@ -197,6 +255,8 @@ public final class TCEntityFoundationAudit {
         Entity clericFactory = TCEntityTypes.CULTIST_CLERIC.get().create(level);
         Entity spiderFactory = TCEntityTypes.MIND_SPIDER.get().create(level);
         Entity guardianFactory = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(level);
+        Entity brainyFactory = TCEntityTypes.BRAINY_ZOMBIE.get().create(level);
+        Entity giantBrainyFactory = TCEntityTypes.GIANT_BRAINY_ZOMBIE.get().create(level);
         TCSpecialItemEntity special = new TCSpecialItemEntity(level, 1.0D, 2.0D, 3.0D, new ItemStack(Items.DIAMOND));
         TCFollowingItemEntity following = new TCFollowingItemEntity(level, 1.0D, 2.0D, 3.0D, new ItemStack(Items.EMERALD), 4.0D, 5.0D, 6.0D);
         boolean passed = specialFactory instanceof TCSpecialItemEntity
@@ -210,6 +270,8 @@ public final class TCEntityFoundationAudit {
                 && clericFactory instanceof TCCultistClericEntity
                 && spiderFactory instanceof TCMindSpiderEntity
                 && guardianFactory instanceof TCEldritchGuardianEntity
+                && brainyFactory instanceof TCBrainyZombieEntity
+                && giantBrainyFactory instanceof TCGiantBrainyZombieEntity
                 && special.getType() == TCEntityTypes.SPECIAL_ITEM.get()
                 && following.getType() == TCEntityTypes.FOLLOW_ITEM.get()
                 && special.getItem().is(Items.DIAMOND)
@@ -229,5 +291,9 @@ public final class TCEntityFoundationAudit {
 
     private static String escape(String value) {
         return value.replace("|", "\\|");
+    }
+
+    private static boolean close(double actual, double expected) {
+        return Math.abs(actual - expected) < 0.0001D;
     }
 }

@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#thaumcraft:legacy_angry_zombie_spawn_biomes",
+  "spawners": {
+    "type": "thaumcraft:brainy_zombie",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

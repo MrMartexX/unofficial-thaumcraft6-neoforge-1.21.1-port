@@ -13,6 +13,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.entities.TCArcaneBoreEntity;
 import thaumcraft.common.entities.TCAlumentumEntity;
 import thaumcraft.common.entities.TCBottleTaintEntity;
+import thaumcraft.common.entities.TCBrainyZombieEntity;
 import thaumcraft.common.entities.TCCausalityCollapserEntity;
 import thaumcraft.common.entities.TCCultistClericEntity;
 import thaumcraft.common.entities.TCCultistKnightEntity;
@@ -22,6 +23,7 @@ import thaumcraft.common.entities.TCEldritchOrbEntity;
 import thaumcraft.common.entities.TCFallingTaintEntity;
 import thaumcraft.common.entities.TCFollowingItemEntity;
 import thaumcraft.common.entities.TCFluxRiftEntity;
+import thaumcraft.common.entities.TCGiantBrainyZombieEntity;
 import thaumcraft.common.entities.TCGolemOrbEntity;
 import thaumcraft.common.entities.TCMindSpiderEntity;
 import thaumcraft.common.entities.TCSpecialItemEntity;
@@ -169,6 +171,24 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(false)
                     .build(Thaumcraft.MODID + ":wisp"));
 
+    public static final Supplier<EntityType<TCBrainyZombieEntity>> BRAINY_ZOMBIE =
+            ENTITY_TYPES.register("brainy_zombie", () ->
+                    EntityType.Builder.<TCBrainyZombieEntity>of(TCBrainyZombieEntity::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.95F)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(3)
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build(Thaumcraft.MODID + ":brainy_zombie"));
+
+    public static final Supplier<EntityType<TCGiantBrainyZombieEntity>> GIANT_BRAINY_ZOMBIE =
+            ENTITY_TYPES.register("giant_brainy_zombie", () ->
+                    EntityType.Builder.<TCGiantBrainyZombieEntity>of(TCGiantBrainyZombieEntity::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.95F)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(3)
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build(Thaumcraft.MODID + ":giant_brainy_zombie"));
+
     public static final Supplier<EntityType<TCBottleTaintEntity>> BOTTLE_TAINT = ENTITY_TYPES.register("bottle_taint", () ->
             EntityType.Builder.<TCBottleTaintEntity>of(TCBottleTaintEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
@@ -253,8 +273,8 @@ public final class TCEntityTypes {
             spec("EldritchGolem", "EntityEldritchGolem", null, 64, 3, true, "defer", "Eldritch boss AI and renderer"),
             spec("CultistLeader", "EntityCultistLeader", null, 64, 3, true, "defer", "Cultist boss AI and renderer"),
             spec("TaintacleGiant", "EntityTaintacleGiant", null, 96, 3, false, "defer", "Taint mob AI and renderer"),
-            spec("BrainyZombie", "EntityBrainyZombie", null, 64, 3, true, "defer", "Thaumcraft mob AI, loot and spawn rules"),
-            spec("GiantBrainyZombie", "EntityGiantBrainyZombie", null, 64, 3, true, "defer", "Thaumcraft mob AI, loot and spawn rules"),
+            spec("BrainyZombie", "EntityBrainyZombie", "brainy_zombie", 64, 3, true, "registered_foundation", "Angry Zombie attributes, brain loot, scan/aspect identity and legacy overworld natural spawn row"),
+            spec("GiantBrainyZombie", "EntityGiantBrainyZombie", "giant_brainy_zombie", 64, 3, true, "registered_foundation", "Furious Zombie anger scaling, leap goal, loot and Eerie-biome spawn dependency"),
             spec("Wisp", "EntityWisp", "wisp", 64, 3, false, "registered_foundation", "Wisp type/aspect persistence, rift-event spawn dependency, legacy flight/target/zap AI, billboard render contract and PacketFXWispZap-equivalent payload"),
             spec("Firebat", "EntityFireBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
             spec("Spellbat", "EntitySpellBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
@@ -303,6 +323,8 @@ public final class TCEntityTypes {
         event.put(TAINTACLE_TINY.get(), TCTaintacleTinyEntity.createAttributes().build());
         event.put(TAINT_SWARM.get(), TCTaintSwarmEntity.createAttributes().build());
         event.put(WISP.get(), TCWispEntity.createAttributes().build());
+        event.put(BRAINY_ZOMBIE.get(), TCBrainyZombieEntity.createAttributes().build());
+        event.put(GIANT_BRAINY_ZOMBIE.get(), TCGiantBrainyZombieEntity.createAttributes().build());
         event.put(CULTIST_PORTAL_LESSER.get(), TCCultistPortalLesserEntity.createAttributes().build());
         event.put(CULTIST_KNIGHT.get(), TCCultistKnightEntity.createAttributes().build());
         event.put(CULTIST_CLERIC.get(), TCCultistClericEntity.createAttributes().build());
