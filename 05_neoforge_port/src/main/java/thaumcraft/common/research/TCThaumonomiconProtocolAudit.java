@@ -207,6 +207,18 @@ final class TCThaumonomiconProtocolAudit {
                 index.revision() == TCThaumonomiconService.buildRevision(player),
                 "revision=matches"
         ));
+        boolean categoryBackgroundsUseRuntimePng = true;
+        for (TCThaumonomiconCategoryView category : index.categories()) {
+            if (!category.background().endsWith(".png") || category.background().endsWith(".jpg")) {
+                categoryBackgroundsUseRuntimePng = false;
+                break;
+            }
+        }
+        checks.add(check(
+                "category_backgrounds_use_runtime_png_textures",
+                categoryBackgroundsUseRuntimePng,
+                "legacy jpg assets remain reference-only; modern client views use png"
+        ));
 
         boolean categoriesServerFiltered = true;
         for (TCResearchCategoryDefinition category : TCResearchManager.categories()) {

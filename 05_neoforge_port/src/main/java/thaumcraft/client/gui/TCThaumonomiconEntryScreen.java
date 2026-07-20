@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -63,12 +64,15 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private static final int BOOK_HEIGHT = 235;
     private static final int RECIPE_PAGE_SIZE = 256;
     private static final int PAGE_TEXT_WIDTH = 126;
-    private static final int LINES_PER_PAGE = 21;
+    private static final int PAGE_IMAGE_MAX_WIDTH = 140;
+    private static final int TEXT_PAGE_HEIGHT = 168;
+    private static final int LINE_HEIGHT = 8;
+    private static final int LEGACY_RESEARCH_TEXTURE_SIZE = 256;
     private static final int ASPECTS_PER_PAGE = 5;
 
     private static int aspectPage;
     private TCThaumonomiconEntryView entry;
-    private List<FormattedCharSequence> lines = List.of();
+    private List<List<PageContent>> textPages = List.of(List.<PageContent>of());
     private int spread;
     private boolean pendingAdvance;
     private Component lastResult = Component.empty();
@@ -231,46 +235,98 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private void rebuildLines() {
-        ArrayList<FormattedCharSequence> rebuilt = new ArrayList<>();
+        ArrayList<PageContent> rebuilt = new ArrayList<>();
         addLocalizedBody(rebuilt, entry.stageText());
         for (String addendum : entry.addendumTexts()) {
-            rebuilt.add(FormattedCharSequence.EMPTY);
+            rebuilt.add(TextLine.empty());
             addLocalizedBody(rebuilt, addendum);
         }
         if (!entry.complete()) {
-            rebuilt.add(FormattedCharSequence.EMPTY);
-            rebuilt.add(Component.translatable("gui.thaumcraft.thaumonomicon.requirements")
+            rebuilt.add(TextLine.empty());
+            rebuilt.add(TextLine.of(Component.translatable("gui.thaumcraft.thaumonomicon.requirements")
                     .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD)
-                    .getVisualOrderText());
+                    .getVisualOrderText()));
             addRequirementLines(rebuilt, entry.satisfiedRequirements(), ChatFormatting.DARK_GREEN);
             addRequirementLines(rebuilt, entry.missingRequirements(), ChatFormatting.DARK_RED);
             addRequirementLines(rebuilt, entry.blockedRequirements(), ChatFormatting.DARK_GRAY);
         }
-        lines = List.copyOf(rebuilt);
+        textPages = paginate(rebuilt);
     }
 
-    private void addLocalizedBody(List<FormattedCharSequence> target, String translationKey) {
-        String body = Component.translatable(translationKey).getString().replace("<BR>", "\n").replace("<br>", "\n");
-        String[] paragraphs = body.split("\\n", -1);
-        for (int index = 0; index < paragraphs.length; index++) {
-            if (!paragraphs[index].isBlank()) {
-                target.addAll(font.split(Component.literal(paragraphs[index]), PAGE_TEXT_WIDTH));
+    private void addLocalizedBody(List<PageContent> target, String translationKey) {
+        String body = Component.translatable(translationKey).getString();
+        int cursor = 0;
+        while (cursor < body.length()) {
+            LegacyMarkup markup = nextMarkup(body, cursor);
+            if (markup == null) {
+                addWrappedText(target, body.substring(cursor));
+                return;
             }
-            if (index < paragraphs.length - 1) {
-                target.add(FormattedCharSequence.EMPTY);
+            if (markup.start() > cursor) {
+                addWrappedText(target, body.substring(cursor, markup.start()));
             }
+            markup.content().addTo(target);
+            cursor = markup.end();
         }
     }
 
     private void addRequirementLines(
-            List<FormattedCharSequence> target,
+            List<PageContent> target,
             List<String> requirements,
             ChatFormatting color
     ) {
         for (String requirement : requirements) {
             Component line = Component.literal("- " + requirement).withStyle(color);
-            target.addAll(font.split(line, PAGE_TEXT_WIDTH));
+            addWrappedComponent(target, line);
         }
+    }
+
+    private void addWrappedText(List<PageContent> target, String text) {
+        if (text.isEmpty()) {
+            return;
+        }
+        String normalized = text.replace("\r\n", "\n").replace('\r', '\n');
+        String[] paragraphs = normalized.split("\n", -1);
+        for (int index = 0; index < paragraphs.length; index++) {
+            if (!paragraphs[index].isBlank()) {
+                addWrappedComponent(target, Component.literal(paragraphs[index]));
+            }
+            if (index < paragraphs.length - 1) {
+                target.add(TextLine.empty());
+            }
+        }
+    }
+
+    private void addWrappedComponent(List<PageContent> target, Component component) {
+        for (FormattedCharSequence line : font.split(component, PAGE_TEXT_WIDTH)) {
+            target.add(TextLine.of(line));
+        }
+    }
+
+    private static List<List<PageContent>> paginate(List<PageContent> contents) {
+        ArrayList<List<PageContent>> pages = new ArrayList<>();
+        ArrayList<PageContent> page = new ArrayList<>();
+        int used = 0;
+        for (PageContent content : contents) {
+            if (content instanceof PageBreak) {
+                pages.add(List.copyOf(page));
+                page = new ArrayList<>();
+                used = 0;
+                continue;
+            }
+            int height = content.height();
+            if (!page.isEmpty() && used + height > TEXT_PAGE_HEIGHT) {
+                pages.add(List.copyOf(page));
+                page = new ArrayList<>();
+                used = 0;
+            }
+            page.add(content);
+            used += height;
+        }
+        if (!page.isEmpty() || pages.isEmpty()) {
+            pages.add(List.copyOf(page));
+        }
+        return List.copyOf(pages);
     }
 
     private void renderBook(GuiGraphics graphics, int x, int y) {
@@ -305,14 +361,23 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private void renderPageText(GuiGraphics graphics, int x, int y) {
-        int firstLine = spread * LINES_PER_PAGE * 2;
-        renderTextPage(graphics, x + 22, y + 34, firstLine);
-        renderTextPage(graphics, x + 183, y + 34, firstLine + LINES_PER_PAGE);
+        int firstPage = spread * 2;
+        renderTextPage(graphics, x + 22, y + 34, firstPage);
+        renderTextPage(graphics, x + 183, y + 34, firstPage + 1);
     }
 
-    private void renderTextPage(GuiGraphics graphics, int x, int y, int firstLine) {
-        for (int row = 0; row < LINES_PER_PAGE && firstLine + row < lines.size(); row++) {
-            graphics.drawString(font, lines.get(firstLine + row), x, y + row * 8, 0xFF302616, false);
+    private void renderTextPage(GuiGraphics graphics, int x, int y, int pageIndex) {
+        if (pageIndex < 0 || pageIndex >= textPages.size()) {
+            return;
+        }
+        int yy = y;
+        for (PageContent content : textPages.get(pageIndex)) {
+            if (content instanceof TextLine line) {
+                graphics.drawString(font, line.text(), x, yy, 0xFF302616, false);
+            } else if (content instanceof PageImage image) {
+                image.render(graphics, x + (PAGE_TEXT_WIDTH - image.displayWidth()) / 2, yy);
+            }
+            yy += content.height();
         }
     }
 
@@ -1265,8 +1330,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private int maxSpread() {
-        int totalPages = Math.max(1, (lines.size() + LINES_PER_PAGE - 1) / LINES_PER_PAGE);
-        return Math.max(0, (totalPages - 1) / 2);
+        return Math.max(0, (Math.max(1, textPages.size()) - 1) / 2);
     }
 
     private int bookX() {
@@ -1316,6 +1380,178 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         } catch (IllegalArgumentException ignored) {
             return null;
         }
+    }
+
+    private static LegacyMarkup nextMarkup(String body, int cursor) {
+        int start = body.indexOf('<', cursor);
+        while (start >= 0) {
+            LegacyMarkup markup = parseMarkupAt(body, start);
+            if (markup != null) {
+                return markup;
+            }
+            start = body.indexOf('<', start + 1);
+        }
+        return null;
+    }
+
+    private static LegacyMarkup parseMarkupAt(String body, int start) {
+        if (startsWithIgnoreCase(body, start, "<BR/>")) {
+            return new LegacyMarkup(start, start + 5, TextLine.empty());
+        }
+        if (startsWithIgnoreCase(body, start, "<BR>")) {
+            return new LegacyMarkup(start, start + 4, TextLine.empty());
+        }
+        if (startsWithIgnoreCase(body, start, "<PAGE/>")) {
+            return new LegacyMarkup(start, start + 7, PageBreak.INSTANCE);
+        }
+        if (startsWithIgnoreCase(body, start, "<PAGE>")) {
+            return new LegacyMarkup(start, start + 6, PageBreak.INSTANCE);
+        }
+        if (startsWithIgnoreCase(body, start, "<LINE/>")) {
+            return new LegacyMarkup(start, start + 7, PageImage.legacyLine());
+        }
+        if (startsWithIgnoreCase(body, start, "<LINE>")) {
+            return new LegacyMarkup(start, start + 6, PageImage.legacyLine());
+        }
+        if (startsWithIgnoreCase(body, start, "<DIV/>")) {
+            return new LegacyMarkup(start, start + 6, PageImage.legacyDivider());
+        }
+        if (startsWithIgnoreCase(body, start, "<DIV>")) {
+            return new LegacyMarkup(start, start + 5, PageImage.legacyDivider());
+        }
+        if (!startsWithIgnoreCase(body, start, "<IMG>")) {
+            return null;
+        }
+
+        int imageStart = start + 5;
+        int imageEnd = indexOfIgnoreCase(body, "</IMG>", imageStart);
+        if (imageEnd < 0) {
+            return null;
+        }
+        PageImage image = PageImage.parse(body.substring(imageStart, imageEnd));
+        return new LegacyMarkup(start, imageEnd + 6, image == null ? TextLine.empty() : image);
+    }
+
+    private static boolean startsWithIgnoreCase(String text, int offset, String prefix) {
+        return offset >= 0
+                && offset + prefix.length() <= text.length()
+                && text.regionMatches(true, offset, prefix, 0, prefix.length());
+    }
+
+    private static int indexOfIgnoreCase(String text, String needle, int fromIndex) {
+        for (int index = Math.max(0, fromIndex); index <= text.length() - needle.length(); index++) {
+            if (text.regionMatches(true, index, needle, 0, needle.length())) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
+    private interface PageContent {
+        int height();
+
+        default void addTo(List<PageContent> target) {
+            target.add(this);
+        }
+    }
+
+    private record TextLine(FormattedCharSequence text) implements PageContent {
+        static TextLine of(FormattedCharSequence text) {
+            return new TextLine(text == null ? FormattedCharSequence.EMPTY : text);
+        }
+
+        static TextLine empty() {
+            return new TextLine(FormattedCharSequence.EMPTY);
+        }
+
+        @Override
+        public int height() {
+            return LINE_HEIGHT;
+        }
+    }
+
+    private enum PageBreak implements PageContent {
+        INSTANCE;
+
+        @Override
+        public int height() {
+            return 0;
+        }
+    }
+
+    private record PageImage(
+            ResourceLocation texture,
+            int sourceX,
+            int sourceY,
+            int sourceWidth,
+            int sourceHeight,
+            float scale,
+            int displayWidth,
+            int displayHeight
+    ) implements PageContent {
+        static PageImage parse(String text) {
+            String[] parts = text.trim().split(":");
+            if (parts.length != 7) {
+                return null;
+            }
+            ResourceLocation texture = ResourceLocation.tryParse((parts[0].trim() + ":" + parts[1].trim()).toLowerCase(Locale.ROOT));
+            if (texture == null) {
+                return null;
+            }
+            try {
+                int sourceX = Integer.parseInt(parts[2].trim());
+                int sourceY = Integer.parseInt(parts[3].trim());
+                int sourceWidth = Integer.parseInt(parts[4].trim());
+                int sourceHeight = Integer.parseInt(parts[5].trim());
+                float scale = Float.parseFloat(parts[6].trim());
+                int displayWidth = (int) (sourceWidth * scale);
+                int displayHeight = (int) (sourceHeight * scale);
+                if (displayWidth <= 0
+                        || displayHeight <= 0
+                        || displayWidth > PAGE_IMAGE_MAX_WIDTH
+                        || displayHeight > TEXT_PAGE_HEIGHT) {
+                    return null;
+                }
+                return new PageImage(texture, sourceX, sourceY, sourceWidth, sourceHeight, scale, displayWidth, displayHeight);
+            } catch (NumberFormatException ignored) {
+                return null;
+            }
+        }
+
+        static PageImage legacyLine() {
+            return new PageImage(BOOK, 24, 184, 95, 6, 1.0F, 95, 6);
+        }
+
+        static PageImage legacyDivider() {
+            return new PageImage(BOOK, 28, 192, 140, 6, 1.0F, 140, 6);
+        }
+
+        @Override
+        public int height() {
+            return displayHeight + 2;
+        }
+
+        void render(GuiGraphics graphics, int x, int y) {
+            graphics.pose().pushPose();
+            graphics.pose().translate(x, y, 0.0F);
+            graphics.pose().scale(scale, scale, 1.0F);
+            blit(
+                    graphics,
+                    texture,
+                    0,
+                    0,
+                    sourceX,
+                    sourceY,
+                    sourceWidth,
+                    sourceHeight,
+                    LEGACY_RESEARCH_TEXTURE_SIZE,
+                    LEGACY_RESEARCH_TEXTURE_SIZE
+            );
+            graphics.pose().popPose();
+        }
+    }
+
+    private record LegacyMarkup(int start, int end, PageContent content) {
     }
 
     private record RecipePageState(

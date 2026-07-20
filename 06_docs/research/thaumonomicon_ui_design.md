@@ -41,7 +41,7 @@ Every index also carries a server-built revision over the current research data,
 - Thaumonomicon is a stack-size-one uncommon item and appears at the start of the legacy item sequence in the creative tab.
 - Right-click sends an authoritative visible research index, syncs player knowledge, plays the page sound, and opens the browser on the client.
 - Browser categories preserve the server/legacy category order.
-- Browser graph uses legacy category backgrounds, overlay, research frame sprites, icon cycling, flags, parent links, pan, and zoom.
+- Browser graph uses legacy category backgrounds, overlay, research frame sprites, icon cycling, flags, parent links, pan, and zoom. The legacy `.jpg` category backgrounds remain imported as source/reference assets, while the 1.21 runtime view sends `.png` background paths to avoid missing-texture rendering in the modern client.
 - Browser search filters only the server-sent visible index, so it cannot reveal hidden research. Search-result clicks reuse the same server action/revision payload path as graph clicks.
 - Unknown unlockable entries send `START_RESEARCH`; known entries send `ACKNOWLEDGE_ENTRY`.
 - The entry screen opens only after the server accepts the action and returns an authoritative entry view.
@@ -64,7 +64,7 @@ Deferred recipe pages are shown only as catalog bookmarks with their authoritati
 ## Validation
 
 - `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action and stale-drilldown rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, selected-stage warp propagation, side-panel knowledge cache exposure, server-side drilldown output matching, and the `READY` crafting/arcane/crucible/infusion/blueprint/fake-display snapshot boundary. The report deliberately records stable revision match labels instead of raw hash values.
-- Latest protocol result: `40/40` checks passed; live vanilla crafting, arcane, crucible, infusion, blueprint and fake/display catalog entries produce valid server snapshots, and recipe drilldown/history validates server-side output-stack resolution, client-cache acceptance and stale-revision rejection.
+- Latest protocol result: `41/41` checks passed; live vanilla crafting, arcane, crucible, infusion, blueprint and fake/display catalog entries produce valid server snapshots, runtime category backgrounds use PNG texture paths, and recipe drilldown/history validates server-side output-stack resolution, client-cache acceptance and stale-revision rejection.
 - `gradlew build` passes after the browser search/filter and recipe drilldown/history slices.
 - Dedicated-server reload passes with `687` exact aspect assignments and the Thaumonomicon protocol audit.
 
