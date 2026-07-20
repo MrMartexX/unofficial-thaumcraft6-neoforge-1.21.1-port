@@ -2,7 +2,7 @@
 
 | Check | Status | Detail |
 |---|---|---|
-| `arcane_and_wand_workbench_blocks_are_distinct` | `PASS` | arcane=TCArcaneWorkbenchBlock, wand=Block |
+| `arcane_and_wand_workbench_blocks_are_distinct` | `PASS` | arcane=TCArcaneWorkbenchBlock, wand=TCFocalManipulatorBlock |
 | `workbench_charger_block_survives_above_arcane_or_wand_workbench` | `PASS` | block=TCArcaneWorkbenchChargerBlock |
 | `empty_workbench_resolves_empty` | `PASS` | kind=EMPTY |
 | `crystal_slots_accept_only_matching_primal_aspects` | `PASS` | order=[aer, ignis, aqua, terra, ordo, perditio] |

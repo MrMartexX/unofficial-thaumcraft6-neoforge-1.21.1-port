@@ -2,6 +2,8 @@
 
 Status: working order after the Arcane Workbench regular-recipe/equipment-discount bridge and item/equipment behavior closure.
 
+Latest row 4/5 regression checkpoint, 2026-07-20: combined essentia transport utility audit `61/61`, Arcane Workbench regular recipe audit `109/109`, and Arcane Workbench behavior/discount audit `28/28`.
+
 Basis: `06_docs/migration/NeoForge_legacy_migration_guide.md`, `06_docs/migration/migration_matrix.md`, `06_docs/migration/porting_order.md`, `06_docs/current_port_status.md`.
 
 ## Rules
