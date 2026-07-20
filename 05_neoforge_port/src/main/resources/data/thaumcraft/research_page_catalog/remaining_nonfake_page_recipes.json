@@ -3,8 +3,8 @@
     {
       "id": "thaumcraft:everfullurn",
       "legacy_source": "THAUMCRAFT_CATALOG",
-      "kind": "INFUSION",
-      "legacy_class": "InfusionRecipeBoundary",
+      "kind": "CRUCIBLE",
+      "legacy_class": "CrucibleRecipe",
       "required_research": "EVERFULLURN",
       "legacy_group": "",
       "targets": [],
@@ -37,8 +37,8 @@
     {
       "id": "thaumcraft:thaumatorium",
       "legacy_source": "THAUMCRAFT_CATALOG",
-      "kind": "INFUSION",
-      "legacy_class": "InfusionRecipeBoundary",
+      "kind": "BLUEPRINT",
+      "legacy_class": "BlueprintBoundary",
       "required_research": "THAUMATORIUM",
       "legacy_group": "",
       "targets": [],

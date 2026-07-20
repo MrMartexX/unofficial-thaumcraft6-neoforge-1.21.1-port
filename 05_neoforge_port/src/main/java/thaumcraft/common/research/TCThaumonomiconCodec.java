@@ -28,6 +28,10 @@ final class TCThaumonomiconCodec {
     private static final int MAX_INFUSION_CATALYST_VARIANTS = 1024;
     private static final int MAX_INFUSION_COMPONENTS = 64;
     private static final int MAX_INFUSION_COMPONENT_VARIANTS = 1024;
+    private static final int MAX_BLUEPRINT_INGREDIENTS = 32;
+    private static final int MAX_BLUEPRINT_LAYERS = 8;
+    private static final int MAX_BLUEPRINT_ROWS = 8;
+    private static final int MAX_BLUEPRINT_COLUMNS = 8;
     private static final int MAX_DISPLAY_STACKS = 64;
     private static final int MAX_RESEARCH_FLAGS = 32;
 
@@ -218,6 +222,8 @@ final class TCThaumonomiconCodec {
         page.crucibleRecipe().ifPresent(recipe -> writeCrucibleRecipe(buffer, recipe));
         buffer.writeBoolean(page.infusionRecipe().isPresent());
         page.infusionRecipe().ifPresent(recipe -> writeInfusionRecipe(buffer, recipe));
+        buffer.writeBoolean(page.blueprintRecipe().isPresent());
+        page.blueprintRecipe().ifPresent(recipe -> writeBlueprintRecipe(buffer, recipe));
         buffer.writeBoolean(page.displayRecipe().isPresent());
         page.displayRecipe().ifPresent(recipe -> writeDisplayRecipe(buffer, recipe));
     }
@@ -246,6 +252,9 @@ final class TCThaumonomiconCodec {
         Optional<TCInfusionRecipePageView> infusionRecipe = buffer.readBoolean()
                 ? Optional.of(readInfusionRecipe(buffer))
                 : Optional.empty();
+        Optional<TCBlueprintRecipePageView> blueprintRecipe = buffer.readBoolean()
+                ? Optional.of(readBlueprintRecipe(buffer))
+                : Optional.empty();
         Optional<TCDisplayRecipePageView> displayRecipe = buffer.readBoolean()
                 ? Optional.of(readDisplayRecipe(buffer))
                 : Optional.empty();
@@ -259,6 +268,7 @@ final class TCThaumonomiconCodec {
                 arcaneRecipe,
                 crucibleRecipe,
                 infusionRecipe,
+                blueprintRecipe,
                 displayRecipe
         );
     }
@@ -442,6 +452,70 @@ final class TCThaumonomiconCodec {
                 readList(buffer, MAX_INFUSION_ASPECTS, "infusion aspects", ItemStack.STREAM_CODEC::decode),
                 readString(buffer, MAX_KEY_LENGTH),
                 buffer.readVarInt()
+        );
+    }
+
+    private static void writeBlueprintRecipe(RegistryFriendlyByteBuf buffer, TCBlueprintRecipePageView recipe) {
+        writeResourceLocation(buffer, recipe.recipeId());
+        ItemStack.STREAM_CODEC.encode(buffer, recipe.displayStack());
+        writeList(
+                buffer,
+                recipe.ingredientStacks(),
+                MAX_BLUEPRINT_INGREDIENTS,
+                "blueprint ingredients",
+                ItemStack.STREAM_CODEC::encode
+        );
+        writeList(
+                buffer,
+                recipe.layers(),
+                MAX_BLUEPRINT_LAYERS,
+                "blueprint layers",
+                TCThaumonomiconCodec::writeBlueprintLayer
+        );
+        writeString(buffer, recipe.research(), MAX_KEY_LENGTH, "blueprint research");
+    }
+
+    private static TCBlueprintRecipePageView readBlueprintRecipe(RegistryFriendlyByteBuf buffer) {
+        return new TCBlueprintRecipePageView(
+                readResourceLocation(buffer),
+                ItemStack.STREAM_CODEC.decode(buffer),
+                readList(buffer, MAX_BLUEPRINT_INGREDIENTS, "blueprint ingredients", ItemStack.STREAM_CODEC::decode),
+                readList(buffer, MAX_BLUEPRINT_LAYERS, "blueprint layers", TCThaumonomiconCodec::readBlueprintLayer),
+                readString(buffer, MAX_KEY_LENGTH)
+        );
+    }
+
+    private static void writeBlueprintLayer(
+            RegistryFriendlyByteBuf buffer,
+            List<List<TCBlueprintRecipePageView.Cell>> layer
+    ) {
+        writeList(buffer, layer, MAX_BLUEPRINT_ROWS, "blueprint rows", TCThaumonomiconCodec::writeBlueprintRow);
+    }
+
+    private static List<List<TCBlueprintRecipePageView.Cell>> readBlueprintLayer(RegistryFriendlyByteBuf buffer) {
+        return readList(buffer, MAX_BLUEPRINT_ROWS, "blueprint rows", TCThaumonomiconCodec::readBlueprintRow);
+    }
+
+    private static void writeBlueprintRow(
+            RegistryFriendlyByteBuf buffer,
+            List<TCBlueprintRecipePageView.Cell> row
+    ) {
+        writeList(buffer, row, MAX_BLUEPRINT_COLUMNS, "blueprint columns", TCThaumonomiconCodec::writeBlueprintCell);
+    }
+
+    private static List<TCBlueprintRecipePageView.Cell> readBlueprintRow(RegistryFriendlyByteBuf buffer) {
+        return readList(buffer, MAX_BLUEPRINT_COLUMNS, "blueprint columns", TCThaumonomiconCodec::readBlueprintCell);
+    }
+
+    private static void writeBlueprintCell(RegistryFriendlyByteBuf buffer, TCBlueprintRecipePageView.Cell cell) {
+        ItemStack.STREAM_CODEC.encode(buffer, cell.sourceStack());
+        ItemStack.STREAM_CODEC.encode(buffer, cell.targetStack());
+    }
+
+    private static TCBlueprintRecipePageView.Cell readBlueprintCell(RegistryFriendlyByteBuf buffer) {
+        return new TCBlueprintRecipePageView.Cell(
+                ItemStack.STREAM_CODEC.decode(buffer),
+                ItemStack.STREAM_CODEC.decode(buffer)
         );
     }
 

@@ -1,13 +1,13 @@
 # Crucible Recipe Data Audit
 
-Generated: 2026-07-20 16:34:35 +03:00
+Generated: 2026-07-20 18:00:58 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Crucible recipe JSON files | 77 |
-| Valid page-data crucible recipes | 77 |
+| Crucible recipe JSON files | 78 |
+| Valid page-data crucible recipes | 78 |
 | Invalid crucible recipes | 0 |
 
 ## Invalid crucible recipes
@@ -22,6 +22,7 @@ No invalid crucible recipe JSON files were found.
 | thaumcraft:bathsalts | thaumcraft:bath_salts | 4 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bathsalts.json |
 | thaumcraft:bottletaint | thaumcraft:bottle_taint | 2 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bottletaint.json |
 | thaumcraft:brassingot | thaumcraft:brass_ingot | 1 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/brassingot.json |
+| thaumcraft:everfullurn | thaumcraft:everfull_urn | 3 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/everfullurn.json |
 | thaumcraft:focus_1 | thaumcraft:focus_1 | 2 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/focus_1.json |
 | thaumcraft:hedge_clay | minecraft:clay_ball | 1 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_clay.json |
 | thaumcraft:hedge_dye | minecraft:ink_sac | 3 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_dye.json |

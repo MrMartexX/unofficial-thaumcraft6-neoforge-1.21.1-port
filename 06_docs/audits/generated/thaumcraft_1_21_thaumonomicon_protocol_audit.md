@@ -15,16 +15,18 @@
 | `ready_page_views_have_server_arcane_snapshots` | `PASS` | pages=1 |
 | `ready_page_views_have_server_crucible_snapshots` | `PASS` | pages=1 |
 | `ready_page_views_have_server_infusion_snapshots` | `PASS` | pages=1 |
+| `ready_page_views_have_server_blueprint_snapshots` | `PASS` | pages=1 |
 | `ready_page_views_use_matching_snapshot_kind` | `PASS` | pages=1 |
 | `non_ready_page_views_have_no_recipe_snapshots` | `PASS` | pages=1 |
-| `ready_crafting_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_crafting_entries=97, fake_crafting_entries=2, deferred_crafting_entries=0 |
+| `ready_crafting_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_crafting_entries=92, fake_crafting_entries=2, deferred_crafting_entries=0 |
 | `fake_crafting_catalog_entries_have_display_snapshots` | `PASS` | fake_crafting_entries=2 |
 | `ready_arcane_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_arcane_entries=89, deferred_arcane_entries=0 |
 | `deferred_arcane_catalog_entries_are_classified` | `PASS` | classified=0, deferred_arcane_entries=0 |
-| `ready_crucible_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_crucible_entries=77, deferred_crucible_entries=0 |
-| `ready_infusion_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_infusion_entries=53, fake_infusion_entries=11, deferred_infusion_entries=0 |
+| `ready_crucible_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_crucible_entries=78, deferred_crucible_entries=0 |
+| `ready_infusion_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_infusion_entries=51, fake_infusion_entries=11, deferred_infusion_entries=0 |
 | `fake_infusion_catalog_entries_have_display_snapshots` | `PASS` | fake_infusion_entries=11 |
 | `all_fake_display_catalog_entries_have_server_snapshots` | `PASS` | fake_display_entries=13 |
+| `ready_blueprint_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_blueprint_entries=6, expected=6, deferred_blueprint_entries=0 |
 | `unknown_entry_rejected` | `PASS` | key=AUDIT_MISSING_RESEARCH |
 | `legacy_resource_location_canonicalization` | `PASS` | uppercase/lowercase lookup |
 | `client_cache_accepts_authoritative_views` | `PASS` | sample_present=true |
@@ -44,7 +46,7 @@
 - Entry views inspected: `4`
 - Bookmarks inspected: `1`
 - Pages inspected: `1`
-- Ready crafting catalog entries: `97`
+- Ready crafting catalog entries: `92`
 - Fake crafting display catalog entries: `2`
 - Deferred crafting catalog entries: `0`
 - Ready arcane catalog entries: `89`
@@ -54,9 +56,9 @@
 - Deferred arcane gameplay catalog entries: `0`
 - Deferred arcane transport/essentia catalog entries: `0`
 - Deferred arcane uncategorized catalog entries: `0`
-- Ready crucible catalog entries: `77`
+- Ready crucible catalog entries: `78`
 - Deferred crucible catalog entries: `0`
-- Ready infusion catalog entries: `53`
+- Ready infusion catalog entries: `51`
 - Fake infusion display catalog entries: `11`
 - Deferred infusion catalog entries: `0`
 

@@ -20,7 +20,7 @@
     {
       "id": "thaumcraft:infernalfurnace",
       "legacy_source": "THAUMCRAFT_CATALOG",
-      "kind": "CRAFTING",
+      "kind": "BLUEPRINT",
       "legacy_class": "BlueprintBoundary",
       "required_research": "INFERNALFURNACE",
       "legacy_group": "",

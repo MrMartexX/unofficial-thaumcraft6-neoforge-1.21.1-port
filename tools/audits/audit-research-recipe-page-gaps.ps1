@@ -303,6 +303,10 @@ foreach ($ref in $refs) {
             } else {
                 $missingClass = 'CATALOG_GROUP_INCOMPLETE'
             }
+        } elseif (-not [string]::IsNullOrWhiteSpace($catalogEntry.Kind)) {
+            $resolved = $true
+            $recipeType = 'research_page_catalog:' + ([string]$catalogEntry.Kind).ToLowerInvariant()
+            $recipeClass = 'CATALOG_' + ([string]$catalogEntry.Kind).ToUpperInvariant() + '_READY'
         }
     }
     if (-not $resolved -and $ref.Kind -eq 'RECIPE_PAGE') {

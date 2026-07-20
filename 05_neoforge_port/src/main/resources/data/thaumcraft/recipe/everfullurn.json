@@ -1,36 +1,21 @@
 {
-  "type": "thaumcraft:infusion",
+  "type": "thaumcraft:crucible",
   "research": "EVERFULLURN",
-  "instability": 4,
   "catalyst": {
-    "item": "minecraft:bucket"
+    "item": "minecraft:flower_pot"
   },
-  "components": [
-    {
-      "item": "minecraft:clay"
-    },
-    {
-      "item": "thaumcraft:crystal_essence_aqua"
-    },
-    {
-      "item": "thaumcraft:phial_aqua"
-    },
-    {
-      "item": "thaumcraft:nitor_blue"
-    }
-  ],
   "aspects": [
     {
       "aspect": "water",
-      "amount": 100
+      "amount": 30
     },
     {
-      "aspect": "void",
-      "amount": 25
+      "aspect": "craft",
+      "amount": 10
     },
     {
-      "aspect": "motion",
-      "amount": 25
+      "aspect": "earth",
+      "amount": 10
     }
   ],
   "result": {

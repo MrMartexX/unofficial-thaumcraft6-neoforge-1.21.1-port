@@ -3,7 +3,7 @@
     {
       "id": "thaumcraft:infusionaltar",
       "legacy_source": "THAUMCRAFT_CATALOG",
-      "kind": "CRAFTING",
+      "kind": "BLUEPRINT",
       "legacy_class": "BlueprintPageBoundary",
       "required_research": "INFUSION",
       "legacy_group": "",
@@ -20,7 +20,7 @@
     {
       "id": "thaumcraft:infusionaltarancient",
       "legacy_source": "THAUMCRAFT_CATALOG",
-      "kind": "CRAFTING",
+      "kind": "BLUEPRINT",
       "legacy_class": "BlueprintPageBoundary",
       "required_research": "INFUSIONANCIENT",
       "legacy_group": "",
@@ -37,7 +37,7 @@
     {
       "id": "thaumcraft:infusionaltareldritch",
       "legacy_source": "THAUMCRAFT_CATALOG",
-      "kind": "CRAFTING",
+      "kind": "BLUEPRINT",
       "legacy_class": "BlueprintPageBoundary",
       "required_research": "INFUSIONELDRITCH",
       "legacy_group": "",
@@ -54,7 +54,7 @@
     {
       "id": "thaumcraft:golempress",
       "legacy_source": "THAUMCRAFT_CATALOG",
-      "kind": "CRAFTING",
+      "kind": "BLUEPRINT",
       "legacy_class": "BlueprintPageBoundary",
       "required_research": "MINDCLOCKWORK",
       "legacy_group": "",

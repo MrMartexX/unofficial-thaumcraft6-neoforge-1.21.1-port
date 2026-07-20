@@ -1,13 +1,13 @@
 # Infusion Recipe Data Audit
 
-Generated: 2026-06-21 05:05:38 +03:00
+Generated: 2026-07-20 17:59:40 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Infusion recipe JSON files | 42 |
-| Valid page-data infusion recipes | 42 |
+| Infusion recipe JSON files | 40 |
+| Valid page-data infusion recipes | 40 |
 | Invalid infusion recipes | 0 |
 
 ## Invalid infusion recipes
@@ -29,7 +29,6 @@ No invalid infusion recipe JSON files were found.
 | thaumcraft:elementalpick | thaumcraft:elemental_pick | 4 | 3 | 1 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/elementalpick.json |
 | thaumcraft:elementalshovel | thaumcraft:elemental_shovel | 4 | 2 | 1 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/elementalshovel.json |
 | thaumcraft:elementalsword | thaumcraft:elemental_sword | 4 | 3 | 1 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/elementalsword.json |
-| thaumcraft:everfullurn | thaumcraft:everfull_urn | 4 | 3 | 4 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/everfullurn.json |
 | thaumcraft:focus_2 | thaumcraft:focus_2 | 4 | 2 | 3 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/focus_2.json |
 | thaumcraft:focus_3 | thaumcraft:focus_3 | 4 | 3 | 5 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/focus_3.json |
 | thaumcraft:helmgoggles | thaumcraft:thaumium_fortress_helm_goggles | 2 | 3 | 5 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/helmgoggles.json |
@@ -47,7 +46,6 @@ No invalid infusion recipe JSON files were found.
 | thaumcraft:sealbreak | thaumcraft:seal_breaker | 3 | 3 | 1 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbreak.json |
 | thaumcraft:sealbutcher | thaumcraft:seal_butcher | 6 | 3 | 0 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbutcher.json |
 | thaumcraft:sealharvest | thaumcraft:seal_harvest | 6 | 3 | 0 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealharvest.json |
-| thaumcraft:thaumatorium | thaumcraft:thaumatorium | 5 | 3 | 5 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumatorium.json |
 | thaumcraft:thaumiumfortresschest | thaumcraft:thaumium_fortress_chest | 6 | 3 | 3 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresschest.json |
 | thaumcraft:thaumiumfortresshelm | thaumcraft:thaumium_fortress_helm | 5 | 3 | 3 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresshelm.json |
 | thaumcraft:thaumiumfortresslegs | thaumcraft:thaumium_fortress_legs | 5 | 3 | 3 | True | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresslegs.json |

@@ -17,6 +17,7 @@ import org.lwjgl.glfw.GLFW;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.research.TCArcaneRecipePageView;
+import thaumcraft.common.research.TCBlueprintRecipePageView;
 import thaumcraft.common.research.TCCraftingRecipePageView;
 import thaumcraft.common.research.TCCrucibleRecipePageView;
 import thaumcraft.common.research.TCDisplayRecipePageType;
@@ -465,8 +466,11 @@ public final class TCThaumonomiconEntryScreen extends Screen {
                         recipe -> renderArcaneRecipe(graphics, recipe, x + 128, y + 128, mouseX, mouseY),
                         () -> page.crucibleRecipe().ifPresentOrElse(
                                 recipe -> renderCrucibleRecipe(graphics, recipe, x + 128, y + 128, mouseX, mouseY),
-                                () -> page.infusionRecipe().ifPresent(
-                                        recipe -> renderInfusionRecipe(graphics, recipe, x + 128, y + 128, mouseX, mouseY)
+                                () -> page.infusionRecipe().ifPresentOrElse(
+                                        recipe -> renderInfusionRecipe(graphics, recipe, x + 128, y + 128, mouseX, mouseY),
+                                        () -> page.blueprintRecipe().ifPresent(
+                                                recipe -> renderBlueprintRecipe(graphics, recipe, x + 128, y + 128, mouseX, mouseY)
+                                        )
                                 )
                         )
                 )
@@ -774,6 +778,83 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
     }
 
+    private void renderBlueprintRecipe(
+            GuiGraphics graphics,
+            TCBlueprintRecipePageView recipe,
+            int centerX,
+            int centerY,
+            int mouseX,
+            int mouseY
+    ) {
+        graphics.drawCenteredString(font, Component.translatable("recipe.type.construct"), centerX, centerY - 104, 0xFF505050);
+        if (!recipe.displayStack().isEmpty()) {
+            renderRecipeStack(graphics, recipe.displayStack(), centerX - 8, centerY - 84, mouseX, mouseY);
+        }
+
+        int layerCount = recipe.layers().size();
+        int gridSize = 18;
+        int gridGap = 8;
+        int maxRows = 0;
+        int totalWidth = Math.max(0, (layerCount - 1) * gridGap);
+        for (List<List<TCBlueprintRecipePageView.Cell>> layer : recipe.layers()) {
+            int rows = layer.size();
+            int columns = layer.stream().mapToInt(List::size).max().orElse(0);
+            maxRows = Math.max(maxRows, rows);
+            totalWidth += columns * gridSize;
+        }
+        int x = centerX - totalWidth / 2;
+        int y = centerY - 48 - Math.max(0, maxRows - 3) * 3;
+        for (int layerIndex = 0; layerIndex < layerCount; layerIndex++) {
+            List<List<TCBlueprintRecipePageView.Cell>> layer = recipe.layers().get(layerIndex);
+            int rows = layer.size();
+            int columns = layer.stream().mapToInt(List::size).max().orElse(0);
+            int layerWidth = columns * gridSize;
+            String label = Integer.toString(layerIndex + 1);
+            graphics.drawCenteredString(font, label, x + layerWidth / 2, y - 11, 0xFF6D4C24);
+            for (int row = 0; row < rows; row++) {
+                List<TCBlueprintRecipePageView.Cell> cells = layer.get(row);
+                for (int column = 0; column < cells.size(); column++) {
+                    TCBlueprintRecipePageView.Cell cell = cells.get(column);
+                    int cellX = x + column * gridSize;
+                    int cellY = y + row * gridSize;
+                    int frame = cell.sourceStack().isEmpty() ? 0x309A7135 : 0xA06A944B;
+                    graphics.fill(cellX, cellY, cellX + 17, cellY + 17, frame);
+                    graphics.fill(cellX + 1, cellY + 1, cellX + 16, cellY + 16, 0x70E8D7A5);
+                    if (!cell.sourceStack().isEmpty()) {
+                        renderRecipeStack(graphics, cell.sourceStack(), cellX + 1, cellY + 1, mouseX, mouseY);
+                    }
+                    if (!cell.targetStack().isEmpty()
+                            && (cell.sourceStack().isEmpty()
+                            || !cell.sourceStack().is(cell.targetStack().getItem()))) {
+                        graphics.pose().pushPose();
+                        graphics.pose().translate(cellX + 10.0F, cellY + 10.0F, 120.0F);
+                        graphics.pose().scale(0.5F, 0.5F, 1.0F);
+                        graphics.renderItem(cell.targetStack(), 0, 0);
+                        graphics.pose().popPose();
+                    }
+                }
+            }
+            x += layerWidth + gridGap;
+        }
+
+        int ingredientCount = recipe.ingredientStacks().size();
+        if (ingredientCount > 0) {
+            int ingredientsWidth = ingredientCount * 17;
+            int startX = centerX - ingredientsWidth / 2;
+            int startY = centerY + 90;
+            for (int index = 0; index < ingredientCount; index++) {
+                renderRecipeStack(
+                        graphics,
+                        recipe.ingredientStacks().get(index),
+                        startX + index * 17,
+                        startY,
+                        mouseX,
+                        mouseY
+                );
+            }
+        }
+    }
+
     private void renderRecipeStack(
             GuiGraphics graphics,
             ItemStack stack,
@@ -820,6 +901,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
                 || page.arcaneRecipe().isPresent()
                 || page.crucibleRecipe().isPresent()
                 || page.infusionRecipe().isPresent()
+                || page.blueprintRecipe().isPresent()
                 || page.displayRecipe().isPresent();
     }
 

@@ -13,6 +13,7 @@ public record TCResearchPageView(
         Optional<TCArcaneRecipePageView> arcaneRecipe,
         Optional<TCCrucibleRecipePageView> crucibleRecipe,
         Optional<TCInfusionRecipePageView> infusionRecipe,
+        Optional<TCBlueprintRecipePageView> blueprintRecipe,
         Optional<TCDisplayRecipePageView> displayRecipe
 ) {
     public TCResearchPageView(
@@ -24,7 +25,7 @@ public record TCResearchPageView(
             Optional<TCCraftingRecipePageView> craftingRecipe,
             Optional<TCArcaneRecipePageView> arcaneRecipe
     ) {
-        this(id, kind, availability, requiredResearch, legacyOutput, craftingRecipe, arcaneRecipe, Optional.empty(), Optional.empty(), Optional.empty());
+        this(id, kind, availability, requiredResearch, legacyOutput, craftingRecipe, arcaneRecipe, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
     }
 
     public TCResearchPageView {
@@ -34,6 +35,7 @@ public record TCResearchPageView(
         arcaneRecipe = arcaneRecipe == null ? Optional.empty() : arcaneRecipe;
         crucibleRecipe = crucibleRecipe == null ? Optional.empty() : crucibleRecipe;
         infusionRecipe = infusionRecipe == null ? Optional.empty() : infusionRecipe;
+        blueprintRecipe = blueprintRecipe == null ? Optional.empty() : blueprintRecipe;
         displayRecipe = displayRecipe == null ? Optional.empty() : displayRecipe;
     }
 }

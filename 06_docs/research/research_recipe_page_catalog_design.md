@@ -95,15 +95,17 @@ Latest validation:
   `325` total entries including group members, `0` field differences;
 - runtime structural validation: `0` missing catalog references, unresolved
   group targets, or cycles;
-- Thaumonomicon protocol audit: `36/36` checks passed. The first real item/open/browser/entry/search/drilldown flow, server-snapshot-backed vanilla crafting page renderer, exact arcane page renderer, crucible page renderer, infusion page renderer, fake/display page renderer, server-built index revision, stale-action/stale-drilldown rejection without mutation, and server-side recipe output-stack drilldown resolution are active. Catalog live availability is `203 READY`, `0 DEFERRED`, `0 LEGACY_MISSING`; remaining blueprint and special recipe-page rendering remains catalog-gated.
+- Thaumonomicon protocol audit: `38/38` checks passed. The first real item/open/browser/entry/search/drilldown flow, server-snapshot-backed vanilla crafting page renderer, exact arcane page renderer, crucible page renderer, infusion page renderer, fake/display page renderer, server-built index revision, stale-action/stale-drilldown rejection without mutation, and server-side recipe output-stack drilldown resolution are active. Catalog live availability is `203 READY`, `0 DEFERRED`, `0 LEGACY_MISSING`; legacy blueprint construct pages are active as server-authored snapshots; future owner-specific page polish remains catalog-gated.
 
 ## Remaining boundary
 
 - Preserve the implemented Thaumonomicon item/open/browser/entry/crafting/arcane-page flow.
 - Keep vanilla crafting page contents server-resolved through
   `TCCraftingRecipePageView`; do not resolve recipes independently on the client.
-- Keep arcane page contents server-resolved through `TCArcaneRecipePageView`;
+- Keep arcane page contents server-resolved through `TCArcaneRecipePageView`.
 - Keep crucible page contents server-resolved through `TCCrucibleRecipePageView`; do not treat this as in-world crucible behavior.
 - Keep infusion page contents server-resolved through `TCInfusionRecipePageView`; do not treat this as in-world infusion altar behavior.
-- Do not let the client infer vis, crystals, research, instability, aspects, result, or ingredient variants.
-- Keep remaining blueprint and special recipe-page rendering deferred until their exact page systems are implemented. Legacy fake/display-only pages are implemented as server-authored display snapshots and must stay non-craftable.
+- Keep blueprint construct page contents server-resolved through `TCBlueprintRecipePageView`; do not let the client infer layers, source blocks, target replacements or required research.
+- Do not let the client infer vis, crystals, research, instability, aspects, result, ingredient variants or blueprint cell transforms.
+- Legacy fake/display-only pages are implemented as server-authored display snapshots and must stay non-craftable.
+- Defer only final visual pixel parity and future owner-specific special page layouts; do not reclassify them as gameplay recipes without legacy ownership evidence.

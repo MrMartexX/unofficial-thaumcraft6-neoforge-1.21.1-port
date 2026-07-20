@@ -39,6 +39,15 @@ final class TCThaumonomiconProtocolAudit {
             FAKE_INFUSION_CATALOG_IDS
     );
 
+    private static final Set<String> BLUEPRINT_CATALOG_IDS = Set.of(
+            "thaumcraft:golempress",
+            "thaumcraft:infernalfurnace",
+            "thaumcraft:infusionaltar",
+            "thaumcraft:infusionaltarancient",
+            "thaumcraft:infusionaltareldritch",
+            "thaumcraft:thaumatorium"
+    );
+
     private static final Set<String> ARCANE_DECORATIVE_HINTS = Set.of(
             "activatorrail",
             "ancientpedestal",
@@ -240,6 +249,7 @@ final class TCThaumonomiconProtocolAudit {
         boolean readyArcanePageViewsHaveSnapshots = true;
         boolean readyCruciblePageViewsHaveSnapshots = true;
         boolean readyInfusionPageViewsHaveSnapshots = true;
+        boolean readyBlueprintPageViewsHaveSnapshots = true;
         boolean readyPageViewsHaveCorrectSnapshotKind = true;
         boolean deferredPageViewsHaveNoSnapshots = true;
         Optional<TCThaumonomiconEntryView> sample = Optional.empty();
@@ -281,6 +291,11 @@ final class TCThaumonomiconProtocolAudit {
                             && page.displayRecipe().isEmpty()) {
                         readyInfusionPageViewsHaveSnapshots = false;
                     }
+                    if (page.availability() == TCResearchPageAvailability.READY
+                            && page.kind() == TCResearchPageKind.BLUEPRINT
+                            && page.blueprintRecipe().isEmpty()) {
+                        readyBlueprintPageViewsHaveSnapshots = false;
+                    }
                     if (page.availability() == TCResearchPageAvailability.READY && !hasOnlyMatchingSnapshot(page)) {
                         readyPageViewsHaveCorrectSnapshotKind = false;
                     }
@@ -310,6 +325,11 @@ final class TCThaumonomiconProtocolAudit {
         checks.add(check(
                 "ready_page_views_have_server_infusion_snapshots",
                 readyInfusionPageViewsHaveSnapshots,
+                "pages=" + pagesInspected
+        ));
+        checks.add(check(
+                "ready_page_views_have_server_blueprint_snapshots",
+                readyBlueprintPageViewsHaveSnapshots,
                 "pages=" + pagesInspected
         ));
         checks.add(check(
@@ -558,6 +578,49 @@ final class TCThaumonomiconProtocolAudit {
                         && fakeCraftingCatalogEntries.size() + fakeInfusionCatalogEntries.size()
                         == FAKE_DISPLAY_CATALOG_IDS.size(),
                 "fake_display_entries=" + (fakeCraftingCatalogEntries.size() + fakeInfusionCatalogEntries.size())
+        ));
+
+        int readyBlueprintEntries = 0;
+        ArrayList<String> readyBlueprintCatalogEntries = new ArrayList<>();
+        ArrayList<String> deferredBlueprintCatalogEntries = new ArrayList<>();
+        boolean readyBlueprintCatalogSnapshotsValid = true;
+        for (TCResearchPageCatalogEntry catalogEntry : TCResearchPageCatalogManager.entries()) {
+            if (catalogEntry.kind() != TCResearchPageKind.BLUEPRINT) {
+                continue;
+            }
+            String catalogId = catalogEntry.id().toString();
+            TCResearchPageAvailability availability = TCResearchPageCatalogManager.availability(
+                    catalogId,
+                    player.server.getRecipeManager()
+            );
+            Optional<TCBlueprintRecipePageView> snapshot = TCResearchPageCatalogManager.buildBlueprintPage(
+                    catalogEntry.id()
+            );
+            if (availability == TCResearchPageAvailability.READY) {
+                readyBlueprintEntries++;
+                readyBlueprintCatalogEntries.add(catalogId);
+                readyBlueprintCatalogSnapshotsValid &= snapshot.isPresent()
+                        && snapshot.get().recipeId().equals(catalogEntry.id())
+                        && !snapshot.get().displayStack().isEmpty()
+                        && !snapshot.get().ingredientStacks().isEmpty()
+                        && !snapshot.get().layers().isEmpty()
+                        && !snapshot.get().research().isBlank();
+            } else {
+                deferredBlueprintCatalogEntries.add(catalogId);
+                if (snapshot.isPresent()) {
+                    readyBlueprintCatalogSnapshotsValid = false;
+                }
+            }
+        }
+        checks.add(check(
+                "ready_blueprint_catalog_entries_have_valid_server_snapshots",
+                readyBlueprintCatalogSnapshotsValid
+                        && Set.copyOf(readyBlueprintCatalogEntries).containsAll(BLUEPRINT_CATALOG_IDS)
+                        && readyBlueprintEntries == BLUEPRINT_CATALOG_IDS.size()
+                        && deferredBlueprintCatalogEntries.isEmpty(),
+                "ready_blueprint_entries=" + readyBlueprintEntries
+                        + ", expected=" + BLUEPRINT_CATALOG_IDS.size()
+                        + ", deferred_blueprint_entries=" + deferredBlueprintCatalogEntries.size()
         ));
 
         boolean rejectedUnknown = TCThaumonomiconService.buildEntry(player, "AUDIT_MISSING_RESEARCH").isEmpty();
@@ -812,6 +875,7 @@ final class TCThaumonomiconProtocolAudit {
                 || page.arcaneRecipe().isPresent()
                 || page.crucibleRecipe().isPresent()
                 || page.infusionRecipe().isPresent()
+                || page.blueprintRecipe().isPresent()
                 || page.displayRecipe().isPresent();
     }
 
@@ -820,11 +884,13 @@ final class TCThaumonomiconProtocolAudit {
         boolean arcane = page.arcaneRecipe().isPresent();
         boolean crucible = page.crucibleRecipe().isPresent();
         boolean infusion = page.infusionRecipe().isPresent();
+        boolean blueprint = page.blueprintRecipe().isPresent();
         boolean display = page.displayRecipe().isPresent();
         int present = (crafting ? 1 : 0)
                 + (arcane ? 1 : 0)
                 + (crucible ? 1 : 0)
                 + (infusion ? 1 : 0)
+                + (blueprint ? 1 : 0)
                 + (display ? 1 : 0);
         if (present != 1) {
             return false;
@@ -834,6 +900,7 @@ final class TCThaumonomiconProtocolAudit {
             case ARCANE -> arcane;
             case CRUCIBLE -> crucible;
             case INFUSION -> infusion || display;
+            case BLUEPRINT -> blueprint;
             default -> false;
         };
     }
@@ -850,6 +917,9 @@ final class TCThaumonomiconProtocolAudit {
         }
         if (page.infusionRecipe().isPresent()) {
             return Optional.of(page.infusionRecipe().get().result());
+        }
+        if (page.blueprintRecipe().isPresent()) {
+            return Optional.of(page.blueprintRecipe().get().displayStack());
         }
         if (page.displayRecipe().isPresent()) {
             return Optional.of(page.displayRecipe().get().result());
@@ -915,6 +985,8 @@ final class TCThaumonomiconProtocolAudit {
                     player.server.getRecipeManager(),
                     player.server.registryAccess()
             ).map(TCInfusionRecipePageView::result);
+            case BLUEPRINT -> TCResearchPageCatalogManager.buildBlueprintPage(entry.id())
+                    .map(TCBlueprintRecipePageView::displayStack);
             default -> Optional.empty();
         };
     }

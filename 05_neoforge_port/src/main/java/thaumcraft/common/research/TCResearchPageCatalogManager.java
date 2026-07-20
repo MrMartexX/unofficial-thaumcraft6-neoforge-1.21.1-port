@@ -258,6 +258,9 @@ public final class TCResearchPageCatalogManager {
         if (page.infusionRecipe().isPresent()) {
             return Optional.of(page.infusionRecipe().get().result());
         }
+        if (page.blueprintRecipe().isPresent()) {
+            return Optional.of(page.blueprintRecipe().get().displayStack());
+        }
         if (page.displayRecipe().isPresent()) {
             return Optional.of(page.displayRecipe().get().result());
         }
@@ -284,6 +287,7 @@ public final class TCResearchPageCatalogManager {
         Optional<TCArcaneRecipePageView> arcaneRecipe = Optional.empty();
         Optional<TCCrucibleRecipePageView> crucibleRecipe = Optional.empty();
         Optional<TCInfusionRecipePageView> infusionRecipe = Optional.empty();
+        Optional<TCBlueprintRecipePageView> blueprintRecipe = Optional.empty();
         Optional<TCDisplayRecipePageView> displayRecipe = Optional.empty();
         if (availability == TCResearchPageAvailability.READY) {
             if (entry.legacySource() == TCResearchPageLegacySource.FAKE_CATALOG) {
@@ -296,6 +300,8 @@ public final class TCResearchPageCatalogManager {
                 crucibleRecipe = buildCruciblePage(entry.id(), recipeManager, registries);
             } else if (entry.kind() == TCResearchPageKind.INFUSION) {
                 infusionRecipe = buildInfusionPage(entry.id(), recipeManager, registries);
+            } else if (entry.kind() == TCResearchPageKind.BLUEPRINT) {
+                blueprintRecipe = buildBlueprintPage(entry.id());
             }
         }
         if (availability == TCResearchPageAvailability.READY
@@ -303,6 +309,7 @@ public final class TCResearchPageCatalogManager {
                 && arcaneRecipe.isEmpty()
                 && crucibleRecipe.isEmpty()
                 && infusionRecipe.isEmpty()
+                && blueprintRecipe.isEmpty()
                 && displayRecipe.isEmpty()) {
             availability = TCResearchPageAvailability.DEFERRED;
         }
@@ -316,6 +323,7 @@ public final class TCResearchPageCatalogManager {
                 arcaneRecipe,
                 crucibleRecipe,
                 infusionRecipe,
+                blueprintRecipe,
                 displayRecipe
         ));
     }
@@ -481,8 +489,164 @@ public final class TCResearchPageCatalogManager {
         return new ItemStack(item);
     }
 
+    private static ItemStack stack(ItemLike item, int count) {
+        return new ItemStack(item, count);
+    }
+
     private static ItemStack aspect(String aspect, int amount) {
         return new TCCrucibleAspectCost(aspect, amount).displayStack();
+    }
+
+    static Optional<TCBlueprintRecipePageView> buildBlueprintPage(ResourceLocation id) {
+        if (id == null || !Thaumcraft.MODID.equals(id.getNamespace())) {
+            return Optional.empty();
+        }
+        return switch (id.getPath()) {
+            case "infernalfurnace" -> Optional.of(blueprint(
+                    id,
+                    "INFERNALFURNACE",
+                    stack(TCItems.INFERNAL_FURNACE.get()),
+                    List.of(
+                            stack(Blocks.NETHER_BRICKS, 12),
+                            stack(Blocks.OBSIDIAN, 12),
+                            stack(Blocks.IRON_BARS),
+                            stack(Items.LAVA_BUCKET)
+                    ),
+                    layer(
+                            row(source(Blocks.NETHER_BRICKS), source(Blocks.OBSIDIAN), source(Blocks.NETHER_BRICKS)),
+                            row(source(Blocks.OBSIDIAN), emptyCell(), source(Blocks.OBSIDIAN)),
+                            row(source(Blocks.NETHER_BRICKS), source(Blocks.OBSIDIAN), source(Blocks.NETHER_BRICKS))
+                    ),
+                    layer(
+                            row(source(Blocks.NETHER_BRICKS), source(Blocks.OBSIDIAN), source(Blocks.NETHER_BRICKS)),
+                            row(source(Blocks.OBSIDIAN), source(Items.LAVA_BUCKET, TCItems.INFERNAL_FURNACE.get()), source(Blocks.OBSIDIAN)),
+                            row(source(Blocks.NETHER_BRICKS), source(Blocks.IRON_BARS), source(Blocks.NETHER_BRICKS))
+                    ),
+                    layer(
+                            row(source(Blocks.NETHER_BRICKS), source(Blocks.OBSIDIAN), source(Blocks.NETHER_BRICKS)),
+                            row(source(Blocks.OBSIDIAN), source(Blocks.OBSIDIAN), source(Blocks.OBSIDIAN)),
+                            row(source(Blocks.NETHER_BRICKS), source(Blocks.OBSIDIAN), source(Blocks.NETHER_BRICKS))
+                    )
+            ));
+            case "infusionaltar" -> Optional.of(infusionAltarBlueprint(
+                    id,
+                    "INFUSION",
+                    stack(TCItems.INFUSION_ALTAR_BLUEPRINT.get()),
+                    TCItems.STONE_ARCANE.get(),
+                    TCItems.PILLAR_ARCANE.get(),
+                    TCItems.ARCANE_PEDESTAL.get()
+            ));
+            case "infusionaltarancient" -> Optional.of(infusionAltarBlueprint(
+                    id,
+                    "INFUSIONANCIENT",
+                    stack(TCItems.INFUSION_ALTAR_ANCIENT_BLUEPRINT.get()),
+                    TCItems.STONE_ANCIENT.get(),
+                    TCItems.PILLAR_ANCIENT.get(),
+                    TCItems.ANCIENT_PEDESTAL.get()
+            ));
+            case "infusionaltareldritch" -> Optional.of(infusionAltarBlueprint(
+                    id,
+                    "INFUSIONELDRITCH",
+                    stack(TCItems.INFUSION_ALTAR_ELDRITCH_BLUEPRINT.get()),
+                    TCItems.STONE_ELDRITCH_TILE.get(),
+                    TCItems.PILLAR_ELDRITCH.get(),
+                    TCItems.ELDRITCH_PEDESTAL.get()
+            ));
+            case "thaumatorium" -> Optional.of(blueprint(
+                    id,
+                    "THAUMATORIUM",
+                    stack(TCItems.THAUMATORIUM.get()),
+                    List.of(stack(TCItems.METAL_ALCHEMICAL.get(), 2), stack(TCItems.CRUCIBLE.get())),
+                    layer(row(source(TCItems.METAL_ALCHEMICAL.get(), TCItems.THAUMATORIUM.get()))),
+                    layer(row(source(TCItems.METAL_ALCHEMICAL.get(), TCItems.THAUMATORIUM.get()))),
+                    layer(row(source(TCItems.CRUCIBLE.get())))
+            ));
+            case "golempress" -> Optional.of(blueprint(
+                    id,
+                    "MINDCLOCKWORK",
+                    stack(TCItems.GOLEM_BUILDER.get()),
+                    List.of(
+                            stack(Blocks.IRON_BARS),
+                            stack(Items.CAULDRON),
+                            stack(Blocks.PISTON),
+                            stack(Blocks.ANVIL),
+                            stack(TCItems.TABLE_STONE.get())
+                    ),
+                    layer(
+                            row(emptyCell(), emptyCell()),
+                            row(source(Blocks.IRON_BARS), emptyCell())
+                    ),
+                    layer(
+                            row(source(Items.CAULDRON), source(Blocks.ANVIL)),
+                            row(source(Blocks.PISTON, TCItems.GOLEM_BUILDER.get()), source(TCItems.TABLE_STONE.get()))
+                    )
+            ));
+            default -> Optional.empty();
+        };
+    }
+
+    private static TCBlueprintRecipePageView infusionAltarBlueprint(
+            ResourceLocation id,
+            String research,
+            ItemStack displayStack,
+            ItemLike stone,
+            ItemLike pillar,
+            ItemLike pedestal
+    ) {
+        return blueprint(
+                id,
+                research,
+                displayStack,
+                List.of(stack(stone, 8), stack(pedestal), stack(TCItems.INFUSION_MATRIX.get())),
+                layer(
+                        row(emptyCell(), source(TCItems.INFUSION_MATRIX.get()), emptyCell()),
+                        row(emptyCell(), emptyCell(), emptyCell()),
+                        row(emptyCell(), emptyCell(), emptyCell())
+                ),
+                layer(
+                        row(source(stone), emptyCell(), source(stone)),
+                        row(emptyCell(), emptyCell(), emptyCell()),
+                        row(source(stone), emptyCell(), source(stone))
+                ),
+                layer(
+                        row(source(stone, pillar), emptyCell(), source(stone, pillar)),
+                        row(emptyCell(), source(pedestal), emptyCell()),
+                        row(source(stone, pillar), emptyCell(), source(stone, pillar))
+                )
+        );
+    }
+
+    @SafeVarargs
+    private static TCBlueprintRecipePageView blueprint(
+            ResourceLocation id,
+            String research,
+            ItemStack displayStack,
+            List<ItemStack> ingredients,
+            List<List<TCBlueprintRecipePageView.Cell>>... layers
+    ) {
+        return new TCBlueprintRecipePageView(id, displayStack, ingredients, List.of(layers), research);
+    }
+
+    @SafeVarargs
+    private static List<List<TCBlueprintRecipePageView.Cell>> layer(List<TCBlueprintRecipePageView.Cell>... rows) {
+        return List.of(rows);
+    }
+
+    @SafeVarargs
+    private static List<TCBlueprintRecipePageView.Cell> row(TCBlueprintRecipePageView.Cell... cells) {
+        return List.of(cells);
+    }
+
+    private static TCBlueprintRecipePageView.Cell source(ItemLike source) {
+        return source(source, null);
+    }
+
+    private static TCBlueprintRecipePageView.Cell source(ItemLike source, ItemLike target) {
+        return new TCBlueprintRecipePageView.Cell(stack(source), target == null ? ItemStack.EMPTY : stack(target));
+    }
+
+    private static TCBlueprintRecipePageView.Cell emptyCell() {
+        return TCBlueprintRecipePageView.Cell.empty();
     }
 
     static Optional<TCCraftingRecipePageView> buildCraftingPage(
@@ -664,6 +828,11 @@ public final class TCResearchPageCatalogManager {
                 return recipeManager.byKey(entry.id())
                         .filter(holder -> holder.value() instanceof TCInfusionRecipe)
                         .isPresent()
+                        ? TCResearchPageAvailability.READY
+                        : TCResearchPageAvailability.DEFERRED;
+            }
+            if (entry.kind() == TCResearchPageKind.BLUEPRINT) {
+                return buildBlueprintPage(entry.id()).isPresent()
                         ? TCResearchPageAvailability.READY
                         : TCResearchPageAvailability.DEFERRED;
             }

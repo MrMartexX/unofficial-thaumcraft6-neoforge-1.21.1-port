@@ -1,16 +1,16 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-06-18 23:05:07 +03:00
+Generated: 2026-07-20 18:00:02 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 345 |
+| Recipe JSON files scanned | 344 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
-| Resolved recipe references | 249 |
-| Missing recipe references | 174 |
+| Resolved recipe references | 247 |
+| Missing recipe references | 176 |
 | Custom/review recipe files | 0 |
 | Blocked/review research recipe references | 0 |
 | JSON parse errors | 0 |
@@ -30,18 +30,18 @@ Generated: 2026-06-18 23:05:07 +03:00
 |---|---:|
 | VANILLA_OR_STANDARD_READY | 137 |
 | ARCANE_READY | 89 |
-| CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 77 |
-| INFUSION_PAGE_READY_NO_GAMEPLAY | 42 |
+| CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 78 |
+| INFUSION_PAGE_READY_NO_GAMEPLAY | 40 |
 
 ## Recipe type distribution
 
 | Type | Count |
 |---|---:|
 | thaumcraft:arcane_shaped | 80 |
-| thaumcraft:crucible | 77 |
+| thaumcraft:crucible | 78 |
 | minecraft:crafting_shapeless | 72 |
 | minecraft:crafting_shaped | 65 |
-| thaumcraft:infusion | 42 |
+| thaumcraft:infusion | 40 |
 | thaumcraft:arcane_shapeless | 9 |
 
 ## Custom or review recipe files
@@ -78,13 +78,13 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | thaumcraft:causality_collapser | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[19].icons[0] |
 | thaumcraft:charm_undying | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[16].icons[0] |
 | thaumcraft:cloud_ring | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[13].icons[0] |
+| thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[9].stages[1].required_craft[0] |
 | thaumcraft:crystal_aer | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[0] |
 | thaumcraft:crystal_aqua | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[2] |
 | thaumcraft:crystal_ignis | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[1] |
 | thaumcraft:crystal_ordo | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[4] |
 | thaumcraft:crystal_perditio | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[5] |
 | thaumcraft:crystal_terra | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[7].icons[3] |
-| thaumcraft:crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[9].stages[1].required_craft[0] |
 | thaumcraft:curiosity_band | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[14].icons[0] |
 | thaumcraft:elemental_axe | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[8].icons[0] |
 | thaumcraft:elemental_hoe | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[8].icons[4] |
@@ -218,6 +218,8 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | thaumcraft:textures/research/r_thaumslime.png | 05_neoforge_port/src/main/resources/data/thaumcraft/research/scans.json | $.entries[2].icons[0] |
 | thaumcraft:textures/research/r_warp.png | 05_neoforge_port/src/main/resources/data/thaumcraft/research/basics.json | $.entries[4].icons[0] |
 | thaumcraft:textures/research/r_wisp.png | 05_neoforge_port/src/main/resources/data/thaumcraft/research/scans.json | $.entries[0].icons[0] |
+| thaumcraft:thaumatorium | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[18].icons[0] |
+| thaumcraft:Thaumatorium | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[18].stages[1].recipes[0] |
 | thaumcraft:thaumium_stuff | 05_neoforge_port/src/main/resources/data/thaumcraft/research/alchemy.json | $.entries[2].stages[2].recipes[3] |
 | thaumcraft:traveller_boots | 05_neoforge_port/src/main/resources/data/thaumcraft/research/infusion.json | $.entries[7].icons[0] |
 | thaumcraft:triplemeattreatfake | 05_neoforge_port/src/main/resources/data/thaumcraft/research/artifice.json | $.entries[3].stages[1].recipes[1] |
@@ -241,6 +243,7 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | blueprint | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/infusionaltareldritch.json |
 | blueprint | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/artifice_behavior_page_recipes.json |
 | blueprint | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/blueprint_page_placeholders.json |
+| blueprint | 05_neoforge_port/src/main/resources/data/thaumcraft/research_page_catalog/remaining_nonfake_page_recipes.json |
 | crucible | 05_neoforge_port/src/main/resources/data/minecraft/tags/block/mineable/pickaxe.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/loot_table/blocks/crucible.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/alumentum.json |
@@ -248,6 +251,7 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bottletaint.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/brassingot.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/essentiasmelter.json |
+| crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/everfullurn.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/focus_1.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_clay.json |
 | crucible | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/hedge_dye.json |
@@ -352,7 +356,6 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannercyan.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannergray.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannergreen.json |
-| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/banneryellow.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannerlightblue.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannerlime.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannermagenta.json |
@@ -362,6 +365,7 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannerred.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannersilver.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bannerwhite.json |
+| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/banneryellow.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/bootstraveller.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/causalitycollapser.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/charmundying.json |
@@ -374,7 +378,6 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/elementalshovel.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/elementalsword.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/enchantedfabric.json |
-| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/everfullurn.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/focus_2.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/focus_3.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/helmgoggles.json |
@@ -404,7 +407,6 @@ No research recipe references currently resolve to blocked/review custom recipe 
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealbutcher.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/sealharvest.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/stabilizer.json |
-| infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumatorium.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresschest.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresshelm.json |
 | infusion | 05_neoforge_port/src/main/resources/data/thaumcraft/recipe/thaumiumfortresslegs.json |
