@@ -16,6 +16,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -52,9 +54,9 @@ public final class TCFluxRiftConsequenceAudit {
         lines.add("");
         lines.add("Runtime checks for the row-11 Flux Rift event/consequence slice after the initial entity");
         lines.add("foundation. This covers the TC6 weighted event table, Wisp dependency foundation, Prime");
-        lines.add("Taint Seed event, infectious vis exhaustion event, collapse effects and the Causality");
-        lines.add("Collapser rift-closing projectile. Focus-cloud execution");
-        lines.add("is explicitly left to the paused focus/projectile owner row.");
+        lines.add("Taint Seed event, infectious vis exhaustion event, rift-owned ROOT -> CLOUD -> FLUX");
+        lines.add("focus-cloud event execution, collapse effects and the Causality Collapser");
+        lines.add("rift-closing projectile.");
         lines.add("");
         lines.add("## Summary");
         lines.add("");
@@ -74,9 +76,9 @@ public final class TCFluxRiftConsequenceAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- Implemented: legacy rift weighted event table `50/10/20/20/1`, near-taint filter, Wisp spawn event, Prime Taint Seed boost/pollution event, infectious vis exhaustion event, collapse aura/explosion/drop/effect path, Causality Collapser throw/explosion/rift-collapse AABB and dynamic Wisp aspect assignment.");
+        lines.add("- Implemented: legacy rift weighted event table `50/10/20/20/1`, near-taint filter, Wisp spawn event, Prime Taint Seed boost/pollution event, infectious vis exhaustion event, rift-owned ROOT -> CLOUD -> FLUX event, collapse aura/explosion/drop/effect path, Causality Collapser throw/explosion/rift-collapse AABB and dynamic Wisp aspect assignment.");
         lines.add("- Implemented dependency: `thaumcraft:wisp` is registered with TC6 tracking values and minimal server state needed by rifts; full Wisp AI/model/particles remain entity/render row work.");
-        lines.add("- Deferred by owner, not guessed: event 3 still requires real `EntityFocusCloud` / focus cloud execution before it can be made player-facing.");
+        lines.add("- Boundary: event 3 now executes the rift-owned focus cloud path. Broad player-authored focus projectile/cloud/mine gameplay and measured cloud/impact particle pixel parity remain focus/render row work.");
         Files.write(output, lines, StandardCharsets.UTF_8);
         return report;
     }
@@ -116,6 +118,16 @@ public final class TCFluxRiftConsequenceAudit {
                         && legacySpecRegistered("Wisp", "wisp", 64, 3, false)
                         && typeShape(TCEntityTypes.WISP.get(), MobCategory.MONSTER, 0.9F, 0.9F, 64, 3, false),
                 "entity=" + entityId(TCEntityTypes.WISP.get())));
+        checks.add(check("focus_cloud_registered_with_legacy_tracking",
+                entityId(TCEntityTypes.FOCUS_CLOUD.get()).equals(id("focus_cloud"))
+                        && legacySpecRegistered("FocusCloud", "focus_cloud", 64, 20, true)
+                        && typeShape(TCEntityTypes.FOCUS_CLOUD.get(), MobCategory.MISC,
+                        TCFocusCloudEntity.LEGACY_ENTITY_WIDTH,
+                        TCFocusCloudEntity.LEGACY_ENTITY_HEIGHT,
+                        64,
+                        20,
+                        true),
+                "entity=" + entityId(TCEntityTypes.FOCUS_CLOUD.get())));
         checks.add(check("rift_event_table_matches_legacy_weights_costs",
                 TCFluxRiftEntity.eventTableForValidation().size() == 5
                         && event(0, 50, 5, true, "wisp")
@@ -159,6 +171,15 @@ public final class TCFluxRiftConsequenceAudit {
                         && close(TCCausalityCollapserEntity.LEGACY_GENERIC_TRAIL_ALPHA, 0.7F)
                         && close(TCCausalityCollapserEntity.LEGACY_GENERIC_TRAIL_SCALE, 0.3F),
                 "samples=3, fireMote alpha/scale=0.5/4.0, generic start=448, frames=8, age=8"));
+        checks.add(check("focus_cloud_flux_contract_matches_legacy_constants",
+                TCFocusCloudEntity.LEGACY_MIN_RADIUS == 1
+                        && TCFocusCloudEntity.LEGACY_MAX_RADIUS == 3
+                        && TCFocusCloudEntity.LEGACY_TICK_INTERVAL == 5
+                        && TCFocusCloudEntity.LEGACY_TARGET_COOLDOWN_MS == 2000L
+                        && TCFocusCloudEntity.LEGACY_FLUX_COLOR == 0x800080
+                        && close(TCFocusCloudEntity.LEGACY_CLOUD_POWER_MULTIPLIER, 0.5F)
+                        && close(TCFocusCloudEntity.LEGACY_FLUX_DAMAGE, 2.0F),
+                "radius=1..3, tick=5, cooldown=2000ms, fluxDamage=" + TCFocusCloudEntity.LEGACY_FLUX_DAMAGE));
     }
 
     private static void addEventChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
@@ -216,13 +237,88 @@ public final class TCFluxRiftConsequenceAudit {
                         + ", hasEffect=" + (target != null && target.hasEffect(TCMobEffects.INFECTIOUS_VIS_EXHAUST))
                         + ", stability=" + exhaustRift.getRiftStability()));
 
-        TCFluxRiftEntity focusRift = rift(level, origin.offset(10, 0, 0), 10, -50.0F);
-        TCFluxRiftEntity.FluxEventResult focusResult = focusRift.executeRiftEventForValidation(3);
-        checks.add(check("rift_event_3_focus_cloud_is_explicitly_deferred_to_focus_owner",
-                focusResult.deferredOwner()
-                        && !focusResult.applied()
+        TCFluxRiftEntity noPlayerFocusRift = rift(level, origin.offset(10, 0, 0), 10, -50.0F);
+        TCFluxRiftEntity.FluxEventResult noPlayerFocusResult = noPlayerFocusRift.executeRiftEventForValidation(3);
+        checks.add(check("rift_event_3_no_player_is_legacy_noop_without_stability_cost",
+                !noPlayerFocusResult.applied()
+                        && !noPlayerFocusResult.deferredOwner()
+                        && close(noPlayerFocusRift.getRiftStability(), -50.0F),
+                "result=no_player_noop, rawResult=" + noPlayerFocusResult.result()
+                        + ", stability=" + noPlayerFocusRift.getRiftStability()));
+
+        var fakePlayer = FakePlayerFactory.getMinecraft(level);
+        fakePlayer.moveTo(origin.getX() + 10.5D, origin.getY(), origin.getZ() + 0.5D, 0.0F, 0.0F);
+        int cloudBefore = count(level, TCFocusCloudEntity.class, origin.offset(10, 0, 0), 16.0D);
+        boolean directCloudSpawned = TCFocusCloudEntity.spawnRiftFluxCloud(level, fakePlayer, 10, level.random);
+        int cloudAfter = count(level, TCFocusCloudEntity.class, origin.offset(10, 0, 0), 16.0D);
+        TCFocusCloudEntity cloud = level.getEntitiesOfClass(TCFocusCloudEntity.class, new AABB(origin.offset(10, 0, 0)).inflate(16.0D))
+                .stream()
+                .filter(candidate -> candidate.getOwner() == fakePlayer)
+                .findFirst()
+                .orElse(null);
+        boolean cloudContract = cloud != null
+                && directCloudSpawned
+                && cloudAfter == cloudBefore + 1
+                && cloud.getEffectKey().equals(TCFocusCloudEntity.LEGACY_EFFECT_KEY)
+                && cloud.getEffectColor() == TCFocusCloudEntity.LEGACY_FLUX_COLOR
+                && cloud.getRadius() >= TCFocusCloudEntity.LEGACY_MIN_RADIUS
+                && cloud.getRadius() <= TCFocusCloudEntity.LEGACY_MAX_RADIUS
+                && cloud.getDurationSeconds() >= TCFocusCloudEntity.minRiftDuration(10)
+                && cloud.getDurationSeconds() <= TCFocusCloudEntity.maxRiftDuration(10)
+                && close(cloud.position().y, fakePlayer.position().y + fakePlayer.getEyeHeight() - 0.10000000149011612D)
+                && close(cloud.getDimensions(Pose.STANDING).width(), cloud.getRadius() * 2.0F)
+                && close(cloud.getDimensions(Pose.STANDING).height(), TCFocusCloudEntity.LEGACY_ACTIVE_HEIGHT);
+        checks.add(check("rift_event_3_spawns_legacy_flux_focus_cloud_contract",
+                cloudContract,
+                "spawned=" + directCloudSpawned
+                        + ", count=" + cloudBefore + "->" + cloudAfter
+                        + ", radius=" + (cloud == null ? -1.0F : cloud.getRadius())
+                        + ", duration=" + (cloud == null ? -1 : cloud.getDurationSeconds())));
+
+        TCFocusCloudEntity.clearCooldownsForValidation();
+        Zombie cloudOwner = EntityType.ZOMBIE.create(level);
+        Zombie cloudTarget = EntityType.ZOMBIE.create(level);
+        if (cloudOwner != null && cloudTarget != null) {
+            BlockPos cloudPos = origin.offset(15, 0, 0);
+            cloudOwner.moveTo(cloudPos.getX() + 0.5D, cloudPos.getY(), cloudPos.getZ() + 0.5D);
+            cloudTarget.moveTo(cloudPos.getX() + 1.0D, cloudPos.getY(), cloudPos.getZ() + 0.5D);
+            level.addFreshEntity(cloudOwner);
+            level.addFreshEntity(cloudTarget);
+            TCFocusCloudEntity damageCloud = new TCFocusCloudEntity(level, Vec3.atCenterOf(cloudPos), cloudOwner, 2.0F, 5);
+            level.addFreshEntity(damageCloud);
+            float healthBefore = cloudTarget.getHealth();
+            for (int tick = 0; tick < TCFocusCloudEntity.LEGACY_TICK_INTERVAL; tick++) {
+                damageCloud.tick();
+            }
+            float healthAfterFirst = cloudTarget.getHealth();
+            for (int tick = 0; tick < TCFocusCloudEntity.LEGACY_TICK_INTERVAL; tick++) {
+                damageCloud.tick();
+            }
+            float healthAfterSecond = cloudTarget.getHealth();
+            checks.add(check("focus_cloud_tick_applies_flux_damage_and_cooldown",
+                    close(healthBefore - healthAfterFirst, TCFocusCloudEntity.LEGACY_FLUX_DAMAGE)
+                            && close(healthAfterFirst, healthAfterSecond)
+                            && damageCloud.cloudExecutionsForValidation() >= 1
+                            && damageCloud.entityHitsForValidation() >= 1
+                            && TCFocusCloudEntity.cooldownSizeForValidation() >= 1,
+                    "health=" + healthBefore + "->" + healthAfterFirst + "->" + healthAfterSecond
+                            + ", executions=" + damageCloud.cloudExecutionsForValidation()
+                            + ", hits=" + damageCloud.entityHitsForValidation()));
+        } else {
+            checks.add(check("focus_cloud_tick_applies_flux_damage_and_cooldown", false, "zombie setup failed"));
+        }
+        TCFocusCloudEntity.clearCooldownsForValidation();
+
+        TCFluxRiftEntity focusRift = rift(level, origin.offset(18, 0, 0), 10, -50.0F);
+        int focusCloudBefore = count(level, TCFocusCloudEntity.class, focusRift.blockPosition(), 16.0D);
+        boolean focusCloudSpawned = TCFocusCloudEntity.spawnRiftFluxCloud(level, fakePlayer, focusRift.getRiftSize(), level.random);
+        int focusCloudAfter = count(level, TCFocusCloudEntity.class, focusRift.blockPosition(), 32.0D);
+        checks.add(check("rift_event_3_focus_cloud_keeps_legacy_no_stability_cost",
+                focusCloudSpawned
+                        && focusCloudAfter == focusCloudBefore + 1
                         && close(focusRift.getRiftStability(), -50.0F),
-                "result=" + focusResult.result()));
+                "spawned=" + focusCloudSpawned + ", stability=" + focusRift.getRiftStability()
+                        + ", clouds=" + focusCloudBefore + "->" + focusCloudAfter));
 
         TCFluxRiftEntity collapseRift = rift(level, origin.offset(11, 0, 0), 10, -5.0F);
         TCFluxRiftEntity.FluxEventResult collapseResult = collapseRift.executeRiftEventForValidation(4);
@@ -265,6 +361,7 @@ public final class TCFluxRiftConsequenceAudit {
     }
 
     private static void addCausalityCollapserChecks(ServerLevel level, BlockPos origin, ArrayList<Check> checks) {
+        level.getEntitiesOfClass(TCFluxRiftEntity.class, new AABB(origin).inflate(16.0D)).forEach(Entity::discard);
         TCCausalityCollapserEntity collapser = new TCCausalityCollapserEntity(
                 level,
                 origin.getX() + 0.5D,

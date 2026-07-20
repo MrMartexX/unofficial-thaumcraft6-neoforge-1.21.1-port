@@ -432,7 +432,7 @@ public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
             case 0 -> spawnWispEvent();
             case 1 -> spawnPrimeSeedEvent();
             case 2 -> applyInfectiousVisExhaustEvent();
-            case 3 -> false;
+            case 3 -> spawnFocusFluxCloudEvent();
             case 4 -> {
                 setCollapse(true);
                 yield true;
@@ -440,12 +440,12 @@ public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
             default -> false;
         };
 
-        if (didIt) {
+        if (didIt && entry.event() != 3) {
             setRiftStability(getRiftStability() + entry.cost());
         }
 
-        String result = didIt ? "applied" : (entry.event() == 3 ? "deferred_focus_cloud_owner" : "failed");
-        return new FluxEventResult(entry.event(), result, didIt, entry.event() == 3);
+        String result = didIt ? "applied" : "failed";
+        return new FluxEventResult(entry.event(), result, didIt, false);
     }
 
     private boolean spawnWispEvent() {
@@ -499,6 +499,17 @@ public class TCFluxRiftEntity extends Entity implements TCVoidSiphonRiftAccess {
             target.addEffect(effect);
         }
         return true;
+    }
+
+    private boolean spawnFocusFluxCloudEvent() {
+        if (!(level() instanceof ServerLevel serverLevel)) {
+            return false;
+        }
+        Player player = level().getNearestPlayer(this, 16.0D);
+        if (player == null) {
+            return false;
+        }
+        return TCFocusCloudEntity.spawnRiftFluxCloud(serverLevel, player, getRiftSize(), random);
     }
 
     private void applyCollapseConsequences() {

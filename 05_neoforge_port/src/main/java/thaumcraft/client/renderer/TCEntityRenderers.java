@@ -18,6 +18,7 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.SPECIAL_ITEM.get(), ItemEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FOLLOW_ITEM.get(), ItemEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FLUX_RIFT.get(), TCFluxRiftRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.FOCUS_CLOUD.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.ARCANE_BORE.get(), TCArcaneBoreRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FALLING_TAINT.get(), TCFallingTaintRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINT_SEED.get(), TCTaintSeedRenderer::new);

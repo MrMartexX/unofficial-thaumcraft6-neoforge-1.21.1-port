@@ -25,6 +25,7 @@ import thaumcraft.common.entities.TCEldritchGuardianEntity;
 import thaumcraft.common.entities.TCEldritchOrbEntity;
 import thaumcraft.common.entities.TCFallingTaintEntity;
 import thaumcraft.common.entities.TCFirebatEntity;
+import thaumcraft.common.entities.TCFocusCloudEntity;
 import thaumcraft.common.entities.TCFollowingItemEntity;
 import thaumcraft.common.entities.TCFluxRiftEntity;
 import thaumcraft.common.entities.TCGiantBrainyZombieEntity;
@@ -69,6 +70,14 @@ public final class TCEntityTypes {
                     .setUpdateInterval(20)
                     .setShouldReceiveVelocityUpdates(false)
                     .build(Thaumcraft.MODID + ":flux_rift"));
+
+    public static final Supplier<EntityType<TCFocusCloudEntity>> FOCUS_CLOUD = ENTITY_TYPES.register("focus_cloud", () ->
+            EntityType.Builder.<TCFocusCloudEntity>of(TCFocusCloudEntity::new, MobCategory.MISC)
+                    .sized(TCFocusCloudEntity.LEGACY_ENTITY_WIDTH, TCFocusCloudEntity.LEGACY_ENTITY_HEIGHT)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":focus_cloud"));
 
     public static final Supplier<EntityType<TCCultistPortalLesserEntity>> CULTIST_PORTAL_LESSER =
             ENTITY_TYPES.register("cultist_portal_lesser", () ->
@@ -332,7 +341,7 @@ public final class TCEntityTypes {
             spec("Grapple", "EntityGrapple", null, 64, 20, true, "defer", "Grapple tool physics and rope renderer"),
             spec("CausalityCollapser", "EntityCausalityCollapser", "causality_collapser", 64, 20, true, "registered_foundation", "Causality Collapser projectile, invisible body, legacy explosive rift-collapse AABB"),
             spec("FocusProjectile", "EntityFocusProjectile", null, 64, 20, true, "defer", "Focus/caster execution"),
-            spec("FocusCloud", "EntityFocusCloud", null, 64, 20, true, "defer", "Focus/caster cloud execution"),
+            spec("FocusCloud", "EntityFocusCloud", "focus_cloud", 64, 20, true, "registered_foundation", "Rift-owned ROOT->CLOUD->FLUX cloud execution; broad caster cloud authoring remains focus subsystem work"),
             spec("Focusmine", "EntityFocusMine", null, 64, 20, true, "defer", "Focus/caster mine execution"),
             spec("TurretBasic", "EntityTurretCrossbow", null, 64, 3, true, "defer", "Construct/turret AI and renderer"),
             spec("TurretAdvanced", "EntityTurretCrossbowAdvanced", null, 64, 3, true, "defer", "Construct/turret AI and renderer"),

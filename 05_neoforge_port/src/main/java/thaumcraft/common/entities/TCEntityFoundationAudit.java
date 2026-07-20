@@ -31,7 +31,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 32;
+    private static final int REGISTERED_FOUNDATION_COUNT = 33;
 
     private TCEntityFoundationAudit() {
     }
@@ -103,6 +103,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
         checks.add(checkRegisteredType("FollowItem", TCEntityTypes.FOLLOW_ITEM.get()));
         checks.add(checkRegisteredType("FluxRift", TCEntityTypes.FLUX_RIFT.get()));
+        checks.add(checkRegisteredType("FocusCloud", TCEntityTypes.FOCUS_CLOUD.get()));
         checks.add(checkRegisteredType("ArcaneBore", TCEntityTypes.ARCANE_BORE.get()));
         checks.add(checkRegisteredType("FallingTaint", TCEntityTypes.FALLING_TAINT.get()));
         checks.add(checkRegisteredType("Wisp", TCEntityTypes.WISP.get()));
@@ -134,6 +135,8 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("GolemOrb", TCEntityTypes.GOLEM_ORB.get()));
         checks.add(checkTypeShape("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get(), 64, 20, true));
         checks.add(checkTypeShape("FollowItem", TCEntityTypes.FOLLOW_ITEM.get(), 64, 20, false));
+        checks.add(checkTypeShape("FocusCloud", TCEntityTypes.FOCUS_CLOUD.get(), 64, 20, true,
+                TCFocusCloudEntity.LEGACY_ENTITY_WIDTH, TCFocusCloudEntity.LEGACY_ENTITY_HEIGHT));
         checks.add(checkTypeShape("FallingTaint", TCEntityTypes.FALLING_TAINT.get(), 64, 3, true, 0.98F, 0.98F));
         checks.add(checkMobTypeShape("Wisp", TCEntityTypes.WISP.get(), 0.9F, 0.9F, 64, 3, false));
         checks.add(checkMobTypeShape("Firebat", TCEntityTypes.FIREBAT.get(), 0.5F, 0.9F, 64, 3, false));

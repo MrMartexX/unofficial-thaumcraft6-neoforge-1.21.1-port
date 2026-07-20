@@ -11,6 +11,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | SpecialItem registry id | PASS | expected thaumcraft:special_item, got thaumcraft:special_item |
 | FollowItem registry id | PASS | expected thaumcraft:follow_item, got thaumcraft:follow_item |
 | FluxRift registry id | PASS | expected thaumcraft:flux_rift, got thaumcraft:flux_rift |
+| FocusCloud registry id | PASS | expected thaumcraft:focus_cloud, got thaumcraft:focus_cloud |
 | ArcaneBore registry id | PASS | expected thaumcraft:arcane_bore, got thaumcraft:arcane_bore |
 | FallingTaint registry id | PASS | expected thaumcraft:falling_taint, got thaumcraft:falling_taint |
 | Wisp registry id | PASS | expected thaumcraft:wisp, got thaumcraft:wisp |
@@ -42,6 +43,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | GolemOrb registry id | PASS | expected thaumcraft:golem_orb, got thaumcraft:golem_orb |
 | SpecialItem type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=true |
 | FollowItem type parameters | PASS | category=MISC, size=0.25x0.25, tracking=64, update=20, velocity=false |
+| FocusCloud type parameters | PASS | category=MISC, size=0.15x0.15, tracking=64, update=20, velocity=true |
 | FallingTaint type parameters | PASS | category=MISC, size=0.98x0.98, tracking=64, update=3, velocity=true |
 | Wisp mob type parameters | PASS | category=MONSTER, size=0.9x0.9, tracking=64, update=3, velocity=false |
 | Firebat mob type parameters | PASS | category=MONSTER, size=0.5x0.9, tracking=64, update=3, velocity=false |
@@ -94,7 +96,7 @@ This audit intentionally verifies only the entity registry/foundation slice. AI,
 | Grapple | EntityGrapple |  | 64 | 20 | true | defer | Grapple tool physics and rope renderer |
 | CausalityCollapser | EntityCausalityCollapser | thaumcraft:causality_collapser | 64 | 20 | true | registered_foundation | Causality Collapser projectile, invisible body, legacy explosive rift-collapse AABB |
 | FocusProjectile | EntityFocusProjectile |  | 64 | 20 | true | defer | Focus/caster execution |
-| FocusCloud | EntityFocusCloud |  | 64 | 20 | true | defer | Focus/caster cloud execution |
+| FocusCloud | EntityFocusCloud | thaumcraft:focus_cloud | 64 | 20 | true | registered_foundation | Rift-owned ROOT->CLOUD->FLUX cloud execution; broad caster cloud authoring remains focus subsystem work |
 | Focusmine | EntityFocusMine |  | 64 | 20 | true | defer | Focus/caster mine execution |
 | TurretBasic | EntityTurretCrossbow |  | 64 | 3 | true | defer | Construct/turret AI and renderer |
 | TurretAdvanced | EntityTurretCrossbowAdvanced |  | 64 | 3 | true | defer | Construct/turret AI and renderer |

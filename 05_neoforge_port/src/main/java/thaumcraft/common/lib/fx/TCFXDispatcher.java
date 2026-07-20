@@ -269,6 +269,95 @@ public final class TCFXDispatcher {
         );
     }
 
+    public static void drawFocusCloudParticle(
+            Level level,
+            double x,
+            double y,
+            double z,
+            double motionX,
+            double motionY,
+            double motionZ,
+            int color
+    ) {
+        if (!level.isClientSide()) {
+            return;
+        }
+
+        RandomSource random = level.random;
+        float red = ((color >> 16) & 0xFF) / 255.0F;
+        float green = ((color >> 8) & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+        TCLegacyFXData data = TCLegacyFXData.generic(
+                        20 + random.nextInt(10),
+                        56 + random.nextInt(4),
+                        1,
+                        1,
+                        16,
+                        false,
+                        0,
+                        red,
+                        green,
+                        blue,
+                        0.66F,
+                        5.0F + random.nextFloat()
+                )
+                .withAlpha(0.0F, 0.66F, 0.0F)
+                .withScale(5.0F + random.nextFloat(), 10.0F + random.nextFloat())
+                .withMotion(0.99D, 0.0F, 0.0D, 0.0D, 0.0D, 0.001D, 0.0D)
+                .withRotation(random.nextFloat() * (random.nextBoolean() ? -0.25F : 0.25F));
+
+        drawLegacyFX(level, data, x, y, z, motionX, motionY, motionZ);
+    }
+
+    public static void drawFluxFocusEffectParticle(
+            Level level,
+            double x,
+            double y,
+            double z,
+            double motionX,
+            double motionY,
+            double motionZ
+    ) {
+        if (!level.isClientSide()) {
+            return;
+        }
+
+        RandomSource random = level.random;
+        float red = 0.25F + random.nextFloat() * 0.25F;
+        float blue = 0.25F + random.nextFloat() * 0.25F;
+        float scale = 2.0F + random.nextFloat();
+        TCLegacyFXData data = TCLegacyFXData.generic(
+                        (int) (15.0F + 10.0F * random.nextFloat()),
+                        128,
+                        14,
+                        1,
+                        64,
+                        true,
+                        0,
+                        red,
+                        0.0F,
+                        blue,
+                        1.0F,
+                        scale
+                )
+                .withAlpha(0.0F, 1.0F, 1.0F, 0.0F)
+                .withScale(scale, 0.25F + random.nextFloat() * 0.25F)
+                .withMotion(0.9D, (float) (random.nextGaussian() * 0.10000000149011612D), 0.0125D, 0.0125D, 0.0125D, 0.0D, 0.0D)
+                .withRotation((float) random.nextGaussian());
+
+        drawLegacyFXWithDelay(
+                level,
+                data,
+                x,
+                y,
+                z,
+                motionX + random.nextGaussian() * 0.01D,
+                motionY + random.nextGaussian() * 0.01D,
+                motionZ + random.nextGaussian() * 0.01D,
+                random.nextInt(4)
+        );
+    }
+
     public static void drawGenericParticles(
             Level level,
             double x,
