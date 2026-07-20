@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -33,6 +34,11 @@ import thaumcraft.common.research.TCKnowledgeType;
 import thaumcraft.common.research.TCResearchPageAvailability;
 import thaumcraft.common.research.TCResearchPageBookmark;
 import thaumcraft.common.research.TCResearchPageView;
+import thaumcraft.common.research.TCResearchRequirementResolver;
+import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirement;
+import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirementResolution;
+import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirement;
+import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirementResolution;
 import thaumcraft.common.research.TCThaumonomiconCategoryView;
 import thaumcraft.common.research.TCThaumonomiconActionPayload;
 import thaumcraft.common.research.TCThaumonomiconClientCache;
@@ -40,6 +46,7 @@ import thaumcraft.common.research.TCThaumonomiconDrilldownPayload;
 import thaumcraft.common.research.TCThaumonomiconDrilldownRequestPayload;
 import thaumcraft.common.research.TCThaumonomiconEntryPayload;
 import thaumcraft.common.research.TCThaumonomiconEntryView;
+import thaumcraft.common.research.TCThaumonomiconResearchView;
 
 public final class TCThaumonomiconEntryScreen extends Screen {
     private static final ResourceLocation BOOK =
@@ -60,6 +67,12 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/research/knowledge_observation.png");
     private static final ResourceLocation AURA_NODES =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/misc/auranodes.png");
+    private static final ResourceLocation REQUIREMENT_MAP =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/research/rd_map.png");
+    private static final ResourceLocation REQUIREMENT_CHEST =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/research/rd_chest.png");
+    private static final ResourceLocation REQUIREMENT_FLASK =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/research/rd_flask.png");
     private static final int LEGACY_PANE_WIDTH = 256;
     private static final int LEGACY_PANE_HEIGHT = 181;
     private static final float LEGACY_BOOK_SCALE = 1.3F;
@@ -140,6 +153,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         renderSideTabs(graphics, x, y, mouseX, mouseY);
         renderWarpWarning(graphics, x, y, mouseX, mouseY);
         renderBookmarks(graphics, x, y, mouseX, mouseY);
+        renderRequirements(graphics, x, y, mouseX, mouseY);
         renderResult(graphics, x, y);
         if (sideInsert != SideInsert.NONE) {
             renderSideInsert(graphics, mouseX, mouseY);
@@ -200,7 +214,11 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             playPageTurn();
             return true;
         }
-        if (inside(mouseX, mouseY, x + 20, y + 176, 64, 14) && canAdvance() && !pendingAdvance) {
+        int advanceY = requirementAdvanceButtonY(y);
+        if (advanceY != Integer.MIN_VALUE
+                && inside(mouseX, mouseY, x + 20, advanceY, 64, 12)
+                && canAdvance()
+                && !pendingAdvance) {
             pendingAdvance = true;
             lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.loading");
             PacketDistributor.sendToServer(new TCThaumonomiconActionPayload(
@@ -245,15 +263,6 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             rebuilt.add(TextLine.empty());
             addLocalizedBody(rebuilt, addendum);
         }
-        if (!entry.complete()) {
-            rebuilt.add(TextLine.empty());
-            rebuilt.add(TextLine.of(Component.translatable("gui.thaumcraft.thaumonomicon.requirements")
-                    .withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.BOLD)
-                    .getVisualOrderText()));
-            addRequirementLines(rebuilt, entry.satisfiedRequirements(), ChatFormatting.DARK_GREEN);
-            addRequirementLines(rebuilt, entry.missingRequirements(), ChatFormatting.DARK_RED);
-            addRequirementLines(rebuilt, entry.blockedRequirements(), ChatFormatting.DARK_GRAY);
-        }
         textPages = paginate(rebuilt);
     }
 
@@ -271,17 +280,6 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             }
             markup.content().addTo(target);
             cursor = markup.end();
-        }
-    }
-
-    private void addRequirementLines(
-            List<PageContent> target,
-            List<String> requirements,
-            ChatFormatting color
-    ) {
-        for (String requirement : requirements) {
-            Component line = Component.literal("- " + requirement).withStyle(color);
-            addWrappedComponent(target, line);
         }
     }
 
@@ -417,45 +415,352 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
         int backColor = inside(mouseX, mouseY, x + 102, y + NAVIGATION_Y_OFFSET - 2, 52, 14) ? 0xFF805A24 : 0xFF4B351B;
         graphics.drawCenteredString(font, Component.translatable("recipe.return"), x + 128, y + NAVIGATION_Y_OFFSET + 1, backColor);
+    }
 
-        if (!canAdvance()) {
+    private void renderRequirements(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
+        if (spread != 0 || entry.complete()) {
             return;
         }
 
-        int advanceColor = 0xFF3F7A2F;
-        if (inside(mouseX, mouseY, x + 20, y + 176, 64, 14)) {
-            advanceColor = 0xFF65A34D;
+        int rowY = y - 16 + 210;
+        boolean rendered = false;
+        if (!entry.requiredResearch().isEmpty()) {
+            rowY -= 18;
+            rendered = true;
+            renderRequirementRow(
+                    graphics,
+                    x,
+                    rowY,
+                    mouseX,
+                    mouseY,
+                    entry.requiredResearch(),
+                    "required_research:",
+                    "required_research_unresolved:",
+                    232,
+                    "tc.need.research",
+                    RequirementKind.RESEARCH
+            );
         }
-        graphics.drawCenteredString(
-                font,
-                Component.translatable("gui.thaumcraft.thaumonomicon.advance"),
-                x + 52,
-                y + 178,
-                advanceColor
-        );
+        if (!entry.requiredItem().isEmpty()) {
+            rowY -= 18;
+            rendered = true;
+            renderRequirementRow(
+                    graphics,
+                    x,
+                    rowY,
+                    mouseX,
+                    mouseY,
+                    entry.requiredItem(),
+                    "required_item:",
+                    "required_item_unresolved:",
+                    216,
+                    "tc.need.obtain",
+                    RequirementKind.ITEM
+            );
+        }
+        if (!entry.requiredCraft().isEmpty()) {
+            rowY -= 18;
+            rendered = true;
+            renderRequirementRow(
+                    graphics,
+                    x,
+                    rowY,
+                    mouseX,
+                    mouseY,
+                    entry.requiredCraft(),
+                    "required_craft:",
+                    "required_craft_unresolved:",
+                    200,
+                    "tc.need.craft",
+                    RequirementKind.CRAFT
+            );
+        }
+        if (!entry.requiredKnowledge().isEmpty()) {
+            rowY -= 18;
+            rendered = true;
+            renderRequirementRow(
+                    graphics,
+                    x,
+                    rowY,
+                    mouseX,
+                    mouseY,
+                    entry.requiredKnowledge(),
+                    "required_knowledge:",
+                    "required_knowledge_unresolved:",
+                    184,
+                    "tc.need.know",
+                    RequirementKind.KNOWLEDGE
+            );
+        }
+
+        if (!rendered) {
+            return;
+        }
+
+        rowY -= 12;
+        blit(graphics, BOOK, x + 4, rowY - 2, 24, 184, 96, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        if (canAdvance()) {
+            int buttonY = rowY - 6;
+            graphics.setColor(
+                    inside(mouseX, mouseY, x + 20, buttonY, 64, 12) ? 1.0F : 0.8F,
+                    inside(mouseX, mouseY, x + 20, buttonY, 64, 12) ? 1.0F : 0.8F,
+                    inside(mouseX, mouseY, x + 20, buttonY, 64, 12) ? 1.0F : 0.9F,
+                    1.0F
+            );
+            blit(graphics, BOOK, x + 20, buttonY, 84, 216, 64, 12, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            Component complete = Component.translatable("tc.stage.complete");
+            graphics.drawCenteredString(font, complete, x + 52, rowY - 4, 0xFFFFFFFF);
+        }
+    }
+
+    private void renderRequirementRow(
+            GuiGraphics graphics,
+            int paneX,
+            int rowY,
+            int mouseX,
+            int mouseY,
+            List<String> requirements,
+            String satisfiedPrefix,
+            String blockedPrefix,
+            int labelV,
+            String tooltipKey,
+            RequirementKind kind
+    ) {
+        graphics.setColor(1.0F, 1.0F, 1.0F, 0.25F);
+        blit(graphics, BOOK, paneX - 12, rowY - 1, 200, labelV, 56, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        if (inside(mouseX, mouseY, paneX - 15, rowY, 56, 16)) {
+            hoveredUiTooltip = List.of(Component.translatable(tooltipKey));
+        }
+
+        int spacing = requirements.size() > 6 ? Math.max(8, 110 / Math.max(1, requirements.size())) : 18;
+        int shift = 24;
+        for (String raw : requirements) {
+            int iconX = paneX - 15 + shift;
+            boolean satisfied = requirementStatusContains(entry.satisfiedRequirements(), satisfiedPrefix, raw);
+            boolean blocked = requirementStatusContains(entry.blockedRequirements(), blockedPrefix, raw);
+            renderRequirementIcon(graphics, kind, raw, iconX, rowY, satisfied, blocked, mouseX, mouseY);
+            shift += spacing;
+        }
+    }
+
+    private void renderRequirementIcon(
+            GuiGraphics graphics,
+            RequirementKind kind,
+            String raw,
+            int x,
+            int y,
+            boolean satisfied,
+            boolean blocked,
+            int mouseX,
+            int mouseY
+    ) {
+        switch (kind) {
+            case RESEARCH -> renderResearchRequirementIcon(graphics, raw, x, y);
+            case ITEM, CRAFT -> renderItemRequirementIcon(graphics, raw, x, y);
+            case KNOWLEDGE -> renderKnowledgeRequirementIcon(graphics, raw, x, y, satisfied);
+        }
+        if (blocked) {
+            graphics.setColor(0.55F, 0.55F, 0.55F, 0.8F);
+            drawFullTexture(graphics, UNKNOWN, x, y, 16, 16);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        if (satisfied) {
+            blit(graphics, BOOK, x + 8, y, 159, 207, 10, 10, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        }
+        if (inside(mouseX, mouseY, x, y, 16, 16)) {
+            hoveredUiTooltip = List.of(requirementTooltip(kind, raw, satisfied, blocked));
+        }
+    }
+
+    private void renderResearchRequirementIcon(GuiGraphics graphics, String raw, int x, int y) {
+        String key = baseResearchKey(raw);
+        if (key.startsWith("!")) {
+            Aspect aspect = Aspect.aspects.get(key.substring(1).toLowerCase(Locale.ROOT));
+            if (aspect != null) {
+                drawAspectIcon(graphics, aspect, x, y, 16);
+                return;
+            }
+        }
+        if (key.startsWith("m_")) {
+            drawFullTexture(graphics, REQUIREMENT_MAP, x, y, 16, 16);
+            return;
+        }
+        if (key.startsWith("c_")) {
+            drawFullTexture(graphics, REQUIREMENT_CHEST, x, y, 16, 16);
+            return;
+        }
+        if (key.startsWith("f_")) {
+            drawFullTexture(graphics, REQUIREMENT_FLASK, x, y, 16, 16);
+            return;
+        }
+
+        TCThaumonomiconResearchView research = researchView(key);
+        if (research == null || research.icons().isEmpty()) {
+            drawFullTexture(graphics, UNKNOWN, x, y, 16, 16);
+            return;
+        }
+        renderResearchIcon(graphics, research.icons().get(0), x, y);
+    }
+
+    private void renderItemRequirementIcon(GuiGraphics graphics, String raw, int x, int y) {
+        ItemStack stack = requirementStack(raw);
+        if (stack.isEmpty()) {
+            drawFullTexture(graphics, UNKNOWN, x, y, 16, 16);
+            return;
+        }
+        graphics.renderItem(stack, x, y);
+    }
+
+    private void renderKnowledgeRequirementIcon(GuiGraphics graphics, String raw, int x, int y, boolean satisfied) {
+        KnowledgeRequirementResolution resolution = TCResearchRequirementResolver.resolveKnowledgeRequirement(raw);
+        if (!resolution.resolved()) {
+            drawFullTexture(graphics, UNKNOWN, x, y, 16, 16);
+            return;
+        }
+        KnowledgeRequirement requirement = resolution.requirement();
+        drawFullTexture(graphics, requirement.type() == TCKnowledgeType.THEORY ? KNOWLEDGE_THEORY : KNOWLEDGE_OBSERVATION, x, y, 16, 16);
+        TCThaumonomiconCategoryView category = categoryView(requirement.category());
+        ResourceLocation icon = parseLocation(category == null ? "" : category.icon());
+        if (icon != null) {
+            graphics.setColor(1.0F, 1.0F, 1.0F, 0.75F);
+            drawFullTexture(graphics, icon, x + 4, y + 4, 10, 10);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        String amount = Integer.toString(requirement.points());
+        graphics.pose().pushPose();
+        graphics.pose().translate(x + 16 - font.width(amount) / 2.0F, y + 12, 5.0F);
+        graphics.pose().scale(0.5F, 0.5F, 1.0F);
+        graphics.drawString(font, amount, 0, 0, satisfied ? 0xFFFFFFFF : 0xFFFF5555, true);
+        graphics.pose().popPose();
+    }
+
+    private void renderResearchIcon(GuiGraphics graphics, String raw, int x, int y) {
+        if (raw.contains("textures/")) {
+            ResourceLocation texture = parseLocation(raw);
+            drawFullTexture(graphics, texture == null ? UNKNOWN : texture, x, y, 16, 16);
+            return;
+        }
+
+        ResourceLocation itemId = parseLocation(raw.split(";")[0]);
+        ItemStack stack = itemId == null
+                ? ItemStack.EMPTY
+                : BuiltInRegistries.ITEM.getOptional(itemId).map(ItemStack::new).orElse(ItemStack.EMPTY);
+        if (stack.isEmpty()) {
+            drawFullTexture(graphics, UNKNOWN, x, y, 16, 16);
+        } else {
+            graphics.renderItem(stack, x, y);
+        }
+    }
+
+    private ItemStack requirementStack(String raw) {
+        ItemRequirementResolution resolution = TCResearchRequirementResolver.resolveItemRequirement(raw);
+        if (!resolution.resolved()) {
+            return ItemStack.EMPTY;
+        }
+        ItemRequirement requirement = resolution.requirement();
+        return requirement.item() == null ? ItemStack.EMPTY : new ItemStack(requirement.item(), Math.max(1, requirement.count()));
+    }
+
+    private Component requirementTooltip(RequirementKind kind, String raw, boolean satisfied, boolean blocked) {
+        ChatFormatting status = blocked ? ChatFormatting.DARK_GRAY : satisfied ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_RED;
+        String prefix = switch (kind) {
+            case RESEARCH -> "research";
+            case ITEM -> "item";
+            case CRAFT -> "craft";
+            case KNOWLEDGE -> "knowledge";
+        };
+        return Component.literal(prefix + ": " + raw).withStyle(status);
+    }
+
+    private boolean requirementStatusContains(List<String> statuses, String prefix, String raw) {
+        String expected = prefix + raw;
+        for (String status : statuses) {
+            if (status.equals(expected) || status.startsWith(expected + " ")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int requirementAdvanceButtonY(int paneY) {
+        int rowY = paneY - 16 + 210;
+        boolean rendered = false;
+        if (!entry.requiredResearch().isEmpty()) {
+            rowY -= 18;
+            rendered = true;
+        }
+        if (!entry.requiredItem().isEmpty()) {
+            rowY -= 18;
+            rendered = true;
+        }
+        if (!entry.requiredCraft().isEmpty()) {
+            rowY -= 18;
+            rendered = true;
+        }
+        if (!entry.requiredKnowledge().isEmpty()) {
+            rowY -= 18;
+            rendered = true;
+        }
+        return rendered ? rowY - 18 : Integer.MIN_VALUE;
+    }
+
+    private TCThaumonomiconResearchView researchView(String key) {
+        String base = baseResearchKey(key);
+        for (TCThaumonomiconResearchView research : TCThaumonomiconClientCache.index().entries()) {
+            if (research.key().equalsIgnoreCase(base)) {
+                return research;
+            }
+        }
+        return null;
+    }
+
+    private TCThaumonomiconCategoryView categoryView(String key) {
+        for (TCThaumonomiconCategoryView category : TCThaumonomiconClientCache.index().categories()) {
+            if (category.key().equalsIgnoreCase(key)) {
+                return category;
+            }
+        }
+        return null;
+    }
+
+    private static String baseResearchKey(String raw) {
+        String key = raw == null ? "" : raw.trim();
+        if (key.startsWith("~")) {
+            key = key.substring(1);
+        }
+        int stage = key.indexOf('@');
+        if (stage >= 0) {
+            key = key.substring(0, stage);
+        }
+        return key;
     }
 
     private void renderBookmarks(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
         for (int index = 0; index < entry.bookmarks().size(); index++) {
             TCResearchPageBookmark bookmark = entry.bookmarks().get(index);
             int space = Math.min(25, Math.max(12, 200 / Math.max(1, entry.bookmarks().size())));
-            int tabX = x + 280;
-            int tabY = y - 8 + index * space;
-            boolean hovered = inside(mouseX, mouseY, tabX, tabY, 30, 16);
+            int hash = bookmark.id().hashCode();
+            int shift = Math.floorMod(hash, 3);
+            int rowY = y - 8 + index * space;
+            int tabX = x + 280 + shift;
+            int tabY = rowY - 1;
+            boolean hovered = inside(mouseX, mouseY, x + 280, tabY, 30, 16);
             boolean selected = bookmark.id().equals(activeRecipeId);
-            int le = hovered || selected ? 0 : 3;
+            int le = Math.floorMod(hash / 3, 3) + (hovered || selected ? 0 : 3);
             graphics.setColor(1.0F, selected ? 0.55F : 1.0F, selected ? 0.55F : 1.0F, 1.0F);
-            blit(graphics, BOOK, tabX + le, tabY, 120 + le, 232, 28 - le, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blit(graphics, BOOK, tabX, tabY, 120 + le, 232, 28, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             blit(graphics, BOOK, tabX, tabY, 116, 232, 4, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             ItemStack stack = firstBookmarkStack(bookmark);
             if (!stack.isEmpty()) {
-                graphics.renderItem(stack, tabX + 7 - le, tabY, index);
+                graphics.renderItem(stack, x + 287 + shift - le, tabY, index);
             } else {
                 int color = bookmark.pages().stream().allMatch(page -> page.availability() == TCResearchPageAvailability.READY)
                         ? 0xFF6A944B
                         : 0xFF9A7135;
-                graphics.drawString(font, Integer.toString(index + 1), tabX + 9 - le, tabY + 4, color, true);
+                graphics.drawString(font, Integer.toString(index + 1), x + 289 + shift - le, tabY + 4, color, true);
             }
             if (hovered) {
                 hoveredBookmark = bookmark;
@@ -1630,6 +1935,13 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private enum SideInsert {
         NONE,
         ASPECTS,
+        KNOWLEDGE
+    }
+
+    private enum RequirementKind {
+        RESEARCH,
+        ITEM,
+        CRAFT,
         KNOWLEDGE
     }
 }
