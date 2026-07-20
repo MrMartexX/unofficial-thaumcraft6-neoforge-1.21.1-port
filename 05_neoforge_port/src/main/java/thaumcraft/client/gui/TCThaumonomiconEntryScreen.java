@@ -60,14 +60,19 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/research/knowledge_observation.png");
     private static final ResourceLocation AURA_NODES =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/misc/auranodes.png");
-    private static final int BOOK_WIDTH = 333;
-    private static final int BOOK_HEIGHT = 235;
+    private static final int LEGACY_PANE_WIDTH = 256;
+    private static final int LEGACY_PANE_HEIGHT = 181;
+    private static final float LEGACY_BOOK_SCALE = 1.3F;
     private static final int RECIPE_PAGE_SIZE = 256;
-    private static final int PAGE_TEXT_WIDTH = 126;
+    private static final int PAGE_TEXT_WIDTH = 140;
     private static final int PAGE_IMAGE_MAX_WIDTH = 140;
-    private static final int TEXT_PAGE_HEIGHT = 168;
-    private static final int LINE_HEIGHT = 8;
+    private static final int TEXT_PAGE_HEIGHT = 182;
+    private static final int LINE_HEIGHT = 9;
     private static final int LEGACY_RESEARCH_TEXTURE_SIZE = 256;
+    private static final int PAGE_SIDE_OFFSET = 152;
+    private static final int PAGE_TEXT_X_OFFSET = -15;
+    private static final int PAGE_Y_OFFSET = -10;
+    private static final int NAVIGATION_Y_OFFSET = 190;
     private static final int ASPECTS_PER_PAGE = 5;
 
     private static int aspectPage;
@@ -130,7 +135,6 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         int x = bookX();
         int y = bookY();
         renderBook(graphics, x, y);
-        renderTitle(graphics, x, y);
         renderPageText(graphics, x, y);
         renderNavigation(graphics, x, y, mouseX, mouseY);
         renderSideTabs(graphics, x, y, mouseX, mouseY);
@@ -181,22 +185,22 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (sideInsert != SideInsert.NONE && handleSideInsertClick(mouseX, mouseY)) {
             return true;
         }
-        if (inside(mouseX, mouseY, x + 140, y + 218, 53, 12)) {
+        if (inside(mouseX, mouseY, x + 102, y + NAVIGATION_Y_OFFSET - 2, 52, 14)) {
             playPage();
             minecraft.setScreen(new TCThaumonomiconBrowserScreen());
             return true;
         }
-        if (inside(mouseX, mouseY, x + 6, y + 218, 24, 12) && spread > 0) {
+        if (inside(mouseX, mouseY, x - 18, y + NAVIGATION_Y_OFFSET - 2, 18, 14) && spread > 0) {
             spread--;
             playPageTurn();
             return true;
         }
-        if (inside(mouseX, mouseY, x + 303, y + 218, 24, 12) && spread < maxSpread()) {
+        if (inside(mouseX, mouseY, x + 260, y + NAVIGATION_Y_OFFSET - 2, 18, 14) && spread < maxSpread()) {
             spread++;
             playPageTurn();
             return true;
         }
-        if (inside(mouseX, mouseY, x + 134, y + 194, 64, 14) && canAdvance() && !pendingAdvance) {
+        if (inside(mouseX, mouseY, x + 20, y + 176, 64, 14) && canAdvance() && !pendingAdvance) {
             pendingAdvance = true;
             lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.loading");
             PacketDistributor.sendToServer(new TCThaumonomiconActionPayload(
@@ -333,76 +337,100 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.pose().pushPose();
-        graphics.pose().translate(x, y, 0.0F);
-        graphics.pose().scale(1.3F, 1.3F, 1.0F);
-        graphics.blit(BOOK, 0, 0, 0.0F, 0.0F, 256, 181, 512, 512);
-        graphics.pose().popPose();
-    }
-
-    private void renderTitle(GuiGraphics graphics, int x, int y) {
-        Component title = Component.translatable(entry.research().name()).withStyle(ChatFormatting.DARK_PURPLE);
-        String titleText = title.getString();
-        if (font.width(titleText) > PAGE_TEXT_WIDTH) {
-            titleText = font.plainSubstrByWidth(titleText, PAGE_TEXT_WIDTH - font.width("...")) + "...";
-        }
-        graphics.drawString(font, titleText, x + 82 - font.width(titleText) / 2, y + 16, 0xFF202020, false);
-        graphics.drawString(
-                font,
-                Component.translatable(
-                        "gui.thaumcraft.thaumonomicon.stage",
-                        entry.selectedStage() + 1,
-                        entry.research().totalStages()
-                ),
-                x + 183,
-                y + 16,
-                0xFF66553A,
-                false
+        float scaledX = (width - LEGACY_PANE_WIDTH * LEGACY_BOOK_SCALE) / 2.0F;
+        float scaledY = (height - LEGACY_PANE_HEIGHT * LEGACY_BOOK_SCALE) / 2.0F;
+        graphics.pose().translate(scaledX, scaledY, 0.0F);
+        graphics.pose().scale(LEGACY_BOOK_SCALE, LEGACY_BOOK_SCALE, 1.0F);
+        blit(
+                graphics,
+                BOOK,
+                0,
+                0,
+                0.0F,
+                0.0F,
+                LEGACY_PANE_WIDTH,
+                LEGACY_PANE_HEIGHT,
+                LEGACY_RESEARCH_TEXTURE_SIZE,
+                LEGACY_RESEARCH_TEXTURE_SIZE
         );
+        graphics.pose().popPose();
     }
 
     private void renderPageText(GuiGraphics graphics, int x, int y) {
         int firstPage = spread * 2;
-        renderTextPage(graphics, x + 22, y + 34, firstPage);
-        renderTextPage(graphics, x + 183, y + 34, firstPage + 1);
+        renderTextPage(graphics, x, y + PAGE_Y_OFFSET, firstPage, 0);
+        renderTextPage(graphics, x, y + PAGE_Y_OFFSET, firstPage + 1, 1);
     }
 
-    private void renderTextPage(GuiGraphics graphics, int x, int y, int pageIndex) {
+    private void renderTextPage(GuiGraphics graphics, int paneX, int pageY, int pageIndex, int side) {
         if (pageIndex < 0 || pageIndex >= textPages.size()) {
             return;
         }
-        int yy = y;
+        int textX = paneX + PAGE_TEXT_X_OFFSET + side * PAGE_SIDE_OFFSET;
+        int yy = pageY;
+        if (pageIndex == 0 && side == 0) {
+            blit(graphics, BOOK, paneX + 4, pageY - 7, 24, 184, 96, 4, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blit(graphics, BOOK, paneX + 4, pageY + 10, 24, 184, 96, 4, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            renderLegacyPageTitle(graphics, textX, pageY);
+            yy += 28;
+        }
         for (PageContent content : textPages.get(pageIndex)) {
             if (content instanceof TextLine line) {
-                graphics.drawString(font, line.text(), x, yy, 0xFF302616, false);
+                graphics.drawString(font, line.text(), textX, yy - 6, 0xFF000000, false);
             } else if (content instanceof PageImage image) {
-                image.render(graphics, x + (PAGE_TEXT_WIDTH - image.displayWidth()) / 2, yy);
+                image.render(graphics, textX + (PAGE_TEXT_WIDTH - image.displayWidth()) / 2, yy - 5);
             }
             yy += content.height();
         }
     }
 
+    private void renderLegacyPageTitle(GuiGraphics graphics, int textX, int y) {
+        String titleText = Component.translatable(entry.research().name()).getString();
+        int titleWidth = font.width(titleText);
+        if (titleWidth <= PAGE_TEXT_WIDTH) {
+            graphics.drawString(
+                    font,
+                    titleText,
+                    textX + PAGE_TEXT_WIDTH / 2 - titleWidth / 2,
+                    y,
+                    0xFF202020,
+                    false
+            );
+            return;
+        }
+
+        float scale = PAGE_TEXT_WIDTH / (float) titleWidth;
+        graphics.pose().pushPose();
+        graphics.pose().translate(textX + PAGE_TEXT_WIDTH / 2.0F - titleWidth / 2.0F * scale, y + scale, 0.0F);
+        graphics.pose().scale(scale, scale, scale);
+        graphics.drawString(font, titleText, 0, 0, 0xFF202020, false);
+        graphics.pose().popPose();
+    }
+
     private void renderNavigation(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
         if (spread > 0) {
-            blit(graphics, BROWSER, x + 6, y + 218, 0, 184, 12, 8, 256, 256);
+            blit(graphics, BOOK, x - 16, y + NAVIGATION_Y_OFFSET, 0, 184, 12, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         }
         if (spread < maxSpread()) {
-            blit(graphics, BROWSER, x + 315, y + 218, 12, 184, 12, 8, 256, 256);
+            blit(graphics, BOOK, x + 262, y + NAVIGATION_Y_OFFSET, 12, 184, 12, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         }
 
-        int backColor = inside(mouseX, mouseY, x + 140, y + 218, 53, 12) ? 0xFF805A24 : 0xFF4B351B;
-        graphics.drawCenteredString(font, Component.translatable("recipe.return"), x + 166, y + 219, backColor);
+        int backColor = inside(mouseX, mouseY, x + 102, y + NAVIGATION_Y_OFFSET - 2, 52, 14) ? 0xFF805A24 : 0xFF4B351B;
+        graphics.drawCenteredString(font, Component.translatable("recipe.return"), x + 128, y + NAVIGATION_Y_OFFSET + 1, backColor);
 
-        int advanceColor = canAdvance() ? 0xFF3F7A2F : 0xFF6B5E4E;
-        if (inside(mouseX, mouseY, x + 134, y + 194, 64, 14) && canAdvance()) {
+        if (!canAdvance()) {
+            return;
+        }
+
+        int advanceColor = 0xFF3F7A2F;
+        if (inside(mouseX, mouseY, x + 20, y + 176, 64, 14)) {
             advanceColor = 0xFF65A34D;
         }
         graphics.drawCenteredString(
                 font,
-                Component.translatable(entry.complete()
-                        ? "gui.thaumcraft.thaumonomicon.complete"
-                        : "gui.thaumcraft.thaumonomicon.advance"),
-                x + 166,
-                y + 196,
+                Component.translatable("gui.thaumcraft.thaumonomicon.advance"),
+                x + 52,
+                y + 178,
                 advanceColor
         );
     }
@@ -417,8 +445,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             boolean selected = bookmark.id().equals(activeRecipeId);
             int le = hovered || selected ? 0 : 3;
             graphics.setColor(1.0F, selected ? 0.55F : 1.0F, selected ? 0.55F : 1.0F, 1.0F);
-            blit(graphics, BOOK, tabX + le, tabY, 120 + le, 232, 28 - le, 16, 512, 512);
-            blit(graphics, BOOK, tabX, tabY, 116, 232, 4, 16, 512, 512);
+            blit(graphics, BOOK, tabX + le, tabY, 120 + le, 232, 28 - le, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blit(graphics, BOOK, tabX, tabY, 116, 232, 4, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             ItemStack stack = firstBookmarkStack(bookmark);
             if (!stack.isEmpty()) {
@@ -501,8 +529,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             boolean hovered = inside(mouseX, mouseY, tabX, tabY, 25, 16);
             int le = hovered || sideInsert == SideInsert.ASPECTS ? 0 : 3;
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-            blit(graphics, BOOK, tabX + le, tabY, 76, 232, 24 - le, 16, 512, 512);
-            blit(graphics, BOOK, tabX + 20, tabY, 100, 232, 4, 16, 512, 512);
+            blit(graphics, BOOK, tabX + le, tabY, 76, 232, 24 - le, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blit(graphics, BOOK, tabX + 20, tabY, 100, 232, 4, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             if (hovered) {
                 hoveredUiTooltip = List.of(Component.translatable("tc.aspect.name"));
             }
@@ -513,8 +541,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             boolean hovered = inside(mouseX, mouseY, tabX, tabY, 25, 16);
             int le = hovered || sideInsert == SideInsert.KNOWLEDGE ? 0 : 3;
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-            blit(graphics, BOOK, tabX + le, tabY, 44, 232, 24 - le, 16, 512, 512);
-            blit(graphics, BOOK, tabX + 20, tabY, 100, 232, 4, 16, 512, 512);
+            blit(graphics, BOOK, tabX + le, tabY, 44, 232, 24 - le, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blit(graphics, BOOK, tabX + 20, tabY, 100, 232, 4, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             if (hovered) {
                 hoveredUiTooltip = List.of(Component.translatable("tc.knowledge.name"));
             }
@@ -699,8 +727,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (partial > 0) {
             int width = Math.max(1, (int) (partial / (float) type.rawUnitsPerPoint() * 16.0F));
             graphics.setColor(1.0F, 1.0F, 1.0F, 0.75F);
-            blit(graphics, BOOK, x, y + 17, 0, 232, width, 2, 512, 512);
-            blit(graphics, BOOK, x + width, y + 17, width, 234, 16 - width, 2, 512, 512);
+            blit(graphics, BOOK, x, y + 17, 0, 232, width, 2, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blit(graphics, BOOK, x + width, y + 17, width, 234, 16 - width, 2, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
         if (inside(mouseX, mouseY, x, y, 16, 18)) {
@@ -897,8 +925,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
         graphics.pose().scale(2.0F, 2.0F, 1.0F);
-        blit(graphics, BOOK_OVERLAY, -26, -26, 60, 15, 51, 52, 512, 512);
-        blit(graphics, BOOK_OVERLAY, -8, -46, 20, 3, 16, 16, 512, 512);
+        blit(graphics, BOOK_OVERLAY, -26, -26, 60, 15, 51, 52, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        blit(graphics, BOOK_OVERLAY, -8, -46, 20, 3, 16, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.pose().popPose();
 
         renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
@@ -940,15 +968,15 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
         graphics.pose().scale(2.0F, 2.0F, 1.0F);
-        blit(graphics, BOOK_OVERLAY, -26, -26, 112, 15, 52, 52, 512, 512);
-        blit(graphics, BOOK_OVERLAY, -8, -46, 20, 3, 16, 16, 512, 512);
+        blit(graphics, BOOK_OVERLAY, -26, -26, 112, 15, 52, 52, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        blit(graphics, BOOK_OVERLAY, -8, -46, 20, 3, 16, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.pose().popPose();
 
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
         graphics.pose().scale(2.0F, 2.0F, 1.0F);
         graphics.setColor(1.0F, 1.0F, 1.0F, 0.4F);
-        blit(graphics, BOOK_OVERLAY, -6, 40, 68, 76, 12, 12, 512, 512);
+        blit(graphics, BOOK_OVERLAY, -6, 40, 68, 76, 12, 12, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         graphics.pose().popPose();
 
@@ -1005,7 +1033,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
         graphics.pose().scale(2.0F, 2.0F, 1.0F);
-        blit(graphics, BOOK_OVERLAY, -26, -26, 60, 15, 51, 52, 512, 512);
+        blit(graphics, BOOK_OVERLAY, -26, -26, 60, 15, 51, 52, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.pose().popPose();
 
         renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
@@ -1040,7 +1068,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
         graphics.pose().scale(2.0F, 2.0F, 1.0F);
-        blit(graphics, BOOK_OVERLAY, -26, -26, 112, 15, 52, 52, 512, 512);
+        blit(graphics, BOOK_OVERLAY, -26, -26, 112, 15, 52, 52, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.pose().popPose();
 
         renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
@@ -1115,8 +1143,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
         graphics.pose().scale(2.0F, 2.0F, 1.0F);
-        blit(graphics, BOOK_OVERLAY, -26, -26, 60, 15, 51, 52, 512, 512);
-        blit(graphics, BOOK_OVERLAY, -8, -46, 20, 3, 16, 16, 512, 512);
+        blit(graphics, BOOK_OVERLAY, -26, -26, 60, 15, 51, 52, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        blit(graphics, BOOK_OVERLAY, -8, -46, 20, 3, 16, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.pose().popPose();
 
         renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
@@ -1145,7 +1173,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
         graphics.pose().scale(2.0F, 2.0F, 1.0F);
-        blit(graphics, BOOK_OVERLAY, -26, -26, 112, 15, 52, 52, 512, 512);
+        blit(graphics, BOOK_OVERLAY, -26, -26, 112, 15, 52, 52, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.pose().popPose();
 
         renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
@@ -1314,7 +1342,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (lastResult.getString().isBlank()) {
             return;
         }
-        graphics.drawCenteredString(font, lastResult, x + BOOK_WIDTH / 2, y + BOOK_HEIGHT + 4, 0xFFFFFFFF);
+        graphics.drawCenteredString(font, lastResult, width / 2, scaledBookBottomY() + 4, 0xFFFFFFFF);
     }
 
     private void renderHoveredUiTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
@@ -1334,11 +1362,16 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private int bookX() {
-        return (width - BOOK_WIDTH) / 2;
+        return (width - LEGACY_PANE_WIDTH) / 2;
     }
 
     private int bookY() {
-        return (height - BOOK_HEIGHT) / 2;
+        return (height - LEGACY_PANE_HEIGHT) / 2;
+    }
+
+    private int scaledBookBottomY() {
+        return Math.round((height - LEGACY_PANE_HEIGHT * LEGACY_BOOK_SCALE) / 2.0F
+                + LEGACY_PANE_HEIGHT * LEGACY_BOOK_SCALE);
     }
 
     private int recipePageX() {
