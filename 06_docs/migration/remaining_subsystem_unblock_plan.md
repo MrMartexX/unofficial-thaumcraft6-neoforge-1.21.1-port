@@ -1,8 +1,10 @@
 # Remaining Subsystem Unblock Plan
 
-Status: working order after the Arcane Workbench regular-recipe/equipment-discount bridge and item/equipment behavior closure.
+Status: working order after the row 6-11 blocker regression sweep.
 
 Latest row 4/5 regression checkpoint, 2026-07-20: combined essentia transport utility audit `61/61`, Arcane Workbench regular recipe audit `109/109`, and Arcane Workbench behavior/discount audit `28/28`.
+
+Latest row 6-11 regression checkpoint, 2026-07-20: item/equipment `17/17`, focus/caster core `10/10`, focus cast execution `5/5`, research data parity `0` source/runtime/category diffs with progression `10/10`, Thaumonomicon protocol `36/36`, page catalog `203 READY` / `0 DEFERRED` / `0 LEGACY_MISSING`, crucible behavior `16/16`, special alchemy `32/32`, alchemy automation `11/11`, crucible recipe data `77/77`, Thaumatorium `19/19`, combined transport `61/61`, Flux/Bore/Thaumatorium `11/11`, Flux Rift consequence `16/16`, Wisp `11/11`, spawn policy `34/34`, Flux Goo/Taint Fibre `13/13`, Taint ecology `15/15`, Taint mob `15/15`, FallingTaint `10/10`, and entity foundation `69/69`. Fixes from this sweep: reset fake-player research knowledge inside the Thaumatorium audit, restore legacy `.jpg` research-category background resource ids, and make the crucible recipe-data audit script work on Windows PowerShell 5. Final measured pixel-level visual parity remains under row 17.
 
 Basis: `06_docs/migration/NeoForge_legacy_migration_guide.md`, `06_docs/migration/migration_matrix.md`, `06_docs/migration/porting_order.md`, `06_docs/current_port_status.md`.
 

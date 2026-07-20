@@ -37,7 +37,7 @@ Runtime checks for TC6 special crucible outputs whose gameplay lives on the prod
 | bath_salts_rejects_flowing_water_and_nonwater | PASS | flowing=false, stone=false |
 | liquid_death_legacy_damage_and_slowdown_formula | PASS | damage0=5.0, damage3=2.0, slowdown0=0.5 |
 | liquid_death_uses_legacy_dissolve_damage_identity | PASS | msgId=dissolve, bypassesArmor=true, exhaustion=0.3 |
-| liquid_death_dissolve_drops_entity_aspect_crystals | PASS | added=2, drops=2 |
+| liquid_death_dissolve_drops_entity_aspect_crystals | PASS | added=3, drops=3 |
 | purifying_fluid_grants_warp_ward_with_legacy_duration_and_consumes_source | PASS | applied=true, duration=20000, block=minecraft:air |
 | sane_soap_uses_legacy_warp_ward_and_purifying_fluid_bonus | PASS | amount=3, normal=2, temp=0 |
 | special_alchemy_recipe_alumentum | PASS | result=thaumcraft:alumentum, research=ALUMENTUM, aspects=[TCCrucibleAspectCost[aspect=potentia, amount=10], TCCrucibleAspectCost[aspect=ignis, amount=10], TCCrucibleAspectCost[aspect=perditio, amount=5]] |

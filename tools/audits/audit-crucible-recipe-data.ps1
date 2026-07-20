@@ -10,7 +10,7 @@ function Escape-Md([string]$Value) {
     return ($Value -replace '\|', '\|' -replace "`r?`n", ' ')
 }
 function Read-JsonFile([System.IO.FileInfo]$File) {
-    try { return Get-Content -LiteralPath $File.FullName -Raw -Encoding UTF8 | ConvertFrom-Json -Depth 100 }
+    try { return Get-Content -LiteralPath $File.FullName -Raw -Encoding UTF8 | ConvertFrom-Json }
     catch { throw ('Failed to parse JSON ' + $File.FullName + ': ' + $_.Exception.Message) }
 }
 function Get-RecipeIdFromFile([string]$DataRoot, [System.IO.FileInfo]$File) {

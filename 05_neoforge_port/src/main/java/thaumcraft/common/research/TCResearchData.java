@@ -122,19 +122,19 @@ record TCResearchData(
     private static LinkedHashMap<String, TCResearchCategoryDefinition> legacyCategories() {
         LinkedHashMap<String, TCResearchCategoryDefinition> categories = new LinkedHashMap<>();
         put(categories, "BASICS", "", tags(Aspect.PLANT, 5, Aspect.ORDER, 5, Aspect.ENTROPY, 5, Aspect.AIR, 5, Aspect.FIRE, 5, Aspect.EARTH, 3, Aspect.WATER, 5),
-                "textures/items/thaumonomicon_cheat.png", "textures/gui/gui_research_back_1.png");
+                "textures/items/thaumonomicon_cheat.png", "textures/gui/gui_research_back_1.jpg");
         put(categories, "AUROMANCY", "UNLOCKAUROMANCY", tags(Aspect.AURA, 20, Aspect.MAGIC, 20, Aspect.FLUX, 15, Aspect.CRYSTAL, 5, Aspect.COLD, 5, Aspect.AIR, 5),
-                "textures/research/cat_auromancy.png", "textures/gui/gui_research_back_2.png");
+                "textures/research/cat_auromancy.png", "textures/gui/gui_research_back_2.jpg");
         put(categories, "ALCHEMY", "UNLOCKALCHEMY", tags(Aspect.ALCHEMY, 30, Aspect.FLUX, 10, Aspect.MAGIC, 10, Aspect.LIFE, 5, Aspect.AVERSION, 5, Aspect.DESIRE, 5, Aspect.WATER, 5),
-                "textures/research/cat_alchemy.png", "textures/gui/gui_research_back_3.png");
+                "textures/research/cat_alchemy.png", "textures/gui/gui_research_back_3.jpg");
         put(categories, "ARTIFICE", "UNLOCKARTIFICE", tags(Aspect.MECHANISM, 10, Aspect.CRAFT, 10, Aspect.METAL, 10, Aspect.TOOL, 10, Aspect.ENERGY, 10, Aspect.LIGHT, 5, Aspect.FLIGHT, 5, Aspect.TRAP, 5, Aspect.FIRE, 5),
-                "textures/research/cat_artifice.png", "textures/gui/gui_research_back_4.png");
+                "textures/research/cat_artifice.png", "textures/gui/gui_research_back_4.jpg");
         put(categories, "INFUSION", "UNLOCKINFUSION", tags(Aspect.MAGIC, 30, Aspect.PROTECT, 10, Aspect.TOOL, 10, Aspect.FLUX, 5, Aspect.CRAFT, 5, Aspect.SOUL, 5, Aspect.EARTH, 3),
-                "textures/research/cat_infusion.png", "textures/gui/gui_research_back_7.png");
+                "textures/research/cat_infusion.png", "textures/gui/gui_research_back_7.jpg");
         put(categories, "GOLEMANCY", "UNLOCKGOLEMANCY", tags(Aspect.MAN, 20, Aspect.MOTION, 10, Aspect.MIND, 10, Aspect.MECHANISM, 10, Aspect.EXCHANGE, 5, Aspect.SENSES, 5, Aspect.BEAST, 5, Aspect.ORDER, 5),
-                "textures/research/cat_golemancy.png", "textures/gui/gui_research_back_5.png");
+                "textures/research/cat_golemancy.png", "textures/gui/gui_research_back_5.jpg");
         put(categories, "ELDRITCH", "UNLOCKELDRITCH", tags(Aspect.ELDRITCH, 20, Aspect.DARKNESS, 10, Aspect.MAGIC, 5, Aspect.MIND, 5, Aspect.VOID, 5, Aspect.DEATH, 5, Aspect.UNDEAD, 5, Aspect.ENTROPY, 5),
-                "textures/research/cat_eldritch.png", "textures/gui/gui_research_back_6.png");
+                "textures/research/cat_eldritch.png", "textures/gui/gui_research_back_6.jpg");
         return categories;
     }
 

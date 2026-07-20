@@ -30,10 +30,10 @@ Wisp Nether, Angry Zombie overworld, Firebat Nether/Halloween and Pech magical-b
 | pech_magical_biome_modifier_resource_exists | PASS | data/thaumcraft/neoforge/biome_modifier/pech_legacy_magical_spawns.json |
 | pech_magical_biome_modifier_matches_legacy_values | PASS | type=neoforge:add_spawns, biome=#thaumcraft:legacy_magical_spawn_biomes, spawner={"type":"thaumcraft:pech","weight":10,"minCount":1,"maxCount":1} |
 | pech_legacy_magical_biome_tag_resource_exists | PASS | tag intentionally contains only optional Thaumcraft magical biomes until biome subsystem is ported |
-| wisp_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$$Lambda/0x0000000800eb8ee0@573f52ec, heightmap=MOTION_BLOCKING_NO_LEAVES |
-| brainy_zombie_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$1@33754027, heightmap=MOTION_BLOCKING_NO_LEAVES |
-| firebat_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$$Lambda/0x0000000800eb8ee0@573f52ec, heightmap=MOTION_BLOCKING_NO_LEAVES |
-| pech_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$1@33754027, heightmap=MOTION_BLOCKING_NO_LEAVES |
+| wisp_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$$Lambda/0x0000000800eb85f0@2231828f, heightmap=MOTION_BLOCKING_NO_LEAVES |
+| brainy_zombie_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$1@3ad3cf24, heightmap=MOTION_BLOCKING_NO_LEAVES |
+| firebat_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$$Lambda/0x0000000800eb85f0@2231828f, heightmap=MOTION_BLOCKING_NO_LEAVES |
+| pech_spawn_placement_registered | PASS | placement=net.minecraft.world.entity.SpawnPlacementTypes$1@3ad3cf24, heightmap=MOTION_BLOCKING_NO_LEAVES |
 | wisp_spawn_predicate_allows_dark_unobstructed_normal_cell | PASS | pos=BlockPos{x=16, y=48, z=16}, brightness=0 |
 | wisp_spawn_predicate_denies_obstructed_cell | PASS | block=Block{minecraft:stone} |
 | wisp_spawn_gates_deny_bright_cell_like_legacy_light_check | PASS | localRawBrightness=15, blockRoll=7 |

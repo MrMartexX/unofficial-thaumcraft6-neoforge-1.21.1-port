@@ -35,6 +35,7 @@ import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCRecipes;
+import thaumcraft.common.research.TCPlayerKnowledge;
 import thaumcraft.common.research.TCPlayerKnowledgeStore;
 import thaumcraft.common.tiles.crafting.TCThaumatoriumBlockEntity;
 import thaumcraft.common.tiles.crafting.TCThaumatoriumTopBlockEntity;
@@ -176,6 +177,7 @@ public final class TCThaumatoriumBehaviorAudit {
 
         ServerPlayer player = FakePlayerFactory.getMinecraft(level);
         player.getInventory().clearContent();
+        TCPlayerKnowledgeStore.set(player, new TCPlayerKnowledge(), false);
         thaumatorium.setCatalystForValidation(new ItemStack(Items.COAL, 1));
         checks.add(check("thaumatorium_recipe_list_is_research_gated",
                 thaumatorium.availableRecipes(player).stream().noneMatch(holder -> holder.id().equals(ALUMENTUM)),
@@ -282,6 +284,7 @@ public final class TCThaumatoriumBehaviorAudit {
                         + TCThaumatoriumBlockEntity.MNEMONIC_MATRIX_BONUS,
                 "base=" + baseCapacity + ", upgraded=" + thaumatorium.maxRecipes()));
 
+        TCPlayerKnowledgeStore.set(player, new TCPlayerKnowledge(), false);
         clearArea(level, origin, 8);
         return new Report(List.copyOf(checks));
     }
