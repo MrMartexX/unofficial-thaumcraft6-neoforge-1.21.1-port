@@ -94,7 +94,7 @@ When research requirement mapping changes:
 
 Do not treat the current branch as a full research system yet. These areas remain blocked:
 
-- final Thaumonomicon GUI polish and remaining special page renderers;
+- measured Thaumonomicon pixel-level polish and the cheat variant;
 - full random `WarpEvents` symptoms/hallucinations;
 - cancellable research/knowledge events;
 - exact legacy direct craft-hash mapping;

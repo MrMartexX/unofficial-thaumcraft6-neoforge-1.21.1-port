@@ -14,6 +14,8 @@ The UI is a client-side `Screen`, not an inventory `Menu`. All visibility, unloc
 | GUI routing | `thaumcraft.proxies.ProxyGUI` | GUI id `12` creates `GuiResearchBrowser` without a server inventory container. |
 | Browser | `thaumcraft.client.gui.GuiResearchBrowser` | Category backgrounds, research graph, parent/sibling links, category tabs, pan/zoom, research flags and server packets for start/acknowledge. |
 | Entry | `thaumcraft.client.gui.GuiResearchPage` | Book background, selected stage text, requirements, bookmarks, page navigation and checked stage-advance packet. |
+| Side inserts | `thaumcraft.client.gui.GuiResearchPage` | Aspect side tab after `FIRSTSTEPS`, knowledge side tab after `KNOWLEDGETYPES`, known-aspect component visibility and raw knowledge totals. |
+| Warp warning | `thaumcraft.client.gui.GuiResearchPage` | Stage warp marker is shown on incomplete warping stages and uses the legacy forbidden-level translation keys. |
 | Progress packets | `PacketSyncProgressToServer`, `PacketSyncResearchFlagsToServer` | Server mutation; browser start, known-entry acknowledgement/final-stage progression and checked stage advance have distinct semantics. |
 
 ## Modern architecture
@@ -25,8 +27,9 @@ The UI is a client-side `Screen`, not an inventory `Menu`. All visibility, unloc
 | Client open orchestration | `TCThaumonomiconClientCache`, `TCThaumonomiconClientController` |
 | Browser | `TCThaumonomiconBrowserScreen` |
 | Entry page | `TCThaumonomiconEntryScreen` |
+| Side insert data | `TCKnowledgeClientCache` completed research keys plus raw observation/theory maps |
 | Vanilla crafting page snapshot | `TCCraftingRecipePageView`, built by `TCResearchPageCatalogManager` |
-| Arcane/crucible/infusion page snapshots | `TCArcaneRecipePageView`, `TCCrucibleRecipePageView`, and `TCInfusionRecipePageView`, all server-built by `TCResearchPageCatalogManager` |
+| Arcane/crucible/infusion/blueprint/fake-display page snapshots | `TCArcaneRecipePageView`, `TCCrucibleRecipePageView`, `TCInfusionRecipePageView`, `TCBlueprintRecipePageView`, and `TCDisplayRecipePageView`, all server-built by `TCResearchPageCatalogManager` |
 | Authoritative state | `TCThaumonomiconService`, `TCResearchManager`, `TCPlayerKnowledgeStore` |
 | Server actions | `TCThaumonomiconActionPayload` with client revision echo |
 
@@ -43,31 +46,30 @@ Every index also carries a server-built revision over the current research data,
 - Unknown unlockable entries send `START_RESEARCH`; known entries send `ACKNOWLEDGE_ENTRY`.
 - The entry screen opens only after the server accepts the action and returns an authoritative entry view.
 - Entry stage text, visible addenda, requirement results, stage state, bookmarks, book asset, page navigation, and checked stage advance are active.
-- Renderable crafting bookmarks open a legacy-style paper recipe page. The server snapshot owns the real result stack, shaped/shapeless kind, shaped dimensions, ingredient slots, and ingredient variants; the client only cycles and renders those values.
-- Live vanilla crafting, arcane, crucible and infusion catalog entries produce valid server snapshots. Direct-reference live availability remains catalog-owned; deferred or legacy-missing groups stay non-interactive until their subsystem or mapping exists.
+- Renderable recipe bookmarks are legacy-style right-side tabs with output stack icons. They open a legacy-style paper recipe page. The server snapshot owns the real result stack, recipe kind, shaped dimensions, ingredient slots, component/aspect displays and display-only recipe contents; the client only cycles and renders those values.
+- Live vanilla crafting, arcane, crucible, infusion, blueprint construct and fake/display catalog entries produce valid server snapshots. Direct-reference live availability remains catalog-owned; deferred or legacy-missing groups stay non-interactive until their subsystem or mapping exists.
 - Recipe stack click-through is server-authoritative: the client sends the hovered stack and current index revision, the server resolves the first visible matching research recipe page, stale revisions are rejected without mutation, and the client keeps only local page history for Back/Escape/right-click navigation.
+- Entry-side aspect and knowledge inserts are active. Aspect pages show only known aspects from completed `!aspect` keys, sort by translated name, hide unknown components with the legacy unknown texture and use the legacy aspect side tab. Knowledge pages read only synced raw observation/theory totals from `TCKnowledgeClientCache`.
+- Incomplete warping stages render a legacy-shaped forbidden marker and `tc.forbidden.level.*`/`tc.warp.warn` text from the selected server stage.
 - Thaumonomicon has its exact legacy runtime aspect result from the 1.12 exporter dump.
 - Legacy `research.*` English translations required by the active screen are present in modern `en_us.json`.
 
 ## Intentionally deferred
 
-- Exact arrow shapes, forbidden/warp marker, category completion percentages, popup animation, and final browser visual parity tuning.
-- Aspect and knowledge side pages.
-- Blueprint, special and missing recipe-page renderers.
+- Exact arrow-shape pixel measurement, category completion percentages, popup animation, and final browser pixel-level tuning.
 - Cheat Thaumonomicon variant.
 
 Deferred recipe pages are shown only as catalog bookmarks with their authoritative kind/availability. Only `READY` pages carrying a matching server snapshot are interactive; the UI does not invent recipe contents.
 
 ## Validation
 
-- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action and stale-drilldown rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, server-side drilldown output matching, and the `READY` crafting/arcane/crucible/infusion snapshot boundary. The report deliberately records stable revision match labels instead of raw hash values.
-- Latest protocol result: `36/36` checks passed; live vanilla crafting, arcane, crucible, infusion and fake/display catalog entries produce valid server snapshots, and recipe drilldown/history validates server-side output-stack resolution, client-cache acceptance and stale-revision rejection.
+- `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action and stale-drilldown rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, selected-stage warp propagation, side-panel knowledge cache exposure, server-side drilldown output matching, and the `READY` crafting/arcane/crucible/infusion/blueprint/fake-display snapshot boundary. The report deliberately records stable revision match labels instead of raw hash values.
+- Latest protocol result: `40/40` checks passed; live vanilla crafting, arcane, crucible, infusion, blueprint and fake/display catalog entries produce valid server snapshots, and recipe drilldown/history validates server-side output-stack resolution, client-cache acceptance and stale-revision rejection.
 - `gradlew build` passes after the browser search/filter and recipe drilldown/history slices.
 - Dedicated-server reload passes with `687` exact aspect assignments and the Thaumonomicon protocol audit.
 
 ## Next boundary
 
 1. Keep `DEFERRED` and `LEGACY_MISSING` pages non-interactive until their crafting subsystem or mapping is implemented.
-2. Keep remaining custom recipe pages catalog-gated. Vanilla crafting, arcane, crucible, real infusion and fake/display page snapshots have first-pass boundaries; blueprint and special pages still need focused design slices before rendering.
-3. Keep recipe drilldown limited to server-returned snapshots; do not let the client resolve hidden or deferred recipes independently.
-4. Run a focused visual parity pass against the legacy browser, entry page, and crafting paper page before calling the UI final.
+2. Keep recipe drilldown limited to server-returned snapshots; do not let the client resolve hidden or deferred recipes independently.
+3. Run manual `runClient` screenshot comparison before claiming pixel-perfect browser/entry parity; the server-authoritative UI behavior layer is complete for the currently implemented page kinds.

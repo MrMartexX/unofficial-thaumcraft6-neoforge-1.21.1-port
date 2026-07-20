@@ -252,6 +252,7 @@ final class TCThaumonomiconProtocolAudit {
         boolean readyBlueprintPageViewsHaveSnapshots = true;
         boolean readyPageViewsHaveCorrectSnapshotKind = true;
         boolean deferredPageViewsHaveNoSnapshots = true;
+        boolean entryViewsCarrySelectedStageWarp = true;
         Optional<TCThaumonomiconEntryView> sample = Optional.empty();
         for (TCThaumonomiconResearchView entry : index.entries()) {
             Optional<TCThaumonomiconEntryView> view = TCThaumonomiconService.buildEntry(player, entry.key());
@@ -261,6 +262,16 @@ final class TCThaumonomiconProtocolAudit {
             entryViewsInspected++;
             if (sample.isEmpty()) {
                 sample = view;
+            }
+            Optional<TCResearchEntryDefinition> definition = TCResearchManager.getEntry(entry.key());
+            if (definition.isPresent()) {
+                int selectedStage = view.get().selectedStage();
+                int expectedWarp = selectedStage >= 0 && selectedStage < definition.get().stages().size()
+                        ? definition.get().stages().get(selectedStage).warp()
+                        : 0;
+                if (view.get().warp() != expectedWarp) {
+                    entryViewsCarrySelectedStageWarp = false;
+                }
             }
             for (TCResearchPageBookmark bookmark : view.get().bookmarks()) {
                 bookmarksInspected++;
@@ -341,6 +352,11 @@ final class TCThaumonomiconProtocolAudit {
                 "non_ready_page_views_have_no_recipe_snapshots",
                 deferredPageViewsHaveNoSnapshots,
                 "pages=" + pagesInspected
+        ));
+        checks.add(check(
+                "entry_views_carry_selected_stage_warp",
+                entryViewsCarrySelectedStageWarp,
+                "inspected=" + entryViewsInspected
         ));
 
         int readyCraftingEntries = 0;
@@ -676,6 +692,25 @@ final class TCThaumonomiconProtocolAudit {
                 "explicit_open_intent_is_separate_from_refresh",
                 explicitOpenIntent && refreshDoesNotOpen,
                 "open_once=" + explicitOpenIntent + ", refresh_open=" + !refreshDoesNotOpen
+        ));
+
+        TCPlayerKnowledge sidePanelKnowledge = new TCPlayerKnowledge();
+        sidePanelKnowledge.addResearch("FIRSTSTEPS");
+        sidePanelKnowledge.addResearch("KNOWLEDGETYPES");
+        sidePanelKnowledge.addResearch("!aer");
+        sidePanelKnowledge.addRaw(TCKnowledgeType.THEORY, "BASICS", 48);
+        sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "AUROMANCY", 20);
+        TCKnowledgeClientCache.accept(TCKnowledgeSyncPayload.from(sidePanelKnowledge));
+        boolean sidePanelStateSynced = TCKnowledgeClientCache.hasResearch("!aer")
+                && TCKnowledgeClientCache.hasResearch("FIRSTSTEPS")
+                && TCKnowledgeClientCache.hasResearch("KNOWLEDGETYPES")
+                && TCKnowledgeClientCache.rawKnowledge(TCKnowledgeType.THEORY, "BASICS") == 48
+                && TCKnowledgeClientCache.knowledgePoints(TCKnowledgeType.OBSERVATION, "AUROMANCY") == 1;
+        TCKnowledgeClientCache.clear();
+        checks.add(check(
+                "client_knowledge_cache_exposes_thaumonomicon_side_panel_state",
+                sidePanelStateSynced,
+                "aspect_keys_and_raw_knowledge"
         ));
 
         CompoundTag beforeDrilldownKnowledge = TCPlayerKnowledgeStore.get(player).save();

@@ -3,8 +3,11 @@ package thaumcraft.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
 import java.util.ArrayDeque;
+import java.util.Comparator;
 import java.util.Deque;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.lwjgl.glfw.GLFW;
 import thaumcraft.Thaumcraft;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.research.TCArcaneRecipePageView;
 import thaumcraft.common.research.TCBlueprintRecipePageView;
@@ -23,9 +27,12 @@ import thaumcraft.common.research.TCCrucibleRecipePageView;
 import thaumcraft.common.research.TCDisplayRecipePageType;
 import thaumcraft.common.research.TCDisplayRecipePageView;
 import thaumcraft.common.research.TCInfusionRecipePageView;
+import thaumcraft.common.research.TCKnowledgeClientCache;
+import thaumcraft.common.research.TCKnowledgeType;
 import thaumcraft.common.research.TCResearchPageAvailability;
 import thaumcraft.common.research.TCResearchPageBookmark;
 import thaumcraft.common.research.TCResearchPageView;
+import thaumcraft.common.research.TCThaumonomiconCategoryView;
 import thaumcraft.common.research.TCThaumonomiconActionPayload;
 import thaumcraft.common.research.TCThaumonomiconClientCache;
 import thaumcraft.common.research.TCThaumonomiconDrilldownPayload;
@@ -42,12 +49,24 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/gui_researchbook_overlay.png");
     private static final ResourceLocation PAPER =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/paper.png");
+    private static final ResourceLocation ASPECT_BACK =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/aspects/_back.png");
+    private static final ResourceLocation UNKNOWN =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/aspects/_unknown.png");
+    private static final ResourceLocation KNOWLEDGE_THEORY =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/research/knowledge_theory.png");
+    private static final ResourceLocation KNOWLEDGE_OBSERVATION =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/research/knowledge_observation.png");
+    private static final ResourceLocation AURA_NODES =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/misc/auranodes.png");
     private static final int BOOK_WIDTH = 333;
     private static final int BOOK_HEIGHT = 235;
     private static final int RECIPE_PAGE_SIZE = 256;
     private static final int PAGE_TEXT_WIDTH = 126;
     private static final int LINES_PER_PAGE = 21;
+    private static final int ASPECTS_PER_PAGE = 5;
 
+    private static int aspectPage;
     private TCThaumonomiconEntryView entry;
     private List<FormattedCharSequence> lines = List.of();
     private int spread;
@@ -59,7 +78,9 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private int activeRecipeIndex;
     private final Deque<RecipePageState> recipeHistory = new ArrayDeque<>();
     private ItemStack hoveredRecipeStack = ItemStack.EMPTY;
+    private List<Component> hoveredUiTooltip = List.of();
     private boolean pendingDrilldown;
+    private SideInsert sideInsert = SideInsert.NONE;
 
     public TCThaumonomiconEntryScreen(TCThaumonomiconEntryView entry) {
         super(Component.translatable(entry.research().name()));
@@ -100,6 +121,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         hoveredBookmark = null;
         hoveredRecipeStack = ItemStack.EMPTY;
+        hoveredUiTooltip = List.of();
         graphics.fill(0, 0, width, height, 0xB0100B16);
         int x = bookX();
         int y = bookY();
@@ -107,18 +129,28 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         renderTitle(graphics, x, y);
         renderPageText(graphics, x, y);
         renderNavigation(graphics, x, y, mouseX, mouseY);
+        renderSideTabs(graphics, x, y, mouseX, mouseY);
+        renderWarpWarning(graphics, x, y, mouseX, mouseY);
         renderBookmarks(graphics, x, y, mouseX, mouseY);
         renderResult(graphics, x, y);
+        if (sideInsert != SideInsert.NONE) {
+            renderSideInsert(graphics, mouseX, mouseY);
+            renderHoveredUiTooltip(graphics, mouseX, mouseY);
+            return;
+        }
         if (!activeRecipePages.isEmpty()) {
             renderRecipePage(graphics, mouseX, mouseY);
             if (!hoveredRecipeStack.isEmpty()) {
                 renderRecipeStackTooltip(graphics, mouseX, mouseY);
             }
+            renderHoveredUiTooltip(graphics, mouseX, mouseY);
             return;
         }
         if (hoveredBookmark != null) {
             renderBookmarkTooltip(graphics, hoveredBookmark, mouseX, mouseY);
+            return;
         }
+        renderHoveredUiTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
@@ -139,6 +171,12 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
         int x = bookX();
         int y = bookY();
+        if (handleSideTabClick(mouseX, mouseY, x, y)) {
+            return true;
+        }
+        if (sideInsert != SideInsert.NONE && handleSideInsertClick(mouseX, mouseY)) {
+            return true;
+        }
         if (inside(mouseX, mouseY, x + 140, y + 218, 53, 12)) {
             playPage();
             minecraft.setScreen(new TCThaumonomiconBrowserScreen());
@@ -174,6 +212,11 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && sideInsert != SideInsert.NONE) {
+            sideInsert = SideInsert.NONE;
+            playPage();
+            return true;
+        }
         if (keyCode == GLFW.GLFW_KEY_ESCAPE && !activeRecipePages.isEmpty()) {
             goBackRecipePage();
             playPage();
@@ -302,17 +345,53 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private void renderBookmarks(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
         for (int index = 0; index < entry.bookmarks().size(); index++) {
             TCResearchPageBookmark bookmark = entry.bookmarks().get(index);
-            int tabX = x + BOOK_WIDTH - 4;
-            int tabY = y + 25 + index * 18;
-            int color = bookmark.pages().stream().allMatch(page -> page.availability() == TCResearchPageAvailability.READY)
-                    ? 0xFF6A944B
-                    : 0xFF9A7135;
-            graphics.fill(tabX, tabY, tabX + 20, tabY + 13, color);
-            graphics.drawString(font, Integer.toString(index + 1), tabX + 6, tabY + 2, 0xFFFFFFFF, true);
-            if (inside(mouseX, mouseY, tabX, tabY, 20, 13)) {
+            int space = Math.min(25, Math.max(12, 200 / Math.max(1, entry.bookmarks().size())));
+            int tabX = x + 280;
+            int tabY = y - 8 + index * space;
+            boolean hovered = inside(mouseX, mouseY, tabX, tabY, 30, 16);
+            boolean selected = bookmark.id().equals(activeRecipeId);
+            int le = hovered || selected ? 0 : 3;
+            graphics.setColor(1.0F, selected ? 0.55F : 1.0F, selected ? 0.55F : 1.0F, 1.0F);
+            blit(graphics, BOOK, tabX + le, tabY, 120 + le, 232, 28 - le, 16, 512, 512);
+            blit(graphics, BOOK, tabX, tabY, 116, 232, 4, 16, 512, 512);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            ItemStack stack = firstBookmarkStack(bookmark);
+            if (!stack.isEmpty()) {
+                graphics.renderItem(stack, tabX + 7 - le, tabY, index);
+            } else {
+                int color = bookmark.pages().stream().allMatch(page -> page.availability() == TCResearchPageAvailability.READY)
+                        ? 0xFF6A944B
+                        : 0xFF9A7135;
+                graphics.drawString(font, Integer.toString(index + 1), tabX + 9 - le, tabY + 4, color, true);
+            }
+            if (hovered) {
                 hoveredBookmark = bookmark;
             }
         }
+    }
+
+    private ItemStack firstBookmarkStack(TCResearchPageBookmark bookmark) {
+        for (TCResearchPageView page : bookmark.pages()) {
+            if (page.craftingRecipe().isPresent()) {
+                return page.craftingRecipe().get().result();
+            }
+            if (page.arcaneRecipe().isPresent()) {
+                return page.arcaneRecipe().get().result();
+            }
+            if (page.crucibleRecipe().isPresent()) {
+                return page.crucibleRecipe().get().result();
+            }
+            if (page.infusionRecipe().isPresent()) {
+                return page.infusionRecipe().get().result();
+            }
+            if (page.blueprintRecipe().isPresent()) {
+                return page.blueprintRecipe().get().displayStack();
+            }
+            if (page.displayRecipe().isPresent()) {
+                return page.displayRecipe().get().result();
+            }
+        }
+        return ItemStack.EMPTY;
     }
 
     private void renderBookmarkTooltip(
@@ -348,6 +427,263 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
         openRecipePages(bookmark.id(), renderable, 0, true);
         playPage();
+    }
+
+    private void renderSideTabs(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
+        if (canShowAspectTab()) {
+            int tabX = x - 48;
+            int tabY = y + 9;
+            boolean hovered = inside(mouseX, mouseY, tabX, tabY, 25, 16);
+            int le = hovered || sideInsert == SideInsert.ASPECTS ? 0 : 3;
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            blit(graphics, BOOK, tabX + le, tabY, 76, 232, 24 - le, 16, 512, 512);
+            blit(graphics, BOOK, tabX + 20, tabY, 100, 232, 4, 16, 512, 512);
+            if (hovered) {
+                hoveredUiTooltip = List.of(Component.translatable("tc.aspect.name"));
+            }
+        }
+        if (canShowKnowledgeTab()) {
+            int tabX = x - 49;
+            int tabY = y + 32;
+            boolean hovered = inside(mouseX, mouseY, tabX, tabY, 25, 16);
+            int le = hovered || sideInsert == SideInsert.KNOWLEDGE ? 0 : 3;
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            blit(graphics, BOOK, tabX + le, tabY, 44, 232, 24 - le, 16, 512, 512);
+            blit(graphics, BOOK, tabX + 20, tabY, 100, 232, 4, 16, 512, 512);
+            if (hovered) {
+                hoveredUiTooltip = List.of(Component.translatable("tc.knowledge.name"));
+            }
+        }
+    }
+
+    private void renderWarpWarning(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
+        if (sideInsert != SideInsert.NONE || !activeRecipePages.isEmpty() || entry.complete() || entry.warp() <= 0) {
+            return;
+        }
+        int warp = Math.min(5, entry.warp());
+        int iconX = x - 57;
+        int iconY = y + 154;
+        graphics.pose().pushPose();
+        graphics.pose().translate(iconX + 10.0F, iconY + 10.0F, 30.0F);
+        float scale = 0.42F + (float) Math.sin(System.currentTimeMillis() / 220.0D) * 0.04F;
+        graphics.pose().scale(scale, scale, 1.0F);
+        graphics.setColor(0.9F, 0.0F, 0.44F, 0.9F);
+        blit(graphics, AURA_NODES, -16, -16, 160, 0, 32, 32, 2048, 2048);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        graphics.pose().popPose();
+        Component level = Component.translatable("tc.forbidden.level." + warp);
+        graphics.drawString(font, level, iconX - font.width(level) / 2 + 10, iconY - 3, 0xFFAA999F, false);
+        if (inside(mouseX, mouseY, iconX - 10, iconY - 10, 28, 28)) {
+            hoveredUiTooltip = List.of(Component.translatable("tc.warp.warn", level));
+        }
+    }
+
+    private boolean handleSideTabClick(double mouseX, double mouseY, int x, int y) {
+        if (canShowAspectTab() && inside(mouseX, mouseY, x - 48, y + 9, 25, 16)) {
+            closeRecipePage(true);
+            sideInsert = sideInsert == SideInsert.ASPECTS ? SideInsert.NONE : SideInsert.ASPECTS;
+            aspectPage = Math.min(aspectPage, maxAspectPage());
+            playPage();
+            return true;
+        }
+        if (canShowKnowledgeTab() && inside(mouseX, mouseY, x - 49, y + 32, 25, 16)) {
+            closeRecipePage(true);
+            sideInsert = sideInsert == SideInsert.KNOWLEDGE ? SideInsert.NONE : SideInsert.KNOWLEDGE;
+            playPage();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean handleSideInsertClick(double mouseX, double mouseY) {
+        if (sideInsert != SideInsert.ASPECTS) {
+            return false;
+        }
+        int x = recipePageX();
+        int y = recipePageY();
+        if (inside(mouseX, mouseY, x + 40, y + 232, 14, 14) && aspectPage > 0) {
+            aspectPage--;
+            playPage();
+            return true;
+        }
+        if (inside(mouseX, mouseY, x + 204, y + 232, 14, 14) && aspectPage < maxAspectPage()) {
+            aspectPage++;
+            playPage();
+            return true;
+        }
+        return false;
+    }
+
+    private void renderSideInsert(GuiGraphics graphics, int mouseX, int mouseY) {
+        int x = recipePageX();
+        int y = recipePageY();
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, 0.0F, 100.0F);
+        blit(graphics, PAPER, x, y, 0, 0, RECIPE_PAGE_SIZE - 1, RECIPE_PAGE_SIZE - 1, RECIPE_PAGE_SIZE, RECIPE_PAGE_SIZE);
+        if (sideInsert == SideInsert.ASPECTS) {
+            renderAspectInsert(graphics, x + 60, y + 24, mouseX, mouseY);
+        } else if (sideInsert == SideInsert.KNOWLEDGE) {
+            renderKnowledgeInsert(graphics, x, y, mouseX, mouseY);
+        }
+        graphics.pose().popPose();
+    }
+
+    private void renderAspectInsert(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
+        List<Aspect> aspects = knownAspects();
+        if (aspects.isEmpty()) {
+            graphics.drawCenteredString(font, Component.translatable("tc.aspect.name"), x + 64, y + 86, 0xFF505050);
+            return;
+        }
+        aspectPage = Math.max(0, Math.min(aspectPage, maxAspectPage()));
+        int start = aspectPage * ASPECTS_PER_PAGE;
+        int end = Math.min(aspects.size(), start + ASPECTS_PER_PAGE);
+        for (int index = start; index < end; index++) {
+            Aspect aspect = aspects.get(index);
+            int row = index - start;
+            int rowY = y + row * 40;
+            if (inside(mouseX, mouseY, x, rowY, 40, 40)) {
+                drawFullTexture(graphics, ASPECT_BACK, x - 2, rowY - 2, 32, 32);
+                hoveredUiTooltip = List.of(
+                        Component.translatable("tc.aspect." + aspect.getTag()).withStyle(ChatFormatting.GOLD),
+                        Component.literal(aspect.getTag()).withStyle(ChatFormatting.GRAY)
+                );
+            }
+            drawAspectIcon(graphics, aspect, x + 2, rowY + 2, 24);
+            drawCenteredSmall(graphics, Component.translatable("tc.aspect." + aspect.getTag()), x + 16, rowY + 29, 0xFF505050);
+            Aspect[] components = aspect.getComponents();
+            if (components == null || components.length < 2) {
+                graphics.drawString(font, Component.translatable("tc.aspect.primal"), x + 54, rowY + 12, 0xFF777777, false);
+                continue;
+            }
+            graphics.drawString(font, "=", x + 41, rowY + 12, 0xFF999999, false);
+            renderAspectComponent(graphics, components[0], x + 60, rowY + 4, mouseX, mouseY);
+            graphics.drawString(font, "+", x + 89, rowY + 12, 0xFF999999, false);
+            renderAspectComponent(graphics, components[1], x + 102, rowY + 4, mouseX, mouseY);
+        }
+        if (aspectPage > 0) {
+            blit(graphics, BROWSER, x - 20, y + 208, 0, 184, 12, 8, 256, 256);
+        }
+        if (aspectPage < maxAspectPage()) {
+            blit(graphics, BROWSER, x + 144, y + 208, 12, 184, 12, 8, 256, 256);
+        }
+    }
+
+    private void renderAspectComponent(GuiGraphics graphics, Aspect aspect, int x, int y, int mouseX, int mouseY) {
+        boolean known = TCKnowledgeClientCache.hasResearch("!" + aspect.getTag());
+        if (known) {
+            drawAspectIcon(graphics, aspect, x, y, 20);
+            drawCenteredSmall(graphics, Component.translatable("tc.aspect." + aspect.getTag()), x + 10, y + 25, 0xFF505050);
+        } else {
+            drawFullTexture(graphics, UNKNOWN, x, y, 20, 20);
+        }
+        if (inside(mouseX, mouseY, x, y, 20, 20)) {
+            hoveredUiTooltip = known
+                    ? List.of(Component.translatable("tc.aspect." + aspect.getTag()).withStyle(ChatFormatting.GOLD))
+                    : List.of(Component.literal("???").withStyle(ChatFormatting.GRAY));
+        }
+    }
+
+    private void renderKnowledgeInsert(GuiGraphics graphics, int paperX, int paperY, int mouseX, int mouseY) {
+        graphics.drawCenteredString(font, Component.translatable("tc.knowledge.name"), paperX + 128, paperY + 24, 0xFF4B351B);
+        Map<String, TCThaumonomiconCategoryView> categories = new LinkedHashMap<>();
+        for (TCThaumonomiconCategoryView category : TCThaumonomiconClientCache.index().categories()) {
+            categories.put(category.key(), category);
+        }
+        int row = 0;
+        for (TCKnowledgeType type : List.of(TCKnowledgeType.THEORY, TCKnowledgeType.OBSERVATION)) {
+            Map<String, Integer> raw = TCKnowledgeClientCache.rawKnowledgeByCategory(type);
+            if (raw.isEmpty()) {
+                continue;
+            }
+            int column = 0;
+            int columnSpacing = Math.max(20, 164 / Math.max(1, Math.max(categories.size(), raw.size())));
+            for (Map.Entry<String, Integer> rawEntry : raw.entrySet()) {
+                int iconX = paperX + 50 + column * columnSpacing;
+                int iconY = paperY + 57 + row * 28;
+                renderKnowledgeIcon(graphics, type, rawEntry.getKey(), rawEntry.getValue(), categories.get(rawEntry.getKey()), iconX, iconY, mouseX, mouseY);
+                column++;
+            }
+            row++;
+        }
+        if (row == 0) {
+            graphics.drawCenteredString(font, Component.translatable("gui.thaumcraft.thaumonomicon.knowledge_empty"), paperX + 128, paperY + 104, 0xFF777777);
+        }
+    }
+
+    private void renderKnowledgeIcon(
+            GuiGraphics graphics,
+            TCKnowledgeType type,
+            String category,
+            int raw,
+            TCThaumonomiconCategoryView categoryView,
+            int x,
+            int y,
+            int mouseX,
+            int mouseY
+    ) {
+        drawFullTexture(graphics, type == TCKnowledgeType.THEORY ? KNOWLEDGE_THEORY : KNOWLEDGE_OBSERVATION, x, y, 16, 16);
+        ResourceLocation icon = parseLocation(categoryView == null ? "" : categoryView.icon());
+        if (icon != null) {
+            graphics.setColor(1.0F, 1.0F, 1.0F, 0.75F);
+            drawFullTexture(graphics, icon, x + 4, y + 4, 10, 10);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        String amount = Integer.toString(type.rawToPoints(raw));
+        graphics.drawString(font, amount, x + 16 - font.width(amount), y + 8, 0xFFFFFFFF, true);
+        int partial = raw % type.rawUnitsPerPoint();
+        if (partial > 0) {
+            int width = Math.max(1, (int) (partial / (float) type.rawUnitsPerPoint() * 16.0F));
+            graphics.setColor(1.0F, 1.0F, 1.0F, 0.75F);
+            blit(graphics, BOOK, x, y + 17, 0, 232, width, 2, 512, 512);
+            blit(graphics, BOOK, x + width, y + 17, width, 234, 16 - width, 2, 512, 512);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
+        if (inside(mouseX, mouseY, x, y, 16, 18)) {
+            hoveredUiTooltip = List.of(
+                    Component.translatable("tc.type." + type.id()).withStyle(ChatFormatting.GOLD),
+                    Component.translatable("tc.research_category." + category).withStyle(ChatFormatting.GRAY),
+                    Component.literal(raw + "/" + type.rawUnitsPerPoint()).withStyle(ChatFormatting.DARK_GRAY)
+            );
+        }
+    }
+
+    private List<Aspect> knownAspects() {
+        return Aspect.aspects.values().stream()
+                .filter(aspect -> TCKnowledgeClientCache.hasResearch("!" + aspect.getTag()))
+                .sorted(Comparator.comparing(aspect -> Component.translatable("tc.aspect." + aspect.getTag()).getString()))
+                .toList();
+    }
+
+    private int maxAspectPage() {
+        return Math.max(0, (knownAspects().size() - 1) / ASPECTS_PER_PAGE);
+    }
+
+    private boolean canShowAspectTab() {
+        return TCKnowledgeClientCache.hasResearch("FIRSTSTEPS");
+    }
+
+    private boolean canShowKnowledgeTab() {
+        return TCKnowledgeClientCache.hasResearch("KNOWLEDGETYPES")
+                && !entry.research().key().equals("KNOWLEDGETYPES");
+    }
+
+    private void drawAspectIcon(GuiGraphics graphics, Aspect aspect, int x, int y, int size) {
+        int color = aspect.getColor();
+        float red = ((color >> 16) & 255) / 255.0F;
+        float green = ((color >> 8) & 255) / 255.0F;
+        float blue = (color & 255) / 255.0F;
+        graphics.setColor(red, green, blue, 1.0F);
+        drawFullTexture(graphics, aspect.getImage(), x, y, size, size);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    private void drawCenteredSmall(GuiGraphics graphics, Component component, int centerX, int y, int color) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(centerX, y, 0.0F);
+        graphics.pose().scale(0.5F, 0.5F, 1.0F);
+        String text = component.getString();
+        graphics.drawString(font, text, -font.width(text) / 2, 0, color, false);
+        graphics.pose().popPose();
     }
 
     private boolean handleRecipePageClick(double mouseX, double mouseY) {
@@ -892,6 +1228,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (activeRecipeIndex < activeRecipePages.size() - 1) {
             blit(graphics, BROWSER, x + 204, y + 232, 12, 184, 12, 8, 256, 256);
         }
+        if (activeRecipePages.size() > 1) {
+            String page = (activeRecipeIndex + 1) + "/" + activeRecipePages.size();
+            graphics.drawCenteredString(font, page, x + 128, y + 224, 0xFF6D4C24);
+        }
         int color = inside(mouseX, mouseY, x + 96, y + 236, 64, 16) ? 0xFF805A24 : 0xFF4B351B;
         graphics.drawCenteredString(font, Component.translatable("recipe.return"), x + 128, y + 238, color);
     }
@@ -910,6 +1250,12 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             return;
         }
         graphics.drawCenteredString(font, lastResult, x + BOOK_WIDTH / 2, y + BOOK_HEIGHT + 4, 0xFFFFFFFF);
+    }
+
+    private void renderHoveredUiTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+        if (!hoveredUiTooltip.isEmpty()) {
+            graphics.renderComponentTooltip(font, hoveredUiTooltip, mouseX, mouseY);
+        }
     }
 
     private boolean canAdvance() {
@@ -961,6 +1307,17 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         return mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
     }
 
+    private static ResourceLocation parseLocation(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return null;
+        }
+        try {
+            return ResourceLocation.parse(raw);
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
+    }
+
     private record RecipePageState(
             ResourceLocation id,
             List<TCResearchPageView> pages,
@@ -986,5 +1343,24 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(texture, x, y, u, v, width, height, textureWidth, textureHeight);
+    }
+
+    private static void drawFullTexture(
+            GuiGraphics graphics,
+            ResourceLocation texture,
+            int x,
+            int y,
+            int width,
+            int height
+    ) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        graphics.blit(texture, x, y, 0.0F, 0.0F, width, height, width, height);
+    }
+
+    private enum SideInsert {
+        NONE,
+        ASPECTS,
+        KNOWLEDGE
     }
 }

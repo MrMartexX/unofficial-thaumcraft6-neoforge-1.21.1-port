@@ -18,6 +18,7 @@
 | `ready_page_views_have_server_blueprint_snapshots` | `PASS` | pages=1 |
 | `ready_page_views_use_matching_snapshot_kind` | `PASS` | pages=1 |
 | `non_ready_page_views_have_no_recipe_snapshots` | `PASS` | pages=1 |
+| `entry_views_carry_selected_stage_warp` | `PASS` | inspected=4 |
 | `ready_crafting_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_crafting_entries=92, fake_crafting_entries=2, deferred_crafting_entries=0 |
 | `fake_crafting_catalog_entries_have_display_snapshots` | `PASS` | fake_crafting_entries=2 |
 | `ready_arcane_catalog_entries_have_valid_server_snapshots` | `PASS` | ready_arcane_entries=89, deferred_arcane_entries=0 |
@@ -33,6 +34,7 @@
 | `client_cache_stores_authoritative_revision` | `PASS` | revision=stored |
 | `index_refresh_invalidates_entry_cache` | `PASS` | sample_present=true |
 | `explicit_open_intent_is_separate_from_refresh` | `PASS` | open_once=true, refresh_open=false |
+| `client_knowledge_cache_exposes_thaumonomicon_side_panel_state` | `PASS` | aspect_keys_and_raw_knowledge |
 | `recipe_drilldown_resolves_output_stack_server_side` | `PASS` | sample_stack=thaumcraft:arcane_bore |
 | `client_cache_accepts_drilldown_payload` | `PASS` | sample_present=true |
 | `stale_drilldown_revision_rejected_without_mutation` | `PASS` | sample_present=true |
