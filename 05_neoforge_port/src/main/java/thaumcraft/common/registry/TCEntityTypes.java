@@ -17,7 +17,10 @@ import thaumcraft.common.entities.TCBrainyZombieEntity;
 import thaumcraft.common.entities.TCCausalityCollapserEntity;
 import thaumcraft.common.entities.TCCultistClericEntity;
 import thaumcraft.common.entities.TCCultistKnightEntity;
+import thaumcraft.common.entities.TCCultistLeaderEntity;
+import thaumcraft.common.entities.TCCultistPortalGreaterEntity;
 import thaumcraft.common.entities.TCCultistPortalLesserEntity;
+import thaumcraft.common.entities.TCEldritchCrabEntity;
 import thaumcraft.common.entities.TCEldritchGuardianEntity;
 import thaumcraft.common.entities.TCEldritchOrbEntity;
 import thaumcraft.common.entities.TCFallingTaintEntity;
@@ -26,12 +29,14 @@ import thaumcraft.common.entities.TCFollowingItemEntity;
 import thaumcraft.common.entities.TCFluxRiftEntity;
 import thaumcraft.common.entities.TCGiantBrainyZombieEntity;
 import thaumcraft.common.entities.TCGolemOrbEntity;
+import thaumcraft.common.entities.TCInhabitedZombieEntity;
 import thaumcraft.common.entities.TCMindSpiderEntity;
 import thaumcraft.common.entities.TCPechEntity;
 import thaumcraft.common.entities.TCSpecialItemEntity;
 import thaumcraft.common.entities.TCTaintCrawlerEntity;
 import thaumcraft.common.entities.TCTaintSeedEntity;
 import thaumcraft.common.entities.TCTaintSwarmEntity;
+import thaumcraft.common.entities.TCTaintacleGiantEntity;
 import thaumcraft.common.entities.TCTaintacleEntity;
 import thaumcraft.common.entities.TCTaintacleTinyEntity;
 import thaumcraft.common.entities.TCThaumicSlimeEntity;
@@ -75,6 +80,16 @@ public final class TCEntityTypes {
                             .fireImmune()
                             .build(Thaumcraft.MODID + ":cultist_portal_lesser"));
 
+    public static final Supplier<EntityType<TCCultistPortalGreaterEntity>> CULTIST_PORTAL_GREATER =
+            ENTITY_TYPES.register("cultist_portal_greater", () ->
+                    EntityType.Builder.<TCCultistPortalGreaterEntity>of(TCCultistPortalGreaterEntity::new, MobCategory.MONSTER)
+                            .sized(1.5F, 3.0F)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(20)
+                            .setShouldReceiveVelocityUpdates(false)
+                            .fireImmune()
+                            .build(Thaumcraft.MODID + ":cultist_portal_greater"));
+
     public static final Supplier<EntityType<TCCultistKnightEntity>> CULTIST_KNIGHT =
             ENTITY_TYPES.register("cultist_knight", () ->
                     EntityType.Builder.<TCCultistKnightEntity>of(TCCultistKnightEntity::new, MobCategory.MONSTER)
@@ -92,6 +107,15 @@ public final class TCEntityTypes {
                             .setUpdateInterval(3)
                             .setShouldReceiveVelocityUpdates(true)
                             .build(Thaumcraft.MODID + ":cultist_cleric"));
+
+    public static final Supplier<EntityType<TCCultistLeaderEntity>> CULTIST_LEADER =
+            ENTITY_TYPES.register("cultist_leader", () ->
+                    EntityType.Builder.<TCCultistLeaderEntity>of(TCCultistLeaderEntity::new, MobCategory.MONSTER)
+                            .sized(0.75F, 2.25F)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(3)
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build(Thaumcraft.MODID + ":cultist_leader"));
 
     public static final Supplier<EntityType<TCArcaneBoreEntity>> ARCANE_BORE = ENTITY_TYPES.register("arcane_bore", () ->
             EntityType.Builder.<TCArcaneBoreEntity>of(TCArcaneBoreEntity::new, MobCategory.MISC)
@@ -156,6 +180,14 @@ public final class TCEntityTypes {
                     .setUpdateInterval(3)
                     .setShouldReceiveVelocityUpdates(false)
                     .build(Thaumcraft.MODID + ":taintacle_tiny"));
+
+    public static final Supplier<EntityType<TCTaintacleGiantEntity>> TAINTACLE_GIANT = ENTITY_TYPES.register("taintacle_giant", () ->
+            EntityType.Builder.<TCTaintacleGiantEntity>of(TCTaintacleGiantEntity::new, MobCategory.MONSTER)
+                    .sized(1.1F, 6.0F)
+                    .setTrackingRange(96)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build(Thaumcraft.MODID + ":taintacle_giant"));
 
     public static final Supplier<EntityType<TCTaintSwarmEntity>> TAINT_SWARM = ENTITY_TYPES.register("taint_swarm", () ->
             EntityType.Builder.<TCTaintSwarmEntity>of(TCTaintSwarmEntity::new, MobCategory.MONSTER)
@@ -267,8 +299,26 @@ public final class TCEntityTypes {
                             .setShouldReceiveVelocityUpdates(true)
                             .build(Thaumcraft.MODID + ":eldritch_guardian"));
 
+    public static final Supplier<EntityType<TCEldritchCrabEntity>> ELDRITCH_CRAB =
+            ENTITY_TYPES.register("eldritch_crab", () ->
+                    EntityType.Builder.<TCEldritchCrabEntity>of(TCEldritchCrabEntity::new, MobCategory.MONSTER)
+                            .sized(0.8F, 0.6F)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(3)
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build(Thaumcraft.MODID + ":eldritch_crab"));
+
+    public static final Supplier<EntityType<TCInhabitedZombieEntity>> INHABITED_ZOMBIE =
+            ENTITY_TYPES.register("inhabited_zombie", () ->
+                    EntityType.Builder.<TCInhabitedZombieEntity>of(TCInhabitedZombieEntity::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.95F)
+                            .setTrackingRange(64)
+                            .setUpdateInterval(3)
+                            .setShouldReceiveVelocityUpdates(true)
+                            .build(Thaumcraft.MODID + ":inhabited_zombie"));
+
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
-            spec("CultistPortalGreater", "EntityCultistPortalGreater", null, 64, 20, false, "defer", "Eldritch/cult portal behavior and renderer"),
+            spec("CultistPortalGreater", "EntityCultistPortalGreater", "cultist_portal_greater", 64, 20, false, "registered_foundation", "Greater portal stage machine, minion/Praetor spawn, bossbar, touch damage and portal renderer foundation; banner/crate world decoration remains item/block gated"),
             spec("CultistPortalLesser", "EntityCultistPortalLesser", "cultist_portal_lesser", 64, 20, false, "registered_foundation", "Lesser cultist portal activation, collision, nearby-cultist budget and minion spawn cadence"),
             spec("FluxRift", "EntityFluxRift", "flux_rift", 64, 20, false, "registered_foundation", "Flux/aura lifecycle, collapse and rift renderer foundation"),
             spec("SpecialItem", "EntitySpecialItem", "special_item", 64, 20, true, "registered_foundation", "Legacy item-entity lift and explosion immunity"),
@@ -290,25 +340,25 @@ public final class TCEntityTypes {
             spec("Golem", "EntityThaumcraftGolem", null, 64, 3, true, "defer", "Golem material/part/AI/seal subsystem"),
             spec("EldritchWarden", "EntityEldritchWarden", null, 64, 3, true, "defer", "Eldritch boss AI and renderer"),
             spec("EldritchGolem", "EntityEldritchGolem", null, 64, 3, true, "defer", "Eldritch boss AI and renderer"),
-            spec("CultistLeader", "EntityCultistLeader", null, 64, 3, true, "defer", "Cultist boss AI and renderer"),
-            spec("TaintacleGiant", "EntityTaintacleGiant", null, 96, 3, false, "defer", "Taint mob AI and renderer"),
+            spec("CultistLeader", "EntityCultistLeader", "cultist_leader", 64, 3, true, "registered_foundation", "Crimson Praetor title, gear placeholder mapping, cultist regen aura, red GolemOrb ranged attack and renderer foundation"),
+            spec("TaintacleGiant", "EntityTaintacleGiant", "taintacle_giant", 96, 3, false, "registered_foundation", "Giant Taintacle bossbar, no natural spawn, damage cap/enrage, regeneration, unique pearl drop and renderer foundation"),
             spec("BrainyZombie", "EntityBrainyZombie", "brainy_zombie", 64, 3, true, "registered_foundation", "Angry Zombie attributes, brain loot, scan/aspect identity and legacy overworld natural spawn row"),
             spec("GiantBrainyZombie", "EntityGiantBrainyZombie", "giant_brainy_zombie", 64, 3, true, "registered_foundation", "Furious Zombie anger scaling, leap goal, loot and Eerie-biome spawn dependency"),
             spec("Wisp", "EntityWisp", "wisp", 64, 3, false, "registered_foundation", "Wisp type/aspect persistence, rift-event spawn dependency, legacy flight/target/zap AI, billboard render contract and PacketFXWispZap-equivalent payload"),
             spec("Firebat", "EntityFireBat", "firebat", 64, 3, false, "registered_foundation", "Firebat AI, hanging flight, Nether/Halloween spawn rows, aspects and renderer foundation"),
             spec("Spellbat", "EntitySpellBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
-            spec("Pech", "EntityPech", "pech", 64, 3, true, "registered_foundation", "Pech type/anger/tamed state, loot pack, valued-item taming, trade menu, scan/aspect identity and renderer foundation; natural magical-biome spawn remains deferred"),
+            spec("Pech", "EntityPech", "pech", 64, 3, true, "registered_foundation", "Pech type/anger/tamed state, loot pack, valued-item taming, trade menu, scan/aspect identity, renderer foundation and exact magical-biome spawn tag gate"),
             spec("MindSpider", "EntityMindSpider", "mind_spider", 64, 3, true, "registered_foundation", "Mind Spider harmless/viewer hallucination state, lifespan and warp spawn foundation; custom renderer deferred"),
-            spec("EldritchGuardian", "EntityEldritchGuardian", "eldritch_guardian", 64, 3, true, "registered_foundation", "Eldritch Guardian attributes, team rules, warp spawn, ranged orb attack and curse branch; custom mob renderer deferred"),
-            spec("CultistKnight", "EntityCultistKnight", "cultist_knight", 64, 3, true, "registered_foundation", "Crimson Knight base attributes, team rules, target AI and portal-spawn equipment foundation; custom mob renderer deferred"),
-            spec("CultistCleric", "EntityCultistCleric", "cultist_cleric", 64, 3, true, "registered_foundation", "Crimson Cleric base attributes, ritualist state, ranged cadence, portal-spawn foundation and GolemOrb branch; custom mob renderer deferred"),
-            spec("EldritchCrab", "EntityEldritchCrab", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),
-            spec("InhabitedZombie", "EntityInhabitedZombie", null, 64, 3, true, "defer", "Eldritch mob AI and renderer"),
-            spec("ThaumSlime", "EntityThaumicSlime", "thaum_slime", 64, 3, true, "registered_foundation", "Thaumic Slime size/xp, ranged spit foundation and scan/aspect identity"),
-            spec("TaintCrawler", "EntityTaintCrawler", "taint_crawler", 64, 3, true, "registered_foundation", "Crawler AI foundation, fibre trail, Flux Taint bite and break-spawn hook"),
-            spec("Taintacle", "EntityTaintacle", "taintacle", 64, 3, false, "registered_foundation", "Stationary taintacle AI foundation and tiny-spawn hook"),
-            spec("TaintacleTiny", "EntityTaintacleSmall", "taintacle_tiny", 64, 3, false, "registered_foundation", "Temporary small taintacle lifetime contract"),
-            spec("TaintSwarm", "EntityTaintSwarm", "taint_swarm", 64, 3, false, "registered_foundation", "Swarm flight/summoned-state foundation and geyser spawn hook"),
+            spec("EldritchGuardian", "EntityEldritchGuardian", "eldritch_guardian", 64, 3, true, "registered_foundation", "Eldritch Guardian attributes, team rules, warp spawn, ranged orb attack, curse branch and renderer foundation"),
+            spec("CultistKnight", "EntityCultistKnight", "cultist_knight", 64, 3, true, "registered_foundation", "Crimson Knight base attributes, team rules, target AI, portal-spawn equipment and renderer foundation"),
+            spec("CultistCleric", "EntityCultistCleric", "cultist_cleric", 64, 3, true, "registered_foundation", "Crimson Cleric base attributes, ritualist state, ranged cadence, portal-spawn foundation, GolemOrb branch and renderer foundation"),
+            spec("EldritchCrab", "EntityEldritchCrab", "eldritch_crab", 64, 3, true, "registered_foundation", "Helm state, speed swap, leap/riding attack, poison immunity, crab sounds, Ender Pearl drop and renderer foundation"),
+            spec("InhabitedZombie", "EntityInhabitedZombie", "inhabited_zombie", 64, 3, true, "registered_foundation", "Eldritch zombie shell, armor placeholder mapping, no conversion, death-crab handoff and renderer foundation"),
+            spec("ThaumSlime", "EntityThaumicSlime", "thaum_slime", 64, 3, true, "registered_foundation", "Thaumic Slime size/xp, ranged spit foundation, scan/aspect identity and renderer foundation"),
+            spec("TaintCrawler", "EntityTaintCrawler", "taint_crawler", 64, 3, true, "registered_foundation", "Crawler AI foundation, fibre trail, Flux Taint bite, break-spawn hook and renderer foundation"),
+            spec("Taintacle", "EntityTaintacle", "taintacle", 64, 3, false, "registered_foundation", "Stationary taintacle AI foundation, tiny-spawn hook and renderer foundation"),
+            spec("TaintacleTiny", "EntityTaintacleSmall", "taintacle_tiny", 64, 3, false, "registered_foundation", "Temporary small taintacle lifetime contract and renderer foundation"),
+            spec("TaintSwarm", "EntityTaintSwarm", "taint_swarm", 64, 3, false, "registered_foundation", "Swarm flight/summoned-state foundation, geyser spawn hook and legacy empty-render contract"),
             spec("TaintSeed", "EntityTaintSeed", "taint_seed", 64, 20, false, "registered_foundation", "Taint spread seed registry, radius and server spread loop"),
             spec("TaintSeedPrime", "EntityTaintSeedPrime", "taint_seed_prime", 64, 20, false, "registered_foundation", "Prime Taint Seed spread area, health and damage variant")
     );
@@ -340,6 +390,7 @@ public final class TCEntityTypes {
         event.put(TAINT_CRAWLER.get(), TCTaintCrawlerEntity.createAttributes().build());
         event.put(TAINTACLE.get(), TCTaintacleEntity.createAttributes().build());
         event.put(TAINTACLE_TINY.get(), TCTaintacleTinyEntity.createAttributes().build());
+        event.put(TAINTACLE_GIANT.get(), TCTaintacleGiantEntity.createAttributes().build());
         event.put(TAINT_SWARM.get(), TCTaintSwarmEntity.createAttributes().build());
         event.put(WISP.get(), TCWispEntity.createAttributes().build());
         event.put(FIREBAT.get(), TCFirebatEntity.createAttributes().build());
@@ -347,10 +398,14 @@ public final class TCEntityTypes {
         event.put(BRAINY_ZOMBIE.get(), TCBrainyZombieEntity.createAttributes().build());
         event.put(GIANT_BRAINY_ZOMBIE.get(), TCGiantBrainyZombieEntity.createAttributes().build());
         event.put(CULTIST_PORTAL_LESSER.get(), TCCultistPortalLesserEntity.createAttributes().build());
+        event.put(CULTIST_PORTAL_GREATER.get(), TCCultistPortalGreaterEntity.createAttributes().build());
         event.put(CULTIST_KNIGHT.get(), TCCultistKnightEntity.createAttributes().build());
         event.put(CULTIST_CLERIC.get(), TCCultistClericEntity.createAttributes().build());
+        event.put(CULTIST_LEADER.get(), TCCultistLeaderEntity.createAttributes().build());
         event.put(MIND_SPIDER.get(), TCMindSpiderEntity.createAttributes().build());
         event.put(ELDRITCH_GUARDIAN.get(), TCEldritchGuardianEntity.createAttributes().build());
+        event.put(ELDRITCH_CRAB.get(), TCEldritchCrabEntity.createAttributes().build());
+        event.put(INHABITED_ZOMBIE.get(), TCInhabitedZombieEntity.createAttributes().build());
     }
 
     private static LegacyEntitySpec spec(

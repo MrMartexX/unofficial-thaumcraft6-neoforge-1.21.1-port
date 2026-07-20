@@ -42,7 +42,7 @@ public final class TCEntitySpawnPolicyAudit {
         lines.add("");
         lines.add("Runtime checks for legacy natural-spawn rows ported to NeoForge 1.21.1.");
         lines.add("Only rows whose entities and server-side behavior have a registered foundation are active:");
-        lines.add("Wisp Nether, Angry Zombie overworld and Firebat Nether/Halloween rows. Thaumcraft-biome rows and unported mob families stay deferred.");
+        lines.add("Wisp Nether, Angry Zombie overworld, Firebat Nether/Halloween and Pech magical-biome rows. Thaumcraft-biome rows whose biome ids are not present yet stay exact-tag gated or deferred.");
         lines.add("");
         lines.add("## Summary");
         lines.add("");
@@ -107,12 +107,14 @@ public final class TCEntitySpawnPolicyAudit {
         TCEntitySpawnRules.LegacyNaturalSpawn brainy = TCEntitySpawnRules.BRAINY_ZOMBIE_OVERWORLD;
         TCEntitySpawnRules.LegacyNaturalSpawn firebatNether = TCEntitySpawnRules.FIREBAT_NETHER;
         TCEntitySpawnRules.LegacyNaturalSpawn firebatHalloween = TCEntitySpawnRules.FIREBAT_HALLOWEEN_OVERWORLD;
-        checks.add(check("active_spawn_catalog_contains_safe_wisp_brainy_and_firebat_rows",
-                TCEntitySpawnRules.activeNaturalSpawns().size() == 4
+        TCEntitySpawnRules.LegacyNaturalSpawn pech = TCEntitySpawnRules.PECH_MAGICAL;
+        checks.add(check("active_spawn_catalog_contains_safe_wisp_brainy_firebat_and_pech_rows",
+                TCEntitySpawnRules.activeNaturalSpawns().size() == 5
                         && TCEntitySpawnRules.activeNaturalSpawns().contains(wisp)
                         && TCEntitySpawnRules.activeNaturalSpawns().contains(brainy)
                         && TCEntitySpawnRules.activeNaturalSpawns().contains(firebatNether)
                         && TCEntitySpawnRules.activeNaturalSpawns().contains(firebatHalloween)
+                        && TCEntitySpawnRules.activeNaturalSpawns().contains(pech)
                         && wisp.active()
                         && "Wisp".equals(wisp.legacyId())
                         && "thaumcraft:wisp".equals(wisp.modernEntityId())
@@ -140,11 +142,18 @@ public final class TCEntitySpawnPolicyAudit {
                         && "#thaumcraft:legacy_firebat_halloween_spawn_biomes".equals(firebatHalloween.biomeSelector())
                         && firebatHalloween.weight() == 5
                         && firebatHalloween.minCount() == 1
-                        && firebatHalloween.maxCount() == 2,
-                "active=" + TCEntitySpawnRules.activeNaturalSpawns().size() + ", wisp=" + wisp + ", brainy=" + brainy + ", firebatNether=" + firebatNether + ", firebatHalloween=" + firebatHalloween));
+                        && firebatHalloween.maxCount() == 2
+                        && pech.active()
+                        && "Pech".equals(pech.legacyId())
+                        && "thaumcraft:pech".equals(pech.modernEntityId())
+                        && "#thaumcraft:legacy_magical_spawn_biomes".equals(pech.biomeSelector())
+                        && pech.weight() == 10
+                        && pech.minCount() == 1
+                        && pech.maxCount() == 1,
+                "active=" + TCEntitySpawnRules.activeNaturalSpawns().size() + ", wisp=" + wisp + ", brainy=" + brainy + ", firebatNether=" + firebatNether + ", firebatHalloween=" + firebatHalloween + ", pech=" + pech));
         checks.add(check("unsafe_legacy_spawn_rows_remain_deferred",
                 TCEntitySpawnRules.deferredNaturalSpawns().stream().noneMatch(TCEntitySpawnRules.LegacyNaturalSpawn::active)
-                        && TCEntitySpawnRules.deferredNaturalSpawns().size() >= 6,
+                        && TCEntitySpawnRules.deferredNaturalSpawns().size() >= 5,
                 "deferred=" + TCEntitySpawnRules.deferredNaturalSpawns().size()));
     }
 
@@ -238,6 +247,34 @@ public final class TCEntitySpawnPolicyAudit {
         checks.add(check("firebat_halloween_legacy_biome_tag_resource_exists",
                 !firebatTag.isBlank() && firebatTag.contains("\"minecraft:desert\"") && firebatTag.contains("\"minecraft:snowy_plains\""),
                 "data/thaumcraft/tags/worldgen/biome/legacy_firebat_halloween_spawn_biomes.json"));
+
+        String pechResource = resourceText("data/thaumcraft/neoforge/biome_modifier/pech_legacy_magical_spawns.json");
+        checks.add(check("pech_magical_biome_modifier_resource_exists",
+                !pechResource.isBlank(),
+                "data/thaumcraft/neoforge/biome_modifier/pech_legacy_magical_spawns.json"));
+        if (!pechResource.isBlank()) {
+            JsonObject pechRoot = JsonParser.parseString(pechResource).getAsJsonObject();
+            JsonObject pechSpawner = pechRoot.getAsJsonObject("spawners");
+            boolean pechPassed = "neoforge:add_spawns".equals(pechRoot.get("type").getAsString())
+                    && "#thaumcraft:legacy_magical_spawn_biomes".equals(pechRoot.get("biomes").getAsString())
+                    && "thaumcraft:pech".equals(pechSpawner.get("type").getAsString())
+                    && pechSpawner.get("weight").getAsInt() == 10
+                    && pechSpawner.get("minCount").getAsInt() == 1
+                    && pechSpawner.get("maxCount").getAsInt() == 1;
+            checks.add(check("pech_magical_biome_modifier_matches_legacy_values",
+                    pechPassed,
+                    "type=" + pechRoot.get("type").getAsString() + ", biome=" + pechRoot.get("biomes").getAsString() + ", spawner=" + pechSpawner));
+        } else {
+            checks.add(check("pech_magical_biome_modifier_matches_legacy_values", false, "resource missing"));
+        }
+
+        String pechTag = resourceText("data/thaumcraft/tags/worldgen/biome/legacy_magical_spawn_biomes.json");
+        checks.add(check("pech_legacy_magical_biome_tag_resource_exists",
+                !pechTag.isBlank()
+                        && pechTag.contains("\"thaumcraft:magical_forest\"")
+                        && pechTag.contains("\"thaumcraft:eerie\"")
+                        && pechTag.contains("\"required\": false"),
+                "tag intentionally contains only optional Thaumcraft magical biomes until biome subsystem is ported"));
     }
 
     private static void addPlacementRegistrationChecks(ArrayList<Check> checks) {
@@ -259,6 +296,12 @@ public final class TCEntitySpawnPolicyAudit {
                         && SpawnPlacements.getHeightmapType(TCEntityTypes.FIREBAT.get()) == TCEntitySpawnRules.FIREBAT_HEIGHTMAP_TYPE,
                 "placement=" + SpawnPlacements.getPlacementType(TCEntityTypes.FIREBAT.get())
                         + ", heightmap=" + SpawnPlacements.getHeightmapType(TCEntityTypes.FIREBAT.get())));
+        checks.add(check("pech_spawn_placement_registered",
+                SpawnPlacements.hasPlacement(TCEntityTypes.PECH.get())
+                        && SpawnPlacements.getPlacementType(TCEntityTypes.PECH.get()) == SpawnPlacementTypes.ON_GROUND
+                        && SpawnPlacements.getHeightmapType(TCEntityTypes.PECH.get()) == TCEntitySpawnRules.PECH_HEIGHTMAP_TYPE,
+                "placement=" + SpawnPlacements.getPlacementType(TCEntityTypes.PECH.get())
+                        + ", heightmap=" + SpawnPlacements.getHeightmapType(TCEntityTypes.PECH.get())));
     }
 
     private static void addPredicateChecks(ServerLevel level, BlockPos origin, MinecraftServer server, ArrayList<Check> checks) {
@@ -360,6 +403,19 @@ public final class TCEntitySpawnPolicyAudit {
                 firebatPeacefulDenied,
                 "difficulty=" + level.getDifficulty()));
         server.setDifficulty(previous, true);
+
+        boolean pechGateAllowed = TCPechEntity.testLegacySpawnGatesForValidation(true, true, true, 3, true);
+        boolean pechConfigDenied = !TCPechEntity.testLegacySpawnGatesForValidation(false, true, true, 0, true);
+        boolean pechNonMagicalDenied = !TCPechEntity.testLegacySpawnGatesForValidation(true, false, true, 0, true);
+        boolean pechWrongDimensionDenied = !TCPechEntity.testLegacySpawnGatesForValidation(true, true, false, 0, true);
+        boolean pechCapDenied = !TCPechEntity.testLegacySpawnGatesForValidation(true, true, true, 4, true);
+        checks.add(check("pech_spawn_gates_match_legacy_magical_biome_budget",
+                pechGateAllowed
+                        && pechConfigDenied
+                        && pechNonMagicalDenied
+                        && pechWrongDimensionDenied
+                        && pechCapDenied,
+                "allow=true magical=true dimensionAllowed=true nearby=3 passes; disabled/non-magical/wrong-dimension/nearby=4 deny"));
     }
 
     private static boolean checkWisp(ServerLevel level, BlockPos pos, long seed) {

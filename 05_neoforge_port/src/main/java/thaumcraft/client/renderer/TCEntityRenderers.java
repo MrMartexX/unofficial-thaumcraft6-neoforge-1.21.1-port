@@ -22,10 +22,11 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.FALLING_TAINT.get(), TCFallingTaintRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINT_SEED.get(), TCTaintSeedRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINT_SEED_PRIME.get(), TCTaintSeedRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.THAUM_SLIME.get(), TCInvisibleEntityRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.TAINT_CRAWLER.get(), TCInvisibleEntityRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.TAINTACLE.get(), TCInvisibleEntityRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.TAINTACLE_TINY.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.THAUM_SLIME.get(), TCThaumicSlimeRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.TAINT_CRAWLER.get(), TCTaintCrawlerRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.TAINTACLE.get(), context -> new TCTaintacleRenderer<>(context, 10, 0.6F));
+        event.registerEntityRenderer(TCEntityTypes.TAINTACLE_TINY.get(), context -> new TCTaintacleRenderer<>(context, 6, 0.2F));
+        event.registerEntityRenderer(TCEntityTypes.TAINTACLE_GIANT.get(), context -> new TCTaintacleRenderer<>(context, 14, 1.0F));
         event.registerEntityRenderer(TCEntityTypes.TAINT_SWARM.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.WISP.get(), TCWispRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FIREBAT.get(), TCFirebatRenderer::new);
@@ -37,10 +38,14 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.CAUSALITY_COLLAPSER.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.ELDRITCH_ORB.get(), TCEldritchOrbRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.GOLEM_ORB.get(), TCGolemOrbRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.CULTIST_PORTAL_LESSER.get(), TCInvisibleEntityRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.CULTIST_KNIGHT.get(), TCInvisibleEntityRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.CULTIST_CLERIC.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.CULTIST_PORTAL_LESSER.get(), TCCultistPortalLesserRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.CULTIST_PORTAL_GREATER.get(), TCCultistPortalGreaterRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.CULTIST_KNIGHT.get(), TCCultistRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.CULTIST_CLERIC.get(), TCCultistRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.CULTIST_LEADER.get(), TCCultistLeaderRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.MIND_SPIDER.get(), TCInvisibleEntityRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.ELDRITCH_GUARDIAN.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.ELDRITCH_GUARDIAN.get(), TCEldritchGuardianRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.ELDRITCH_CRAB.get(), TCEldritchCrabRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.INHABITED_ZOMBIE.get(), TCInhabitedZombieRenderer::new);
     }
 }

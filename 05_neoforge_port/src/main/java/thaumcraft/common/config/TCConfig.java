@@ -58,6 +58,10 @@ public final class TCConfig {
             .comment("Legacy Thaumcraft CONFIG_WORLD.allowSpawnFireBat. Controls natural Nether Firebat spawns and the Oct 31 overworld Firebat row.")
             .define("allowSpawnFireBat", true);
 
+    public static final ModConfigSpec.BooleanValue ALLOW_SPAWN_PECH = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.allowSpawnPech. Controls Pech natural spawns in magical biomes; the 1.21 tag intentionally contains only Thaumcraft magical biomes until that biome subsystem is ported.")
+            .define("allowSpawnPech", true);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private TCConfig() {

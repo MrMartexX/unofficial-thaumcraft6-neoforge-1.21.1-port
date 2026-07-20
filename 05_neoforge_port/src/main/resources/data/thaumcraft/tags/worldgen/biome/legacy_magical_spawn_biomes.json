@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "thaumcraft:magical_forest",
+      "required": false
+    },
+    {
+      "id": "thaumcraft:eerie",
+      "required": false
+    }
+  ]
+}

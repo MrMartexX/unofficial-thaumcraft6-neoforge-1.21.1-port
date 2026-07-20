@@ -158,8 +158,11 @@ public final class TCEntityAspectAssignments {
 
         // Exact Thaumcraft 6 custom taint mob contracts from legacy ConfigAspects.
         put(map, "thaum_slime", tags(Aspect.LIFE, 5, Aspect.WATER, 5, Aspect.FLUX, 5, Aspect.ALCHEMY, 5));
+        put(map, "taint_seed", tags(Aspect.PLANT, 20, Aspect.BEAST, 20, Aspect.FLUX, 20));
+        put(map, "taint_seed_prime", tags(Aspect.PLANT, 30, Aspect.BEAST, 30, Aspect.FLUX, 30));
         put(map, "taintacle", tags(Aspect.FLUX, 15, Aspect.BEAST, 10));
         put(map, "taintacle_tiny", tags(Aspect.FLUX, 5, Aspect.BEAST, 5));
+        put(map, "taintacle_giant", tags(Aspect.ELDRITCH, 40, Aspect.BEAST, 40, Aspect.FLUX, 40));
         put(map, "taint_swarm", tags(Aspect.FLUX, 15, Aspect.AIR, 5));
         put(map, "mind_spider", tags(Aspect.FLUX, 5, Aspect.FIRE, 5));
         put(map, "firebat", tags(Aspect.BEAST, 5, Aspect.FLIGHT, 5, Aspect.FIRE, 10));
@@ -167,8 +170,11 @@ public final class TCEntityAspectAssignments {
         put(map, "brainy_zombie", tags(Aspect.UNDEAD, 20, Aspect.MAN, 10, Aspect.MIND, 5, Aspect.AVERSION, 5));
         put(map, "giant_brainy_zombie", tags(Aspect.UNDEAD, 25, Aspect.MAN, 15, Aspect.MIND, 5, Aspect.AVERSION, 10));
         put(map, "eldritch_guardian", tags(Aspect.ELDRITCH, 20, Aspect.DEATH, 20, Aspect.UNDEAD, 20));
+        put(map, "eldritch_crab", tags(Aspect.ELDRITCH, 10, Aspect.BEAST, 10, Aspect.TRAP, 10));
+        put(map, "inhabited_zombie", tags(Aspect.ELDRITCH, 10, Aspect.UNDEAD, 10, Aspect.MAN, 5));
         put(map, "cultist_knight", tags(Aspect.ELDRITCH, 5, Aspect.MAN, 15, Aspect.AVERSION, 5));
         put(map, "cultist_cleric", tags(Aspect.ELDRITCH, 5, Aspect.MAN, 15, Aspect.AVERSION, 5));
+        put(map, "cultist_leader", tags(Aspect.ELDRITCH, 40, Aspect.AVERSION, 40, Aspect.MAN, 40));
 
         return Map.copyOf(map);
     }

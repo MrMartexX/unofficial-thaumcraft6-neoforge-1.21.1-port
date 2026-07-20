@@ -1,15 +1,24 @@
 package thaumcraft.common.entities;
 
 import java.util.List;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacementType;
 import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.registry.TCEntityTypes;
 
 public final class TCEntitySpawnRules {
+    public static final TagKey<Biome> LEGACY_MAGICAL_BIOME_TAG = TagKey.create(
+            Registries.BIOME,
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "legacy_magical_spawn_biomes")
+    );
+
     public static final LegacyNaturalSpawn WISP_NETHER = new LegacyNaturalSpawn(
             "Wisp",
             "EntityWisp",
@@ -54,15 +63,26 @@ public final class TCEntitySpawnRules {
             true,
             "ConfigEntities.postInitEntitySpawns Oct 31 warm/cool/icy/desert monster-biome row; predicate gates date"
     );
+    public static final LegacyNaturalSpawn PECH_MAGICAL = new LegacyNaturalSpawn(
+            "Pech",
+            "EntityPech",
+            "thaumcraft:pech",
+            "#thaumcraft:legacy_magical_spawn_biomes",
+            10,
+            1,
+            1,
+            true,
+            "ConfigEntities.postInitEntitySpawns allowSpawnPech BiomeDictionary.Type.MAGICAL row. Tag is intentionally exact-gated to optional Thaumcraft Magical Forest/Eerie biomes until biome porting supplies real magical biome data."
+    );
 
     private static final List<LegacyNaturalSpawn> ACTIVE_NATURAL_SPAWNS = List.of(
             WISP_NETHER,
             BRAINY_ZOMBIE_OVERWORLD,
             FIREBAT_NETHER,
-            FIREBAT_HALLOWEEN_OVERWORLD
+            FIREBAT_HALLOWEEN_OVERWORLD,
+            PECH_MAGICAL
     );
     private static final List<LegacyNaturalSpawn> DEFERRED_NATURAL_SPAWNS = List.of(
-            new LegacyNaturalSpawn("Pech", "EntityPech", "thaumcraft:pech", "legacy BiomeDictionary.Type.MAGICAL", 10, 1, 1, false, "Pech entity is registered; exact magical-biome mapping, Magical Forest/Eerie dimension exception and nearby-Pech budget are not active as a natural spawn row yet"),
             new LegacyNaturalSpawn("EerieBrainyZombie", "EntityBrainyZombie", "thaumcraft:brainy_zombie", "thaumcraft:eerie", 32, 1, 1, false, "Thaumcraft Eerie biome is not ported yet"),
             new LegacyNaturalSpawn("EerieGiantBrainyZombie", "EntityGiantBrainyZombie", "thaumcraft:giant_brainy_zombie", "thaumcraft:eerie", 8, 1, 1, false, "Thaumcraft Eerie biome is not ported yet"),
             new LegacyNaturalSpawn("MagicalForestWisp", "EntityWisp", "thaumcraft:wisp", "thaumcraft:magical_forest", 20, 1, 2, false, "Thaumcraft Magical Forest biome is not ported yet"),
@@ -76,6 +96,8 @@ public final class TCEntitySpawnRules {
     public static final Heightmap.Types BRAINY_ZOMBIE_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
     public static final SpawnPlacementType FIREBAT_PLACEMENT_TYPE = SpawnPlacementTypes.NO_RESTRICTIONS;
     public static final Heightmap.Types FIREBAT_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
+    public static final SpawnPlacementType PECH_PLACEMENT_TYPE = SpawnPlacementTypes.ON_GROUND;
+    public static final Heightmap.Types PECH_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
 
     private TCEntitySpawnRules() {
     }
@@ -100,6 +122,13 @@ public final class TCEntitySpawnRules {
                 FIREBAT_PLACEMENT_TYPE,
                 FIREBAT_HEIGHTMAP_TYPE,
                 TCFirebatEntity::checkFirebatSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+        event.register(
+                TCEntityTypes.PECH.get(),
+                PECH_PLACEMENT_TYPE,
+                PECH_HEIGHTMAP_TYPE,
+                TCPechEntity::checkPechSpawnRules,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
         Thaumcraft.LOGGER.debug("Registered Thaumcraft natural spawn placement policies.");

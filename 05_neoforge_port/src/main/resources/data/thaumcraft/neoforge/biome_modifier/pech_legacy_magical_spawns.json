@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "#thaumcraft:legacy_magical_spawn_biomes",
+  "spawners": {
+    "type": "thaumcraft:pech",
+    "weight": 10,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -1,6 +1,7 @@
 package thaumcraft.common.entities;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +31,7 @@ public final class TCEntityFoundationAudit {
     public static final String OUTPUT_PROPERTY = "tc.entityFoundationAuditPath";
 
     private static final int LEGACY_ENTITY_COUNT = 43;
-    private static final int REGISTERED_FOUNDATION_COUNT = 27;
+    private static final int REGISTERED_FOUNDATION_COUNT = 32;
 
     private TCEntityFoundationAudit() {
     }
@@ -96,7 +97,7 @@ public final class TCEntityFoundationAudit {
         checks.add(new Check(
                 "registered foundation count",
                 TCEntityTypes.registeredFoundationSpecs().size() == REGISTERED_FOUNDATION_COUNT,
-                "expected item entities, Alumentum, CausalityCollapser, BottleTaint, EldritchOrb, GolemOrb, FluxRift, ArcaneBore, FallingTaint, Wisp, Firebat, Pech, BrainyZombie pair, TaintSeed pair, five taint mob foundations, cultist minion pair and warp outcome foundations"
+                "expected item entities, projectile foundations, FluxRift, ArcaneBore, FallingTaint, Wisp, Firebat, Pech, BrainyZombie pair, TaintSeed pair, taint mob/boss foundations, cultist portal/minion/leader foundations and eldritch mob foundations"
         ));
 
         checks.add(checkRegisteredType("SpecialItem", TCEntityTypes.SPECIAL_ITEM.get()));
@@ -112,14 +113,19 @@ public final class TCEntityFoundationAudit {
         checks.add(checkRegisteredType("TaintSeed", TCEntityTypes.TAINT_SEED.get()));
         checks.add(checkRegisteredType("TaintSeedPrime", TCEntityTypes.TAINT_SEED_PRIME.get()));
         checks.add(checkRegisteredType("CultistPortalLesser", TCEntityTypes.CULTIST_PORTAL_LESSER.get()));
+        checks.add(checkRegisteredType("CultistPortalGreater", TCEntityTypes.CULTIST_PORTAL_GREATER.get()));
         checks.add(checkRegisteredType("CultistKnight", TCEntityTypes.CULTIST_KNIGHT.get()));
         checks.add(checkRegisteredType("CultistCleric", TCEntityTypes.CULTIST_CLERIC.get()));
+        checks.add(checkRegisteredType("CultistLeader", TCEntityTypes.CULTIST_LEADER.get()));
         checks.add(checkRegisteredType("MindSpider", TCEntityTypes.MIND_SPIDER.get()));
         checks.add(checkRegisteredType("EldritchGuardian", TCEntityTypes.ELDRITCH_GUARDIAN.get()));
+        checks.add(checkRegisteredType("EldritchCrab", TCEntityTypes.ELDRITCH_CRAB.get()));
+        checks.add(checkRegisteredType("InhabitedZombie", TCEntityTypes.INHABITED_ZOMBIE.get()));
         checks.add(checkRegisteredType("ThaumSlime", TCEntityTypes.THAUM_SLIME.get()));
         checks.add(checkRegisteredType("TaintCrawler", TCEntityTypes.TAINT_CRAWLER.get()));
         checks.add(checkRegisteredType("Taintacle", TCEntityTypes.TAINTACLE.get()));
         checks.add(checkRegisteredType("TaintacleTiny", TCEntityTypes.TAINTACLE_TINY.get()));
+        checks.add(checkRegisteredType("TaintacleGiant", TCEntityTypes.TAINTACLE_GIANT.get()));
         checks.add(checkRegisteredType("TaintSwarm", TCEntityTypes.TAINT_SWARM.get()));
         checks.add(checkRegisteredType("Alumentum", TCEntityTypes.ALUMENTUM.get()));
         checks.add(checkRegisteredType("CausalityCollapser", TCEntityTypes.CAUSALITY_COLLAPSER.get()));
@@ -138,6 +144,7 @@ public final class TCEntityFoundationAudit {
         checks.add(checkMobTypeShape("TaintCrawler", TCEntityTypes.TAINT_CRAWLER.get(), 0.5F, 0.4F, 64, 3, true));
         checks.add(checkMobTypeShape("Taintacle", TCEntityTypes.TAINTACLE.get(), 0.8F, 3.0F, 64, 3, false));
         checks.add(checkMobTypeShape("TaintacleTiny", TCEntityTypes.TAINTACLE_TINY.get(), 0.22F, 1.0F, 64, 3, false));
+        checks.add(checkMobTypeShape("TaintacleGiant", TCEntityTypes.TAINTACLE_GIANT.get(), 1.1F, 6.0F, 96, 3, false));
         checks.add(checkMobTypeShape("TaintSwarm", TCEntityTypes.TAINT_SWARM.get(), 2.0F, 2.0F, 64, 3, false));
         checks.add(checkTypeShape("Alumentum", TCEntityTypes.ALUMENTUM.get(), 64, 20, true));
         checks.add(checkTypeShape("CausalityCollapser", TCEntityTypes.CAUSALITY_COLLAPSER.get(), 64, 20, true));
@@ -145,14 +152,20 @@ public final class TCEntityFoundationAudit {
         checks.add(checkTypeShape("EldritchOrb", TCEntityTypes.ELDRITCH_ORB.get(), 64, 20, true));
         checks.add(checkTypeShape("GolemOrb", TCEntityTypes.GOLEM_ORB.get(), 64, 3, true));
         checks.add(checkMobTypeShape("CultistPortalLesser", TCEntityTypes.CULTIST_PORTAL_LESSER.get(), 1.5F, 3.0F, 64, 20, false));
+        checks.add(checkMobTypeShape("CultistPortalGreater", TCEntityTypes.CULTIST_PORTAL_GREATER.get(), 1.5F, 3.0F, 64, 20, false));
         checks.add(checkMobTypeShape("CultistKnight", TCEntityTypes.CULTIST_KNIGHT.get(), 0.6F, 1.8F, 64, 3, true));
         checks.add(checkMobTypeShape("CultistCleric", TCEntityTypes.CULTIST_CLERIC.get(), 0.6F, 1.8F, 64, 3, true));
+        checks.add(checkMobTypeShape("CultistLeader", TCEntityTypes.CULTIST_LEADER.get(), 0.75F, 2.25F, 64, 3, true));
         checks.add(checkMobTypeShape("MindSpider", TCEntityTypes.MIND_SPIDER.get(), 0.7F, 0.5F, 64, 3, true));
         checks.add(checkMobTypeShape("EldritchGuardian", TCEntityTypes.ELDRITCH_GUARDIAN.get(), 0.8F, 2.25F, 64, 3, true));
+        checks.add(checkMobTypeShape("EldritchCrab", TCEntityTypes.ELDRITCH_CRAB.get(), 0.8F, 0.6F, 64, 3, true));
+        checks.add(checkMobTypeShape("InhabitedZombie", TCEntityTypes.INHABITED_ZOMBIE.get(), 0.6F, 1.95F, 64, 3, true));
         checks.add(checkBrainyZombieContracts(server.overworld()));
         checks.add(checkGiantBrainyZombieContracts(server.overworld()));
         checks.add(checkFirebatContracts(server.overworld()));
         checks.add(checkPechContracts(server.overworld()));
+        checks.add(checkRemainingEldritchTaintContracts(server.overworld()));
+        checks.add(checkRendererTextureResources());
         checks.add(checkConstructors(server.overworld()));
         return checks;
     }
@@ -269,6 +282,68 @@ public final class TCEntityFoundationAudit {
         return new Check("Pech legacy contracts", passed, "type/tamed/anger state, attributes, pack size, explicit ender pearl value, trade tier coverage, spawn gates and subtype aspects");
     }
 
+    private static Check checkRemainingEldritchTaintContracts(ServerLevel level) {
+        TCTaintacleGiantEntity giant = TCEntityTypes.TAINTACLE_GIANT.get().create(level);
+        TCCultistPortalGreaterEntity portal = TCEntityTypes.CULTIST_PORTAL_GREATER.get().create(level);
+        TCCultistLeaderEntity leader = TCEntityTypes.CULTIST_LEADER.get().create(level);
+        TCEldritchCrabEntity crab = TCEntityTypes.ELDRITCH_CRAB.get().create(level);
+        TCInhabitedZombieEntity husk = TCEntityTypes.INHABITED_ZOMBIE.get().create(level);
+        boolean passed = giant != null
+                && portal != null
+                && leader != null
+                && crab != null
+                && husk != null
+                && close(giant.getAttributeValue(Attributes.MAX_HEALTH), TCTaintacleGiantEntity.LEGACY_MAX_HEALTH)
+                && close(giant.getAttributeValue(Attributes.ATTACK_DAMAGE), TCTaintacleGiantEntity.LEGACY_ATTACK_DAMAGE)
+                && TCTaintacleGiantEntity.LEGACY_DAMAGE_CAP == 35.0F
+                && TCTaintacleGiantEntity.LEGACY_ANGER_TICKS == 200
+                && close(portal.getAttributeValue(Attributes.MAX_HEALTH), TCCultistPortalGreaterEntity.LEGACY_MAX_HEALTH)
+                && portal.stageCounterForValidation() == TCCultistPortalGreaterEntity.LEGACY_INITIAL_STAGE_COUNTER
+                && TCCultistPortalGreaterEntity.LEGACY_BOSS_STAGE == 12
+                && close(leader.getAttributeValue(Attributes.MAX_HEALTH), TCCultistLeaderEntity.LEGACY_MAX_HEALTH)
+                && close(leader.getAttributeValue(Attributes.ATTACK_DAMAGE), TCCultistLeaderEntity.LEGACY_ATTACK_DAMAGE)
+                && close(leader.getAttributeValue(Attributes.MOVEMENT_SPEED), TCCultistLeaderEntity.LEGACY_MOVEMENT_SPEED)
+                && TCCultistLeaderEntity.LEGACY_TITLES.length == 15
+                && close(crab.getAttributeValue(Attributes.MAX_HEALTH), TCEldritchCrabEntity.LEGACY_MAX_HEALTH)
+                && close(crab.getAttributeValue(Attributes.ATTACK_DAMAGE), TCEldritchCrabEntity.LEGACY_ATTACK_DAMAGE)
+                && close(husk.getAttributeValue(Attributes.MAX_HEALTH), TCInhabitedZombieEntity.LEGACY_MAX_HEALTH)
+                && close(husk.getAttributeValue(Attributes.ATTACK_DAMAGE), TCInhabitedZombieEntity.LEGACY_ATTACK_DAMAGE)
+                && hasAspects(TCEntityTypes.TAINT_SEED.get(), Aspect.PLANT, 20, Aspect.BEAST, 20, Aspect.FLUX, 20)
+                && hasAspects(TCEntityTypes.TAINT_SEED_PRIME.get(), Aspect.PLANT, 30, Aspect.BEAST, 30, Aspect.FLUX, 30)
+                && hasAspects(TCEntityTypes.TAINTACLE_GIANT.get(), Aspect.ELDRITCH, 40, Aspect.BEAST, 40, Aspect.FLUX, 40)
+                && hasAspects(TCEntityTypes.ELDRITCH_CRAB.get(), Aspect.ELDRITCH, 10, Aspect.BEAST, 10, Aspect.TRAP, 10)
+                && hasAspects(TCEntityTypes.INHABITED_ZOMBIE.get(), Aspect.ELDRITCH, 10, Aspect.UNDEAD, 10, Aspect.MAN, 5)
+                && hasAspects(TCEntityTypes.CULTIST_LEADER.get(), Aspect.ELDRITCH, 40, Aspect.AVERSION, 40, Aspect.MAN, 40);
+        if (crab != null) {
+            crab.setHelm(true);
+            passed = passed && close(crab.getAttributeValue(Attributes.MOVEMENT_SPEED), TCEldritchCrabEntity.LEGACY_SPEED_WITH_HELM);
+            crab.setHelm(false);
+            passed = passed && close(crab.getAttributeValue(Attributes.MOVEMENT_SPEED), TCEldritchCrabEntity.LEGACY_SPEED_NO_HELM);
+        }
+        return new Check("remaining eldritch/taint entity contracts", passed, "Greater portal, CultistLeader, Giant Taintacle, EldritchCrab, InhabitedZombie and exact ConfigAspects assignments");
+    }
+
+    private static Check checkRendererTextureResources() {
+        String[] paths = {
+                "assets/thaumcraft/textures/entity/tslime.png",
+                "assets/thaumcraft/textures/entity/crawler.png",
+                "assets/thaumcraft/textures/entity/taintacle.png",
+                "assets/thaumcraft/textures/entity/taintseed.png",
+                "assets/thaumcraft/textures/entity/cultist.png",
+                "assets/thaumcraft/textures/entity/eldritch_guardian.png",
+                "assets/thaumcraft/textures/entity/crab.png",
+                "assets/thaumcraft/textures/entity/czombie.png",
+                "assets/thaumcraft/textures/misc/cultist_portal.png"
+        };
+        List<String> missing = new ArrayList<>();
+        for (String path : paths) {
+            if (!resourceExists(path)) {
+                missing.add(path);
+            }
+        }
+        return new Check("active entity renderer texture resources exist", missing.isEmpty(), "missing=" + missing);
+    }
+
     private static Check checkRegisteredType(String legacyId, EntityType<?> type) {
         LegacyEntitySpec spec = TCEntityTypes.byLegacyId(legacyId).orElse(null);
         if (spec == null || spec.modernId() == null) {
@@ -323,10 +398,14 @@ public final class TCEntityFoundationAudit {
         Entity orbFactory = TCEntityTypes.ELDRITCH_ORB.get().create(level);
         Entity golemOrbFactory = TCEntityTypes.GOLEM_ORB.get().create(level);
         Entity portalFactory = TCEntityTypes.CULTIST_PORTAL_LESSER.get().create(level);
+        Entity greaterPortalFactory = TCEntityTypes.CULTIST_PORTAL_GREATER.get().create(level);
         Entity knightFactory = TCEntityTypes.CULTIST_KNIGHT.get().create(level);
         Entity clericFactory = TCEntityTypes.CULTIST_CLERIC.get().create(level);
+        Entity leaderFactory = TCEntityTypes.CULTIST_LEADER.get().create(level);
         Entity spiderFactory = TCEntityTypes.MIND_SPIDER.get().create(level);
         Entity guardianFactory = TCEntityTypes.ELDRITCH_GUARDIAN.get().create(level);
+        Entity crabFactory = TCEntityTypes.ELDRITCH_CRAB.get().create(level);
+        Entity huskFactory = TCEntityTypes.INHABITED_ZOMBIE.get().create(level);
         Entity firebatFactory = TCEntityTypes.FIREBAT.get().create(level);
         Entity brainyFactory = TCEntityTypes.BRAINY_ZOMBIE.get().create(level);
         Entity giantBrainyFactory = TCEntityTypes.GIANT_BRAINY_ZOMBIE.get().create(level);
@@ -339,10 +418,14 @@ public final class TCEntityFoundationAudit {
                 && orbFactory instanceof TCEldritchOrbEntity
                 && golemOrbFactory instanceof TCGolemOrbEntity
                 && portalFactory instanceof TCCultistPortalLesserEntity
+                && greaterPortalFactory instanceof TCCultistPortalGreaterEntity
                 && knightFactory instanceof TCCultistKnightEntity
                 && clericFactory instanceof TCCultistClericEntity
+                && leaderFactory instanceof TCCultistLeaderEntity
                 && spiderFactory instanceof TCMindSpiderEntity
                 && guardianFactory instanceof TCEldritchGuardianEntity
+                && crabFactory instanceof TCEldritchCrabEntity
+                && huskFactory instanceof TCInhabitedZombieEntity
                 && firebatFactory instanceof TCFirebatEntity
                 && brainyFactory instanceof TCBrainyZombieEntity
                 && giantBrainyFactory instanceof TCGiantBrainyZombieEntity
@@ -369,5 +452,26 @@ public final class TCEntityFoundationAudit {
 
     private static boolean close(double actual, double expected) {
         return Math.abs(actual - expected) < 0.0001D;
+    }
+
+    private static boolean hasAspects(EntityType<?> type, Object... pairs) {
+        AspectList aspects = TCEntityAspectAssignments.getEntityTypeAspectsForValidation(type);
+        if (aspects == null || aspects.size() != pairs.length / 2) {
+            return false;
+        }
+        for (int index = 0; index < pairs.length; index += 2) {
+            if (aspects.getAmount((Aspect) pairs[index]) != (Integer) pairs[index + 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean resourceExists(String path) {
+        try (InputStream stream = TCEntityFoundationAudit.class.getClassLoader().getResourceAsStream(path)) {
+            return stream != null;
+        } catch (IOException ignored) {
+            return false;
+        }
     }
 }

@@ -73,6 +73,12 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "egdeath")));
     public static final Supplier<SoundEvent> EGSCREECH = SOUND_EVENTS.register("egscreech", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "egscreech")));
+    public static final Supplier<SoundEvent> CRAB_CLAW = SOUND_EVENTS.register("crabclaw", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "crabclaw")));
+    public static final Supplier<SoundEvent> CRAB_DEATH = SOUND_EVENTS.register("crabdeath", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "crabdeath")));
+    public static final Supplier<SoundEvent> CRAB_TALK = SOUND_EVENTS.register("crabtalk", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "crabtalk")));
     public static final Supplier<SoundEvent> WISPLIVE = SOUND_EVENTS.register("wisplive", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "wisplive")));
     public static final Supplier<SoundEvent> WISPDEAD = SOUND_EVENTS.register("wispdead", () ->

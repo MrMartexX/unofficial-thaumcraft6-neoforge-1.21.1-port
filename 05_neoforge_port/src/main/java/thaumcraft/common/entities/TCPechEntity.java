@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javax.annotation.Nullable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
@@ -17,6 +19,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
@@ -54,11 +58,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.NameTagItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.aspects.TCAspectAssignments;
+import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.menu.TCPechMenu;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCSounds;
@@ -500,6 +507,39 @@ public class TCPechEntity extends Monster implements Container, MenuProvider {
 
     private int explicitValue(ItemStack stack) {
         return stack.is(Items.ENDER_PEARL) ? LEGACY_ENDER_PEARL_VALUE : 0;
+    }
+
+    public static boolean checkPechSpawnRules(
+            EntityType<TCPechEntity> type,
+            ServerLevelAccessor level,
+            MobSpawnType spawnType,
+            BlockPos pos,
+            RandomSource random
+    ) {
+        boolean magicalBiome = level.getBiome(pos).is(TCEntitySpawnRules.LEGACY_MAGICAL_BIOME_TAG);
+        boolean overworldOrThaumcraftBiome = level.getLevel().dimension() == Level.OVERWORLD
+                || isLegacyThaumcraftMagicBiome(level.getBiome(pos));
+        int nearbyPech = level.getLevel().getEntitiesOfClass(
+                TCPechEntity.class,
+                new AABB(pos).inflate(16.0D, 16.0D, 16.0D)
+        ).size();
+        return testLegacySpawnGatesForValidation(
+                TCConfig.ALLOW_SPAWN_PECH.get(),
+                magicalBiome,
+                overworldOrThaumcraftBiome,
+                nearbyPech,
+                Monster.checkMonsterSpawnRules(type, level, spawnType, pos, random)
+        );
+    }
+
+    private static boolean isLegacyThaumcraftMagicBiome(Holder<Biome> biome) {
+        return biome.unwrapKey()
+                .map(key -> {
+                    ResourceLocation location = key.location();
+                    return ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "magical_forest").equals(location)
+                            || ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "eerie").equals(location);
+                })
+                .orElse(false);
     }
 
     public NonNullList<ItemStack> lootForValidation() {

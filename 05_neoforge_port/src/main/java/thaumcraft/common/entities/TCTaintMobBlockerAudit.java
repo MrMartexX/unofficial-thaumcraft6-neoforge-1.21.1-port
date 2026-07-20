@@ -67,10 +67,10 @@ public final class TCTaintMobBlockerAudit {
         lines.add("");
         lines.add("## Boundary");
         lines.add("");
-        lines.add("- Implemented: `thaum_slime`, `taint_crawler`, `taintacle`, `taintacle_tiny` and `taint_swarm` entity types with TC6 tracking/update/velocity values.");
+        lines.add("- Implemented: `thaum_slime`, `taint_crawler`, `taintacle`, `taintacle_tiny`, `taintacle_giant` and `taint_swarm` entity types with TC6 tracking/update/velocity values.");
         lines.add("- Implemented: server-side foundations for crawler fibre trail/Flux Taint bite, feature break crawler spawn, geyser swarm spawn, taintacle tiny spawn/lifetime, swarm summoned NBT and Thaumic Slime ranged split.");
-        lines.add("- Implemented: legacy scan keys for custom taint mobs and exact ConfigAspects assignments where legacy provided explicit entity tags.");
-        lines.add("- Covered separately: FallingTaint crust physics is covered by TCFallingTaintBlockerAudit. Deferred: measured mob model/animation renderer parity, full taint swarm particle renderer and broad natural spawn placement tables.");
+        lines.add("- Implemented: legacy scan keys for custom taint mobs and exact ConfigAspects assignments where legacy provided explicit entity tags, including TaintSeed/TaintSeedPrime and Giant Taintacle.");
+        lines.add("- Covered separately: FallingTaint crust physics is covered by TCFallingTaintBlockerAudit. Deferred: measured mob model/animation renderer pixel parity, full taint swarm particle renderer and broad natural spawn placement tables.");
         Files.write(output, lines, StandardCharsets.UTF_8);
         return report;
     }
@@ -111,6 +111,11 @@ public final class TCTaintMobBlockerAudit {
                         && legacySpecRegistered("TaintacleTiny", "taintacle_tiny", 64, 3, false)
                         && typeShape(TCEntityTypes.TAINTACLE_TINY.get(), MobCategory.MONSTER, 0.22F, 1.0F, 64, 3, false),
                 "entity=" + entityId(TCEntityTypes.TAINTACLE_TINY.get())));
+        checks.add(check("taintacle_giant_registered_with_legacy_tracking",
+                entityId(TCEntityTypes.TAINTACLE_GIANT.get()).equals(id("taintacle_giant"))
+                        && legacySpecRegistered("TaintacleGiant", "taintacle_giant", 96, 3, false)
+                        && typeShape(TCEntityTypes.TAINTACLE_GIANT.get(), MobCategory.MONSTER, 1.1F, 6.0F, 96, 3, false),
+                "entity=" + entityId(TCEntityTypes.TAINTACLE_GIANT.get())));
         checks.add(check("taint_swarm_registered_with_legacy_tracking",
                 entityId(TCEntityTypes.TAINT_SWARM.get()).equals(id("taint_swarm"))
                         && legacySpecRegistered("TaintSwarm", "taint_swarm", 64, 3, false)
@@ -122,12 +127,14 @@ public final class TCTaintMobBlockerAudit {
         TCTaintCrawlerEntity crawler = TCEntityTypes.TAINT_CRAWLER.get().create(level);
         TCTaintacleEntity taintacle = TCEntityTypes.TAINTACLE.get().create(level);
         TCTaintacleTinyEntity tiny = TCEntityTypes.TAINTACLE_TINY.get().create(level);
+        TCTaintacleGiantEntity giant = TCEntityTypes.TAINTACLE_GIANT.get().create(level);
         TCTaintSwarmEntity swarm = TCEntityTypes.TAINT_SWARM.get().create(level);
         TCThaumicSlimeEntity slime = TCEntityTypes.THAUM_SLIME.get().create(level);
         checks.add(check("taint_mob_attribute_baselines_match_legacy",
                 crawler != null
                         && taintacle != null
                         && tiny != null
+                        && giant != null
                         && swarm != null
                         && slime != null
                         && close(crawler.getAttributeBaseValue(Attributes.MAX_HEALTH), 8.0D)
@@ -137,6 +144,8 @@ public final class TCTaintMobBlockerAudit {
                         && close(taintacle.getAttributeBaseValue(Attributes.ATTACK_DAMAGE), 7.0D)
                         && close(tiny.getAttributeBaseValue(Attributes.MAX_HEALTH), 5.0D)
                         && close(tiny.getAttributeBaseValue(Attributes.ATTACK_DAMAGE), 2.0D)
+                        && close(giant.getAttributeBaseValue(Attributes.MAX_HEALTH), TCTaintacleGiantEntity.LEGACY_MAX_HEALTH)
+                        && close(giant.getAttributeBaseValue(Attributes.ATTACK_DAMAGE), TCTaintacleGiantEntity.LEGACY_ATTACK_DAMAGE)
                         && close(swarm.getAttributeBaseValue(Attributes.MAX_HEALTH), 30.0D)
                         && close(swarm.getAttributeBaseValue(Attributes.ATTACK_DAMAGE), 2.0D),
                 "crawler/tentacle/tiny/swarm base attributes"));
@@ -145,9 +154,12 @@ public final class TCTaintMobBlockerAudit {
     private static void addAspectAndScanChecks(ArrayList<Check> checks) {
         checks.add(check("custom_taint_entity_aspects_match_legacy_explicit_assignments",
                 hasAspects(TCEntityTypes.THAUM_SLIME.get(), Aspect.LIFE, 5, Aspect.WATER, 5, Aspect.FLUX, 5, Aspect.ALCHEMY, 5)
+                        && hasAspects(TCEntityTypes.TAINT_SEED.get(), Aspect.PLANT, 20, Aspect.BEAST, 20, Aspect.FLUX, 20)
+                        && hasAspects(TCEntityTypes.TAINT_SEED_PRIME.get(), Aspect.PLANT, 30, Aspect.BEAST, 30, Aspect.FLUX, 30)
                         && TCEntityAspectAssignments.getEntityTypeAspectsForValidation(TCEntityTypes.TAINT_CRAWLER.get()) == null
                         && hasAspects(TCEntityTypes.TAINTACLE.get(), Aspect.FLUX, 15, Aspect.BEAST, 10)
                         && hasAspects(TCEntityTypes.TAINTACLE_TINY.get(), Aspect.FLUX, 5, Aspect.BEAST, 5)
+                        && hasAspects(TCEntityTypes.TAINTACLE_GIANT.get(), Aspect.ELDRITCH, 40, Aspect.BEAST, 40, Aspect.FLUX, 40)
                         && hasAspects(TCEntityTypes.TAINT_SWARM.get(), Aspect.FLUX, 15, Aspect.AIR, 5),
                 "crawler intentionally has no explicit ConfigAspects assignment in TC6 source"));
         String scannables = resourceText("data/thaumcraft/scannables/legacy_core.json");
@@ -156,8 +168,11 @@ public final class TCTaintMobBlockerAudit {
                         && scannables.contains("\"thaumcraft:thaum_slime\"")
                         && scannables.contains("\"!TaintCrawler\"")
                         && scannables.contains("\"thaumcraft:taint_crawler\"")
+                        && scannables.contains("\"!TaintSeed\"")
+                        && scannables.contains("\"thaumcraft:taint_seed_prime\"")
                         && scannables.contains("\"!Taintacle\"")
                         && scannables.contains("\"thaumcraft:taintacle_tiny\"")
+                        && scannables.contains("\"thaumcraft:taintacle_giant\"")
                         && scannables.contains("\"!TaintSwarm\"")
                         && scannables.contains("\"f_FLY\"")
                         && scannables.contains("\"thaumcraft:taint_swarm\""),
@@ -279,6 +294,7 @@ public final class TCTaintMobBlockerAudit {
                                 || entity.getType() == TCEntityTypes.TAINT_CRAWLER.get()
                                 || entity.getType() == TCEntityTypes.TAINTACLE.get()
                                 || entity.getType() == TCEntityTypes.TAINTACLE_TINY.get()
+                                || entity.getType() == TCEntityTypes.TAINTACLE_GIANT.get()
                                 || entity.getType() == TCEntityTypes.TAINT_SWARM.get())
                 .forEach(Entity::discard);
     }

@@ -7,7 +7,7 @@ server-side taint ecology hooks, scan/aspect identities and safe client renderer
 
 | Check | Result |
 |---|---:|
-| Passed | 14 |
+| Passed | 15 |
 | Failed | 0 |
 
 ## Checks
@@ -18,6 +18,7 @@ server-side taint ecology hooks, scan/aspect identities and safe client renderer
 | taint_crawler_registered_with_legacy_tracking | PASS | entity=thaumcraft:taint_crawler |
 | taintacle_registered_with_legacy_tracking | PASS | entity=thaumcraft:taintacle |
 | taintacle_tiny_registered_with_legacy_tracking | PASS | entity=thaumcraft:taintacle_tiny |
+| taintacle_giant_registered_with_legacy_tracking | PASS | entity=thaumcraft:taintacle_giant |
 | taint_swarm_registered_with_legacy_tracking | PASS | entity=thaumcraft:taint_swarm |
 | taint_mob_attribute_baselines_match_legacy | PASS | crawler/tentacle/tiny/swarm base attributes |
 | custom_taint_entity_aspects_match_legacy_explicit_assignments | PASS | crawler intentionally has no explicit ConfigAspects assignment in TC6 source |
@@ -31,7 +32,7 @@ server-side taint ecology hooks, scan/aspect identities and safe client renderer
 
 ## Boundary
 
-- Implemented: `thaum_slime`, `taint_crawler`, `taintacle`, `taintacle_tiny` and `taint_swarm` entity types with TC6 tracking/update/velocity values.
+- Implemented: `thaum_slime`, `taint_crawler`, `taintacle`, `taintacle_tiny`, `taintacle_giant` and `taint_swarm` entity types with TC6 tracking/update/velocity values.
 - Implemented: server-side foundations for crawler fibre trail/Flux Taint bite, feature break crawler spawn, geyser swarm spawn, taintacle tiny spawn/lifetime, swarm summoned NBT and Thaumic Slime ranged split.
-- Implemented: legacy scan keys for custom taint mobs and exact ConfigAspects assignments where legacy provided explicit entity tags.
-- Covered separately: FallingTaint crust physics is covered by TCFallingTaintBlockerAudit. Deferred: measured mob model/animation renderer parity, full taint swarm particle renderer and broad natural spawn placement tables.
+- Implemented: legacy scan keys for custom taint mobs and exact ConfigAspects assignments where legacy provided explicit entity tags, including TaintSeed/TaintSeedPrime and Giant Taintacle.
+- Covered separately: FallingTaint crust physics is covered by TCFallingTaintBlockerAudit. Deferred: measured mob model/animation renderer pixel parity, full taint swarm particle renderer and broad natural spawn placement tables.

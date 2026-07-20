@@ -314,10 +314,19 @@
     },
     {
       "type": "entity",
+      "research": "!TaintSeed",
+      "entities": [
+        "thaumcraft:taint_seed",
+        "thaumcraft:taint_seed_prime"
+      ]
+    },
+    {
+      "type": "entity",
       "research": "!Taintacle",
       "entities": [
         "thaumcraft:taintacle",
-        "thaumcraft:taintacle_tiny"
+        "thaumcraft:taintacle_tiny",
+        "thaumcraft:taintacle_giant"
       ]
     },
     {
@@ -325,6 +334,14 @@
       "research": "!TaintSwarm",
       "entities": [
         "thaumcraft:taint_swarm"
+      ]
+    },
+    {
+      "type": "entity",
+      "research": "!EldritchCrab",
+      "entities": [
+        "thaumcraft:eldritch_crab",
+        "thaumcraft:inhabited_zombie"
       ]
     },
     {

@@ -66,12 +66,13 @@ public abstract class TCCultistEntity extends Monster {
     public boolean canAttackType(EntityType<?> type) {
         return type != TCEntityTypes.CULTIST_KNIGHT.get()
                 && type != TCEntityTypes.CULTIST_CLERIC.get()
+                && type != TCEntityTypes.CULTIST_LEADER.get()
                 && super.canAttackType(type);
     }
 
     @Override
     public boolean isAlliedTo(Entity entity) {
-        return entity instanceof TCCultistEntity || super.isAlliedTo(entity);
+        return entity instanceof TCCultistEntity || entity instanceof TCCultistLeaderEntity || super.isAlliedTo(entity);
     }
 
     @Override
