@@ -14,6 +14,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.item.ItemStack;
@@ -291,7 +293,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         String[] paragraphs = normalized.split("\n", -1);
         for (int index = 0; index < paragraphs.length; index++) {
             if (!paragraphs[index].isBlank()) {
-                addWrappedComponent(target, Component.literal(paragraphs[index]));
+                addWrappedComponent(target, legacyFormatted(paragraphs[index]));
             }
             if (index < paragraphs.length - 1) {
                 target.add(TextLine.empty());
@@ -303,6 +305,36 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         for (FormattedCharSequence line : font.split(component, PAGE_TEXT_WIDTH)) {
             target.add(TextLine.of(line));
         }
+    }
+
+    private static Component legacyFormatted(String text) {
+        MutableComponent root = Component.empty();
+        Style style = Style.EMPTY;
+        StringBuilder segment = new StringBuilder();
+        for (int index = 0; index < text.length(); index++) {
+            char current = text.charAt(index);
+            if (current != '\u00A7' || index + 1 >= text.length()) {
+                segment.append(current);
+                continue;
+            }
+
+            ChatFormatting format = ChatFormatting.getByCode(text.charAt(++index));
+            if (format == null) {
+                continue;
+            }
+            appendStyledSegment(root, segment, style);
+            style = format == ChatFormatting.RESET ? Style.EMPTY : style.applyFormat(format);
+        }
+        appendStyledSegment(root, segment, style);
+        return root;
+    }
+
+    private static void appendStyledSegment(MutableComponent root, StringBuilder segment, Style style) {
+        if (segment.isEmpty()) {
+            return;
+        }
+        root.append(Component.literal(segment.toString()).withStyle(style));
+        segment.setLength(0);
     }
 
     private static List<List<PageContent>> paginate(List<PageContent> contents) {

@@ -120,6 +120,7 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             return super.mouseClicked(mouseX, mouseY, button);
         }
         if (searchBox != null && searchBox.mouseClicked(mouseX, mouseY, button)) {
+            setFocused(searchBox);
             return true;
         }
         if (searchBox != null) {
@@ -166,6 +167,10 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (searchBox != null && searchBox.isFocused()) {
             if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+                if (!searchBox.getValue().isBlank()) {
+                    searchBox.setValue("");
+                    return true;
+                }
                 searchBox.setFocused(false);
                 return true;
             }
@@ -173,6 +178,7 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         }
         if (Screen.hasControlDown() && keyCode == GLFW.GLFW_KEY_F && searchBox != null) {
             searchBox.setFocused(true);
+            setFocused(searchBox);
             return true;
         }
         if (keyCode == GLFW.GLFW_KEY_HOME || keyCode == GLFW.GLFW_KEY_H || keyCode == GLFW.GLFW_KEY_R) {
@@ -185,6 +191,11 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
     @Override
     public boolean charTyped(char codePoint, int modifiers) {
         if (searchBox != null && searchBox.isFocused()) {
+            return searchBox.charTyped(codePoint, modifiers);
+        }
+        if (searchBox != null && isSearchCharacter(codePoint)) {
+            searchBox.setFocused(true);
+            setFocused(searchBox);
             return searchBox.charTyped(codePoint, modifiers);
         }
         return super.charTyped(codePoint, modifiers);
@@ -568,6 +579,9 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         if (entry.key().toLowerCase(Locale.ROOT).contains(query)) {
             return true;
         }
+        if (entry.name().toLowerCase(Locale.ROOT).contains(query)) {
+            return true;
+        }
         if (entry.category().toLowerCase(Locale.ROOT).contains(query)) {
             return true;
         }
@@ -578,6 +592,10 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
                 .getString()
                 .toLowerCase(Locale.ROOT)
                 .contains(query);
+    }
+
+    private static boolean isSearchCharacter(char codePoint) {
+        return !Character.isISOControl(codePoint) && !Character.isWhitespace(codePoint);
     }
 
     private String normalizedSearchQuery() {
