@@ -47,6 +47,7 @@ Every index also carries a server-built revision over the current research data,
 - The entry screen opens only after the server accepts the action and returns an authoritative entry view.
 - Entry stage text, visible addenda, requirement results, stage state, bookmarks, book asset, page navigation, and checked stage advance are active.
 - Renderable recipe bookmarks are legacy-style right-side tabs with output stack icons. They open a legacy-style paper recipe page. The server snapshot owns the real result stack, recipe kind, shaped dimensions, ingredient slots, component/aspect displays and display-only recipe contents; the client only cycles and renders those values.
+- Crafting, arcane, crucible, infusion and fake/display recipe pages use the legacy `GuiResearchPage` slot/overlay geometry through modern `GuiGraphics` calls. Crucible and infusion aspect costs are rendered as aspect icons plus amounts from the stack `ASPECT_STACK` component instead of clickable crystal recipe stacks, matching the legacy popup/cost intent while keeping the current server snapshot protocol unchanged.
 - Live vanilla crafting, arcane, crucible, infusion, blueprint construct and fake/display catalog entries produce valid server snapshots. Direct-reference live availability remains catalog-owned; deferred or legacy-missing groups stay non-interactive until their subsystem or mapping exists.
 - Recipe stack click-through is server-authoritative: the client sends the hovered stack and current index revision, the server resolves the first visible matching research recipe page, stale revisions are rejected without mutation, and the client keeps only local page history for Back/Escape/right-click navigation.
 - Entry-side aspect and knowledge inserts are active. Aspect pages show only known aspects from completed `!aspect` keys, sort by translated name, hide unknown components with the legacy unknown texture and use the legacy aspect side tab. Knowledge pages read only synced raw observation/theory totals from `TCKnowledgeClientCache`.
@@ -56,7 +57,7 @@ Every index also carries a server-built revision over the current research data,
 
 ## Intentionally deferred
 
-- Exact arrow-shape pixel measurement, category completion percentages, popup animation, and final browser pixel-level tuning.
+- Exact arrow-shape pixel measurement, category completion percentages, popup animation, and final browser/paper-page pixel-level tuning.
 - Exact legacy recipe-output search parity. Legacy searches recipe outputs from the loaded known-research recipe catalog; the current client index does not yet carry every searchable recipe-output display name, so this must be solved as a server snapshot/index data extension rather than guessed client-side.
 - Cheat Thaumonomicon variant.
 
@@ -66,7 +67,7 @@ Deferred recipe pages are shown only as catalog bookmarks with their authoritati
 
 - `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action and stale-drilldown rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, selected-stage warp propagation, side-panel knowledge cache exposure, server-side drilldown output matching, and the `READY` crafting/arcane/crucible/infusion/blueprint/fake-display snapshot boundary. The report deliberately records stable revision match labels instead of raw hash values.
 - Latest protocol result: `41/41` checks passed; live vanilla crafting, arcane, crucible, infusion, blueprint and fake/display catalog entries produce valid server snapshots, runtime category backgrounds use PNG texture paths, and recipe drilldown/history validates server-side output-stack resolution, client-cache acceptance and stale-revision rejection.
-- `gradlew compileJava` passes after the legacy-shaped browser search/background reset slice. A full `gradlew build` should remain the required check before merging a larger Thaumonomicon UI parity batch.
+- `gradlew build --no-daemon` passes after the legacy-shaped browser search/background reset and recipe-page geometry transplant slices.
 - Dedicated-server reload passes with `687` exact aspect assignments and the Thaumonomicon protocol audit.
 
 ## Next boundary

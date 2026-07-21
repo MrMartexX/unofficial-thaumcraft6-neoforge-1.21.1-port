@@ -49,6 +49,8 @@ import thaumcraft.common.research.TCThaumonomiconDrilldownRequestPayload;
 import thaumcraft.common.research.TCThaumonomiconEntryPayload;
 import thaumcraft.common.research.TCThaumonomiconEntryView;
 import thaumcraft.common.research.TCThaumonomiconResearchView;
+import thaumcraft.common.items.components.TCAspectStackComponent;
+import thaumcraft.common.registry.TCDataComponents;
 
 public final class TCThaumonomiconEntryScreen extends Screen {
     private static final ResourceLocation BOOK =
@@ -1379,28 +1381,22 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
         graphics.pose().scale(2.0F, 2.0F, 1.0F);
-        blit(graphics, BOOK_OVERLAY, -26, -26, 60, 15, 51, 52, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        blit(graphics, BOOK_OVERLAY, -28, -29, 0, 3, 56, 17, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        graphics.pose().translate(0.0F, 32.0F, 0.0F);
+        blit(graphics, BOOK_OVERLAY, -28, -44, 0, 20, 56, 48, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        graphics.pose().translate(0.0F, -8.0F, 0.0F);
+        blit(graphics, BOOK_OVERLAY, -25, -50, 100, 84, 11, 13, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.pose().popPose();
 
-        renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
+        renderLegacyAspectCosts(graphics, recipe.aspectStacks(), centerX - 28, centerY + 8, 3, mouseX, mouseY);
+        renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 50, mouseX, mouseY);
 
         if (!recipe.catalystVariants().isEmpty()) {
             int variant = (int) ((System.currentTimeMillis() / 1000L) % recipe.catalystVariants().size());
-            renderRecipeStack(graphics, recipe.catalystVariants().get(variant), centerX - 8, centerY - 8, mouseX, mouseY);
-        }
-
-        int aspectCount = recipe.aspectStacks().size();
-        for (int index = 0; index < aspectCount; index++) {
-            renderRecipeStack(
-                    graphics,
-                    recipe.aspectStacks().get(index),
-                    centerX + 4 - aspectCount * 10 + index * 20,
-                    centerY + 59,
-                    mouseX,
-                    mouseY
-            );
+            renderRecipeStack(graphics, recipe.catalystVariants().get(variant), centerX - 64, centerY - 56, mouseX, mouseY);
         }
     }
+
     private void renderInfusionRecipe(
             GuiGraphics graphics,
             TCInfusionRecipePageView recipe,
@@ -1412,16 +1408,19 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         drawCenteredNoShadow(graphics, Component.translatable("recipe.type.infusion"), centerX, centerY - 104, 0xFF505050);
 
         graphics.pose().pushPose();
-        graphics.pose().translate(centerX, centerY, 0.0F);
+        graphics.pose().translate(centerX, centerY + 20, 0.0F);
         graphics.pose().scale(2.0F, 2.0F, 1.0F);
-        blit(graphics, BOOK_OVERLAY, -26, -26, 112, 15, 52, 52, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        blit(graphics, BOOK_OVERLAY, -28, -56, 0, 3, 56, 17, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        graphics.pose().translate(0.0F, 19.0F, 0.0F);
+        blit(graphics, BOOK_OVERLAY, -28, -55, 200, 77, 60, 44, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.pose().popPose();
 
-        renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
+        renderLegacyAspectCosts(graphics, recipe.aspectStacks(), centerX - 48, centerY + 50, 5, mouseX, mouseY);
+        renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 85, mouseX, mouseY);
 
         if (!recipe.catalystVariants().isEmpty()) {
             int variant = (int) ((System.currentTimeMillis() / 1000L) % recipe.catalystVariants().size());
-            renderRecipeStack(graphics, recipe.catalystVariants().get(variant), centerX - 8, centerY - 8, mouseX, mouseY);
+            renderRecipeStack(graphics, recipe.catalystVariants().get(variant), centerX - 8, centerY - 16, mouseX, mouseY);
         }
 
         int componentCount = recipe.componentVariants().size();
@@ -1431,26 +1430,14 @@ public final class TCThaumonomiconEntryScreen extends Screen {
                 continue;
             }
             int variant = (int) ((System.currentTimeMillis() / 1000L + index) % variants.size());
-            double angle = Math.PI * 2.0D * index / Math.max(1, componentCount);
-            int x = centerX - 8 + (int) Math.round(Math.cos(angle) * 64.0D);
-            int y = centerY - 8 + (int) Math.round(Math.sin(angle) * 44.0D);
+            double angle = Math.toRadians(-90.0D + index * (360.0D / Math.max(1, componentCount)));
+            int x = centerX + (int) (Math.cos(angle) * 40.0D) - 8;
+            int y = centerY - 8 + (int) (Math.sin(angle) * 40.0D) - 8;
             renderRecipeStack(graphics, variants.get(variant), x, y, mouseX, mouseY);
         }
 
-        int aspectCount = recipe.aspectStacks().size();
-        for (int index = 0; index < aspectCount; index++) {
-            renderRecipeStack(
-                    graphics,
-                    recipe.aspectStacks().get(index),
-                    centerX + 4 - aspectCount * 10 + index * 20,
-                    centerY + 59,
-                    mouseX,
-                    mouseY
-            );
-        }
-
         String instability = Integer.toString(recipe.instability());
-        graphics.drawString(font, instability, centerX - font.width(instability) / 2, centerY + 88, 0xFF805A24, false);
+        graphics.drawString(font, instability, centerX - font.width(instability) / 2, centerY + 94, 0xFF505050, false);
     }
 
     private void renderDisplayRecipe(
@@ -1517,39 +1504,88 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int mouseY
     ) {
         graphics.pose().pushPose();
-        graphics.pose().translate(centerX, centerY, 0.0F);
+        graphics.pose().translate(centerX, centerY + 20, 0.0F);
         graphics.pose().scale(2.0F, 2.0F, 1.0F);
-        blit(graphics, BOOK_OVERLAY, -26, -26, 112, 15, 52, 52, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        blit(graphics, BOOK_OVERLAY, -28, -56, 0, 3, 56, 17, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        graphics.pose().translate(0.0F, 19.0F, 0.0F);
+        blit(graphics, BOOK_OVERLAY, -28, -55, 200, 77, 60, 44, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.pose().popPose();
 
-        renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 84, mouseX, mouseY);
+        renderLegacyAspectCosts(graphics, recipe.aspectStacks(), centerX - 48, centerY + 50, 5, mouseX, mouseY);
+        renderRecipeStack(graphics, recipe.result(), centerX - 8, centerY - 85, mouseX, mouseY);
         if (!recipe.catalystStacks().isEmpty()) {
-            renderRecipeStack(graphics, recipe.catalystStacks().getFirst(), centerX - 8, centerY - 8, mouseX, mouseY);
+            renderRecipeStack(graphics, recipe.catalystStacks().getFirst(), centerX - 8, centerY - 16, mouseX, mouseY);
         }
 
         int componentCount = recipe.componentStacks().size();
         for (int index = 0; index < componentCount; index++) {
-            double angle = Math.PI * 2.0D * index / Math.max(1, componentCount);
-            int x = centerX - 8 + (int) Math.round(Math.cos(angle) * 64.0D);
-            int y = centerY - 8 + (int) Math.round(Math.sin(angle) * 44.0D);
+            double angle = Math.toRadians(-90.0D + index * (360.0D / Math.max(1, componentCount)));
+            int x = centerX + (int) (Math.cos(angle) * 40.0D) - 8;
+            int y = centerY - 8 + (int) (Math.sin(angle) * 40.0D) - 8;
             renderRecipeStack(graphics, recipe.componentStacks().get(index), x, y, mouseX, mouseY);
-        }
-
-        int aspectCount = recipe.aspectStacks().size();
-        for (int index = 0; index < aspectCount; index++) {
-            renderRecipeStack(
-                    graphics,
-                    recipe.aspectStacks().get(index),
-                    centerX + 4 - aspectCount * 10 + index * 20,
-                    centerY + 59,
-                    mouseX,
-                    mouseY
-            );
         }
 
         if (recipe.instability() > 0) {
             String instability = Integer.toString(recipe.instability());
-            graphics.drawString(font, instability, centerX - font.width(instability) / 2, centerY + 88, 0xFF805A24, false);
+            graphics.drawString(font, instability, centerX - font.width(instability) / 2, centerY + 94, 0xFF505050, false);
+        }
+    }
+
+    private void renderLegacyAspectCosts(
+            GuiGraphics graphics,
+            List<ItemStack> aspectStacks,
+            int startX,
+            int startY,
+            int columns,
+            int mouseX,
+            int mouseY
+    ) {
+        int count = aspectStacks.size();
+        if (count <= 0 || columns <= 0) {
+            return;
+        }
+        int rows = (count - 1) / columns;
+        int shift = (columns - count % columns) * 10;
+        int y = startY - 10 * rows;
+        for (int index = 0; index < count; index++) {
+            int centerLastRow = 0;
+            if (index / columns >= rows && (rows > 1 || count < columns)) {
+                centerLastRow = 1;
+            }
+            renderAspectCostStack(
+                    graphics,
+                    aspectStacks.get(index),
+                    startX + index % columns * 20 + shift * centerLastRow,
+                    y + index / columns * 20,
+                    mouseX,
+                    mouseY
+            );
+        }
+    }
+
+    private void renderAspectCostStack(
+            GuiGraphics graphics,
+            ItemStack stack,
+            int x,
+            int y,
+            int mouseX,
+            int mouseY
+    ) {
+        TCAspectStackComponent aspectStack = stack.get(TCDataComponents.ASPECT_STACK.get());
+        Aspect aspect = aspectStack == null ? null : Aspect.getAspect(aspectStack.aspect());
+        if (aspect == null) {
+            renderRecipeStack(graphics, stack, x, y, mouseX, mouseY);
+            return;
+        }
+        drawAspectIcon(graphics, aspect, x, y, 16);
+        int amount = Math.max(stack.getCount(), aspectStack.amount());
+        String amountText = Integer.toString(amount);
+        graphics.drawString(font, amountText, x + 17 - font.width(amountText), y + 9, 0xFFFFFFFF, true);
+        if (inside(mouseX, mouseY, x, y, 16, 16)) {
+            hoveredUiTooltip = List.of(
+                    Component.translatable("tc.aspect." + aspect.getTag()).withStyle(ChatFormatting.GOLD),
+                    Component.literal(amountText).withStyle(ChatFormatting.GRAY)
+            );
         }
     }
 
