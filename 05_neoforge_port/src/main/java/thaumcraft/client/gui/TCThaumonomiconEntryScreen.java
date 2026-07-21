@@ -420,26 +420,56 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private int firstTextPageHeight() {
         int height = TEXT_PAGE_HEIGHT;
-        boolean hasRequirements = false;
+        int dividerSpace = 0;
+        int knowledgeRows = inPageKnowledgeTotalRows();
+        if (knowledgeRows > 0) {
+            height -= 2;
+            height -= 20 * knowledgeRows;
+            dividerSpace = 12;
+        }
         if (!entry.complete()) {
             if (!entry.requiredCraft().isEmpty()) {
                 height -= REQUIREMENT_ROW_HEIGHT;
-                hasRequirements = true;
+                dividerSpace = REQUIREMENT_DIVIDER_SPACE;
             }
             if (!entry.requiredItem().isEmpty()) {
                 height -= REQUIREMENT_ROW_HEIGHT;
-                hasRequirements = true;
+                dividerSpace = REQUIREMENT_DIVIDER_SPACE;
             }
             if (!entry.requiredKnowledge().isEmpty()) {
                 height -= REQUIREMENT_ROW_HEIGHT;
-                hasRequirements = true;
+                dividerSpace = REQUIREMENT_DIVIDER_SPACE;
             }
             if (!entry.requiredResearch().isEmpty()) {
                 height -= REQUIREMENT_ROW_HEIGHT;
-                hasRequirements = true;
+                dividerSpace = REQUIREMENT_DIVIDER_SPACE;
             }
         }
-        return height - (hasRequirements ? REQUIREMENT_DIVIDER_SPACE : 0);
+        return height - dividerSpace;
+    }
+
+    private int inPageKnowledgeTotalRows() {
+        if (!entry.research().key().equals("KNOWLEDGETYPES")
+                || !TCKnowledgeClientCache.hasResearch("KNOWLEDGETYPES")) {
+            return 0;
+        }
+        int rows = 0;
+        for (TCKnowledgeType type : TCKnowledgeType.values()) {
+            boolean hasAny = false;
+            Map<String, Integer> raw = TCKnowledgeClientCache.rawKnowledgeByCategory(type);
+            for (int rawValue : raw.values()) {
+                int amount = type.rawToPoints(rawValue);
+                int partial = rawValue % type.rawUnitsPerPoint();
+                if (amount > 0 || partial > 0) {
+                    hasAny = true;
+                    break;
+                }
+            }
+            if (hasAny) {
+                rows++;
+            }
+        }
+        return rows;
     }
 
     private void renderBook(GuiGraphics graphics, int x, int y) {
@@ -1232,7 +1262,12 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         ResourceLocation icon = parseLocation(categoryView == null ? "" : categoryView.icon());
         if (icon != null) {
             graphics.setColor(1.0F, 1.0F, 1.0F, 0.75F);
-            drawFullTexture(graphics, icon, x + 4, y + 4, 10, 10);
+            graphics.pose().pushPose();
+            graphics.pose().translate(x, y, 1.0F);
+            graphics.pose().scale(0.0625F, 0.0625F, 1.0F);
+            graphics.pose().scale(0.66F, 0.66F, 1.0F);
+            blit(graphics, icon, 66, 66, 0, 0, 255, 255, 256, 256);
+            graphics.pose().popPose();
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
         String amount = Integer.toString(type.rawToPoints(raw));

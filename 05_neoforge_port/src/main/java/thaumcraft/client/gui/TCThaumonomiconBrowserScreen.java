@@ -129,9 +129,7 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             graphics.disableScissor();
         }
         renderFrame(graphics);
-        if (!searching) {
-            renderLegacyCategories(graphics, index, mouseX, mouseY);
-        }
+        renderLegacyCategories(graphics, index, mouseX, mouseY);
         renderSearchButton(graphics, mouseX, mouseY);
         renderSearch(graphics, index, mouseX, mouseY, partialTick);
         renderLegacyTooltip(graphics, mouseX, mouseY);
@@ -154,6 +152,12 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             }
             if (hoveredSearchHit != null && activateSearchHit(hoveredSearchHit)) {
                 closeSearch();
+                return true;
+            }
+            if (hoveredCategory != null) {
+                selectCategory(hoveredCategory.key());
+                closeSearch();
+                playPage();
                 return true;
             }
             return super.mouseClicked(mouseX, mouseY, button);
@@ -181,7 +185,7 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (button == 0 && insideViewport(mouseX, mouseY)) {
+        if (!searching && button == 0 && insideViewport(mouseX, mouseY)) {
             panX -= dragX * zoom;
             panY -= dragY * zoom;
             clampPan();

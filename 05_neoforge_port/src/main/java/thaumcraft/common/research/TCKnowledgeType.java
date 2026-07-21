@@ -3,8 +3,8 @@ package thaumcraft.common.research;
 import java.util.Locale;
 
 public enum TCKnowledgeType {
-    OBSERVATION("observation", 16),
-    THEORY("theory", 32);
+    THEORY("theory", 32),
+    OBSERVATION("observation", 16);
 
     private final String id;
     private final int rawUnitsPerPoint;

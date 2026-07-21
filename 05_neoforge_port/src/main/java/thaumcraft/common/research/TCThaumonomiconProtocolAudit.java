@@ -848,13 +848,21 @@ final class TCThaumonomiconProtocolAudit {
         sidePanelKnowledge.addResearch("KNOWLEDGETYPES");
         sidePanelKnowledge.addResearch("!aer");
         sidePanelKnowledge.addRaw(TCKnowledgeType.THEORY, "BASICS", 48);
+        sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "ALCHEMY", 67);
+        sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "ARTIFICE", 42);
         sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "AUROMANCY", 20);
+        sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "BASICS", 140);
+        sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "ELDRITCH", 22);
+        sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "GOLEMANCY", 32);
+        sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "INFUSION", 60);
         TCKnowledgeClientCache.accept(TCKnowledgeSyncPayload.from(sidePanelKnowledge));
         boolean sidePanelStateSynced = TCKnowledgeClientCache.hasResearch("!aer")
                 && TCKnowledgeClientCache.hasResearch("FIRSTSTEPS")
                 && TCKnowledgeClientCache.hasResearch("KNOWLEDGETYPES")
                 && TCKnowledgeClientCache.rawKnowledge(TCKnowledgeType.THEORY, "BASICS") == 48
-                && TCKnowledgeClientCache.knowledgePoints(TCKnowledgeType.OBSERVATION, "AUROMANCY") == 1;
+                && TCKnowledgeClientCache.knowledgePoints(TCKnowledgeType.OBSERVATION, "AUROMANCY") == 1
+                && TCKnowledgeClientCache.knowledgePoints(TCKnowledgeType.OBSERVATION, "BASICS") == 8
+                && TCKnowledgeClientCache.rawKnowledgeByCategory(TCKnowledgeType.OBSERVATION).size() == 7;
         TCKnowledgeClientCache.clear();
         checks.add(check(
                 "client_knowledge_cache_exposes_thaumonomicon_side_panel_state",

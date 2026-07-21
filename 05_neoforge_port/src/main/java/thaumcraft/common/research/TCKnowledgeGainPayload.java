@@ -17,18 +17,17 @@ public record TCKnowledgeGainPayload(TCKnowledgeType knowledgeType, String categ
     public static final StreamCodec<RegistryFriendlyByteBuf, TCKnowledgeGainPayload> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public TCKnowledgeGainPayload decode(RegistryFriendlyByteBuf buffer) {
-            int ordinal = buffer.readVarInt();
-            TCKnowledgeType[] values = TCKnowledgeType.values();
-            if (ordinal < 0 || ordinal >= values.length) {
-                throw new IllegalArgumentException("Invalid Thaumcraft knowledge type ordinal: " + ordinal);
+            TCKnowledgeType type = TCKnowledgeType.parse(buffer.readUtf(32));
+            if (type == null) {
+                throw new IllegalArgumentException("Invalid Thaumcraft knowledge type id");
             }
 
-            return new TCKnowledgeGainPayload(values[ordinal], buffer.readUtf(256));
+            return new TCKnowledgeGainPayload(type, buffer.readUtf(256));
         }
 
         @Override
         public void encode(RegistryFriendlyByteBuf buffer, TCKnowledgeGainPayload payload) {
-            buffer.writeVarInt(payload.knowledgeType().ordinal());
+            buffer.writeUtf(payload.knowledgeType().id(), 32);
             buffer.writeUtf(payload.category(), 256);
         }
     };
