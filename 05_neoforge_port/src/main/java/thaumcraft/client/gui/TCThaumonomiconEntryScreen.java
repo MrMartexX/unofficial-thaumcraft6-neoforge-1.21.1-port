@@ -36,6 +36,8 @@ import thaumcraft.common.research.TCKnowledgeType;
 import thaumcraft.common.research.TCResearchPageAvailability;
 import thaumcraft.common.research.TCResearchPageBookmark;
 import thaumcraft.common.research.TCResearchPageView;
+import thaumcraft.common.research.TCResearchCategoryDefinition;
+import thaumcraft.common.research.TCResearchManager;
 import thaumcraft.common.research.TCResearchRequirementResolver;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirement;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirementResolution;
@@ -1213,10 +1215,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             boolean inPage
     ) {
         y -= 18;
-        Map<String, TCThaumonomiconCategoryView> categories = new LinkedHashMap<>();
-        for (TCThaumonomiconCategoryView category : TCThaumonomiconClientCache.index().categories()) {
-            categories.put(category.key(), category);
-        }
+        Map<String, TCThaumonomiconCategoryView> categories = knowledgeTotalCategories();
         int row = 0;
         boolean drewSomething = false;
         for (TCKnowledgeType type : TCKnowledgeType.values()) {
@@ -1245,6 +1244,41 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (inPage && drewSomething) {
             blit(graphics, BOOK, x + 4, y - row * 20 + 12, 24, 184, 96, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         }
+    }
+
+    private Map<String, TCThaumonomiconCategoryView> knowledgeTotalCategories() {
+        LinkedHashMap<String, TCThaumonomiconCategoryView> categories = new LinkedHashMap<>();
+        for (TCResearchCategoryDefinition category : TCResearchManager.categories()) {
+            if (!hasKnowledgeTotal(category.key())) {
+                continue;
+            }
+            categories.put(category.key(), new TCThaumonomiconCategoryView(
+                    category.key(),
+                    category.requiredResearch(),
+                    location(category.icon()),
+                    location(category.background()),
+                    location(category.overlay())
+            ));
+        }
+        for (TCKnowledgeType type : TCKnowledgeType.values()) {
+            for (String category : TCKnowledgeClientCache.rawKnowledgeByCategory(type).keySet()) {
+                categories.putIfAbsent(category, categoryView(category));
+            }
+        }
+        return categories;
+    }
+
+    private boolean hasKnowledgeTotal(String category) {
+        for (TCKnowledgeType type : TCKnowledgeType.values()) {
+            if (TCKnowledgeClientCache.rawKnowledge(type, category) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String location(ResourceLocation location) {
+        return location == null ? "" : location.toString();
     }
 
     private void renderKnowledgeIcon(
