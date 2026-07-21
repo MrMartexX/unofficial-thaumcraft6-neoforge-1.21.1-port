@@ -1261,7 +1261,9 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         drawFullTexture(graphics, type == TCKnowledgeType.THEORY ? KNOWLEDGE_THEORY : KNOWLEDGE_OBSERVATION, x, y, 16, 16);
         ResourceLocation icon = parseLocation(categoryView == null ? "" : categoryView.icon());
         if (icon != null) {
-            graphics.setColor(1.0F, 1.0F, 1.0F, 0.75F);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            graphics.setColor(1.0F, 1.0F, 1.0F, 0.55F);
             graphics.pose().pushPose();
             graphics.pose().translate(x, y, 1.0F);
             graphics.pose().scale(0.0625F, 0.0625F, 1.0F);
@@ -1271,6 +1273,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
         String amount = Integer.toString(type.rawToPoints(raw));
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, 0.0F, 5.0F);
         graphics.drawString(font, amount, x + 16 - font.width(amount), y + 8, 0xFFFFFFFF, true);
         int partial = raw % type.rawUnitsPerPoint();
         if (partial > 0) {
@@ -1280,6 +1284,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             blit(graphics, BOOK, x + width, y + 17, width, 234, 16 - width, 2, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
+        graphics.pose().popPose();
         if (inside(mouseX, mouseY, x, y, 16, 18)) {
             hoveredUiTooltip = List.of(
                     Component.translatable("tc.type." + type.id()).withStyle(ChatFormatting.GOLD),
