@@ -1180,6 +1180,7 @@
   "tc.research_category.GOLEMANCY": "Golemancy",
   "tc.research_category.INFUSION": "Arcane Infusion",
   "tc.research.begin": "You have not yet begun this research",
+  "tc.researchmissing": "Missing required research:",
   "tc.research.newpage": "New page added",
   "tc.research.newresearch": "Newly discovered research",
   "tc.research.stage": "Current stage:",

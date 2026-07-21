@@ -245,7 +245,7 @@ public final class TCResearchPageCatalogManager {
         return output.isPresent() && !output.get().isEmpty() && output.get().is(stack.getItem());
     }
 
-    private static Optional<ItemStack> recipeOutput(TCResearchPageView page) {
+    static Optional<ItemStack> recipeOutput(TCResearchPageView page) {
         if (page.craftingRecipe().isPresent()) {
             return Optional.of(page.craftingRecipe().get().result());
         }

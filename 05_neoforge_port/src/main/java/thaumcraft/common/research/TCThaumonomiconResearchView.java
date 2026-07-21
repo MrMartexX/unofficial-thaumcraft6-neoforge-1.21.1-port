@@ -16,7 +16,8 @@ public record TCThaumonomiconResearchView(
         boolean unlockable,
         List<TCResearchFlag> flags,
         int currentStage,
-        int totalStages
+        int totalStages,
+        List<TCThaumonomiconRecipeSearchView> recipeSearch
 ) {
     public TCThaumonomiconResearchView {
         key = safe(key);
@@ -29,6 +30,7 @@ public record TCThaumonomiconResearchView(
         flags = List.copyOf(flags);
         currentStage = Math.max(0, currentStage);
         totalStages = Math.max(0, totalStages);
+        recipeSearch = List.copyOf(recipeSearch);
     }
 
     private static String safe(String value) {

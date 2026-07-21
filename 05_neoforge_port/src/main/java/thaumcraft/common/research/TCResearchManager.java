@@ -473,6 +473,37 @@ public final class TCResearchManager {
         return progressed;
     }
 
+    public static boolean completeKnownResearchSiblings(ServerPlayer player, boolean sync) {
+        if (player == null) {
+            return false;
+        }
+
+        boolean changed = false;
+        boolean progressed;
+        do {
+            progressed = false;
+            TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+            for (TCResearchEntryDefinition entry : entries()) {
+                if (!knowledge.isResearchKnown(entry.key())) {
+                    continue;
+                }
+                for (String sibling : entry.siblings()) {
+                    String siblingKey = canonicalResearchKey(sibling);
+                    if (!isResearchComplete(knowledge, siblingKey) && doesPlayerHaveRequisites(player, siblingKey)) {
+                        boolean siblingProgressed = completeResearch(player, siblingKey, sync);
+                        progressed |= siblingProgressed;
+                        changed |= siblingProgressed;
+                    }
+                }
+            }
+        } while (progressed);
+
+        if (changed && sync) {
+            TCPlayerKnowledgeStore.sync(player);
+        }
+        return changed;
+    }
+
     public static boolean startResearchWithPopup(ServerPlayer player, String key) {
         String researchKey = canonicalResearchKey(key);
         boolean progressed = progressResearch(player, researchKey, true);

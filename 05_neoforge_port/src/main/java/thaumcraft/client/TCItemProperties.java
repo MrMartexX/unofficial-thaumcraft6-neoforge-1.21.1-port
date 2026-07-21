@@ -6,8 +6,10 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.TCEssentiaItemHelper;
 import thaumcraft.common.items.casters.ItemCaster;
+import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 
@@ -29,6 +31,9 @@ public final class TCItemProperties {
             ResourceLocation fill = ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "fill");
             ItemProperties.register(TCItems.JAR_NORMAL.get(), fill, (stack, level, entity, seed) -> jarFill(stack));
             ItemProperties.register(TCItems.JAR_VOID.get(), fill, (stack, level, entity, seed) -> jarFill(stack));
+
+            ResourceLocation type = ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "type");
+            ItemProperties.register(TCItems.PRIMORDIAL_PEARL.get(), type, (stack, level, entity, seed) -> legacyPearlType(stack));
         });
     }
 
@@ -48,5 +53,17 @@ public final class TCItemProperties {
             return 3.0F;
         }
         return 4.0F;
+    }
+
+    private static float legacyPearlType(ItemStack stack) {
+        TCLegacyItemComponent legacyItem = stack.get(TCDataComponents.LEGACY_ITEM.get());
+        int metadata = legacyItem == null ? 0 : legacyItem.metadata();
+        if (metadata < 3) {
+            return 0.0F;
+        }
+        if (metadata < 6) {
+            return 1.0F;
+        }
+        return 2.0F;
     }
 }

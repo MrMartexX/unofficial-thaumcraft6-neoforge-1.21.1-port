@@ -34,6 +34,7 @@ final class TCThaumonomiconCodec {
     private static final int MAX_BLUEPRINT_COLUMNS = 8;
     private static final int MAX_DISPLAY_STACKS = 64;
     private static final int MAX_RESEARCH_FLAGS = 32;
+    private static final int MAX_RECIPE_SEARCH_RESULTS = 512;
 
     private TCThaumonomiconCodec() {
     }
@@ -127,6 +128,13 @@ final class TCThaumonomiconCodec {
         writeList(buffer, research.flags(), MAX_RESEARCH_FLAGS, "research flags", TCThaumonomiconCodec::writeEnum);
         buffer.writeVarInt(research.currentStage());
         buffer.writeVarInt(research.totalStages());
+        writeList(
+                buffer,
+                research.recipeSearch(),
+                MAX_RECIPE_SEARCH_RESULTS,
+                "recipe search results",
+                TCThaumonomiconCodec::writeRecipeSearch
+        );
     }
 
     private static TCThaumonomiconResearchView readResearch(RegistryFriendlyByteBuf buffer) {
@@ -149,7 +157,27 @@ final class TCThaumonomiconCodec {
                         target -> readEnum(target, TCResearchFlag.values(), "research flag")
                 ),
                 buffer.readVarInt(),
-                buffer.readVarInt()
+                buffer.readVarInt(),
+                readList(
+                        buffer,
+                        MAX_RECIPE_SEARCH_RESULTS,
+                        "recipe search results",
+                        TCThaumonomiconCodec::readRecipeSearch
+                )
+        );
+    }
+
+    private static void writeRecipeSearch(RegistryFriendlyByteBuf buffer, TCThaumonomiconRecipeSearchView search) {
+        writeResourceLocation(buffer, search.bookmarkId());
+        buffer.writeVarInt(search.pageIndex());
+        ItemStack.STREAM_CODEC.encode(buffer, search.result());
+    }
+
+    private static TCThaumonomiconRecipeSearchView readRecipeSearch(RegistryFriendlyByteBuf buffer) {
+        return new TCThaumonomiconRecipeSearchView(
+                readResourceLocation(buffer),
+                buffer.readVarInt(),
+                ItemStack.STREAM_CODEC.decode(buffer)
         );
     }
 

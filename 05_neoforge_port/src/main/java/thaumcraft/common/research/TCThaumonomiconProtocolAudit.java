@@ -253,6 +253,32 @@ final class TCThaumonomiconProtocolAudit {
         checks.add(check("unlockable_state_server_owned", unlockableServerOwned, "visible=" + entryKeys.size()));
         checks.add(check("research_flags_server_owned", flagsServerOwned, "visible=" + entryKeys.size()));
 
+        CompoundTag beforeSiblingKnowledge = TCPlayerKnowledgeStore.get(player).save();
+        TCPlayerKnowledge siblingKnowledge = new TCPlayerKnowledge();
+        siblingKnowledge.addResearch("FIRSTSTEPS");
+        siblingKnowledge.setResearchStage("FIRSTSTEPS", 4);
+        TCPlayerKnowledgeStore.set(player, siblingKnowledge, false);
+        boolean siblingSweepChanged = TCResearchManager.completeKnownResearchSiblings(player, false);
+        TCPlayerKnowledge afterSiblingSweep = TCPlayerKnowledgeStore.get(player);
+        TCThaumonomiconIndexPayload siblingIndex = TCThaumonomiconService.buildIndex(player);
+        Optional<TCThaumonomiconResearchView> knowledgeTypesView = siblingIndex.entries().stream()
+                .filter(entry -> entry.key().equals("KNOWLEDGETYPES"))
+                .findFirst();
+        boolean thaumonomiconOpenSiblingSweep = siblingSweepChanged
+                && afterSiblingSweep.isResearchKnown("KNOWLEDGETYPES")
+                && TCResearchManager.isResearchComplete(afterSiblingSweep, "KNOWLEDGETYPES")
+                && afterSiblingSweep.isResearchKnown("!gotdream")
+                && knowledgeTypesView.isPresent()
+                && knowledgeTypesView.get().status() == TCResearchStatus.COMPLETE;
+        checks.add(check(
+                "thaumonomicon_open_completes_known_siblings",
+                thaumonomiconOpenSiblingSweep,
+                "KNOWLEDGETYPES=" + afterSiblingSweep.isResearchKnown("KNOWLEDGETYPES")
+                        + ", !gotdream=" + afterSiblingSweep.isResearchKnown("!gotdream")
+        ));
+        TCPlayerKnowledgeStore.set(player, TCPlayerKnowledge.load(beforeSiblingKnowledge), false);
+        knowledge = TCPlayerKnowledgeStore.get(player);
+
         int entryViewsInspected = 0;
         int bookmarksInspected = 0;
         int pagesInspected = 0;
@@ -688,6 +714,36 @@ final class TCThaumonomiconProtocolAudit {
                 indexInvalidatesEntryCache,
                 "sample_present=" + sample.isPresent()
         ));
+
+        CompoundTag beforeRecipeSearchKnowledge = TCPlayerKnowledgeStore.get(player).save();
+        TCPlayerKnowledge recipeSearchKnowledge = new TCPlayerKnowledge();
+        recipeSearchKnowledge.addResearch("FIRSTSTEPS");
+        recipeSearchKnowledge.setResearchStage("FIRSTSTEPS", 4);
+        TCPlayerKnowledgeStore.set(player, recipeSearchKnowledge, false);
+        TCResearchManager.completeKnownResearchSiblings(player, false);
+        TCThaumonomiconIndexPayload recipeSearchIndex = TCThaumonomiconService.buildIndex(player);
+        Optional<TCThaumonomiconResearchView> recipeSearchEntry = recipeSearchIndex.entries().stream()
+                .filter(entry -> !entry.recipeSearch().isEmpty())
+                .findFirst();
+        boolean recipeSearchOutputsServerOwned = recipeSearchEntry
+                .map(entry -> {
+                    TCThaumonomiconRecipeSearchView first = entry.recipeSearch().getFirst();
+                    return first.bookmarkId() != null
+                            && !first.result().isEmpty()
+                            && first.pageIndex() >= 0
+                            && TCThaumonomiconService.buildEntry(player, entry.key())
+                                    .map(view -> view.bookmarks().stream()
+                                            .anyMatch(bookmark -> bookmark.id().equals(first.bookmarkId())
+                                                    && first.pageIndex() < bookmark.pages().size()))
+                                    .orElse(false);
+                })
+                .orElse(false);
+        checks.add(check(
+                "search_recipe_outputs_are_server_owned",
+                recipeSearchOutputsServerOwned,
+                "entry=" + recipeSearchEntry.map(TCThaumonomiconResearchView::key).orElse("none")
+        ));
+        TCPlayerKnowledgeStore.set(player, TCPlayerKnowledge.load(beforeRecipeSearchKnowledge), false);
         TCThaumonomiconClientCache.clear();
         TCThaumonomiconClientCache.accept(new TCThaumonomiconIndexPayload(
                 index.categories(),

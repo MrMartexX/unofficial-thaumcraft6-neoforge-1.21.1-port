@@ -109,8 +109,15 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private SideInsert sideInsert = SideInsert.NONE;
 
     public TCThaumonomiconEntryScreen(TCThaumonomiconEntryView entry) {
+        this(entry, null, 0);
+    }
+
+    public TCThaumonomiconEntryScreen(TCThaumonomiconEntryView entry, ResourceLocation initialRecipeBookmark, int initialRecipePage) {
         super(Component.translatable(entry.research().name()));
         this.entry = entry;
+        if (initialRecipeBookmark != null) {
+            openInitialRecipePage(initialRecipeBookmark, initialRecipePage);
+        }
     }
 
     @Override
@@ -158,6 +165,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         renderWarpWarning(graphics, x, y, mouseX, mouseY);
         renderBookmarks(graphics, x, y, mouseX, mouseY);
         renderRequirements(graphics, x, y, mouseX, mouseY);
+        renderInPageKnowledgeTotals(graphics, x, y, mouseX, mouseY);
         renderResult(graphics, x, y);
         if (sideInsert != SideInsert.NONE) {
             renderSideInsert(graphics, mouseX, mouseY);
@@ -185,6 +193,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             if (button == 1) {
                 closeRecipePage(true);
                 playPage();
+                return true;
+            }
+            if (button == 0 && hoveredBookmark != null) {
+                openBookmark(hoveredBookmark);
                 return true;
             }
             if (button == 0 && handleRecipePageClick(mouseX, mouseY)) {
@@ -471,10 +483,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             return;
         }
         if (spread > 0) {
-            blit(graphics, BOOK, x - 16, y + NAVIGATION_Y_OFFSET, 0, 184, 12, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blitScaled(graphics, BOOK, x - 16, y + NAVIGATION_Y_OFFSET, 0, 184, 12, 8, legacyBob());
         }
         if (spread < maxSpread()) {
-            blit(graphics, BOOK, x + 262, y + NAVIGATION_Y_OFFSET, 12, 184, 12, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blitScaled(graphics, BOOK, x + 262, y + NAVIGATION_Y_OFFSET, 12, 184, 12, 8, legacyBob());
         }
     }
 
@@ -888,6 +900,22 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         playPage();
     }
 
+    private void openInitialRecipePage(ResourceLocation bookmarkId, int pageIndex) {
+        for (TCResearchPageBookmark bookmark : entry.bookmarks()) {
+            if (!bookmark.id().equals(bookmarkId)) {
+                continue;
+            }
+            List<TCResearchPageView> renderable = bookmark.pages().stream()
+                    .filter(page -> page.availability() == TCResearchPageAvailability.READY)
+                    .filter(TCThaumonomiconEntryScreen::hasRenderableRecipe)
+                    .toList();
+            if (!renderable.isEmpty()) {
+                openRecipePages(bookmark.id(), renderable, renderableIndex(bookmark.pages(), pageIndex), true);
+            }
+            return;
+        }
+    }
+
     private void renderSideTabs(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
         if (canShowAspectTab()) {
             int tabX = x - 48;
@@ -1020,10 +1048,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             renderAspectComponent(graphics, components[1], x + 102, rowY + 4, mouseX, mouseY);
         }
         if (aspectPage > 0) {
-            blit(graphics, BROWSER, x - 20, y + 208, 0, 184, 12, 8, 256, 256);
+            blitScaled(graphics, BROWSER, x - 20, y + 208, 0, 184, 12, 8, legacyBob());
         }
         if (aspectPage < maxAspectPage()) {
-            blit(graphics, BROWSER, x + 144, y + 208, 12, 184, 12, 8, 256, 256);
+            blitScaled(graphics, BROWSER, x + 144, y + 208, 12, 184, 12, 8, legacyBob());
         }
     }
 
@@ -1043,29 +1071,61 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private void renderKnowledgeInsert(GuiGraphics graphics, int paperX, int paperY, int mouseX, int mouseY) {
-        drawCenteredNoShadow(graphics, Component.translatable("tc.knowledge.name"), paperX + 128, paperY + 24, 0xFF4B351B);
+        renderKnowledgeTotals(graphics, paperX + 60, bookY() + 75, mouseX, mouseY, false);
+    }
+
+    private void renderInPageKnowledgeTotals(GuiGraphics graphics, int bookX, int bookY, int mouseX, int mouseY) {
+        if (!entry.research().key().equals("KNOWLEDGETYPES")
+                || !TCKnowledgeClientCache.hasResearch("KNOWLEDGETYPES")
+                || sideInsert != SideInsert.NONE
+                || !activeRecipePages.isEmpty()) {
+            return;
+        }
+        renderKnowledgeTotals(graphics, bookX, bookY - 16 + 210, mouseX, mouseY, true);
+    }
+
+    private void renderKnowledgeTotals(
+            GuiGraphics graphics,
+            int x,
+            int y,
+            int mouseX,
+            int mouseY,
+            boolean inPage
+    ) {
+        y -= 18;
         Map<String, TCThaumonomiconCategoryView> categories = new LinkedHashMap<>();
         for (TCThaumonomiconCategoryView category : TCThaumonomiconClientCache.index().categories()) {
             categories.put(category.key(), category);
         }
         int row = 0;
+        boolean drewSomething = false;
         for (TCKnowledgeType type : List.of(TCKnowledgeType.THEORY, TCKnowledgeType.OBSERVATION)) {
             Map<String, Integer> raw = TCKnowledgeClientCache.rawKnowledgeByCategory(type);
-            if (raw.isEmpty()) {
-                continue;
-            }
+            boolean drewRow = false;
             int column = 0;
-            int columnSpacing = Math.max(20, 164 / Math.max(1, Math.max(categories.size(), raw.size())));
-            for (Map.Entry<String, Integer> rawEntry : raw.entrySet()) {
-                int iconX = paperX + 50 + column * columnSpacing;
-                int iconY = paperY + 57 + row * 28;
-                renderKnowledgeIcon(graphics, type, rawEntry.getKey(), rawEntry.getValue(), categories.get(rawEntry.getKey()), iconX, iconY, mouseX, mouseY);
+            int columnSpacing = inPage ? 18 : Math.max(20, (int) (164.0F / Math.max(1, categories.size())));
+            for (Map.Entry<String, TCThaumonomiconCategoryView> categoryEntry : categories.entrySet()) {
+                int rawValue = raw.getOrDefault(categoryEntry.getKey(), 0);
+                int amount = type.rawToPoints(rawValue);
+                int partial = rawValue % type.rawUnitsPerPoint();
+                if (amount <= 0 && partial <= 0) {
+                    continue;
+                }
+                int iconX = x - 10 + column * columnSpacing;
+                int iconY = y - row * (inPage ? 20 : 28);
+                renderKnowledgeIcon(graphics, type, categoryEntry.getKey(), rawValue, categoryEntry.getValue(), iconX, iconY, mouseX, mouseY);
                 column++;
+                drewRow = true;
+                drewSomething = true;
             }
-            row++;
+            if (drewRow) {
+                row++;
+            }
         }
-        if (row == 0) {
-            drawCenteredNoShadow(graphics, Component.translatable("gui.thaumcraft.thaumonomicon.knowledge_empty"), paperX + 128, paperY + 104, 0xFF777777);
+        if (inPage && drewSomething) {
+            blit(graphics, BOOK, x + 4, y - row * 20 + 12, 24, 184, 96, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        } else if (!inPage && !drewSomething) {
+            drawCenteredNoShadow(graphics, Component.translatable("gui.thaumcraft.thaumonomicon.knowledge_empty"), x + 68, y + 47, 0xFF777777);
         }
     }
 
@@ -1725,15 +1785,15 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private void renderRecipeNavigation(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
         if (activeRecipeIndex > 0) {
-            blit(graphics, BOOK, x + 40, y + 232, 0, 184, 12, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blitScaled(graphics, BOOK, x + 40, y + 232, 0, 184, 12, 8, legacyBob());
         }
         if (activeRecipeIndex < activeRecipePages.size() - 1) {
-            blit(graphics, BOOK, x + 204, y + 232, 12, 184, 12, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blitScaled(graphics, BOOK, x + 204, y + 232, 12, 184, 12, 8, legacyBob());
         }
         if (!recipeHistory.isEmpty()) {
             int paneX = bookX();
             int paneY = bookY();
-            blit(graphics, BOOK, paneX + 118, paneY + 190, 38, 202, 20, 12, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            blitScaled(graphics, BOOK, paneX + 118, paneY + 190, 38, 202, 20, 12, legacyBob());
             if (inside(mouseX, mouseY, paneX + 118, paneY + 190, 20, 12)) {
                 graphics.drawString(font, Component.translatable("recipe.return"), mouseX, mouseY, 0xFFFFFFFF, true);
             }
@@ -1819,8 +1879,12 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (raw == null || raw.isBlank()) {
             return null;
         }
+        String normalized = raw.trim().toLowerCase(Locale.ROOT);
+        if (!normalized.contains(":") && normalized.contains("/")) {
+            normalized = Thaumcraft.MODID + ":" + normalized;
+        }
         try {
-            return ResourceLocation.parse(raw);
+            return ResourceLocation.parse(normalized);
         } catch (IllegalArgumentException ignored) {
             return null;
         }
@@ -2006,6 +2070,33 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         private RecipePageState {
             pages = List.copyOf(pages);
         }
+    }
+
+    private float legacyBob() {
+        int ticks = minecraft != null && minecraft.player != null
+                ? minecraft.player.tickCount
+                : (int) (System.currentTimeMillis() / 50L);
+        return (float) Math.sin(ticks / 3.0F) * 0.2F + 0.1F;
+    }
+
+    private static void blitScaled(
+            GuiGraphics graphics,
+            ResourceLocation texture,
+            int x,
+            int y,
+            float u,
+            float v,
+            int width,
+            int height,
+            float scale
+    ) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        graphics.pose().pushPose();
+        graphics.pose().translate(x + width / 2.0F, y + height / 2.0F, 0.0F);
+        graphics.pose().scale(1.0F + scale, 1.0F + scale, 1.0F);
+        graphics.blit(texture, -width / 2, -height / 2, u, v, width, height, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+        graphics.pose().popPose();
     }
 
     private static void blit(

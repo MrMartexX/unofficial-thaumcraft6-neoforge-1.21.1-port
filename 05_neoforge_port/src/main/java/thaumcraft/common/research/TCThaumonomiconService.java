@@ -81,6 +81,7 @@ final class TCThaumonomiconService {
                 .stream()
                 .sorted()
                 .toList();
+        TCResearchStatus status = TCResearchManager.getResearchStatus(knowledge, entry.key());
         return new TCThaumonomiconResearchView(
                 entry.key(),
                 entry.name(),
@@ -91,12 +92,42 @@ final class TCThaumonomiconService {
                 entry.parents(),
                 entry.siblings(),
                 entry.meta(),
-                TCResearchManager.getResearchStatus(knowledge, entry.key()),
+                status,
                 TCResearchManager.canUnlockResearch(player, entry.key()),
                 flags,
                 knowledge.getResearchStage(entry.key()),
-                entry.stages().size()
+                entry.stages().size(),
+                recipeSearch(status, player, entry.key())
         );
+    }
+
+    private static List<TCThaumonomiconRecipeSearchView> recipeSearch(
+            TCResearchStatus status,
+            ServerPlayer player,
+            String researchKey
+    ) {
+        if (status == TCResearchStatus.UNKNOWN) {
+            return List.of();
+        }
+
+        ArrayList<TCThaumonomiconRecipeSearchView> results = new ArrayList<>();
+        for (TCResearchPageBookmark bookmark : TCResearchPageCatalogManager.bookmarksForCurrentStage(player, researchKey)) {
+            for (int pageIndex = 0; pageIndex < bookmark.pages().size(); pageIndex++) {
+                TCResearchPageView page = bookmark.pages().get(pageIndex);
+                if (page.availability() != TCResearchPageAvailability.READY) {
+                    continue;
+                }
+                int currentPageIndex = pageIndex;
+                TCResearchPageCatalogManager.recipeOutput(page)
+                        .filter(stack -> !stack.isEmpty())
+                        .ifPresent(stack -> results.add(new TCThaumonomiconRecipeSearchView(
+                                bookmark.id(),
+                                currentPageIndex,
+                                stack
+                        )));
+            }
+        }
+        return List.copyOf(results);
     }
 
     private static String location(ResourceLocation location) {

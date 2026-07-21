@@ -95,7 +95,7 @@ Latest validation:
   `325` total entries including group members, `0` field differences;
 - runtime structural validation: `0` missing catalog references, unresolved
   group targets, or cycles;
-- Thaumonomicon protocol audit: `41/41` checks passed. The first real item/open/browser/entry/search/drilldown flow, server-snapshot-backed vanilla crafting page renderer, exact arcane page renderer, crucible page renderer, infusion page renderer, blueprint construct page renderer, fake/display page renderer, legacy-style recipe tabs, side-panel knowledge/aspect state, selected-stage warp propagation, runtime PNG category background paths, server-built index revision, stale-action/stale-drilldown rejection without mutation, and server-side recipe output-stack drilldown resolution are active. Catalog live availability is `203 READY`, `0 DEFERRED`, `0 LEGACY_MISSING`; measured pixel-level polish remains row-17 work.
+- Thaumonomicon protocol audit: `43/43` checks passed. The first real item/open/browser/entry/search/drilldown flow, server-snapshot-backed vanilla crafting page renderer, exact arcane page renderer, crucible page renderer, infusion page renderer, blueprint construct page renderer, fake/display page renderer, legacy-style recipe tabs, side-panel knowledge/aspect state, selected-stage warp propagation, runtime PNG category background paths, open-time known-sibling completion, server-owned recipe-output search aliases, server-built index revision, stale-action/stale-drilldown rejection without mutation, and server-side recipe output-stack drilldown resolution are active. Catalog live availability is `203 READY`, `0 DEFERRED`, `0 LEGACY_MISSING`; measured pixel-level polish remains row-17 work.
 
 ## Remaining boundary
 
