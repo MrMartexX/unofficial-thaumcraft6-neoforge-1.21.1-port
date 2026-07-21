@@ -183,7 +183,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!activeRecipePages.isEmpty()) {
             if (button == 1) {
-                goBackRecipePage();
+                closeRecipePage(true);
                 playPage();
                 return true;
             }
@@ -203,17 +203,12 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (sideInsert != SideInsert.NONE && handleSideInsertClick(mouseX, mouseY)) {
             return true;
         }
-        if (inside(mouseX, mouseY, x + 102, y + NAVIGATION_Y_OFFSET - 2, 52, 14)) {
-            playPage();
-            minecraft.setScreen(new TCThaumonomiconBrowserScreen());
-            return true;
-        }
-        if (inside(mouseX, mouseY, x - 18, y + NAVIGATION_Y_OFFSET - 2, 18, 14) && spread > 0) {
+        if (inside(mouseX, mouseY, x - 17, y + 189, 14, 10) && spread > 0) {
             spread--;
             playPageTurn();
             return true;
         }
-        if (inside(mouseX, mouseY, x + 260, y + NAVIGATION_Y_OFFSET - 2, 18, 14) && spread < maxSpread()) {
+        if (inside(mouseX, mouseY, x + 261, y + 189, 14, 10) && spread < maxSpread()) {
             spread++;
             playPageTurn();
             return true;
@@ -242,14 +237,46 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE && sideInsert != SideInsert.NONE) {
+        boolean closeKey = keyCode == GLFW.GLFW_KEY_ESCAPE
+                || (minecraft != null && minecraft.options.keyInventory.matches(keyCode, scanCode));
+        if (closeKey && sideInsert != SideInsert.NONE) {
             sideInsert = SideInsert.NONE;
             playPage();
             return true;
         }
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE && !activeRecipePages.isEmpty()) {
+        if (closeKey && !activeRecipePages.isEmpty()) {
+            closeRecipePage(true);
+            playPage();
+            return true;
+        }
+        if (closeKey) {
+            minecraft.setScreen(new TCThaumonomiconBrowserScreen());
+            playPage();
+            return true;
+        }
+        if (keyCode == GLFW.GLFW_KEY_BACKSPACE && !activeRecipePages.isEmpty()) {
             goBackRecipePage();
             playPage();
+            return true;
+        }
+        if ((keyCode == GLFW.GLFW_KEY_LEFT
+                || keyCode == GLFW.GLFW_KEY_UP
+                || keyCode == GLFW.GLFW_KEY_PAGE_UP)
+                && activeRecipePages.isEmpty()
+                && sideInsert == SideInsert.NONE
+                && spread > 0) {
+            spread--;
+            playPageTurn();
+            return true;
+        }
+        if ((keyCode == GLFW.GLFW_KEY_RIGHT
+                || keyCode == GLFW.GLFW_KEY_DOWN
+                || keyCode == GLFW.GLFW_KEY_PAGE_DOWN)
+                && activeRecipePages.isEmpty()
+                && sideInsert == SideInsert.NONE
+                && spread < maxSpread()) {
+            spread++;
+            playPageTurn();
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
@@ -440,15 +467,15 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private void renderNavigation(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
+        if (!activeRecipePages.isEmpty()) {
+            return;
+        }
         if (spread > 0) {
             blit(graphics, BOOK, x - 16, y + NAVIGATION_Y_OFFSET, 0, 184, 12, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         }
         if (spread < maxSpread()) {
             blit(graphics, BOOK, x + 262, y + NAVIGATION_Y_OFFSET, 12, 184, 12, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         }
-
-        int backColor = inside(mouseX, mouseY, x + 102, y + NAVIGATION_Y_OFFSET - 2, 52, 14) ? 0xFF805A24 : 0xFF4B351B;
-        drawCenteredNoShadow(graphics, Component.translatable("recipe.return"), x + 128, y + NAVIGATION_Y_OFFSET + 1, backColor);
     }
 
     private void renderRequirements(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
@@ -1128,19 +1155,19 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private boolean handleRecipePageClick(double mouseX, double mouseY) {
-        int x = recipePageX();
-        int y = recipePageY();
-        if (inside(mouseX, mouseY, x + 96, y + 236, 64, 16)) {
+        int x = bookX();
+        int y = bookY();
+        if (inside(mouseX, mouseY, x + 118, y + 190, 20, 12)) {
             goBackRecipePage();
             playPage();
             return true;
         }
-        if (inside(mouseX, mouseY, x + 34, y + 226, 36, 24) && activeRecipeIndex > 0) {
+        if (inside(mouseX, mouseY, x + 38, y + 192, 14, 14) && activeRecipeIndex > 0) {
             activeRecipeIndex--;
             playPageTurn();
             return true;
         }
-        if (inside(mouseX, mouseY, x + 186, y + 226, 36, 24)
+        if (inside(mouseX, mouseY, x + 205, y + 192, 14, 14)
                 && activeRecipeIndex < activeRecipePages.size() - 1) {
             activeRecipeIndex++;
             playPageTurn();
@@ -1698,17 +1725,19 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private void renderRecipeNavigation(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
         if (activeRecipeIndex > 0) {
-            blit(graphics, BROWSER, x + 40, y + 232, 0, 184, 12, 8, 256, 256);
+            blit(graphics, BOOK, x + 40, y + 232, 0, 184, 12, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         }
         if (activeRecipeIndex < activeRecipePages.size() - 1) {
-            blit(graphics, BROWSER, x + 204, y + 232, 12, 184, 12, 8, 256, 256);
+            blit(graphics, BOOK, x + 204, y + 232, 12, 184, 12, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         }
-        if (activeRecipePages.size() > 1) {
-            String page = (activeRecipeIndex + 1) + "/" + activeRecipePages.size();
-            drawCenteredNoShadow(graphics, page, x + 128, y + 224, 0xFF6D4C24);
+        if (!recipeHistory.isEmpty()) {
+            int paneX = bookX();
+            int paneY = bookY();
+            blit(graphics, BOOK, paneX + 118, paneY + 190, 38, 202, 20, 12, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
+            if (inside(mouseX, mouseY, paneX + 118, paneY + 190, 20, 12)) {
+                graphics.drawString(font, Component.translatable("recipe.return"), mouseX, mouseY, 0xFFFFFFFF, true);
+            }
         }
-        int color = inside(mouseX, mouseY, x + 96, y + 236, 64, 16) ? 0xFF805A24 : 0xFF4B351B;
-        drawCenteredNoShadow(graphics, Component.translatable("recipe.return"), x + 128, y + 238, color);
     }
 
     private static boolean hasRenderableRecipe(TCResearchPageView page) {
