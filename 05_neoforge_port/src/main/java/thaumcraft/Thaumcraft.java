@@ -71,6 +71,7 @@ import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.research.TCKnowledgeCommands;
 import thaumcraft.common.research.TCKnowledgeNetwork;
 import thaumcraft.common.research.TCArcaneRecipeAuditExporter;
+import thaumcraft.common.research.TCResearchDiscoveryEvents;
 import thaumcraft.common.research.TCResearchManager;
 import thaumcraft.common.research.TCResearchDataAuditExporter;
 import thaumcraft.common.research.TCResearchPageCatalogManager;
@@ -202,6 +203,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCScanningManager::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCWarpCraftingEvents::onItemCrafted);
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onItemCrafted);
+        NeoForge.EVENT_BUS.addListener(TCResearchDiscoveryEvents::onItemPickup);
         NeoForge.EVENT_BUS.addListener(TCBathSaltsEvents::onItemExpire);
         TCAspectAssignments.bootstrap();
         TCResearchManager.bootstrap();

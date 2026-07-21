@@ -84,6 +84,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private static final int PAGE_TEXT_WIDTH = 140;
     private static final int PAGE_IMAGE_MAX_WIDTH = 140;
     private static final int TEXT_PAGE_HEIGHT = 182;
+    private static final int TEXT_PAGE_AFTER_BREAK_HEIGHT = 210;
+    private static final int REQUIREMENT_ROW_HEIGHT = 18;
+    private static final int REQUIREMENT_DIVIDER_SPACE = 15;
+    private static final int LEGACY_TOOLTIP_Y_OFFSET = 12;
     private static final int LINE_HEIGHT = 9;
     private static final int LEGACY_RESEARCH_TEXTURE_SIZE = 256;
     private static final int PAGE_SIDE_OFFSET = 152;
@@ -184,6 +188,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             renderBookmarkTooltip(graphics, hoveredBookmark, mouseX, mouseY);
             return;
         }
+        if (!hoveredRecipeStack.isEmpty()) {
+            renderRecipeStackTooltip(graphics, mouseX, mouseY);
+            return;
+        }
         renderHoveredUiTooltip(graphics, mouseX, mouseY);
     }
 
@@ -242,6 +250,9 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
         if (hoveredBookmark != null) {
             openBookmark(hoveredBookmark);
+            return true;
+        }
+        if (!hoveredRecipeStack.isEmpty() && requestDrilldownForHoveredStack()) {
             return true;
         }
         return super.mouseClicked(mouseX, mouseY, button);
@@ -306,7 +317,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             rebuilt.add(TextLine.empty());
             addLocalizedBody(rebuilt, addendum);
         }
-        textPages = paginate(rebuilt);
+        textPages = paginate(rebuilt, firstTextPageHeight());
     }
 
     private void addLocalizedBody(List<PageContent> target, String translationKey) {
@@ -378,22 +389,25 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         segment.setLength(0);
     }
 
-    private static List<List<PageContent>> paginate(List<PageContent> contents) {
+    private List<List<PageContent>> paginate(List<PageContent> contents, int firstPageHeight) {
         ArrayList<List<PageContent>> pages = new ArrayList<>();
         ArrayList<PageContent> page = new ArrayList<>();
         int used = 0;
+        int pageLimit = Math.max(LINE_HEIGHT, firstPageHeight);
         for (PageContent content : contents) {
             if (content instanceof PageBreak) {
                 pages.add(List.copyOf(page));
                 page = new ArrayList<>();
                 used = 0;
+                pageLimit = TEXT_PAGE_AFTER_BREAK_HEIGHT;
                 continue;
             }
             int height = content.height();
-            if (!page.isEmpty() && used + height > TEXT_PAGE_HEIGHT) {
+            if (!page.isEmpty() && used + height > pageLimit) {
                 pages.add(List.copyOf(page));
                 page = new ArrayList<>();
                 used = 0;
+                pageLimit = TEXT_PAGE_AFTER_BREAK_HEIGHT;
             }
             page.add(content);
             used += height;
@@ -402,6 +416,30 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             pages.add(List.copyOf(page));
         }
         return List.copyOf(pages);
+    }
+
+    private int firstTextPageHeight() {
+        int height = TEXT_PAGE_HEIGHT;
+        boolean hasRequirements = false;
+        if (!entry.complete()) {
+            if (!entry.requiredCraft().isEmpty()) {
+                height -= REQUIREMENT_ROW_HEIGHT;
+                hasRequirements = true;
+            }
+            if (!entry.requiredItem().isEmpty()) {
+                height -= REQUIREMENT_ROW_HEIGHT;
+                hasRequirements = true;
+            }
+            if (!entry.requiredKnowledge().isEmpty()) {
+                height -= REQUIREMENT_ROW_HEIGHT;
+                hasRequirements = true;
+            }
+            if (!entry.requiredResearch().isEmpty()) {
+                height -= REQUIREMENT_ROW_HEIGHT;
+                hasRequirements = true;
+            }
+        }
+        return height - (hasRequirements ? REQUIREMENT_DIVIDER_SPACE : 0);
     }
 
     private void renderBook(GuiGraphics graphics, int x, int y) {
@@ -604,7 +642,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         blit(graphics, BOOK, paneX - 12, rowY - 1, 200, labelV, 56, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         if (inside(mouseX, mouseY, paneX - 15, rowY, 56, 16)) {
-            hoveredUiTooltip = List.of(Component.translatable(tooltipKey));
+            hoveredUiTooltip = List.of(Component.translatable(tooltipKey).withStyle(ChatFormatting.AQUA));
         }
 
         int spacing = requirements.size() > 6 ? Math.max(8, 110 / Math.max(1, requirements.size())) : 18;
@@ -643,7 +681,14 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             blit(graphics, BOOK, x + 8, y, 159, 207, 10, 10, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
         }
         if (inside(mouseX, mouseY, x, y, 16, 16)) {
-            hoveredUiTooltip = List.of(requirementTooltip(kind, raw, satisfied, blocked));
+            if (kind == RequirementKind.ITEM || kind == RequirementKind.CRAFT) {
+                ItemStack stack = requirementStack(raw);
+                if (!stack.isEmpty()) {
+                    hoveredRecipeStack = stack;
+                    return;
+                }
+            }
+            hoveredUiTooltip = requirementTooltip(kind, raw, satisfied, blocked);
         }
     }
 
@@ -736,15 +781,55 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         return requirement.item() == null ? ItemStack.EMPTY : new ItemStack(requirement.item(), Math.max(1, requirement.count()));
     }
 
-    private Component requirementTooltip(RequirementKind kind, String raw, boolean satisfied, boolean blocked) {
+    private List<Component> requirementTooltip(RequirementKind kind, String raw, boolean satisfied, boolean blocked) {
+        if (kind == RequirementKind.RESEARCH) {
+            return List.of(researchRequirementTooltip(raw, blocked));
+        }
+        if (kind == RequirementKind.KNOWLEDGE) {
+            return List.of(knowledgeRequirementTooltip(raw, blocked));
+        }
         ChatFormatting status = blocked ? ChatFormatting.DARK_GRAY : satisfied ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_RED;
-        String prefix = switch (kind) {
-            case RESEARCH -> "research";
-            case ITEM -> "item";
-            case CRAFT -> "craft";
-            case KNOWLEDGE -> "knowledge";
-        };
-        return Component.literal(prefix + ": " + raw).withStyle(status);
+        return List.of(Component.literal(raw == null ? "" : raw).withStyle(status));
+    }
+
+    private Component researchRequirementTooltip(String raw, boolean blocked) {
+        String key = baseResearchKey(raw);
+        ChatFormatting color = blocked ? ChatFormatting.DARK_GRAY : ChatFormatting.AQUA;
+        if (key.startsWith("!")) {
+            Aspect aspect = Aspect.aspects.get(key.substring(1).toLowerCase(Locale.ROOT));
+            if (aspect != null) {
+                return Component.translatable("tc.aspect." + aspect.getTag()).withStyle(color);
+            }
+        }
+        TCThaumonomiconResearchView research = researchView(key);
+        if (research != null) {
+            return Component.translatable(research.name()).withStyle(color);
+        }
+        if (key.startsWith("m_")) {
+            return Component.translatable("tc.need.research").withStyle(color);
+        }
+        if (key.startsWith("c_")) {
+            return Component.translatable("tc.need.obtain").withStyle(color);
+        }
+        if (key.startsWith("f_")) {
+            return Component.translatable("tc.need.know").withStyle(color);
+        }
+        return Component.translatable("research." + key + ".title").withStyle(color);
+    }
+
+    private Component knowledgeRequirementTooltip(String raw, boolean blocked) {
+        KnowledgeRequirementResolution resolution = TCResearchRequirementResolver.resolveKnowledgeRequirement(raw);
+        ChatFormatting color = blocked ? ChatFormatting.DARK_GRAY : ChatFormatting.AQUA;
+        if (!resolution.resolved()) {
+            return Component.literal(raw == null ? "" : raw).withStyle(color);
+        }
+        KnowledgeRequirement requirement = resolution.requirement();
+        MutableComponent label = Component.translatable("tc.type." + requirement.type().id());
+        if (!requirement.category().isBlank()) {
+            label.append(": ");
+            label.append(Component.translatable("tc.research_category." + requirement.category()));
+        }
+        return label.withStyle(color);
     }
 
     private boolean requirementStatusContains(List<String> statuses, String prefix, String raw) {
@@ -871,6 +956,11 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int mouseX,
             int mouseY
     ) {
+        ItemStack stack = firstBookmarkStack(bookmark);
+        if (!stack.isEmpty()) {
+            graphics.renderTooltip(font, stack, mouseX, mouseY + LEGACY_TOOLTIP_Y_OFFSET);
+            return;
+        }
         ArrayList<Component> lines = new ArrayList<>();
         lines.add(Component.literal(bookmark.id().toString()).withStyle(ChatFormatting.GOLD));
         for (TCResearchPageView page : bookmark.pages()) {
@@ -884,7 +974,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
                         ? "gui.thaumcraft.thaumonomicon.bookmark_open"
                         : "gui.thaumcraft.thaumonomicon.bookmark_deferred")
                 .withStyle(renderable ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_GRAY));
-        graphics.renderComponentTooltip(font, lines, mouseX, mouseY);
+        graphics.renderComponentTooltip(font, lines, mouseX, mouseY + LEGACY_TOOLTIP_Y_OFFSET);
     }
 
     private void openBookmark(TCResearchPageBookmark bookmark) {
@@ -926,7 +1016,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             blit(graphics, BOOK, tabX + le, tabY, 76, 232, 24 - le, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             blit(graphics, BOOK, tabX + 20, tabY, 100, 232, 4, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             if (hovered) {
-                hoveredUiTooltip = List.of(Component.translatable("tc.aspect.name"));
+                hoveredUiTooltip = List.of(Component.translatable("tc.aspect.name").withStyle(ChatFormatting.AQUA));
             }
         }
         if (canShowKnowledgeTab()) {
@@ -938,7 +1028,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             blit(graphics, BOOK, tabX + le, tabY, 44, 232, 24 - le, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             blit(graphics, BOOK, tabX + 20, tabY, 100, 232, 4, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
             if (hovered) {
-                hoveredUiTooltip = List.of(Component.translatable("tc.knowledge.name"));
+                hoveredUiTooltip = List.of(Component.translatable("tc.knowledge.name").withStyle(ChatFormatting.AQUA));
             }
         }
     }
@@ -1099,7 +1189,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
         int row = 0;
         boolean drewSomething = false;
-        for (TCKnowledgeType type : List.of(TCKnowledgeType.THEORY, TCKnowledgeType.OBSERVATION)) {
+        for (TCKnowledgeType type : TCKnowledgeType.values()) {
             Map<String, Integer> raw = TCKnowledgeClientCache.rawKnowledgeByCategory(type);
             boolean drewRow = false;
             int column = 0;
@@ -1124,8 +1214,6 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
         if (inPage && drewSomething) {
             blit(graphics, BOOK, x + 4, y - row * 20 + 12, 24, 184, 96, 8, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
-        } else if (!inPage && !drewSomething) {
-            drawCenteredNoShadow(graphics, Component.translatable("gui.thaumcraft.thaumonomicon.knowledge_empty"), x + 68, y + 47, 0xFF777777);
         }
     }
 
@@ -1233,6 +1321,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             playPageTurn();
             return true;
         }
+        return requestDrilldownForHoveredStack();
+    }
+
+    private boolean requestDrilldownForHoveredStack() {
         if (!hoveredRecipeStack.isEmpty() && !pendingDrilldown) {
             pendingDrilldown = true;
             lastResult = Component.translatable("gui.thaumcraft.thaumonomicon.loading");
@@ -1772,15 +1864,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private void renderRecipeStackTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        ArrayList<Component> lines = new ArrayList<>(getTooltipFromItem(minecraft, hoveredRecipeStack));
-        if (pendingDrilldown) {
-            lines.add(Component.translatable("gui.thaumcraft.thaumonomicon.loading")
-                    .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
-        } else {
-            lines.add(Component.translatable("recipe.clickthrough")
-                    .withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC));
-        }
-        graphics.renderComponentTooltip(font, lines, mouseX, mouseY);
+        graphics.renderTooltip(font, hoveredRecipeStack, mouseX, mouseY + LEGACY_TOOLTIP_Y_OFFSET);
     }
 
     private void renderRecipeNavigation(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
@@ -1818,7 +1902,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private void renderHoveredUiTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
         if (!hoveredUiTooltip.isEmpty()) {
-            graphics.renderComponentTooltip(font, hoveredUiTooltip, mouseX, mouseY);
+            graphics.renderComponentTooltip(font, hoveredUiTooltip, mouseX, mouseY + LEGACY_TOOLTIP_Y_OFFSET);
         }
     }
 
@@ -2017,7 +2101,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
                 if (displayWidth <= 0
                         || displayHeight <= 0
                         || displayWidth > PAGE_IMAGE_MAX_WIDTH
-                        || displayHeight > TEXT_PAGE_HEIGHT) {
+                        || displayHeight > TEXT_PAGE_AFTER_BREAK_HEIGHT) {
                     return null;
                 }
                 return new PageImage(texture, sourceX, sourceY, sourceWidth, sourceHeight, scale, displayWidth, displayHeight);

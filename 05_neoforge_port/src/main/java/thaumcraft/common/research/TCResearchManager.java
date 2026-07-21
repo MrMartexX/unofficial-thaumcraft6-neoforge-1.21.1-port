@@ -204,6 +204,21 @@ public final class TCResearchManager {
         return changed[0];
     }
 
+    public static boolean addResearchMarker(ServerPlayer player, String key, boolean sync) {
+        if (player == null) {
+            return false;
+        }
+
+        String researchKey = canonicalResearchKey(key);
+        if (researchKey.isBlank()) {
+            return false;
+        }
+
+        final boolean[] changed = {false};
+        TCPlayerKnowledgeStore.mutate(player, knowledge -> changed[0] = knowledge.addResearch(researchKey), sync);
+        return changed[0];
+    }
+
     public static int getKnowledgePoints(ServerPlayer player, TCKnowledgeType type, String category) {
         if (player == null || type == null) {
             return 0;
@@ -473,6 +488,35 @@ public final class TCResearchManager {
         return progressed;
     }
 
+    public static int completeAllResearchForDebug(ServerPlayer player, boolean sync) {
+        if (player == null) {
+            return 0;
+        }
+
+        Set<String> before = new HashSet<>(TCPlayerKnowledgeStore.get(player).completedResearch());
+        HashSet<String> visiting = new HashSet<>();
+        for (TCResearchCategoryDefinition category : categories()) {
+            for (TCResearchEntryDefinition entry : activeData.entries().values()) {
+                if (entry.category().equals(category.key())) {
+                    giveRecursiveResearch(player, entry.key(), visiting);
+                }
+            }
+        }
+
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        int newlyCompleted = 0;
+        markAllLegacyPageFlagsForKnownDependencies(knowledge);
+        for (TCResearchEntryDefinition entry : activeData.entries().values()) {
+            if (!before.contains(entry.key()) && isResearchComplete(knowledge, entry.key())) {
+                knowledge.setResearchFlag(entry.key(), TCResearchFlag.RESEARCH);
+                knowledge.setResearchFlag(entry.key(), TCResearchFlag.POPUP);
+                newlyCompleted++;
+            }
+        }
+        TCPlayerKnowledgeStore.set(player, knowledge, sync);
+        return newlyCompleted;
+    }
+
     public static boolean completeKnownResearchSiblings(ServerPlayer player, boolean sync) {
         if (player == null) {
             return false;
@@ -618,7 +662,8 @@ public final class TCResearchManager {
         }
 
         for (String parent : entry.parents()) {
-            TCResearchEntryDefinition parentEntry = activeData.entries().get(canonicalResearchKey(parent));
+            String lookupKey = legacyVisibilityParentLookupKey(parent);
+            TCResearchEntryDefinition parentEntry = lookupKey.isBlank() ? null : activeData.entries().get(lookupKey);
             if (parentEntry != null && !isResearchVisible(player, parentEntry, visiting)) {
                 visiting.remove(entry.key());
                 return false;
@@ -627,6 +672,109 @@ public final class TCResearchManager {
 
         visiting.remove(entry.key());
         return true;
+    }
+
+    private static void giveRecursiveResearch(ServerPlayer player, String rawResearch, Set<String> visiting) {
+        String researchKey = legacyRecursiveGrantKey(rawResearch);
+        if (researchKey.isBlank() || !visiting.add(researchKey)) {
+            return;
+        }
+
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        if (!isResearchComplete(knowledge, researchKey)) {
+            TCResearchEntryDefinition entry = activeData.entries().get(researchKey);
+            if (entry != null) {
+                for (String parent : entry.parents()) {
+                    giveRecursiveResearch(player, parent, visiting);
+                }
+
+                for (TCResearchStageDefinition stage : entry.stages()) {
+                    for (String requiredResearch : stage.requiredResearch()) {
+                        if (completeResearch(player, requiredResearch, false)) {
+                            markLegacyPageFlagsForDependency(player, requiredResearch);
+                        }
+                    }
+                }
+            }
+
+            if (completeResearch(player, researchKey, false)) {
+                markLegacyPageFlagsForDependency(player, researchKey);
+            }
+
+            if (entry != null) {
+                for (String sibling : entry.siblings()) {
+                    giveRecursiveResearch(player, sibling, visiting);
+                }
+            }
+        }
+
+        visiting.remove(researchKey);
+    }
+
+    private static void markLegacyPageFlagsForDependency(ServerPlayer player, String rawDependency) {
+        String dependency = legacyRecursiveGrantKey(rawDependency);
+        if (dependency.isBlank()) {
+            return;
+        }
+
+        TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        boolean changed = false;
+        for (TCResearchEntryDefinition entry : activeData.entries().values()) {
+            for (TCResearchStageDefinition stage : entry.stages()) {
+                if (stageHasResearchDependency(stage, dependency)) {
+                    changed |= knowledge.setResearchFlag(entry.key(), TCResearchFlag.PAGE);
+                    break;
+                }
+            }
+        }
+        if (changed) {
+            TCPlayerKnowledgeStore.set(player, knowledge, false);
+        }
+    }
+
+    private static boolean stageHasResearchDependency(TCResearchStageDefinition stage, String dependency) {
+        for (String required : stage.requiredResearch()) {
+            if (legacyRecursiveGrantKey(required).equals(dependency)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void markAllLegacyPageFlagsForKnownDependencies(TCPlayerKnowledge knowledge) {
+        for (TCResearchEntryDefinition entry : activeData.entries().values()) {
+            if (!knowledge.isResearchKnown(entry.key())) {
+                continue;
+            }
+            for (TCResearchStageDefinition stage : entry.stages()) {
+                if (stageHasKnownResearchDependency(stage, knowledge)) {
+                    knowledge.setResearchFlag(entry.key(), TCResearchFlag.PAGE);
+                    break;
+                }
+            }
+        }
+    }
+
+    private static boolean stageHasKnownResearchDependency(TCResearchStageDefinition stage, TCPlayerKnowledge knowledge) {
+        for (String required : stage.requiredResearch()) {
+            String dependency = legacyRecursiveGrantKey(required);
+            if (!dependency.isBlank() && knowledge.isResearchKnown(dependency)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String legacyVisibilityParentLookupKey(String rawParent) {
+        if (rawParent == null) {
+            return "";
+        }
+
+        String key = rawParent.trim();
+        if (key.isBlank() || key.startsWith("~") || key.contains("@") || key.contains("&&") || key.contains("||")) {
+            return "";
+        }
+        return TCPlayerKnowledge.normalizeResearchKey(key);
     }
 
     private static boolean hasMeta(TCResearchEntryDefinition entry, String meta) {
@@ -1038,6 +1186,10 @@ public final class TCResearchManager {
 
     private static String canonicalResearchKey(String key) {
         return TCPlayerKnowledge.baseResearchKey(stripHiddenPrefix(key));
+    }
+
+    private static String legacyRecursiveGrantKey(String key) {
+        return canonicalResearchKey(key);
     }
 
     private static String stripHiddenPrefix(String key) {

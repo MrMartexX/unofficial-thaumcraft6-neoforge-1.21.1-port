@@ -122,8 +122,8 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
 
         graphics.fill(0, 0, width, height, 0xB0100B16);
         if (!searching) {
-            graphics.enableScissor(VIEWPORT_MARGIN, VIEWPORT_MARGIN, width - VIEWPORT_MARGIN, height - VIEWPORT_MARGIN);
             renderCategoryBackground(graphics);
+            graphics.enableScissor(VIEWPORT_MARGIN, VIEWPORT_MARGIN, width - VIEWPORT_MARGIN, height - VIEWPORT_MARGIN);
             renderLegacyResearchLinks(graphics, index);
             renderResearchNodes(graphics, index, mouseX, mouseY);
             graphics.disableScissor();
@@ -210,6 +210,11 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
                 return true;
             }
             return searchBox.keyPressed(keyCode, scanCode, modifiers);
+        }
+        if (keyCode == GLFW.GLFW_KEY_F && hasControlDown()) {
+            openSearch();
+            playPage();
+            return true;
         }
         if (keyCode == GLFW.GLFW_KEY_HOME || keyCode == GLFW.GLFW_KEY_H || keyCode == GLFW.GLFW_KEY_R) {
             resetPan();
@@ -379,14 +384,10 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         }
 
         if (entry.flags().contains(TCResearchFlag.RESEARCH)) {
-            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-            blit(graphics, BROWSER, -17, -17, 176, 16, 16, 16, 256, 256);
-            graphics.setColor(brightness, brightness, brightness, 1.0F);
+            drawLegacyNodeFlag(graphics, -9, -9, 176, 16);
         }
         if (entry.flags().contains(TCResearchFlag.PAGE)) {
-            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-            blit(graphics, BROWSER, -17, 1, 208, 16, 16, 16, 256, 256);
-            graphics.setColor(brightness, brightness, brightness, 1.0F);
+            drawLegacyNodeFlag(graphics, -9, 9, 208, 16);
         }
 
         renderResearchIcon(graphics, entry, -8, -8);
@@ -466,15 +467,33 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             drawFullTexture(graphics, icon == null ? UNKNOWN : icon, x, y, 16, 16);
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
+            boolean hasNewResearch = categoryHasFlag(index, category.key(), TCResearchFlag.RESEARCH);
+            boolean hasNewPage = categoryHasFlag(index, category.key(), TCResearchFlag.PAGE);
+            if (hasNewResearch) {
+                drawLegacyCornerFlag(graphics, x - 2, y - 2, 176, 16, 0.7F);
+            }
+            if (hasNewPage) {
+                drawLegacyCornerFlag(graphics, x - 2, y + 9, 208, 16, 0.7F);
+            }
+
             if (hovered) {
+                int textY = y + 4;
                 graphics.drawString(
                         font,
                         Component.translatable("tc.research_category." + category.key()),
                         x + 22,
-                        y + 4,
+                        textY,
                         0xFFFFFF,
                         false
                 );
+                textY += 9;
+                if (hasNewResearch) {
+                    graphics.drawString(font, Component.translatable("tc.research.newresearch"), x + 22, textY, 0xFFFFFF, false);
+                    textY += 9;
+                }
+                if (hasNewPage) {
+                    graphics.drawString(font, Component.translatable("tc.research.newpage"), x + 22, textY, 0xFFFFFF, false);
+                }
             }
         }
     }
@@ -543,6 +562,36 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             lines.add(LegacyTooltipLine.small(Component.translatable("gui.thaumcraft.thaumonomicon.loading").getString(), 0xFFAAAAAA));
         }
         renderLegacyCustomTooltip(graphics, lines, mouseX + 3, mouseY - 3);
+    }
+
+    private boolean categoryHasFlag(TCThaumonomiconIndexPayload index, String categoryKey, TCResearchFlag flag) {
+        for (TCThaumonomiconResearchView entry : index.entries()) {
+            if (entry.category().equals(categoryKey)
+                    && entry.status() != TCResearchStatus.UNKNOWN
+                    && entry.flags().contains(flag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void drawLegacyCornerFlag(GuiGraphics graphics, int x, int y, int u, int v, float alpha) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(x, y, 0.0F);
+        graphics.pose().scale(0.25F, 0.25F, 1.0F);
+        graphics.setColor(1.0F, 1.0F, 1.0F, alpha);
+        blit(graphics, BROWSER, 0, 0, u, v, 32, 32, 256, 256);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        graphics.pose().popPose();
+    }
+
+    private static void drawLegacyNodeFlag(GuiGraphics graphics, int x, int y, int u, int v) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(x, y, 0.0F);
+        graphics.pose().scale(0.5F, 0.5F, 1.0F);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        blit(graphics, BROWSER, 0, 0, u, v, 32, 32, 256, 256);
+        graphics.pose().popPose();
     }
 
     private void renderSearch(

@@ -382,23 +382,13 @@ public final class TCKnowledgeCommands {
 
     private static int completeAllResearch(CommandContext<CommandSourceStack> context) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
-        int progressed = 0;
-
-        for (TCResearchEntryDefinition entry : TCResearchManager.entries()) {
-            if (TCResearchManager.completeResearch(player, entry.key(), false)) {
-                progressed++;
-            }
-        }
-
-        if (progressed > 0) {
-            TCPlayerKnowledgeStore.sync(player);
-        }
+        int progressed = TCResearchManager.completeAllResearchForDebug(player, true);
 
         int progressedCount = progressed;
         context.getSource().sendSuccess(() -> Component.literal(
-                "Debug-only completed/progressed " + progressedCount + " loaded Thaumcraft research entr"
+                "Legacy-recursive debug grant completed/progressed " + progressedCount + " loaded Thaumcraft research entr"
                         + (progressedCount == 1 ? "y" : "ies") + " for " + player.getGameProfile().getName()
-                        + ". Rewards, recipes and GUI flags are still limited to the current progression slice."
+                        + ". Parent, stage-required, sibling and PAGE/RESEARCH flag behavior follows the current legacy data model."
         ), true);
         return progressed;
     }

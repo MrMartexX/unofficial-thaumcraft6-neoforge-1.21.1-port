@@ -235,7 +235,9 @@ final class TCThaumonomiconProtocolAudit {
         boolean flagsServerOwned = true;
         TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
         for (TCResearchEntryDefinition entry : TCResearchManager.entries()) {
-            if (entryKeys.contains(entry.key()) != TCResearchManager.isResearchVisible(player, entry.key())) {
+            boolean expected = TCResearchManager.isCategoryVisible(knowledge, entry.category())
+                    && TCResearchManager.isResearchVisible(player, entry.key());
+            if (entryKeys.contains(entry.key()) != expected) {
                 entriesServerFiltered = false;
                 break;
             }
@@ -252,6 +254,85 @@ final class TCThaumonomiconProtocolAudit {
         checks.add(check("entry_visibility_server_filtered", entriesServerFiltered, "visible=" + entryKeys.size()));
         checks.add(check("unlockable_state_server_owned", unlockableServerOwned, "visible=" + entryKeys.size()));
         checks.add(check("research_flags_server_owned", flagsServerOwned, "visible=" + entryKeys.size()));
+
+        CompoundTag beforeCreativeBookKnowledge = TCPlayerKnowledgeStore.get(player).save();
+        TCPlayerKnowledgeStore.set(player, new TCPlayerKnowledge(), false);
+        TCThaumonomiconIndexPayload creativeBookIndex = TCThaumonomiconService.buildIndex(player);
+        Optional<TCThaumonomiconResearchView> creativeFirstSteps = creativeBookIndex.entries().stream()
+                .filter(entry -> entry.key().equals("FIRSTSTEPS"))
+                .findFirst();
+        boolean creativeBookStaysLocked = creativeFirstSteps.isPresent()
+                && creativeFirstSteps.get().status() == TCResearchStatus.UNKNOWN
+                && !creativeFirstSteps.get().unlockable()
+                && creativeFirstSteps.get().currentStage() == 0
+                && creativeBookIndex.entries().stream().anyMatch(entry -> entry.key().equals("UNLOCKARTIFICE"))
+                && creativeBookIndex.entries().stream().anyMatch(entry -> entry.key().equals("UNLOCKGOLEMANCY"))
+                && !TCPlayerKnowledgeStore.get(player).isResearchKnown("!gotthaumonomicon");
+        checks.add(check(
+                "legacy_creative_book_without_pickup_marker_stays_locked",
+                creativeBookStaysLocked,
+                "FIRSTSTEPS.visible=" + creativeFirstSteps.isPresent()
+                        + ", unlockable=" + creativeFirstSteps.map(TCThaumonomiconResearchView::unlockable).orElse(false)
+                        + ", stage=" + creativeFirstSteps.map(TCThaumonomiconResearchView::currentStage).orElse(-1)
+                        + ", UNLOCKARTIFICE="
+                        + creativeBookIndex.entries().stream().anyMatch(entry -> entry.key().equals("UNLOCKARTIFICE"))
+                        + ", UNLOCKGOLEMANCY="
+                        + creativeBookIndex.entries().stream().anyMatch(entry -> entry.key().equals("UNLOCKGOLEMANCY"))
+        ));
+        TCPlayerKnowledgeStore.set(player, TCPlayerKnowledge.load(beforeCreativeBookKnowledge), false);
+
+        CompoundTag beforeStartKnowledge = TCPlayerKnowledgeStore.get(player).save();
+        TCPlayerKnowledge startKnowledge = new TCPlayerKnowledge();
+        startKnowledge.addResearch("!gotthaumonomicon");
+        TCPlayerKnowledgeStore.set(player, startKnowledge, false);
+        TCThaumonomiconIndexPayload startIndex = TCThaumonomiconService.buildIndex(player);
+        Set<String> startEntryKeys = new HashSet<>();
+        for (TCThaumonomiconResearchView entry : startIndex.entries()) {
+            startEntryKeys.add(entry.key());
+        }
+        boolean startShowsLegacyDiscoveringChain = startEntryKeys.contains("FIRSTSTEPS")
+                && startEntryKeys.contains("UNLOCKARTIFICE")
+                && startEntryKeys.contains("UNLOCKGOLEMANCY");
+        checks.add(check(
+                "legacy_start_discovering_artifice_golemancy_visible",
+                startShowsLegacyDiscoveringChain,
+                "FIRSTSTEPS=" + startEntryKeys.contains("FIRSTSTEPS")
+                        + ", UNLOCKARTIFICE=" + startEntryKeys.contains("UNLOCKARTIFICE")
+                        + ", UNLOCKGOLEMANCY=" + startEntryKeys.contains("UNLOCKGOLEMANCY")
+        ));
+        TCPlayerKnowledgeStore.set(player, TCPlayerKnowledge.load(beforeStartKnowledge), false);
+
+        CompoundTag beforeAllKnowledge = TCPlayerKnowledgeStore.get(player).save();
+        int debugAllProgressed = TCResearchManager.completeAllResearchForDebug(player, false);
+        TCPlayerKnowledge allKnowledge = TCPlayerKnowledgeStore.get(player);
+        TCThaumonomiconIndexPayload allIndex = TCThaumonomiconService.buildIndex(player);
+        boolean debugAllShowsEveryCategory = allIndex.categories().size() == TCResearchManager.categories().size();
+        boolean debugAllShowsEveryEntry = allIndex.entries().size() == TCResearchManager.entries().size();
+        boolean debugAllCompletesEveryEntry = true;
+        boolean debugAllMarksNewResearch = true;
+        for (TCResearchEntryDefinition entry : TCResearchManager.entries()) {
+            debugAllCompletesEveryEntry &= TCResearchManager.isResearchComplete(allKnowledge, entry.key());
+            debugAllMarksNewResearch &= allKnowledge.hasResearchFlag(entry.key(), TCResearchFlag.RESEARCH);
+        }
+        checks.add(check(
+                "legacy_recursive_research_all_opens_all_categories",
+                debugAllShowsEveryCategory,
+                "visible=" + allIndex.categories().size() + "/" + TCResearchManager.categories().size()
+        ));
+        checks.add(check(
+                "legacy_recursive_research_all_opens_all_entries",
+                debugAllShowsEveryEntry && debugAllCompletesEveryEntry,
+                "visible=" + allIndex.entries().size() + "/" + TCResearchManager.entries().size()
+                        + ", completed=" + debugAllCompletesEveryEntry
+                        + ", progressed=" + debugAllProgressed
+        ));
+        checks.add(check(
+                "legacy_recursive_research_all_marks_new_research_flags",
+                debugAllMarksNewResearch,
+                "entries=" + TCResearchManager.entries().size()
+        ));
+        TCPlayerKnowledgeStore.set(player, TCPlayerKnowledge.load(beforeAllKnowledge), false);
+        knowledge = TCPlayerKnowledgeStore.get(player);
 
         CompoundTag beforeSiblingKnowledge = TCPlayerKnowledgeStore.get(player).save();
         TCPlayerKnowledge siblingKnowledge = new TCPlayerKnowledge();
