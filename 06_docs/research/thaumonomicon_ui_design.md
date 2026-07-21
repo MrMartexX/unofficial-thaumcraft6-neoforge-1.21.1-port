@@ -41,8 +41,8 @@ Every index also carries a server-built revision over the current research data,
 - Thaumonomicon is a stack-size-one uncommon item and appears at the start of the legacy item sequence in the creative tab.
 - Right-click sends an authoritative visible research index, syncs player knowledge, plays the page sound, and opens the browser on the client.
 - Browser categories preserve the server/legacy category order.
-- Browser graph uses legacy category backgrounds, overlay, research frame sprites, icon cycling, flags, parent links, pan, and zoom. The legacy `.jpg` category backgrounds remain imported as source/reference assets, while the 1.21 runtime view sends `.png` background paths to avoid missing-texture rendering in the modern client.
-- Browser search filters only the server-sent visible index, so it cannot reveal hidden research. Search-result clicks reuse the same server action/revision payload path as graph clicks.
+- Browser graph uses legacy category backgrounds, overlay, research frame sprites, icon cycling, flags, parent links, pan, and zoom. The legacy `.jpg` category backgrounds remain imported as source/reference assets, while the 1.21 runtime view sends `.png` background paths to avoid missing-texture rendering in the modern client. The browser background render path now uses a dedicated legacy-style tiled UV helper for the 256-unit repeating research-map coordinates instead of a normal single GUI blit.
+- Browser search follows the legacy activation shape: the search icon is at the lower-left edge, the text field appears at `(20,20)`, results use 10px rows and legacy colors, and search mode suppresses the category map/background until a category or research hit is selected. Search-result clicks reuse the same server action/revision payload path as graph clicks.
 - Unknown unlockable entries send `START_RESEARCH`; known entries send `ACKNOWLEDGE_ENTRY`.
 - The entry screen opens only after the server accepts the action and returns an authoritative entry view.
 - Entry stage text, visible addenda, requirement results, stage state, bookmarks, book asset, page navigation, and checked stage advance are active.
@@ -57,6 +57,7 @@ Every index also carries a server-built revision over the current research data,
 ## Intentionally deferred
 
 - Exact arrow-shape pixel measurement, category completion percentages, popup animation, and final browser pixel-level tuning.
+- Exact legacy recipe-output search parity. Legacy searches recipe outputs from the loaded known-research recipe catalog; the current client index does not yet carry every searchable recipe-output display name, so this must be solved as a server snapshot/index data extension rather than guessed client-side.
 - Cheat Thaumonomicon variant.
 
 Deferred recipe pages are shown only as catalog bookmarks with their authoritative kind/availability. Only `READY` pages carrying a matching server snapshot are interactive; the UI does not invent recipe contents.
@@ -65,11 +66,11 @@ Deferred recipe pages are shown only as catalog bookmarks with their authoritati
 
 - `TCThaumonomiconProtocolAudit` validates visibility, server-owned state, revision freshness, stale-action and stale-drilldown rejection without mutation, exact start/advance/acknowledge semantics, final-stage progression, cache invalidation, explicit-open-versus-refresh separation, selected-stage warp propagation, side-panel knowledge cache exposure, server-side drilldown output matching, and the `READY` crafting/arcane/crucible/infusion/blueprint/fake-display snapshot boundary. The report deliberately records stable revision match labels instead of raw hash values.
 - Latest protocol result: `41/41` checks passed; live vanilla crafting, arcane, crucible, infusion, blueprint and fake/display catalog entries produce valid server snapshots, runtime category backgrounds use PNG texture paths, and recipe drilldown/history validates server-side output-stack resolution, client-cache acceptance and stale-revision rejection.
-- `gradlew build` passes after the browser search/filter and recipe drilldown/history slices.
+- `gradlew compileJava` passes after the legacy-shaped browser search/background reset slice. A full `gradlew build` should remain the required check before merging a larger Thaumonomicon UI parity batch.
 - Dedicated-server reload passes with `687` exact aspect assignments and the Thaumonomicon protocol audit.
 
 ## Next boundary
 
 1. Keep `DEFERRED` and `LEGACY_MISSING` pages non-interactive until their crafting subsystem or mapping is implemented.
 2. Keep recipe drilldown limited to server-returned snapshots; do not let the client resolve hidden or deferred recipes independently.
-3. Run manual `runClient` screenshot comparison before claiming pixel-perfect browser/entry parity; the server-authoritative UI behavior layer is complete for the currently implemented page kinds.
+3. Run manual `runClient` screenshot comparison before claiming pixel-perfect browser/entry parity; the server-authoritative protocol is implemented for the currently implemented page kinds, but final UI parity is not complete until measured screenshots and recipe-output search parity are closed.

@@ -2,6 +2,7 @@ package thaumcraft.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -36,14 +37,19 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
     private static final int VIEWPORT_MARGIN = 16;
     private static final int GRID_SIZE = 24;
     private static final int LEGACY_GUI_UV_SIZE = 256;
-    private static final int SEARCH_WIDTH = 154;
-    private static final int SEARCH_HEIGHT = 16;
-    private static final int SEARCH_RESULT_ROWS = 8;
+    private static final int SEARCH_FIELD_X = 20;
+    private static final int SEARCH_FIELD_Y = 20;
+    private static final int SEARCH_WIDTH = 89;
+    private static final int SEARCH_RESULT_X = 32;
+    private static final int SEARCH_RESULT_Y = 32;
+    private static final int SEARCH_RESULT_ROW_HEIGHT = 10;
+    private static final int SEARCH_BUTTON_X = 1;
+    private static final int SEARCH_BUTTON_SIZE = 16;
     private static final double MIN_ZOOM = 1.0D;
     private static final double MAX_ZOOM = 2.0D;
 
     private static String selectedCategory = "";
-    private static String lastSearch = "";
+    private static boolean searching;
     private static final Map<String, Double> LAST_PAN_X = new HashMap<>();
     private static final Map<String, Double> LAST_PAN_Y = new HashMap<>();
 
@@ -54,6 +60,7 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
     private TCThaumonomiconResearchView hoveredResearch;
     private TCThaumonomiconCategoryView hoveredCategory;
     private TCThaumonomiconResearchView hoveredSearchResult;
+    private String hoveredSearchCategory = "";
     private EditBox searchBox;
 
     public TCThaumonomiconBrowserScreen() {
@@ -67,17 +74,16 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         panY = LAST_PAN_Y.getOrDefault(selectedCategory, initialPanY());
         clampPan();
         rememberPan();
-        searchBox = new EditBox(
-                font,
-                searchBoxX(),
-                6,
-                SEARCH_WIDTH,
-                SEARCH_HEIGHT,
-                Component.translatable("gui.thaumcraft.thaumonomicon.search")
-        );
-        searchBox.setMaxLength(64);
-        searchBox.setValue(lastSearch);
-        searchBox.setResponder(value -> lastSearch = value == null ? "" : value);
+        searchBox = new EditBox(font, SEARCH_FIELD_X, SEARCH_FIELD_Y, SEARCH_WIDTH, font.lineHeight, Component.translatable("tc.search"));
+        searchBox.setMaxLength(15);
+        searchBox.setValue("");
+        searchBox.setTextColor(0xFFFFFF);
+        searchBox.visible = searching;
+        searchBox.active = searching;
+        searchBox.setFocused(searching);
+        if (searching) {
+            setFocused(searchBox);
+        }
         addWidget(searchBox);
     }
 
@@ -103,13 +109,19 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         hoveredResearch = null;
         hoveredCategory = null;
         hoveredSearchResult = null;
+        hoveredSearchCategory = "";
 
         graphics.fill(0, 0, width, height, 0xFF08070B);
-        renderCategoryBackground(graphics);
-        renderLegacyResearchLinks(graphics, index);
-        renderResearchNodes(graphics, index, mouseX, mouseY);
+        if (!searching) {
+            renderCategoryBackground(graphics);
+            renderLegacyResearchLinks(graphics, index);
+            renderResearchNodes(graphics, index, mouseX, mouseY);
+        }
         renderFrame(graphics);
-        renderLegacyCategories(graphics, index, mouseX, mouseY);
+        if (!searching) {
+            renderLegacyCategories(graphics, index, mouseX, mouseY);
+        }
+        renderSearchButton(graphics, mouseX, mouseY);
         renderSearch(graphics, index, mouseX, mouseY, partialTick);
         renderLegacyTooltip(graphics, mouseX, mouseY);
     }
@@ -117,6 +129,28 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button != 0) {
+            return super.mouseClicked(mouseX, mouseY, button);
+        }
+        if (insideSearchButton(mouseX, mouseY)) {
+            openSearch();
+            playPage();
+            return true;
+        }
+        if (searching) {
+            if (searchBox != null && searchBox.mouseClicked(mouseX, mouseY, button)) {
+                setFocused(searchBox);
+                return true;
+            }
+            if (!hoveredSearchCategory.isBlank()) {
+                closeSearch();
+                selectCategory(hoveredSearchCategory);
+                playPage();
+                return true;
+            }
+            if (hoveredSearchResult != null && activateResearch(hoveredSearchResult)) {
+                closeSearch();
+                return true;
+            }
             return super.mouseClicked(mouseX, mouseY, button);
         }
         if (searchBox != null && searchBox.mouseClicked(mouseX, mouseY, button)) {
@@ -165,21 +199,12 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (searchBox != null && searchBox.isFocused()) {
+        if (searching && searchBox != null && searchBox.isFocused()) {
             if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
-                if (!searchBox.getValue().isBlank()) {
-                    searchBox.setValue("");
-                    return true;
-                }
-                searchBox.setFocused(false);
+                closeSearch();
                 return true;
             }
             return searchBox.keyPressed(keyCode, scanCode, modifiers);
-        }
-        if (Screen.hasControlDown() && keyCode == GLFW.GLFW_KEY_F && searchBox != null) {
-            searchBox.setFocused(true);
-            setFocused(searchBox);
-            return true;
         }
         if (keyCode == GLFW.GLFW_KEY_HOME || keyCode == GLFW.GLFW_KEY_H || keyCode == GLFW.GLFW_KEY_R) {
             resetPan();
@@ -190,12 +215,7 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
 
     @Override
     public boolean charTyped(char codePoint, int modifiers) {
-        if (searchBox != null && searchBox.isFocused()) {
-            return searchBox.charTyped(codePoint, modifiers);
-        }
-        if (searchBox != null && isSearchCharacter(codePoint)) {
-            searchBox.setFocused(true);
-            setFocused(searchBox);
+        if (searching && searchBox != null && searchBox.isFocused()) {
             return searchBox.charTyped(codePoint, modifiers);
         }
         return super.charTyped(codePoint, modifiers);
@@ -225,12 +245,12 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         graphics.fill(drawX, drawY, drawX + drawW, drawY + drawH, 0xFF191521);
 
         if (background != null) {
-            legacyResearchBlit(graphics, background, drawX, drawY,
+            legacyResearchBackgroundBlit(graphics, background, drawX, drawY,
                     (float) (locX / 2.0D), (float) (locY / 2.0D), drawW, drawH, 1.0F);
         }
 
         if (overlay != null) {
-            legacyResearchBlit(graphics, overlay, drawX, drawY,
+            legacyResearchBackgroundBlit(graphics, overlay, drawX, drawY,
                     (float) (locX / 1.5D), (float) (locY / 1.5D), drawW, drawH, 1.0F);
         }
     }
@@ -504,58 +524,62 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         if (searchBox == null) {
             return;
         }
-        searchBox.setX(searchBoxX());
-        searchBox.render(graphics, mouseX, mouseY, partialTick);
-        if (searchBox.getValue().isBlank() && !searchBox.isFocused()) {
-            graphics.drawString(
-                    font,
-                    Component.translatable("gui.thaumcraft.thaumonomicon.search"),
-                    searchBox.getX() + 4,
-                    searchBox.getY() + 4,
-                    0x88777777,
-                    false
-            );
+        searchBox.visible = searching;
+        searchBox.active = searching;
+        if (!searching) {
+            return;
         }
+        searchBox.render(graphics, mouseX, mouseY, partialTick);
 
         String query = normalizedSearchQuery();
-        if (query.isBlank()) {
-            return;
-        }
-
-        List<TCThaumonomiconResearchView> results = searchResults(index, query);
-        int x = searchBox.getX();
-        int y = searchBox.getY() + SEARCH_HEIGHT + 3;
-        int rowHeight = 14;
-        int visibleRows = Math.min(SEARCH_RESULT_ROWS, Math.max(1, results.size()));
-        graphics.fill(x - 2, y - 2, x + SEARCH_WIDTH + 2, y + visibleRows * rowHeight + 2, 0xE0100B16);
+        List<SearchHit> results = searchResults(index, query);
         if (results.isEmpty()) {
-            graphics.drawString(
-                    font,
-                    Component.translatable("gui.thaumcraft.thaumonomicon.search_none"),
-                    x + 4,
-                    y + 3,
-                    0xFF9C8F7B,
-                    false
-            );
             return;
         }
 
-        for (int row = 0; row < Math.min(SEARCH_RESULT_ROWS, results.size()); row++) {
-            TCThaumonomiconResearchView result = results.get(row);
-            int rowY = y + row * rowHeight;
-            boolean hovered = mouseX >= x && mouseX < x + SEARCH_WIDTH && mouseY >= rowY && mouseY < rowY + rowHeight;
+        int legacyScreenX = Math.max(1, width - 32);
+        int legacyScreenY = Math.max(1, height - 32);
+        int row = 0;
+        for (SearchHit result : results) {
+            int rowY = SEARCH_RESULT_Y + row * SEARCH_RESULT_ROW_HEIGHT;
+            boolean hovered = mouseX > 22
+                    && mouseX < 18 + legacyScreenX
+                    && mouseY >= rowY
+                    && mouseY < rowY + 8;
             if (hovered) {
-                hoveredSearchResult = result;
-                graphics.fill(x, rowY, x + SEARCH_WIDTH, rowY + rowHeight, 0x803B2D48);
+                if (result.category()) {
+                    hoveredSearchCategory = result.categoryKey();
+                } else {
+                    hoveredSearchResult = result.research();
+                }
             }
-            int color = result.status() == TCResearchStatus.COMPLETE
-                    ? 0xFFD8C58A
-                    : result.unlockable() ? 0xFF9FD5A2 : 0xFF8F8678;
-            String title = Component.translatable(result.name()).getString();
-            if (font.width(title) > SEARCH_WIDTH - 8) {
-                title = font.plainSubstrByWidth(title, SEARCH_WIDTH - 20) + "...";
+            int color = result.category()
+                    ? 14527146
+                    : result.recipe() ? 11184861 : 14540253;
+            if (hovered) {
+                color = result.recipe()
+                        ? 13421823
+                        : result.category() ? 16764108 : 16777215;
             }
-            graphics.drawString(font, title, x + 4, rowY + 3, color, false);
+            if (result.recipe()) {
+                graphics.pose().pushPose();
+                graphics.pose().scale(0.5F, 0.5F, 1.0F);
+                blit(graphics, BROWSER, 44, rowY * 2, 224, 48, 16, 16, 256, 256);
+                graphics.pose().popPose();
+            }
+            graphics.drawString(font, result.label(), SEARCH_RESULT_X, rowY, color, false);
+            row++;
+            if (SEARCH_RESULT_Y + (row + 1) * SEARCH_RESULT_ROW_HEIGHT > legacyScreenY) {
+                graphics.drawString(
+                        font,
+                        Component.translatable("tc.search.more"),
+                        22,
+                        SEARCH_RESULT_Y + 2 + row * SEARCH_RESULT_ROW_HEIGHT,
+                        11184810,
+                        false
+                );
+                break;
+            }
         }
     }
 
@@ -565,41 +589,82 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
                 .toList();
     }
 
-    private List<TCThaumonomiconResearchView> searchResults(
+    private List<SearchHit> searchResults(
             TCThaumonomiconIndexPayload index,
             String query
     ) {
-        return index.entries().stream()
-                .filter(entry -> matchesSearch(entry, query))
-                .limit(SEARCH_RESULT_ROWS)
-                .toList();
-    }
-
-    private boolean matchesSearch(TCThaumonomiconResearchView entry, String query) {
-        if (entry.key().toLowerCase(Locale.ROOT).contains(query)) {
-            return true;
+        ArrayList<SearchHit> results = new ArrayList<>();
+        for (TCThaumonomiconCategoryView category : index.categories()) {
+            if (query.isBlank() || category.key().toLowerCase(Locale.ROOT).contains(query)) {
+                results.add(SearchHit.category(
+                        Component.translatable("tc.research_category." + category.key()).getString(),
+                        category.key()
+                ));
+            }
         }
-        if (entry.name().toLowerCase(Locale.ROOT).contains(query)) {
-            return true;
+        for (TCThaumonomiconResearchView entry : index.entries()) {
+            if (entry.status() == TCResearchStatus.UNKNOWN) {
+                continue;
+            }
+            String translatedName = Component.translatable(entry.name()).getString();
+            if (query.isBlank()
+                    || translatedName.toLowerCase(Locale.ROOT).contains(query)
+                    || entry.key().toLowerCase(Locale.ROOT).contains(query)) {
+                results.add(SearchHit.research(translatedName, entry, false));
+            }
         }
-        if (entry.category().toLowerCase(Locale.ROOT).contains(query)) {
-            return true;
-        }
-        if (Component.translatable(entry.name()).getString().toLowerCase(Locale.ROOT).contains(query)) {
-            return true;
-        }
-        return Component.translatable("tc.research_category." + entry.category())
-                .getString()
-                .toLowerCase(Locale.ROOT)
-                .contains(query);
-    }
-
-    private static boolean isSearchCharacter(char codePoint) {
-        return !Character.isISOControl(codePoint) && !Character.isWhitespace(codePoint);
+        results.sort(Comparator.comparing(SearchHit::label, String.CASE_INSENSITIVE_ORDER));
+        return results;
     }
 
     private String normalizedSearchQuery() {
         return searchBox == null ? "" : searchBox.getValue().trim().toLowerCase(Locale.ROOT);
+    }
+
+    private void renderSearchButton(GuiGraphics graphics, int mouseX, int mouseY) {
+        int y = searchButtonY();
+        boolean hovered = insideSearchButton(mouseX, mouseY);
+        graphics.setColor(hovered ? 1.0F : 0.8F, hovered ? 1.0F : 0.8F, hovered ? 1.0F : 0.8F, 1.0F);
+        blit(graphics, BROWSER, SEARCH_BUTTON_X, y, 160, 16, SEARCH_BUTTON_SIZE, SEARCH_BUTTON_SIZE, 256, 256);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        if (hovered) {
+            graphics.drawString(font, Component.translatable("tc.search"), SEARCH_BUTTON_X + 19, y + 4, 0xFFFFFF, false);
+        }
+    }
+
+    private boolean insideSearchButton(double mouseX, double mouseY) {
+        int y = searchButtonY();
+        return mouseX >= SEARCH_BUTTON_X
+                && mouseY >= y
+                && mouseX < SEARCH_BUTTON_X + SEARCH_BUTTON_SIZE
+                && mouseY < y + SEARCH_BUTTON_SIZE;
+    }
+
+    private int searchButtonY() {
+        return height - 17;
+    }
+
+    private void openSearch() {
+        searching = true;
+        if (searchBox != null) {
+            searchBox.visible = true;
+            searchBox.active = true;
+            searchBox.setValue("");
+            searchBox.setFocused(true);
+            setFocused(searchBox);
+        }
+    }
+
+    private void closeSearch() {
+        searching = false;
+        hoveredSearchCategory = "";
+        hoveredSearchResult = null;
+        if (searchBox != null) {
+            searchBox.setValue("");
+            searchBox.setFocused(false);
+            searchBox.visible = false;
+            searchBox.active = false;
+        }
     }
 
     private boolean activateResearch(TCThaumonomiconResearchView research) {
@@ -632,10 +697,6 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             return true;
         }
         return false;
-    }
-
-    private int searchBoxX() {
-        return Math.max(VIEWPORT_MARGIN + 28, width - SEARCH_WIDTH - 24);
     }
 
     private TCThaumonomiconCategoryView selectedCategoryView() {
@@ -921,7 +982,7 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
-    private static void legacyResearchBlit(
+    private static void legacyResearchBackgroundBlit(
             GuiGraphics graphics,
             ResourceLocation texture,
             int x,
@@ -935,8 +996,35 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.setColor(1.0F, 1.0F, 1.0F, alpha);
-        graphics.blit(texture, x, y, u, v, width, height, LEGACY_GUI_UV_SIZE, LEGACY_GUI_UV_SIZE);
+        int drawnY = 0;
+        while (drawnY < height) {
+            float tileV = positiveModulo(v + drawnY, LEGACY_GUI_UV_SIZE);
+            int segmentHeight = Math.min(height - drawnY, Math.max(1, (int) Math.floor(LEGACY_GUI_UV_SIZE - tileV)));
+            int drawnX = 0;
+            while (drawnX < width) {
+                float tileU = positiveModulo(u + drawnX, LEGACY_GUI_UV_SIZE);
+                int segmentWidth = Math.min(width - drawnX, Math.max(1, (int) Math.floor(LEGACY_GUI_UV_SIZE - tileU)));
+                graphics.blit(
+                        texture,
+                        x + drawnX,
+                        y + drawnY,
+                        tileU,
+                        tileV,
+                        segmentWidth,
+                        segmentHeight,
+                        LEGACY_GUI_UV_SIZE,
+                        LEGACY_GUI_UV_SIZE
+                );
+                drawnX += segmentWidth;
+            }
+            drawnY += segmentHeight;
+        }
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    private static float positiveModulo(float value, int modulo) {
+        float result = value % modulo;
+        return result < 0.0F ? result + modulo : result;
     }
 
     private static void tintedBrowserBlit(
@@ -987,5 +1075,21 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(texture, x, y, u, v, width, height, textureWidth, textureHeight);
+    }
+
+    private record SearchHit(
+            String label,
+            String categoryKey,
+            TCThaumonomiconResearchView research,
+            boolean category,
+            boolean recipe
+    ) {
+        static SearchHit category(String label, String categoryKey) {
+            return new SearchHit(label, categoryKey, null, true, false);
+        }
+
+        static SearchHit research(String label, TCThaumonomiconResearchView research, boolean recipe) {
+            return new SearchHit(label, "", research, false, recipe);
+        }
     }
 }
