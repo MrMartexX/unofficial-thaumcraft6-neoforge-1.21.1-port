@@ -446,7 +446,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
 
         int backColor = inside(mouseX, mouseY, x + 102, y + NAVIGATION_Y_OFFSET - 2, 52, 14) ? 0xFF805A24 : 0xFF4B351B;
-        graphics.drawCenteredString(font, Component.translatable("recipe.return"), x + 128, y + NAVIGATION_Y_OFFSET + 1, backColor);
+        drawCenteredNoShadow(graphics, Component.translatable("recipe.return"), x + 128, y + NAVIGATION_Y_OFFSET + 1, backColor);
     }
 
     private void renderRequirements(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
@@ -961,7 +961,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private void renderAspectInsert(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
         List<Aspect> aspects = knownAspects();
         if (aspects.isEmpty()) {
-            graphics.drawCenteredString(font, Component.translatable("tc.aspect.name"), x + 64, y + 86, 0xFF505050);
+            drawCenteredNoShadow(graphics, Component.translatable("tc.aspect.name"), x + 64, y + 86, 0xFF505050);
             return;
         }
         aspectPage = Math.max(0, Math.min(aspectPage, maxAspectPage()));
@@ -1014,7 +1014,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private void renderKnowledgeInsert(GuiGraphics graphics, int paperX, int paperY, int mouseX, int mouseY) {
-        graphics.drawCenteredString(font, Component.translatable("tc.knowledge.name"), paperX + 128, paperY + 24, 0xFF4B351B);
+        drawCenteredNoShadow(graphics, Component.translatable("tc.knowledge.name"), paperX + 128, paperY + 24, 0xFF4B351B);
         Map<String, TCThaumonomiconCategoryView> categories = new LinkedHashMap<>();
         for (TCThaumonomiconCategoryView category : TCThaumonomiconClientCache.index().categories()) {
             categories.put(category.key(), category);
@@ -1036,7 +1036,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             row++;
         }
         if (row == 0) {
-            graphics.drawCenteredString(font, Component.translatable("gui.thaumcraft.thaumonomicon.knowledge_empty"), paperX + 128, paperY + 104, 0xFF777777);
+            drawCenteredNoShadow(graphics, Component.translatable("gui.thaumcraft.thaumonomicon.knowledge_empty"), paperX + 128, paperY + 104, 0xFF777777);
         }
     }
 
@@ -1114,6 +1114,15 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         String text = component.getString();
         graphics.drawString(font, text, -font.width(text) / 2, 0, color, false);
         graphics.pose().popPose();
+    }
+
+    private void drawCenteredNoShadow(GuiGraphics graphics, Component component, int centerX, int y, int color) {
+        int textWidth = font.width(component.getVisualOrderText());
+        graphics.drawString(font, component, centerX - textWidth / 2, y, color, false);
+    }
+
+    private void drawCenteredNoShadow(GuiGraphics graphics, String text, int centerX, int y, int color) {
+        graphics.drawString(font, text, centerX - font.width(text) / 2, y, color, false);
     }
 
     private boolean handleRecipePageClick(double mouseX, double mouseY) {
@@ -1257,7 +1266,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         Component type = Component.translatable(recipe.shaped()
                 ? "recipe.type.workbench"
                 : "recipe.type.workbenchshapeless");
-        graphics.drawCenteredString(font, type, centerX, centerY - 104, 0xFF505050);
+        drawCenteredNoShadow(graphics, type, centerX, centerY - 104, 0xFF505050);
 
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
@@ -1300,7 +1309,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         Component type = Component.translatable(recipe.shaped()
                 ? "recipe.type.arcane"
                 : "recipe.type.arcane.shapeless");
-        graphics.drawCenteredString(font, type, centerX, centerY - 104, 0xFF505050);
+        drawCenteredNoShadow(graphics, type, centerX, centerY - 104, 0xFF505050);
 
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
@@ -1365,7 +1374,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int mouseX,
             int mouseY
     ) {
-        graphics.drawCenteredString(font, Component.translatable("recipe.type.crucible"), centerX, centerY - 104, 0xFF505050);
+        drawCenteredNoShadow(graphics, Component.translatable("recipe.type.crucible"), centerX, centerY - 104, 0xFF505050);
 
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
@@ -1400,7 +1409,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int mouseX,
             int mouseY
     ) {
-        graphics.drawCenteredString(font, Component.translatable("recipe.type.infusion"), centerX, centerY - 104, 0xFF505050);
+        drawCenteredNoShadow(graphics, Component.translatable("recipe.type.infusion"), centerX, centerY - 104, 0xFF505050);
 
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 0.0F);
@@ -1457,9 +1466,9 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             case INFUSION_ENCHANTMENT -> Component.translatable("recipe.type.infusion_enchantment");
             case RUNIC_AUGMENT -> Component.translatable("recipe.type.runic_augment");
         };
-        graphics.drawCenteredString(font, type, centerX, centerY - 104, 0xFF505050);
+        drawCenteredNoShadow(graphics, type, centerX, centerY - 104, 0xFF505050);
         if (!recipe.titleKey().isBlank()) {
-            graphics.drawCenteredString(font, Component.translatable(recipe.titleKey()), centerX, centerY - 92, 0xFF6D4C24);
+            drawCenteredNoShadow(graphics, Component.translatable(recipe.titleKey()), centerX, centerY - 92, 0xFF6D4C24);
         }
 
         if (recipe.type() == TCDisplayRecipePageType.FAKE_CRAFTING) {
@@ -1552,7 +1561,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int mouseX,
             int mouseY
     ) {
-        graphics.drawCenteredString(font, Component.translatable("recipe.type.construct"), centerX, centerY - 104, 0xFF505050);
+        drawCenteredNoShadow(graphics, Component.translatable("recipe.type.construct"), centerX, centerY - 104, 0xFF505050);
         if (!recipe.displayStack().isEmpty()) {
             renderRecipeStack(graphics, recipe.displayStack(), centerX - 8, centerY - 84, mouseX, mouseY);
         }
@@ -1576,7 +1585,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int columns = layer.stream().mapToInt(List::size).max().orElse(0);
             int layerWidth = columns * gridSize;
             String label = Integer.toString(layerIndex + 1);
-            graphics.drawCenteredString(font, label, x + layerWidth / 2, y - 11, 0xFF6D4C24);
+            drawCenteredNoShadow(graphics, label, x + layerWidth / 2, y - 11, 0xFF6D4C24);
             for (int row = 0; row < rows; row++) {
                 List<TCBlueprintRecipePageView.Cell> cells = layer.get(row);
                 for (int column = 0; column < cells.size(); column++) {
@@ -1660,10 +1669,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
         if (activeRecipePages.size() > 1) {
             String page = (activeRecipeIndex + 1) + "/" + activeRecipePages.size();
-            graphics.drawCenteredString(font, page, x + 128, y + 224, 0xFF6D4C24);
+            drawCenteredNoShadow(graphics, page, x + 128, y + 224, 0xFF6D4C24);
         }
         int color = inside(mouseX, mouseY, x + 96, y + 236, 64, 16) ? 0xFF805A24 : 0xFF4B351B;
-        graphics.drawCenteredString(font, Component.translatable("recipe.return"), x + 128, y + 238, color);
+        drawCenteredNoShadow(graphics, Component.translatable("recipe.return"), x + 128, y + 238, color);
     }
 
     private static boolean hasRenderableRecipe(TCResearchPageView page) {
