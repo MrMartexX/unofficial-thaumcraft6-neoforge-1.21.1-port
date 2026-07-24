@@ -1,7 +1,18 @@
 {
-  "textures": {
-    "layer0": "minecraft:item/stick"
-  },
-  "parent": "minecraft:item/generated"
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "predicate": {
+        "thaumcraft:focus": 0
+      },
+      "model": "thaumcraft:item/caster_basic_model"
+    },
+    {
+      "predicate": {
+        "thaumcraft:focus": 1
+      },
+      "model": "thaumcraft:item/caster_basic_focus_model"
+    }
+  ]
 }
 

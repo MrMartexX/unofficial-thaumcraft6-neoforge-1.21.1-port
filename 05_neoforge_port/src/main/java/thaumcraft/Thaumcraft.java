@@ -2,6 +2,7 @@ package thaumcraft;
 
 
 import thaumcraft.client.gui.TCKnowledgeGainHud;
+import thaumcraft.client.gui.TCResearchIconRenderer;
 import com.mojang.logging.LogUtils;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -127,6 +128,7 @@ public final class Thaumcraft {
             TCEntityRenderers.register(modEventBus);
             TCKnowledgeGainHud.register(modEventBus);
             TCItemProperties.register(modEventBus);
+            TCResearchIconRenderer.register(modEventBus);
         }
         modEventBus.addListener(TCAuraNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCInfusionNetwork::onRegisterPayloadHandlers);

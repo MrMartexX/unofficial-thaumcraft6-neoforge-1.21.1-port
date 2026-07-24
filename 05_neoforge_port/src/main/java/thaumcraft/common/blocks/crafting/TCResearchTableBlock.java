@@ -46,7 +46,9 @@ public class TCResearchTableBlock extends Block implements EntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getHorizontalDirection());
+        Direction playerFacing = context.getHorizontalDirection();
+        boolean reversed = context.getPlayer() != null && context.getPlayer().isShiftKeyDown();
+        return defaultBlockState().setValue(FACING, reversed ? playerFacing : playerFacing.getOpposite());
     }
 
     @Override

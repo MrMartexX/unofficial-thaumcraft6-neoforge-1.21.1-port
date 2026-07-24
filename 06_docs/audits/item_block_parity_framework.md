@@ -241,11 +241,14 @@ The framework must not:
 
 The existing `item-block-parity` implementation already contains parts of batches 2-6, but future work must now proceed in the planned sequence and classify framework gaps explicitly instead of continuing ad-hoc resource fixing.
 
-2026-06-29 framework wiring note:
+2026-07-24 framework state:
 
 - `item_visual_parity` is wired through the orchestrator and reports all registered `TCItems` entries, including missing item models, placeholder implementations and risky block-item display inheritance.
+- Item display analysis now follows the full Thaumcraft model parent chain, recognizes the defined vanilla generated/handheld/block/banner display contracts, and keeps exact catalog bridge aliases separate from arbitrary vanilla placeholder parents.
+- The current item-visual result is `2209` rows: `2145` pass, `64` review and `0` missing. All `135` registered block items pass the custom-geometry display guard. The remaining reviews are `60` explicit catalog bridge implementations and `4` enchanted requirement placeholders, not missing textures or models.
 - `legacy_shape_parity` remains the source/manifest shape classifier.
 - `legacy_visual_collision_parity` is a stricter original-jar/source-backed report-only audit for block model geometry, facing domains, occlusion contracts, outline/selection-shape contracts, collision contracts and block-item display transform slots.
 - `texture_color` now maps active modern `textures/block` and `textures/item` model references back to legacy `textures/blocks` and `textures/items` resources before comparing SHA, dimensions, alpha ratio and sampled average color.
-- The `visual` preset is the focused visual evidence run. Current `visual` report is executable and report-only: `legacy_shape_parity` reports `114` rows with `10` review rows, `legacy_visual_collision_parity` reports `585` rows with `2` mismatches (`golem_builder`, `research_table` facing domain), `0` missing rows and `341` unknown rows, `outline_contract` reports `68` match / `0` mismatch / `46` unknown, `item_visual_parity` reports `2009` rows with `34` missing item models plus `219` review rows, `texture_color` reports `201` active texture refs with `176` exact matches and `25` review rows, and `visual_equivalence_completion` reports `17` rows with `11` pass / `6` review / `0` errors.
+- The current `visual` preset result is report-only: model transforms report `1287/1287` evidence with `0` reviews and `0` missing; `legacy_shape_parity` reports `123/139` pass with `16` reviews; `legacy_visual_collision_parity` reports `271` match, `0` mismatch, `0` missing and `444` unknown; `texture_color` reports `295/295` exact with `0` reviews; `visual_equivalence_completion` reports `13/17` pass with `4` reviews and `0` errors. Facing comparison now respects exact legacy aliases and the runtime `IBlockFacingHorizontal` domain instead of treating Forge blockstate dummy variants as real vertical states.
+- The `ci-safe` preset passes with `0` safe failures after registered bridge ids received legacy-backed translations. It still reports unresolved implementation/legacy parity gaps without incorrectly turning those review questions into mechanical failures.
 - These visual-boundary reports do not claim full gameplay or measured pixel parity. They only classify evidence and blockers before targeted fixes.

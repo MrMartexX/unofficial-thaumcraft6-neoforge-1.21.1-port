@@ -36,13 +36,12 @@ import thaumcraft.common.research.TCKnowledgeType;
 import thaumcraft.common.research.TCResearchPageAvailability;
 import thaumcraft.common.research.TCResearchPageBookmark;
 import thaumcraft.common.research.TCResearchPageView;
-import thaumcraft.common.research.TCResearchCategoryDefinition;
-import thaumcraft.common.research.TCResearchManager;
 import thaumcraft.common.research.TCResearchRequirementResolver;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirement;
 import thaumcraft.common.research.TCResearchRequirementResolver.ItemRequirementResolution;
 import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirement;
 import thaumcraft.common.research.TCResearchRequirementResolver.KnowledgeRequirementResolution;
+import thaumcraft.common.research.TCResearchStatus;
 import thaumcraft.common.research.TCThaumonomiconCategoryView;
 import thaumcraft.common.research.TCThaumonomiconActionPayload;
 import thaumcraft.common.research.TCThaumonomiconClientCache;
@@ -97,6 +96,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private static final int PAGE_Y_OFFSET = -10;
     private static final int NAVIGATION_Y_OFFSET = 190;
     private static final int ASPECTS_PER_PAGE = 5;
+    private static final float INSERT_Z = 300.0F;
+    private static final float TOOLTIP_Z = 1000.0F;
 
     private static int aspectPage;
     private TCThaumonomiconEntryView entry;
@@ -113,6 +114,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private List<Component> hoveredUiTooltip = List.of();
     private boolean pendingDrilldown;
     private SideInsert sideInsert = SideInsert.NONE;
+    private long knowledgeSnapshotVersion;
+    private int thaumonomiconRevision;
 
     public TCThaumonomiconEntryScreen(TCThaumonomiconEntryView entry) {
         this(entry, null, 0);
@@ -128,11 +131,23 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     @Override
     protected void init() {
+        knowledgeSnapshotVersion = TCKnowledgeClientCache.snapshotVersion();
+        thaumonomiconRevision = TCThaumonomiconClientCache.revision();
         rebuildLines();
     }
 
     @Override
     public void tick() {
+        long currentKnowledgeSnapshot = TCKnowledgeClientCache.snapshotVersion();
+        if (currentKnowledgeSnapshot != knowledgeSnapshotVersion) {
+            knowledgeSnapshotVersion = currentKnowledgeSnapshot;
+            rebuildLines();
+        }
+        int currentThaumonomiconRevision = TCThaumonomiconClientCache.revision();
+        if (currentThaumonomiconRevision != thaumonomiconRevision) {
+            thaumonomiconRevision = currentThaumonomiconRevision;
+            rebuildLines();
+        }
         TCThaumonomiconEntryPayload result = TCThaumonomiconClientCache.pollLastEntryResult();
         if (result != null && result.researchKey().equals(entry.research().key())) {
             pendingAdvance = false;
@@ -168,11 +183,13 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         renderPageText(graphics, x, y);
         renderNavigation(graphics, x, y, mouseX, mouseY);
         renderSideTabs(graphics, x, y, mouseX, mouseY);
-        renderWarpWarning(graphics, x, y, mouseX, mouseY);
         renderBookmarks(graphics, x, y, mouseX, mouseY);
-        renderRequirements(graphics, x, y, mouseX, mouseY);
-        renderInPageKnowledgeTotals(graphics, x, y, mouseX, mouseY);
-        renderResult(graphics, x, y);
+        if (sideInsert == SideInsert.NONE && activeRecipePages.isEmpty()) {
+            renderWarpWarning(graphics, x, y, mouseX, mouseY);
+            renderRequirements(graphics, x, y, mouseX, mouseY);
+            renderInPageKnowledgeTotals(graphics, x, y, mouseX, mouseY);
+            renderResult(graphics, x, y);
+        }
         if (sideInsert != SideInsert.NONE) {
             renderSideInsert(graphics, mouseX, mouseY);
             renderHoveredUiTooltip(graphics, mouseX, mouseY);
@@ -199,10 +216,15 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        int x = bookX();
+        int y = bookY();
         if (!activeRecipePages.isEmpty()) {
             if (button == 1) {
                 closeRecipePage(true);
                 playPage();
+                return true;
+            }
+            if (button == 0 && handleSideTabClick(mouseX, mouseY, x, y)) {
                 return true;
             }
             if (button == 0 && hoveredBookmark != null) {
@@ -217,8 +239,6 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (button != 0) {
             return super.mouseClicked(mouseX, mouseY, button);
         }
-        int x = bookX();
-        int y = bookY();
         if (handleSideTabClick(mouseX, mouseY, x, y)) {
             return true;
         }
@@ -452,7 +472,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private int inPageKnowledgeTotalRows() {
         if (!entry.research().key().equals("KNOWLEDGETYPES")
-                || !TCKnowledgeClientCache.hasResearch("KNOWLEDGETYPES")) {
+                || !isResearchComplete("KNOWLEDGETYPES")) {
             return 0;
         }
         int rows = 0;
@@ -787,20 +807,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private void renderResearchIcon(GuiGraphics graphics, String raw, int x, int y) {
-        if (raw.contains("textures/")) {
-            ResourceLocation texture = parseLocation(raw);
-            drawFullTexture(graphics, texture == null ? UNKNOWN : texture, x, y, 16, 16);
-            return;
-        }
-
-        ResourceLocation itemId = parseLocation(raw.split(";")[0]);
-        ItemStack stack = itemId == null
-                ? ItemStack.EMPTY
-                : BuiltInRegistries.ITEM.getOptional(itemId).map(ItemStack::new).orElse(ItemStack.EMPTY);
-        if (stack.isEmpty()) {
+        if (!TCResearchIconRenderer.render(graphics, raw, x, y, 220)) {
             drawFullTexture(graphics, UNKNOWN, x, y, 16, 16);
-        } else {
-            graphics.renderItem(stack, x, y);
         }
     }
 
@@ -990,7 +998,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     ) {
         ItemStack stack = firstBookmarkStack(bookmark);
         if (!stack.isEmpty()) {
-            graphics.renderTooltip(font, stack, mouseX, mouseY + LEGACY_TOOLTIP_Y_OFFSET);
+            renderItemTooltip(graphics, stack, mouseX, mouseY + LEGACY_TOOLTIP_Y_OFFSET);
             return;
         }
         ArrayList<Component> lines = new ArrayList<>();
@@ -1010,6 +1018,11 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private void openBookmark(TCResearchPageBookmark bookmark) {
+        if (!activeRecipePages.isEmpty() && bookmark.id().equals(activeRecipeId)) {
+            closeRecipePage(true);
+            playPage();
+            return;
+        }
         List<TCResearchPageView> renderable = bookmark.pages().stream()
                 .filter(page -> page.availability() == TCResearchPageAvailability.READY)
                 .filter(TCThaumonomiconEntryScreen::hasRenderableRecipe)
@@ -1054,7 +1067,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         if (canShowKnowledgeTab()) {
             int tabX = x - 49;
             int tabY = y + 32;
-            boolean hovered = inside(mouseX, mouseY, tabX, tabY, 25, 16);
+            boolean hovered = inside(mouseX, mouseY, x - 48, tabY, 25, 16);
             int le = hovered || sideInsert == SideInsert.KNOWLEDGE ? 0 : 3;
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             blit(graphics, BOOK, tabX + le, tabY, 44, 232, 24 - le, 16, LEGACY_RESEARCH_TEXTURE_SIZE, LEGACY_RESEARCH_TEXTURE_SIZE);
@@ -1095,7 +1108,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             playPage();
             return true;
         }
-        if (canShowKnowledgeTab() && inside(mouseX, mouseY, x - 49, y + 32, 25, 16)) {
+        if (canShowKnowledgeTab() && inside(mouseX, mouseY, x - 48, y + 32, 25, 16)) {
             closeRecipePage(true);
             sideInsert = sideInsert == SideInsert.KNOWLEDGE ? SideInsert.NONE : SideInsert.KNOWLEDGE;
             playPage();
@@ -1127,7 +1140,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         int x = recipePageX();
         int y = recipePageY();
         graphics.pose().pushPose();
-        graphics.pose().translate(0.0F, 0.0F, 100.0F);
+        graphics.pose().translate(0.0F, 0.0F, INSERT_Z);
         blit(graphics, PAPER, x, y, 0, 0, RECIPE_PAGE_SIZE - 1, RECIPE_PAGE_SIZE - 1, RECIPE_PAGE_SIZE, RECIPE_PAGE_SIZE);
         if (sideInsert == SideInsert.ASPECTS) {
             renderAspectInsert(graphics, x + 60, y + 24, mouseX, mouseY);
@@ -1198,7 +1211,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private void renderInPageKnowledgeTotals(GuiGraphics graphics, int bookX, int bookY, int mouseX, int mouseY) {
         if (!entry.research().key().equals("KNOWLEDGETYPES")
-                || !TCKnowledgeClientCache.hasResearch("KNOWLEDGETYPES")
+                || !isResearchComplete("KNOWLEDGETYPES")
                 || sideInsert != SideInsert.NONE
                 || !activeRecipePages.isEmpty()) {
             return;
@@ -1223,6 +1236,30 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             boolean drewRow = false;
             int column = 0;
             int columnSpacing = inPage ? 18 : Math.max(20, (int) (164.0F / Math.max(1, categories.size())));
+            if (!type.hasCategories()) {
+                int combinedRaw = raw.values().stream().mapToInt(Integer::intValue).sum();
+                if (combinedRaw > 0) {
+                    renderKnowledgeIcon(
+                            graphics,
+                            type,
+                            "",
+                            combinedRaw,
+                            null,
+                            x - 10,
+                            y - row * (inPage ? 20 : 28),
+                            mouseX,
+                            mouseY
+                    );
+                    drewRow = true;
+                    drewSomething = true;
+                }
+            }
+            if (!type.hasCategories()) {
+                if (drewRow) {
+                    row++;
+                }
+                continue;
+            }
             for (Map.Entry<String, TCThaumonomiconCategoryView> categoryEntry : categories.entrySet()) {
                 int rawValue = raw.getOrDefault(categoryEntry.getKey(), 0);
                 int amount = type.rawToPoints(rawValue);
@@ -1248,17 +1285,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private Map<String, TCThaumonomiconCategoryView> knowledgeTotalCategories() {
         LinkedHashMap<String, TCThaumonomiconCategoryView> categories = new LinkedHashMap<>();
-        for (TCResearchCategoryDefinition category : TCResearchManager.categories()) {
-            if (!hasKnowledgeTotal(category.key())) {
-                continue;
-            }
-            categories.put(category.key(), new TCThaumonomiconCategoryView(
-                    category.key(),
-                    category.requiredResearch(),
-                    location(category.icon()),
-                    location(category.background()),
-                    location(category.overlay())
-            ));
+        for (TCThaumonomiconCategoryView category : TCThaumonomiconClientCache.index().categories()) {
+            categories.put(category.key(), category);
         }
         for (TCKnowledgeType type : TCKnowledgeType.values()) {
             for (String category : TCKnowledgeClientCache.rawKnowledgeByCategory(type).keySet()) {
@@ -1266,19 +1294,6 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             }
         }
         return categories;
-    }
-
-    private boolean hasKnowledgeTotal(String category) {
-        for (TCKnowledgeType type : TCKnowledgeType.values()) {
-            if (TCKnowledgeClientCache.rawKnowledge(type, category) > 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static String location(ResourceLocation location) {
-        return location == null ? "" : location.toString();
     }
 
     private void renderKnowledgeIcon(
@@ -1294,10 +1309,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     ) {
         drawFullTexture(graphics, type == TCKnowledgeType.THEORY ? KNOWLEDGE_THEORY : KNOWLEDGE_OBSERVATION, x, y, 16, 16);
         ResourceLocation icon = parseLocation(categoryView == null ? "" : categoryView.icon());
-        if (icon != null) {
+        if (type.hasCategories() && icon != null) {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
-            graphics.setColor(1.0F, 1.0F, 1.0F, 0.55F);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 0.75F);
             graphics.pose().pushPose();
             graphics.pose().translate(x, y, 1.0F);
             graphics.pose().scale(0.0625F, 0.0625F, 1.0F);
@@ -1308,7 +1323,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
         String amount = Integer.toString(type.rawToPoints(raw));
         graphics.pose().pushPose();
-        graphics.pose().translate(0.0F, 0.0F, 5.0F);
+        graphics.pose().translate(0.0F, 0.0F, 20.0F);
         graphics.drawString(font, amount, x + 16 - font.width(amount), y + 8, 0xFFFFFFFF, true);
         int partial = raw % type.rawUnitsPerPoint();
         if (partial > 0) {
@@ -1320,11 +1335,12 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
         graphics.pose().popPose();
         if (inside(mouseX, mouseY, x, y, 16, 18)) {
-            hoveredUiTooltip = List.of(
-                    Component.translatable("tc.type." + type.id()).withStyle(ChatFormatting.GOLD),
-                    Component.translatable("tc.research_category." + category).withStyle(ChatFormatting.GRAY),
-                    Component.literal(raw + "/" + type.rawUnitsPerPoint()).withStyle(ChatFormatting.DARK_GRAY)
-            );
+            MutableComponent tooltip = Component.translatable("tc.type." + type.id());
+            if (type.hasCategories() && !category.isBlank()) {
+                tooltip.append(": ");
+                tooltip.append(Component.translatable("tc.research_category." + category));
+            }
+            hoveredUiTooltip = List.of(tooltip);
         }
     }
 
@@ -1340,12 +1356,17 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private boolean canShowAspectTab() {
-        return TCKnowledgeClientCache.hasResearch("FIRSTSTEPS");
+        return isResearchComplete("FIRSTSTEPS");
     }
 
     private boolean canShowKnowledgeTab() {
-        return TCKnowledgeClientCache.hasResearch("KNOWLEDGETYPES")
+        return isResearchComplete("KNOWLEDGETYPES")
                 && !entry.research().key().equals("KNOWLEDGETYPES");
+    }
+
+    private boolean isResearchComplete(String key) {
+        TCThaumonomiconResearchView research = researchView(key);
+        return research != null && research.status() == TCResearchStatus.COMPLETE;
     }
 
     private void drawAspectIcon(GuiGraphics graphics, Aspect aspect, int x, int y, int size) {
@@ -1462,6 +1483,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int pageIndex,
             boolean clearHistory
     ) {
+        sideInsert = SideInsert.NONE;
         activeRecipeId = id;
         activeRecipePages = List.copyOf(pages);
         activeRecipeIndex = Math.max(0, Math.min(pageIndex, Math.max(0, activeRecipePages.size() - 1)));
@@ -1488,7 +1510,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         int x = recipePageX();
         int y = recipePageY();
         graphics.pose().pushPose();
-        graphics.pose().translate(0.0F, 0.0F, 100.0F);
+        graphics.pose().translate(0.0F, 0.0F, INSERT_Z);
         blit(graphics, PAPER, x, y, 0, 0, RECIPE_PAGE_SIZE - 1, RECIPE_PAGE_SIZE - 1, RECIPE_PAGE_SIZE, RECIPE_PAGE_SIZE);
         page.craftingRecipe().ifPresentOrElse(
                 recipe -> renderCraftingRecipe(graphics, recipe, x + 128, y + 128, mouseX, mouseY),
@@ -1938,7 +1960,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private void renderRecipeStackTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.renderTooltip(font, hoveredRecipeStack, mouseX, mouseY + LEGACY_TOOLTIP_Y_OFFSET);
+        renderItemTooltip(graphics, hoveredRecipeStack, mouseX, mouseY + LEGACY_TOOLTIP_Y_OFFSET);
     }
 
     private void renderRecipeNavigation(GuiGraphics graphics, int x, int y, int mouseX, int mouseY) {
@@ -1975,9 +1997,33 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     }
 
     private void renderHoveredUiTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
-        if (!hoveredUiTooltip.isEmpty()) {
-            graphics.renderComponentTooltip(font, hoveredUiTooltip, mouseX, mouseY + LEGACY_TOOLTIP_Y_OFFSET);
+        if (hoveredUiTooltip.isEmpty()) {
+            return;
         }
+        List<TCLegacyTooltipRenderer.Line> lines = hoveredUiTooltip.stream()
+                .map(component -> {
+                    int color = component.getStyle().getColor() == null
+                            ? 0xFFFFFFFF
+                            : 0xFF000000 | component.getStyle().getColor().getValue();
+                    return TCLegacyTooltipRenderer.Line.normal(component.getString(), color);
+                })
+                .toList();
+        TCLegacyTooltipRenderer.render(
+                graphics,
+                font,
+                lines,
+                mouseX,
+                mouseY + LEGACY_TOOLTIP_Y_OFFSET,
+                width,
+                height
+        );
+    }
+
+    private void renderItemTooltip(GuiGraphics graphics, ItemStack stack, int mouseX, int mouseY) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(0.0F, 0.0F, TOOLTIP_Z);
+        graphics.renderTooltip(font, stack, mouseX, mouseY);
+        graphics.pose().popPose();
     }
 
     private boolean canAdvance() {

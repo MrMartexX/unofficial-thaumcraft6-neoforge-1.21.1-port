@@ -47,6 +47,142 @@ function Get-ObjectAsCompactJson($Object) {
     if ($null -eq $Object) { return "<missing>" }
     return ($Object | ConvertTo-Json -Depth 8 -Compress)
 }
+function Normalize-ModelRef([string]$Ref) {
+    if ([string]::IsNullOrWhiteSpace($Ref)) { return "" }
+    if ($Ref.Contains(":")) { return $Ref }
+    return "minecraft:$Ref"
+}
+function Get-ThaumcraftModelPath([string]$Ref) {
+    $normalized = Normalize-ModelRef $Ref
+    if (-not $normalized.StartsWith("thaumcraft:")) { return $null }
+    $relative = $normalized.Substring("thaumcraft:".Length)
+    if (-not ($relative.StartsWith("item/") -or $relative.StartsWith("block/"))) { return $null }
+    return Join-Path $assetsRoot "models/$relative.json"
+}
+function Normalize-BlockModelRef([string]$Ref) {
+    if ([string]::IsNullOrWhiteSpace($Ref)) { return "" }
+    if ($Ref.Contains(":")) { return $Ref }
+    return "thaumcraft:$Ref"
+}
+function Add-ModelRefsFromNode($Node, [System.Collections.Generic.List[string]]$Refs) {
+    if ($null -eq $Node) { return }
+    if ($Node -is [System.Collections.IDictionary]) {
+        foreach ($key in $Node.Keys) {
+            if ([string]$key -eq "model" -and $Node[$key] -is [string]) {
+                $Refs.Add((Normalize-BlockModelRef ([string]$Node[$key])))
+            } else {
+                Add-ModelRefsFromNode $Node[$key] $Refs
+            }
+        }
+        return
+    }
+    if ($Node -is [System.Collections.IEnumerable] -and $Node -isnot [string]) {
+        foreach ($child in $Node) { Add-ModelRefsFromNode $child $Refs }
+    }
+}
+function Get-BlockstateModelRefs([string]$Id) {
+    $path = Join-Path $assetsRoot "blockstates/$Id.json"
+    $refs = [System.Collections.Generic.List[string]]::new()
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { return @() }
+    try {
+        $json = Get-Content -Raw -LiteralPath $path | ConvertFrom-Json -AsHashtable
+        Add-ModelRefsFromNode $json $refs
+    } catch {
+        return @()
+    }
+    return @($refs | Sort-Object -Unique)
+}
+function Test-VanillaModelTemplate([string]$Parent) {
+    return $Parent -match '^minecraft:block/(block|cube|cube_all|cube_bottom_top|cube_column|cube_column_horizontal|orientable|orientable_vertical|template_.+|cross|tinted_cross)$'
+}
+function Get-EffectiveTextureInfo([string]$ModelPath) {
+    $visited = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+    $currentPath = $ModelPath
+    while (-not [string]::IsNullOrWhiteSpace($currentPath) -and $visited.Add($currentPath)) {
+        $model = Read-JsonFileOrNull $currentPath
+        if ($null -eq $model) {
+            return [pscustomobject]@{ hasTextures = $false; slots = @(); source = ConvertTo-RelativeRepoPath $currentPath }
+        }
+        $slots = @(Get-JsonPropertyNames $model.textures)
+        if ($slots.Count -gt 0) {
+            return [pscustomobject]@{ hasTextures = $true; slots = $slots; source = ConvertTo-RelativeRepoPath $currentPath }
+        }
+        $parent = if ($model.parent) { Normalize-ModelRef ([string]$model.parent) } else { "" }
+        if ($parent.StartsWith("minecraft:block/")) {
+            return [pscustomobject]@{
+                hasTextures = -not (Test-VanillaModelTemplate $parent)
+                slots = @()
+                source = $parent
+            }
+        }
+        $parentPath = Get-ThaumcraftModelPath $parent
+        if ([string]::IsNullOrWhiteSpace($parentPath)) {
+            return [pscustomobject]@{ hasTextures = $false; slots = @(); source = $parent }
+        }
+        $currentPath = $parentPath
+    }
+    return [pscustomobject]@{ hasTextures = $false; slots = @(); source = "<cycle>" }
+}
+function Test-KnownVanillaDisplayParent([string]$Parent) {
+    if ($Parent -match '^minecraft:item/(generated|handheld|handheld_rod)$' -or $Parent -match '^minecraft:block/') {
+        return $true
+    }
+    return $Parent -match '^minecraft:item/(black|blue|brown|cyan|gray|green|light_blue|light_gray|lime|magenta|orange|pink|purple|red|white|yellow)_banner$'
+}
+function Get-EffectiveDisplayInfo([string]$ModelPath) {
+    $visited = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+    $currentPath = $ModelPath
+    while (-not [string]::IsNullOrWhiteSpace($currentPath) -and $visited.Add($currentPath)) {
+        $model = Read-JsonFileOrNull $currentPath
+        if ($null -eq $model) {
+            return [pscustomobject]@{
+                hasDisplay = $false
+                usesVanillaDefaults = $false
+                displaySlots = @()
+                source = ConvertTo-RelativeRepoPath $currentPath
+                terminalParent = "<invalid>"
+            }
+        }
+        $slots = @(Get-JsonPropertyNames $model.display)
+        if ($slots.Count -gt 0) {
+            return [pscustomobject]@{
+                hasDisplay = $true
+                usesVanillaDefaults = $false
+                displaySlots = $slots
+                source = ConvertTo-RelativeRepoPath $currentPath
+                terminalParent = if ($model.parent) { Normalize-ModelRef ([string]$model.parent) } else { "<none>" }
+            }
+        }
+        $parent = if ($model.parent) { Normalize-ModelRef ([string]$model.parent) } else { "<none>" }
+        if (Test-KnownVanillaDisplayParent $parent) {
+            return [pscustomobject]@{
+                hasDisplay = $false
+                usesVanillaDefaults = $true
+                displaySlots = @()
+                source = $parent
+                terminalParent = $parent
+            }
+        }
+        $parentPath = Get-ThaumcraftModelPath $parent
+        if ([string]::IsNullOrWhiteSpace($parentPath)) {
+            return [pscustomobject]@{
+                hasDisplay = $false
+                usesVanillaDefaults = $false
+                displaySlots = @()
+                source = ConvertTo-RelativeRepoPath $currentPath
+                terminalParent = $parent
+            }
+        }
+        $currentPath = $parentPath
+    }
+    return [pscustomobject]@{
+        hasDisplay = $false
+        usesVanillaDefaults = $false
+        displaySlots = @()
+        source = ConvertTo-RelativeRepoPath $ModelPath
+        terminalParent = "<cycle>"
+    }
+}
 function Test-Truthy($Value) {
     if ($null -eq $Value) { return $false }
     if ($Value -is [bool]) { return $Value }
@@ -137,7 +273,9 @@ foreach ($entry in @($port.entries | Sort-Object kind, registryId)) {
         $parent = if ($json.parent) { [string]$json.parent } else { "<none>" }
         $textureSlots = @(Get-JsonPropertyNames $json.textures)
         $displaySlots = @(Get-JsonPropertyNames $json.display)
-        $missingDisplaySlots = @($displayContexts | Where-Object { $_ -notin $displaySlots })
+        $effectiveDisplay = Get-EffectiveDisplayInfo $modelPath
+        $effectiveDisplaySlots = @($effectiveDisplay.displaySlots)
+        $missingDisplaySlots = @($displayContexts | Where-Object { $_ -notin $effectiveDisplaySlots })
         $transformRule = Get-Rule $transformRules "item" $entry.registryId
         $parentRule = Get-Rule $parentRules "item" $entry.registryId
         $modelSummaries.Add([pscustomobject][ordered]@{
@@ -147,38 +285,58 @@ foreach ($entry in @($port.entries | Sort-Object kind, registryId)) {
             parent = $parent
             textureSlots = @($textureSlots)
             displaySlots = @($displaySlots)
+            effectiveDisplaySlots = @($effectiveDisplaySlots)
+            effectiveDisplaySource = $effectiveDisplay.source
+            usesVanillaDisplayDefaults = [bool]$effectiveDisplay.usesVanillaDefaults
             hasTransformRule = $null -ne $transformRule
             hasParentRule = $null -ne $parentRule
         })
         $parentStatus = Get-ParentRuleStatus $parent $parentRule
         Add-ResultRow $results "item" $entry.registryId "item_model_json" $parentStatus "parent=$parent; textureSlots=$(Format-List $textureSlots); displaySlots=$(Format-List $displaySlots)" $relativePath $parentRule
-        $displayStatus = Get-DisplayStatus $displaySlots $transformRule
-        if ($displaySlots.Count -eq 0) {
-            $evidence = "No explicit item display transforms; vanilla/model defaults may apply, but hand/GUI parity is unchecked"
+        $hasEffectiveDisplay = $effectiveDisplay.hasDisplay -or $effectiveDisplay.usesVanillaDefaults
+        $displayStatus = Get-DisplayStatus $(if ($hasEffectiveDisplay) { @("effective") } else { @() }) $transformRule
+        if (-not $hasEffectiveDisplay) {
+            $evidence = "No display transforms in the Thaumcraft parent chain and no known vanilla item/block display defaults; hand/GUI flat-front risk remains"
             if ($displayStatus -eq "VISUAL_RULE_ACCEPTED") { $evidence = "Missing display transforms accepted by reviewed item-transform-equivalence rule: $(Get-RuleReason $transformRule)" }
             Add-ResultRow $results "item" $entry.registryId "item_display_transforms" $displayStatus $evidence $relativePath $transformRule
+        } elseif ($effectiveDisplay.usesVanillaDefaults) {
+            Add-ResultRow $results "item" $entry.registryId "item_display_transforms" "VISUAL_EVIDENCE" "Inherited known vanilla display defaults from $($effectiveDisplay.source)" $relativePath
         } else {
-            $presentDisplayEvidence = @($displaySlots | ForEach-Object { "$_=$(Get-ObjectAsCompactJson $json.display.$_)" })
-            Add-ResultRow $results "item" $entry.registryId "item_display_transforms" "VISUAL_EVIDENCE" "present=$(Format-List $displaySlots); missing=$(Format-List $missingDisplaySlots); values=$(Format-List $presentDisplayEvidence)" $relativePath
+            Add-ResultRow $results "item" $entry.registryId "item_display_transforms" "VISUAL_EVIDENCE" "Inherited/effective display slots=$(Format-List $effectiveDisplaySlots); missing=$(Format-List $missingDisplaySlots); source=$($effectiveDisplay.source)" $relativePath
         }
-        if ($parent -eq "item/generated" -and $displaySlots.Count -eq 0) {
+        $normalizedParent = Normalize-ModelRef $parent
+        if ($normalizedParent -eq "minecraft:item/generated" -and $displaySlots.Count -eq 0) {
             Add-ResultRow $results "item" $entry.registryId "generated_icon_default_transform" "VISUAL_EVIDENCE" "Generated item model with vanilla default transforms; verify manually if legacy used custom handheld/GUI transform" $relativePath
         }
-        if ($parent -eq "item/handheld" -and ($displaySlots -notcontains "firstperson_righthand" -and $displaySlots -notcontains "thirdperson_righthand")) {
-            $handheldStatus = Get-HandheldStatus $parent $displaySlots $transformRule
-            $evidence = "Handheld parent with no explicit first/third-person display transform; visual parity may depend on defaults"
-            if ($handheldStatus -eq "VISUAL_RULE_ACCEPTED") { $evidence = "Missing handheld transforms accepted by reviewed item-transform-equivalence rule: $(Get-RuleReason $transformRule)" }
-            Add-ResultRow $results "item" $entry.registryId "handheld_transform_review" $handheldStatus $evidence $relativePath $transformRule
+        if ($normalizedParent -eq "minecraft:item/handheld" -and ($displaySlots -notcontains "firstperson_righthand" -and $displaySlots -notcontains "thirdperson_righthand")) {
+            Add-ResultRow $results "item" $entry.registryId "handheld_transform_review" "VISUAL_EVIDENCE" "Handheld model inherits the defined vanilla first/third-person transforms" $relativePath
         }
     } elseif ($entry.kind -eq "block") {
-        $referencedModels = @($entry.resources.referencedBlockModels | Where-Object { $_ } | Sort-Object -Unique)
+        $referencedModels = @($entry.resources.referencedBlockModels | Where-Object { $_ } | ForEach-Object { Normalize-BlockModelRef ([string]$_) } | Sort-Object -Unique)
+        if ($referencedModels.Count -eq 0) {
+            $referencedModels = @(Get-BlockstateModelRefs $entry.registryId)
+        }
         $parentRule = Get-Rule $parentRules "block" $entry.registryId
         if ($referencedModels.Count -eq 0) {
             Add-ResultRow $results "block" $entry.registryId "block_model_refs" "VISUAL_REVIEW_NEEDED" "No referenced block models found from blockstate manifest evidence" "assets/thaumcraft/blockstates/$($entry.registryId).json"
             continue
         }
         foreach ($modelRef in $referencedModels) {
-            $modelPath = Join-Path $assetsRoot "models/$modelRef.json"
+            if ($modelRef.StartsWith("minecraft:")) {
+                $modelSummaries.Add([pscustomobject][ordered]@{
+                    kind = "block"
+                    id = "thaumcraft:$($entry.registryId)"
+                    path = $modelRef
+                    modelRef = $modelRef
+                    parent = "<vanilla-model>"
+                    textureSlots = @()
+                    elements = 0
+                    hasParentRule = $null -ne $parentRule
+                })
+                Add-ResultRow $results "block" $entry.registryId "block_model_json" "VISUAL_EVIDENCE" "Blockstate references the concrete baked vanilla model $modelRef" "assets/thaumcraft/blockstates/$($entry.registryId).json"
+                continue
+            }
+            $modelPath = Get-ThaumcraftModelPath $modelRef
             $relativePath = if (Test-Path -LiteralPath $modelPath -PathType Leaf) { ConvertTo-RelativeRepoPath $modelPath } else { "assets/thaumcraft/models/$modelRef.json" }
             $json = Read-JsonFileOrNull $modelPath
             if ($null -eq $json) {
@@ -187,6 +345,7 @@ foreach ($entry in @($port.entries | Sort-Object kind, registryId)) {
             }
             $parent = if ($json.parent) { [string]$json.parent } else { "<none>" }
             $textureSlots = @(Get-JsonPropertyNames $json.textures)
+            $effectiveTextures = Get-EffectiveTextureInfo $modelPath
             $elementCount = @($json.elements).Count
             $modelSummaries.Add([pscustomobject][ordered]@{
                 kind = "block"
@@ -203,8 +362,10 @@ foreach ($entry in @($port.entries | Sort-Object kind, registryId)) {
             if ($parent -eq "<none>" -and $elementCount -eq 0) {
                 Add-ResultRow $results "block" $entry.registryId "block_geometry_review" "VISUAL_REVIEW_NEEDED" "Block model has no parent and no elements; geometry/render parity cannot be established" $relativePath
             }
-            if ($textureSlots.Count -eq 0) {
-                Add-ResultRow $results "block" $entry.registryId "block_texture_slots" "VISUAL_REVIEW_NEEDED" "Block model has no direct texture slots; texture parity may depend on parent or generated model" $relativePath
+            if (-not $effectiveTextures.hasTextures) {
+                Add-ResultRow $results "block" $entry.registryId "block_texture_slots" "VISUAL_REVIEW_NEEDED" "Block model and its resolvable parent chain provide no texture slots; terminal source=$($effectiveTextures.source)" $relativePath
+            } elseif ($textureSlots.Count -eq 0) {
+                Add-ResultRow $results "block" $entry.registryId "block_texture_slots" "VISUAL_EVIDENCE" "Texture slots inherited from $($effectiveTextures.source): $(Format-List $effectiveTextures.slots)" $relativePath
             }
         }
     }

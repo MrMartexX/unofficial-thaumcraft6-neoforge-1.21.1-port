@@ -14,6 +14,7 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.items.ItemAspectVariant;
+import thaumcraft.common.items.TCEssentiaItemHelper;
 import thaumcraft.common.items.components.TCAspectStackComponent;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCDataComponents;
@@ -152,6 +153,13 @@ public final class TCColorHandlers {
                 event.register(aspectVariantColor, item);
             }
         }
+        event.register((stack, tintIndex) -> {
+            if (tintIndex != 1) {
+                return 0xFFFFFFFF;
+            }
+            Aspect aspect = TCEssentiaItemHelper.aspectFromStack(stack);
+            return aspect == null ? 0xFFFFFFFF : (0xFF000000 | (aspect.getColor() & 0xFFFFFF));
+        }, TCItems.JAR_LABEL_ESSENCE.get());
     }
 
     private static int aspectVariantColor(ItemStack stack, int tintIndex) {

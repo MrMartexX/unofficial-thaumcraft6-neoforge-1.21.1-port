@@ -74,9 +74,9 @@ if (@($rows | Where-Object { $_.status -eq $errorStatus }).Count -eq 0) {
     $frameworkText = Get-Content -Raw -LiteralPath $frameworkPath
     $matrixText = Get-Content -Raw -LiteralPath $matrixPath
 
-    $checks = @($registry.checks | Where-Object { $null -ne $_ })
+    $registryChecks = @($registry.checks | Where-Object { $null -ne $_ })
     $nameCounts = @{}
-    foreach ($check in $checks) {
+    foreach ($check in $registryChecks) {
         $name = ([string]$check.name).Trim()
         if ([string]::IsNullOrWhiteSpace($name)) { continue }
         if (-not $nameCounts.ContainsKey($name)) { $nameCounts[$name] = 0 }
@@ -86,14 +86,14 @@ if (@($rows | Where-Object { $_.status -eq $errorStatus }).Count -eq 0) {
     if ($duplicateNames.Count -eq 0) { Add-Row $passStatus "info" "check-registry unique names" "All registry check names are unique." }
     else { Add-Row $errorStatus "error" "check-registry unique names" "Duplicate check names found." "unique check names" ($duplicateNames -join ", ") }
 
-    $implementedChecks = @($checks | Where-Object { ([string]$_.status) -eq "implemented" })
+    $implementedChecks = @($registryChecks | Where-Object { ([string]$_.status) -eq "implemented" })
     $implementedNames = @($implementedChecks | ForEach-Object { ([string]$_.name).Trim() } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
     $ownerNames = @($invocationRules.owners | ForEach-Object { ([string]$_.name).Trim() } | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
     $missingOwners = @($implementedNames | Where-Object { $_ -notin $ownerNames })
     if ($missingOwners.Count -eq 0) { Add-Row $passStatus "info" "implemented checks have owners" "Every implemented registry check has an invocation owner rule." }
     else { Add-Row $reviewStatus "review" "implemented checks have owners" "Some implemented registry checks are missing invocation owner rules." "all implemented owner rules" ($missingOwners -join ", ") }
 
-    $sourceChecks = @($checks | Where-Object { ([string]$_.layer) -eq "source_quality" })
+    $sourceChecks = @($registryChecks | Where-Object { ([string]$_.layer) -eq "source_quality" })
     $sourceImplemented = @($sourceChecks | Where-Object { ([string]$_.status) -eq "implemented" }).Count
     $sourcePlanned = @($sourceChecks | Where-Object { ([string]$_.status) -eq "planned" }).Count
     $sourceLine = @($matrixText -split "`r?`n" | Where-Object { $_.StartsWith("| Source quality and legacy evidence (`$layer=source_quality) |") } | Select-Object -First 1)

@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "thaumcraft:block/arcane_ear_off",
   "textures": {
-    "layer0": "minecraft:item/redstone"
+    "particle": "thaumcraft:block/arcane_ear_toggle_off",
+    "side": "thaumcraft:block/arcane_ear_toggle_off"
   }
 }

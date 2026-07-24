@@ -15,6 +15,7 @@ public final class TCKnowledgeClientCache {
     private static Map<String, Set<String>> researchFlags = Map.of();
     private static Map<String, Integer> observationRaw = Map.of();
     private static Map<String, Integer> theoryRaw = Map.of();
+    private static long snapshotVersion;
     private static final Queue<TCKnowledgeGainPayload> knowledgeGainQueue = new ConcurrentLinkedQueue<>();
 
     private TCKnowledgeClientCache() {
@@ -50,6 +51,7 @@ public final class TCKnowledgeClientCache {
 
         observationRaw = normalizeRawMap(payload.observationRaw());
         theoryRaw = normalizeRawMap(payload.theoryRaw());
+        snapshotVersion++;
     }
 
     public static void accept(TCKnowledgeGainPayload payload) {
@@ -105,6 +107,10 @@ public final class TCKnowledgeClientCache {
         return rawMap(type);
     }
 
+    public static long snapshotVersion() {
+        return snapshotVersion;
+    }
+
     public static void clear() {
         completedResearch = Set.of();
         researchStages = Map.of();
@@ -112,6 +118,7 @@ public final class TCKnowledgeClientCache {
         observationRaw = Map.of();
         theoryRaw = Map.of();
         knowledgeGainQueue.clear();
+        snapshotVersion++;
     }
 
     private static Map<String, Integer> rawMap(TCKnowledgeType type) {

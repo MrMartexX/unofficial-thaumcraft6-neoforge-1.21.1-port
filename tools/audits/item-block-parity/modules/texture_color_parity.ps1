@@ -84,6 +84,16 @@ function Get-LegacyTexturePathVariants([string]$TexturePath) {
     if ($normalized.StartsWith("textures/items/")) {
         $variants.Add($normalized.Replace("textures/items/", "textures/item/"))
     }
+    switch ($normalized) {
+        "textures/block/stone_arcane_brick.png" { $variants.Add("textures/blocks/arcane_brick_stone.png") }
+        "textures/block/stone_porous.png" { $variants.Add("textures/blocks/porous_stone.png") }
+        "textures/item/brass_ingot.png" { $variants.Add("textures/items/ingot_brass.png") }
+        "textures/item/thaumium_ingot.png" { $variants.Add("textures/items/ingot_thaumium.png") }
+        "textures/item/brass_plate.png" { $variants.Add("textures/items/plate_brass.png") }
+        "textures/item/thaumium_plate.png" { $variants.Add("textures/items/plate_thaumium.png") }
+        "textures/item/void_plate.png" { $variants.Add("textures/items/plate_void.png") }
+        "textures/item/thaumometer.png" { $variants.Add("textures/items/scanner.png") }
+    }
     return @($variants | Select-Object -Unique)
 }
 function Resolve-LegacyTexture([string]$TexturePath) {

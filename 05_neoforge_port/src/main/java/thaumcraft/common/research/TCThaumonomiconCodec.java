@@ -101,6 +101,7 @@ final class TCThaumonomiconCodec {
         writeString(buffer, category.icon(), MAX_VALUE_LENGTH, "category icon");
         writeString(buffer, category.background(), MAX_VALUE_LENGTH, "category background");
         writeString(buffer, category.overlay(), MAX_VALUE_LENGTH, "category overlay");
+        buffer.writeVarInt(category.completionPercent());
     }
 
     private static TCThaumonomiconCategoryView readCategory(RegistryFriendlyByteBuf buffer) {
@@ -109,7 +110,8 @@ final class TCThaumonomiconCodec {
                 readString(buffer, MAX_KEY_LENGTH),
                 readString(buffer, MAX_VALUE_LENGTH),
                 readString(buffer, MAX_VALUE_LENGTH),
-                readString(buffer, MAX_VALUE_LENGTH)
+                readString(buffer, MAX_VALUE_LENGTH),
+                buffer.readVarInt()
         );
     }
 

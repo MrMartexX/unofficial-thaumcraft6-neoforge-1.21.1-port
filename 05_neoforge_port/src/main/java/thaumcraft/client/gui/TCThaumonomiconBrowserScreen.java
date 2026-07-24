@@ -393,7 +393,6 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         if (entry.flags().contains(TCResearchFlag.PAGE)) {
             drawLegacyNodeFlag(graphics, -9, 9, 208, 16);
         }
-
         renderResearchIcon(graphics, entry, -8, -8);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         graphics.pose().popPose();
@@ -405,20 +404,14 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             return;
         }
         String raw = entry.icons().get((int) (System.currentTimeMillis() / 1000L % entry.icons().size()));
-        if (raw.contains("textures/")) {
-            ResourceLocation texture = parseLocation(raw);
-            drawFullTexture(graphics, texture == null ? UNKNOWN : texture, x, y, 16, 16);
-            return;
-        }
-
-        ResourceLocation itemId = parseLocation(raw.split(";")[0]);
-        ItemStack stack = itemId == null
-                ? ItemStack.EMPTY
-                : BuiltInRegistries.ITEM.getOptional(itemId).map(ItemStack::new).orElse(ItemStack.EMPTY);
-        if (stack.isEmpty()) {
+        if (!TCResearchIconRenderer.render(
+                graphics,
+                raw,
+                x,
+                y,
+                entry.unlockable() || entry.status() == TCResearchStatus.COMPLETE ? 220 : 50
+        )) {
             drawFullTexture(graphics, UNKNOWN, x, y, 16, 16);
-        } else {
-            graphics.renderItem(stack, x, y);
         }
     }
 
@@ -481,10 +474,13 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             }
 
             if (hovered) {
+                graphics.pose().pushPose();
+                graphics.pose().translate(0.0F, 0.0F, 300.0F);
                 int textY = y + 4;
                 graphics.drawString(
                         font,
-                        Component.translatable("tc.research_category." + category.key()),
+                        Component.translatable("tc.research_category." + category.key())
+                                .append(" (" + category.completionPercent() + "%)"),
                         x + 22,
                         textY,
                         0xFFFFFF,
@@ -492,12 +488,27 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
                 );
                 textY += 9;
                 if (hasNewResearch) {
-                    graphics.drawString(font, Component.translatable("tc.research.newresearch"), x + 22, textY, 0xFFFFFF, false);
+                    graphics.drawString(
+                            font,
+                            Component.translatable("tc.research.newresearch").withStyle(net.minecraft.ChatFormatting.GOLD),
+                            x + 22,
+                            textY,
+                            0xFFFFFF,
+                            false
+                    );
                     textY += 9;
                 }
                 if (hasNewPage) {
-                    graphics.drawString(font, Component.translatable("tc.research.newpage"), x + 22, textY, 0xFFFFFF, false);
+                    graphics.drawString(
+                            font,
+                            Component.translatable("tc.research.newpage").withStyle(net.minecraft.ChatFormatting.GREEN),
+                            x + 22,
+                            textY,
+                            0xFFFFFF,
+                            false
+                    );
                 }
+                graphics.pose().popPose();
             }
         }
     }
@@ -522,25 +533,25 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             int mouseX,
             int mouseY
     ) {
-        List<LegacyTooltipLine> lines = new ArrayList<>();
-        lines.add(LegacyTooltipLine.normal(Component.translatable(research.name()).getString(), 0xFFFFAA00));
+        List<TCLegacyTooltipRenderer.Line> lines = new ArrayList<>();
+        lines.add(TCLegacyTooltipRenderer.Line.normal(Component.translatable(research.name()).getString(), 0xFFFFAA00));
         if (research.unlockable()) {
             if (research.status() != TCResearchStatus.COMPLETE && research.totalStages() > 0) {
                 if (research.currentStage() > 0) {
-                    lines.add(LegacyTooltipLine.small(
+                    lines.add(TCLegacyTooltipRenderer.Line.small(
                             Component.translatable("tc.research.stage").getString()
                                     + " " + research.currentStage() + "/" + research.totalStages(),
                             0xFF55FFFF
                     ));
                 } else {
-                    lines.add(LegacyTooltipLine.small(
+                    lines.add(TCLegacyTooltipRenderer.Line.small(
                             Component.translatable("tc.research.begin").getString(),
                             0xFF55FF55
                     ));
                 }
             }
         } else {
-            lines.add(LegacyTooltipLine.small(Component.translatable("tc.researchmissing").getString(), 0xFFFF5555));
+            lines.add(TCLegacyTooltipRenderer.Line.small(Component.translatable("tc.researchmissing").getString(), 0xFFFF5555));
             for (String parent : research.parents()) {
                 String clean = baseResearchKey(parent);
                 if (clean.isBlank()) {
@@ -553,19 +564,19 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
                 String parentName = parentView == null
                         ? Component.translatable("research." + clean + ".title").getString()
                         : Component.translatable(parentView.name()).getString();
-                lines.add(LegacyTooltipLine.small(" - " + parentName, 0xFFFFFF55));
+                lines.add(TCLegacyTooltipRenderer.Line.small(" - " + parentName, 0xFFFFFF55));
             }
         }
         if (research.flags().contains(TCResearchFlag.RESEARCH)) {
-            lines.add(LegacyTooltipLine.small(Component.translatable("tc.research.newresearch").getString(), 0xFFFFAA00));
+            lines.add(TCLegacyTooltipRenderer.Line.small(Component.translatable("tc.research.newresearch").getString(), 0xFFFFAA00));
         }
         if (research.flags().contains(TCResearchFlag.PAGE)) {
-            lines.add(LegacyTooltipLine.small(Component.translatable("tc.research.newpage").getString(), 0xFF55FF55));
+            lines.add(TCLegacyTooltipRenderer.Line.small(Component.translatable("tc.research.newpage").getString(), 0xFF55FF55));
         }
         if (!pendingResearch.isBlank() && pendingResearch.equals(research.key())) {
-            lines.add(LegacyTooltipLine.small(Component.translatable("gui.thaumcraft.thaumonomicon.loading").getString(), 0xFFAAAAAA));
+            lines.add(TCLegacyTooltipRenderer.Line.small(Component.translatable("gui.thaumcraft.thaumonomicon.loading").getString(), 0xFFAAAAAA));
         }
-        renderLegacyCustomTooltip(graphics, lines, mouseX + 3, mouseY - 3);
+        TCLegacyTooltipRenderer.render(graphics, font, lines, mouseX + 3, mouseY - 3, width, height);
     }
 
     private boolean categoryHasFlag(TCThaumonomiconIndexPayload index, String categoryKey, TCResearchFlag flag) {
@@ -794,7 +805,9 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         if (!research.category().equals(selectedCategory)) {
             selectCategory(research.category());
         }
-        if (research.status() != TCResearchStatus.UNKNOWN) {
+        boolean needsAcknowledgement = research.flags().contains(TCResearchFlag.RESEARCH)
+                || research.flags().contains(TCResearchFlag.PAGE);
+        if (research.status() != TCResearchStatus.UNKNOWN && !needsAcknowledgement) {
             var cached = TCThaumonomiconClientCache.entry(research.key());
             if (cached.isPresent() && minecraft != null) {
                 playPage();
@@ -1214,71 +1227,6 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         graphics.blit(texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
 
-    private void renderLegacyCustomTooltip(
-            GuiGraphics graphics,
-            List<LegacyTooltipLine> lines,
-            int x,
-            int y
-    ) {
-        if (lines.isEmpty()) {
-            return;
-        }
-
-        int maxWidth = 240;
-        int widest = 0;
-        int totalHeight = -2;
-        for (LegacyTooltipLine line : lines) {
-            int width = line.small() ? (int) Math.ceil(font.width(line.text()) / 2.0D) : font.width(line.text());
-            widest = Math.max(widest, width);
-            totalHeight += line.small() ? 7 : 10;
-        }
-        if (lines.size() > 1) {
-            totalHeight += 2;
-        }
-        widest = Math.min(widest, maxWidth);
-
-        int drawX = x + 12;
-        int drawY = y - 12;
-        if (drawY + totalHeight > height) {
-            drawY = height - totalHeight - 5;
-        }
-        if (drawX + widest + 4 > width) {
-            drawX = Math.max(4, x - widest - 12);
-        }
-
-        graphics.pose().pushPose();
-        graphics.pose().translate(0.0F, 0.0F, 400.0F);
-        graphics.fill(drawX - 3, drawY - 4, drawX + widest + 3, drawY - 3, 0xF0100010);
-        graphics.fill(drawX - 3, drawY + totalHeight + 3, drawX + widest + 3, drawY + totalHeight + 4, 0xF0100010);
-        graphics.fill(drawX - 3, drawY - 3, drawX + widest + 3, drawY + totalHeight + 3, 0xF0100010);
-        graphics.fill(drawX - 4, drawY - 3, drawX - 3, drawY + totalHeight + 3, 0xF0100010);
-        graphics.fill(drawX + widest + 3, drawY - 3, drawX + widest + 4, drawY + totalHeight + 3, 0xF0100010);
-        graphics.fill(drawX - 3, drawY - 2, drawX - 2, drawY + totalHeight + 2, 0x505000FF);
-        graphics.fill(drawX + widest + 2, drawY - 2, drawX + widest + 3, drawY + totalHeight + 2, 0x5028007F);
-        graphics.fill(drawX - 3, drawY - 3, drawX + widest + 3, drawY - 2, 0x505000FF);
-        graphics.fill(drawX - 3, drawY + totalHeight + 2, drawX + widest + 3, drawY + totalHeight + 3, 0x5028007F);
-
-        int lineY = drawY;
-        for (int i = 0; i < lines.size(); i++) {
-            LegacyTooltipLine line = lines.get(i);
-            if (line.small()) {
-                graphics.pose().pushPose();
-                graphics.pose().translate(drawX, lineY, 1.0F);
-                graphics.pose().scale(0.5F, 0.5F, 1.0F);
-                graphics.drawString(font, line.text(), 0, 3, line.color(), true);
-                graphics.pose().popPose();
-                lineY += 7;
-            } else {
-                graphics.drawString(font, line.text(), drawX, lineY, line.color(), true);
-                lineY += 10;
-            }
-            if (i == 0) {
-                lineY += 2;
-            }
-        }
-        graphics.pose().popPose();
-    }
-
     private record SearchHit(
             String label,
             String categoryKey,
@@ -1303,13 +1251,4 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
     private record RecipeSearchTarget(ResourceLocation bookmarkId, int pageIndex) {
     }
 
-    private record LegacyTooltipLine(String text, int color, boolean small) {
-        static LegacyTooltipLine normal(String text, int color) {
-            return new LegacyTooltipLine(text, color, false);
-        }
-
-        static LegacyTooltipLine small(String text, int color) {
-            return new LegacyTooltipLine(text, color, true);
-        }
-    }
 }

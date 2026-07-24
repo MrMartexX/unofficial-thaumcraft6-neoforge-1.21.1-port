@@ -25,7 +25,8 @@ final class TCThaumonomiconService {
                     category.requiredResearch(),
                     location(category.icon()),
                     location(category.background()),
-                    location(category.overlay())
+                    location(category.overlay()),
+                    categoryCompletionPercent(knowledge, category.key())
             ));
             for (TCResearchEntryDefinition entry : TCResearchManager.visibleEntriesByCategory(player, category.key())) {
                 entries.add(researchView(entry, player, knowledge));
@@ -132,6 +133,21 @@ final class TCThaumonomiconService {
 
     private static String location(ResourceLocation location) {
         return location == null ? "" : location.toString();
+    }
+
+    private static int categoryCompletionPercent(TCPlayerKnowledge knowledge, String categoryKey) {
+        int total = 0;
+        int known = 0;
+        for (TCResearchEntryDefinition entry : TCResearchManager.entriesByCategory(categoryKey)) {
+            if (entry.meta().contains("AUTOUNLOCK")) {
+                continue;
+            }
+            total++;
+            if (knowledge.isResearchKnown(entry.key())) {
+                known++;
+            }
+        }
+        return total == 0 ? 0 : (int) ((float) known / total * 100.0F);
     }
 
     static boolean isRevisionCurrent(ServerPlayer player, int clientRevision) {

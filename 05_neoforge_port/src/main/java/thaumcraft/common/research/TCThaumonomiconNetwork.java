@@ -7,7 +7,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public final class TCThaumonomiconNetwork {
-    private static final String NETWORK_VERSION = "9";
+    private static final String NETWORK_VERSION = "10";
 
     private TCThaumonomiconNetwork() {
     }
@@ -52,6 +52,7 @@ public final class TCThaumonomiconNetwork {
     }
 
     public static void sendIndex(ServerPlayer player) {
+        TCPlayerKnowledgeStore.sync(player);
         PacketDistributor.sendToPlayer(player, TCThaumonomiconService.buildIndex(player));
     }
 

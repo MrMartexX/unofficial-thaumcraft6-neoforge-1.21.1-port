@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "thaumcraft:block/golem_builder"
+    },
+    "facing=east": {
+      "model": "thaumcraft:block/golem_builder",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "thaumcraft:block/golem_builder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "thaumcraft:block/golem_builder",
+      "y": 90
     }
   }
 }

@@ -1,4 +1,5 @@
 {
+    "parent": "minecraft:block/block",
     "textures": {
         "side": "thaumcraft:block/everfull_urn",
         "particle": "thaumcraft:block/everfull_urn"

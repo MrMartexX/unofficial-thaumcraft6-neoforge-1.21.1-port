@@ -1,4 +1,5 @@
 {
+    "parent": "minecraft:block/block",
     "textures": {
         "particle": "thaumcraft:block/taint_growth_5",
         "side1": "thaumcraft:block/taint_growth_5",

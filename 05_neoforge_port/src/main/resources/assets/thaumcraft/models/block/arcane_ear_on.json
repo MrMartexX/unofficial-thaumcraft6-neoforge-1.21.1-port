@@ -1,4 +1,5 @@
 {
+    "parent": "minecraft:block/block",
     "textures": {
         "particle": "thaumcraft:block/arcane_ear_on",
         "side": "thaumcraft:block/arcane_ear_on",

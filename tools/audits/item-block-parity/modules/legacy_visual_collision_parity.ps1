@@ -329,6 +329,8 @@ try {
             "arcane_pedestal" { $aliases.Add("pedestal_normal"); $aliases.Add("pedestal_arcane") }
             "ancient_pedestal" { $aliases.Add("pedestal_ancient") }
             "eldritch_pedestal" { $aliases.Add("pedestal_eldritch") }
+            "essentiatransportin" { $aliases.Add("essentia_input") }
+            "essentiatransportout" { $aliases.Add("essentia_output") }
             "jar_normal" { $aliases.Add("jar") }
         }
         return @($aliases | Sort-Object -Unique)
@@ -384,6 +386,8 @@ try {
                 "arcane_workbench_charger" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/crafting/BlockArcaneWorkbenchCharger.java" }
                 "bellows" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/devices/BlockBellows.java" }
                 "crucible" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java" }
+                "essentiatransportin" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/essentia/BlockEssentiaTransport.java" }
+                "essentiatransportout" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/essentia/BlockEssentiaTransport.java" }
                 "golem_builder" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/crafting/BlockGolemBuilder.java" }
                 "infusion_matrix" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/crafting/BlockInfusionMatrix.java" }
                 "matrix_cost" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/crafting/BlockInfusionMatrix.java" }
@@ -399,6 +403,8 @@ try {
                 "smelter_thaumium" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/essentia/BlockSmelter.java" }
                 "smelter_void" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/essentia/BlockSmelter.java" }
                 "stabilizer" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/devices/BlockStabilizer.java" }
+                "thaumatorium" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java" }
+                "thaumatorium_top" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/crafting/BlockThaumatorium.java" }
                 "wand_workbench" { Add-LegacySourcePath $paths "src/main/java/thaumcraft/common/blocks/crafting/BlockArcaneWorkbench.java" }
             }
         }
@@ -417,6 +423,7 @@ try {
             hasExplicitBounds = $all -match 'getBoundingBox\s*\(|getCollisionBoundingBox\s*\(|AxisAlignedBB\s+|setBlockBounds\s*\('
             hasExplicitOutlineBounds = $all -match 'getBoundingBox\s*\(|getSelectedBoundingBox\s*\(|AxisAlignedBB\s+|setBlockBounds\s*\('
             hasExplicitNoCollision = $all -match 'getCollisionBoundingBox\s*\([^)]*\)\s*\{[^}]*return\s+NULL_AABB\s*;' -or $all -match 'getCollisionBoundingBox\s*\([^)]*\)\s*\{[^}]*return\s+null\s*;'
+            facingContract = if ($all -match '\bimplements\s+[^{]*\bIBlockFacingHorizontal\b') { "horizontal" } elseif ($all -match '\bimplements\s+[^{]*\bIBlockFacing\b') { "all" } else { "unspecified" }
         }
     }
 
@@ -502,12 +509,15 @@ try {
         $legacyVariantMap = Get-VariantMap $legacyBs.Json
         $portVariantMap = Get-VariantMap $portBs.Json
         $legacyFacingDomain = Get-FacingDomain $legacyVariantMap
+        if ($legacySource.facingContract -eq "horizontal") {
+            $legacyFacingDomain = @($legacyFacingDomain | Where-Object { $_ -in @("north", "south", "east", "west") })
+        }
         $portFacingDomain = Get-FacingDomain $portVariantMap
         if ($legacyFacingDomain.Count -gt 0 -or $portFacingDomain.Count -gt 0) {
             $legacyDomainString = $legacyFacingDomain -join ","
             $portDomainString = $portFacingDomain -join ","
-            if ($legacyDomainString -ne $portDomainString) { Add-ResultRow $results "block" $id "facing_domain" "LEGACY_PARITY_MISMATCH" "Legacy/port facing domains differ. legacy=[$legacyDomainString], port=[$portDomainString]." $legacyBs.Path $portBs.Path @{ legacyFacing = $legacyFacingDomain; portFacing = $portFacingDomain } }
-            else { Add-ResultRow $results "block" $id "facing_domain" "LEGACY_PARITY_MATCH" "Legacy/port facing domains match: [$legacyDomainString]." $legacyBs.Path $portBs.Path @{ legacyFacing = $legacyFacingDomain; portFacing = $portFacingDomain } }
+            if ($legacyDomainString -ne $portDomainString) { Add-ResultRow $results "block" $id "facing_domain" "LEGACY_PARITY_MISMATCH" "Legacy/port facing domains differ. legacy=[$legacyDomainString], port=[$portDomainString]." $legacyBs.Path $portBs.Path @{ legacyFacing = $legacyFacingDomain; portFacing = $portFacingDomain; legacyFacingContract = $legacySource.facingContract } }
+            else { Add-ResultRow $results "block" $id "facing_domain" "LEGACY_PARITY_MATCH" "Legacy/port facing domains match: [$legacyDomainString]." $legacyBs.Path $portBs.Path @{ legacyFacing = $legacyFacingDomain; portFacing = $portFacingDomain; legacyFacingContract = $legacySource.facingContract } }
         }
     }
 

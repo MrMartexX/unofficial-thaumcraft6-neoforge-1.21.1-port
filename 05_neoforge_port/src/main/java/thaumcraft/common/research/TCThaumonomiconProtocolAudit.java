@@ -1,7 +1,9 @@
 package thaumcraft.common.research;
 
+import io.netty.buffer.Unpooled;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,11 +12,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.connection.ConnectionType;
 
 final class TCThaumonomiconProtocolAudit {
+    private static final Set<String> LEGACY_ANIMATED_RESEARCH_TEXTURES = Set.of(
+            "thaumcraft:textures/items/seals/seal_breaker.png",
+            "thaumcraft:textures/items/seals/seal_butcher.png",
+            "thaumcraft:textures/items/seals/seal_empty.png",
+            "thaumcraft:textures/items/seals/seal_fill.png",
+            "thaumcraft:textures/items/seals/seal_guard.png",
+            "thaumcraft:textures/items/seals/seal_harvest.png",
+            "thaumcraft:textures/items/seals/seal_lumber.png",
+            "thaumcraft:textures/items/seals/seal_pickup.png",
+            "thaumcraft:textures/items/seals/seal_provider.png",
+            "thaumcraft:textures/items/seals/seal_stock.png",
+            "thaumcraft:textures/items/seals/seal_use.png"
+    );
+
     private static final Set<String> FAKE_CRAFTING_CATALOG_IDS = Set.of(
             "thaumcraft:salismundusfake",
             "thaumcraft:triplemeattreatfake"
@@ -219,6 +238,100 @@ final class TCThaumonomiconProtocolAudit {
                 categoryBackgroundsUseRuntimePng,
                 "legacy jpg assets remain reference-only; modern client views use png"
         ));
+        boolean emptyCategoryCompletionIsZero = index.categories().stream()
+                .allMatch(category -> category.completionPercent() == 0);
+        checks.add(check(
+                "category_completion_is_server_owned_for_empty_knowledge",
+                emptyCategoryCompletionIsZero,
+                "categories=" + index.categories().size()
+        ));
+        checks.add(check(
+                "legacy_knowledge_types_keep_category_fields_and_progression",
+                TCKnowledgeType.THEORY.hasCategories()
+                        && TCKnowledgeType.OBSERVATION.hasCategories()
+                        && TCKnowledgeType.THEORY.rawUnitsPerPoint() == 32
+                        && TCKnowledgeType.OBSERVATION.rawUnitsPerPoint() == 16,
+                "THEORY=32/category, OBSERVATION=16/category"
+        ));
+
+        ArrayList<String> unresolvedResearchIcons = new ArrayList<>();
+        int researchIconsInspected = 0;
+        for (TCResearchEntryDefinition entry : TCResearchManager.entries()) {
+            for (String rawIcon : entry.icons()) {
+                researchIconsInspected++;
+                TCResearchIconResolver.ResolvedIcon resolved = TCResearchIconResolver.resolve(rawIcon);
+                if (resolved.kind() == TCResearchIconResolver.Kind.UNKNOWN
+                        || resolved.kind() == TCResearchIconResolver.Kind.ITEM
+                        && !BuiltInRegistries.ITEM.containsKey(resolved.resource())) {
+                    unresolvedResearchIcons.add(entry.key() + "=" + rawIcon);
+                }
+            }
+        }
+        checks.add(check(
+                "all_research_icons_have_renderable_contracts",
+                unresolvedResearchIcons.isEmpty(),
+                "inspected=" + researchIconsInspected
+                        + ", unresolved=" + String.join(",", unresolvedResearchIcons.stream().limit(8).toList())
+        ));
+        TCResearchIconTextureLayout verticalLayout = TCResearchIconTextureLayout.fromDimensions(16, 48);
+        TCResearchIconTextureLayout horizontalLayout = TCResearchIconTextureLayout.fromDimensions(48, 16);
+        checks.add(check(
+                "legacy_research_texture_animation_contract",
+                verticalLayout.known()
+                        && verticalLayout.vertical()
+                        && verticalLayout.frameCount() == 3
+                        && verticalLayout.frameAt(0L, 150L) == 0
+                        && verticalLayout.frameAt(150L, 150L) == 1
+                        && verticalLayout.frameAt(300L, 150L) == 2
+                        && verticalLayout.vOffset(2) == 32
+                        && horizontalLayout.known()
+                        && !horizontalLayout.vertical()
+                        && horizontalLayout.frameCount() == 3
+                        && horizontalLayout.uOffset(2) == 32,
+                "vertical=16x48/3, horizontal=48x16/3, frame=150ms"
+        ));
+
+        HashSet<String> animatedResearchTextures = new HashSet<>();
+        ArrayList<String> missingResearchTextures = new ArrayList<>();
+        ArrayList<String> invalidResearchTextures = new ArrayList<>();
+        HashSet<String> inspectedResearchTextures = new HashSet<>();
+        for (TCResearchEntryDefinition entry : TCResearchManager.entries()) {
+            for (String rawIcon : entry.icons()) {
+                TCResearchIconResolver.ResolvedIcon resolved = TCResearchIconResolver.resolve(rawIcon);
+                if (resolved.kind() != TCResearchIconResolver.Kind.TEXTURE
+                        || !inspectedResearchTextures.add(resolved.resource().toString())) {
+                    continue;
+                }
+                PngDimensions dimensions = readPngDimensions(resolved.resource());
+                if (dimensions == null) {
+                    missingResearchTextures.add(resolved.resource().toString());
+                    continue;
+                }
+                TCResearchIconTextureLayout layout =
+                        TCResearchIconTextureLayout.fromDimensions(dimensions.width(), dimensions.height());
+                if (!layout.known()) {
+                    invalidResearchTextures.add(resolved.resource().toString());
+                } else if (layout.frameCount() > 1) {
+                    animatedResearchTextures.add(resolved.resource().toString());
+                }
+            }
+        }
+        checks.add(check(
+                "all_research_texture_icons_resolve_png_dimensions",
+                missingResearchTextures.isEmpty() && invalidResearchTextures.isEmpty(),
+                "inspected=" + inspectedResearchTextures.size()
+                        + ", missing=" + String.join(",", missingResearchTextures.stream().limit(8).toList())
+                        + ", invalid=" + String.join(",", invalidResearchTextures.stream().limit(8).toList())
+        ));
+        checks.add(check(
+                "legacy_animated_research_texture_set_matches",
+                animatedResearchTextures.equals(LEGACY_ANIMATED_RESEARCH_TEXTURES),
+                "animated=" + animatedResearchTextures.size()
+                        + ", missingExpected="
+                        + difference(LEGACY_ANIMATED_RESEARCH_TEXTURES, animatedResearchTextures)
+                        + ", unexpected="
+                        + difference(animatedResearchTextures, LEGACY_ANIMATED_RESEARCH_TEXTURES)
+        ));
 
         boolean categoriesServerFiltered = true;
         for (TCResearchCategoryDefinition category : TCResearchManager.categories()) {
@@ -330,6 +443,13 @@ final class TCThaumonomiconProtocolAudit {
                 "legacy_recursive_research_all_marks_new_research_flags",
                 debugAllMarksNewResearch,
                 "entries=" + TCResearchManager.entries().size()
+        ));
+        boolean debugAllCategoryCompletion = allIndex.categories().stream()
+                .allMatch(category -> category.completionPercent() == 100);
+        checks.add(check(
+                "legacy_recursive_research_all_reports_full_category_completion",
+                debugAllCategoryCompletion,
+                "categories=" + allIndex.categories().size()
         ));
         TCPlayerKnowledgeStore.set(player, TCPlayerKnowledge.load(beforeAllKnowledge), false);
         knowledge = TCPlayerKnowledgeStore.get(player);
@@ -855,7 +975,16 @@ final class TCThaumonomiconProtocolAudit {
         sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "ELDRITCH", 22);
         sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "GOLEMANCY", 32);
         sidePanelKnowledge.addRaw(TCKnowledgeType.OBSERVATION, "INFUSION", 60);
-        TCKnowledgeClientCache.accept(TCKnowledgeSyncPayload.from(sidePanelKnowledge));
+        TCKnowledgeSyncPayload sidePanelPayload = TCKnowledgeSyncPayload.from(sidePanelKnowledge);
+        RegistryFriendlyByteBuf sidePanelBuffer = new RegistryFriendlyByteBuf(
+                Unpooled.buffer(),
+                player.registryAccess(),
+                ConnectionType.OTHER
+        );
+        TCKnowledgeSyncPayload.STREAM_CODEC.encode(sidePanelBuffer, sidePanelPayload);
+        TCKnowledgeSyncPayload decodedSidePanelPayload = TCKnowledgeSyncPayload.STREAM_CODEC.decode(sidePanelBuffer);
+        sidePanelBuffer.release();
+        TCKnowledgeClientCache.accept(decodedSidePanelPayload);
         boolean sidePanelStateSynced = TCKnowledgeClientCache.hasResearch("!aer")
                 && TCKnowledgeClientCache.hasResearch("FIRSTSTEPS")
                 && TCKnowledgeClientCache.hasResearch("KNOWLEDGETYPES")
@@ -867,7 +996,9 @@ final class TCThaumonomiconProtocolAudit {
         checks.add(check(
                 "client_knowledge_cache_exposes_thaumonomicon_side_panel_state",
                 sidePanelStateSynced,
-                "aspect_keys_and_raw_knowledge"
+                "wire_roundtrip_categories="
+                        + decodedSidePanelPayload.observationRaw().size()
+                        + ", aspect_keys_and_raw_knowledge"
         ));
 
         CompoundTag beforeDrilldownKnowledge = TCPlayerKnowledgeStore.get(player).save();
@@ -1189,6 +1320,45 @@ final class TCThaumonomiconProtocolAudit {
         return Set.copyOf(result);
     }
 
+    private static Set<String> difference(Set<String> left, Set<String> right) {
+        HashSet<String> result = new HashSet<>(left);
+        result.removeAll(right);
+        return Set.copyOf(result);
+    }
+
+    private static PngDimensions readPngDimensions(net.minecraft.resources.ResourceLocation location) {
+        String resourcePath = "/assets/" + location.getNamespace() + "/" + location.getPath();
+        try (InputStream stream = TCThaumonomiconProtocolAudit.class.getResourceAsStream(resourcePath)) {
+            if (stream == null) {
+                return null;
+            }
+            byte[] header = stream.readNBytes(24);
+            if (header.length != 24
+                    || (header[0] & 0xFF) != 0x89
+                    || header[1] != 'P'
+                    || header[2] != 'N'
+                    || header[3] != 'G'
+                    || header[12] != 'I'
+                    || header[13] != 'H'
+                    || header[14] != 'D'
+                    || header[15] != 'R') {
+                return null;
+            }
+            int width = readBigEndianInt(header, 16);
+            int height = readBigEndianInt(header, 20);
+            return width > 0 && height > 0 ? new PngDimensions(width, height) : null;
+        } catch (IOException ignored) {
+            return null;
+        }
+    }
+
+    private static int readBigEndianInt(byte[] bytes, int offset) {
+        return (bytes[offset] & 0xFF) << 24
+                | (bytes[offset + 1] & 0xFF) << 16
+                | (bytes[offset + 2] & 0xFF) << 8
+                | bytes[offset + 3] & 0xFF;
+    }
+
     private static String classifyDeferredArcaneCatalogEntry(String catalogId) {
         String normalized = catalogId == null ? "" : catalogId.toLowerCase();
         if (containsAny(normalized, ARCANE_TRANSPORT_HINTS)) {
@@ -1277,6 +1447,9 @@ final class TCThaumonomiconProtocolAudit {
     }
 
     private record DrilldownAuditSample(ItemStack stack, int revision) {
+    }
+
+    private record PngDimensions(int width, int height) {
     }
 
     record Report(

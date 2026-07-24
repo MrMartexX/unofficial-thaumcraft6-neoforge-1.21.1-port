@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "minecraft:item/string"
+    "layer0": "thaumcraft:item/amulet_mundane"
   }
 }

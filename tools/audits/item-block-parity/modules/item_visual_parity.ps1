@@ -24,6 +24,9 @@ $TCItemsPath = Join-Path $JavaRoot 'common/registry/TCItems.java'
 $TCBlocksPath = Join-Path $JavaRoot 'common/registry/TCBlocks.java'
 $ItemModelRoot = Join-Path $AssetRoot 'models/item'
 $BlockModelRoot = Join-Path $AssetRoot 'models/block'
+$LegacyAssetRoot = Join-Path $RepoRoot '02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/resources/assets/thaumcraft'
+$LegacyItemModelRoot = Join-Path $LegacyAssetRoot 'models/item'
+$LegacyBlockstateRoot = Join-Path $LegacyAssetRoot 'blockstates'
 
 if (-not (Test-Path $TCItemsPath)) { throw "Missing TCItems.java at $TCItemsPath" }
 if (-not (Test-Path $ReportDir)) { New-Item -ItemType Directory -Force -Path $ReportDir | Out-Null }
@@ -103,6 +106,7 @@ function Is-AllowedGenericMinecraftParent([string]$Parent) {
         'minecraft:item/handheld_rod',
         'minecraft:block/cube',
         'minecraft:block/cube_all',
+        'minecraft:block/cube_bottom_top',
         'minecraft:block/cube_column',
         'minecraft:block/cross',
         'minecraft:block/slab',
@@ -114,6 +118,30 @@ function Is-AllowedGenericMinecraftParent([string]$Parent) {
         'minecraft:block/wall_inventory'
     )
     return $allowed -contains $normalized
+}
+
+$ExpectedSpecificMinecraftParents = @{
+    bannerblack = 'minecraft:item/black_banner'
+    bannerblue = 'minecraft:item/blue_banner'
+    bannerbrown = 'minecraft:item/brown_banner'
+    bannercyan = 'minecraft:item/cyan_banner'
+    bannergray = 'minecraft:item/gray_banner'
+    bannergreen = 'minecraft:item/green_banner'
+    bannerlightblue = 'minecraft:item/light_blue_banner'
+    bannerlime = 'minecraft:item/lime_banner'
+    bannermagenta = 'minecraft:item/magenta_banner'
+    bannerorange = 'minecraft:item/orange_banner'
+    bannerpink = 'minecraft:item/pink_banner'
+    bannerpurple = 'minecraft:item/purple_banner'
+    bannerred = 'minecraft:item/red_banner'
+    bannersilver = 'minecraft:item/light_gray_banner'
+    bannerwhite = 'minecraft:item/white_banner'
+    banneryellow = 'minecraft:item/yellow_banner'
+}
+
+function Is-ExpectedSpecificMinecraftParent([string]$Id, [string]$Parent) {
+    return $ExpectedSpecificMinecraftParents.ContainsKey($Id) `
+        -and $ExpectedSpecificMinecraftParents[$Id] -eq $Parent
 }
 
 function Add-Result(
@@ -182,6 +210,48 @@ function Test-LikelyCustomOrNonFullBlockModel([string]$BlockModelRef) {
     }
 
     return [pscustomobject]@{ isRisk = $false; reason = 'single full-cube element'; path = $blockModelPath }
+}
+
+function Test-ModelChainHasDisplay([string]$ModelRef, [System.Collections.Generic.HashSet[string]]$Visited) {
+    $normalized = Normalize-ResourceRef $ModelRef 'thaumcraft'
+    if ([string]::IsNullOrWhiteSpace($normalized)) { return $false }
+    if (-not $Visited.Add($normalized)) { return $false }
+    if ($normalized -match '^minecraft:block/') { return $true }
+    if ($normalized -notmatch '^thaumcraft:block/') { return $false }
+
+    $modelPath = Get-ModelPathFromRef $normalized 'block'
+    $model = Read-JsonFile $modelPath
+    if ($null -eq $model) { return $false }
+    if (Has-JsonProperty $model 'display') { return $true }
+
+    $parent = [string](Get-JsonPropertyValue $model 'parent')
+    if ([string]::IsNullOrWhiteSpace($parent)) { return $false }
+    return Test-ModelChainHasDisplay $parent $Visited
+}
+
+function Test-LegacyIntentionalFlatItem([string]$Id) {
+    $modelCandidates = New-Object System.Collections.Generic.List[string]
+    $modelCandidates.Add($Id)
+    $separator = $Id.LastIndexOf('_')
+    if ($separator -gt 0) {
+        $modelCandidates.Add($Id.Substring(0, $separator))
+    }
+    foreach ($candidate in $modelCandidates) {
+        $legacyItemModelPath = Join-Path $LegacyItemModelRoot ($candidate + '.json')
+        $legacyItemModel = Read-JsonFile $legacyItemModelPath
+        if ($null -ne $legacyItemModel) {
+            $legacyParent = Normalize-ResourceRef ([string](Get-JsonPropertyValue $legacyItemModel 'parent')) 'minecraft'
+            if ($legacyParent -match '^minecraft:item/(generated|handheld|handheld_rod)$') {
+                return $true
+            }
+        }
+    }
+
+    $legacyBlockstatePath = Join-Path $LegacyBlockstateRoot ($Id + '.json')
+    $legacyBlockstate = Read-Text $legacyBlockstatePath
+    return -not [string]::IsNullOrWhiteSpace($legacyBlockstate) `
+        -and $legacyBlockstate -match '"inventory"' `
+        -and $legacyBlockstate -match '"model"\s*:\s*"forge:item-layer"'
 }
 
 function Get-RegisteredItems([string]$SourceText) {
@@ -268,7 +338,11 @@ foreach ($item in $items) {
         if (-not [string]::IsNullOrWhiteSpace($parent)) {
             $normalizedParent = Normalize-ResourceRef $parent 'minecraft'
             if ($normalizedParent -match '^minecraft:(item|block)/' -and -not (Is-AllowedGenericMinecraftParent $normalizedParent)) {
-                Add-Result $results 'item' $item.id 'vanilla_parent_reference' 'ITEM_VISUAL_REVIEW_NEEDED' $modelPath "Item model inherits specific vanilla parent $normalizedParent; visible thaumcraft item may be using a vanilla icon/model placeholder." 'warning'
+                if (Is-ExpectedSpecificMinecraftParent $item.id $normalizedParent) {
+                    Add-Result $results 'item' $item.id 'vanilla_parent_reference' 'ITEM_VISUAL_PASS' $modelPath "Specific vanilla parent is the explicit legacy-flattening alias for this id: $normalizedParent." 'info'
+                } else {
+                    Add-Result $results 'item' $item.id 'vanilla_parent_reference' 'ITEM_VISUAL_REVIEW_NEEDED' $modelPath "Item model inherits specific vanilla parent $normalizedParent; visible thaumcraft item may be using a vanilla icon/model placeholder." 'warning'
+                }
             } else {
                 Add-Result $results 'item' $item.id 'vanilla_parent_reference' 'ITEM_VISUAL_PASS' $modelPath "No specific vanilla parent placeholder detected; parent=$parent." 'info'
             }
@@ -285,15 +359,20 @@ foreach ($item in $items) {
             $parentNorm = Normalize-ResourceRef $parent 'thaumcraft'
             if ($parentNorm -match '^thaumcraft:block/') {
                 $risk = Test-LikelyCustomOrNonFullBlockModel $parentNorm
-                $hasDisplay = Has-JsonProperty $model 'display'
+                $hasDisplay = (Has-JsonProperty $model 'display') -or
+                        (Test-ModelChainHasDisplay $parentNorm (New-Object 'System.Collections.Generic.HashSet[string]'))
                 if ($risk.isRisk -and -not $hasDisplay) {
                     Add-Result $results 'item' $item.id 'blockitem_custom_geometry_display' 'ITEM_VISUAL_REVIEW_NEEDED' $modelPath "BlockItem inherits likely custom/non-full block model without explicit item display transforms; risk of 2D/front-view or bad hand/GUI icon. $($risk.reason)." 'warning'
                 } else {
-                    Add-Result $results 'item' $item.id 'blockitem_custom_geometry_display' 'ITEM_VISUAL_PASS' $modelPath "BlockItem custom-geometry display risk not detected. hasDisplay=$hasDisplay; $($risk.reason)." 'info'
+                    Add-Result $results 'item' $item.id 'blockitem_custom_geometry_display' 'ITEM_VISUAL_PASS' $modelPath "BlockItem custom-geometry display risk not detected. modelChainHasDisplay=$hasDisplay; $($risk.reason)." 'info'
                 }
             } else {
                 if ($parentNorm -match '^minecraft:item/generated$|^minecraft:item/handheld') {
-                    Add-Result $results 'item' $item.id 'blockitem_custom_geometry_display' 'ITEM_VISUAL_REVIEW_NEEDED' $modelPath "Registered BlockItem uses a flat item parent instead of a block model parent; verify this is intentional and not a front-view placeholder." 'warning'
+                    if (Test-LegacyIntentionalFlatItem $item.id) {
+                        Add-Result $results 'item' $item.id 'blockitem_custom_geometry_display' 'ITEM_VISUAL_PASS' $modelPath "Flat BlockItem icon is intentional: the legacy item model or inventory blockstate also uses an item-layer/generated model." 'info'
+                    } else {
+                        Add-Result $results 'item' $item.id 'blockitem_custom_geometry_display' 'ITEM_VISUAL_REVIEW_NEEDED' $modelPath "Registered BlockItem uses a flat item parent instead of a block model parent without matching legacy item-layer evidence; verify this is not a front-view placeholder." 'warning'
+                    }
                 } else {
                     Add-Result $results 'item' $item.id 'blockitem_custom_geometry_display' 'ITEM_VISUAL_PASS' $modelPath "BlockItem does not inherit a thaumcraft block model; parent=$parent." 'info'
                 }

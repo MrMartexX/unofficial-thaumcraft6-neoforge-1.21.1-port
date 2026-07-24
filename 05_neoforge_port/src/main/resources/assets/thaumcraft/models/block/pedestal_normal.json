@@ -1,4 +1,5 @@
 {
+    "parent": "minecraft:block/block",
     "textures": {
         "side": "thaumcraft:block/pedestal_side",
         "top": "thaumcraft:block/pedestal_top",

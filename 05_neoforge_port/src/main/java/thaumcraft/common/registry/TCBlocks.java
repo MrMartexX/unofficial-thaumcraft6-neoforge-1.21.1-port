@@ -37,6 +37,7 @@ import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchBlock;
 import thaumcraft.common.blocks.crafting.TCArcaneWorkbenchChargerBlock;
 import thaumcraft.common.blocks.crafting.TCCrucibleBlock;
 import thaumcraft.common.blocks.crafting.TCFocalManipulatorBlock;
+import thaumcraft.common.blocks.crafting.TCGolemBuilderBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionMatrixBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionModifierBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionPedestalBlock;
@@ -538,7 +539,7 @@ public final class TCBlocks {
     }
 
     private static Block golemBuilderBlock() {
-        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+        return new TCGolemBuilderBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                 .strength(1.5F, 2.0F)
                 .sound(SoundType.STONE)
                 .noOcclusion());

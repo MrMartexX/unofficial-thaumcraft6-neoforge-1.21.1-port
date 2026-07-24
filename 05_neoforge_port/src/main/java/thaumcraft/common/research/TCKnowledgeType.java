@@ -30,6 +30,10 @@ public enum TCKnowledgeType {
         return Math.max(0, raw) / rawUnitsPerPoint;
     }
 
+    public boolean hasCategories() {
+        return true;
+    }
+
     public static TCKnowledgeType parse(String value) {
         if (value == null) {
             return null;
