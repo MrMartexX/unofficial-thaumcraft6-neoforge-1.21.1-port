@@ -124,7 +124,6 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.LAMP_ARCANE.get());
         acceptVisible(output, TCItems.LAMP_GROWTH.get());
         acceptVisible(output, TCItems.LAMP_FERTILITY.get());
-        acceptVisible(output, TCItems.INFERNAL_FURNACE.get());
         acceptVisible(output, TCItems.VOID_SIPHON.get());
         acceptVisible(output, TCItems.SPA.get());
         acceptVisible(output, TCItems.EVERFULL_URN.get());
@@ -140,7 +139,6 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.ELDRITCH_PEDESTAL.get());
         acceptVisible(output, TCItems.INLAY.get());
         acceptVisible(output, TCItems.STABILIZER.get());
-        acceptVisible(output, TCItems.GOLEM_BUILDER.get());
         acceptVisible(output, TCItems.FLUX_GOO.get());
         acceptVisible(output, TCItems.TAINT_FIBRE.get());
         acceptVisible(output, TCItems.TAINT_CRUST.get());

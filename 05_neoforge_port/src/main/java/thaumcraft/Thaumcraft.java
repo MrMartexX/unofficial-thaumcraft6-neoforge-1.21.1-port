@@ -13,6 +13,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 import thaumcraft.client.TCItemProperties;
+import thaumcraft.client.TCClientExtensions;
 import thaumcraft.client.gui.TCClientTooltipComponents;
 import thaumcraft.client.gui.TCMenuScreens;
 import thaumcraft.client.renderer.TCBlockEntityRenderers;
@@ -128,6 +129,7 @@ public final class Thaumcraft {
             TCEntityRenderers.register(modEventBus);
             TCKnowledgeGainHud.register(modEventBus);
             TCItemProperties.register(modEventBus);
+            TCClientExtensions.register(modEventBus);
             TCResearchIconRenderer.register(modEventBus);
         }
         modEventBus.addListener(TCAuraNetwork::onRegisterPayloadHandlers);

@@ -1,7 +1,7 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
 Last reviewed branch: `main`
-Last reviewed checkpoint: `2026-07-24` Thaumonomicon protocol/UI and item-visual parity repair
+Last reviewed checkpoint: `2026-07-24` client visual, fluid and essentia-container repair
 Reviewed target module: `05_neoforge_port`
 
 ## State Snapshot
@@ -16,6 +16,7 @@ This section records the current repository state. The lower "Changelog Notes" s
 - Latest Thaumonomicon protocol/UI correction on 2026-07-24 passes `55/55` checks. It covers creative locked-start and recursive debug-all behavior, all seven categorized knowledge totals, exact legacy knowledge field/progression semantics, category completion, `165` metadata/component-aware research icon contracts, all `51` texture icons, the exact `11` animated seal spritesheets, mutually exclusive side/recipe papers, normal stack tooltips, completed-research tab gates and legacy marker layering.
 - The focused item/block `visual` run reports `0` missing models. Model transforms have `1287/1287` evidence rows with `0` reviews; item visuals have `2145/2209` pass rows with `64` explicit implementation reviews (`60` catalog bridge items and `4` enchanted placeholders). Legacy shape has `123/139` pass with `16` reviews; visual/collision evidence has `271` match, `0` mismatch, `0` missing and `444` unknown; texture comparison has `295/295` exact and `0` reviews. `research_table` facing/placement and `golem_builder` empty geometry were corrected from exact legacy evidence. CI-safe passes with `0` safe failures. These reports do not claim measured pixel parity.
 - The same batch restored exact legacy-backed aliases/textures/display parents for active special item models, including the 3D Hungry Chest research output, turret icons, caster focus predicate, armor/tool families, banners, baubles and machine/device outputs. All registered bridge IDs now have modern translation keys derived from legacy display names.
+- The follow-up client repair removes legacy command-only `golem_builder` and `infernal_furnace` from the creative tab, replaces absolute/deprecated atlas references for Golem Press, Hungry Chest, caster gauntlets and crystals, makes all lamp item models display their off state, restores legacy dyeable robe layer order/default color, installs exact legacy potion-effect icon cells, supplies non-null legacy fluid sprites/tints for Liquid Death and Purifying Fluid, and adds progressive colored essentia rendering for normal/Void jars. Thaumatorium placement now preserves the legacy Shift-facing branch and its inventory model uses the legacy transform.
 
 ### Research, scanning and theorycraft
 
@@ -39,7 +40,7 @@ This section records the current repository state. The lower "Changelog Notes" s
 ### Item and equipment behavior
 
 - The first safe item/equipment behavior pass is active for already registered legacy ids. `goggles` is now a real `ArmorItem` helmet with legacy `350` durability, rare rarity, thaumium repair, `IVisDiscountGear` `5%`, `IGoggles`, and `IRevealer` contracts.
-- `cloth_boots`, `cloth_legs`, and `cloth_chest` are real armor pieces with legacy `2/3/3%` vis discounts, uncommon rarity and fabric repair. `void_robe_helm`, `void_robe_chest`, and `void_robe_legs` are real armor pieces with legacy `5%` discount each, `IWarpingGear` `3` each, void-ingot repair, epic rarity and one-point-per-second self repair; only the helm reveals nodes/popups like legacy.
+- `cloth_boots`, `cloth_legs`, and `cloth_chest` are real armor pieces with legacy `2/3/3%` vis discounts, uncommon rarity, fabric repair, dyeable base layer and default color `6961280`. `void_robe_helm`, `void_robe_chest`, and `void_robe_legs` are real armor pieces with the legacy dyeable overlay/base order, default color `6961280`, `5%` discount each, `IWarpingGear` `3` each, void-ingot repair, epic rarity and one-point-per-second self repair; only the helm reveals nodes/popups like legacy.
 - `sanity_checker` is the real modern item id. The legacy `sanitychecker` key remains a recipe/page id only, and the arcane recipe now outputs `thaumcraft:sanity_checker`.
 - `sane_soap` has the legacy use-duration/blocking action boundary and server-side warp cleansing behavior for the current warp store: after a full use it consumes one item, reduces normal warp by one plus the legacy Warp Ward/Purifying Fluid bonuses, and clears temporary warp.
 - `curio_rites` carries the legacy curio/rites metadata component and enforces the legacy `actual warp > 20` Crimson Rites gate before completing `CrimsonRites`, granting Eldritch/random knowledge, adding normal/temporary/possible permanent warp and consuming the item outside creative mode.

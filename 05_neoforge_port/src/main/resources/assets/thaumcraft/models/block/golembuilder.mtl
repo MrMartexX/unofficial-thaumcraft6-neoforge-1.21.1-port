@@ -11,5 +11,5 @@ newmtl texture
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka E:\Thaumcraft\thaumcraft110\bin\assets\thaumcraft\textures\blocks\golembuilder.png 
-	map_Kd E:\Thaumcraft\thaumcraft110\bin\assets\thaumcraft\textures\blocks\golembuilder.png 
+	map_Ka thaumcraft:block/golembuilder
+	map_Kd thaumcraft:block/golembuilder

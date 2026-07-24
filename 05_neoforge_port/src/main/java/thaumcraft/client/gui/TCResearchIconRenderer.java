@@ -40,8 +40,9 @@ public final class TCResearchIconRenderer {
     }
 
     static boolean render(GuiGraphics graphics, String raw, int x, int y, int focusBrightness) {
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         TCResearchIconResolver.ResolvedIcon icon = TCResearchIconResolver.resolve(raw);
-        return switch (icon.kind()) {
+        boolean rendered = switch (icon.kind()) {
             case TEXTURE -> {
                 drawResearchTexture(graphics, icon.resource(), x, y);
                 yield true;
@@ -64,6 +65,8 @@ public final class TCResearchIconRenderer {
                     .orElse(false);
             case UNKNOWN -> false;
         };
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        return rendered;
     }
 
     private static void drawResearchTexture(
@@ -134,7 +137,7 @@ public final class TCResearchIconRenderer {
 
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 5.0F);
-        graphics.pose().mulPose(Axis.ZP.rotationDegrees(-90.0F));
+        graphics.pose().mulPose(Axis.ZP.rotationDegrees(90.0F));
         if (definition.kind() == TCFocusElementDefinition.Kind.EFFECT
                 || definition.kind() == TCFocusElementDefinition.Kind.MEDIUM) {
             ResourceLocation backing = ResourceLocation.fromNamespaceAndPath(

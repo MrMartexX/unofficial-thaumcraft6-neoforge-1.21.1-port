@@ -43,7 +43,7 @@ public final class TCArmorMaterials {
                     25,
                     SoundEvents.ARMOR_EQUIP_LEATHER,
                     () -> Ingredient.of(TCItems.FABRIC.get()),
-                    List.of(layer("robes"), overlayLayer("robes")),
+                    List.of(dyeableLayer("robes"), overlayLayer("robes")),
                     1.0F,
                     0.0F
             )
@@ -57,7 +57,7 @@ public final class TCArmorMaterials {
                     10,
                     SoundEvents.ARMOR_EQUIP_LEATHER,
                     () -> Ingredient.of(TCItems.VOID_INGOT.get()),
-                    List.of(layer("void_robe_armor"), overlayLayer("void_robe_armor")),
+                    List.of(dyeableOverlayLayer("void_robe_armor"), layer("void_robe_armor")),
                     2.0F,
                     0.0F
             )
@@ -92,8 +92,16 @@ public final class TCArmorMaterials {
         return new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, path));
     }
 
+    private static ArmorMaterial.Layer dyeableLayer(String path) {
+        return new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, path), "", true);
+    }
+
     private static ArmorMaterial.Layer overlayLayer(String path) {
         return new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, path), "_overlay", false);
+    }
+
+    private static ArmorMaterial.Layer dyeableOverlayLayer(String path) {
+        return new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, path), "_overlay", true);
     }
 
     public static Item.Properties armorProperties(ArmorItem.Type type, int durabilityFactor) {

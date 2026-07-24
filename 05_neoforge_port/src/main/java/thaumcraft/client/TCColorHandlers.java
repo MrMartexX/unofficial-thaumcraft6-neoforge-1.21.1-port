@@ -5,6 +5,7 @@ import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
@@ -16,6 +17,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.items.ItemAspectVariant;
 import thaumcraft.common.items.TCEssentiaItemHelper;
 import thaumcraft.common.items.components.TCAspectStackComponent;
+import thaumcraft.common.items.armor.ItemRobeArmor;
 import thaumcraft.common.registry.TCBlocks;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
@@ -160,6 +162,16 @@ public final class TCColorHandlers {
             Aspect aspect = TCEssentiaItemHelper.aspectFromStack(stack);
             return aspect == null ? 0xFFFFFFFF : (0xFF000000 | (aspect.getColor() & 0xFFFFFF));
         }, TCItems.JAR_LABEL_ESSENCE.get());
+        ItemColor robeColor = (stack, tintIndex) -> tintIndex == 0
+                ? DyedItemColor.getOrDefault(stack, ItemRobeArmor.LEGACY_DEFAULT_COLOR)
+                : WHITE;
+        event.register(robeColor,
+                TCItems.CLOTH_BOOTS.get(),
+                TCItems.CLOTH_LEGS.get(),
+                TCItems.CLOTH_CHEST.get(),
+                TCItems.VOID_ROBE_LEGS.get(),
+                TCItems.VOID_ROBE_CHEST.get(),
+                TCItems.VOID_ROBE_HELM.get());
     }
 
     private static int aspectVariantColor(ItemStack stack, int tintIndex) {

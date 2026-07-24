@@ -388,10 +388,10 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         }
 
         if (entry.flags().contains(TCResearchFlag.RESEARCH)) {
-            drawLegacyNodeFlag(graphics, -9, -9, 176, 16);
+            drawLegacyNodeFlag(graphics, -17, -17, 176, 16);
         }
         if (entry.flags().contains(TCResearchFlag.PAGE)) {
-            drawLegacyNodeFlag(graphics, -9, 9, 208, 16);
+            drawLegacyNodeFlag(graphics, -17, 1, 208, 16);
         }
         renderResearchIcon(graphics, entry, -8, -8);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);

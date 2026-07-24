@@ -106,7 +106,11 @@ public final class TCThaumatoriumBlock extends Block implements EntityBlock {
         if (!above.canBeReplaced(context)) {
             return null;
         }
-        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        Direction facing = context.getHorizontalDirection();
+        if (!context.isSecondaryUseActive()) {
+            facing = facing.getOpposite();
+        }
+        return defaultBlockState().setValue(FACING, facing);
     }
 
     @Override

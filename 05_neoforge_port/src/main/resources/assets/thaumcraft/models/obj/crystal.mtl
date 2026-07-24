@@ -12,5 +12,5 @@ newmtl Material__25
 	Kd 0.5880 0.5880 0.5880
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.0000 0.0000 0.0000
-	map_Ka C:\Thaumcraft\thaumcraft18\src\main\resources\assets\thaumcraft\textures\blocks\crystal.png
-	map_Kd C:\Thaumcraft\thaumcraft18\src\main\resources\assets\thaumcraft\textures\blocks\crystal.png
+	map_Ka thaumcraft:block/crystal
+	map_Kd thaumcraft:block/crystal

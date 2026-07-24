@@ -1164,11 +1164,9 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int row = index - start;
             int rowY = y + row * 40;
             if (inside(mouseX, mouseY, x, rowY, 40, 40)) {
+                graphics.setColor(1.0F, 1.0F, 1.0F, 0.35F);
                 drawFullTexture(graphics, ASPECT_BACK, x - 2, rowY - 2, 32, 32);
-                hoveredUiTooltip = List.of(
-                        Component.translatable("tc.aspect." + aspect.getTag()).withStyle(ChatFormatting.GOLD),
-                        Component.literal(aspect.getTag()).withStyle(ChatFormatting.GRAY)
-                );
+                graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             }
             drawAspectIcon(graphics, aspect, x + 2, rowY + 2, 24);
             drawCenteredSmall(graphics, Component.translatable("tc.aspect." + aspect.getTag()), x + 16, rowY + 29, 0xFF505050);
@@ -1197,11 +1195,6 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             drawCenteredSmall(graphics, Component.translatable("tc.aspect." + aspect.getTag()), x + 10, y + 25, 0xFF505050);
         } else {
             drawFullTexture(graphics, UNKNOWN, x, y, 20, 20);
-        }
-        if (inside(mouseX, mouseY, x, y, 20, 20)) {
-            hoveredUiTooltip = known
-                    ? List.of(Component.translatable("tc.aspect." + aspect.getTag()).withStyle(ChatFormatting.GOLD))
-                    : List.of(Component.literal("???").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -1307,6 +1300,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int mouseX,
             int mouseY
     ) {
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         drawFullTexture(graphics, type == TCKnowledgeType.THEORY ? KNOWLEDGE_THEORY : KNOWLEDGE_OBSERVATION, x, y, 16, 16);
         ResourceLocation icon = parseLocation(categoryView == null ? "" : categoryView.icon());
         if (type.hasCategories() && icon != null) {
@@ -1340,7 +1334,7 @@ public final class TCThaumonomiconEntryScreen extends Screen {
                 tooltip.append(": ");
                 tooltip.append(Component.translatable("tc.research_category." + category));
             }
-            hoveredUiTooltip = List.of(tooltip);
+            hoveredUiTooltip = List.of(tooltip.withStyle(ChatFormatting.AQUA));
         }
     }
 
@@ -2022,7 +2016,14 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private void renderItemTooltip(GuiGraphics graphics, ItemStack stack, int mouseX, int mouseY) {
         graphics.pose().pushPose();
         graphics.pose().translate(0.0F, 0.0F, TOOLTIP_Z);
-        graphics.renderTooltip(font, stack, mouseX, mouseY);
+        List<Component> lines = new ArrayList<>(Screen.getTooltipFromItem(minecraft, stack));
+        if (!lines.isEmpty()) {
+            lines.set(0, lines.get(0).copy().withStyle(ChatFormatting.AQUA));
+            for (int index = 1; index < lines.size(); index++) {
+                lines.set(index, lines.get(index).copy().withStyle(ChatFormatting.GRAY));
+            }
+        }
+        graphics.renderTooltip(font, lines, stack.getTooltipImage(), stack, mouseX, mouseY);
         graphics.pose().popPose();
     }
 
