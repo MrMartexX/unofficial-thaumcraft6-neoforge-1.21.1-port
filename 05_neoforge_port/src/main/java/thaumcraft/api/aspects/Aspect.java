@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import thaumcraft.Thaumcraft;
@@ -64,7 +65,7 @@ public class Aspect {
         if (tag == null || tag.isEmpty()) {
             return tag;
         }
-        return tag.substring(0, 1).toUpperCase() + tag.substring(1).toLowerCase();
+        return tag.substring(0, 1).toUpperCase(Locale.ROOT) + tag.substring(1).toLowerCase(Locale.ROOT);
     }
 
     public String getLocalizedDescription() {
@@ -144,7 +145,7 @@ public class Aspect {
     }
 
     private static ResourceLocation aspectImage(String tag) {
-        return ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/aspects/" + tag.toLowerCase() + ".png");
+        return ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/aspects/" + tag.toLowerCase(Locale.ROOT) + ".png");
     }
 
     public static Aspect AIR = new Aspect("aer", 0xffff7e, "e", 1);
