@@ -188,19 +188,17 @@ public class TCSilverwoodTreeGenerator {
     }
 
     private static void placeShimmerleafPatch(WorldGenLevel level, RandomSource random, BlockPos center) {
-        for (int i = 0; i < 16; i++) {
-            BlockPos pos = center.offset(random.nextInt(9) - 4, 0, random.nextInt(9) - 4);
+        for (int i = 0; i < 18; i++) {
+            int x = center.getX() + random.nextInt(8) - random.nextInt(8);
+            int y = center.getY() + random.nextInt(4) - random.nextInt(4);
+            int z = center.getZ() + random.nextInt(8) - random.nextInt(8);
+            BlockPos target = new BlockPos(x, y, z);
+            BlockPos below = target.below();
 
-            for (int y = 0; y < 6; y++) {
-                BlockPos target = pos.above(y);
-                BlockPos below = target.below();
-
-                if (level.hasChunkAt(target) && level.hasChunkAt(below)
-                        && level.getBlockState(target).isAir()
-                        && level.getBlockState(below).is(Blocks.GRASS_BLOCK)) {
-                    level.setBlock(target, TCBlocks.SHIMMERLEAF.get().defaultBlockState(), 3);
-                    break;
-                }
+            if (level.hasChunkAt(target) && level.hasChunkAt(below)
+                    && level.getBlockState(target).isAir()
+                    && (level.getBlockState(below).is(Blocks.GRASS_BLOCK) || level.getBlockState(below).is(Blocks.DIRT))) {
+                level.setBlock(target, TCBlocks.SHIMMERLEAF.get().defaultBlockState(), 3);
             }
         }
     }
