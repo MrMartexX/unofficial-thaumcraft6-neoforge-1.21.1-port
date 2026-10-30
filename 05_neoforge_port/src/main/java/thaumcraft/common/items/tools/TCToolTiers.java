@@ -16,6 +16,38 @@ public enum TCToolTiers implements Tier {
             2.0F,
             22,
             () -> Ingredient.of(TCItems.THAUMIUM_INGOT.get())
+    ),
+    VOID(
+            BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+            150,
+            8.0F,
+            3.0F,
+            10,
+            () -> Ingredient.of(TCItems.VOID_INGOT.get())
+    ),
+    ELEMENTAL(
+            BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+            1500,
+            9.0F,
+            3.0F,
+            18,
+            () -> Ingredient.of(TCItems.THAUMIUM_INGOT.get())
+    ),
+    PRIMALVOID(
+            BlockTags.INCORRECT_FOR_NETHERITE_TOOL,
+            500,
+            8.0F,
+            4.0F,
+            20,
+            () -> Ingredient.of(TCItems.VOID_INGOT.get())
+    ),
+    CVOID(
+            BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+            200,
+            8.0F,
+            3.5F,
+            20,
+            () -> Ingredient.of(TCItems.VOID_INGOT.get())
     );
 
     private final TagKey<Block> incorrectBlocksForDrops;

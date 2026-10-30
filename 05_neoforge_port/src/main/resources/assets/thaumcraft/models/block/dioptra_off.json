@@ -1,0 +1,9 @@
+{
+  "parent": "thaumcraft:block/dioptra",
+  "textures": {
+    "particle": "thaumcraft:block/dioptra_side_off",
+    "side": "thaumcraft:block/dioptra_side_off",
+    "top": "thaumcraft:block/dioptra_top",
+    "bottom": "thaumcraft:block/arcane_stone_1"
+  }
+}

@@ -129,7 +129,6 @@ def parse_legacy_registry(legacy_root: Path) -> Tuple[Set[str], Set[str]]:
                 sub_list = [s.strip().strip('"') for s in subs.split(',') if s.strip()]
                 for sub in sub_list:
                     legacy_items.add(f"{base}_{sub}")
-                    legacy_items.add(sub)
             else:
                 legacy_items.add(base)
 
@@ -212,8 +211,16 @@ def parse_legacy_registry(legacy_root: Path) -> Tuple[Set[str], Set[str]]:
         'pedestal_arcane': 'arcane_pedestal',
         'pedestal_ancient': 'ancient_pedestal',
         'pedestal_eldritch': 'eldritch_pedestal',
+        'hungrychest': 'hungry_chest',
+        'essentia_input': 'essentiatransportin',
+        'essentia_output': 'essentiatransportout',
     }
     legacy_blocks = {block_normalizations.get(b, b) for b in legacy_blocks}
+    # Discard 1.12 transient, dummy, or prefix entries
+    legacy_blocks = {b for b in legacy_blocks if not b.startswith('tile') and ':' not in b and b not in [
+        'empty', 'banner_', 'candle_', 'nitor_', 'placeholder_anvil', 'placeholder_bars',
+        'placeholder_cauldron', 'placeholder_table', 'effect_sap', 'effect_shock', 'hole', 'grass_ambient'
+    ]}
 
     # Item name normalizations
     item_normalizations = {
@@ -237,6 +244,38 @@ def parse_legacy_registry(legacy_root: Path) -> Tuple[Set[str], Set[str]]:
         'resonator': 'vis_resonator',
         'sanity_soap': 'sane_soap',
         'jar_brace': 'brass_brace',
+        'fortress_helm': 'thaumium_fortress_helm',
+        'fortress_chest': 'thaumium_fortress_chest',
+        'fortress_legs': 'thaumium_fortress_legs',
+        'elemental_pickaxe': 'elemental_pick',
+        'thaumium_pickaxe': 'thaumium_pick',
+        'void_pickaxe': 'void_pick',
+        'amulet_vis': 'vis_amulet',
+        'band_curiosity': 'curiosity_band',
+        'charm_voidseer': 'voidseer_pearl',
+        'charm_verdant': 'verdant_heart',
+        'ring_cloud': 'cloud_ring',
+        'ingot_brass': 'brass_ingot',
+        'ingot_thaumium': 'thaumium_ingot',
+        'ingot_void': 'void_ingot',
+        'nugget_brass': 'brass_nugget',
+        'nugget_quicksilver': 'quicksilver_nugget',
+        'nugget_thaumium': 'thaumium_nugget',
+        'nugget_void': 'void_nugget',
+        'plate_brass': 'brass_plate',
+        'plate_iron': 'iron_plate',
+        'plate_thaumium': 'thaumium_plate',
+        'plate_void': 'void_plate',
+        'hungrychest': 'hungry_chest',
+        'nugget_copper': 'copper_nugget',
+        'nugget_iron': 'iron_nugget',
+        'nugget_silver': 'silver_nugget',
+        'nugget_lead': 'lead_nugget',
+        'nugget_tin': 'tin_nugget',
+        'nugget_quartz': 'quartz_nugget',
+        'nugget_rareearth': 'rare_earth',
+        'rareearth': 'rare_earth',
+        'cluster_quartz': 'quartz',
     }
     legacy_items = {item_normalizations.get(i, i) for i in legacy_items}
 

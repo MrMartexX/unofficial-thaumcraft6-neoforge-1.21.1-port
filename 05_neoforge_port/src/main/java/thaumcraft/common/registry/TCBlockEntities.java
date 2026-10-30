@@ -46,6 +46,21 @@ public final class TCBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
             DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Thaumcraft.MODID);
 
+    public static final Supplier<BlockEntityType<thaumcraft.common.tiles.devices.TCHungryChestBlockEntity>> HUNGRY_CHEST =
+            BLOCK_ENTITY_TYPES.register("hungry_chest", () ->
+                    BlockEntityType.Builder.of(thaumcraft.common.tiles.devices.TCHungryChestBlockEntity::new, TCBlocks.HUNGRY_CHEST.get()).build(null));
+    public static final Supplier<BlockEntityType<thaumcraft.common.tiles.devices.TCDioptraBlockEntity>> DIOPTRA =
+            BLOCK_ENTITY_TYPES.register("dioptra", () ->
+                    BlockEntityType.Builder.of(thaumcraft.common.tiles.devices.TCDioptraBlockEntity::new, TCBlocks.DIOPTRA.get()).build(null));
+    public static final Supplier<BlockEntityType<thaumcraft.common.tiles.devices.TCArcaneEarBlockEntity>> ARCANE_EAR =
+            BLOCK_ENTITY_TYPES.register("arcane_ear", () ->
+                    BlockEntityType.Builder.of(thaumcraft.common.tiles.devices.TCArcaneEarBlockEntity::new, TCBlocks.ARCANE_EAR.get()).build(null));
+    public static final Supplier<BlockEntityType<thaumcraft.common.tiles.devices.TCArcaneEarBlockEntity>> ARCANE_EAR_TOGGLE =
+            BLOCK_ENTITY_TYPES.register("arcane_ear_toggle", () ->
+                    BlockEntityType.Builder.of(thaumcraft.common.tiles.devices.TCArcaneEarBlockEntity::new, TCBlocks.ARCANE_EAR_TOGGLE.get()).build(null));
+    public static final Supplier<BlockEntityType<thaumcraft.common.tiles.devices.TCLevitatorBlockEntity>> LEVITATOR =
+            BLOCK_ENTITY_TYPES.register("levitator", () ->
+                    BlockEntityType.Builder.of(thaumcraft.common.tiles.devices.TCLevitatorBlockEntity::new, TCBlocks.LEVITATOR.get()).build(null));
     public static final Supplier<BlockEntityType<TCResearchTableBlockEntity>> RESEARCH_TABLE =
             BLOCK_ENTITY_TYPES.register("research_table", () ->
                     BlockEntityType.Builder.of(TCResearchTableBlockEntity::new, TCBlocks.RESEARCH_TABLE.get()).build(null));

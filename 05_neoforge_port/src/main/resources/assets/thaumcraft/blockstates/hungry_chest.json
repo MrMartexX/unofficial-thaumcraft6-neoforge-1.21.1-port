@@ -1,20 +1,19 @@
 {
-    "forge_marker": 1,
-    "defaults": {
-        "model": "thaumcraft:chest",
-        "transform": "forge:default-block",
-        "textures": {
-          "particle": "thaumcraft:models/chesthungry",
-          "texture": "thaumcraft:models/chesthungry"
-        }
+  "variants": {
+    "facing=north": {
+      "model": "thaumcraft:block/hungry_chest"
     },
-    "variants": {
-        "inventory":[{}],
-        "facing=up":    { "model": "thaumcraft:chest"},        
-        "facing=down":    { "model": "thaumcraft:chest"},        
-        "facing=west":    { "model": "thaumcraft:chest"},        
-        "facing=south":    { "model": "thaumcraft:chest"},        
-        "facing=north":    { "model": "thaumcraft:chest"},        
-        "facing=east":    { "model": "thaumcraft:chest"}        
+    "facing=south": {
+      "model": "thaumcraft:block/hungry_chest",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "thaumcraft:block/hungry_chest",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "thaumcraft:block/hungry_chest",
+      "y": 90
     }
+  }
 }

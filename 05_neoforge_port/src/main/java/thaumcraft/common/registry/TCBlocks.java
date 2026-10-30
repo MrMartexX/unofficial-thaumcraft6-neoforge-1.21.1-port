@@ -206,6 +206,12 @@ public final class TCBlocks {
     public static final Supplier<Block> LOOT_URN_UNCOMMON = BLOCKS.register("loot_urn_uncommon", () -> stoneBlock(1.5F, 5.0F));
     public static final Supplier<Block> LOOT_URN_RARE = BLOCKS.register("loot_urn_rare", () -> stoneBlock(1.5F, 5.0F));
     public static final Supplier<Block> VIS_GENERATOR = BLOCKS.register("vis_generator", () -> visGeneratorBlock());
+    public static final Supplier<Block> HUNGRY_CHEST = BLOCKS.register("hungry_chest", () -> new thaumcraft.common.blocks.devices.TCHungryChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).strength(2.5F).sound(SoundType.WOOD)));
+    public static final Supplier<Block> DIOPTRA = BLOCKS.register("dioptra", () -> new thaumcraft.common.blocks.devices.TCDioptraBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(2.0F).sound(SoundType.STONE).noOcclusion()));
+    public static final Supplier<Block> ARCANE_EAR = BLOCKS.register("arcane_ear", () -> new thaumcraft.common.blocks.devices.TCArcaneEarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(1.0F).sound(SoundType.WOOD).noOcclusion()));
+    public static final Supplier<Block> ARCANE_EAR_TOGGLE = BLOCKS.register("arcane_ear_toggle", () -> new thaumcraft.common.blocks.devices.TCArcaneEarToggleBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).strength(1.0F).sound(SoundType.WOOD).noOcclusion()));
+    public static final Supplier<Block> LEVITATOR = BLOCKS.register("levitator", () -> new thaumcraft.common.blocks.devices.TCLevitatorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(3.0F).sound(SoundType.STONE).noOcclusion()));
+
     public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
     public static final Supplier<Block> INLAY = BLOCKS.register("inlay", () -> inlayBlock());
     public static final Supplier<Block> STABILIZER = BLOCKS.register("stabilizer", () -> stabilizerBlock());

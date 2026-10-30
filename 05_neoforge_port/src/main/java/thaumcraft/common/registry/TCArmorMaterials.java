@@ -105,6 +105,77 @@ public final class TCArmorMaterials {
             )
     );
 
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> FORTRESS = ARMOR_MATERIALS.register(
+            "fortress",
+            () -> material(
+                    40,
+                    defense(3, 6, 7, 3),
+                    25,
+                    SoundEvents.ARMOR_EQUIP_IRON,
+                    () -> Ingredient.of(TCItems.THAUMIUM_INGOT.get()),
+                    List.of(layer("fortress")),
+                    3.0F,
+                    0.0F
+            )
+    );
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CULTIST_PLATE = ARMOR_MATERIALS.register(
+            "cultist_plate",
+            () -> material(
+                    18,
+                    defense(2, 5, 6, 2),
+                    13,
+                    SoundEvents.ARMOR_EQUIP_IRON,
+                    () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT),
+                    List.of(layer("cultist_plate_armor")),
+                    0.0F,
+                    0.0F
+            )
+    );
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CULTIST_ROBE = ARMOR_MATERIALS.register(
+            "cultist_robe",
+            () -> material(
+                    15,
+                    defense(1, 4, 5, 1),
+                    13,
+                    SoundEvents.ARMOR_EQUIP_LEATHER,
+                    () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT),
+                    List.of(layer("cultist_robe_armor")),
+                    0.0F,
+                    0.0F
+            )
+    );
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CULTIST_PRAETOR = ARMOR_MATERIALS.register(
+            "cultist_praetor",
+            () -> material(
+                    22,
+                    defense(3, 6, 7, 3),
+                    15,
+                    SoundEvents.ARMOR_EQUIP_IRON,
+                    () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT),
+                    List.of(layer("cultist_leader_armor")),
+                    1.0F,
+                    0.0F
+            )
+    );
+
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> CULTIST_BOOTS = ARMOR_MATERIALS.register(
+            "cultist_boots",
+            () -> material(
+                    15,
+                    defense(2, 5, 6, 2),
+                    13,
+                    SoundEvents.ARMOR_EQUIP_IRON,
+                    () -> Ingredient.of(net.minecraft.world.item.Items.IRON_INGOT),
+                    List.of(layer("cultistboots")),
+                    0.0F,
+                    0.0F
+            )
+    );
+
     private TCArmorMaterials() {
     }
 

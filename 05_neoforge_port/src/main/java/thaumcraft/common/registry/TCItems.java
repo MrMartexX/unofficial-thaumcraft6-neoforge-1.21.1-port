@@ -1,5 +1,20 @@
 package thaumcraft.common.registry;
 
+import thaumcraft.common.items.tools.ItemElementalAxe;
+import thaumcraft.common.items.tools.ItemElementalPickaxe;
+import thaumcraft.common.items.tools.ItemElementalSword;
+import thaumcraft.common.items.tools.ItemElementalShovel;
+import thaumcraft.common.items.tools.ItemElementalHoe;
+import thaumcraft.common.items.tools.ItemPrimalCrusher;
+import thaumcraft.common.items.tools.ItemCrimsonBlade;
+import thaumcraft.common.items.armor.ItemFortressArmor;
+import thaumcraft.common.items.armor.ItemCultistPlateArmor;
+import thaumcraft.common.items.armor.ItemCultistRobeArmor;
+import thaumcraft.common.items.armor.ItemCultistLeaderArmor;
+import thaumcraft.common.items.armor.ItemCultistBoots;
+import thaumcraft.common.items.curios.TCCurioItem;
+import thaumcraft.common.items.curios.TCLootBagItem;
+
 import java.util.function.Supplier;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ArmorItem;
@@ -239,6 +254,32 @@ public final class TCItems {
     public static final Supplier<Item> SANE_SOAP = ITEMS.register("sane_soap", ItemSanitySoap::new);
     public static final Supplier<Item> FLESH_BLOCK = simpleItem("flesh_block");
     public static final Supplier<Item> CURIO_RITES = ITEMS.register("curio_rites", ItemCurioRites::new);
+    // Crimson Cult Equipment
+    public static final Supplier<Item> CRIMSON_BLADE = ITEMS.register("crimson_blade", ItemCrimsonBlade::new);
+    public static final Supplier<Item> CRIMSON_PLATE_HELM = ITEMS.register("crimson_plate_helm", () -> new ItemCultistPlateArmor(ArmorItem.Type.HELMET));
+    public static final Supplier<Item> CRIMSON_PLATE_CHEST = ITEMS.register("crimson_plate_chest", () -> new ItemCultistPlateArmor(ArmorItem.Type.CHESTPLATE));
+    public static final Supplier<Item> CRIMSON_PLATE_LEGS = ITEMS.register("crimson_plate_legs", () -> new ItemCultistPlateArmor(ArmorItem.Type.LEGGINGS));
+    public static final Supplier<Item> CRIMSON_BOOTS = ITEMS.register("crimson_boots", ItemCultistBoots::new);
+    public static final Supplier<Item> CRIMSON_ROBE_HELM = ITEMS.register("crimson_robe_helm", () -> new ItemCultistRobeArmor(ArmorItem.Type.HELMET));
+    public static final Supplier<Item> CRIMSON_ROBE_CHEST = ITEMS.register("crimson_robe_chest", () -> new ItemCultistRobeArmor(ArmorItem.Type.CHESTPLATE));
+    public static final Supplier<Item> CRIMSON_ROBE_LEGS = ITEMS.register("crimson_robe_legs", () -> new ItemCultistRobeArmor(ArmorItem.Type.LEGGINGS));
+    public static final Supplier<Item> CRIMSON_PRAETOR_HELM = ITEMS.register("crimson_praetor_helm", () -> new ItemCultistLeaderArmor(ArmorItem.Type.HELMET));
+    public static final Supplier<Item> CRIMSON_PRAETOR_CHEST = ITEMS.register("crimson_praetor_chest", () -> new ItemCultistLeaderArmor(ArmorItem.Type.CHESTPLATE));
+    public static final Supplier<Item> CRIMSON_PRAETOR_LEGS = ITEMS.register("crimson_praetor_legs", () -> new ItemCultistLeaderArmor(ArmorItem.Type.LEGGINGS));
+
+    // Curiosities
+    public static final Supplier<Item> CURIO_ARCANE = ITEMS.register("curio_arcane", () -> new TCCurioItem(TCCurioItem.Kind.ARCANE));
+    public static final Supplier<Item> CURIO_PRESERVED = ITEMS.register("curio_preserved", () -> new TCCurioItem(TCCurioItem.Kind.PRESERVED));
+    public static final Supplier<Item> CURIO_ANCIENT = ITEMS.register("curio_ancient", () -> new TCCurioItem(TCCurioItem.Kind.ANCIENT));
+    public static final Supplier<Item> CURIO_ELDRITCH = ITEMS.register("curio_eldritch", () -> new TCCurioItem(TCCurioItem.Kind.ELDRITCH));
+    public static final Supplier<Item> CURIO_KNOWLEDGE = ITEMS.register("curio_knowledge", () -> new TCCurioItem(TCCurioItem.Kind.KNOWLEDGE));
+    public static final Supplier<Item> CURIO_TWISTED = ITEMS.register("curio_twisted", () -> new TCCurioItem(TCCurioItem.Kind.TWISTED));
+
+    // Loot Bags
+    public static final Supplier<Item> LOOT_BAG_COMMON = ITEMS.register("loot_bag_common", () -> new TCLootBagItem(TCLootBagItem.Tier.COMMON));
+    public static final Supplier<Item> LOOT_BAG_UNCOMMON = ITEMS.register("loot_bag_uncommon", () -> new TCLootBagItem(TCLootBagItem.Tier.UNCOMMON));
+    public static final Supplier<Item> LOOT_BAG_RARE = ITEMS.register("loot_bag_rare", () -> new TCLootBagItem(TCLootBagItem.Tier.RARE));
+
     public static final Supplier<Item> PECH_WAND = ITEMS.register("pech_wand", ItemPechWand::new);
     public static final Supplier<Item> SANITY_CHECKER = ITEMS.register("sanity_checker", ItemSanityChecker::new);
     public static final Supplier<Item> SCRIBING_TOOLS = simpleItem("scribing_tools");
@@ -275,15 +316,18 @@ public final class TCItems {
     public static final Supplier<Item> TRAVELLER_BOOTS = ITEMS.register("traveller_boots", ItemTravellerBoots::new);
     public static final Supplier<Item> CLOUD_RING = simpleItem("cloud_ring");
     public static final Supplier<Item> CHARM_UNDYING = simpleItem("charm_undying");
-    public static final Supplier<Item> ELEMENTAL_AXE = simpleItem("elemental_axe");
-    public static final Supplier<Item> ELEMENTAL_PICK = simpleItem("elemental_pick");
-    public static final Supplier<Item> ELEMENTAL_SWORD = simpleItem("elemental_sword");
-    public static final Supplier<Item> ELEMENTAL_SHOVEL = simpleItem("elemental_shovel");
-    public static final Supplier<Item> ELEMENTAL_HOE = simpleItem("elemental_hoe");
-    public static final Supplier<Item> THAUMIUM_FORTRESS_HELM = simpleItem("thaumium_fortress_helm");
-    public static final Supplier<Item> THAUMIUM_FORTRESS_HELM_GOGGLES = simpleItem("thaumium_fortress_helm_goggles");
-    public static final Supplier<Item> THAUMIUM_FORTRESS_CHEST = simpleItem("thaumium_fortress_chest");
-    public static final Supplier<Item> THAUMIUM_FORTRESS_LEGS = simpleItem("thaumium_fortress_legs");
+    public static final Supplier<Item> ELEMENTAL_AXE = ITEMS.register("elemental_axe", ItemElementalAxe::new);
+    public static final Supplier<Item> ELEMENTAL_PICK = ITEMS.register("elemental_pick", ItemElementalPickaxe::new);
+    public static final Supplier<Item> ELEMENTAL_SWORD = ITEMS.register("elemental_sword", ItemElementalSword::new);
+    public static final Supplier<Item> ELEMENTAL_SHOVEL = ITEMS.register("elemental_shovel", ItemElementalShovel::new);
+    public static final Supplier<Item> ELEMENTAL_HOE = ITEMS.register("elemental_hoe", ItemElementalHoe::new);
+    public static final Supplier<Item> THAUMIUM_FORTRESS_HELM = ITEMS.register("thaumium_fortress_helm", () -> new ItemFortressArmor(ArmorItem.Type.HELMET));
+    public static final Supplier<Item> THAUMIUM_FORTRESS_HELM_GOGGLES = ITEMS.register("thaumium_fortress_helm_goggles", () -> new ItemFortressArmor(ArmorItem.Type.HELMET));
+    public static final Supplier<Item> THAUMIUM_FORTRESS_CHEST = ITEMS.register("thaumium_fortress_chest", () -> new ItemFortressArmor(ArmorItem.Type.CHESTPLATE));
+    public static final Supplier<Item> THAUMIUM_FORTRESS_LEGS = ITEMS.register("thaumium_fortress_legs", () -> new ItemFortressArmor(ArmorItem.Type.LEGGINGS));
+    public static final Supplier<Item> FORTRESS_HELM = THAUMIUM_FORTRESS_HELM;
+    public static final Supplier<Item> FORTRESS_CHEST = THAUMIUM_FORTRESS_CHEST;
+    public static final Supplier<Item> FORTRESS_LEGS = THAUMIUM_FORTRESS_LEGS;
     public static final Supplier<Item> VERDANT_HEART = simpleItem("verdant_heart");
     public static final Supplier<Item> VERDANT_HEART_LIFE = simpleItem("verdant_heart_life");
     public static final Supplier<Item> VERDANT_HEART_SUSTAIN = simpleItem("verdant_heart_sustain");
@@ -352,7 +396,7 @@ public final class TCItems {
     public static final Supplier<BlockItem> LAMP_GROWTH = blockItem("lamp_growth", TCBlocks.LAMP_GROWTH);
     public static final Supplier<BlockItem> INFERNAL_FURNACE = blockItem("infernal_furnace", TCBlocks.INFERNAL_FURNACE);
     public static final Supplier<Item> ARCANE_BORE = ITEMS.register("arcane_bore", ItemArcaneBore::new);
-    public static final Supplier<Item> PRIMAL_CRUSHER = simpleItem("primal_crusher");
+    public static final Supplier<Item> PRIMAL_CRUSHER = ITEMS.register("primal_crusher", ItemPrimalCrusher::new);
     public static final Supplier<Item> VOIDSEER_PEARL = simpleItem("voidseer_pearl");
     public static final Supplier<Item> VOID_ROBE_LEGS = ITEMS.register("void_robe_legs", () -> new ItemVoidRobeArmor(ArmorItem.Type.LEGGINGS));
     public static final Supplier<Item> VOID_ROBE_CHEST = ITEMS.register("void_robe_chest", () -> new ItemVoidRobeArmor(ArmorItem.Type.CHESTPLATE));
@@ -361,7 +405,11 @@ public final class TCItems {
     public static final Supplier<Item> CLOTH_CHEST = ITEMS.register("cloth_chest", () -> new ItemRobeArmor(ArmorItem.Type.CHESTPLATE));
     public static final Supplier<Item> CLOTH_BOOTS = ITEMS.register("cloth_boots", () -> new ItemRobeArmor(ArmorItem.Type.BOOTS));
     public static final Supplier<Item> VOID_SEED = simpleItem("void_seed");
-    public static final Supplier<Item> ARCANE_EAR_TOGGLE = simpleItem("arcane_ear_toggle");
+    public static final Supplier<BlockItem> ARCANE_EAR = blockItem("arcane_ear", TCBlocks.ARCANE_EAR);
+    public static final Supplier<BlockItem> ARCANE_EAR_TOGGLE = blockItem("arcane_ear_toggle", TCBlocks.ARCANE_EAR_TOGGLE);
+    public static final Supplier<BlockItem> HUNGRY_CHEST = blockItem("hungry_chest", TCBlocks.HUNGRY_CHEST);
+    public static final Supplier<BlockItem> DIOPTRA = blockItem("dioptra", TCBlocks.DIOPTRA);
+    public static final Supplier<BlockItem> LEVITATOR = blockItem("levitator", TCBlocks.LEVITATOR);
     public static final Supplier<Item> BAUBLE_AMULET = simpleItem("bauble_amulet");
     public static final Supplier<Item> VIS_AMULET = simpleItem("vis_amulet");
     public static final Supplier<Item> BAUBLE_AMULET_FANCY = simpleItem("bauble_amulet_fancy");
@@ -605,10 +653,10 @@ public final class TCItems {
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_CENTRIFUGE = CENTRIFUGE;
     public static final Supplier<Item> CATALOG_PLACEHOLDER_CONDENSER = ITEMS.register("condenser", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_CONDENSERLATTICE = ITEMS.register("condenserlattice", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_DIOPTRA = ITEMS.register("dioptra", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_HUNGRYCHEST = ITEMS.register("hungrychest", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_DIOPTRA = DIOPTRA;
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_HUNGRYCHEST = HUNGRY_CHEST;
     public static final Supplier<Item> CATALOG_PLACEHOLDER_JARVOID = ITEMS.register("jarvoid", () -> new Item(new Item.Properties()));
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_LEVITATOR = ITEMS.register("levitator", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_LEVITATOR = LEVITATOR;
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_MATRIXCOST = MATRIX_COST;
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_MATRIXMOTION = MATRIX_SPEED;
     public static final Supplier<Item> CATALOG_PLACEHOLDER_MNEMONICMATRIX = ITEMS.register("mnemonicmatrix", () -> new Item(new Item.Properties()));

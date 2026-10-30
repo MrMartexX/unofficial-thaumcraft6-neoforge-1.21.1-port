@@ -166,6 +166,12 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.LOOT_URN_UNCOMMON.get());
         acceptVisible(output, TCItems.LOOT_URN_RARE.get());
         acceptVisible(output, TCItems.VIS_GENERATOR.get());
+        acceptVisible(output, TCItems.HUNGRY_CHEST.get());
+        acceptVisible(output, TCItems.DIOPTRA.get());
+        acceptVisible(output, TCItems.ARCANE_EAR.get());
+        acceptVisible(output, TCItems.ARCANE_EAR_TOGGLE.get());
+        acceptVisible(output, TCItems.LEVITATOR.get());
+
         acceptVisible(output, TCItems.INLAY.get());
         acceptVisible(output, TCItems.STABILIZER.get());
         acceptVisible(output, TCItems.GOLEM_BUILDER.get());
@@ -183,6 +189,29 @@ public final class TCCreativeTabOrder {
     private static void addLegacyItemSequence(CreativeModeTab.Output output) {
         acceptVisible(output, TCItems.THAUMONOMICON.get());
         acceptVisible(output, TCItems.CURIO_RITES.get());
+        acceptVisible(output, TCItems.CURIO_ARCANE.get());
+        acceptVisible(output, TCItems.CURIO_PRESERVED.get());
+        acceptVisible(output, TCItems.CURIO_ANCIENT.get());
+        acceptVisible(output, TCItems.CURIO_ELDRITCH.get());
+        acceptVisible(output, TCItems.CURIO_KNOWLEDGE.get());
+        acceptVisible(output, TCItems.CURIO_TWISTED.get());
+
+        acceptVisible(output, TCItems.LOOT_BAG_COMMON.get());
+        acceptVisible(output, TCItems.LOOT_BAG_UNCOMMON.get());
+        acceptVisible(output, TCItems.LOOT_BAG_RARE.get());
+
+        acceptVisible(output, TCItems.CRIMSON_BLADE.get());
+        acceptVisible(output, TCItems.CRIMSON_PLATE_HELM.get());
+        acceptVisible(output, TCItems.CRIMSON_PLATE_CHEST.get());
+        acceptVisible(output, TCItems.CRIMSON_PLATE_LEGS.get());
+        acceptVisible(output, TCItems.CRIMSON_BOOTS.get());
+        acceptVisible(output, TCItems.CRIMSON_ROBE_HELM.get());
+        acceptVisible(output, TCItems.CRIMSON_ROBE_CHEST.get());
+        acceptVisible(output, TCItems.CRIMSON_ROBE_LEGS.get());
+        acceptVisible(output, TCItems.CRIMSON_PRAETOR_HELM.get());
+        acceptVisible(output, TCItems.CRIMSON_PRAETOR_CHEST.get());
+        acceptVisible(output, TCItems.CRIMSON_PRAETOR_LEGS.get());
+
         acceptVisible(output, TCItems.PECH_WAND.get());
 
         acceptVisible(output, TCItems.AMBER.get());
