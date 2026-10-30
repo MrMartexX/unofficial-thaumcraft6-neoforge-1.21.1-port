@@ -15,7 +15,7 @@ The `0.2.1-alpha4` work branch is a tested content-parity checkpoint. Research a
 - Research reload: `160` entries and `294` stages with the addon installed.
 - Research page catalog: `223` direct references, `345` total entries, `273` occurrences, `0` structural errors.
 - Metal blocks now place with their Thaumcraft blockstates/models rather than vanilla iron/obsidian fallbacks.
-- All seven vis-crystal loot tables use the vanilla Fortune `ore_drops` bonus formula.
+- Vis crystal loot tables strictly ignore Fortune to match Legacy 1.12.2 (BlockCrystal.java:70). Drop count is strictly growth-based.
 - Creative inventory parity now exposes 104 additional registered user-facing blocks/items, including armor, tools, machines, seals, jewelry, candles, clusters, and blueprints. Only four internal enchanted-placeholder records remain intentionally hidden.
 - Thaumium armor now uses a legacy-shaped Thaumium armor material; Void armor uses its own material, carries warping value `1`, and self-repairs one durability point per second while worn.
 - The corrupted generated Ukrainian gzip input was replaced with the validated UTF-8 language resource, making clean builds reproducible.
