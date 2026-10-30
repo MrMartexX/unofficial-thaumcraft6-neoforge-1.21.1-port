@@ -1,0 +1,8 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#thaumcraft:greatwood_biomes",
+  "features": [
+    "thaumcraft:tree_greatwood"
+  ],
+  "step": "vegetal_decoration"
+}

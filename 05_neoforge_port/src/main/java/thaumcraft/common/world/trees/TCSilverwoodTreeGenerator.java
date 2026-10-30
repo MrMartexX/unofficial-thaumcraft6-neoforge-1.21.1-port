@@ -2,7 +2,7 @@ package thaumcraft.common.world.trees;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
@@ -23,7 +23,7 @@ public class TCSilverwoodTreeGenerator {
         this.randomTreeHeight = randomTreeHeight;
     }
 
-    public boolean generate(ServerLevel level, RandomSource random, BlockPos pos) {
+    public boolean generate(WorldGenLevel level, RandomSource random, BlockPos pos) {
         int height = random.nextInt(randomTreeHeight) + minTreeHeight;
 
         int x = pos.getX();
@@ -56,6 +56,10 @@ public class TCSilverwoodTreeGenerator {
                         continue;
                     }
 
+                    if (!level.hasChunkAt(checkPos)) {
+                        clear = false;
+                        continue;
+                    }
                     BlockState checkState = level.getBlockState(checkPos);
 
                     if (!isTreeReplaceable(checkState) && yy > y) {
@@ -95,7 +99,7 @@ public class TCSilverwoodTreeGenerator {
 
                     BlockPos leafPos = new BlockPos(xx, yy, zz);
 
-                    if (dist < 10 + random.nextInt(8) && canReplaceWithLeaves(level, leafPos)) {
+                    if (dist < 10 + random.nextInt(8) && level.hasChunkAt(leafPos) && canReplaceWithLeaves(level, leafPos)) {
                         level.setBlock(leafPos, leaves, 3);
                     }
                 }
@@ -183,7 +187,7 @@ public class TCSilverwoodTreeGenerator {
         return true;
     }
 
-    private static void placeShimmerleafPatch(ServerLevel level, RandomSource random, BlockPos center) {
+    private static void placeShimmerleafPatch(WorldGenLevel level, RandomSource random, BlockPos center) {
         for (int i = 0; i < 16; i++) {
             BlockPos pos = center.offset(random.nextInt(9) - 4, 0, random.nextInt(9) - 4);
 
@@ -191,7 +195,8 @@ public class TCSilverwoodTreeGenerator {
                 BlockPos target = pos.above(y);
                 BlockPos below = target.below();
 
-                if (level.getBlockState(target).isAir()
+                if (level.hasChunkAt(target) && level.hasChunkAt(below)
+                        && level.getBlockState(target).isAir()
                         && level.getBlockState(below).is(Blocks.GRASS_BLOCK)) {
                     level.setBlock(target, TCBlocks.SHIMMERLEAF.get().defaultBlockState(), 3);
                     break;
@@ -200,14 +205,14 @@ public class TCSilverwoodTreeGenerator {
         }
     }
 
-    private static void setIfReplaceable(ServerLevel level, BlockPos pos, BlockState state) {
-        if (isTreeReplaceable(level.getBlockState(pos))) {
+    private static void setIfReplaceable(WorldGenLevel level, BlockPos pos, BlockState state) {
+        if (level.hasChunkAt(pos) && isTreeReplaceable(level.getBlockState(pos))) {
             level.setBlock(pos, state, 3);
         }
     }
 
-    private static boolean canReplaceWithLeaves(ServerLevel level, BlockPos pos) {
-        return isTreeReplaceable(level.getBlockState(pos));
+    private static boolean canReplaceWithLeaves(WorldGenLevel level, BlockPos pos) {
+        return level.hasChunkAt(pos) && isTreeReplaceable(level.getBlockState(pos));
     }
 
     private static boolean isTreeReplaceable(BlockState state) {
@@ -246,7 +251,7 @@ public class TCSilverwoodTreeGenerator {
                 .setValue(RotatedPillarBlock.AXIS, axis);
     }
 
-    private static void stabilizeGeneratedLeaves(ServerLevel level, BlockPos center, int horizontalRadius, int minY, int maxY) {
+    private static void stabilizeGeneratedLeaves(WorldGenLevel level, BlockPos center, int horizontalRadius, int minY, int maxY) {
         int clampedMinY = Math.max(level.getMinBuildHeight(), minY);
         int clampedMaxY = Math.min(level.getMaxBuildHeight() - 1, maxY);
 
@@ -257,6 +262,9 @@ public class TCSilverwoodTreeGenerator {
                 for (int x = center.getX() - horizontalRadius; x <= center.getX() + horizontalRadius; x++) {
                     for (int z = center.getZ() - horizontalRadius; z <= center.getZ() + horizontalRadius; z++) {
                         BlockPos pos = new BlockPos(x, y, z);
+                        if (!level.hasChunkAt(pos)) {
+                            continue;
+                        }
                         BlockState state = level.getBlockState(pos);
 
                         if (!state.hasProperty(LeavesBlock.DISTANCE)) {
@@ -279,11 +287,15 @@ public class TCSilverwoodTreeGenerator {
         }
     }
 
-    private static int getUpdatedLeafDistance(ServerLevel level, BlockPos pos) {
+    private static int getUpdatedLeafDistance(WorldGenLevel level, BlockPos pos) {
         int distance = 7;
 
         for (Direction direction : Direction.values()) {
-            BlockState neighbor = level.getBlockState(pos.relative(direction));
+            BlockPos neighborPos = pos.relative(direction);
+            if (!level.hasChunkAt(neighborPos)) {
+                continue;
+            }
+            BlockState neighbor = level.getBlockState(neighborPos);
 
             if (neighbor.is(net.minecraft.tags.BlockTags.LOGS)) {
                 return 1;

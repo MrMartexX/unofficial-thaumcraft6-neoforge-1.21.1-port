@@ -7,6 +7,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.world.features.TCCrystalClusterFeature;
+import thaumcraft.common.world.features.TCGreatwoodTreeFeature;
+import thaumcraft.common.world.features.TCSilverwoodTreeFeature;
 
 /** NeoForge worldgen feature registrations used by Thaumcraft datapack features. */
 public final class TCFeatures {
@@ -31,6 +33,13 @@ public final class TCFeatures {
     public static final DeferredHolder<Feature<?>, TCCrystalClusterFeature> CRYSTAL_CLUSTER_PERDITIO =
             FEATURES.register("crystal_cluster_perditio",
                     () -> new TCCrystalClusterFeature(NoneFeatureConfiguration.CODEC, TCBlocks.CRYSTAL_PERDITIO));
+
+    public static final DeferredHolder<Feature<?>, TCGreatwoodTreeFeature> TREE_GREATWOOD =
+            FEATURES.register("tree_greatwood",
+                    () -> new TCGreatwoodTreeFeature(NoneFeatureConfiguration.CODEC));
+    public static final DeferredHolder<Feature<?>, TCSilverwoodTreeFeature> TREE_SILVERWOOD =
+            FEATURES.register("tree_silverwood",
+                    () -> new TCSilverwoodTreeFeature(NoneFeatureConfiguration.CODEC));
 
     private TCFeatures() {
     }

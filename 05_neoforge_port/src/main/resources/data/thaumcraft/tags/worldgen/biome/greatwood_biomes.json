@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:is_forest",
+    "minecraft:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:meadow",
+    "minecraft:savanna",
+    "minecraft:swamp",
+    {
+      "id": "thaumcraft:legacy_magical_spawn_biomes",
+      "required": false
+    }
+  ]
+}

@@ -654,7 +654,7 @@ public final class TCItems {
     public static final Supplier<Item> CATALOG_PLACEHOLDER_CONDENSER = ITEMS.register("condenser", () -> new Item(new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_CONDENSERLATTICE = ITEMS.register("condenserlattice", () -> new Item(new Item.Properties()));
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_DIOPTRA = DIOPTRA;
-    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_HUNGRYCHEST = HUNGRY_CHEST;
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_HUNGRYCHEST = blockItem("hungrychest", TCBlocks.HUNGRY_CHEST);
     public static final Supplier<Item> CATALOG_PLACEHOLDER_JARVOID = ITEMS.register("jarvoid", () -> new Item(new Item.Properties()));
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_LEVITATOR = LEVITATOR;
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_MATRIXCOST = MATRIX_COST;

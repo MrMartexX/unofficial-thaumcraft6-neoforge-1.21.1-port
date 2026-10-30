@@ -3,7 +3,7 @@ package thaumcraft.common.world.trees;
 import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
@@ -19,7 +19,7 @@ public class TCGreatwoodTreeGenerator {
     private final boolean spiders;
 
     private Random rand;
-    private ServerLevel level;
+    private WorldGenLevel level;
     private final int[] basePos = new int[] { 0, 0, 0 };
     private int heightLimit;
     private int height;
@@ -36,7 +36,7 @@ public class TCGreatwoodTreeGenerator {
         this.spiders = spiders;
     }
 
-    public boolean generate(ServerLevel level, RandomSource random, BlockPos pos) {
+    public boolean generate(WorldGenLevel level, RandomSource random, BlockPos pos) {
         this.level = level;
         this.rand = new Random(random.nextLong());
         this.basePos[0] = pos.getX();
@@ -190,7 +190,7 @@ public class TCGreatwoodTreeGenerator {
                     cursor[coordB] = center[coordB] + db;
                     BlockPos pos = new BlockPos(cursor[0], cursor[1], cursor[2]);
 
-                    if (canReplaceWithGreatwoodLeaves(pos)) {
+                    if (this.level.hasChunkAt(pos) && canReplaceWithGreatwoodLeaves(pos)) {
                         this.level.setBlock(pos, leaves, 3);
                     }
                 }
@@ -280,7 +280,7 @@ public class TCGreatwoodTreeGenerator {
 
             BlockPos pos = new BlockPos(cursor[0], cursor[1], cursor[2]);
 
-            if (isTreeReplaceable(this.level.getBlockState(pos))) {
+            if (this.level.hasChunkAt(pos) && isTreeReplaceable(this.level.getBlockState(pos))) {
                 this.level.setBlock(pos, logBase.setValue(RotatedPillarBlock.AXIS, logAxis), 3);
             }
         }
@@ -372,6 +372,9 @@ public class TCGreatwoodTreeGenerator {
             cursor[coordB] = Mth.floor(start[coordB] + n * slopeB);
 
             BlockPos pos = new BlockPos(cursor[0], cursor[1], cursor[2]);
+            if (!this.level.hasChunkAt(pos)) {
+                break;
+            }
             BlockState state = this.level.getBlockState(pos);
 
             if (!state.isAir() && !state.is(TCBlocks.LEAVES_GREATWOOD.get())) {
@@ -408,6 +411,9 @@ public class TCGreatwoodTreeGenerator {
     }
 
     private boolean canReplaceWithGreatwoodLeaves(BlockPos pos) {
+        if (!this.level.hasChunkAt(pos)) {
+            return false;
+        }
         BlockState state = this.level.getBlockState(pos);
         return state.isAir()
                 || state.is(TCBlocks.LEAVES_GREATWOOD.get())
@@ -451,7 +457,7 @@ public class TCGreatwoodTreeGenerator {
                 .setValue(RotatedPillarBlock.AXIS, axis);
     }
 
-    private static void stabilizeGeneratedLeaves(ServerLevel level, BlockPos center, int horizontalRadius, int minY, int maxY) {
+    private static void stabilizeGeneratedLeaves(WorldGenLevel level, BlockPos center, int horizontalRadius, int minY, int maxY) {
         int clampedMinY = Math.max(level.getMinBuildHeight(), minY);
         int clampedMaxY = Math.min(level.getMaxBuildHeight() - 1, maxY);
 
@@ -462,6 +468,9 @@ public class TCGreatwoodTreeGenerator {
                 for (int x = center.getX() - horizontalRadius; x <= center.getX() + horizontalRadius; x++) {
                     for (int z = center.getZ() - horizontalRadius; z <= center.getZ() + horizontalRadius; z++) {
                         BlockPos pos = new BlockPos(x, y, z);
+                        if (!level.hasChunkAt(pos)) {
+                            continue;
+                        }
                         BlockState state = level.getBlockState(pos);
 
                         if (!state.hasProperty(LeavesBlock.DISTANCE)) {
@@ -484,11 +493,15 @@ public class TCGreatwoodTreeGenerator {
         }
     }
 
-    private static int getUpdatedLeafDistance(ServerLevel level, BlockPos pos) {
+    private static int getUpdatedLeafDistance(WorldGenLevel level, BlockPos pos) {
         int distance = 7;
 
         for (Direction direction : Direction.values()) {
-            BlockState neighbor = level.getBlockState(pos.relative(direction));
+            BlockPos neighborPos = pos.relative(direction);
+            if (!level.hasChunkAt(neighborPos)) {
+                continue;
+            }
+            BlockState neighbor = level.getBlockState(neighborPos);
 
             if (neighbor.is(net.minecraft.tags.BlockTags.LOGS)) {
                 return 1;
