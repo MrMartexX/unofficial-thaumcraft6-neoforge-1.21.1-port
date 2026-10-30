@@ -133,6 +133,7 @@ public final class TCItems {
 
     public static final Supplier<BlockItem> JAR_NORMAL = ITEMS.register("jar_normal", () -> new TCWardedJarBlockItem(TCBlocks.JAR_NORMAL.get(), new Item.Properties()));
     public static final Supplier<BlockItem> JAR_VOID = ITEMS.register("jar_void", () -> new TCWardedJarBlockItem(TCBlocks.JAR_VOID.get(), new Item.Properties()));
+    public static final Supplier<BlockItem> CENTRIFUGE = blockItem("centrifuge", TCBlocks.CENTRIFUGE);
     public static final Supplier<BlockItem> ALEMBIC = blockItem("alembic", TCBlocks.ALEMBIC);
     public static final Supplier<BlockItem> ESSENTIA_TRANSPORT_IN = blockItem("essentiatransportin", TCBlocks.ESSENTIA_TRANSPORT_IN);
     public static final Supplier<BlockItem> ESSENTIA_TRANSPORT_OUT = blockItem("essentiatransportout", TCBlocks.ESSENTIA_TRANSPORT_OUT);

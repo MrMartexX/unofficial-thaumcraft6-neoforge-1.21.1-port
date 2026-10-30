@@ -790,12 +790,12 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             return;
         }
         KnowledgeRequirement requirement = resolution.requirement();
-        drawFullTexture(graphics, requirement.type() == TCKnowledgeType.THEORY ? KNOWLEDGE_THEORY : KNOWLEDGE_OBSERVATION, x, y, 16, 16);
+        drawKnowledgeTexture(graphics, requirement.type() == TCKnowledgeType.THEORY ? KNOWLEDGE_THEORY : KNOWLEDGE_OBSERVATION, x, y, 16, 16);
         TCThaumonomiconCategoryView category = categoryView(requirement.category());
         ResourceLocation icon = parseLocation(category == null ? "" : category.icon());
         if (icon != null) {
-            graphics.setColor(1.0F, 1.0F, 1.0F, 0.75F);
-            drawFullTexture(graphics, icon, x + 4, y + 4, 10, 10);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+            drawKnowledgeTexture(graphics, icon, x + 4, y + 4, 10, 10);
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
         String amount = Integer.toString(requirement.points());
@@ -1301,17 +1301,17 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int mouseY
     ) {
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        drawFullTexture(graphics, type == TCKnowledgeType.THEORY ? KNOWLEDGE_THEORY : KNOWLEDGE_OBSERVATION, x, y, 16, 16);
+        drawKnowledgeTexture(graphics, type == TCKnowledgeType.THEORY ? KNOWLEDGE_THEORY : KNOWLEDGE_OBSERVATION, x, y, 16, 16);
         ResourceLocation icon = parseLocation(categoryView == null ? "" : categoryView.icon());
         if (type.hasCategories() && icon != null) {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
-            graphics.setColor(1.0F, 1.0F, 1.0F, 0.75F);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             graphics.pose().pushPose();
             graphics.pose().translate(x, y, 1.0F);
             graphics.pose().scale(0.0625F, 0.0625F, 1.0F);
             graphics.pose().scale(0.66F, 0.66F, 1.0F);
-            blit(graphics, icon, 66, 66, 0, 0, 255, 255, 256, 256);
+            blitKnowledgeTexture(graphics, icon, 66, 66, 0, 0, 255, 255, 256, 256);
             graphics.pose().popPose();
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
@@ -2332,6 +2332,34 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         graphics.blit(texture, x, y, 0.0F, 0.0F, width, height, width, height);
+    }
+
+    private static void drawKnowledgeTexture(
+            GuiGraphics graphics,
+            ResourceLocation texture,
+            int x,
+            int y,
+            int width,
+            int height
+    ) {
+        drawFullTexture(graphics, texture, x, y, width, height);
+        drawFullTexture(graphics, texture, x, y, width, height);
+    }
+
+    private static void blitKnowledgeTexture(
+            GuiGraphics graphics,
+            ResourceLocation texture,
+            int x,
+            int y,
+            float u,
+            float v,
+            int width,
+            int height,
+            int textureWidth,
+            int textureHeight
+    ) {
+        blit(graphics, texture, x, y, u, v, width, height, textureWidth, textureHeight);
+        blit(graphics, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
 
     private enum SideInsert {

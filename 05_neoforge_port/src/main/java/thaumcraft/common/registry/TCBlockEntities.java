@@ -24,6 +24,7 @@ import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
 import thaumcraft.common.tiles.crafting.TCFocalManipulatorBlockEntity;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 import thaumcraft.common.tiles.essentia.TCSmelterBlockEntity;
+import thaumcraft.common.tiles.essentia.TCCentrifugeBlockEntity;
 import thaumcraft.common.tiles.essentia.TCAlembicBlockEntity;
 import thaumcraft.common.tiles.essentia.TCBellowsBlockEntity;
 import thaumcraft.common.tiles.essentia.TCEssentiaTransfuserBlockEntity;
@@ -78,6 +79,9 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCBrainJarBlockEntity>> JAR_BRAIN =
             BLOCK_ENTITY_TYPES.register("jar_brain", () ->
                     BlockEntityType.Builder.of(TCBrainJarBlockEntity::new, TCBlocks.JAR_BRAIN.get()).build(null));
+    public static final Supplier<BlockEntityType<TCCentrifugeBlockEntity>> CENTRIFUGE =
+            BLOCK_ENTITY_TYPES.register("centrifuge", () ->
+                    BlockEntityType.Builder.of(TCCentrifugeBlockEntity::new, TCBlocks.CENTRIFUGE.get()).build(null));
     public static final Supplier<BlockEntityType<TCAlembicBlockEntity>> ALEMBIC =
             BLOCK_ENTITY_TYPES.register("alembic", () ->
                     BlockEntityType.Builder.of(TCAlembicBlockEntity::new, TCBlocks.ALEMBIC.get()).build(null));

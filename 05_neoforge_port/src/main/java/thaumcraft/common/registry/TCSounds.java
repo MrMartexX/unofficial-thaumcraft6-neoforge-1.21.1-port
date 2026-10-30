@@ -25,6 +25,8 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "tool")));
     public static final Supplier<SoundEvent> SQUEEK = SOUND_EVENTS.register("squeek", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "squeek")));
+    public static final Supplier<SoundEvent> PUMP = SOUND_EVENTS.register("pump", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pump")));
     public static final Supplier<SoundEvent> CREAK = SOUND_EVENTS.register("creak", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "creak")));
     public static final Supplier<SoundEvent> PAGETURN = SOUND_EVENTS.register("pageturn", () ->

@@ -30,6 +30,7 @@ import thaumcraft.common.blocks.essentia.TCSmelterAuxBlock;
 import thaumcraft.common.blocks.essentia.TCSmelterVentBlock;
 import thaumcraft.common.blocks.essentia.TCWardedJarBlock;
 import thaumcraft.common.blocks.essentia.TCBrainJarBlock;
+import thaumcraft.common.blocks.essentia.TCCentrifugeBlock;
 import thaumcraft.common.blocks.essentia.TCAlembicBlock;
 import thaumcraft.common.blocks.essentia.TCBellowsBlock;
 import thaumcraft.common.blocks.essentia.TCEssentiaTransportBlock;
@@ -167,6 +168,7 @@ public final class TCBlocks {
     public static final Supplier<Block> JAR_VOID = BLOCKS.register("jar_void",
             () -> wardedJarBlock(TCWardedJarBlockEntity.Kind.VOID));
     public static final Supplier<Block> JAR_BRAIN = BLOCKS.register("jar_brain", () -> brainJarBlock());
+    public static final Supplier<Block> CENTRIFUGE = BLOCKS.register("centrifuge", () -> centrifugeBlock());
     public static final Supplier<Block> ALEMBIC = BLOCKS.register("alembic", () -> alembicBlock());
     public static final Supplier<Block> ESSENTIA_TRANSPORT_IN = BLOCKS.register("essentiatransportin",
             () -> essentiaTransportBlock(TCEssentiaTransfuserBlockEntity.Kind.INPUT));
@@ -491,6 +493,14 @@ public final class TCBlocks {
 
     private static Block alembicBlock() {
         return new TCAlembicBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK)
+                .strength(1.5F, 6.0F)
+                .sound(SoundType.COPPER)
+                .requiresCorrectToolForDrops()
+                .noOcclusion());
+    }
+
+    private static Block centrifugeBlock() {
+        return new TCCentrifugeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK)
                 .strength(1.5F, 6.0F)
                 .sound(SoundType.COPPER)
                 .requiresCorrectToolForDrops()

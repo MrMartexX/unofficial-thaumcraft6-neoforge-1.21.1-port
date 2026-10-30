@@ -137,7 +137,8 @@ public final class TCResearchIconRenderer {
 
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 5.0F);
-        graphics.pose().mulPose(Axis.ZP.rotationDegrees(90.0F));
+        // Legacy rotates 90 degrees around the negative Z axis.
+        graphics.pose().mulPose(Axis.ZP.rotationDegrees(-90.0F));
         if (definition.kind() == TCFocusElementDefinition.Kind.EFFECT
                 || definition.kind() == TCFocusElementDefinition.Kind.MEDIUM) {
             ResourceLocation backing = ResourceLocation.fromNamespaceAndPath(
@@ -152,7 +153,7 @@ public final class TCResearchIconRenderer {
                     ((color >> 16) & 255) / 255.0F,
                     ((color >> 8) & 255) / 255.0F,
                     (color & 255) / 255.0F,
-                    220.0F / 255.0F
+                    1.0F
             );
             drawFullTexture(
                     graphics,
@@ -165,7 +166,11 @@ public final class TCResearchIconRenderer {
         }
 
         int iconSize = Math.round(scale / 2.0F);
-        graphics.setColor(1.0F, 1.0F, 1.0F, Math.max(0, Math.min(255, brightness)) / 255.0F);
+        // Legacy brightness is a lightmap value, not texture alpha. Keep the
+        // focus glyph opaque and approximate the locked-node light level with
+        // RGB intensity instead of transparency.
+        float light = Math.max(0, Math.min(220, brightness)) / 220.0F;
+        graphics.setColor(light, light, light, 1.0F);
         graphics.pose().translate(0.0F, 0.0F, 1.0F);
         drawFullTexture(
                 graphics,
