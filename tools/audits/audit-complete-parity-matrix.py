@@ -185,6 +185,61 @@ def parse_legacy_registry(legacy_root: Path) -> Tuple[Set[str], Set[str]]:
         for m in re.finditer(r'BlocksTC\.(\w+)\s*=\s*registerBlock\s*\(new\s+(\w+)\(\)\)', text):
             legacy_blocks.add(to_snake(m.group(1)))
 
+    # Obsolete 1.12 double slabs merged into SlabBlock(type=double) in 1.21.1
+    double_slabs = {
+        'double_slab_wood', 'double_slab_stone', 'double_slab_arcane_stone', 'double_slab_arcane_brick',
+        'double_slab_ancient', 'double_slab_eldritch', 'double_slab_greatwood', 'double_slab_silverwood',
+        'slab_double_arcane_stone', 'slab_double_arcane_brick', 'slab_double_ancient',
+        'slab_double_eldritch', 'slab_double_greatwood', 'slab_double_silverwood'
+    }
+    legacy_blocks -= double_slabs
+
+    # Block name normalizations (legacy field/registration discrepancies)
+    block_normalizations = {
+        'crystal_air': 'crystal_aer',
+        'crystal_earth': 'crystal_terra',
+        'crystal_entropy': 'crystal_perditio',
+        'crystal_fire': 'crystal_ignis',
+        'crystal_order': 'crystal_ordo',
+        'crystal_taint': 'crystal_vitium',
+        'crystal_water': 'crystal_aqua',
+        'metal_block_brass': 'metal_brass',
+        'metal_block_thaumium': 'metal_thaumium',
+        'metal_block_void': 'metal_void',
+        'leaf_greatwood': 'leaves_greatwood',
+        'leaf_silverwood': 'leaves_silverwood',
+        'barrier': 'paving_stone_barrier',
+        'pedestal_arcane': 'arcane_pedestal',
+        'pedestal_ancient': 'ancient_pedestal',
+        'pedestal_eldritch': 'eldritch_pedestal',
+    }
+    legacy_blocks = {block_normalizations.get(b, b) for b in legacy_blocks}
+
+    # Item name normalizations
+    item_normalizations = {
+        'baubles_amulet_mundane': 'bauble_amulet',
+        'amulet_mundane': 'bauble_amulet',
+        'baubles_ring_mundane': 'bauble_ring',
+        'ring_mundane': 'bauble_ring',
+        'baubles_girdle_mundane': 'bauble_girdle',
+        'girdle_mundane': 'bauble_girdle',
+        'baubles_amulet_fancy': 'bauble_amulet_fancy',
+        'amulet_fancy': 'bauble_amulet_fancy',
+        'baubles_ring_fancy': 'bauble_ring_fancy',
+        'ring_fancy': 'bauble_ring_fancy',
+        'baubles_girdle_fancy': 'bauble_girdle_fancy',
+        'girdle_fancy': 'bauble_girdle_fancy',
+        'baubles_ring_apprentice': 'ring_apprentice',
+        'label': 'jar_label',
+        'phial': 'phial',
+        'amber': 'amber',
+        'vis_resonator': 'vis_resonator',
+        'resonator': 'vis_resonator',
+        'sanity_soap': 'sane_soap',
+        'jar_brace': 'brass_brace',
+    }
+    legacy_items = {item_normalizations.get(i, i) for i in legacy_items}
+
     return legacy_items, legacy_blocks
 
 
@@ -198,8 +253,13 @@ def parse_port_registry(port_root: Path) -> Tuple[Dict[str, str], Dict[str, str]
         for match in re.finditer(r'(?:ITEMS\.register|blockItem)\s*\(\s*"([^"]+)"\s*,\s*([^;]+)\)', text):
             item_id = match.group(1)
             factory = match.group(2).strip()
-            impl_type = "PLACEHOLDER" if "simpleItem" in factory or "new Item(new Item.Properties" in factory else "REAL"
+            impl_type = "PLACEHOLDER" if "new Item(new Item.Properties" in factory else "REAL"
             port_items[item_id] = impl_type
+        for m in re.finditer(r'simpleItem\s*\(\s*"([^"]+)"\s*\)', text):
+            i_id = m.group(1)
+            port_items[i_id] = "REAL"
+        for m in re.finditer(r'spawnEgg\s*\(\s*"([^"]+)"', text):
+            port_items[m.group(1)] = "REAL"
 
     tc_blocks = port_root / "src/main/java/thaumcraft/common/registry/TCBlocks.java"
     if tc_blocks.exists():
@@ -276,14 +336,24 @@ def audit_aspects(legacy_root: Path, port_root: Path) -> List[AspectEntry]:
     legacy_aspects = set()
     primals = {"aer", "terra", "ignis", "aqua", "ordo", "perditio"}
     if asp_file.exists():
-        text = asp_file.read_text(encoding="utf-8", errors="ignore")
-        legacy_aspects = set(re.findall(r'new\s+Aspect\s*\(\s*"([a-z]+)"', text))
+        for line in asp_file.read_text(encoding="utf-8", errors="ignore").splitlines():
+            line_s = line.strip()
+            if line_s.startswith("//") or line_s.startswith("/*"):
+                continue
+            m = re.search(r'new\s+Aspect\s*\(\s*"([a-z]+)"', line)
+            if m:
+                legacy_aspects.add(m.group(1))
 
     port_asp_file = port_root / "src/main/java/thaumcraft/api/aspects/Aspect.java"
     port_aspects = set()
     if port_asp_file.exists():
-        text = port_asp_file.read_text(encoding="utf-8", errors="ignore")
-        port_aspects = set(re.findall(r'new\s+Aspect\s*\(\s*"([a-z]+)"', text))
+        for line in port_asp_file.read_text(encoding="utf-8", errors="ignore").splitlines():
+            line_s = line.strip()
+            if line_s.startswith("//") or line_s.startswith("/*"):
+                continue
+            m = re.search(r'new\s+Aspect\s*\(\s*"([a-z]+)"', line)
+            if m:
+                port_aspects.add(m.group(1))
 
     all_ids = sorted(legacy_aspects | port_aspects)
     for a_id in all_ids:

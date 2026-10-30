@@ -156,6 +156,16 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.ARCANE_PEDESTAL.get());
         acceptVisible(output, TCItems.ANCIENT_PEDESTAL.get());
         acceptVisible(output, TCItems.ELDRITCH_PEDESTAL.get());
+        acceptVisible(output, TCItems.RECHARGE_PEDESTAL.get());
+        acceptVisible(output, TCItems.PAVING_STONE_TRAVEL.get());
+        acceptVisible(output, TCItems.PAVING_STONE_BARRIER.get());
+        acceptVisible(output, TCItems.LOOT_CRATE_COMMON.get());
+        acceptVisible(output, TCItems.LOOT_CRATE_UNCOMMON.get());
+        acceptVisible(output, TCItems.LOOT_CRATE_RARE.get());
+        acceptVisible(output, TCItems.LOOT_URN_COMMON.get());
+        acceptVisible(output, TCItems.LOOT_URN_UNCOMMON.get());
+        acceptVisible(output, TCItems.LOOT_URN_RARE.get());
+        acceptVisible(output, TCItems.VIS_GENERATOR.get());
         acceptVisible(output, TCItems.INLAY.get());
         acceptVisible(output, TCItems.STABILIZER.get());
         acceptVisible(output, TCItems.GOLEM_BUILDER.get());

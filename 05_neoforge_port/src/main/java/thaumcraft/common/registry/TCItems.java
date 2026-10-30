@@ -299,6 +299,19 @@ public final class TCItems {
     public static final Supplier<BlockItem> ELDRITCH_PEDESTAL = blockItem("eldritch_pedestal", TCBlocks.ELDRITCH_PEDESTAL);
     public static final Supplier<BlockItem> ANCIENT_PEDESTAL = blockItem("ancient_pedestal", TCBlocks.ANCIENT_PEDESTAL);
     public static final Supplier<BlockItem> ARCANE_PEDESTAL = blockItem("arcane_pedestal", TCBlocks.ARCANE_PEDESTAL);
+    public static final Supplier<BlockItem> PEDESTAL_ARCANE = blockItem("pedestal_arcane", TCBlocks.PEDESTAL_ARCANE);
+    public static final Supplier<BlockItem> PEDESTAL_ANCIENT = blockItem("pedestal_ancient", TCBlocks.PEDESTAL_ANCIENT);
+    public static final Supplier<BlockItem> PEDESTAL_ELDRITCH = blockItem("pedestal_eldritch", TCBlocks.PEDESTAL_ELDRITCH);
+    public static final Supplier<BlockItem> RECHARGE_PEDESTAL = blockItem("recharge_pedestal", TCBlocks.RECHARGE_PEDESTAL);
+    public static final Supplier<BlockItem> PAVING_STONE_TRAVEL = blockItem("paving_stone_travel", TCBlocks.PAVING_STONE_TRAVEL);
+    public static final Supplier<BlockItem> PAVING_STONE_BARRIER = blockItem("paving_stone_barrier", TCBlocks.PAVING_STONE_BARRIER);
+    public static final Supplier<BlockItem> LOOT_CRATE_COMMON = blockItem("loot_crate_common", TCBlocks.LOOT_CRATE_COMMON);
+    public static final Supplier<BlockItem> LOOT_CRATE_UNCOMMON = blockItem("loot_crate_uncommon", TCBlocks.LOOT_CRATE_UNCOMMON);
+    public static final Supplier<BlockItem> LOOT_CRATE_RARE = blockItem("loot_crate_rare", TCBlocks.LOOT_CRATE_RARE);
+    public static final Supplier<BlockItem> LOOT_URN_COMMON = blockItem("loot_urn_common", TCBlocks.LOOT_URN_COMMON);
+    public static final Supplier<BlockItem> LOOT_URN_UNCOMMON = blockItem("loot_urn_uncommon", TCBlocks.LOOT_URN_UNCOMMON);
+    public static final Supplier<BlockItem> LOOT_URN_RARE = blockItem("loot_urn_rare", TCBlocks.LOOT_URN_RARE);
+    public static final Supplier<BlockItem> VIS_GENERATOR = blockItem("vis_generator", TCBlocks.VIS_GENERATOR);
     public static final Supplier<Item> CAUSALITY_COLLAPSER = ITEMS.register("causality_collapser", ItemCausalityCollapser::new);
 
     // TC6 exposed spawn eggs for these mobs. Keeping the original two legacy

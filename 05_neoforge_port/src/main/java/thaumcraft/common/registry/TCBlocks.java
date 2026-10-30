@@ -193,6 +193,19 @@ public final class TCBlocks {
     public static final Supplier<Block> ARCANE_PEDESTAL = BLOCKS.register("arcane_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
     public static final Supplier<Block> ANCIENT_PEDESTAL = BLOCKS.register("ancient_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
     public static final Supplier<Block> ELDRITCH_PEDESTAL = BLOCKS.register("eldritch_pedestal", () -> infusionPedestalBlock(15.0F, 1000.0F));
+    public static final Supplier<Block> PEDESTAL_ARCANE = BLOCKS.register("pedestal_arcane", () -> infusionPedestalBlock(2.0F, 10.0F));
+    public static final Supplier<Block> PEDESTAL_ANCIENT = BLOCKS.register("pedestal_ancient", () -> infusionPedestalBlock(2.0F, 10.0F));
+    public static final Supplier<Block> PEDESTAL_ELDRITCH = BLOCKS.register("pedestal_eldritch", () -> infusionPedestalBlock(15.0F, 1000.0F));
+    public static final Supplier<Block> RECHARGE_PEDESTAL = BLOCKS.register("recharge_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
+    public static final Supplier<Block> PAVING_STONE_TRAVEL = BLOCKS.register("paving_stone_travel", () -> stoneBlock(2.0F, 10.0F));
+    public static final Supplier<Block> PAVING_STONE_BARRIER = BLOCKS.register("paving_stone_barrier", () -> stoneBlock(2.0F, 10.0F));
+    public static final Supplier<Block> LOOT_CRATE_COMMON = BLOCKS.register("loot_crate_common", () -> woodBlock());
+    public static final Supplier<Block> LOOT_CRATE_UNCOMMON = BLOCKS.register("loot_crate_uncommon", () -> woodBlock());
+    public static final Supplier<Block> LOOT_CRATE_RARE = BLOCKS.register("loot_crate_rare", () -> woodBlock());
+    public static final Supplier<Block> LOOT_URN_COMMON = BLOCKS.register("loot_urn_common", () -> stoneBlock(1.5F, 5.0F));
+    public static final Supplier<Block> LOOT_URN_UNCOMMON = BLOCKS.register("loot_urn_uncommon", () -> stoneBlock(1.5F, 5.0F));
+    public static final Supplier<Block> LOOT_URN_RARE = BLOCKS.register("loot_urn_rare", () -> stoneBlock(1.5F, 5.0F));
+    public static final Supplier<Block> VIS_GENERATOR = BLOCKS.register("vis_generator", () -> visGeneratorBlock());
     public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
     public static final Supplier<Block> INLAY = BLOCKS.register("inlay", () -> inlayBlock());
     public static final Supplier<Block> STABILIZER = BLOCKS.register("stabilizer", () -> stabilizerBlock());
@@ -260,6 +273,13 @@ public final class TCBlocks {
     private static Block woodBlock() {
         return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                 .strength(2.0F, 2.0F));
+    }
+
+    private static Block visGeneratorBlock() {
+        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                .strength(3.0F, 10.0F)
+                .sound(SoundType.METAL)
+                .requiresCorrectToolForDrops());
     }
 
     private static Block workbenchBlock() {

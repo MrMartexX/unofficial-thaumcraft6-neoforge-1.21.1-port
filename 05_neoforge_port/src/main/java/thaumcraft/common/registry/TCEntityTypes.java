@@ -42,6 +42,11 @@ import thaumcraft.common.entities.TCTaintacleEntity;
 import thaumcraft.common.entities.TCTaintacleTinyEntity;
 import thaumcraft.common.entities.TCThaumicSlimeEntity;
 import thaumcraft.common.entities.TCWispEntity;
+import thaumcraft.common.entities.TCSpellbatEntity;
+import thaumcraft.common.entities.TCFocusProjectileEntity;
+import thaumcraft.common.entities.TCFocusmineEntity;
+import thaumcraft.common.entities.TCGolemDartEntity;
+import thaumcraft.common.entities.TCGrappleEntity;
 
 public final class TCEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
@@ -326,6 +331,46 @@ public final class TCEntityTypes {
                             .setShouldReceiveVelocityUpdates(true)
                             .build(Thaumcraft.MODID + ":inhabited_zombie"));
 
+    public static final Supplier<EntityType<TCSpellbatEntity>> SPELLBAT = ENTITY_TYPES.register("spellbat", () ->
+            EntityType.Builder.<TCSpellbatEntity>of(TCSpellbatEntity::new, MobCategory.MONSTER)
+                    .sized(TCFirebatEntity.LEGACY_WIDTH, TCFirebatEntity.LEGACY_HEIGHT)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build(Thaumcraft.MODID + ":spellbat"));
+
+    public static final Supplier<EntityType<TCFocusProjectileEntity>> FOCUS_PROJECTILE = ENTITY_TYPES.register("focus_projectile", () ->
+            EntityType.Builder.<TCFocusProjectileEntity>of(TCFocusProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":focus_projectile"));
+
+    public static final Supplier<EntityType<TCFocusmineEntity>> FOCUSMINE = ENTITY_TYPES.register("focusmine", () ->
+            EntityType.Builder.<TCFocusmineEntity>of(TCFocusmineEntity::new, MobCategory.MISC)
+                    .sized(0.3F, 0.3F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":focusmine"));
+
+    public static final Supplier<EntityType<TCGolemDartEntity>> GOLEM_DART = ENTITY_TYPES.register("golem_dart", () ->
+            EntityType.Builder.<TCGolemDartEntity>of(TCGolemDartEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build(Thaumcraft.MODID + ":golem_dart"));
+
+    public static final Supplier<EntityType<TCGrappleEntity>> GRAPPLE = ENTITY_TYPES.register("grapple", () ->
+            EntityType.Builder.<TCGrappleEntity>of(TCGrappleEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(20)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":grapple"));
+
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
             spec("CultistPortalGreater", "EntityCultistPortalGreater", "cultist_portal_greater", 64, 20, false, "registered_foundation", "Greater portal stage machine, minion/Praetor spawn, bossbar, touch damage and portal renderer foundation; banner/crate world decoration remains item/block gated"),
             spec("CultistPortalLesser", "EntityCultistPortalLesser", "cultist_portal_lesser", 64, 20, false, "registered_foundation", "Lesser cultist portal activation, collision, nearby-cultist budget and minion spawn cadence"),
@@ -334,15 +379,15 @@ public final class TCEntityTypes {
             spec("FollowItem", "EntityFollowingItem", "follow_item", 64, 20, false, "registered_foundation", "Legacy following item movement and spawn data"),
             spec("FallingTaint", "EntityFallingTaint", "falling_taint", 64, 3, true, "registered_foundation", "Taint crust falling physics and taint world mutation"),
             spec("Alumentum", "EntityAlumentum", "alumentum", 64, 20, true, "registered_foundation", "Throwable Alumentum item projectile, invisible body, fiery trail and legacy flaming explosion"),
-            spec("GolemDart", "EntityGolemDart", null, 64, 20, false, "defer", "Golem ranged combat"),
+            spec("GolemDart", "EntityGolemDart", "golem_dart", 64, 20, false, "registered_foundation", "Golem ranged combat dart projectile foundation"),
             spec("EldritchOrb", "EntityEldritchOrb", "eldritch_orb", 64, 20, true, "registered_foundation", "Eldritch Guardian/Warden projectile: no-gravity lifetime, impact AoE and source-informed renderer"),
             spec("BottleTaint", "EntityBottleTaint", "bottle_taint", 64, 20, true, "registered_foundation", "Taint bottle projectile item behavior, Flux Taint splash and Flux Goo spread"),
             spec("GolemOrb", "EntityGolemOrb", "golem_orb", 64, 3, true, "registered_foundation", "Cultist/Golem homing magic orb projectile behavior and electric-orb renderer foundation"),
-            spec("Grapple", "EntityGrapple", null, 64, 20, true, "defer", "Grapple tool physics and rope renderer"),
+            spec("Grapple", "EntityGrapple", "grapple", 64, 20, true, "registered_foundation", "Grapple tool physics foundation"),
             spec("CausalityCollapser", "EntityCausalityCollapser", "causality_collapser", 64, 20, true, "registered_foundation", "Causality Collapser projectile, invisible body, legacy explosive rift-collapse AABB"),
-            spec("FocusProjectile", "EntityFocusProjectile", null, 64, 20, true, "defer", "Focus/caster execution"),
+            spec("FocusProjectile", "EntityFocusProjectile", "focus_projectile", 64, 20, true, "registered_foundation", "Focus/caster projectile foundation"),
             spec("FocusCloud", "EntityFocusCloud", "focus_cloud", 64, 20, true, "registered_foundation", "Rift-owned ROOT->CLOUD->FLUX cloud execution; broad caster cloud authoring remains focus subsystem work"),
-            spec("Focusmine", "EntityFocusMine", null, 64, 20, true, "defer", "Focus/caster mine execution"),
+            spec("Focusmine", "EntityFocusMine", "focusmine", 64, 20, true, "registered_foundation", "Focus/caster mine foundation"),
             spec("TurretBasic", "EntityTurretCrossbow", null, 64, 3, true, "defer", "Construct/turret AI and renderer"),
             spec("TurretAdvanced", "EntityTurretCrossbowAdvanced", null, 64, 3, true, "defer", "Construct/turret AI and renderer"),
             spec("ArcaneBore", "EntityArcaneBore", "arcane_bore", 64, 3, true, "registered_foundation", "Arcane Bore entity, menu, vis mining and renderer foundation"),
@@ -355,7 +400,7 @@ public final class TCEntityTypes {
             spec("GiantBrainyZombie", "EntityGiantBrainyZombie", "giant_brainy_zombie", 64, 3, true, "registered_foundation", "Furious Zombie anger scaling, leap goal, loot and Eerie-biome spawn dependency"),
             spec("Wisp", "EntityWisp", "wisp", 64, 3, false, "registered_foundation", "Wisp type/aspect persistence, rift-event spawn dependency, legacy flight/target/zap AI, billboard render contract and PacketFXWispZap-equivalent payload"),
             spec("Firebat", "EntityFireBat", "firebat", 64, 3, false, "registered_foundation", "Firebat AI, hanging flight, Nether/Halloween spawn rows, aspects and renderer foundation"),
-            spec("Spellbat", "EntitySpellBat", null, 64, 3, false, "defer", "Bat AI variant and renderer"),
+            spec("Spellbat", "EntitySpellBat", "spellbat", 64, 3, false, "registered_foundation", "Bat AI variant and renderer foundation"),
             spec("Pech", "EntityPech", "pech", 64, 3, true, "registered_foundation", "Pech type/anger/tamed state, loot pack, valued-item taming, trade menu, scan/aspect identity, renderer foundation and exact magical-biome spawn tag gate"),
             spec("MindSpider", "EntityMindSpider", "mind_spider", 64, 3, true, "registered_foundation", "Mind Spider harmless/viewer hallucination state, lifespan and warp spawn foundation; custom renderer deferred"),
             spec("EldritchGuardian", "EntityEldritchGuardian", "eldritch_guardian", 64, 3, true, "registered_foundation", "Eldritch Guardian attributes, team rules, warp spawn, ranged orb attack, curse branch and renderer foundation"),
@@ -403,6 +448,7 @@ public final class TCEntityTypes {
         event.put(TAINT_SWARM.get(), TCTaintSwarmEntity.createAttributes().build());
         event.put(WISP.get(), TCWispEntity.createAttributes().build());
         event.put(FIREBAT.get(), TCFirebatEntity.createAttributes().build());
+        event.put(SPELLBAT.get(), TCFirebatEntity.createAttributes().build());
         event.put(PECH.get(), TCPechEntity.createAttributes().build());
         event.put(BRAINY_ZOMBIE.get(), TCBrainyZombieEntity.createAttributes().build());
         event.put(GIANT_BRAINY_ZOMBIE.get(), TCGiantBrainyZombieEntity.createAttributes().build());
