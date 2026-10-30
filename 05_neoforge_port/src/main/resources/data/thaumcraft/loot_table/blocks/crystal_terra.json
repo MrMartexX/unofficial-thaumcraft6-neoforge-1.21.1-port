@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thaumcraft:crystal_terra"
+          "name": "thaumcraft:crystal_essence_terra"
         }
       ],
       "conditions": [

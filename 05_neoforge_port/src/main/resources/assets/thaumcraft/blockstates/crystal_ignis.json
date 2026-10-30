@@ -1,7 +1,1 @@
-{
-  "variants": {
-    "": {
-      "model": "thaumcraft:block/crystal_ignis"
-    }
-  }
-}
+{"variants":{"":{"model":"thaumcraft:block/crystal_ignis"}}}

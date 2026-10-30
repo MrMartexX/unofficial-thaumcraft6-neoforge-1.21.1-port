@@ -1,12 +1,12 @@
 # Custom Recipe Boundary Audit
 
-Generated: 2026-07-20 18:00:02 +03:00
+Generated: 2026-09-01 22:31:26 +03:00
 
 ## Summary
 
 | Metric | Count |
 |---|---:|
-| Recipe JSON files scanned | 344 |
+| Recipe JSON files scanned | 371 |
 | Research JSON files scanned | 8 |
 | Research recipe-like references found | 423 |
 | Resolved recipe references | 247 |
@@ -28,7 +28,7 @@ Generated: 2026-07-20 18:00:02 +03:00
 
 | Class | Count |
 |---|---:|
-| VANILLA_OR_STANDARD_READY | 137 |
+| VANILLA_OR_STANDARD_READY | 164 |
 | ARCANE_READY | 89 |
 | CRUCIBLE_PAGE_READY_NO_GAMEPLAY | 78 |
 | INFUSION_PAGE_READY_NO_GAMEPLAY | 40 |
@@ -37,12 +37,13 @@ Generated: 2026-07-20 18:00:02 +03:00
 
 | Type | Count |
 |---|---:|
+| minecraft:crafting_shapeless | 92 |
 | thaumcraft:arcane_shaped | 80 |
 | thaumcraft:crucible | 78 |
-| minecraft:crafting_shapeless | 72 |
 | minecraft:crafting_shaped | 65 |
 | thaumcraft:infusion | 40 |
 | thaumcraft:arcane_shapeless | 9 |
+| minecraft:smelting | 7 |
 
 ## Custom or review recipe files
 

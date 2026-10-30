@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thaumcraft:crystal_vitium"
+          "name": "thaumcraft:crystal_essence_vitium"
         }
       ],
       "conditions": [

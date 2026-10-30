@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectAssignmentRegistry;
 import thaumcraft.api.aspects.AspectList;
 
 public final class TCAspectAssignments {
@@ -20,7 +21,7 @@ public final class TCAspectAssignments {
         }
         TCGeneratedAspectCache.clear();
         activeData = TCAspectAssignmentParser.loadBundledDefaults();
-        TCAspectParityValidator.validate();
+        TCAspectParityValidator.validate(false);
         Thaumcraft.LOGGER.info(
                 "Thaumcraft aspect bootstrap initialized from bundled data: {} aspects, {} exact object assignments, {} tag assignments, {} complex exact assignments, {} complex tag assignments, parity validation passed.",
                 Aspect.aspects.size(),
@@ -38,7 +39,7 @@ public final class TCAspectAssignments {
     static void reload(TCAspectAssignmentData data) {
         TCGeneratedAspectCache.clear();
         activeData = data;
-        TCAspectParityValidator.validate();
+        TCAspectParityValidator.validate(true);
         Thaumcraft.LOGGER.info(
                 "Thaumcraft aspect assignments reloaded: {} exact object assignments, {} tag assignments, {} complex exact assignments, {} complex tag assignments, parity validation passed.",
                 activeData.directObjectTags().size(),
@@ -76,6 +77,11 @@ public final class TCAspectAssignments {
     static AspectList getExplicitObjectAspects(ItemStack stack) {
         if (stack == null || stack.isEmpty()) {
             return null;
+        }
+
+        AspectList runtimeOverride = AspectAssignmentRegistry.getOverride(stack);
+        if (runtimeOverride != null) {
+            return runtimeOverride;
         }
 
         TCAspectAssignmentData data = activeData;

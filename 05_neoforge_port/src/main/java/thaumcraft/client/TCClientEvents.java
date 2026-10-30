@@ -18,6 +18,7 @@ import thaumcraft.common.research.TCKnowledgeClientCache;
 import thaumcraft.common.research.TCThaumonomiconClientCache;
 import thaumcraft.common.research.theorycraft.TCResearchTableClientCache;
 import thaumcraft.common.warp.TCWarpClientCache;
+import thaumcraft.common.world.aura.TCAuraClientCache;
 
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class TCClientEvents {
@@ -35,6 +36,7 @@ public final class TCClientEvents {
             TCLegacyParticleEngine.clear();
             TCKnowledgeClientCache.clear();
             TCWarpClientCache.clear();
+            TCAuraClientCache.clear();
             TCThaumonomiconClientCache.clear();
             TCResearchTableClientCache.clear();
             TCInfusionClientFXCache.clear();

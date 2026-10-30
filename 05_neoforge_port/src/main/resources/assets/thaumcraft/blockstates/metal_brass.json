@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/iron_block"
+      "model": "thaumcraft:block/metal_brass"
     }
   }
 }

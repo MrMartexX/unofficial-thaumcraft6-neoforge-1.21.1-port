@@ -1,7 +1,1 @@
-{
-  "variants": {
-    "": {
-      "model": "thaumcraft:block/crystal_perditio"
-    }
-  }
-}
+{"variants":{"":{"model":"thaumcraft:block/crystal_perditio"}}}

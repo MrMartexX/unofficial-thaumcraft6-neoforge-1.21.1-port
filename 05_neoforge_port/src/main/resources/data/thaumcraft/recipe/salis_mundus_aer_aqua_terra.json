@@ -1,0 +1,29 @@
+{
+  "type": "thaumcraft:salis_mundus",
+  "category": "misc",
+  "group": "thaumcraft_salis_mundus",
+  "ingredients": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "minecraft:flint"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_aer"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_aqua"
+    },
+    {
+      "item": "thaumcraft:crystal_essence_terra"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:salis_mundus"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": { "item": "thaumcraft:cluster_silver" },
+  "result": { "id": "thaumcraft:silver_nugget", "count": 18 },
+  "experience": 1.0,
+  "cookingtime": 200
+}

@@ -23,6 +23,8 @@ public final class TCDataComponents {
     public static final Supplier<DataComponentType<TCCasterFocusComponent>> CASTER_FOCUS = DATA_COMPONENT_TYPES.register("caster_focus", () -> DataComponentType.<TCCasterFocusComponent>builder().persistent(TCCasterFocusComponent.CODEC).networkSynchronized(TCCasterFocusComponent.STREAM_CODEC).build());
     public static final Supplier<DataComponentType<TCMirrorLinkComponent>> MIRROR_LINK = DATA_COMPONENT_TYPES.register("mirror_link", () -> DataComponentType.<TCMirrorLinkComponent>builder().persistent(TCMirrorLinkComponent.CODEC).networkSynchronized(TCMirrorLinkComponent.STREAM_CODEC).build());
     public static final Supplier<DataComponentType<Integer>> BRAIN_JAR_XP = DATA_COMPONENT_TYPES.register("brain_jar_xp", () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
+    public static final Supplier<DataComponentType<Integer>> CHARGE = DATA_COMPONENT_TYPES.register("charge", () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
+    public static final Supplier<DataComponentType<Integer>> ACTIVE_ENERGY = DATA_COMPONENT_TYPES.register("active_energy", () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
 
     private TCDataComponents() {
     }

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thaumcraft:crystal_ignis"
+          "name": "thaumcraft:crystal_essence_ignis"
         }
       ],
       "conditions": [

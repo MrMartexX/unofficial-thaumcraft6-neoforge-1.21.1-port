@@ -20,6 +20,7 @@ import thaumcraft.common.registry.TCRecipes;
 import thaumcraft.common.research.TCPlayerKnowledgeStore;
 import thaumcraft.common.research.TCResearchManager;
 import thaumcraft.common.tiles.crafting.TCArcaneWorkbenchBlockEntity;
+import thaumcraft.api.crafting.IArcaneWorkbench;
 
 public final class TCArcaneWorkbenchCrafting {
     public static final List<String> PRIMAL_ASPECT_ORDER = List.of(
@@ -34,12 +35,12 @@ public final class TCArcaneWorkbenchCrafting {
     private TCArcaneWorkbenchCrafting() {
     }
 
-    public static ResolvedCraft resolve(ServerPlayer player, TCArcaneWorkbenchBlockEntity workbench) {
-        if (player == null || workbench == null || workbench.getLevel() == null) {
+    public static ResolvedCraft resolve(ServerPlayer player, IArcaneWorkbench workbench) {
+        if (player == null || workbench == null || workbench.arcaneLevel() == null) {
             return ResolvedCraft.empty();
         }
 
-        Level level = workbench.getLevel();
+        Level level = workbench.arcaneLevel();
         CraftingInput input = workbench.craftingInput();
         Optional<RecipeHolder<TCArcaneRecipe>> arcaneRecipe = matchingArcaneRecipe(level.getRecipeManager(), level, input);
         if (arcaneRecipe.isPresent()) {
@@ -84,7 +85,7 @@ public final class TCArcaneWorkbenchCrafting {
         return resolveVanilla(player, workbench, input);
     }
 
-    public static boolean craft(ServerPlayer player, TCArcaneWorkbenchBlockEntity workbench, ResolvedCraft expected) {
+    public static boolean craft(ServerPlayer player, IArcaneWorkbench workbench, ResolvedCraft expected) {
         if (player == null || workbench == null || expected == null || expected.output().isEmpty()) {
             return false;
         }
@@ -107,7 +108,7 @@ public final class TCArcaneWorkbenchCrafting {
         if (actual.kind() == Kind.ARCANE) {
             consumeCrystals(workbench, actual.crystalCosts());
         }
-        workbench.setChanged();
+        workbench.setArcaneChanged();
         TCResearchManager.markCraftedResearchReferences(player, actual.output());
         return true;
     }
@@ -142,8 +143,8 @@ public final class TCArcaneWorkbenchCrafting {
         return Optional.empty();
     }
 
-    private static ResolvedCraft resolveVanilla(ServerPlayer player, TCArcaneWorkbenchBlockEntity workbench, CraftingInput input) {
-        Level level = workbench.getLevel();
+    private static ResolvedCraft resolveVanilla(ServerPlayer player, IArcaneWorkbench workbench, CraftingInput input) {
+        Level level = workbench.arcaneLevel();
         if (level == null) {
             return ResolvedCraft.empty();
         }
@@ -169,13 +170,13 @@ public final class TCArcaneWorkbenchCrafting {
         );
     }
 
-    private static boolean hasCrystalCosts(TCArcaneWorkbenchBlockEntity workbench, List<TCArcaneCrystalCost> costs) {
+    private static boolean hasCrystalCosts(IArcaneWorkbench workbench, List<TCArcaneCrystalCost> costs) {
         for (TCArcaneCrystalCost cost : costs) {
             int slot = crystalSlotForAspect(cost.aspect());
-            if (slot < 0 || workbench.getItem(slot).getCount() < cost.amount()) {
+            if (slot < 0 || workbench.getArcaneItem(slot).getCount() < cost.amount()) {
                 return false;
             }
-            if (!isCrystal(workbench.getItem(slot), cost.aspect())) {
+            if (!isCrystal(workbench.getArcaneItem(slot), cost.aspect())) {
                 return false;
             }
         }
@@ -184,15 +185,15 @@ public final class TCArcaneWorkbenchCrafting {
 
     private static NonNullList<ItemStack> remainingItems(
             ServerPlayer player,
-            TCArcaneWorkbenchBlockEntity workbench,
+            IArcaneWorkbench workbench,
             ResolvedCraft craft,
             CraftingInput input
     ) {
         if (craft.kind() == Kind.VANILLA) {
-            Optional<RecipeHolder<CraftingRecipe>> recipe = workbench.getLevel().getRecipeManager().getRecipeFor(
+            Optional<RecipeHolder<CraftingRecipe>> recipe = workbench.arcaneLevel().getRecipeManager().getRecipeFor(
                     RecipeType.CRAFTING,
                     input,
-                    workbench.getLevel()
+                    workbench.arcaneLevel()
             );
             if (recipe.isPresent()) {
                 return recipe.get().value().getRemainingItems(input);
@@ -202,31 +203,31 @@ public final class TCArcaneWorkbenchCrafting {
         return empty;
     }
 
-    private static void consumeMatrix(ServerPlayer player, TCArcaneWorkbenchBlockEntity workbench, NonNullList<ItemStack> remainingItems) {
+    private static void consumeMatrix(ServerPlayer player, IArcaneWorkbench workbench, NonNullList<ItemStack> remainingItems) {
         for (int slot = 0; slot < TCArcaneWorkbenchBlockEntity.MATRIX_SLOT_COUNT; slot++) {
-            ItemStack current = workbench.getItem(slot);
+            ItemStack current = workbench.getArcaneItem(slot);
             if (current.isEmpty()) {
                 continue;
             }
-            workbench.removeItem(slot, 1);
+            workbench.removeArcaneItem(slot, 1);
             ItemStack remainder = slot < remainingItems.size() ? remainingItems.get(slot) : ItemStack.EMPTY;
             if (remainder.isEmpty()) {
                 continue;
             }
-            ItemStack updated = workbench.getItem(slot);
+            ItemStack updated = workbench.getArcaneItem(slot);
             if (updated.isEmpty()) {
-                workbench.setItem(slot, remainder.copy());
+                workbench.setArcaneItem(slot, remainder.copy());
             } else if (!player.getInventory().add(remainder.copy())) {
                 player.drop(remainder.copy(), false);
             }
         }
     }
 
-    private static void consumeCrystals(TCArcaneWorkbenchBlockEntity workbench, List<TCArcaneCrystalCost> costs) {
+    private static void consumeCrystals(IArcaneWorkbench workbench, List<TCArcaneCrystalCost> costs) {
         for (TCArcaneCrystalCost cost : costs) {
             int slot = crystalSlotForAspect(cost.aspect());
             if (slot >= 0) {
-                workbench.removeItem(slot, cost.amount());
+                workbench.removeArcaneItem(slot, cost.amount());
             }
         }
     }

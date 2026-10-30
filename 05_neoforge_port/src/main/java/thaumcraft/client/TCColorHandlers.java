@@ -162,6 +162,13 @@ public final class TCColorHandlers {
             Aspect aspect = TCEssentiaItemHelper.aspectFromStack(stack);
             return aspect == null ? 0xFFFFFFFF : (0xFF000000 | (aspect.getColor() & 0xFFFFFF));
         }, TCItems.JAR_LABEL_ESSENCE.get());
+        event.register((stack, tintIndex) -> {
+            if (tintIndex != 1) {
+                return 0xFFFFFFFF;
+            }
+            Aspect aspect = TCEssentiaItemHelper.aspectFromStack(stack);
+            return aspect == null ? 0xFFFFFFFF : (0xFF000000 | (aspect.getColor() & 0xFFFFFF));
+        }, TCItems.JAR_NORMAL.get(), TCItems.JAR_VOID.get());
         ItemColor robeColor = (stack, tintIndex) -> tintIndex == 0
                 ? DyedItemColor.getOrDefault(stack, ItemRobeArmor.LEGACY_DEFAULT_COLOR)
                 : WHITE;

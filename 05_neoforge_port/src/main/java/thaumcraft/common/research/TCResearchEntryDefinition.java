@@ -2,7 +2,7 @@ package thaumcraft.common.research;
 
 import java.util.List;
 
-record TCResearchEntryDefinition(
+public record TCResearchEntryDefinition(
         String key,
         String name,
         List<String> icons,
@@ -17,7 +17,7 @@ record TCResearchEntryDefinition(
         List<TCResearchStageDefinition> stages,
         List<TCResearchStageDefinition> addenda
 ) {
-    TCResearchEntryDefinition {
+    public TCResearchEntryDefinition {
         key = TCPlayerKnowledge.normalizeResearchKey(key);
         name = name == null ? "" : name.trim();
         icons = List.copyOf(icons);

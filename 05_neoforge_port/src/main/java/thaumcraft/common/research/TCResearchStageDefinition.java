@@ -2,7 +2,7 @@ package thaumcraft.common.research;
 
 import java.util.List;
 
-record TCResearchStageDefinition(
+public record TCResearchStageDefinition(
         String text,
         List<String> requiredResearch,
         List<String> requiredCraft,
@@ -11,7 +11,7 @@ record TCResearchStageDefinition(
         List<String> recipes,
         int warp
 ) {
-    TCResearchStageDefinition {
+    public TCResearchStageDefinition {
         text = text == null ? "" : text.trim();
         requiredResearch = List.copyOf(requiredResearch);
         requiredCraft = List.copyOf(requiredCraft);

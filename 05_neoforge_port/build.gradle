@@ -25,6 +25,14 @@ sourceSets.main.resources {
 }
 
 repositories {
+    maven {
+        name = "Sleeping Town"
+        url = "https://repo.sleeping.town/"
+    }
+}
+
+dependencies {
+    compileOnly "dev.emi:emi-neoforge:1.1.24+1.21.1:api"
 }
 
 neoForge {
@@ -87,7 +95,7 @@ neoForge {
             def arcaneRecipeAuditEnabled = providers.gradleProperty('tcArcaneRecipeAudit').orNull ?: System.getProperty('tc.arcaneRecipeAudit')
             def arcaneRecipeAuditPath = providers.gradleProperty('tcArcaneRecipeAuditPath').orNull ?: System.getProperty('tc.arcaneRecipeAuditPath')
             def arcaneWorkbenchAuditEnabled = providers.gradleProperty('tcArcaneWorkbenchAudit').orNull ?: System.getProperty('tc.arcaneWorkbenchAudit')
-            def arcaneWorkbenchAuditPath = providers.gradleProperty('tcArcaneWorkbenchAuditPath').orNull ?: System.getProperty('tc.arcaneWorkbenchAuditPath')
+            def arcaneWorkbenchAuditPath = providers.gradleProperty('tcArcaneWorkbenchAuditPath').orNull ?: System.getProperty('tc.arcaneworkbenchAuditPath')
             def crucibleBehaviorAuditEnabled = providers.gradleProperty('tcCrucibleBehaviorAudit').orNull ?: System.getProperty('tc.crucibleBehaviorAudit')
             def crucibleBehaviorAuditPath = providers.gradleProperty('tcCrucibleBehaviorAuditPath').orNull ?: System.getProperty('tc.crucibleBehaviorAuditPath')
             def specialAlchemyBehaviorAuditEnabled = providers.gradleProperty('tcSpecialAlchemyBehaviorAudit').orNull ?: System.getProperty('tc.specialAlchemyBehaviorAudit')
@@ -102,8 +110,8 @@ neoForge {
             def infernalFurnaceBehaviorAuditPath = providers.gradleProperty('tcInfernalFurnaceBehaviorAuditPath').orNull ?: System.getProperty('tc.infernalFurnaceBehaviorAuditPath')
             def alchemyAutomationDeviceAuditEnabled = providers.gradleProperty('tcAlchemyAutomationDeviceAudit').orNull ?: System.getProperty('tc.alchemyAutomationDeviceAudit')
             def alchemyAutomationDeviceAuditPath = providers.gradleProperty('tcAlchemyAutomationDeviceAuditPath').orNull ?: System.getProperty('tc.alchemyAutomationDeviceAuditPath')
-            def brainJarBehaviorAuditEnabled = providers.gradleProperty('tcBrainJarBehaviorAudit').orNull ?: System.getProperty('tcBrainJarBehaviorAudit')
-            def brainJarBehaviorAuditPath = providers.gradleProperty('tcBrainJarBehaviorAuditPath').orNull ?: System.getProperty('tcBrainJarBehaviorAuditPath')
+            def brainJarBehaviorAuditEnabled = providers.gradleProperty('tcBrainJarBehaviorAudit').orNull ?: System.getProperty('tc.brainJarBehaviorAudit')
+            def brainJarBehaviorAuditPath = providers.gradleProperty('tcBrainJarBehaviorAuditPath').orNull ?: System.getProperty('tc.brainJarBehaviorAuditPath')
             def standaloneDeviceBlockerAuditEnabled = providers.gradleProperty('tcStandaloneDeviceBlockerAudit').orNull ?: System.getProperty('tc.standaloneDeviceBlockerAudit')
             def standaloneDeviceBlockerAuditPath = providers.gradleProperty('tcStandaloneDeviceBlockerAuditPath').orNull ?: System.getProperty('tc.standaloneDeviceBlockerAuditPath')
             def entityFoundationAuditEnabled = providers.gradleProperty('tcEntityFoundationAudit').orNull ?: System.getProperty('tc.entityFoundationAudit')
@@ -142,6 +150,8 @@ neoForge {
             def fallingTaintBlockerAuditPath = providers.gradleProperty('tcFallingTaintBlockerAuditPath').orNull ?: System.getProperty('tc.fallingTaintBlockerAuditPath')
             def minimalGameTestFixtureEnabled = providers.gradleProperty('tcMinimalGameTestFixture').orNull ?: System.getProperty('tc.minimalGameTestFixture')
             def minimalGameTestFixturePath = providers.gradleProperty('tcMinimalGameTestFixturePath').orNull ?: System.getProperty('tc.minimalGameTestFixturePath')
+            def completeParityMatrixAuditEnabled = providers.gradleProperty('tcCompleteParityMatrixAudit').orNull ?: System.getProperty('tc.completeParityMatrixAudit')
+            def completeParityMatrixAuditPath = providers.gradleProperty('tcCompleteParityMatrixAuditPath').orNull ?: System.getProperty('tc.completeParityMatrixAuditPath')
             if (aspectDumpEnabled != null) {
                 systemProperty 'tc.aspectDump', aspectDumpEnabled
             }
@@ -242,10 +252,10 @@ neoForge {
                 systemProperty 'tc.alchemyAutomationDeviceAuditPath', alchemyAutomationDeviceAuditPath
             }
             if (brainJarBehaviorAuditEnabled != null) {
-                systemProperty 'tcBrainJarBehaviorAudit', brainJarBehaviorAuditEnabled
+                systemProperty 'tc.brainJarBehaviorAudit', brainJarBehaviorAuditEnabled
             }
             if (brainJarBehaviorAuditPath != null) {
-                systemProperty 'tcBrainJarBehaviorAuditPath', brainJarBehaviorAuditPath
+                systemProperty 'tc.brainJarBehaviorAuditPath', brainJarBehaviorAuditPath
             }
             if (standaloneDeviceBlockerAuditEnabled != null) {
                 systemProperty 'tc.standaloneDeviceBlockerAudit', standaloneDeviceBlockerAuditEnabled
@@ -361,6 +371,12 @@ neoForge {
             if (minimalGameTestFixturePath != null) {
                 systemProperty 'tc.minimalGameTestFixturePath', minimalGameTestFixturePath
             }
+            if (completeParityMatrixAuditEnabled != null) {
+                systemProperty 'tc.completeParityMatrixAudit', completeParityMatrixAuditEnabled
+            }
+            if (completeParityMatrixAuditPath != null) {
+                systemProperty 'tc.completeParityMatrixAuditPath', completeParityMatrixAuditPath
+            }
             logLevel = org.slf4j.event.Level.DEBUG
         }
     }
@@ -411,6 +427,17 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
+}
+
+tasks.register('parityAudit', Exec) {
+    group = 'verification'
+    description = 'Runs the TC6 Master Parity Audit against 1.12.2 legacy source.'
+    workingDir = project.projectDir.parentFile ?: project.projectDir
+    if (org.apache.tools.ant.taskdefs.condition.Os.isFamily(org.apache.tools.ant.taskdefs.condition.Os.FAMILY_WINDOWS)) {
+        commandLine 'cmd', '/c', 'python', 'tools/audits/audit-complete-parity-matrix.py'
+    } else {
+        commandLine 'python3', 'tools/audits/audit-complete-parity-matrix.py'
+    }
 }
 
 idea {

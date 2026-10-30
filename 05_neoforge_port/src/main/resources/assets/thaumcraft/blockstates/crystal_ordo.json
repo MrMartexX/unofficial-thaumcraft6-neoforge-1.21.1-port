@@ -1,7 +1,1 @@
-{
-  "variants": {
-    "": {
-      "model": "thaumcraft:block/crystal_ordo"
-    }
-  }
-}
+{"variants":{"":{"model":"thaumcraft:block/crystal_ordo"}}}

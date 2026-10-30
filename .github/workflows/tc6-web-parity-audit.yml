@@ -1,0 +1,40 @@
+name: TC6 Web Parity Audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '05_neoforge_port/**'
+      - 'Thaumcraft-6-Source-Code-master/**'
+      - '.github/workflows/tc6-web-parity-audit.yml'
+
+jobs:
+  parity-audit:
+    name: Compare legacy TC6 with NeoForge port
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run TC6 parity audit
+        run: |
+          python 05_neoforge_port/tools/tc6_web_parity_audit.py \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --out-dir 05_neoforge_port/build/reports
+
+      - name: Show audit summary
+        run: |
+          sed -n '1,220p' 05_neoforge_port/build/reports/tc6_web_parity_audit.md
+
+      - name: Upload audit reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: tc6-web-parity-audit
+          path: |
+            05_neoforge_port/build/reports/tc6_web_parity_audit.md
+            05_neoforge_port/build/reports/tc6_web_parity_audit.json

@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thaumcraft:crystal_aer"
+          "name": "thaumcraft:crystal_essence_aer"
         }
       ],
       "conditions": [

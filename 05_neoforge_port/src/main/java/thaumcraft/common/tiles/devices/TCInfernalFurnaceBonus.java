@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import thaumcraft.Thaumcraft;
+import thaumcraft.api.crafting.InfernalFurnaceBonusRegistry;
 import thaumcraft.common.registry.TCItems;
 
 /** Internal legacy default smelting bonus table for the Infernal Furnace. */
@@ -71,11 +72,12 @@ public final class TCInfernalFurnaceBonus {
         addIfRolled(level, output, input, TCItems.CLUSTER_TIN.get(), TCItems.RARE_EARTH, 0.02F);
         addIfRolled(level, output, input, TCItems.CLUSTER_SILVER.get(), TCItems.RARE_EARTH, 0.02F);
         addIfRolled(level, output, input, TCItems.CLUSTER_LEAD.get(), TCItems.RARE_EARTH, 0.02F);
+        InfernalFurnaceBonusRegistry.appendRolls(level, input, output);
         return output;
     }
 
     public static boolean hasKnownBonusCandidate(ItemStack input) {
-        return input != null && !input.isEmpty() && (
+        return input != null && !input.isEmpty() && (InfernalFurnaceBonusRegistry.hasCandidate(input) || (
                 input.is(ore("gold"))
                         || input.is(ore("iron"))
                         || input.is(ore("cinnabar"))
@@ -102,7 +104,7 @@ public final class TCInfernalFurnaceBonus {
                         || input.is(Items.SALMON)
                         || input.is(Items.TROPICAL_FISH)
                         || input.is(Items.RABBIT)
-                        || input.is(Items.MUTTON));
+                        || input.is(Items.MUTTON)));
     }
 
     private static void addIfRolled(Level level, List<ItemStack> output, ItemStack input, Item item, Item bonus, float chance) {

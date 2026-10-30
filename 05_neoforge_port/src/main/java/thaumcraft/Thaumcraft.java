@@ -47,6 +47,7 @@ import thaumcraft.common.tiles.devices.TCAlchemyAutomationDeviceAuditExporter;
 import thaumcraft.common.tiles.devices.TCBrainJarBehaviorAuditExporter;
 import thaumcraft.common.tiles.devices.TCStandaloneDeviceBlockerAuditExporter;
 import thaumcraft.common.runtime.TCMinimalGameTestFixtureExporter;
+import thaumcraft.common.audit.parity.TCUnifiedParityRuntimeAuditExporter;
 import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.capabilities.TCMachineCapabilities;
@@ -65,6 +66,7 @@ import thaumcraft.common.registry.TCCreativeTabs;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCEntityTypes;
 import thaumcraft.common.registry.TCFluids;
+import thaumcraft.common.registry.TCFeatures;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMenus;
 import thaumcraft.common.registry.TCMobEffects;
@@ -110,6 +112,7 @@ public final class Thaumcraft {
         TCFluids.FLUID_TYPES.register(modEventBus);
         TCFluids.FLUIDS.register(modEventBus);
         TCBlocks.BLOCKS.register(modEventBus);
+        TCFeatures.FEATURES.register(modEventBus);
         TCBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         TCMobEffects.MOB_EFFECTS.register(modEventBus);
         TCEntityTypes.ENTITY_TYPES.register(modEventBus);
@@ -128,6 +131,7 @@ public final class Thaumcraft {
             TCBlockEntityRenderers.register(modEventBus);
             TCEntityRenderers.register(modEventBus);
             TCKnowledgeGainHud.register(modEventBus);
+            thaumcraft.client.gui.TCInstrumentHud.register(modEventBus);
             TCItemProperties.register(modEventBus);
             TCClientExtensions.register(modEventBus);
             TCResearchIconRenderer.register(modEventBus);
@@ -199,6 +203,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCWarpBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCWarpEventBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCMinimalGameTestFixtureExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCUnifiedParityRuntimeAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCResearchPageCatalogCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditCommands::onRegisterCommands);
         NeoForge.EVENT_BUS.addListener(TCResearchTableAuditExporter::onServerStarted);
@@ -208,6 +213,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCWarpCraftingEvents::onItemCrafted);
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onItemCrafted);
         NeoForge.EVENT_BUS.addListener(TCResearchDiscoveryEvents::onItemPickup);
+        NeoForge.EVENT_BUS.addListener(TCResearchDiscoveryEvents::onPlayerWakeUp);
         NeoForge.EVENT_BUS.addListener(TCBathSaltsEvents::onItemExpire);
         TCAspectAssignments.bootstrap();
         TCResearchManager.bootstrap();

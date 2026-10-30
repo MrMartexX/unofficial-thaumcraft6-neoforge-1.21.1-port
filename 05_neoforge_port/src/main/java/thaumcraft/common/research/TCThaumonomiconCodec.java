@@ -538,15 +538,28 @@ final class TCThaumonomiconCodec {
     }
 
     private static void writeBlueprintCell(RegistryFriendlyByteBuf buffer, TCBlueprintRecipePageView.Cell cell) {
-        ItemStack.STREAM_CODEC.encode(buffer, cell.sourceStack());
-        ItemStack.STREAM_CODEC.encode(buffer, cell.targetStack());
+        writeOptionalItemStack(buffer, cell.sourceStack());
+        writeOptionalItemStack(buffer, cell.targetStack());
     }
 
     private static TCBlueprintRecipePageView.Cell readBlueprintCell(RegistryFriendlyByteBuf buffer) {
         return new TCBlueprintRecipePageView.Cell(
-                ItemStack.STREAM_CODEC.decode(buffer),
-                ItemStack.STREAM_CODEC.decode(buffer)
+                readOptionalItemStack(buffer),
+                readOptionalItemStack(buffer)
         );
+    }
+
+    /** Blueprint air cells are represented by ItemStack.EMPTY and need an explicit presence bit. */
+    private static void writeOptionalItemStack(RegistryFriendlyByteBuf buffer, ItemStack stack) {
+        boolean present = stack != null && !stack.isEmpty();
+        buffer.writeBoolean(present);
+        if (present) {
+            ItemStack.STREAM_CODEC.encode(buffer, stack);
+        }
+    }
+
+    private static ItemStack readOptionalItemStack(RegistryFriendlyByteBuf buffer) {
+        return buffer.readBoolean() ? ItemStack.STREAM_CODEC.decode(buffer) : ItemStack.EMPTY;
     }
 
     private static void writeDisplayRecipe(RegistryFriendlyByteBuf buffer, TCDisplayRecipePageView recipe) {

@@ -7,6 +7,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.crafting.TCSalisMundusRecipe;
 import thaumcraft.common.crafting.arcane.TCArcaneRecipe;
 import thaumcraft.common.crafting.arcane.TCShapedArcaneRecipe;
 import thaumcraft.common.crafting.arcane.TCShapelessArcaneRecipe;
@@ -40,6 +41,8 @@ public final class TCRecipes {
             RECIPE_SERIALIZERS.register("crucible", TCCrucibleRecipe.Serializer::new);
     public static final Supplier<RecipeSerializer<TCInfusionRecipe>> INFUSION_SERIALIZER =
             RECIPE_SERIALIZERS.register("infusion", TCInfusionRecipe.Serializer::new);
+    public static final Supplier<RecipeSerializer<TCSalisMundusRecipe>> SALIS_MUNDUS_SERIALIZER =
+            RECIPE_SERIALIZERS.register("salis_mundus", TCSalisMundusRecipe.Serializer::new);
 
     private TCRecipes() {
     }

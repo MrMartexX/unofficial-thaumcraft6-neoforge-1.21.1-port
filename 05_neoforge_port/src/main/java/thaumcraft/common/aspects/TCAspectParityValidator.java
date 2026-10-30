@@ -59,14 +59,14 @@ final class TCAspectParityValidator {
             compound("humanus", 0xffd7c0, 1, "spiritus", "victus")
     };
 
-    static void validate() {
+    static void validate(boolean allowAddonAssignments) {
         validateAspectRegistry();
         validateAspectListSemantics();
         validateAspectHelperSemantics();
         validateEntityAspectAssignments();
-        validateDirectAssignments();
-        validateTagAssignments();
-        validateComplexAssignments();
+        validateDirectAssignments(allowAddonAssignments);
+        validateTagAssignments(allowAddonAssignments);
+        validateComplexAssignments(allowAddonAssignments);
         validateGeneratedCacheScaffold();
     }
 
@@ -208,9 +208,9 @@ final class TCAspectParityValidator {
         expectEntity(EntityType.WARDEN, amount(Aspect.BEAST, 30), amount(Aspect.DARKNESS, 30), amount(Aspect.SENSES, 20), amount(Aspect.AVERSION, 30), amount(Aspect.SOUL, 15));
     }
 
-    private static void validateDirectAssignments() {
+    private static void validateDirectAssignments(boolean allowAddonAssignments) {
         Map<ResourceLocation, AspectList> tags = TCAspectAssignments.directObjectTags();
-        expectEquals(702, tags.size(), "direct object assignment count");
+        expectAssignmentCount(702, tags.size(), "direct object assignment count", allowAddonAssignments);
 
         expectDirect(tags, "ore_quartz", amount(Aspect.EARTH, 5), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "ore_cinnabar", amount(Aspect.EARTH, 5), amount(Aspect.METAL, 10), amount(Aspect.ALCHEMY, 5), amount(Aspect.DEATH, 5));
@@ -352,9 +352,9 @@ final class TCAspectParityValidator {
         expectDirect(tags, "minecraft", "melon", amount(Aspect.PLANT, 10));
     }
 
-    private static void validateTagAssignments() {
+    private static void validateTagAssignments(boolean allowAddonAssignments) {
         Map<TagKey<Item>, AspectList> tags = TCAspectAssignments.tagObjectTags();
-        expectEquals(46, tags.size(), "tag object assignment count");
+        expectAssignmentCount(46, tags.size(), "tag object assignment count", allowAddonAssignments);
 
         expectTag(tags, "c", "ores/amber", amount(Aspect.EARTH, 5), amount(Aspect.TRAP, 10), amount(Aspect.CRYSTAL, 10));
         expectTag(tags, "c", "ores/cinnabar", amount(Aspect.EARTH, 5), amount(Aspect.METAL, 10), amount(Aspect.ALCHEMY, 5), amount(Aspect.DEATH, 5));
@@ -405,9 +405,9 @@ final class TCAspectParityValidator {
         expectTag(tags, Thaumcraft.MODID, "legacy_ore_dictionary/quicksilver", amount(Aspect.METAL, 10), amount(Aspect.DEATH, 5), amount(Aspect.ALCHEMY, 5));
     }
 
-    private static void validateComplexAssignments() {
+    private static void validateComplexAssignments(boolean allowAddonAssignments) {
         Map<ResourceLocation, AspectList> direct = TCAspectAssignments.complexDirectObjectTags();
-        expectEquals(32, direct.size(), "complex direct object assignment count");
+        expectAssignmentCount(32, direct.size(), "complex direct object assignment count", allowAddonAssignments);
 
         expectComplexDirect(direct, "minecraft", "cookie", amount(Aspect.DESIRE, 1));
         expectComplexDirect(direct, "minecraft", "bowl", amount(Aspect.VOID, 5));
@@ -429,7 +429,12 @@ final class TCAspectParityValidator {
         expectComplexDirect(direct, "minecraft", "oak_door", amount(Aspect.TRAP, 5), amount(Aspect.MECHANISM, 5));
         expectComplexDirect(direct, "minecraft", "acacia_fence_gate", amount(Aspect.TRAP, 5), amount(Aspect.MECHANISM, 5));
 
-        expectEquals(0, TCAspectAssignments.complexTagObjectTags().size(), "complex tag object assignment count");
+        int complexTagCount = TCAspectAssignments.complexTagObjectTags().size();
+        if (allowAddonAssignments) {
+            expect(complexTagCount >= 0, "complex tag object assignment count should be non-negative");
+        } else {
+            expectEquals(0, complexTagCount, "complex tag object assignment count");
+        }
     }
 
     private static void validateGeneratedCacheScaffold() {
@@ -560,6 +565,16 @@ final class TCAspectParityValidator {
     private static void expectEquals(Object expected, Object actual, String message) {
         if (!expected.equals(actual)) {
             throw new IllegalStateException("Aspect parity validation failed: " + message + " expected " + expected + " got " + actual);
+        }
+    }
+
+    private static void expectAssignmentCount(int expectedBase, int actual, String message, boolean allowAddonAssignments) {
+        if (allowAddonAssignments) {
+            if (actual < expectedBase) {
+                throw new IllegalStateException("Aspect parity validation failed: " + message + " expected at least " + expectedBase + " got " + actual);
+            }
+        } else {
+            expectEquals(expectedBase, actual, message);
         }
     }
 

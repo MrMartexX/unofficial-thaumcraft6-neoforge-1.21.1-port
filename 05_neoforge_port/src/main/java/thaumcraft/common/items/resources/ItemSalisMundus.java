@@ -14,13 +14,25 @@ public final class ItemSalisMundus extends Item {
         super(new Item.Properties().rarity(Rarity.UNCOMMON));
     }
 
+    /**
+     * Salis transformations must run before the clicked block handles the interaction. Vanilla
+     * crafting tables otherwise open their menu and {@link #useOn(UseOnContext)} is never reached.
+     */
+    @Override
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        return activate(context, stack);
+    }
+
     @Override
     public InteractionResult useOn(UseOnContext context) {
+        return activate(context, context.getItemInHand());
+    }
+
+    private static InteractionResult activate(UseOnContext context, ItemStack stack) {
         if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
             return InteractionResult.PASS;
         }
 
-        ItemStack stack = context.getItemInHand();
         if (context.getPlayer() != null
                 && !context.getPlayer().mayUseItemAt(context.getClickedPos(), context.getClickedFace(), stack)) {
             return InteractionResult.FAIL;
@@ -35,6 +47,9 @@ public final class ItemSalisMundus extends Item {
                 && context.getPlayer() instanceof ServerPlayer player
                 && !player.getAbilities().instabuild) {
             stack.shrink(1);
+        }
+        if (context.getPlayer() != null) {
+            context.getPlayer().swing(context.getHand());
         }
         return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
     }

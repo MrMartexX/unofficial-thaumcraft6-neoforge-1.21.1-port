@@ -1,20 +1,32 @@
 # Thaumcraft 6 NeoForge 1.21.1 Porting Status
 
-Last updated: 2026-06-04
+Last updated: 2026-08-31
 
 This file tracks the current porting checkpoint for the NeoForge 1.21.1 port. It is intentionally gate-based: a subsystem is marked complete only when it has passed compile/runtime/audit checks, not merely when code exists.
 
 ## Current checkpoint
 
-The current work branch has reached a stable baseline for research loading, exact progression semantics, the permanent research recipe/page catalog, the server-authoritative Thaumonomicon index/entry/action protocol foundation, data/resource integrity, current menu/network handling, and the existing Research Table BlockEntity path. The next research milestone is the Thaumonomicon item/open flow plus the first real browser and entry screens over the authoritative protocol.
+The `0.2.1-alpha4` work branch is a tested content-parity checkpoint. Research and Thaumonomicon foundations remain stable, metal-block placement and vis-crystal Fortune drops are repaired, 104 previously hidden registered entries are now exposed in the creative tab, and normal Thaumium/Void armor uses real armor materials and behavior instead of generic placeholder items. Taint entities and ecology exist, but a dedicated tainted biome is not yet complete; Curios-backed jewelry, full equipment behavior, RGB Nitor rendering, and several custom recipe/rendering systems remain active work.
+
+## 2026-08-31 parity checkpoint
+
+- Clean Java 21 / NeoForge build: OK.
+- Dedicated server reached `Done (9.613s)` with the packaged Thaumcraft alpha4 and Thaumic Energistics alpha6 JARs.
+- Research reload: `160` entries and `294` stages with the addon installed.
+- Research page catalog: `223` direct references, `345` total entries, `273` occurrences, `0` structural errors.
+- Metal blocks now place with their Thaumcraft blockstates/models rather than vanilla iron/obsidian fallbacks.
+- All seven vis-crystal loot tables use the vanilla Fortune `ore_drops` bonus formula.
+- Creative inventory parity now exposes 104 additional registered user-facing blocks/items, including armor, tools, machines, seals, jewelry, candles, clusters, and blueprints. Only four internal enchanted-placeholder records remain intentionally hidden.
+- Thaumium armor now uses a legacy-shaped Thaumium armor material; Void armor uses its own material, carries warping value `1`, and self-repairs one durability point per second while worn.
+- The corrupted generated Ukrainian gzip input was replaced with the validated UTF-8 language resource, making clean builds reproducible.
 
 ## Confirmed OK
 
 ### Build and runtime startup
 
-- `compileJava`: OK after research stage warp reward patch.
-- `runClient`: OK.
-- `runServer`: startup OK; server remains running as expected until manually stopped.
+- `clean build`: OK on Java 21 / NeoForge 21.1.248.
+- `runClient`: previously OK; the alpha4 content checkpoint still requires a full visual regression pass.
+- `runServer`: reached `Done (9.613s)`; the world lock was released after the checkpoint smoke test.
 - Dedicated-server client import audit: OK.
 
 ### Research and knowledge systems
@@ -120,15 +132,18 @@ The catalog keeps legacy page identifiers separate from modern recipe unlocks. A
   - recipe cache invalidation;
   - sided access rules.
 
-### Entities and rendering
+### Entities, taint, Curios, and rendering
 
-- Entity systems are not fully audited.
-- Rendering parity for entities is not complete.
-- Existing GUI/Fx rendering work has been partially validated, but broader entity renderers remain a future gate.
+- Taint seed/prime, crawler, taintacle variants, swarm, falling taint, taint terrain conversion, and ecology foundations are present.
+- Entity behavior and renderer parity still require client-side gameplay validation.
+- A dedicated, naturally generated tainted biome with its complete vegetation, atmosphere, structures, spawn rules, and transformation lifecycle is not complete.
+- Jewelry entries are visible and assigned to Curios belt/bracelet/charm/head/necklace/ring slots through optional datapack integration. Their legacy attribute/effect behavior, persistence, render layers, and client UI regression tests are still incomplete.
+- Every Nitor variant emits vanilla block light level `14`; vanilla Minecraft light has no RGB channel. True colored illumination needs an optional client renderer/shader or compatible dynamic-colored-light integration and must not affect dedicated-server safety.
+- Fortress armor and several elemental/Void tools are visible parity records but still need their legacy models and gameplay behavior.
 
 ### World generation
 
-World generation remains an independent future subsystem to validate after the current research milestone.
+Ore and crystal world generation is active, but biome-scale parity remains incomplete.
 
 Registered worldgen-related content exists:
 
@@ -138,12 +153,11 @@ Registered worldgen-related content exists:
 
 Pending worldgen checks:
 
-- Java worldgen pipeline detection.
-- Configured feature JSON files.
-- Placed feature JSON files.
-- Biome modifier JSON files.
-- New world generation test.
-- Dedicated server worldgen test.
+- Dedicated tainted biome data and visual/effect rules.
+- Taint vegetation/features and stable biome transformation/spread boundaries.
+- Taint mob spawn integration and fresh-world distribution tests.
+- Greatwood/silverwood and remaining plant generation parity.
+- New-world, save/reload, and dedicated-server regression tests.
 
 ### Performance and regression
 
@@ -223,12 +237,12 @@ Completed:
 
 ## Recommended next gate
 
-Implement the Thaumonomicon item/open flow and the first real browser/entry screens over the server-authoritative view models. The client may render and navigate returned data, but it must not resolve raw research recipes, decide visibility, or advance stages locally. Keep custom recipe pages explicitly deferred until each custom recipe type and renderer has its own validated subsystem slice.
+Complete the dedicated tainted-biome slice and Curios-backed jewelry/equipment slice, then finish the remaining armor/tool behaviors. Keep true RGB Nitor illumination optional and client-only. Continue custom recipe pages one validated subsystem at a time; the client may render server-returned data but must not decide research visibility or advance stages locally.
 
 Required regression commands:
 
 ```powershell
-cd D:\Thaumcraft_6_port_to_1.21.1\05_neoforge_port
+cd C:\Modding\TC-4-6\TC_6-1.21.1\ThaumicResearch\05_neoforge_port
 .\gradlew compileJava
 .\gradlew runClient
 .\gradlew runServer

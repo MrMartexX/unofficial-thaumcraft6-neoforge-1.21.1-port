@@ -7,8 +7,8 @@ import net.minecraft.world.level.ItemLike;
  * Controls the visible Thaumcraft creative tab order.
  *
  * <p>Do not sort this class alphabetically and do not rely on registry declaration order. The visible order follows
- * the Thaumcraft 6 1.12.2 registration order for the subset currently ported to NeoForge. Missing legacy entries are
- * intentionally skipped, so the remaining implemented entries keep their relative legacy position.</p>
+ * the Thaumcraft 6 1.12.2 registration order. Registered compatibility placeholders remain visible so incomplete
+ * behavior can be found during parity testing instead of silently disappearing from the catalog.</p>
  */
 public final class TCCreativeTabOrder {
     private TCCreativeTabOrder() {
@@ -18,6 +18,7 @@ public final class TCCreativeTabOrder {
         addWorldAndDecorativeBlocks(output);
         addDeviceAndCraftingBlocks(output);
         addLegacyItemSequence(output);
+        addLegacySpawnEggs(output);
     }
 
     private static void addWorldAndDecorativeBlocks(CreativeModeTab.Output output) {
@@ -70,6 +71,23 @@ public final class TCCreativeTabOrder {
 
         acceptVisible(output, TCItems.AMBER_BLOCK.get());
         acceptVisible(output, TCItems.AMBER_BRICK.get());
+
+        acceptVisible(output, TCItems.CANDLE_BLACK.get());
+        acceptVisible(output, TCItems.CANDLE_BLUE.get());
+        acceptVisible(output, TCItems.CANDLE_BROWN.get());
+        acceptVisible(output, TCItems.CANDLE_CYAN.get());
+        acceptVisible(output, TCItems.CANDLE_GRAY.get());
+        acceptVisible(output, TCItems.CANDLE_GREEN.get());
+        acceptVisible(output, TCItems.CANDLE_YELLOW.get());
+        acceptVisible(output, TCItems.CANDLE_LIGHTBLUE.get());
+        acceptVisible(output, TCItems.CANDLE_LIME.get());
+        acceptVisible(output, TCItems.CANDLE_MAGENTA.get());
+        acceptVisible(output, TCItems.CANDLE_ORANGE.get());
+        acceptVisible(output, TCItems.CANDLE_PINK.get());
+        acceptVisible(output, TCItems.CANDLE_PURPLE.get());
+        acceptVisible(output, TCItems.CANDLE_RED.get());
+        acceptVisible(output, TCItems.CANDLE_SILVER.get());
+        acceptVisible(output, TCItems.CANDLE_WHITE.get());
 
         acceptVisible(output, TCItems.METAL_BRASS.get());
         acceptVisible(output, TCItems.METAL_THAUMIUM.get());
@@ -140,6 +158,8 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.ELDRITCH_PEDESTAL.get());
         acceptVisible(output, TCItems.INLAY.get());
         acceptVisible(output, TCItems.STABILIZER.get());
+        acceptVisible(output, TCItems.GOLEM_BUILDER.get());
+        acceptVisible(output, TCItems.INFERNAL_FURNACE.get());
         acceptVisible(output, TCItems.FLUX_GOO.get());
         acceptVisible(output, TCItems.TAINT_FIBRE.get());
         acceptVisible(output, TCItems.TAINT_CRUST.get());
@@ -157,6 +177,7 @@ public final class TCCreativeTabOrder {
 
         acceptVisible(output, TCItems.AMBER.get());
         acceptVisible(output, TCItems.QUICKSILVER.get());
+        acceptVisible(output, TCItems.QUICKSILVER_NUGGET.get());
         acceptVisible(output, TCItems.THAUMIUM_INGOT.get());
         acceptVisible(output, TCItems.BRASS_INGOT.get());
         acceptVisible(output, TCItems.BRASS_NUGGET.get());
@@ -182,12 +203,24 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.SALIS_MUNDUS.get());
         acceptVisible(output, TCItems.MIRRORED_GLASS.get());
         acceptVisible(output, TCItems.HAND_MIRROR.get());
+        acceptVisible(output, TCItems.PRIMORDIAL_PEARL.get());
+
+        acceptVisible(output, TCItems.CLUSTER_IRON.get());
+        acceptVisible(output, TCItems.CLUSTER_GOLD.get());
+        acceptVisible(output, TCItems.CLUSTER_COPPER.get());
+        acceptVisible(output, TCItems.CLUSTER_TIN.get());
+        acceptVisible(output, TCItems.CLUSTER_SILVER.get());
+        acceptVisible(output, TCItems.CLUSTER_LEAD.get());
+        acceptVisible(output, TCItems.CLUSTER_CINNABAR.get());
 
         addCrystalEssenceVariants(output);
 
         acceptVisible(output, TCItems.BRAIN.get());
 
         addPhialVariants(output);
+        acceptVisible(output, TCItems.PHIAL.get());
+        acceptVisible(output, TCItems.JAR_LABEL.get());
+        acceptVisible(output, TCItems.JAR_LABEL_ESSENCE.get());
 
         acceptVisible(output, TCItems.ALUMENTUM.get());
         acceptVisible(output, TCItems.CHUNK_CHICKEN.get());
@@ -212,13 +245,95 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.THAUMIUM_PICK.get());
         acceptVisible(output, TCItems.THAUMIUM_HOE.get());
 
+        acceptVisible(output, TCItems.VOID_INGOT.get());
+        acceptVisible(output, TCItems.VOID_AXE.get());
+        acceptVisible(output, TCItems.VOID_SWORD.get());
+        acceptVisible(output, TCItems.VOID_SHOVEL.get());
+        acceptVisible(output, TCItems.VOID_PICK.get());
+        acceptVisible(output, TCItems.VOID_HOE.get());
+
+        acceptVisible(output, TCItems.ELEMENTAL_AXE.get());
+        acceptVisible(output, TCItems.ELEMENTAL_SWORD.get());
+        acceptVisible(output, TCItems.ELEMENTAL_SHOVEL.get());
+        acceptVisible(output, TCItems.ELEMENTAL_PICK.get());
+        acceptVisible(output, TCItems.ELEMENTAL_HOE.get());
+        acceptVisible(output, TCItems.PRIMAL_CRUSHER.get());
+
         acceptVisible(output, TCItems.GOGGLES.get());
+        acceptVisible(output, TCItems.THAUMIUM_HELM.get());
+        acceptVisible(output, TCItems.THAUMIUM_CHEST.get());
+        acceptVisible(output, TCItems.THAUMIUM_LEGS.get());
+        acceptVisible(output, TCItems.THAUMIUM_BOOTS.get());
+        acceptVisible(output, TCItems.VOID_HELM.get());
+        acceptVisible(output, TCItems.VOID_CHEST.get());
+        acceptVisible(output, TCItems.VOID_LEGS.get());
+        acceptVisible(output, TCItems.VOID_BOOTS.get());
         acceptVisible(output, TCItems.CLOTH_BOOTS.get());
         acceptVisible(output, TCItems.CLOTH_LEGS.get());
         acceptVisible(output, TCItems.CLOTH_CHEST.get());
         acceptVisible(output, TCItems.VOID_ROBE_HELM.get());
         acceptVisible(output, TCItems.VOID_ROBE_CHEST.get());
         acceptVisible(output, TCItems.VOID_ROBE_LEGS.get());
+
+        acceptVisible(output, TCItems.TRAVELLER_BOOTS.get());
+        acceptVisible(output, TCItems.THAUMIUM_FORTRESS_HELM.get());
+        acceptVisible(output, TCItems.THAUMIUM_FORTRESS_HELM_GOGGLES.get());
+        acceptVisible(output, TCItems.THAUMIUM_FORTRESS_CHEST.get());
+        acceptVisible(output, TCItems.THAUMIUM_FORTRESS_LEGS.get());
+
+        acceptVisible(output, TCItems.GOLEM_BELL.get());
+        acceptVisible(output, TCItems.SEAL_PICKUP.get());
+        acceptVisible(output, TCItems.SEAL_PICKUP_ADVANCED.get());
+        acceptVisible(output, TCItems.SEAL_FILL.get());
+        acceptVisible(output, TCItems.SEAL_FILL_ADVANCED.get());
+        acceptVisible(output, TCItems.SEAL_EMPTY.get());
+        acceptVisible(output, TCItems.SEAL_EMPTY_ADVANCED.get());
+        acceptVisible(output, TCItems.SEAL_GUARD.get());
+        acceptVisible(output, TCItems.SEAL_GUARD_ADVANCED.get());
+        acceptVisible(output, TCItems.SEAL_BREAKER.get());
+        acceptVisible(output, TCItems.SEAL_BREAKER_ADVANCED.get());
+        acceptVisible(output, TCItems.SEAL_LUMBER.get());
+        acceptVisible(output, TCItems.SEAL_PROVIDER.get());
+        acceptVisible(output, TCItems.SEAL_STOCK.get());
+        acceptVisible(output, TCItems.SEAL_USE.get());
+        acceptVisible(output, TCItems.SEAL_BUTCHER.get());
+        acceptVisible(output, TCItems.SEAL_HARVEST.get());
+
+        acceptVisible(output, TCItems.CLOUD_RING.get());
+        acceptVisible(output, TCItems.CHARM_UNDYING.get());
+        acceptVisible(output, TCItems.VERDANT_HEART.get());
+        acceptVisible(output, TCItems.VERDANT_HEART_LIFE.get());
+        acceptVisible(output, TCItems.VERDANT_HEART_SUSTAIN.get());
+        acceptVisible(output, TCItems.TRIPLE_MEAT_TREAT.get());
+        acceptVisible(output, TCItems.MASK_GRINNING_DEVIL.get());
+        acceptVisible(output, TCItems.MASK_ANGRY_GHOST.get());
+        acceptVisible(output, TCItems.MASK_SIPPING_FIEND.get());
+        acceptVisible(output, TCItems.MIND_CLOCKWORK_ADVANCED.get());
+
+        acceptVisible(output, TCItems.GOLEM_PRESS_BLUEPRINT.get());
+        acceptVisible(output, TCItems.INFUSION_ALTAR_BLUEPRINT.get());
+        acceptVisible(output, TCItems.INFUSION_ALTAR_ANCIENT_BLUEPRINT.get());
+        acceptVisible(output, TCItems.INFUSION_ALTAR_ELDRITCH_BLUEPRINT.get());
+
+        acceptVisible(output, TCItems.ALCHEMICAL_CONSTRUCT.get());
+        acceptVisible(output, TCItems.ESSENTIA_EXPORTER.get());
+        acceptVisible(output, TCItems.ESSENTIA_IMPORTER.get());
+        acceptVisible(output, TCItems.CAUSALITY_COLLAPSER.get());
+        acceptVisible(output, TCItems.VOIDSEER_PEARL.get());
+        acceptVisible(output, TCItems.VOID_SEED.get());
+        acceptVisible(output, TCItems.FLESH_BLOCK.get());
+
+        acceptVisible(output, TCItems.ARCANE_EAR_TOGGLE.get());
+        acceptVisible(output, TCItems.BAUBLE_AMULET.get());
+        acceptVisible(output, TCItems.VIS_AMULET.get());
+        acceptVisible(output, TCItems.BAUBLE_AMULET_FANCY.get());
+        acceptVisible(output, TCItems.BAUBLE_GIRDLE.get());
+        acceptVisible(output, TCItems.BAUBLE_GIRDLE_FANCY.get());
+        acceptVisible(output, TCItems.BAUBLE_RING.get());
+        acceptVisible(output, TCItems.BAUBLE_RING_FANCY.get());
+        acceptVisible(output, TCItems.BAUBLE_CHARM.get());
+        acceptVisible(output, TCItems.CURIOSITY_BAND.get());
+        acceptVisible(output, TCItems.BRASS_BRACE.get());
 
         acceptVisible(output, TCItems.CASTER_BASIC.get());
         acceptVisible(output, TCItems.FOCUS_1.get());
@@ -306,6 +421,28 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.PHIAL_EXANIMIS.get());
         acceptVisible(output, TCItems.PHIAL_BESTIA.get());
         acceptVisible(output, TCItems.PHIAL_HUMANUS.get());
+    }
+
+    private static void addLegacySpawnEggs(CreativeModeTab.Output output) {
+        acceptVisible(output, TCItems.CULTIST_LEADER_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.TAINTACLE_GIANT_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.BRAINY_ZOMBIE_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.GIANT_BRAINY_ZOMBIE_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.WISP_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.FIREBAT_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.PECH_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.MIND_SPIDER_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.ELDRITCH_GUARDIAN_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.CULTIST_KNIGHT_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.CULTIST_CLERIC_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.ELDRITCH_CRAB_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.INHABITED_ZOMBIE_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.THAUM_SLIME_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.TAINT_CRAWLER_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.TAINTACLE_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.TAINT_SWARM_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.TAINT_SEED_SPAWN_EGG.get());
+        acceptVisible(output, TCItems.TAINT_SEED_PRIME_SPAWN_EGG.get());
     }
 
     private static void acceptVisible(CreativeModeTab.Output output, ItemLike item) {

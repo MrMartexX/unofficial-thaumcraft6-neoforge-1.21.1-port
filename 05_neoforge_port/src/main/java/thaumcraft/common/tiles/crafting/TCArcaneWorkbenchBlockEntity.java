@@ -50,6 +50,36 @@ public class TCArcaneWorkbenchBlockEntity extends BlockEntity implements Contain
         return CraftingInput.of(3, 3, matrix);
     }
 
+    @Override
+    public Level arcaneLevel() {
+        return level;
+    }
+
+    @Override
+    public BlockPos arcanePosition() {
+        return worldPosition;
+    }
+
+    @Override
+    public ItemStack getArcaneItem(int slot) {
+        return getItem(slot);
+    }
+
+    @Override
+    public ItemStack removeArcaneItem(int slot, int amount) {
+        return removeItem(slot, amount);
+    }
+
+    @Override
+    public void setArcaneItem(int slot, ItemStack stack) {
+        setItem(slot, stack);
+    }
+
+    @Override
+    public void setArcaneChanged() {
+        setChanged();
+    }
+
     public int availableVis() {
         if (level == null) {
             return 0;

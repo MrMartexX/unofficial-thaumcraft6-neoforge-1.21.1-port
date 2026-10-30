@@ -41,6 +41,8 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "bubble")));
     public static final Supplier<SoundEvent> SPILL = SOUND_EVENTS.register("spill", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "spill")));
+    public static final Supplier<SoundEvent> DUST = SOUND_EVENTS.register("dust", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "dust")));
     public static final Supplier<SoundEvent> POOF = SOUND_EVENTS.register("poof", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "poof")));
     public static final Supplier<SoundEvent> WAND = SOUND_EVENTS.register("wand", () ->

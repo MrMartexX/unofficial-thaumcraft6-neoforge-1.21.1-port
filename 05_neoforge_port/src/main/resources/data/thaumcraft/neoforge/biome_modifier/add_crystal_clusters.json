@@ -1,0 +1,13 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "thaumcraft:crystal_cluster_aer",
+    "thaumcraft:crystal_cluster_ignis",
+    "thaumcraft:crystal_cluster_aqua",
+    "thaumcraft:crystal_cluster_terra",
+    "thaumcraft:crystal_cluster_ordo",
+    "thaumcraft:crystal_cluster_perditio"
+  ],
+  "step": "underground_decoration"
+}
