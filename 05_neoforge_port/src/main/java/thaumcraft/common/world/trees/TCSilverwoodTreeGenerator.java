@@ -99,7 +99,7 @@ public class TCSilverwoodTreeGenerator {
 
                     BlockPos leafPos = new BlockPos(xx, yy, zz);
 
-                    if (dist < 10 + random.nextInt(8) && level.hasChunkAt(leafPos) && canReplaceWithLeaves(level, leafPos)) {
+                    if (dist < 10 + random.nextInt(8) && canWriteBlock(level, leafPos) && canReplaceWithLeaves(level, leafPos)) {
                         level.setBlock(leafPos, leaves, 3);
                     }
                 }
@@ -182,8 +182,6 @@ public class TCSilverwoodTreeGenerator {
             placeShimmerleafPatch(level, random, pos);
         }
 
-        stabilizeGeneratedLeaves(level, pos, 10, y - 2, y + height + 8);
-
         return true;
     }
 
@@ -195,7 +193,7 @@ public class TCSilverwoodTreeGenerator {
             BlockPos target = new BlockPos(x, y, z);
             BlockPos below = target.below();
 
-            if (level.hasChunkAt(target) && level.hasChunkAt(below)
+            if (canWriteBlock(level, target) && canWriteBlock(level, below)
                     && level.getBlockState(target).isAir()
                     && (level.getBlockState(below).is(Blocks.GRASS_BLOCK) || level.getBlockState(below).is(Blocks.DIRT))) {
                 level.setBlock(target, TCBlocks.SHIMMERLEAF.get().defaultBlockState(), 3);
@@ -204,7 +202,7 @@ public class TCSilverwoodTreeGenerator {
     }
 
     private static void setIfReplaceable(WorldGenLevel level, BlockPos pos, BlockState state) {
-        if (level.hasChunkAt(pos) && isTreeReplaceable(level.getBlockState(pos))) {
+        if (canWriteBlock(level, pos) && isTreeReplaceable(level.getBlockState(pos))) {
             level.setBlock(pos, state, 3);
         }
     }
@@ -230,17 +228,7 @@ public class TCSilverwoodTreeGenerator {
     }
 
     private static BlockState silverwoodLeaves() {
-        BlockState state = TCBlocks.LEAVES_SILVERWOOD.get().defaultBlockState();
-
-        if (state.hasProperty(LeavesBlock.DISTANCE)) {
-            state = state.setValue(LeavesBlock.DISTANCE, 7);
-        }
-
-        if (state.hasProperty(LeavesBlock.PERSISTENT)) {
-            state = state.setValue(LeavesBlock.PERSISTENT, false);
-        }
-
-        return state;
+        return TCLeavesBlock.legacyGeneratedState(TCBlocks.LEAVES_SILVERWOOD.get().defaultBlockState());
     }
 
     private static BlockState silverwoodLog(Direction.Axis axis) {
@@ -249,61 +237,19 @@ public class TCSilverwoodTreeGenerator {
                 .setValue(RotatedPillarBlock.AXIS, axis);
     }
 
-    private static void stabilizeGeneratedLeaves(WorldGenLevel level, BlockPos center, int horizontalRadius, int minY, int maxY) {
-        int clampedMinY = Math.max(level.getMinBuildHeight(), minY);
-        int clampedMaxY = Math.min(level.getMaxBuildHeight() - 1, maxY);
-
-        for (int pass = 0; pass < 7; pass++) {
-            boolean changed = false;
-
-            for (int y = clampedMinY; y <= clampedMaxY; y++) {
-                for (int x = center.getX() - horizontalRadius; x <= center.getX() + horizontalRadius; x++) {
-                    for (int z = center.getZ() - horizontalRadius; z <= center.getZ() + horizontalRadius; z++) {
-                        BlockPos pos = new BlockPos(x, y, z);
-                        if (!level.hasChunkAt(pos)) {
-                            continue;
-                        }
-                        BlockState state = level.getBlockState(pos);
-
-                        if (!state.hasProperty(LeavesBlock.DISTANCE)) {
-                            continue;
-                        }
-
-                        int distance = getUpdatedLeafDistance(level, pos);
-
-                        if (distance != state.getValue(LeavesBlock.DISTANCE)) {
-                            level.setBlock(pos, state.setValue(LeavesBlock.DISTANCE, distance), 3);
-                            changed = true;
-                        }
-                    }
-                }
+    
+    private static boolean canWriteBlock(WorldGenLevel level, BlockPos pos) {
+        if (level instanceof net.minecraft.server.level.WorldGenRegion region) {
+            net.minecraft.world.level.ChunkPos center = region.getCenter();
+            int chunkX = net.minecraft.core.SectionPos.blockToSectionCoord(pos.getX());
+            int chunkZ = net.minecraft.core.SectionPos.blockToSectionCoord(pos.getZ());
+            if (Math.abs(chunkX - center.x) > 1 || Math.abs(chunkZ - center.z) > 1) {
+                return false;
             }
-
-            if (!changed) {
-                return;
+            if (pos.getY() < region.getMinBuildHeight() || pos.getY() >= region.getMaxBuildHeight()) {
+                return false;
             }
         }
-    }
-
-    private static int getUpdatedLeafDistance(WorldGenLevel level, BlockPos pos) {
-        int distance = 7;
-
-        for (Direction direction : Direction.values()) {
-            BlockPos neighborPos = pos.relative(direction);
-            if (!level.hasChunkAt(neighborPos)) {
-                continue;
-            }
-            BlockState neighbor = level.getBlockState(neighborPos);
-
-            if (neighbor.is(net.minecraft.tags.BlockTags.LOGS)) {
-                return 1;
-            }
-
-            if (neighbor.hasProperty(LeavesBlock.DISTANCE)) {
-                distance = Math.min(distance, neighbor.getValue(LeavesBlock.DISTANCE) + 1);
-            }
-        }
-
-        return Math.min(distance, 7);
+        return level.hasChunkAt(pos);
     }
 }
