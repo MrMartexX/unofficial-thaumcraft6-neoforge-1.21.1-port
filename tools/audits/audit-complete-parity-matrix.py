@@ -306,7 +306,15 @@ def parse_port_registry(port_root: Path) -> Tuple[Dict[str, str], Dict[str, str]
         for match in re.finditer(r'BLOCKS\.register\s*\(\s*"([^"]+)"\s*,\s*([^;]+)\)', text):
             block_id = match.group(1)
             factory = match.group(2).strip()
-            impl_type = "PLACEHOLDER" if "() -> new Block(" in factory or "simpleBlock(" in factory else "REAL"
+            is_placeholder = (
+                "() -> new Block(" in factory or
+                "simpleBlock(" in factory or
+                "stoneBlock(" in factory or
+                "woodBlock(" in factory or
+                "crystalPlaceholder(" in factory or
+                "visGeneratorBlock(" in factory
+            )
+            impl_type = "PLACEHOLDER" if is_placeholder else "REAL"
             port_blocks[block_id] = impl_type
 
     return port_items, port_blocks
@@ -636,8 +644,8 @@ def generate_master_report(
     loot_parity = max(0.0, 100.0 - (illegal_fortunes * 10.0))
 
     # 9. Runtime contracts
-    runtime_passed = 28
-    runtime_total = 28
+    runtime_passed = 0
+    runtime_total = 0
     runtime_report = repo_root / "06_docs/audits/generated/tc6_runtime_parity_matrix.md"
     if runtime_report.exists():
         r_text = runtime_report.read_text(encoding="utf-8")

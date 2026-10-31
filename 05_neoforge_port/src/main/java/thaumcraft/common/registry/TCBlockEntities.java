@@ -127,7 +127,11 @@ public final class TCBlockEntities {
                             TCInfusionPedestalBlockEntity::new,
                             TCBlocks.ARCANE_PEDESTAL.get(),
                             TCBlocks.ANCIENT_PEDESTAL.get(),
-                            TCBlocks.ELDRITCH_PEDESTAL.get()).build(null));
+                            TCBlocks.ELDRITCH_PEDESTAL.get(),
+                            TCBlocks.PEDESTAL_ARCANE.get(),
+                            TCBlocks.PEDESTAL_ANCIENT.get(),
+                            TCBlocks.PEDESTAL_ELDRITCH.get(),
+                            TCBlocks.RECHARGE_PEDESTAL.get()).build(null));
     public static final Supplier<BlockEntityType<TCStabilizerBlockEntity>> STABILIZER =
             BLOCK_ENTITY_TYPES.register("stabilizer", () ->
                     BlockEntityType.Builder.of(TCStabilizerBlockEntity::new, TCBlocks.STABILIZER.get()).build(null));

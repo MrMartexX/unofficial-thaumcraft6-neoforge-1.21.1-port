@@ -372,5 +372,88 @@
         { "aspect": "thaumcraft:alkimia", "amount": 5 }
       ]
     }
+,
+    {
+      "item": "thaumcraft:deepslate_quartz_ore",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:deepslate_cinnabar_ore",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:metallum", "amount": 10 },
+        { "aspect": "thaumcraft:alkimia", "amount": 5 },
+        { "aspect": "thaumcraft:mortuus", "amount": 5 }
+      ]
+    },
+    {
+      "item": "thaumcraft:deepslate_amber_ore",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 5 },
+        { "aspect": "thaumcraft:vinculum", "amount": 10 },
+        { "aspect": "thaumcraft:vitreus", "amount": 10 }
+      ]
+    },
+    {
+      "item": "thaumcraft:arcane_pedestal",
+      "aspects": [
+        { "aspect": "thaumcraft:praecantatio", "amount": 5 },
+        { "aspect": "thaumcraft:aer", "amount": 3 },
+        { "aspect": "thaumcraft:terra", "amount": 6 }
+      ]
+    },
+    {
+      "item": "thaumcraft:pedestal_arcane",
+      "aspects": [
+        { "aspect": "thaumcraft:praecantatio", "amount": 5 },
+        { "aspect": "thaumcraft:aer", "amount": 3 },
+        { "aspect": "thaumcraft:terra", "amount": 6 }
+      ]
+    },
+    {
+      "item": "thaumcraft:ancient_pedestal",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 8 },
+        { "aspect": "thaumcraft:alienis", "amount": 8 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 8 }
+      ]
+    },
+    {
+      "item": "thaumcraft:pedestal_ancient",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 8 },
+        { "aspect": "thaumcraft:alienis", "amount": 8 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 8 }
+      ]
+    },
+    {
+      "item": "thaumcraft:eldritch_pedestal",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 8 },
+        { "aspect": "thaumcraft:alienis", "amount": 8 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 8 }
+      ]
+    },
+    {
+      "item": "thaumcraft:pedestal_eldritch",
+      "aspects": [
+        { "aspect": "thaumcraft:terra", "amount": 8 },
+        { "aspect": "thaumcraft:alienis", "amount": 8 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 8 }
+      ]
+    },
+    {
+      "item": "thaumcraft:recharge_pedestal",
+      "aspects": [
+        { "aspect": "thaumcraft:metallum", "amount": 13 },
+        { "aspect": "thaumcraft:vitreus", "amount": 24 },
+        { "aspect": "thaumcraft:praecantatio", "amount": 10 },
+        { "aspect": "thaumcraft:desiderium", "amount": 30 },
+        { "aspect": "thaumcraft:terra", "amount": 11 }
+      ]
+    }
   ]
 }

@@ -28,6 +28,9 @@ public final class TCUnifiedParityRuntimeAuditExporter {
                     report.passed() + report.failed(),
                     String.format("%.1f", report.percent())
             );
+            if (report.failed() > 0 && Boolean.parseBoolean(System.getProperty("thaumcraft.audit.fail_on_error", "false"))) {
+                throw new IllegalStateException("Parity runtime audit failed with " + report.failed() + " failures!");
+            }
         } catch (Exception exception) {
             throw new IllegalStateException("Failed to write Thaumcraft master runtime parity report", exception);
         } finally {

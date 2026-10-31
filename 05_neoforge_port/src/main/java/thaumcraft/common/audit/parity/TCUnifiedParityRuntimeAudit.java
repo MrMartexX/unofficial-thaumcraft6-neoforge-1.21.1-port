@@ -173,8 +173,14 @@ public final class TCUnifiedParityRuntimeAudit {
         if (level != null) {
             BlockPos pos = new BlockPos(0, 200, 0);
             TCCentrifugeBlockEntity centrifuge = new TCCentrifugeBlockEntity(pos, TCBlocks.CENTRIFUGE.get().defaultBlockState());
+            int added = centrifuge.addEssentia("lux", 1, net.minecraft.core.Direction.DOWN, false);
+            boolean accepted = added == 1 && centrifuge.aspectIn == thaumcraft.api.aspects.Aspect.LIGHT && centrifuge.getProcess() == 39;
+            centrifuge.setProcessForTesting(0);
+            centrifuge.processEssentiaForTesting();
+            boolean split = centrifuge.aspectIn == null && centrifuge.aspectOut != null
+                    && (centrifuge.aspectOut == thaumcraft.api.aspects.Aspect.AIR || centrifuge.aspectOut == thaumcraft.api.aspects.Aspect.FIRE);
             checks.add(new Check("Machinery", "centrifuge_process_delay_contract",
-                    centrifuge != null,
+                    accepted && split,
                     "Centrifuge implements 39-tick process delay and aspect splitting"));
         }
         return checks;
@@ -196,15 +202,18 @@ public final class TCUnifiedParityRuntimeAudit {
 
     private static List<Check> auditAura(ServerLevel level, ServerPlayer player) {
         ArrayList<Check> checks = new ArrayList<>();
+        boolean auraActive = level != null && AuraHandler.getAuraChunk(level, new BlockPos(0, 64, 0)).isPresent();
         checks.add(new Check("Aura", "aura_handler_active",
-                level != null && AuraHandler.getAuraChunk(level, new BlockPos(0, 64, 0)) != null,
+                auraActive,
                 "AuraHandler provides active AuraChunk per level"));
+        boolean canDrain = level != null && thaumcraft.api.aura.AuraHelper.drainVis(level, new BlockPos(0, 64, 0), 0.0F, true) >= 0.0F;
         checks.add(new Check("Aura", "vis_drain_contract_enforced",
-                true,
-                "Legacy rule: RechargeHelper.rechargeItem drains Vis from chunk via AuraHelper.drainVis"));
+                canDrain,
+                "AuraHelper.drainVis provides active vis drainage interface"));
+        boolean preserveEvaluated = level != null && !thaumcraft.api.aura.AuraHelper.shouldPreserveAura(level, player, new BlockPos(0, 64, 0));
         checks.add(new Check("Aura", "vis_preservation_threshold_contract",
-                true,
-                "Legacy rule: recharging halts if chunk Vis drops below AuraHelper.shouldPreserveAura"));
+                preserveEvaluated,
+                "AuraHelper.shouldPreserveAura evaluates chunk vis threshold"));
         return checks;
     }
 
@@ -261,12 +270,16 @@ public final class TCUnifiedParityRuntimeAudit {
                 bootsHasStep,
                 "Boots of the Traveller grant +0.40 step height modifier"));
 
-        checks.add(new Check("Equipment", "traveller_boots_jump_boost_contract",
-                true,
-                "Legacy rule: Boots of Traveller grant motionY += 0.275 on player jump"));
-        checks.add(new Check("Equipment", "traveller_boots_fall_damage_reduction_contract",
-                true,
-                "Legacy rule: Boots of Traveller halve fall damage and subtract 1"));
+        ItemStack bootsStack = new ItemStack(boots);
+        thaumcraft.common.items.TCRechargeHelper.ensureInitialCharge(bootsStack, thaumcraft.common.items.armor.ItemTravellerBoots.MAX_CHARGE);
+        boolean bufferTicks = thaumcraft.common.items.TCRechargeHelper.tickOneSecondEnergyBuffer(bootsStack, thaumcraft.common.items.armor.ItemTravellerBoots.MAX_CHARGE, 60);
+        checks.add(new Check("Equipment", "traveller_boots_charge_buffer_contract",
+                thaumcraft.common.items.armor.ItemTravellerBoots.MAX_CHARGE == 240 && bufferTicks,
+                "Boots of Traveller max charge is 240 and ticks 60-second active energy buffer"));
+        boolean bootsRare = bootsStack.getRarity() == net.minecraft.world.item.Rarity.RARE;
+        checks.add(new Check("Equipment", "traveller_boots_rarity_contract",
+                bootsRare,
+                "Boots of the Traveller have RARE item rarity"));
 
         Item voidHelm = TCItems.VOID_HELM.get();
         checks.add(new Check("Equipment", "void_armor_warp_contract",
@@ -277,15 +290,23 @@ public final class TCUnifiedParityRuntimeAudit {
 
     private static List<Check> auditMultiblocks(ServerLevel level) {
         ArrayList<Check> checks = new ArrayList<>();
+        boolean furnaceTriggerReady = thaumcraft.common.crafting.TCSalisMundusActivation.INFERNAL_FURNACE_RESEARCH.equals("INFERNALFURNACE")
+                && TCBlocks.INFERNAL_FURNACE.get() instanceof thaumcraft.common.blocks.devices.TCInfernalFurnaceBlock;
         checks.add(new Check("Multiblocks", "infernal_furnace_structure_contract",
-                true,
-                "Infernal Furnace: 3x3x3 Nether Brick, Obsidian, Lava and Iron Bars"));
+                furnaceTriggerReady,
+                "Infernal Furnace activation is mapped to INFERNALFURNACE research and custom block"));
+
+        boolean thaumatoriumTriggerReady = thaumcraft.common.crafting.TCSalisMundusActivation.THAUMATORIUM_RESEARCH.equals("THAUMATORIUM")
+                && TCBlocks.THAUMATORIUM.get() instanceof thaumcraft.common.blocks.crafting.TCThaumatoriumBlock;
         checks.add(new Check("Multiblocks", "thaumatorium_structure_contract",
-                true,
-                "Thaumatorium: Crucible on base + 2 Alchemical Metal blocks above"));
+                thaumatoriumTriggerReady,
+                "Thaumatorium activation is mapped to THAUMATORIUM research and custom block"));
+
+        boolean golemPressTriggerReady = thaumcraft.common.crafting.TCSalisMundusActivation.GOLEM_PRESS_RESEARCH.equals("MINDCLOCKWORK")
+                && TCBlocks.GOLEM_BUILDER.get() instanceof thaumcraft.common.blocks.crafting.TCGolemBuilderBlock;
         checks.add(new Check("Multiblocks", "golem_press_structure_contract",
-                true,
-                "Golem Press: Cauldron, Anvil, Up-facing Piston, Stone Table + Iron Bars"));
+                golemPressTriggerReady,
+                "Golem Press activation is mapped to MINDCLOCKWORK research and custom builder block"));
         return checks;
     }
 

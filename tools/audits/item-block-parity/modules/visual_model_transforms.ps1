@@ -22,7 +22,13 @@ $assetsRoot = Join-Path $portPath "src/main/resources/assets/thaumcraft"
 if (-not $RulesRoot) { $RulesRoot = Join-Path (Split-Path -Parent $PSScriptRoot) "rules" }
 
 function ConvertTo-RelativeRepoPath([string]$FullPath) {
-    return [System.IO.Path]::GetRelativePath($RepoRoot, $FullPath).Replace("\", "/")
+    if ([string]::IsNullOrWhiteSpace($FullPath)) { return "" }
+    $normFull = $FullPath.Replace("\", "/")
+    $normRoot = $RepoRoot.Replace("\", "/").TrimEnd("/") + "/"
+    if ($normFull.StartsWith($normRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+        return $normFull.Substring($normRoot.Length)
+    }
+    return $normFull
 }
 function Read-JsonFileOrNull([string]$Path) {
     if ([string]::IsNullOrWhiteSpace($Path)) { return $null }

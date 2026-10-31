@@ -103,13 +103,26 @@ public final class TCCentrifugeBlockEntity extends BlockEntity implements TCAspe
     }
 
     private void processEssentia() {
-        if (aspectIn != null && level != null) {
+        if (aspectIn != null) {
             Aspect[] comps = aspectIn.getComponents();
             if (comps != null && comps.length == 2) {
-                aspectOut = comps[level.random.nextInt(2)];
+                int idx = (level != null && level.random != null) ? level.random.nextInt(2) : 0;
+                aspectOut = comps[idx];
             }
             aspectIn = null;
         }
+    }
+
+    public int getProcess() {
+        return process;
+    }
+
+    public void setProcessForTesting(int process) {
+        this.process = process;
+    }
+
+    public void processEssentiaForTesting() {
+        processEssentia();
     }
 
     private void markChangedAndSync() {
