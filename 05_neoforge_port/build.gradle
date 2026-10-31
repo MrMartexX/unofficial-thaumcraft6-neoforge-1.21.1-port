@@ -29,10 +29,15 @@ repositories {
         name = "Sleeping Town"
         url = "https://repo.sleeping.town/"
     }
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
 }
 
 dependencies {
     compileOnly "dev.emi:emi-neoforge:1.1.24+1.21.1:api"
+    compileOnly "mezz.jei:jei-1.21.1-neoforge-api:19.70.0.468"
 }
 
 neoForge {

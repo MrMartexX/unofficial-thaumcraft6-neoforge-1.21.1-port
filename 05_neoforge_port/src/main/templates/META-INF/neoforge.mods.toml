@@ -37,3 +37,10 @@ type="optional"
 versionRange="[9.5.1,)"
 ordering="AFTER"
 side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="jei"
+type="optional"
+versionRange="[19.0.0,)"
+ordering="AFTER"
+side="CLIENT"
