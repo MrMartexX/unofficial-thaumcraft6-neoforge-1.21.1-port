@@ -40,12 +40,14 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 | Component | Target |
 |---|---|
 | Minecraft | `1.21.1` |
-| NeoForge | `21.1.228` |
+| NeoForge | `21.1.265` |
 | Java | `21` |
 | Mod id | `thaumcraft` |
 | Project state | See "Current Project State Snapshot" below. |
 
 ## Current Project State Snapshot
+
+October 31 review boundary: the detailed gate/subsystem notes below largely describe the July checkpoint. Use [the main review](../audits/main_review_2026_10_31.md) and [CURRENT_TASK.md](../CURRENT_TASK.md) for current defects and priorities. New worldgen, devices, equipment and integrations are present, but registry counts and the heuristic 95.3% index do not close their gameplay/visual gates.
 
 This snapshot is extracted from the old long `Project state` table cell so the target baseline remains readable. Detailed status still lives in `06_docs/current_port_status.md`.
 

@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-07-24
+Last updated: 2026-10-31
 
 ## Current branch
 
@@ -8,6 +8,8 @@ Last updated: 2026-07-24
 
 ## Current focus
 
+- Use [the July-to-October main review](audits/main_review_2026_10_31.md) as the current repair queue. Its findings are open; the heuristic 95.3% report is not a gameplay/visual readiness gate.
+- First address invalid pedestal BlockEntity registrations, Centrifuge integration and false-green audit checks; follow the ordered batches at the end of the review before expanding gameplay.
 - Keep build CI green.
 - Use GitHub Actions build and dedicated server smoke testing only for relevant NeoForge port changes.
 - Keep documentation and audit outputs organized under `06_docs/` and `tools/`.
@@ -58,7 +60,7 @@ Last updated: 2026-07-24
 - Do not expand the current in-world crucible slice, infusion, essentia transport, broad worldgen, or broad rendering systems without a focused design note and validation path.
 - Do not commit generated local reports unless they are intentionally curated under `06_docs/audits/`.
 
-## Near-term tasks
+## July checkpoint tasks (historical)
 
 1. Continue blocker-removal work outside the focus/caster layer unless explicitly requested.
    - Row 4 now has real `essentiatransportin` / `essentiatransportout`, `jar_void`, and `mirror_essentia` blocks/BlockEntities where applicable, sided capability boundaries, modern blockstates/item models and runtime transfer/source checks.

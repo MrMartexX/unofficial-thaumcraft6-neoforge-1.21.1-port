@@ -2,6 +2,8 @@
 
 This folder is for audit summaries that are useful after the original local run is gone.
 
+Latest cross-subsystem review: [main changes from July 25 through October 31, 2026](main_review_2026_10_31.md), including fresh verification, confirmed defects and the next repair batches.
+
 Use it for:
 
 - asset/model/texture parity summaries;

@@ -1,8 +1,16 @@
 # Thaumcraft 6 NeoForge 1.21.1 Current Port Status
 
 Last reviewed branch: `main`
-Last reviewed checkpoint: `2026-07-24` client visual, fluid and essentia-container repair
+Last reviewed checkpoint: `2026-10-31`, `main` at `66b3683a`
 Reviewed target module: `05_neoforge_port`
+
+## October Review Checkpoint
+
+The active target is Minecraft `1.21.1`, NeoForge `21.1.265`, Java `21`, mod `0.2.1-alpha6`. See the [July-to-October main review](audits/main_review_2026_10_31.md) for the 55 subsequent commits, open defects and next work order. Gameplay code/resources were not changed by the review.
+
+Fresh build and dedicated-server smoke passed; focused Thaumonomicon/equipment/transport/standalone audits passed `55/55`, `17/17`, `61/61` and `9/9`. All 1,987 saved July modern aspect keys retained their results. New content still has confirmed invalid pedestal registrations, Centrifuge capability/resource gaps and other behavior/asset issues. The quick item/block audit returned 6 safe failures. The master report's `95.3%` does not establish functional or visual parity.
+
+The detailed snapshot and changelog below preserve the July checkpoint and are historical unless explicitly superseded by this review. In particular, old zero-missing-model, completed-subsystem and target-version statements must not be applied to current `main`.
 
 ## State Snapshot
 
