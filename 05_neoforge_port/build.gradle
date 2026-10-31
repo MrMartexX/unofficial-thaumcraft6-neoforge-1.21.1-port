@@ -33,6 +33,10 @@ repositories {
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
     }
+    maven {
+        name = "Curios Maven"
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 dependencies {
@@ -391,6 +395,17 @@ neoForge {
             sourceSet sourceSets.main
         }
     }
+}
+
+dependencies {
+    clientAdditionalRuntimeClasspath "mezz.jei:jei-1.21.1-neoforge:19.70.0.468"
+    clientAdditionalRuntimeClasspath "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1"
+}
+
+tasks.register('client') {
+    group = 'mod development'
+    description = 'Runs the client Minecraft run configuration with default runtime mods (JEI, Curios).'
+    dependsOn 'runClient'
 }
 
 def generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
