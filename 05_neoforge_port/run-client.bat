@@ -10,8 +10,8 @@ if not exist "gradlew.bat" (
     exit /b 1
 )
 
-echo Starting the existing development client without clean or full build...
-call gradlew.bat runClient --no-daemon %*
+echo Starting the development client with default runtime mods (JEI, Curios)...
+call gradlew.bat client --no-daemon %*
 set "TC_CLIENT_EXIT=%ERRORLEVEL%"
 
 popd

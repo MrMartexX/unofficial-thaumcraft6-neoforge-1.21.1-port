@@ -398,9 +398,27 @@ neoForge {
     }
 }
 
+configurations {
+    clientRunMods {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
 dependencies {
-    clientAdditionalRuntimeClasspath "mezz.jei:jei-1.21.1-neoforge:19.70.0.468"
-    clientAdditionalRuntimeClasspath "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1"
+    clientRunMods "mezz.jei:jei-1.21.1-neoforge:19.70.0.468"
+    clientRunMods "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1"
+}
+
+def prepareRunMods = tasks.register('prepareRunMods', Sync) {
+    group = 'mod development'
+    description = 'Prepares default runtime mods (JEI, Curios) in run/mods for development runs.'
+    from configurations.clientRunMods
+    into file('run/mods')
+}
+
+tasks.named('runClient').configure {
+    dependsOn prepareRunMods
 }
 
 tasks.register('client') {
