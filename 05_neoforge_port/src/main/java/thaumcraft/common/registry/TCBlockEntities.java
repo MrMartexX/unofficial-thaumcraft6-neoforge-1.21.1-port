@@ -42,6 +42,11 @@ import thaumcraft.common.tiles.devices.TCArcaneSpaBlockEntity;
 import thaumcraft.common.tiles.devices.TCWaterJugBlockEntity;
 import thaumcraft.common.tiles.devices.TCBrainJarBlockEntity;
 
+import thaumcraft.common.tiles.crafting.TCPatternCrafterBlockEntity;
+import thaumcraft.common.tiles.devices.TCCondenserBlockEntity;
+import thaumcraft.common.tiles.devices.TCPotionSprayerBlockEntity;
+import thaumcraft.common.tiles.devices.TCVisGeneratorBlockEntity;
+
 public final class TCBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
             DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Thaumcraft.MODID);
@@ -154,6 +159,19 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCVoidSiphonBlockEntity>> VOID_SIPHON =
             BLOCK_ENTITY_TYPES.register("void_siphon", () ->
                     BlockEntityType.Builder.of(TCVoidSiphonBlockEntity::new, TCBlocks.VOID_SIPHON.get()).build(null));
+    public static final Supplier<BlockEntityType<TCVisGeneratorBlockEntity>> VIS_GENERATOR =
+            BLOCK_ENTITY_TYPES.register("vis_generator", () ->
+                    BlockEntityType.Builder.of(TCVisGeneratorBlockEntity::new, TCBlocks.VIS_GENERATOR.get()).build(null));
+    public static final Supplier<BlockEntityType<TCCondenserBlockEntity>> CONDENSER =
+            BLOCK_ENTITY_TYPES.register("condenser", () ->
+                    BlockEntityType.Builder.of(TCCondenserBlockEntity::new, TCBlocks.CONDENSER.get()).build(null));
+    public static final Supplier<BlockEntityType<TCPatternCrafterBlockEntity>> PATTERN_CRAFTER =
+            BLOCK_ENTITY_TYPES.register("pattern_crafter", () ->
+                    BlockEntityType.Builder.of(TCPatternCrafterBlockEntity::new, TCBlocks.PATTERN_CRAFTER.get()).build(null));
+    public static final Supplier<BlockEntityType<TCPotionSprayerBlockEntity>> POTION_SPRAYER =
+            BLOCK_ENTITY_TYPES.register("potion_sprayer", () ->
+                    BlockEntityType.Builder.of(TCPotionSprayerBlockEntity::new, TCBlocks.POTION_SPRAYER.get()).build(null));
+
     public static final Supplier<BlockEntityType<TCArcaneSpaBlockEntity>> SPA =
             BLOCK_ENTITY_TYPES.register("spa", () ->
                     BlockEntityType.Builder.of(TCArcaneSpaBlockEntity::new, TCBlocks.SPA.get()).build(null));

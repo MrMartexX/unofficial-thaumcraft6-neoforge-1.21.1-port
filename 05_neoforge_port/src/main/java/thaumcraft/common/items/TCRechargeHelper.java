@@ -21,6 +21,9 @@ public final class TCRechargeHelper {
         if (stack.getItem() == TCItems.TRAVELLER_BOOTS.get()) {
             return ItemTravellerBoots.MAX_CHARGE;
         }
+        if (stack.getItem() == TCItems.GRAPPLE_GUN.get()) {
+            return 100;
+        }
         if (stack.getItem() == TCItems.VERDANT_HEART.get()
                 || stack.getItem() == TCItems.VERDANT_HEART_LIFE.get()
                 || stack.getItem() == TCItems.VERDANT_HEART_SUSTAIN.get()) {

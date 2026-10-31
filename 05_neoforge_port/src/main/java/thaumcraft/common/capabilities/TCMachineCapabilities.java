@@ -56,6 +56,16 @@ public final class TCMachineCapabilities {
                 (spa, side) -> spa.fluidHandler()
         );
         event.registerBlockEntity(
+                Capabilities.EnergyStorage.BLOCK,
+                TCBlockEntities.VIS_GENERATOR.get(),
+                (generator, side) -> generator.energyStorage(side)
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                TCBlockEntities.POTION_SPRAYER.get(),
+                (sprayer, side) -> sprayer.itemHandler(side)
+        );
+        event.registerBlockEntity(
                 Capabilities.FluidHandler.BLOCK,
                 TCBlockEntities.EVERFULL_URN.get(),
                 (urn, side) -> urn.fluidHandler(side)

@@ -35,6 +35,9 @@ public final class TCEssentiaCapabilities {
         event.registerBlockEntity(BLOCK, TCBlockEntities.THAUMATORIUM_TOP.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.CENTRIFUGE.get(), TCEssentiaCapabilities::forSide);
         event.registerBlockEntity(BLOCK, TCBlockEntities.LAMP.get(), TCEssentiaCapabilities::forSide);
+        event.registerBlockEntity(BLOCK, TCBlockEntities.CONDENSER.get(), TCEssentiaCapabilities::forSide);
+        event.registerBlockEntity(BLOCK, TCBlockEntities.POTION_SPRAYER.get(), TCEssentiaCapabilities::forSide);
+
     }
 
     private static TCEssentiaTransport forSide(TCEssentiaTransport transport, @Nullable Direction side) {

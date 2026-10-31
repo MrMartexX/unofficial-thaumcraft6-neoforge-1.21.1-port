@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
-      "model": "thaumcraft:block/vis_generator"
-    }
+    "facing=down":  { "model": "thaumcraft:block/vis_generator", "x": 180 },
+    "facing=up":    { "model": "thaumcraft:block/vis_generator" },
+    "facing=north": { "model": "thaumcraft:block/vis_generator", "x": 90 },
+    "facing=south": { "model": "thaumcraft:block/vis_generator", "x": 90, "y": 180 },
+    "facing=west":  { "model": "thaumcraft:block/vis_generator", "x": 90, "y": 270 },
+    "facing=east":  { "model": "thaumcraft:block/vis_generator", "x": 90, "y": 90 }
   }
 }

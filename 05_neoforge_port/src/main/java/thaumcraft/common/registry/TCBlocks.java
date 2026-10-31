@@ -1,5 +1,12 @@
 package thaumcraft.common.registry;
 
+import thaumcraft.common.blocks.crafting.TCPatternCrafterBlock;
+import thaumcraft.common.blocks.devices.TCCondenserBlock;
+import thaumcraft.common.blocks.devices.TCCondenserLatticeBlock;
+import thaumcraft.common.blocks.devices.TCPotionSprayerBlock;
+import thaumcraft.common.blocks.devices.TCVisBatteryBlock;
+import thaumcraft.common.blocks.devices.TCVisGeneratorBlock;
+
 
 
 import thaumcraft.common.essentia.transport.block.TCLegacyTubeVariant;
@@ -422,7 +429,13 @@ public final class TCBlocks {
 
     public static final Supplier<Block> LOOT_URN_RARE = BLOCKS.register("loot_urn_rare", () -> stoneBlock(1.5F, 5.0F));
 
-    public static final Supplier<Block> VIS_GENERATOR = BLOCKS.register("vis_generator", () -> visGeneratorBlock());
+    public static final Supplier<Block> VIS_GENERATOR = BLOCKS.register("vis_generator", () -> new TCVisGeneratorBlock());
+    public static final Supplier<Block> VIS_BATTERY = BLOCKS.register("vis_battery", () -> new TCVisBatteryBlock());
+    public static final Supplier<Block> CONDENSER = BLOCKS.register("condenser", () -> new TCCondenserBlock());
+    public static final Supplier<Block> CONDENSER_LATTICE = BLOCKS.register("condenser_lattice", () -> new TCCondenserLatticeBlock(false));
+    public static final Supplier<Block> CONDENSER_LATTICE_DIRTY = BLOCKS.register("condenser_lattice_dirty", () -> new TCCondenserLatticeBlock(true));
+    public static final Supplier<Block> PATTERN_CRAFTER = BLOCKS.register("pattern_crafter", () -> new TCPatternCrafterBlock());
+    public static final Supplier<Block> POTION_SPRAYER = BLOCKS.register("potion_sprayer", () -> new TCPotionSprayerBlock());
 
     public static final Supplier<Block> HUNGRY_CHEST = BLOCKS.register("hungry_chest", () -> new thaumcraft.common.blocks.devices.TCHungryChestBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).strength(2.5F).sound(SoundType.WOOD)));
 
