@@ -8,6 +8,7 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.registration.IRecipeTransferRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -20,8 +21,11 @@ import thaumcraft.client.integration.jei.category.InfusionRecipeCategory;
 import thaumcraft.common.crafting.arcane.TCArcaneRecipe;
 import thaumcraft.common.crafting.crucible.TCCrucibleRecipe;
 import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
+import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
 import thaumcraft.common.registry.TCBlocks;
+import thaumcraft.common.registry.TCMenus;
 import thaumcraft.common.registry.TCRecipes;
+import thaumcraft.common.tiles.crafting.TCArcaneWorkbenchBlockEntity;
 
 import java.util.List;
 
@@ -91,5 +95,18 @@ public class ThaumcraftJeiPlugin implements IModPlugin {
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(TCArcaneWorkbenchScreen.class, 115, 60, 28, 20, ARCANE);
+    }
+
+    @Override
+    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+        registration.addRecipeTransferHandler(
+                TCArcaneWorkbenchMenu.class,
+                TCMenus.ARCANE_WORKBENCH.get(),
+                ARCANE,
+                TCArcaneWorkbenchMenu.SLOT_MATRIX_START,
+                TCArcaneWorkbenchBlockEntity.MATRIX_SLOT_COUNT,
+                TCArcaneWorkbenchMenu.PLAYER_INVENTORY_START,
+                36
+        );
     }
 }
