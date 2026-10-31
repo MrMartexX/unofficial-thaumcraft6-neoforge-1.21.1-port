@@ -8,13 +8,19 @@ Last updated: 2026-10-31
 
 ## Current focus
 
-- Use [the July-to-October main review](audits/main_review_2026_10_31.md) as the current repair queue. Its findings are open; the heuristic 95.3% report is not a gameplay/visual readiness gate.
-- First address invalid pedestal BlockEntity registrations, Centrifuge integration and false-green audit checks; follow the ordered batches at the end of the review before expanding gameplay.
-- Keep build CI green.
-- Use GitHub Actions build and dedicated server smoke testing only for relevant NeoForge port changes.
-- Keep documentation and audit outputs organized under `06_docs/` and `tools/`.
+- All 17 confirmed findings (R01 through R17) from [the October 31 main review](audits/main_review_2026_10_31.md) across all 5 remediation batches have been resolved, verified, and synchronized across `main` and `dev`.
+- Retain honest classification in parity matrices and ensure all runtime tests remain enforceable and green.
+- Keep build CI and dedicated-server smoke testing green.
+- Next phase: focused client visual/in-game testing and larger deferred systems (golems, Eldritch bosses, custom renderers).
 
 ## Recently confirmed
+
+- All 17 findings (R01-R17) from the October 31 review remediated across Batches 1-5:
+  - Batch 1 (Registration & Audit Trust): R01 (pedestal registrations), R03 (Centrifuge capability), R05 (Centrifuge blockstate & shape), R15 (deepslate & pedestal aspects), R04 (enforceable runtime audit assertions).
+  - Batch 2 (Standalone Devices): R06 (Arcane Ear & Toggle note capture and tone derivation), R07 (Levitator vis buffer/drain, range limits, motion formula), R16 (Golem Press multiblock placeholders and rollback).
+  - Batch 3 (Items & Equipment): R02 (Elemental tool harvest path, facing excavation, drop context), R08 (Curio Arcane auromancy theory), R09 (Loot bag authentic weighted distribution and gear/pearl variants), R10 (Traveller Boots charge/step-height/jump), R11 (Cloud Ring jump airtime state and worn-slot bauble restriction), R12 (Fortress & cultist armor textures and abilities).
+  - Batch 4 (Worldgen & Crystals): R13 (Ore sizes tuned to legacy small deposits, surface-focused amber, 33% biome-biased omnidirectional crystal cluster feature), R14 (TCCrystalBlock lifecycle, 6 facings, 4 sizes, equilibrium growth/shrinkage, size-scaled drops), R17 (honest PLACEHOLDER classification for generic shells).
+  - Batch 5 (Integration Closure & Documentation): Dedicated server smoke test passed cleanly, TCAspectParityValidator direct assignments count updated to 712 with explicit deepslate/pedestal checks, documentation fully synchronized.
 
 - GitHub Actions build workflow exists and runs on GitHub-hosted Windows runner.
 - Build workflow is now path-filtered to `05_neoforge_port/**` and `.github/workflows/build.yml`.

@@ -210,7 +210,18 @@ final class TCAspectParityValidator {
 
     private static void validateDirectAssignments(boolean allowAddonAssignments) {
         Map<ResourceLocation, AspectList> tags = TCAspectAssignments.directObjectTags();
-        expectAssignmentCount(702, tags.size(), "direct object assignment count", allowAddonAssignments);
+        expectAssignmentCount(712, tags.size(), "direct object assignment count", allowAddonAssignments);
+
+        expectDirect(tags, "deepslate_quartz_ore", amount(Aspect.EARTH, 5), amount(Aspect.CRYSTAL, 10));
+        expectDirect(tags, "deepslate_cinnabar_ore", amount(Aspect.EARTH, 5), amount(Aspect.METAL, 10), amount(Aspect.ALCHEMY, 5), amount(Aspect.DEATH, 5));
+        expectDirect(tags, "deepslate_amber_ore", amount(Aspect.EARTH, 5), amount(Aspect.TRAP, 10), amount(Aspect.CRYSTAL, 10));
+        expectDirect(tags, "arcane_pedestal", amount(Aspect.MAGIC, 5), amount(Aspect.AIR, 3), amount(Aspect.EARTH, 6));
+        expectDirect(tags, "pedestal_arcane", amount(Aspect.MAGIC, 5), amount(Aspect.AIR, 3), amount(Aspect.EARTH, 6));
+        expectDirect(tags, "ancient_pedestal", amount(Aspect.EARTH, 8), amount(Aspect.ELDRITCH, 8), amount(Aspect.MAGIC, 8));
+        expectDirect(tags, "pedestal_ancient", amount(Aspect.EARTH, 8), amount(Aspect.ELDRITCH, 8), amount(Aspect.MAGIC, 8));
+        expectDirect(tags, "eldritch_pedestal", amount(Aspect.EARTH, 8), amount(Aspect.ELDRITCH, 8), amount(Aspect.MAGIC, 8));
+        expectDirect(tags, "pedestal_eldritch", amount(Aspect.EARTH, 8), amount(Aspect.ELDRITCH, 8), amount(Aspect.MAGIC, 8));
+        expectDirect(tags, "recharge_pedestal", amount(Aspect.METAL, 13), amount(Aspect.CRYSTAL, 24), amount(Aspect.MAGIC, 10), amount(Aspect.DESIRE, 30), amount(Aspect.EARTH, 11));
 
         expectDirect(tags, "ore_quartz", amount(Aspect.EARTH, 5), amount(Aspect.CRYSTAL, 10));
         expectDirect(tags, "ore_cinnabar", amount(Aspect.EARTH, 5), amount(Aspect.METAL, 10), amount(Aspect.ALCHEMY, 5), amount(Aspect.DEATH, 5));

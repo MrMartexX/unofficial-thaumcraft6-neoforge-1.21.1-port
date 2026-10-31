@@ -4,13 +4,18 @@ Last reviewed branch: `main`
 Last reviewed checkpoint: `2026-10-31`, `main` at `66b3683a`
 Reviewed target module: `05_neoforge_port`
 
-## October Review Checkpoint
+## October Review Checkpoint & Remediation
 
-The active target is Minecraft `1.21.1`, NeoForge `21.1.265`, Java `21`, mod `0.2.1-alpha6`. See the [July-to-October main review](audits/main_review_2026_10_31.md) for the 55 subsequent commits, open defects and next work order. Gameplay code/resources were not changed by the review.
+The active target is Minecraft `1.21.1`, NeoForge `21.1.265`, Java `21`, mod `0.2.1-alpha6`.
+Following the [July-to-October main review](audits/main_review_2026_10_31.md), all 17 confirmed findings (R01 through R17) have been systematically resolved and verified across 5 remediation batches:
 
-Fresh build and dedicated-server smoke passed; focused Thaumonomicon/equipment/transport/standalone audits passed `55/55`, `17/17`, `61/61` and `9/9`. All 1,987 saved July modern aspect keys retained their results. New content still has confirmed invalid pedestal registrations, Centrifuge capability/resource gaps and other behavior/asset issues. The quick item/block audit returned 6 safe failures. The master report's `95.3%` does not establish functional or visual parity.
+- **Batch 1 (Registration and Audit Trust - `64c9d9c1`):** Fixed pedestal block entity registrations (R01); registered Centrifuge capability (R03); modernized Centrifuge blockstate and shape (R05); assigned aspects to deepslate ores and new pedestals (R15); replaced constant-pass checks with enforceable assertions and made exporter fail on test failures (R04).
+- **Batch 2 (Standalone Devices - `7a5527a9`):** Restored Arcane Ear note-event capture and tone derivation (R06); restored Levitator aura cost, vis buffer, obstruction raycast, and motion formula (R07); restored Golem Press multiblock placeholders and break rollback (R16).
+- **Batch 3 (Items and Equipment - `e22bbf7a`):** Routed multi-block tool mining through player harvest path respecting permissions/drops/durability/orientation (R02); restored Curio Arcane auromancy theory award (R08); restored authentic weighted loot bag drops and gear/pearl variants (R09); aligned Traveller Boots charge/step-height/jump mechanics (R10); corrected Cloud Ring airtime jump prediction and restricted baubles to worn slots (R11); added missing Fortress and cultist armor textures and abilities (R12).
+- **Batch 4 (Worldgen and Crystals - `83a221bc`):** Tuned ore deposit sizes to legacy small veins and restored surface amber (R13); implemented `TCCrystalBlock` with 6 facings, 4 sizes, aura equilibrium random ticks, and scaled drops (R14); classified generic shell blocks as `PLACEHOLDER` in parity matrix (R17).
+- **Batch 5 (Integration Closure & Documentation - current):** Dedicated server smoke test passed cleanly (`Done`), aspect parity validator updated to 712 direct assignments with explicit checks, all documentation synchronized.
 
-The detailed snapshot and changelog below preserve the July checkpoint and are historical unless explicitly superseded by this review. In particular, old zero-missing-model, completed-subsystem and target-version statements must not be applied to current `main`.
+The detailed snapshot and changelog below preserve the July checkpoint and are historical unless explicitly superseded by this review and its remediation batches.
 
 ## State Snapshot
 
