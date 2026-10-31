@@ -1332,5 +1332,8 @@
   "item.thaumcraft.crimson_praetor_chest": "Crimson Praetor Chestplate",
   "item.thaumcraft.crimson_praetor_legs": "Crimson Praetor Greaves",
   "tc.levitator": "Range set to %s blocks (Cost: %s Vis)",
-  "tc.corepick.found": "Detected ore at %s blocks distance!"
+  "tc.corepick.found": "Detected ore at %s blocks distance!",
+  "block.thaumcraft.deepslate_amber_ore": "Deepslate Amber Bearing Stone",
+  "block.thaumcraft.deepslate_cinnabar_ore": "Deepslate Cinnabar Ore",
+  "block.thaumcraft.deepslate_quartz_ore": "Deepslate Quartz Ore"
 }

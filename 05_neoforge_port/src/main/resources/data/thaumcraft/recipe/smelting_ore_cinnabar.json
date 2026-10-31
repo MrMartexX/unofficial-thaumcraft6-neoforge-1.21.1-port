@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": {
+    "item": "thaumcraft:ore_cinnabar"
+  },
+  "result": {
+    "id": "thaumcraft:quicksilver",
+    "count": 1
+  },
+  "experience": 1.0,
+  "cookingtime": 200
+}

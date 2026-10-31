@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:ore_amber"
+    "thaumcraft:ore_amber",
+    "thaumcraft:deepslate_amber_ore"
   ]
 }

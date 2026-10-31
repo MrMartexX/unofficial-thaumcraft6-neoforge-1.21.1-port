@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:ore_quartz"
+    "thaumcraft:ore_quartz",
+    "thaumcraft:deepslate_quartz_ore"
   ]
 }

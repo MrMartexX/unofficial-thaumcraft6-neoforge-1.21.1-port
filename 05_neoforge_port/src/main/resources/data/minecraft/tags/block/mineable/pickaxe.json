@@ -43,6 +43,9 @@
     "thaumcraft:stone_porous",
     "thaumcraft:table_stone",
     "thaumcraft:smelter_vent",
-    "thaumcraft:smelter_aux"
+    "thaumcraft:smelter_aux",
+    "thaumcraft:deepslate_amber_ore",
+    "thaumcraft:deepslate_cinnabar_ore",
+    "thaumcraft:deepslate_quartz_ore"
   ]
 }
