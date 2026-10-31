@@ -402,6 +402,7 @@ configurations {
     clientRunMods {
         canBeResolved = true
         canBeConsumed = false
+        transitive = false
     }
 }
 
