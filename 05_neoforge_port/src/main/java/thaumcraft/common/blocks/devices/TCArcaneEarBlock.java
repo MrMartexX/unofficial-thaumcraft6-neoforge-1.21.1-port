@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,6 +27,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -105,6 +105,18 @@ public class TCArcaneEarBlock extends BaseEntityBlock {
     }
 
     @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, block, fromPos, movedByPiston);
+        Direction attachedTo = state.getValue(FACING).getOpposite();
+        if (fromPos.equals(pos.relative(attachedTo))) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof TCArcaneEarBlockEntity ear) {
+                ear.updateTone();
+            }
+        }
+    }
+
+    @Override
     public BlockState rotate(BlockState state, Rotation rotation) {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
@@ -120,8 +132,11 @@ public class TCArcaneEarBlock extends BaseEntityBlock {
         if (be instanceof TCArcaneEarBlockEntity ear) {
             int newPitch = ear.changePitch();
             float pitch = (float) Math.pow(2.0D, (double) (newPitch - 12) / 12.0D);
+            NoteBlockInstrument[] instruments = NoteBlockInstrument.values();
+            NoteBlockInstrument inst = (ear.getTone() >= 0 && ear.getTone() < instruments.length)
+                    ? instruments[ear.getTone()] : NoteBlockInstrument.HARP;
             level.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
-                    SoundEvents.NOTE_BLOCK_HARP.value(), SoundSource.BLOCKS, 3.0F, pitch);
+                    inst.getSoundEvent().value(), SoundSource.BLOCKS, 3.0F, pitch);
             level.addParticle(ParticleTypes.NOTE, pos.getX() + 0.5D, pos.getY() + 0.6D, pos.getZ() + 0.5D,
                     (double) newPitch / 24.0D, 0.0D, 0.0D);
             return InteractionResult.sidedSuccess(level.isClientSide);

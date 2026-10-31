@@ -396,7 +396,16 @@ public final class TCSalisMundusActivation {
     }
 
     private static void applyGolemPressPlacement(ServerLevel level, GolemPressPlacement placement) {
+        BlockPos cauldron = golemPressPos(placement.origin(), 0, 0, 0, placement.facing());
+        BlockPos anvil = golemPressPos(placement.origin(), 0, 0, 1, placement.facing());
         BlockPos piston = golemPressPos(placement.origin(), 1, 0, 0, placement.facing());
+        BlockPos table = golemPressPos(placement.origin(), 1, 0, 1, placement.facing());
+        BlockPos bars = golemPressPos(placement.origin(), 1, 1, 0, placement.facing());
+
+        level.setBlock(cauldron, TCBlocks.PLACEHOLDER_CAULDRON.get().defaultBlockState(), Block.UPDATE_ALL);
+        level.setBlock(anvil, TCBlocks.PLACEHOLDER_ANVIL.get().defaultBlockState(), Block.UPDATE_ALL);
+        level.setBlock(table, TCBlocks.PLACEHOLDER_TABLE.get().defaultBlockState(), Block.UPDATE_ALL);
+        level.setBlock(bars, TCBlocks.PLACEHOLDER_BARS.get().defaultBlockState(), Block.UPDATE_ALL);
         level.setBlock(
                 piston,
                 TCBlocks.GOLEM_BUILDER.get().defaultBlockState()
@@ -404,12 +413,10 @@ public final class TCSalisMundusActivation {
                 Block.UPDATE_ALL
         );
         emitDustEffects(level, piston, 40, 0.9D);
-        BlockPos bars = piston.above();
         level.sendParticles(ParticleTypes.ENCHANT,
                 bars.getX() + 0.5D, bars.getY() + 0.35D, bars.getZ() + 0.5D,
                 20, 0.35D, 0.25D, 0.35D, 0.02D);
     }
-
     public static Optional<InfernalFurnacePlacement> findInfernalFurnacePlacement(BlockGetter level, BlockPos clickedPos) {
         for (int yy = -3; yy <= 0; yy++) {
             for (int xx = -3; xx <= 0; xx++) {

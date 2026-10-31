@@ -1,8 +1,11 @@
 package thaumcraft.common.blocks.crafting;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -11,16 +14,15 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.Nullable;
+import thaumcraft.common.registry.TCBlocks;
 
 /**
- * Render/state bridge for the legacy Golem Press controller block.
- *
- * <p>The full multiblock, inventory and animated press remain owned by the
- * golemancy subsystem. This class preserves the exact horizontal placement
- * contract used by {@code BlockTCDevice}.</p>
+ * Controller block for the Golem Press multiblock.
+ * Handles multiblock teardown and rollback of placeholder components.
  */
 public final class TCGolemBuilderBlock extends Block {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    private static boolean destroyingStructure = false;
 
     public TCGolemBuilderBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -48,5 +50,48 @@ public final class TCGolemBuilderBlock extends Block {
     @Override
     protected BlockState mirror(BlockState state, Mirror mirror) {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
+    public static boolean isDestroyingStructure() {
+        return destroyingStructure;
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (!state.is(newState.getBlock()) && !destroyingStructure && !level.isClientSide) {
+            destroyStructure(level, pos, state);
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    public static void destroyStructure(Level level, BlockPos controllerPos, BlockState state) {
+        if (level.isClientSide || destroyingStructure) {
+            return;
+        }
+
+        destroyingStructure = true;
+        try {
+            // Revert controller position back to upward-facing piston
+            if (level.getBlockState(controllerPos).is(TCBlocks.GOLEM_BUILDER.get())) {
+                level.setBlock(controllerPos, Blocks.PISTON.defaultBlockState()
+                        .setValue(BlockStateProperties.FACING, Direction.UP), Block.UPDATE_ALL);
+            }
+
+            // Scan adjacent multiblock area for placeholders and revert each to original block
+            for (BlockPos target : BlockPos.betweenClosed(controllerPos.offset(-2, -1, -2), controllerPos.offset(2, 1, 2))) {
+                BlockState targetState = level.getBlockState(target);
+                if (targetState.is(TCBlocks.PLACEHOLDER_BARS.get())) {
+                    level.setBlock(target, Blocks.IRON_BARS.defaultBlockState(), Block.UPDATE_ALL);
+                } else if (targetState.is(TCBlocks.PLACEHOLDER_ANVIL.get())) {
+                    level.setBlock(target, Blocks.ANVIL.defaultBlockState(), Block.UPDATE_ALL);
+                } else if (targetState.is(TCBlocks.PLACEHOLDER_CAULDRON.get())) {
+                    level.setBlock(target, Blocks.CAULDRON.defaultBlockState(), Block.UPDATE_ALL);
+                } else if (targetState.is(TCBlocks.PLACEHOLDER_TABLE.get())) {
+                    level.setBlock(target, TCBlocks.TABLE_STONE.get().defaultBlockState(), Block.UPDATE_ALL);
+                }
+            }
+        } finally {
+            destroyingStructure = false;
+        }
     }
 }

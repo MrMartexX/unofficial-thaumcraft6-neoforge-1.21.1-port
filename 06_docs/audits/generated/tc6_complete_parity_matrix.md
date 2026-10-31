@@ -7,9 +7,9 @@ Source of Truth: `Thaumcraft-6-Source-Code-master` (1.12.2) | Target: `05_neofor
 
 | Subsystem Domain | Metric | Port Count | Legacy Target | Parity % | Status |
 |---|---|---:|---:|---:|---|
-| **1. Registry (Items & Blocks)** | Registered IDs | 637 | 662 | 96.2% | GAPS |
-| | Real Custom Classes | 556 | 662 | 84.0% | IN PROGRESS |
-| | Visual Models & Blockstates | 651 | 662 | 98.3% | READY |
+| **1. Registry (Items & Blocks)** | Registered IDs | 641 | 666 | 96.2% | GAPS |
+| | Real Custom Classes | 560 | 666 | 84.1% | IN PROGRESS |
+| | Visual Models & Blockstates | 655 | 666 | 98.3% | READY |
 | **2. Entities (Mobs & Bosses)** | Registered Entity Types | 38 | 43 | 88.4% | GAPS |
 | **3. Mob Effects & Potions** | Custom Status Effects | 9 | 9 | 100.0% | OK |
 | **4. Aspects & Alchemy** | Aspect Definitions | 37 | 37 | 100.0% | OK |
@@ -78,7 +78,7 @@ Source of Truth: `Thaumcraft-6-Source-Code-master` (1.12.2) | Target: `05_neofor
 
 | Type | Total IDs | Custom Real Class | Generic Placeholder | Missing |
 |---|---:|---:|---:|---:|
-| Blocks | 172 | 135 | 28 | 9 |
+| Blocks | 176 | 139 | 28 | 9 |
 | Items | 490 | 421 | 53 | 16 |
 
 ### 3. Entities Breakdown

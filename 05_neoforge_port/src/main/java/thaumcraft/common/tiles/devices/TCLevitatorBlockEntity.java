@@ -11,18 +11,22 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.common.blocks.devices.TCLevitatorBlock;
 import thaumcraft.common.registry.TCBlockEntities;
 
 public class TCLevitatorBlockEntity extends BlockEntity {
-    private static final int[] RANGES = {4, 8, 16, 24, 32};
-    private int rangeIdx = 0;
+    private static final int[] RANGES = {4, 8, 16, 32};
+    private int rangeIdx = 1; // Default legacy range is 8 (index 1)
+    private int vis = 0;
 
     public TCLevitatorBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.LEVITATOR.get(), pos, state);
@@ -32,12 +36,24 @@ public class TCLevitatorBlockEntity extends BlockEntity {
         return RANGES[this.rangeIdx % RANGES.length];
     }
 
+    public int getCost() {
+        return getRange() * 2;
+    }
+
+    public int getVis() {
+        return this.vis;
+    }
+
+    public void setVisForTesting(int vis) {
+        this.vis = vis;
+    }
+
     public void increaseRange(Player player) {
         this.rangeIdx = (this.rangeIdx + 1) % RANGES.length;
         setChanged();
         if (this.level != null && !this.level.isClientSide) {
             this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 3);
-            player.displayClientMessage(Component.translatable("tc.levitator", getRange(), getRange() * 2), true);
+            player.displayClientMessage(Component.translatable("tc.levitator", getRange(), getCost()), true);
         }
     }
 
@@ -46,58 +62,92 @@ public class TCLevitatorBlockEntity extends BlockEntity {
             return;
         }
 
+        // Refill internal vis buffer from aura (legacy: when vis < 10, drains 1 vis -> adds 1200 units)
+        if (!level.isClientSide && entity.vis < 10) {
+            float drained = AuraHelper.drainVis(level, pos, 1.0F, false);
+            if (drained > 0.0F) {
+                entity.vis += (int) (drained * 1200.0F);
+                entity.setChanged();
+            }
+        }
+
         Direction dir = state.getValue(TCLevitatorBlock.FACING);
-        int maxRange = entity.getRange();
+        int maxConfiguredRange = entity.getRange();
 
-        AABB box = switch (dir) {
-            case UP -> new AABB(pos.getX(), pos.getY() + 1, pos.getZ(),
-                    pos.getX() + 1, pos.getY() + 1 + maxRange, pos.getZ() + 1);
-            case DOWN -> new AABB(pos.getX(), pos.getY() - maxRange, pos.getZ(),
-                    pos.getX() + 1, pos.getY(), pos.getZ() + 1);
-            case NORTH -> new AABB(pos.getX(), pos.getY(), pos.getZ() - maxRange,
-                    pos.getX() + 1, pos.getY() + 1, pos.getZ());
-            case SOUTH -> new AABB(pos.getX(), pos.getY(), pos.getZ() + 1,
-                    pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1 + maxRange);
-            case WEST -> new AABB(pos.getX() - maxRange, pos.getY(), pos.getZ(),
-                    pos.getX(), pos.getY() + 1, pos.getZ() + 1);
-            case EAST -> new AABB(pos.getX() + 1, pos.getY(), pos.getZ(),
-                    pos.getX() + 1 + maxRange, pos.getY() + 1, pos.getZ() + 1);
-        };
+        // Truncate range if obstructed by solid/opaque blocks
+        int actualRange = 0;
+        for (int i = 1; i <= maxConfiguredRange; i++) {
+            BlockPos checkPos = pos.relative(dir, i);
+            BlockState checkState = level.getBlockState(checkPos);
+            if (checkState.isSolidRender(level, checkPos)) {
+                break;
+            }
+            actualRange = i;
+        }
 
-        List<Entity> list = level.getEntities((Entity) null, box, e -> !e.isSpectator());
-        for (Entity e : list) {
-            Vec3 motion = e.getDeltaMovement();
-            switch (dir) {
-                case UP -> {
-                    if (e.isShiftKeyDown()) {
-                        e.setDeltaMovement(motion.x * 0.9D, Math.max(-0.1D, motion.y * 0.9D), motion.z * 0.9D);
-                    } else {
-                        double newY = Math.min(0.35D, motion.y * 0.9D + 0.08D);
-                        e.setDeltaMovement(motion.x * 0.9D, newY, motion.z * 0.9D);
+        if (actualRange <= 0) {
+            return;
+        }
+
+        // Entity lifting requires available vis buffer
+        if (entity.vis > 0) {
+            AABB box = switch (dir) {
+                case UP -> new AABB(pos.getX(), pos.getY() + 1, pos.getZ(),
+                        pos.getX() + 1, pos.getY() + 1 + actualRange, pos.getZ() + 1);
+                case DOWN -> new AABB(pos.getX(), pos.getY() - actualRange, pos.getZ(),
+                        pos.getX() + 1, pos.getY(), pos.getZ() + 1);
+                case NORTH -> new AABB(pos.getX(), pos.getY(), pos.getZ() - actualRange,
+                        pos.getX() + 1, pos.getY() + 1, pos.getZ());
+                case SOUTH -> new AABB(pos.getX(), pos.getY(), pos.getZ() + 1,
+                        pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1 + actualRange);
+                case WEST -> new AABB(pos.getX() - actualRange, pos.getY(), pos.getZ(),
+                        pos.getX(), pos.getY() + 1, pos.getZ() + 1);
+                case EAST -> new AABB(pos.getX() + 1, pos.getY(), pos.getZ(),
+                        pos.getX() + 1 + actualRange, pos.getY() + 1, pos.getZ() + 1);
+            };
+
+            List<Entity> list = level.getEntities((Entity) null, box,
+                    e -> !e.isSpectator() && (e instanceof ItemEntity || e.isPushable() || e instanceof LivingEntity));
+
+            int cost = entity.getCost();
+            boolean liftedAny = false;
+
+            for (Entity e : list) {
+                Vec3 motion = e.getDeltaMovement();
+                if (e.isShiftKeyDown() && dir == Direction.UP) {
+                    if (motion.y < 0.0D) {
+                        e.setDeltaMovement(motion.x, motion.y * 0.9D, motion.z);
+                    }
+                } else {
+                    double mx = motion.x + 0.1D * dir.getStepX();
+                    double my = motion.y + 0.1D * dir.getStepY();
+                    double mz = motion.z + 0.1D * dir.getStepZ();
+                    if (dir.getAxis() != Direction.Axis.Y && !e.onGround()) {
+                        if (motion.y < 0.0D) {
+                            my *= 0.9D;
+                        }
+                        my += 0.08D;
+                    }
+                    mx = Math.max(-0.35D, Math.min(0.35D, mx));
+                    my = Math.max(-0.35D, Math.min(0.35D, my));
+                    mz = Math.max(-0.35D, Math.min(0.35D, mz));
+                    e.setDeltaMovement(mx, my, mz);
+                }
+
+                e.resetFallDistance();
+                liftedAny = true;
+
+                if (!level.isClientSide) {
+                    entity.vis -= cost;
+                    if (entity.vis <= 0) {
+                        break;
                     }
                 }
-                case DOWN -> {
-                    double newY = Math.max(-0.35D, motion.y * 0.9D - 0.08D);
-                    e.setDeltaMovement(motion.x * 0.9D, newY, motion.z * 0.9D);
-                }
-                case NORTH -> {
-                    double newZ = Math.max(-0.35D, motion.z * 0.9D - 0.08D);
-                    e.setDeltaMovement(motion.x * 0.9D, motion.y * 0.9D, newZ);
-                }
-                case SOUTH -> {
-                    double newZ = Math.min(0.35D, motion.z * 0.9D + 0.08D);
-                    e.setDeltaMovement(motion.x * 0.9D, motion.y * 0.9D, newZ);
-                }
-                case WEST -> {
-                    double newX = Math.max(-0.35D, motion.x * 0.9D - 0.08D);
-                    e.setDeltaMovement(newX, motion.y * 0.9D, motion.z * 0.9D);
-                }
-                case EAST -> {
-                    double newX = Math.min(0.35D, motion.x * 0.9D + 0.08D);
-                    e.setDeltaMovement(newX, motion.y * 0.9D, motion.z * 0.9D);
-                }
             }
-            e.resetFallDistance();
+
+            if (liftedAny && !level.isClientSide) {
+                entity.setChanged();
+            }
         }
 
         if (level.isClientSide && level.random.nextFloat() < 0.2F) {
@@ -113,18 +163,21 @@ public class TCLevitatorBlockEntity extends BlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         this.rangeIdx = tag.getByte("range");
+        this.vis = tag.getInt("vis");
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.putByte("range", (byte) this.rangeIdx);
+        tag.putInt("vis", this.vis);
     }
 
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = super.getUpdateTag(registries);
         tag.putByte("range", (byte) this.rangeIdx);
+        tag.putInt("vis", this.vis);
         return tag;
     }
 
