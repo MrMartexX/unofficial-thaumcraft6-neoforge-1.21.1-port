@@ -319,6 +319,20 @@ public final class TCUnifiedParityRuntimeAudit {
                 cultistContracts,
                 "Cultist robe and boots implement IWarpingGear and IVisDiscountGear"));
 
+        net.minecraft.world.level.block.Block aerCrystal = TCBlocks.CRYSTAL_AER.get();
+        boolean crystalValid = aerCrystal instanceof thaumcraft.common.blocks.world.ore.TCCrystalBlock cb
+                && cb.defaultBlockState().hasProperty(thaumcraft.common.blocks.world.ore.TCCrystalBlock.SIZE)
+                && cb.defaultBlockState().hasProperty(thaumcraft.common.blocks.world.ore.TCCrystalBlock.FACING);
+        if (crystalValid && aerCrystal instanceof thaumcraft.common.blocks.world.ore.TCCrystalBlock cb) {
+            net.minecraft.world.level.block.state.BlockState stateSize0 = cb.defaultBlockState().setValue(thaumcraft.common.blocks.world.ore.TCCrystalBlock.SIZE, 0);
+            net.minecraft.world.level.block.state.BlockState stateSize3 = cb.defaultBlockState().setValue(thaumcraft.common.blocks.world.ore.TCCrystalBlock.SIZE, 3);
+            crystalValid = cb.getDrops(stateSize0, null).size() == 1
+                    && cb.getDrops(stateSize3, null).size() == 4;
+        }
+        checks.add(new Check("Worldgen", "crystal_growth_and_drops_contract",
+                crystalValid,
+                "Vis crystal blocks have SIZE (0-3) lifecycle and drop (SIZE + 1) shards"));
+
         return checks;
     }
 

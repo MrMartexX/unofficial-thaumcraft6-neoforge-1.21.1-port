@@ -19,6 +19,7 @@ import thaumcraft.common.essentia.transport.block.TCLegacySmelterEndpoint;
 
 
 import java.util.function.Supplier;
+import net.minecraft.world.item.Item;
 
 import net.minecraft.world.level.block.Block;
 
@@ -118,6 +119,8 @@ import thaumcraft.common.blocks.devices.TCInfernalFurnaceBlock;
 
 import thaumcraft.common.blocks.devices.TCInfernalFurnacePlaceholderBlock;
 import thaumcraft.common.blocks.crafting.TCGolemBuilderPlaceholderBlock;
+import thaumcraft.common.blocks.world.ore.TCCrystalBlock;
+import thaumcraft.api.aspects.Aspect;
 
 import thaumcraft.common.blocks.devices.TCLampBlock;
 
@@ -155,19 +158,19 @@ public final class TCBlocks {
 
 
 
-    public static final Supplier<Block> CRYSTAL_AER = BLOCKS.register("crystal_aer", () -> crystalPlaceholder());
+    public static final Supplier<Block> CRYSTAL_AER = BLOCKS.register("crystal_aer", () -> crystalBlock(Aspect.AIR, TCItems.CRYSTAL_ESSENCE_AER));
 
-    public static final Supplier<Block> CRYSTAL_IGNIS = BLOCKS.register("crystal_ignis", () -> crystalPlaceholder());
+    public static final Supplier<Block> CRYSTAL_IGNIS = BLOCKS.register("crystal_ignis", () -> crystalBlock(Aspect.FIRE, TCItems.CRYSTAL_ESSENCE_IGNIS));
 
-    public static final Supplier<Block> CRYSTAL_AQUA = BLOCKS.register("crystal_aqua", () -> crystalPlaceholder());
+    public static final Supplier<Block> CRYSTAL_AQUA = BLOCKS.register("crystal_aqua", () -> crystalBlock(Aspect.WATER, TCItems.CRYSTAL_ESSENCE_AQUA));
 
-    public static final Supplier<Block> CRYSTAL_TERRA = BLOCKS.register("crystal_terra", () -> crystalPlaceholder());
+    public static final Supplier<Block> CRYSTAL_TERRA = BLOCKS.register("crystal_terra", () -> crystalBlock(Aspect.EARTH, TCItems.CRYSTAL_ESSENCE_TERRA));
 
-    public static final Supplier<Block> CRYSTAL_ORDO = BLOCKS.register("crystal_ordo", () -> crystalPlaceholder());
+    public static final Supplier<Block> CRYSTAL_ORDO = BLOCKS.register("crystal_ordo", () -> crystalBlock(Aspect.ORDER, TCItems.CRYSTAL_ESSENCE_ORDO));
 
-    public static final Supplier<Block> CRYSTAL_PERDITIO = BLOCKS.register("crystal_perditio", () -> crystalPlaceholder());
+    public static final Supplier<Block> CRYSTAL_PERDITIO = BLOCKS.register("crystal_perditio", () -> crystalBlock(Aspect.ENTROPY, TCItems.CRYSTAL_ESSENCE_PERDITIO));
 
-    public static final Supplier<Block> CRYSTAL_VITIUM = BLOCKS.register("crystal_vitium", () -> crystalPlaceholder());
+    public static final Supplier<Block> CRYSTAL_VITIUM = BLOCKS.register("crystal_vitium", () -> crystalBlock(Aspect.FLUX, TCItems.CRYSTAL_ESSENCE_VITIUM));
 
 
 
@@ -1366,22 +1369,19 @@ public final class TCBlocks {
 
 
 
-    private static Block crystalPlaceholder() {
-
-        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
-
-                .strength(0.25F, 0.0F)
-
-                .noOcclusion()
-
-                .noCollission()
-
-                .hasPostProcess((state, reader, pos) -> true)
-
-                .emissiveRendering((state, reader, pos) -> true)
-
-                .lightLevel(state -> 3));
-
+    private static Block crystalBlock(Aspect aspect, Supplier<Item> shardItem) {
+        return new TCCrystalBlock(
+                aspect,
+                shardItem,
+                BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                        .strength(0.25F, 0.0F)
+                        .noOcclusion()
+                        .noCollission()
+                        .randomTicks()
+                        .hasPostProcess((state, reader, pos) -> true)
+                        .emissiveRendering((state, reader, pos) -> true)
+                        .lightLevel(state -> 1)
+        );
     }
 
 

@@ -6,7 +6,61 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "thaumcraft:crystal_essence_terra"
+          "name": "thaumcraft:crystal_essence_terra",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 1,
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "thaumcraft:crystal_terra",
+                  "properties": {
+                    "size": "0"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_count",
+              "count": 2,
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "thaumcraft:crystal_terra",
+                  "properties": {
+                    "size": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_count",
+              "count": 3,
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "thaumcraft:crystal_terra",
+                  "properties": {
+                    "size": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_count",
+              "count": 4,
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "thaumcraft:crystal_terra",
+                  "properties": {
+                    "size": "3"
+                  }
+                }
+              ]
+            }
+          ]
         }
       ],
       "conditions": [

@@ -307,6 +307,7 @@ def parse_port_registry(port_root: Path) -> Tuple[Dict[str, str], Dict[str, str]
             block_id = match.group(1)
             factory = match.group(2).strip()
             is_placeholder = (
+                block_id == "recharge_pedestal" or
                 "() -> new Block(" in factory or
                 "simpleBlock(" in factory or
                 "stoneBlock(" in factory or
