@@ -17,6 +17,7 @@ import thaumcraft.common.lib.fx.TCFXDispatcher;
 @EventBusSubscriber(modid = Thaumcraft.MODID, value = Dist.CLIENT)
 public final class TCCloudRingClientEvents {
     private static boolean jumpKeyLatched;
+    private static boolean jumpConsumedInAir;
 
     private TCCloudRingClientEvents() {
     }
@@ -26,7 +27,13 @@ public final class TCCloudRingClientEvents {
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.level == null || minecraft.player == null) {
             jumpKeyLatched = false;
+            jumpConsumedInAir = false;
             return;
+        }
+
+        Player player = minecraft.player;
+        if (player.onGround() || player.isInWater()) {
+            jumpConsumedInAir = false;
         }
 
         boolean jumpPressed = minecraft.options.keyJump.isDown();
@@ -34,16 +41,16 @@ public final class TCCloudRingClientEvents {
             jumpKeyLatched = false;
             return;
         }
-        if (jumpKeyLatched) {
+        if (jumpKeyLatched || jumpConsumedInAir) {
             return;
         }
         jumpKeyLatched = true;
 
-        Player player = minecraft.player;
         if (!TCBaubleEvents.canAttemptCloudRingJump(player) || !TCBaubleEvents.hasCloudRing(player)) {
             return;
         }
 
+        jumpConsumedInAir = true;
         PacketDistributor.sendToServer(new TCCloudRingJumpPayload());
         TCBaubleEvents.applyCloudRingImpulse(player);
         TCFXDispatcher.drawCrucibleBamf(player.level(), player.getX(), player.getY() + 0.5D, player.getZ());

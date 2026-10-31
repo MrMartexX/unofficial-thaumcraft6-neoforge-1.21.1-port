@@ -263,15 +263,22 @@ public final class TCUnifiedParityRuntimeAudit {
         Item boots = TCItems.TRAVELLER_BOOTS.get();
         boolean bootsHasStep = false;
         if (boots instanceof ArmorItem armor) {
-            bootsHasStep = armor.getDefaultAttributeModifiers().modifiers().stream()
+            ItemStack chargedBoots = new ItemStack(armor);
+            thaumcraft.common.items.TCRechargeHelper.recharge(chargedBoots, thaumcraft.common.items.armor.ItemTravellerBoots.MAX_CHARGE);
+            boolean chargedHasStep = armor.getDefaultAttributeModifiers(chargedBoots).modifiers().stream()
                     .anyMatch(m -> m.attribute().equals(Attributes.STEP_HEIGHT));
+            ItemStack emptyBoots = new ItemStack(armor);
+            thaumcraft.common.items.TCRechargeHelper.ensureInitialCharge(emptyBoots, thaumcraft.common.items.armor.ItemTravellerBoots.MAX_CHARGE);
+            boolean emptyHasStep = armor.getDefaultAttributeModifiers(emptyBoots).modifiers().stream()
+                    .anyMatch(m -> m.attribute().equals(Attributes.STEP_HEIGHT));
+            bootsHasStep = chargedHasStep && !emptyHasStep;
         }
         checks.add(new Check("Equipment", "traveller_boots_step_height",
                 bootsHasStep,
-                "Boots of the Traveller grant +0.40 step height modifier"));
+                "Boots of the Traveller grant +0.40 step height modifier when charged, none when exhausted"));
 
         ItemStack bootsStack = new ItemStack(boots);
-        thaumcraft.common.items.TCRechargeHelper.ensureInitialCharge(bootsStack, thaumcraft.common.items.armor.ItemTravellerBoots.MAX_CHARGE);
+        thaumcraft.common.items.TCRechargeHelper.recharge(bootsStack, 1);
         boolean bufferTicks = thaumcraft.common.items.TCRechargeHelper.tickOneSecondEnergyBuffer(bootsStack, thaumcraft.common.items.armor.ItemTravellerBoots.MAX_CHARGE, 60);
         checks.add(new Check("Equipment", "traveller_boots_charge_buffer_contract",
                 thaumcraft.common.items.armor.ItemTravellerBoots.MAX_CHARGE == 240 && bufferTicks,
@@ -285,6 +292,33 @@ public final class TCUnifiedParityRuntimeAudit {
         checks.add(new Check("Equipment", "void_armor_warp_contract",
                 voidHelm instanceof IWarpingGear,
                 "Void metal armor implements IWarpingGear and inflicts warping value 1"));
+
+        Item fortressHelm = TCItems.FORTRESS_HELM.get();
+        boolean fortressContracts = fortressHelm instanceof thaumcraft.common.items.armor.ItemFortressArmor fa
+                && fa instanceof IGoggles
+                && fa instanceof IRevealer
+                && fa instanceof IVisDiscountGear;
+        if (fortressContracts && fortressHelm instanceof thaumcraft.common.items.armor.ItemFortressArmor fa) {
+            ItemStack stackNoGoggles = new ItemStack(fa);
+            ItemStack stackWithGoggles = new ItemStack(fa);
+            stackWithGoggles.set(thaumcraft.common.registry.TCDataComponents.FORTRESS_GOGGLES.get(), true);
+            fortressContracts = !fa.showNodes(stackNoGoggles, player)
+                    && fa.showNodes(stackWithGoggles, player)
+                    && fa.getVisDiscount(stackNoGoggles, player) == 2
+                    && fa.getVisDiscount(stackWithGoggles, player) == 7;
+        }
+        checks.add(new Check("Equipment", "fortress_armor_goggles_and_discount",
+                fortressContracts,
+                "Fortress Armor implements IGoggles/IRevealer/IVisDiscountGear with attached goggles dynamic discount"));
+
+        Item cultistRobe = TCItems.CRIMSON_ROBE_CHEST.get();
+        Item cultistBoots = TCItems.CRIMSON_BOOTS.get();
+        boolean cultistContracts = cultistRobe instanceof IWarpingGear && cultistRobe instanceof IVisDiscountGear
+                && cultistBoots instanceof IWarpingGear && cultistBoots instanceof IVisDiscountGear;
+        checks.add(new Check("Equipment", "cultist_armor_warp_and_discount",
+                cultistContracts,
+                "Cultist robe and boots implement IWarpingGear and IVisDiscountGear"));
+
         return checks;
     }
 

@@ -73,9 +73,7 @@ public class TCCurioItem extends Item {
 
         // 1. Primary category knowledge
         addRandomKnowledge(serverPlayer, TCKnowledgeType.OBSERVATION, this.kind.category, observationProgression / 2, observationProgression);
-        if (this.kind != Kind.ARCANE) { // Legacy: arcane was observation only on primary, theory on secondary
-            addRandomKnowledge(serverPlayer, TCKnowledgeType.THEORY, this.kind.category, theoryProgression / 3, theoryProgression / 2);
-        }
+        addRandomKnowledge(serverPlayer, TCKnowledgeType.THEORY, this.kind.category, theoryProgression / 3, theoryProgression / 2);
 
         // 2. Secondary random category knowledge
         List<String> categories = new ArrayList<>(TCResearchManager.categories().stream()

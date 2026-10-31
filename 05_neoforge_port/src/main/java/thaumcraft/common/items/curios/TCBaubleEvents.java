@@ -5,30 +5,30 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import thaumcraft.api.aura.AuraHelper;
-import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thaumcraft.Thaumcraft;
+import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.common.items.TCRechargeHelper;
 import thaumcraft.common.registry.TCItems;
 
@@ -37,6 +37,8 @@ import thaumcraft.common.registry.TCItems;
  * uses split item ids and data driven Curios slots.
  *
  * Implemented legacy behaviour:
+ * - Baubles (Cloud Ring, Vis Amulet) require being worn in a Curios slot (or offhand fallback);
+ *   inventory items in main storage or hotbar do NOT activate bauble powers.
  * - crafted Vis Amulet: every 5 ticks it recharges the first eligible item;
  * - Cloud Ring: one mid-air jump per airtime, using the original 0.75 vertical
  *   impulse, Jump Boost bonus, sprint push, fall-distance reset and sweep sound.
@@ -68,7 +70,7 @@ public final class TCBaubleEvents {
             return;
         }
 
-        ItemStack visAmulet = firstMatching(player, TCItems.VIS_AMULET.get());
+        ItemStack visAmulet = getWornBauble(player, TCItems.VIS_AMULET.get());
         if (visAmulet.isEmpty()) {
             return;
         }
@@ -90,7 +92,11 @@ public final class TCBaubleEvents {
 
     @SubscribeEvent
     public static void onLivingDamagePre(LivingDamageEvent.Pre event) {
-        if (event.getEntity() instanceof Player player && event.getSource().is(DamageTypeTags.IS_FALL)) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        if (event.getSource().is(DamageTypeTags.IS_FALL)) {
             ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
             if (boots.getItem() == TCItems.TRAVELLER_BOOTS.get()) {
                 float damage = event.getNewDamage();
@@ -100,6 +106,23 @@ public final class TCBaubleEvents {
                 float damage = event.getNewDamage();
                 float reduced = Math.max(0.0F, damage / 3.0F - 2.0F);
                 event.setNewDamage(reduced);
+            }
+        } else {
+            int fortressPieces = 0;
+            for (ItemStack armor : player.getArmorSlots()) {
+                if (armor.getItem() instanceof thaumcraft.common.items.armor.ItemFortressArmor) {
+                    fortressPieces++;
+                }
+            }
+            if (fortressPieces > 0) {
+                float damage = event.getNewDamage();
+                if (event.getSource().is(DamageTypeTags.IS_FIRE) || event.getSource().is(DamageTypeTags.IS_EXPLOSION)) {
+                    damage *= (1.0F - 0.05F * fortressPieces);
+                    event.setNewDamage(damage);
+                } else if (event.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO) || event.getSource().is(DamageTypeTags.BYPASSES_ARMOR)) {
+                    damage *= (1.0F - 0.03F * fortressPieces);
+                    event.setNewDamage(damage);
+                }
             }
         }
     }
@@ -138,7 +161,7 @@ public final class TCBaubleEvents {
     }
 
     public static boolean hasCloudRing(Player player) {
-        return !firstMatching(player, TCItems.CLOUD_RING.get()).isEmpty();
+        return !getWornBauble(player, TCItems.CLOUD_RING.get()).isEmpty();
     }
 
     public static void applyCloudRingImpulse(Player player) {
@@ -216,29 +239,17 @@ public final class TCBaubleEvents {
         return false;
     }
 
-    private static ItemStack firstMatching(Player player, Item item) {
+    public static ItemStack getWornBauble(Player player, Item item) {
+        if (player == null) {
+            return ItemStack.EMPTY;
+        }
         ItemStack curiosStack = firstMatchingCurios(player, item);
         if (!curiosStack.isEmpty()) {
             return curiosStack;
         }
-
-        Inventory inventory = player.getInventory();
-        ItemStack stack = firstMatching(inventory.items, item);
-        if (!stack.isEmpty()) {
-            return stack;
-        }
-        stack = firstMatching(inventory.armor, item);
-        if (!stack.isEmpty()) {
-            return stack;
-        }
-        return firstMatching(inventory.offhand, item);
-    }
-
-    private static ItemStack firstMatching(List<ItemStack> stacks, Item item) {
-        for (ItemStack stack : stacks) {
-            if (!stack.isEmpty() && stack.getItem() == item) {
-                return stack;
-            }
+        // Fallback for environment without Curios: allow offhand slot
+        if (player.getOffhandItem().getItem() == item) {
+            return player.getOffhandItem();
         }
         return ItemStack.EMPTY;
     }

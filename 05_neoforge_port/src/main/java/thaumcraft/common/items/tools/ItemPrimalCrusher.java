@@ -49,17 +49,40 @@ public class ItemPrimalCrusher extends DiggerItem implements IWarpingGear {
 
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (!level.isClientSide() && (state.is(BlockTags.MINEABLE_WITH_PICKAXE) || state.is(BlockTags.MINEABLE_WITH_SHOVEL))) {
-            // 3x3x1 excavation
-            Direction facing = entityLiving.getDirection();
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dy = -1; dy <= 1; dy++) {
-                    if (dx == 0 && dy == 0) continue;
-                    BlockPos target = pos.offset(dx, dy, 0);
-                    BlockState s = level.getBlockState(target);
-                    if (s.is(BlockTags.MINEABLE_WITH_PICKAXE) || s.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
-                        level.destroyBlock(target, true, entityLiving);
+        if (!level.isClientSide() && !TCToolEvents.isHarvesting() && !entityLiving.isShiftKeyDown()
+                && (state.is(BlockTags.MINEABLE_WITH_PICKAXE) || state.is(BlockTags.MINEABLE_WITH_SHOVEL))) {
+            // 3x3 excavation oriented along the face mined
+            Player player = entityLiving instanceof Player p ? p : null;
+            Direction face = player != null ? TCToolEvents.getMiningFace(player, pos) : entityLiving.getDirection();
+
+            for (int aa = -1; aa <= 1; aa++) {
+                for (int bb = -1; bb <= 1; bb++) {
+                    if (aa == 0 && bb == 0) continue;
+                    int xx = 0;
+                    int yy = 0;
+                    int zz = 0;
+                    if (face.getAxis() == Direction.Axis.Y) {
+                        xx = aa;
+                        zz = bb;
+                    } else if (face.getAxis() == Direction.Axis.Z) {
+                        xx = aa;
+                        yy = bb;
+                    } else {
+                        zz = aa;
+                        yy = bb;
                     }
+                    BlockPos target = pos.offset(xx, yy, zz);
+                    BlockState s = level.getBlockState(target);
+                    if (s.getDestroySpeed(level, target) >= 0.0F
+                            && (s.is(BlockTags.MINEABLE_WITH_PICKAXE) || s.is(BlockTags.MINEABLE_WITH_SHOVEL))) {
+                        TCToolEvents.destroyNeighborBlock(entityLiving, level, target, stack);
+                        if (stack.isEmpty()) {
+                            break;
+                        }
+                    }
+                }
+                if (stack.isEmpty()) {
+                    break;
                 }
             }
         }

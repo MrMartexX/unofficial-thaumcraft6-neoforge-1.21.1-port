@@ -22,10 +22,11 @@ import thaumcraft.common.registry.TCArmorMaterials;
  *
  * TC6 behaviour kept here:
  * - max charge: 240;
+ * - missing/initial charge starts at zero until recharged from aura/amulet;
  * - one charge refills a 60 second active-energy buffer;
- * - while charged and moving forward the boots improve ground and water travel;
- * - the full-block step remains exposed as a NeoForge attribute so server and
- *   client agree on step-up behaviour while the armor is worn.
+ * - while charged and driving forward (positive forward movement input zza > 0),
+ *   the boots improve ground, water, and airborne travel;
+ * - step-height attribute is granted dynamically only when the boots have usable energy.
  */
 public final class ItemTravellerBoots extends ArmorItem {
     public static final int MAX_CHARGE = 240;
@@ -58,28 +59,34 @@ public final class ItemTravellerBoots extends ArmorItem {
             return;
         }
 
-        Vec3 motion = entity.getDeltaMovement();
-        double horizontalSpeed = motion.horizontalDistanceSqr();
-        if (horizontalSpeed <= 0.0004D) {
+        // Must be driving forward (positive forward movement input)
+        if (living.zza <= 0.0F) {
             return;
         }
 
+        Vec3 motion = entity.getDeltaMovement();
         if (living.onGround()) {
             double bonus = living.isInWater() ? 0.0125D : 0.05D;
             addLookMovement(entity, motion, bonus);
         } else if (living.isInWater()) {
             addLookMovement(entity, motion, 0.025D);
+        } else {
+            // Legacy airborne handling (jumpMovementFactor = 0.05F vs default 0.02F)
+            addLookMovement(entity, motion, 0.03D);
         }
     }
 
     @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers() {
-        return super.getDefaultAttributeModifiers()
-                .withModifierAdded(
-                        Attributes.STEP_HEIGHT,
-                        new AttributeModifier(STEP_ID, 0.40D, AttributeModifier.Operation.ADD_VALUE),
-                        EquipmentSlotGroup.FEET
-                );
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
+        ItemAttributeModifiers base = super.getDefaultAttributeModifiers(stack);
+        if (TCRechargeHelper.hasUsableEnergy(stack)) {
+            return base.withModifierAdded(
+                    Attributes.STEP_HEIGHT,
+                    new AttributeModifier(STEP_ID, 0.40D, AttributeModifier.Operation.ADD_VALUE),
+                    EquipmentSlotGroup.FEET
+            );
+        }
+        return base;
     }
 
     private static void addLookMovement(Entity entity, Vec3 currentMotion, double bonus) {

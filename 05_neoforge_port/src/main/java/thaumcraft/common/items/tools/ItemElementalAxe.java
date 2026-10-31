@@ -12,7 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class ItemElementalAxe extends AxeItem {
@@ -27,8 +26,8 @@ public class ItemElementalAxe extends AxeItem {
 
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (!level.isClientSide() && state.is(BlockTags.LOGS)) {
-            // Tree felling: recursively destroy adjacent connected log blocks up to 50
+        if (!level.isClientSide() && !TCToolEvents.isHarvesting() && !entityLiving.isShiftKeyDown() && state.is(BlockTags.LOGS)) {
+            // Tree felling: recursively destroy adjacent connected log blocks up to 64
             fellTree(level, pos, stack, entityLiving);
         }
         return super.mineBlock(stack, level, state, pos, entityLiving);
@@ -49,11 +48,13 @@ public class ItemElementalAxe extends AxeItem {
                     visited.add(immutable);
                     BlockState s = level.getBlockState(immutable);
                     if (s.is(BlockTags.LOGS)) {
-                        level.destroyBlock(immutable, true, entity);
-                        count++;
-                        queue.add(immutable);
-                        if (count % 4 == 0 && entity instanceof net.minecraft.server.level.ServerPlayer sp) {
-                            stack.hurtAndBreak(1, sp, LivingEntity.getSlotForHand(entity.getUsedItemHand()));
+                        boolean destroyed = TCToolEvents.destroyNeighborBlock(entity, level, immutable, stack);
+                        if (destroyed) {
+                            count++;
+                            queue.add(immutable);
+                        }
+                        if (stack.isEmpty()) {
+                            break;
                         }
                     }
                 }

@@ -42,7 +42,7 @@ public final class TCRechargeHelper {
 
     public static void ensureInitialCharge(ItemStack stack, int maxCharge) {
         if (!stack.has(TCDataComponents.CHARGE.get())) {
-            stack.set(TCDataComponents.CHARGE.get(), Math.max(0, maxCharge));
+            stack.set(TCDataComponents.CHARGE.get(), 0);
         }
         if (!stack.has(TCDataComponents.ACTIVE_ENERGY.get())) {
             stack.set(TCDataComponents.ACTIVE_ENERGY.get(), 0);
