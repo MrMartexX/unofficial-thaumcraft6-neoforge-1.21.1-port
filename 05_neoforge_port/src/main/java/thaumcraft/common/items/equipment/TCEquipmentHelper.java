@@ -12,6 +12,34 @@ import thaumcraft.api.items.IWarpingGear;
 public final class TCEquipmentHelper {
     private static final List<ExtraEquipmentStackProvider> EXTRA_EQUIPMENT_STACK_PROVIDERS = new CopyOnWriteArrayList<>();
 
+    static {
+        try {
+            Class<?> curiosApi = Class.forName("top.theillusivec4.curios.api.CuriosApi");
+            registerExtraEquipmentStackProvider(player -> {
+                try {
+                    Object optional = curiosApi.getMethod("getCuriosInventory", net.minecraft.world.entity.LivingEntity.class).invoke(null, player);
+                    if (optional instanceof java.util.Optional<?> opt && opt.isPresent()) {
+                        Object handler = opt.get();
+                        Object equipped = handler.getClass().getMethod("getEquippedCurios").invoke(handler);
+                        if (equipped instanceof net.neoforged.neoforge.items.IItemHandler itemHandler) {
+                            List<ItemStack> list = new ArrayList<>(itemHandler.getSlots());
+                            for (int i = 0; i < itemHandler.getSlots(); i++) {
+                                ItemStack s = itemHandler.getStackInSlot(i);
+                                if (!s.isEmpty()) {
+                                    list.add(s);
+                                }
+                            }
+                            return list;
+                        }
+                    }
+                } catch (Throwable ignored) {
+                }
+                return List.of();
+            });
+        } catch (Throwable ignored) {
+        }
+    }
+
     private TCEquipmentHelper() {
     }
 

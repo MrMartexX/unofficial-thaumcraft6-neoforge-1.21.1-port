@@ -2343,7 +2343,6 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int height
     ) {
         drawFullTexture(graphics, texture, x, y, width, height);
-        drawFullTexture(graphics, texture, x, y, width, height);
     }
 
     private static void blitKnowledgeTexture(
@@ -2358,7 +2357,6 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             int textureWidth,
             int textureHeight
     ) {
-        blit(graphics, texture, x, y, u, v, width, height, textureWidth, textureHeight);
         blit(graphics, texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
 

@@ -5,6 +5,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import java.util.List;
+import net.minecraft.server.network.Filterable;
+import net.minecraft.world.item.component.WrittenBookContent;
 import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerWakeUpEvent;
@@ -71,7 +74,20 @@ public final class TCResearchDiscoveryEvents {
             return;
         }
 
-        ItemStack dreamJournal = new ItemStack(Items.WRITABLE_BOOK);
+        ItemStack dreamJournal = new ItemStack(Items.WRITTEN_BOOK);
+        List<Filterable<Component>> pages = List.of(
+                Filterable.passThrough(Component.translatable("book.start.1")),
+                Filterable.passThrough(Component.translatable("book.start.2")),
+                Filterable.passThrough(Component.translatable("book.start.3"))
+        );
+        WrittenBookContent content = new WrittenBookContent(
+                Filterable.passThrough(Component.translatable("book.start.title").getString()),
+                player.getScoreboardName(),
+                3,
+                pages,
+                true
+        );
+        dreamJournal.set(DataComponents.WRITTEN_BOOK_CONTENT, content);
         dreamJournal.set(DataComponents.CUSTOM_NAME,
                 Component.translatable("book.start.title").withStyle(ChatFormatting.DARK_PURPLE));
         if (!player.getInventory().add(dreamJournal)) {

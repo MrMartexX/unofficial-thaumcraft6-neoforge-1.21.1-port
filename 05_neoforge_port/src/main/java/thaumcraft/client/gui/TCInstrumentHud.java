@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import thaumcraft.Thaumcraft;
+import thaumcraft.common.items.equipment.TCEquipmentHelper;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.warp.TCPlayerWarp;
 import thaumcraft.common.warp.TCWarpClientCache;
@@ -45,24 +46,24 @@ public final class TCInstrumentHud {
 
         int y = 2;
         if (showsAura(player)) {
-            TCAuraClientCache.getCurrentAura().ifPresent(aura -> renderAura(graphics, minecraft, aura, 2));
+            TCAuraClientCache.getCurrentAura().ifPresent(aura -> renderAura(graphics, minecraft, player, aura, 2));
             y += 82;
         }
         if (holds(player, TCItems.SANITY_CHECKER.get())) {
-            renderSanity(graphics, minecraft, TCWarpClientCache.currentWarp(), y);
+            renderSanity(graphics, minecraft, player, TCWarpClientCache.currentWarp(), y);
         }
     }
 
     private static boolean showsAura(Player player) {
         return holds(player, TCItems.THAUMOMETER.get())
-                || player.getItemBySlot(EquipmentSlot.HEAD).is(TCItems.GOGGLES.get());
+                || TCEquipmentHelper.hasGoggles(player);
     }
 
     private static boolean holds(Player player, net.minecraft.world.item.Item item) {
         return player.getMainHandItem().is(item) || player.getOffhandItem().is(item);
     }
 
-    private static void renderAura(GuiGraphics graphics, Minecraft minecraft, TCAuraSyncPayload aura, int y) {
+    private static void renderAura(GuiGraphics graphics, Minecraft minecraft, Player player, TCAuraSyncPayload aura, int y) {
         int x = 2;
         int height = 64;
         float capacity = Math.max(1.0F, aura.base());
@@ -77,13 +78,20 @@ public final class TCInstrumentHud {
             graphics.fill(x + 5, y + 74 - visHeight - fluxHeight, x + 13, y + 74 - visHeight, 0xD05A246E);
         }
         int markerY = y + 74 - Math.min(height, Math.round(height * Math.min(aura.base(), 525.0F) / 525.0F));
-        graphics.fill(x + 2, markerY, x + 16, markerY + 1, 0xFFE8D59A);
-        graphics.drawString(minecraft.font, "Vis " + oneDecimal(aura.vis()), x + 19, y + 16, 0xEEC6FF, true);
-        graphics.drawString(minecraft.font, "Flux " + oneDecimal(aura.flux()), x + 19, y + 28, 0xB57AC7, true);
-        graphics.drawString(minecraft.font, "Base " + aura.base(), x + 19, y + 40, 0xD8C48E, true);
+        graphics.blit(HUD, x + 1, markerY - 2, 117, 61, 14, 5);
+
+        if (player.isCrouching()) {
+            graphics.pose().pushPose();
+            graphics.pose().translate(x + 19, y + 16, 0);
+            graphics.pose().scale(0.75F, 0.75F, 1.0F);
+            graphics.drawString(minecraft.font, "Vis: " + oneDecimal(aura.vis()), 0, 0, 0xEEC6FF, true);
+            graphics.drawString(minecraft.font, "Flux: " + oneDecimal(aura.flux()), 0, 14, 0xB57AC7, true);
+            graphics.drawString(minecraft.font, "Base: " + Math.round(aura.base()), 0, 28, 0xD8C48E, true);
+            graphics.pose().popPose();
+        }
     }
 
-    private static void renderSanity(GuiGraphics graphics, Minecraft minecraft, TCPlayerWarp warp, int y) {
+    private static void renderSanity(GuiGraphics graphics, Minecraft minecraft, Player player, TCPlayerWarp warp, int y) {
         int x = 1;
         int permanent = warp.get(TCWarpType.PERMANENT);
         int normal = warp.get(TCWarpType.NORMAL);
@@ -100,8 +108,15 @@ public final class TCInstrumentHud {
         if (n > 0) graphics.fill(x + 7, bottom - t - n, x + 15, bottom - t, 0xD0BF00BF);
         if (p > 0) graphics.fill(x + 7, bottom - t - n - p, x + 15, bottom - t - n, 0xD0800080);
         graphics.blit(HUD, x, y, 176, 0, 20, 76);
-        graphics.drawString(minecraft.font, "Warp " + (permanent + normal + temporary), x + 23, y + 18, 0xDDA0DD, true);
-        graphics.drawString(minecraft.font, "P " + permanent + "  S " + normal + "  T " + temporary, x + 23, y + 31, 0xB784C7, true);
+
+        if (player.isCrouching()) {
+            graphics.pose().pushPose();
+            graphics.pose().translate(x + 23, y + 18, 0);
+            graphics.pose().scale(0.75F, 0.75F, 1.0F);
+            graphics.drawString(minecraft.font, "Warp: " + (permanent + normal + temporary), 0, 0, 0xDDA0DD, true);
+            graphics.drawString(minecraft.font, "P: " + permanent + "  N: " + normal + "  T: " + temporary, 0, 14, 0xB784C7, true);
+            graphics.pose().popPose();
+        }
     }
 
     private static String oneDecimal(float value) {
