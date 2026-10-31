@@ -27,6 +27,7 @@ public final class TCDataComponents {
     public static final Supplier<DataComponentType<Integer>> ACTIVE_ENERGY = DATA_COMPONENT_TYPES.register("active_energy", () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
     public static final Supplier<DataComponentType<Boolean>> FORTRESS_GOGGLES = DATA_COMPONENT_TYPES.register("fortress_goggles", () -> DataComponentType.<Boolean>builder().persistent(com.mojang.serialization.Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final Supplier<DataComponentType<Integer>> FORTRESS_MASK = DATA_COMPONENT_TYPES.register("fortress_mask", () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
+    public static final Supplier<DataComponentType<Integer>> RUNIC_CHARGE = DATA_COMPONENT_TYPES.register("runic_charge", () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
 
     private TCDataComponents() {
     }

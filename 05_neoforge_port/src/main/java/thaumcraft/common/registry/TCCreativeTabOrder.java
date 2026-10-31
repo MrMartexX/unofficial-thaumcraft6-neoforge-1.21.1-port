@@ -341,11 +341,11 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.SEAL_BUTCHER.get());
         acceptVisible(output, TCItems.SEAL_HARVEST.get());
 
-        acceptVisible(output, TCItems.CLOUD_RING.get());
-        acceptVisible(output, TCItems.CHARM_UNDYING.get());
-        acceptVisible(output, TCItems.VERDANT_HEART.get());
-        acceptVisible(output, TCItems.VERDANT_HEART_LIFE.get());
-        acceptVisible(output, TCItems.VERDANT_HEART_SUSTAIN.get());
+        acceptVisible(output, TCItems.CLOUD_RING.get());
+        acceptVisible(output, TCItems.CHARM_UNDYING.get());
+        acceptVisible(output, TCItems.VERDANT_HEART.get());
+        acceptVisible(output, TCItems.VERDANT_HEART_LIFE.get());
+        acceptVisible(output, TCItems.VERDANT_HEART_SUSTAIN.get());
         acceptVisible(output, TCItems.TRIPLE_MEAT_TREAT.get());
         acceptVisible(output, TCItems.MASK_GRINNING_DEVIL.get());
         acceptVisible(output, TCItems.MASK_ANGRY_GHOST.get());
@@ -361,19 +361,20 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.ESSENTIA_EXPORTER.get());
         acceptVisible(output, TCItems.ESSENTIA_IMPORTER.get());
         acceptVisible(output, TCItems.CAUSALITY_COLLAPSER.get());
-        acceptVisible(output, TCItems.VOIDSEER_PEARL.get());
+        acceptVisible(output, TCItems.VOIDSEER_PEARL.get());
         acceptVisible(output, TCItems.VOID_SEED.get());
         acceptVisible(output, TCItems.FLESH_BLOCK.get());
 
         acceptVisible(output, TCItems.ARCANE_EAR_TOGGLE.get());
-        acceptVisible(output, TCItems.BAUBLE_AMULET.get());
+        acceptVisible(output, TCItems.BAUBLE_AMULET.get());
         acceptVisible(output, TCItems.VIS_AMULET.get());
-        acceptVisible(output, TCItems.BAUBLE_AMULET_FANCY.get());
-        acceptVisible(output, TCItems.BAUBLE_GIRDLE.get());
-        acceptVisible(output, TCItems.BAUBLE_GIRDLE_FANCY.get());
-        acceptVisible(output, TCItems.BAUBLE_RING.get());
-        acceptVisible(output, TCItems.BAUBLE_RING_FANCY.get());
-        acceptVisible(output, TCItems.BAUBLE_CHARM.get());
+        acceptVisible(output, TCItems.BAUBLE_AMULET_FANCY.get());
+        acceptVisible(output, TCItems.BAUBLE_GIRDLE.get());
+        acceptVisible(output, TCItems.BAUBLE_GIRDLE_FANCY.get());
+        acceptVisible(output, TCItems.BAUBLE_RING.get());
+        acceptVisible(output, TCItems.BAUBLE_RING_FANCY.get());
+        acceptVisible(output, TCItems.RING_APPRENTICE.get());
+        acceptVisible(output, TCItems.BAUBLE_CHARM.get());
         acceptVisible(output, TCItems.CURIOSITY_BAND.get());
         acceptVisible(output, TCItems.BRASS_BRACE.get());
 

@@ -27,6 +27,8 @@ import thaumcraft.common.items.armor.ItemVoidRobeArmor;
 import thaumcraft.common.items.casters.CasterManager;
 import thaumcraft.common.items.consumables.ItemSanitySoap;
 import thaumcraft.common.items.curios.ItemCurioRites;
+import thaumcraft.common.items.curios.TCBaubleEvents;
+import thaumcraft.common.items.TCRechargeHelper;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.warp.TCPlayerWarp;
@@ -85,6 +87,7 @@ public final class TCItemEquipmentBehaviorAudit {
         checks.addAll(checkCrimsonRites(player));
         checks.add(checkSanityCheckerRecipe(server));
         checks.add(checkEquipmentHelperBridge(player));
+        checks.addAll(checkMagicalJewelry(player));
 
         return new Report(List.copyOf(checks));
     }
@@ -268,6 +271,65 @@ public final class TCItemEquipmentBehaviorAudit {
         } catch (Exception exception) {
             return new Check("equipment_helper_armor_and_extra_provider_paths", false, exception.getMessage());
         }
+    }
+
+    private static List<Check> checkMagicalJewelry(ServerPlayer player) {
+        ArrayList<Check> checks = new ArrayList<>();
+
+        // Ring of the Apprentice
+        Item apprenticeRing = TCItems.RING_APPRENTICE.get();
+        ItemStack apprenticeStack = new ItemStack(apprenticeRing);
+        boolean apprenticePassed = apprenticeRing.getDefaultMaxStackSize() == 1
+                && apprenticeStack.getRarity() == Rarity.UNCOMMON
+                && apprenticeRing instanceof IVisDiscountGear discount
+                && discount.getVisDiscount(apprenticeStack, player) == 5;
+        checks.add(new Check("ring_apprentice_parity_contract", apprenticePassed,
+                "maxStackSize=1, rarity=UNCOMMON, visDiscount=5%"));
+
+        // Voidseer Pearl
+        Item pearl = TCItems.VOIDSEER_PEARL.get();
+        ItemStack pearlStack = new ItemStack(pearl);
+        TCPlayerWarpStore.clear(player);
+        TCPlayerWarpStore.add(player, TCWarpType.PERMANENT, 40);
+        boolean pearlPassed = pearl.getDefaultMaxStackSize() == 1
+                && pearlStack.getRarity() == Rarity.RARE
+                && pearl instanceof IVisDiscountGear pDisc
+                && pDisc.getVisDiscount(pearlStack, player) == 10
+                && pearl instanceof IWarpingGear pWarp
+                && pWarp.getWarp(pearlStack, player) == 2;
+        checks.add(new Check("voidseer_pearl_parity_contract", pearlPassed,
+                "visDiscount & warp scale with permanent warp up to 25%"));
+        TCPlayerWarpStore.clear(player);
+
+        // Verdant Hearts
+        Item vBase = TCItems.VERDANT_HEART.get();
+        Item vLife = TCItems.VERDANT_HEART_LIFE.get();
+        Item vSustain = TCItems.VERDANT_HEART_SUSTAIN.get();
+        boolean verdantPassed = vBase.getDefaultMaxStackSize() == 1
+                && vLife.getDefaultMaxStackSize() == 1
+                && vSustain.getDefaultMaxStackSize() == 1
+                && TCRechargeHelper.getMaxCharge(new ItemStack(vBase)) == 200
+                && TCRechargeHelper.getMaxCharge(new ItemStack(vLife)) == 200
+                && TCRechargeHelper.getMaxCharge(new ItemStack(vSustain)) == 200;
+        checks.add(new Check("verdant_heart_parity_contract", verdantPassed,
+                "base, life, sustain maxCharge=200, maxStackSize=1"));
+
+        // Cloud Ring & Charm Undying & Curiosity Band & Vis Amulet
+        boolean otherBaublesPassed = TCItems.CLOUD_RING.get().getDefaultMaxStackSize() == 1
+                && TCItems.CHARM_UNDYING.get().getDefaultMaxStackSize() == 1
+                && TCItems.CURIOSITY_BAND.get().getDefaultMaxStackSize() == 1
+                && TCItems.VIS_AMULET.get().getDefaultMaxStackSize() == 1;
+        checks.add(new Check("bauble_items_single_stack_contract", otherBaublesPassed,
+                "cloud_ring, charm_undying, curiosity_band, vis_amulet stacksTo(1)"));
+
+        // Runic Shielding component check
+        ItemStack runicArmor = new ItemStack(TCItems.THAUMIUM_CHEST.get());
+        runicArmor.set(TCDataComponents.RUNIC_CHARGE.get(), 4);
+        boolean runicPassed = TCBaubleEvents.getRunicCharge(runicArmor) == 4;
+        checks.add(new Check("runic_shielding_charge_component_contract", runicPassed,
+                "TCDataComponents.RUNIC_CHARGE correctly read by getRunicCharge"));
+
+        return checks;
     }
 
     public record Report(List<Check> checks) {

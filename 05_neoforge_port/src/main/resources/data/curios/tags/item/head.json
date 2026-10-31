@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "thaumcraft:curiosity_band"
+    "thaumcraft:curiosity_band",
+    "thaumcraft:goggles"
   ]
 }

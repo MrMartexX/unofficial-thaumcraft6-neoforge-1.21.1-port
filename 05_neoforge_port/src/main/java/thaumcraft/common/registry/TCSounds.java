@@ -101,6 +101,10 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pech_death")));
     public static final Supplier<SoundEvent> PECH_CHARGE = SOUND_EVENTS.register("pech_charge", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pech_charge")));
+    public static final Supplier<SoundEvent> RUNIC_SHIELD_EFFECT = SOUND_EVENTS.register("runicshieldeffect", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "runicshieldeffect")));
+    public static final Supplier<SoundEvent> RUNIC_SHIELD_CHARGE = SOUND_EVENTS.register("runicshieldcharge", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "runicshieldcharge")));
 
     private TCSounds() {
     }

@@ -21,11 +21,20 @@ public final class TCRechargeHelper {
         if (stack.getItem() == TCItems.TRAVELLER_BOOTS.get()) {
             return ItemTravellerBoots.MAX_CHARGE;
         }
+        if (stack.getItem() == TCItems.VERDANT_HEART.get()
+                || stack.getItem() == TCItems.VERDANT_HEART_LIFE.get()
+                || stack.getItem() == TCItems.VERDANT_HEART_SUSTAIN.get()) {
+            return 200;
+        }
         return 0;
     }
 
     public static boolean canRecharge(ItemStack stack) {
         return getMaxCharge(stack) > 0;
+    }
+
+    public static boolean consumeCharge(ItemStack stack, int amount) {
+        return discharge(stack, amount) >= amount;
     }
 
     public static int getCharge(ItemStack stack) {

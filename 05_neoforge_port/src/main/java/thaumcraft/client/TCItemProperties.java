@@ -34,6 +34,10 @@ public final class TCItemProperties {
 
             ResourceLocation type = ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "type");
             ItemProperties.register(TCItems.PRIMORDIAL_PEARL.get(), type, (stack, level, entity, seed) -> legacyPearlType(stack));
+
+            if (thaumcraft.common.integration.curios.TCCuriosCompat.isLoaded()) {
+                thaumcraft.client.integration.curios.CuriosClientCompat.registerRenderers();
+            }
         });
     }
 
