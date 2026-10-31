@@ -25,6 +25,7 @@ function ConvertTo-RelativeRepoPath([string]$FullPath) {
     return [System.IO.Path]::GetRelativePath($RepoRoot, $FullPath).Replace("\", "/")
 }
 function Read-JsonFileOrNull([string]$Path) {
+    if ([string]::IsNullOrWhiteSpace($Path)) { return $null }
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $null }
     try { return Get-Content -Raw -LiteralPath $Path | ConvertFrom-Json } catch { return $null }
 }
@@ -56,7 +57,13 @@ function Get-ThaumcraftModelPath([string]$Ref) {
     $normalized = Normalize-ModelRef $Ref
     if (-not $normalized.StartsWith("thaumcraft:")) { return $null }
     $relative = $normalized.Substring("thaumcraft:".Length)
-    if (-not ($relative.StartsWith("item/") -or $relative.StartsWith("block/"))) { return $null }
+    if (-not ($relative.StartsWith("item/") -or $relative.StartsWith("block/"))) {
+        $blockCandidate = Join-Path $assetsRoot "models/block/$relative.json"
+        if (Test-Path -LiteralPath $blockCandidate -PathType Leaf) { return $blockCandidate }
+        $itemCandidate = Join-Path $assetsRoot "models/item/$relative.json"
+        if (Test-Path -LiteralPath $itemCandidate -PathType Leaf) { return $itemCandidate }
+        return $null
+    }
     return Join-Path $assetsRoot "models/$relative.json"
 }
 function Normalize-BlockModelRef([string]$Ref) {
@@ -337,7 +344,7 @@ foreach ($entry in @($port.entries | Sort-Object kind, registryId)) {
                 continue
             }
             $modelPath = Get-ThaumcraftModelPath $modelRef
-            $relativePath = if (Test-Path -LiteralPath $modelPath -PathType Leaf) { ConvertTo-RelativeRepoPath $modelPath } else { "assets/thaumcraft/models/$modelRef.json" }
+            $relativePath = if (-not [string]::IsNullOrWhiteSpace($modelPath) -and (Test-Path -LiteralPath $modelPath -PathType Leaf)) { ConvertTo-RelativeRepoPath $modelPath } else { "assets/thaumcraft/models/$modelRef.json" }
             $json = Read-JsonFileOrNull $modelPath
             if ($null -eq $json) {
                 Add-ResultRow $results "block" $entry.registryId "block_model_json" "VISUAL_MODEL_MISSING" "Referenced block model JSON missing or invalid: $modelRef" $relativePath
