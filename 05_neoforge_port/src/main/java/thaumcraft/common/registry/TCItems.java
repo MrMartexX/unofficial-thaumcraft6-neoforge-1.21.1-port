@@ -764,6 +764,8 @@ public final class TCItems {
     public static final Supplier<Item> MIND_SPIDER_SPAWN_EGG = spawnEgg("mind_spider_spawn_egg", TCEntityTypes.MIND_SPIDER, 4996656, 4473924);
 
     public static final Supplier<Item> ELDRITCH_GUARDIAN_SPAWN_EGG = spawnEgg("eldritch_guardian_spawn_egg", TCEntityTypes.ELDRITCH_GUARDIAN, 8421504, 0);
+    public static final Supplier<Item> ELDRITCH_WARDEN_SPAWN_EGG = spawnEgg("eldritch_warden_spawn_egg", TCEntityTypes.ELDRITCH_WARDEN, 6842578, 8421504);
+    public static final Supplier<Item> ELDRITCH_GOLEM_SPAWN_EGG = spawnEgg("eldritch_golem_spawn_egg", TCEntityTypes.ELDRITCH_GOLEM, 6842578, 8947848);
 
     public static final Supplier<Item> CULTIST_KNIGHT_SPAWN_EGG = spawnEgg("cultist_knight_spawn_egg", TCEntityTypes.CULTIST_KNIGHT, 9438728, 128);
 

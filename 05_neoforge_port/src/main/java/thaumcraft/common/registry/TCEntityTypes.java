@@ -49,6 +49,8 @@ import thaumcraft.common.entities.TCGolemDartEntity;
 import thaumcraft.common.entities.TCGolemEntity;
 import thaumcraft.common.entities.TCGrappleEntity;
 import thaumcraft.common.entities.construct.TCTurretCrossbowEntity;
+import thaumcraft.common.entities.boss.TCEldritchGolemEntity;
+import thaumcraft.common.entities.boss.TCEldritchWardenEntity;
 import thaumcraft.common.entities.construct.TCTurretCrossbowAdvancedEntity;
 
 public final class TCEntityTypes {
@@ -398,6 +400,23 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(true)
                     .build(Thaumcraft.MODID + ":turret_advanced"));
 
+    public static final Supplier<EntityType<TCEldritchWardenEntity>> ELDRITCH_WARDEN = ENTITY_TYPES.register("eldritch_warden", () ->
+            EntityType.Builder.<TCEldritchWardenEntity>of(TCEldritchWardenEntity::new, MobCategory.MONSTER)
+                    .sized(1.5F, 3.5F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":eldritch_warden"));
+
+    public static final Supplier<EntityType<TCEldritchGolemEntity>> ELDRITCH_GOLEM = ENTITY_TYPES.register("eldritch_golem", () ->
+            EntityType.Builder.<TCEldritchGolemEntity>of(TCEldritchGolemEntity::new, MobCategory.MONSTER)
+                    .sized(1.75F, 3.5F)
+                    .fireImmune()
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":eldritch_golem"));
+
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
             spec("CultistPortalGreater", "EntityCultistPortalGreater", "cultist_portal_greater", 64, 20, false, "registered_foundation", "Greater portal stage machine, minion/Praetor spawn, bossbar, touch damage and portal renderer foundation; banner/crate world decoration remains item/block gated"),
             spec("CultistPortalLesser", "EntityCultistPortalLesser", "cultist_portal_lesser", 64, 20, false, "registered_foundation", "Lesser cultist portal activation, collision, nearby-cultist budget and minion spawn cadence"),
@@ -419,8 +438,8 @@ public final class TCEntityTypes {
             spec("TurretAdvanced", "EntityTurretCrossbowAdvanced", "turret_advanced", 64, 3, true, "registered_foundation", "Advanced Automated Crossbow entity, targeting filters, GUI menu and renderer"),
             spec("ArcaneBore", "EntityArcaneBore", "arcane_bore", 64, 3, true, "registered_foundation", "Arcane Bore entity, menu, vis mining and renderer foundation"),
             spec("Golem", "EntityThaumcraftGolem", "golem", 64, 3, true, "registered_foundation", "Golem entity, properties, parts, traits, seal tasks, carrying inventory and Placer/Bell interaction"),
-            spec("EldritchWarden", "EntityEldritchWarden", null, 64, 3, true, "defer", "Eldritch boss AI and renderer"),
-            spec("EldritchGolem", "EntityEldritchGolem", null, 64, 3, true, "defer", "Eldritch boss AI and renderer"),
+            spec("EldritchWarden", "EntityEldritchWarden", "eldritch_warden", 64, 3, true, "registered_foundation", "Eldritch Warden boss: titles, dual boss bars, shield regeneration, field frenzy, teleport home, ranged orbs, sonic screech with temporary warp, and full renderer"),
+            spec("EldritchGolem", "EntityEldritchGolem", "eldritch_golem", 64, 3, true, "registered_foundation", "Eldritch Golem boss: ground tremor block crush, phase 2 headless explosion, beam charging, homing GolemOrb barrage, arm swinging attack animation, and full renderer"),
             spec("CultistLeader", "EntityCultistLeader", "cultist_leader", 64, 3, true, "registered_foundation", "Crimson Praetor title, gear placeholder mapping, cultist regen aura, red GolemOrb ranged attack and renderer foundation"),
             spec("TaintacleGiant", "EntityTaintacleGiant", "taintacle_giant", 96, 3, false, "registered_foundation", "Giant Taintacle bossbar, no natural spawn, damage cap/enrage, regeneration, unique pearl drop and renderer foundation"),
             spec("BrainyZombie", "EntityBrainyZombie", "brainy_zombie", 64, 3, true, "registered_foundation", "Angry Zombie attributes, brain loot, scan/aspect identity and legacy overworld natural spawn row"),
@@ -491,6 +510,8 @@ public final class TCEntityTypes {
         event.put(GOLEM.get(), TCGolemEntity.createAttributes().build());
         event.put(TURRET_BASIC.get(), TCTurretCrossbowEntity.createAttributes().build());
         event.put(TURRET_ADVANCED.get(), TCTurretCrossbowAdvancedEntity.createAttributes().build());
+        event.put(ELDRITCH_WARDEN.get(), TCEldritchWardenEntity.createAttributes().build());
+        event.put(ELDRITCH_GOLEM.get(), TCEldritchGolemEntity.createAttributes().build());
     }
 
     private static LegacyEntitySpec spec(

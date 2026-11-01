@@ -144,6 +144,8 @@ neoForge {
             def focusMediumEffectAuditPath = providers.gradleProperty('tcFocusMediumEffectAuditPath').orNull ?: System.getProperty('tc.focusMediumEffectAuditPath')
             def turretBehaviorAuditEnabled = providers.gradleProperty('tcTurretBehaviorAudit').orNull ?: System.getProperty('tc.turretBehaviorAudit')
             def turretBehaviorAuditPath = providers.gradleProperty('tcTurretBehaviorAuditPath').orNull ?: System.getProperty('tc.turretBehaviorAuditPath')
+            def eldritchBossAuditEnabled = providers.gradleProperty('tcEldritchBossAudit').orNull ?: System.getProperty('tc.eldritchBossAudit')
+            def eldritchBossAuditPath = providers.gradleProperty('tcEldritchBossAuditPath').orNull ?: System.getProperty('tc.eldritchBossAuditPath')
             def warpBehaviorAuditEnabled = providers.gradleProperty('tcWarpBehaviorAudit').orNull ?: System.getProperty('tc.warpBehaviorAudit')
             def warpBehaviorAuditPath = providers.gradleProperty('tcWarpBehaviorAuditPath').orNull ?: System.getProperty('tc.warpBehaviorAuditPath')
             def warpEventBehaviorAuditEnabled = providers.gradleProperty('tcWarpEventBehaviorAudit').orNull ?: System.getProperty('tc.warpEventBehaviorAudit')
@@ -338,6 +340,12 @@ neoForge {
             }
             if (turretBehaviorAuditPath != null) {
                 systemProperty 'tc.turretBehaviorAuditPath', turretBehaviorAuditPath
+            }
+            if (eldritchBossAuditEnabled != null) {
+                systemProperty 'tc.eldritchBossAudit', eldritchBossAuditEnabled
+            }
+            if (eldritchBossAuditPath != null) {
+                systemProperty 'tc.eldritchBossAuditPath', eldritchBossAuditPath
             }
             if (warpBehaviorAuditEnabled != null) {
                 systemProperty 'tc.warpBehaviorAudit', warpBehaviorAuditEnabled
