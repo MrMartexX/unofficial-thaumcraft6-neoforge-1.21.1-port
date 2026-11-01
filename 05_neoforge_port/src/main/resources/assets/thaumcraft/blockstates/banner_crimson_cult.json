@@ -1,7 +1,6 @@
 {
     "variants": {
-        "inventory": { "model": "thaumcraft:banner_crimson_cult" }, 
+        "inventory": { "model": "thaumcraft:banner" },
         "normal": { "model": "thaumcraft:banner" }
     }
-
 }
