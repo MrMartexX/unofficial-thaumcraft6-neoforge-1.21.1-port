@@ -24,5 +24,7 @@ public final class TCMenuScreens {
         event.register(TCMenus.PECH.get(), TCPechScreen::new);
         event.register(TCMenus.GOLEM_BUILDER.get(), TCGolemBuilderScreen::new);
         event.register(TCMenus.FOCUS_POUCH.get(), TCFocusPouchScreen::new);
+        event.register(TCMenus.TURRET_BASIC.get(), TCTurretBasicScreen::new);
+        event.register(TCMenus.TURRET_ADVANCED.get(), TCTurretAdvancedScreen::new);
     }
 }

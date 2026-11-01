@@ -1350,13 +1350,16 @@ public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_STABILIZER = STABILI
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_WARDEDJAR = JAR_NORMAL;
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ADVANCEDCROSSBOW = ITEMS.register("advancedcrossbow", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> ADVANCEDCROSSBOW = ITEMS.register("advancedcrossbow", () -> new thaumcraft.common.entities.construct.ItemTurretPlacer(true, new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ADVANCEDCROSSBOW = ADVANCEDCROSSBOW;
 
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANEEAR = ITEMS.register("arcaneear", () -> new Item(new Item.Properties()));
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ARCANESPA = SPA;
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_AUTOMATEDCROSSBOW = ITEMS.register("automatedcrossbow", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> AUTOMATEDCROSSBOW = ITEMS.register("automatedcrossbow", () -> new thaumcraft.common.entities.construct.ItemTurretPlacer(false, new Item.Properties()));
+    public static final Supplier<Item> TURRET_PLACER = ITEMS.register("turret_placer", () -> new thaumcraft.common.entities.construct.ItemTurretPlacer(false, new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_AUTOMATEDCROSSBOW = AUTOMATEDCROSSBOW;
 
     public static final Supplier<Item> CATALOG_PLACEHOLDER_FOCUSPOUCH = ITEMS.register("focuspouch", () -> new Item(new Item.Properties()));
 

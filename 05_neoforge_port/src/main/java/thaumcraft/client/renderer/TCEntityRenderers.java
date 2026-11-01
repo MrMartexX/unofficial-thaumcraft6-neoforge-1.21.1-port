@@ -54,5 +54,7 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.ELDRITCH_GUARDIAN.get(), TCEldritchGuardianRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.ELDRITCH_CRAB.get(), TCEldritchCrabRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.INHABITED_ZOMBIE.get(), TCInhabitedZombieRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.TURRET_BASIC.get(), TCTurretRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.TURRET_ADVANCED.get(), TCTurretRenderer::new);
     }
 }

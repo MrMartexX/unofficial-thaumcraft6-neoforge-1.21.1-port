@@ -48,6 +48,8 @@ import thaumcraft.common.entities.TCFocusmineEntity;
 import thaumcraft.common.entities.TCGolemDartEntity;
 import thaumcraft.common.entities.TCGolemEntity;
 import thaumcraft.common.entities.TCGrappleEntity;
+import thaumcraft.common.entities.construct.TCTurretCrossbowEntity;
+import thaumcraft.common.entities.construct.TCTurretCrossbowAdvancedEntity;
 
 public final class TCEntityTypes {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
@@ -380,6 +382,22 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(true)
                     .build(Thaumcraft.MODID + ":grapple"));
 
+    public static final Supplier<EntityType<TCTurretCrossbowEntity>> TURRET_BASIC = ENTITY_TYPES.register("turret_basic", () ->
+            EntityType.Builder.<TCTurretCrossbowEntity>of(TCTurretCrossbowEntity::new, MobCategory.MISC)
+                    .sized(0.95F, 1.25F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":turret_basic"));
+
+    public static final Supplier<EntityType<TCTurretCrossbowAdvancedEntity>> TURRET_ADVANCED = ENTITY_TYPES.register("turret_advanced", () ->
+            EntityType.Builder.<TCTurretCrossbowAdvancedEntity>of(TCTurretCrossbowAdvancedEntity::new, MobCategory.MISC)
+                    .sized(0.95F, 1.5F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":turret_advanced"));
+
     private static final List<LegacyEntitySpec> LEGACY_ENTITY_SPECS = List.of(
             spec("CultistPortalGreater", "EntityCultistPortalGreater", "cultist_portal_greater", 64, 20, false, "registered_foundation", "Greater portal stage machine, minion/Praetor spawn, bossbar, touch damage and portal renderer foundation; banner/crate world decoration remains item/block gated"),
             spec("CultistPortalLesser", "EntityCultistPortalLesser", "cultist_portal_lesser", 64, 20, false, "registered_foundation", "Lesser cultist portal activation, collision, nearby-cultist budget and minion spawn cadence"),
@@ -397,8 +415,8 @@ public final class TCEntityTypes {
             spec("FocusProjectile", "EntityFocusProjectile", "focus_projectile", 64, 20, true, "registered_foundation", "Focus/caster projectile foundation"),
             spec("FocusCloud", "EntityFocusCloud", "focus_cloud", 64, 20, true, "registered_foundation", "Rift-owned ROOT->CLOUD->FLUX cloud execution; broad caster cloud authoring remains focus subsystem work"),
             spec("Focusmine", "EntityFocusMine", "focusmine", 64, 20, true, "registered_foundation", "Focus/caster mine foundation"),
-            spec("TurretBasic", "EntityTurretCrossbow", null, 64, 3, true, "defer", "Construct/turret AI and renderer"),
-            spec("TurretAdvanced", "EntityTurretCrossbowAdvanced", null, 64, 3, true, "defer", "Construct/turret AI and renderer"),
+            spec("TurretBasic", "EntityTurretCrossbow", "turret_basic", 64, 3, true, "registered_foundation", "Automated Crossbow entity, ammo inventory, targeting and renderer"),
+            spec("TurretAdvanced", "EntityTurretCrossbowAdvanced", "turret_advanced", 64, 3, true, "registered_foundation", "Advanced Automated Crossbow entity, targeting filters, GUI menu and renderer"),
             spec("ArcaneBore", "EntityArcaneBore", "arcane_bore", 64, 3, true, "registered_foundation", "Arcane Bore entity, menu, vis mining and renderer foundation"),
             spec("Golem", "EntityThaumcraftGolem", "golem", 64, 3, true, "registered_foundation", "Golem entity, properties, parts, traits, seal tasks, carrying inventory and Placer/Bell interaction"),
             spec("EldritchWarden", "EntityEldritchWarden", null, 64, 3, true, "defer", "Eldritch boss AI and renderer"),
@@ -471,6 +489,8 @@ public final class TCEntityTypes {
         event.put(ELDRITCH_CRAB.get(), TCEldritchCrabEntity.createAttributes().build());
         event.put(INHABITED_ZOMBIE.get(), TCInhabitedZombieEntity.createAttributes().build());
         event.put(GOLEM.get(), TCGolemEntity.createAttributes().build());
+        event.put(TURRET_BASIC.get(), TCTurretCrossbowEntity.createAttributes().build());
+        event.put(TURRET_ADVANCED.get(), TCTurretCrossbowAdvancedEntity.createAttributes().build());
     }
 
     private static LegacyEntitySpec spec(

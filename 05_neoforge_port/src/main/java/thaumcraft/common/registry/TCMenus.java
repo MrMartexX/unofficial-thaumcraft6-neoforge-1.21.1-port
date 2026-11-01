@@ -11,6 +11,8 @@ import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
 import thaumcraft.common.menu.TCArcaneBoreMenu;
 import thaumcraft.common.menu.TCFocalManipulatorMenu;
 import thaumcraft.common.menu.TCFocusPouchMenu;
+import thaumcraft.common.menu.TCTurretBasicMenu;
+import thaumcraft.common.menu.TCTurretAdvancedMenu;
 import thaumcraft.common.menu.TCGolemBuilderMenu;
 import thaumcraft.common.menu.TCHandMirrorMenu;
 import thaumcraft.common.menu.TCPechMenu;
@@ -44,6 +46,10 @@ public final class TCMenus {
             MENUS.register("golem_builder", () -> new MenuType<>(TCGolemBuilderMenu::new, FeatureFlags.VANILLA_SET));
     public static final Supplier<MenuType<TCFocusPouchMenu>> FOCUS_POUCH =
             MENUS.register("focus_pouch", () -> IMenuTypeExtension.create(TCFocusPouchMenu::new));
+    public static final Supplier<MenuType<TCTurretBasicMenu>> TURRET_BASIC =
+            MENUS.register("turret_basic", () -> IMenuTypeExtension.create(TCTurretBasicMenu::new));
+    public static final Supplier<MenuType<TCTurretAdvancedMenu>> TURRET_ADVANCED =
+            MENUS.register("turret_advanced", () -> IMenuTypeExtension.create(TCTurretAdvancedMenu::new));
 
     private TCMenus() {
     }
