@@ -7,8 +7,8 @@ Source of Truth: `Thaumcraft-6-Source-Code-master` (1.12.2) | Target: `05_neofor
 
 | Subsystem Domain | Metric | Port Count | Legacy Target | Parity % | Status |
 |---|---|---:|---:|---:|---|
-| **1. Registry (Items & Blocks)** | Registered IDs | 661 | 677 | 97.6% | GAPS |
-| | Real Custom Classes | 591 | 677 | 87.3% | IN PROGRESS |
+| **1. Registry (Items & Blocks)** | Registered IDs | 662 | 677 | 97.8% | GAPS |
+| | Real Custom Classes | 592 | 677 | 87.4% | IN PROGRESS |
 | | Visual Models & Blockstates | 668 | 677 | 98.7% | READY |
 | **2. Entities (Mobs & Bosses)** | Registered Entity Types | 43 | 43 | 100.0% | OK |
 | **3. Mob Effects & Potions** | Custom Status Effects | 9 | 9 | 100.0% | OK |
@@ -20,7 +20,7 @@ Source of Truth: `Thaumcraft-6-Source-Code-master` (1.12.2) | Target: `05_neofor
 | | Infusion Runic Recipes | 40 | 40 | 100.0% | OK |
 | | Container Remainder Safety | 356 / 356 | 100% | 100.0% | OK |
 | **7. Research Progression** | Thaumonomicon Entries | 148 | 148 | 100.0% | OK |
-| **8. Loot & Drops** | Loot Tables Scanned | 106 | 106 | 100.0% | OK |
+| **8. Loot & Drops** | Loot Tables Scanned | 107 | 107 | 100.0% | OK |
 | **9. Runtime Server Contracts** | Dedicated Server Verification | 28 / 28 | 28 | 100.0% | OK |
 
 ---
@@ -77,7 +77,7 @@ Source of Truth: `Thaumcraft-6-Source-Code-master` (1.12.2) | Target: `05_neofor
 
 | Type | Total IDs | Custom Real Class | Generic Placeholder | Missing |
 |---|---:|---:|---:|---:|
-| Blocks | 179 | 153 | 21 | 5 |
+| Blocks | 179 | 154 | 21 | 4 |
 | Items | 498 | 438 | 49 | 11 |
 
 ### 3. Entities Breakdown
