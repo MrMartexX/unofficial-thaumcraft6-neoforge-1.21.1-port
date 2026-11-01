@@ -28,6 +28,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import thaumcraft.common.items.casters.TCFocusCastExecutor;
 import thaumcraft.common.lib.fx.TCFXDispatcher;
 import thaumcraft.common.registry.TCEntityTypes;
 
@@ -59,6 +60,8 @@ public class TCFocusCloudEntity extends Entity {
     private LivingEntity owner;
     private UUID ownerUuid;
     private String effectKey = LEGACY_EFFECT_KEY;
+    private String remainingNodes = "";
+    private float power = LEGACY_CLOUD_POWER_MULTIPLIER;
     private int cloudExecutions;
     private int entityHits;
     private int blockHits;
@@ -80,6 +83,16 @@ public class TCFocusCloudEntity extends Entity {
         setDurationSeconds(durationSeconds);
         setEffectColor(LEGACY_FLUX_COLOR);
         effectKey = LEGACY_EFFECT_KEY;
+    }
+
+    public TCFocusCloudEntity(Level level, Vec3 source, LivingEntity owner, float radius, int durationSeconds, String remainingNodes, float power, int color) {
+        this(level, source.x, source.y, source.z);
+        setOwner(owner);
+        setRadius(radius);
+        setDurationSeconds(durationSeconds);
+        setEffectColor(color);
+        this.remainingNodes = remainingNodes != null ? remainingNodes : "";
+        this.power = power;
     }
 
     @Override
@@ -126,6 +139,8 @@ public class TCFocusCloudEntity extends Entity {
         tag.putFloat("Radius", getRadius());
         tag.putString("Effect", effectKey);
         tag.putInt("EffectColor", getEffectColor());
+        tag.putString("remaining_nodes", remainingNodes != null ? remainingNodes : "");
+        tag.putFloat("power", power);
         if (ownerUuid != null) {
             tag.putUUID("OwnerUUID", ownerUuid);
         }
@@ -138,6 +153,8 @@ public class TCFocusCloudEntity extends Entity {
         setRadius(tag.contains("Radius") ? tag.getFloat("Radius") : 0.5F);
         effectKey = tag.contains("Effect") ? tag.getString("Effect") : LEGACY_EFFECT_KEY;
         setEffectColor(tag.contains("EffectColor") ? tag.getInt("EffectColor") : LEGACY_FLUX_COLOR);
+        remainingNodes = tag.contains("remaining_nodes") ? tag.getString("remaining_nodes") : "";
+        power = tag.contains("power") ? tag.getFloat("power") : LEGACY_CLOUD_POWER_MULTIPLIER;
         ownerUuid = tag.hasUUID("OwnerUUID") ? tag.getUUID("OwnerUUID") : null;
         owner = null;
     }
@@ -288,7 +305,14 @@ public class TCFocusCloudEntity extends Entity {
                 continue;
             }
             COOLDOWN_MAP.put(key, now + LEGACY_TARGET_COOLDOWN_MS);
-            applyFluxEffect(living);
+            if (remainingNodes != null && !remainingNodes.isBlank()) {
+                LivingEntity livingOwner = getOwner();
+                TCFocusCastExecutor.executeRemainingNodesAt(level(), livingOwner, new net.minecraft.world.phys.EntityHitResult(living), remainingNodes, power);
+                cloudExecutions++;
+                entityHits++;
+            } else {
+                applyFluxEffect(living);
+            }
         }
 
         int blockSamples = Math.max(0, (int) radius);

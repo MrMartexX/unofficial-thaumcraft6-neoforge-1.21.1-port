@@ -23,5 +23,6 @@ public final class TCMenuScreens {
         event.register(TCMenus.ARCANE_BORE.get(), TCArcaneBoreScreen::new);
         event.register(TCMenus.PECH.get(), TCPechScreen::new);
         event.register(TCMenus.GOLEM_BUILDER.get(), TCGolemBuilderScreen::new);
+        event.register(TCMenus.FOCUS_POUCH.get(), TCFocusPouchScreen::new);
     }
 }

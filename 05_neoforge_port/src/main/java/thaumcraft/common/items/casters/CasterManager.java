@@ -214,6 +214,25 @@ public final class CasterManager {
         return Math.max(0, gear.getVisDiscount(stack, player));
     }
 
+    public static List<ItemStack> findAvailableFoci(Player player) {
+        List<ItemStack> list = new ArrayList<>();
+        if (player == null) {
+            return list;
+        }
+        for (ItemStack s : player.getInventory().items) {
+            if (s.getItem() instanceof ItemFocus) {
+                list.add(s);
+            } else if (s.getItem() instanceof ItemFocusPouch) {
+                for (ItemStack fs : ItemFocusPouch.getInventory(s)) {
+                    if (!fs.isEmpty() && fs.getItem() instanceof ItemFocus) {
+                        list.add(fs);
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
     public interface VisDiscountStackProvider {
         Iterable<ItemStack> getDiscountStacks(Player player);
     }

@@ -251,6 +251,10 @@ public final class TCBlockEntities {
                             (pos, state) -> new TCLegacySmelterEndpointBlockEntity(TCBlockEntities.SMELTER_VOID.get(), pos, state, TCLegacySmelterEndpoint.VOID),
                             TCBlocks.SMELTER_VOID.get()).build(null));
 
+    public static final Supplier<BlockEntityType<thaumcraft.common.tiles.misc.TCHoleBlockEntity>> HOLE =
+            BLOCK_ENTITY_TYPES.register("hole", () ->
+                    BlockEntityType.Builder.of(thaumcraft.common.tiles.misc.TCHoleBlockEntity::new, TCBlocks.HOLE.get()).build(null));
+
     public static TCLegacyTubeBlockEntity createTubeBlockEntity(TCLegacyTubeVariant variant, BlockPos pos, BlockState state) {
         return switch (variant) {
             case TUBE -> new TCLegacyTubeBlockEntity(TUBE.get(), pos, state, variant);

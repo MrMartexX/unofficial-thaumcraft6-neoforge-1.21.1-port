@@ -559,6 +559,13 @@ public final class TCBlocks {
     public static final Supplier<Block> SLAB_GREATWOOD = BLOCKS.register("slab_greatwood", () -> woodSlabBlock(1.2F, 2.0F));
 
     public static final Supplier<Block> SLAB_SILVERWOOD = BLOCKS.register("slab_silverwood", () -> woodSlabBlock(1.0F, 2.0F));
+    public static final Supplier<Block> HOLE = BLOCKS.register("hole", () -> new thaumcraft.common.blocks.misc.TCHoleBlock(
+            net.minecraft.world.level.block.state.BlockBehaviour.Properties.of()
+                    .strength(-1.0F, 3600000.0F)
+                    .noOcclusion()
+                    .lightLevel(state -> 11)
+                    .noLootTable()
+    ));
 
 
 

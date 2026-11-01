@@ -207,7 +207,7 @@ public final class TCFocusCastExecutionAudit {
         return TCFocusPackageHelper.buildPackage(List.of(
                 new TCFocusPackageHelper.NodeInstance(0, "ROOT", -1, List.of(1), Map.of()),
                 new TCFocusPackageHelper.NodeInstance(1, "thaumcraft.TOUCH", 0, List.of(2), Map.of()),
-                new TCFocusPackageHelper.NodeInstance(2, "thaumcraft.FROST", 1, List.of(), Map.of())
+                new TCFocusPackageHelper.NodeInstance(2, "thaumcraft.INVALID", 1, List.of(), Map.of())
         ));
     }
 
