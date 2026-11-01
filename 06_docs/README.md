@@ -11,6 +11,7 @@ This folder is the main documentation area for the Thaumcraft 6 -> NeoForge 1.21
 5. [Porting order](migration/porting_order.md) - staged roadmap.
 6. [Documentation index](documentation_index.md) - detailed folder map and cleanup rules.
 7. [Legacy FX engine notes](rendering/legacy_fx_engine.md) - legacy FX/rendering notes.
+8. [Development workflow](development_workflow_chatgpt_aih.md) - ChatGPT, AIH, GitHub, and in-game verification agreement.
 
 ## Core migration references
 
