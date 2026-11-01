@@ -102,6 +102,9 @@ import thaumcraft.common.warp.TCWarpNetwork;
 import thaumcraft.common.world.aura.TCAuraDebugCommands;
 import thaumcraft.common.world.aura.TCAuraEvents;
 import thaumcraft.common.world.aura.TCAuraNetwork;
+import thaumcraft.common.golems.TCGolemEvents;
+import thaumcraft.common.golems.TCGolemBuilderNetwork;
+import thaumcraft.common.golems.TCGolemBehaviorAuditExporter;
 
 @Mod(Thaumcraft.MODID)
 public final class Thaumcraft {
@@ -124,6 +127,7 @@ public final class Thaumcraft {
         TCRecipes.RECIPE_SERIALIZERS.register(modEventBus);
         TCSounds.SOUND_EVENTS.register(modEventBus);
         TCCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
+        modEventBus.addListener(this::onCommonSetup);
         modEventBus.addListener(TCEntityTypes::onEntityAttributeCreation);
         modEventBus.addListener(TCEntitySpawnRules::onRegisterSpawnPlacements);
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -145,6 +149,7 @@ public final class Thaumcraft {
         modEventBus.addListener(TCResearchTableNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCThaumonomiconNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCFocalManipulatorNetwork::onRegisterPayloadHandlers);
+        modEventBus.addListener(TCGolemBuilderNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCEntityFXNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCEssentiaCapabilities::register);
         modEventBus.addListener(TCMachineCapabilities::register);
@@ -159,6 +164,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCAspectReloadValidator::onTagsUpdated);
         NeoForge.EVENT_BUS.addListener(TCAspectDumpExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCAuraEvents::onServerTick);
+        NeoForge.EVENT_BUS.addListener(TCGolemEvents::onServerTick);
         NeoForge.EVENT_BUS.addListener(TCAuraEvents::onChunkLoad);
         NeoForge.EVENT_BUS.addListener(TCAuraEvents::onChunkUnload);
         NeoForge.EVENT_BUS.addListener(TCAuraDebugCommands::onRegisterCommands);
@@ -200,6 +206,7 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCTaintMobBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFallingTaintBlockerAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCItemEquipmentBehaviorAuditExporter::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCGolemBehaviorAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCasterCoreAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFocusCastExecutionAuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCWarpBehaviorAuditExporter::onServerStarted);
@@ -225,5 +232,12 @@ public final class Thaumcraft {
         TCWarpItemRegistry.bootstrap();
 
         LOGGER.info("Thaumcraft NeoForge bootstrap initialized.");
+    }
+
+    private void onCommonSetup(net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            thaumcraft.common.golems.GolemProperties.initParts();
+            thaumcraft.common.golems.seals.SealHandler.initSeals();
+        });
     }
 }

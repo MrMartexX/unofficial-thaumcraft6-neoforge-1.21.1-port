@@ -2,6 +2,7 @@ package thaumcraft.common.registry;
 
 import java.util.function.Supplier;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -9,6 +10,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.menu.TCArcaneWorkbenchMenu;
 import thaumcraft.common.menu.TCArcaneBoreMenu;
 import thaumcraft.common.menu.TCFocalManipulatorMenu;
+import thaumcraft.common.menu.TCGolemBuilderMenu;
 import thaumcraft.common.menu.TCHandMirrorMenu;
 import thaumcraft.common.menu.TCPechMenu;
 import thaumcraft.common.menu.TCResearchTableMenu;
@@ -37,6 +39,8 @@ public final class TCMenus {
             MENUS.register("arcane_bore", () -> IMenuTypeExtension.create(TCArcaneBoreMenu::new));
     public static final Supplier<MenuType<TCPechMenu>> PECH =
             MENUS.register("pech", () -> IMenuTypeExtension.create(TCPechMenu::new));
+    public static final Supplier<MenuType<TCGolemBuilderMenu>> GOLEM_BUILDER =
+            MENUS.register("golem_builder", () -> new MenuType<>(TCGolemBuilderMenu::new, FeatureFlags.VANILLA_SET));
 
     private TCMenus() {
     }

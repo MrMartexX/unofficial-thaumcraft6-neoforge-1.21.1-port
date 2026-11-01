@@ -46,6 +46,7 @@ import thaumcraft.common.entities.TCSpellbatEntity;
 import thaumcraft.common.entities.TCFocusProjectileEntity;
 import thaumcraft.common.entities.TCFocusmineEntity;
 import thaumcraft.common.entities.TCGolemDartEntity;
+import thaumcraft.common.entities.TCGolemEntity;
 import thaumcraft.common.entities.TCGrappleEntity;
 
 public final class TCEntityTypes {
@@ -363,6 +364,14 @@ public final class TCEntityTypes {
                     .setShouldReceiveVelocityUpdates(false)
                     .build(Thaumcraft.MODID + ":golem_dart"));
 
+    public static final Supplier<EntityType<TCGolemEntity>> GOLEM = ENTITY_TYPES.register("golem", () ->
+            EntityType.Builder.<TCGolemEntity>of(TCGolemEntity::new, MobCategory.MISC)
+                    .sized(0.4F, 0.9F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(3)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build(Thaumcraft.MODID + ":golem"));
+
     public static final Supplier<EntityType<TCGrappleEntity>> GRAPPLE = ENTITY_TYPES.register("grapple", () ->
             EntityType.Builder.<TCGrappleEntity>of(TCGrappleEntity::new, MobCategory.MISC)
                     .sized(0.25F, 0.25F)
@@ -391,7 +400,7 @@ public final class TCEntityTypes {
             spec("TurretBasic", "EntityTurretCrossbow", null, 64, 3, true, "defer", "Construct/turret AI and renderer"),
             spec("TurretAdvanced", "EntityTurretCrossbowAdvanced", null, 64, 3, true, "defer", "Construct/turret AI and renderer"),
             spec("ArcaneBore", "EntityArcaneBore", "arcane_bore", 64, 3, true, "registered_foundation", "Arcane Bore entity, menu, vis mining and renderer foundation"),
-            spec("Golem", "EntityThaumcraftGolem", null, 64, 3, true, "defer", "Golem material/part/AI/seal subsystem"),
+            spec("Golem", "EntityThaumcraftGolem", "golem", 64, 3, true, "registered_foundation", "Golem entity, properties, parts, traits, seal tasks, carrying inventory and Placer/Bell interaction"),
             spec("EldritchWarden", "EntityEldritchWarden", null, 64, 3, true, "defer", "Eldritch boss AI and renderer"),
             spec("EldritchGolem", "EntityEldritchGolem", null, 64, 3, true, "defer", "Eldritch boss AI and renderer"),
             spec("CultistLeader", "EntityCultistLeader", "cultist_leader", 64, 3, true, "registered_foundation", "Crimson Praetor title, gear placeholder mapping, cultist regen aura, red GolemOrb ranged attack and renderer foundation"),
@@ -461,6 +470,7 @@ public final class TCEntityTypes {
         event.put(ELDRITCH_GUARDIAN.get(), TCEldritchGuardianEntity.createAttributes().build());
         event.put(ELDRITCH_CRAB.get(), TCEldritchCrabEntity.createAttributes().build());
         event.put(INHABITED_ZOMBIE.get(), TCInhabitedZombieEntity.createAttributes().build());
+        event.put(GOLEM.get(), TCGolemEntity.createAttributes().build());
     }
 
     private static LegacyEntitySpec spec(

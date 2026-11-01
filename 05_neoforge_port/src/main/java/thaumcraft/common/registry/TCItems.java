@@ -37,6 +37,9 @@ import thaumcraft.common.items.curios.ItemCuriosityBand;
 import thaumcraft.common.items.curios.ItemVerdantHeart;
 import thaumcraft.common.items.curios.ItemVoidseerPearl;
 import thaumcraft.common.items.armor.ItemVisDiscountGear;
+import thaumcraft.common.golems.ItemGolemBell;
+import thaumcraft.common.golems.ItemGolemPlacer;
+import thaumcraft.common.golems.seals.ItemSealPlacer;
 
 
 import java.util.function.Supplier;
@@ -605,41 +608,43 @@ public final class TCItems {
 
     public static final Supplier<Item> JAR_LABEL = ITEMS.register("jar_label", () -> new TCJarLabelItem(false));
 
-    public static final Supplier<Item> GOLEM_BELL = simpleItem("golem_bell");
+    public static final Supplier<Item> GOLEM_PLACER = ITEMS.register("golem", () -> new ItemGolemPlacer(new Item.Properties().stacksTo(1)));
 
-    public static final Supplier<Item> SEAL_PICKUP = simpleItem("seal_pickup");
+    public static final Supplier<Item> GOLEM_BELL = ITEMS.register("golem_bell", () -> new ItemGolemBell(new Item.Properties().stacksTo(1)));
 
-    public static final Supplier<Item> SEAL_PICKUP_ADVANCED = simpleItem("seal_pickup_advanced");
+    public static final Supplier<Item> SEAL_PICKUP = ITEMS.register("seal_pickup", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:pickup"));
 
-    public static final Supplier<Item> SEAL_FILL = simpleItem("seal_fill");
+    public static final Supplier<Item> SEAL_PICKUP_ADVANCED = ITEMS.register("seal_pickup_advanced", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:pickup_advanced"));
 
-    public static final Supplier<Item> SEAL_FILL_ADVANCED = simpleItem("seal_fill_advanced");
+    public static final Supplier<Item> SEAL_FILL = ITEMS.register("seal_fill", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:fill"));
 
-    public static final Supplier<Item> SEAL_EMPTY = simpleItem("seal_empty");
+    public static final Supplier<Item> SEAL_FILL_ADVANCED = ITEMS.register("seal_fill_advanced", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:fill_advanced"));
 
-    public static final Supplier<Item> SEAL_EMPTY_ADVANCED = simpleItem("seal_empty_advanced");
+    public static final Supplier<Item> SEAL_EMPTY = ITEMS.register("seal_empty", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:empty"));
 
-    public static final Supplier<Item> SEAL_GUARD = simpleItem("seal_guard");
+    public static final Supplier<Item> SEAL_EMPTY_ADVANCED = ITEMS.register("seal_empty_advanced", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:empty_advanced"));
 
-    public static final Supplier<Item> SEAL_GUARD_ADVANCED = simpleItem("seal_guard_advanced");
+    public static final Supplier<Item> SEAL_GUARD = ITEMS.register("seal_guard", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:guard"));
 
-    public static final Supplier<Item> SEAL_BREAKER = simpleItem("seal_breaker");
+    public static final Supplier<Item> SEAL_GUARD_ADVANCED = ITEMS.register("seal_guard_advanced", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:guard_advanced"));
 
-    public static final Supplier<Item> SEAL_BREAKER_ADVANCED = simpleItem("seal_breaker_advanced");
+    public static final Supplier<Item> SEAL_BREAKER = ITEMS.register("seal_breaker", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:breaker"));
 
-    public static final Supplier<Item> SEAL_LUMBER = simpleItem("seal_lumber");
+    public static final Supplier<Item> SEAL_BREAKER_ADVANCED = ITEMS.register("seal_breaker_advanced", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:breaker_advanced"));
 
-    public static final Supplier<Item> SEAL_PROVIDER = simpleItem("seal_provider");
+    public static final Supplier<Item> SEAL_LUMBER = ITEMS.register("seal_lumber", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:lumber"));
 
-    public static final Supplier<Item> SEAL_STOCK = simpleItem("seal_stock");
+    public static final Supplier<Item> SEAL_PROVIDER = ITEMS.register("seal_provider", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:provider"));
 
-    public static final Supplier<Item> SEAL_USE = simpleItem("seal_use");
+    public static final Supplier<Item> SEAL_STOCK = ITEMS.register("seal_stock", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:stock"));
+
+    public static final Supplier<Item> SEAL_USE = ITEMS.register("seal_use", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:use"));
 
     public static final Supplier<BlockItem> JAR_BRAIN = ITEMS.register("jar_brain", () -> new TCBrainJarBlockItem(TCBlocks.JAR_BRAIN.get(), new Item.Properties()));
 
-    public static final Supplier<Item> SEAL_BUTCHER = simpleItem("seal_butcher");
+    public static final Supplier<Item> SEAL_BUTCHER = ITEMS.register("seal_butcher", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:butcher"));
 
-    public static final Supplier<Item> SEAL_HARVEST = simpleItem("seal_harvest");
+    public static final Supplier<Item> SEAL_HARVEST = ITEMS.register("seal_harvest", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:harvest"));
 
     public static final Supplier<Item> TRAVELLER_BOOTS = ITEMS.register("traveller_boots", ItemTravellerBoots::new);
 

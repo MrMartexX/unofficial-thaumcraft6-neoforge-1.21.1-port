@@ -19,6 +19,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.tiles.crafting.TCArcaneWorkbenchBlockEntity;
 import thaumcraft.common.tiles.crafting.TCCrucibleBlockEntity;
+import thaumcraft.common.tiles.crafting.TCGolemBuilderBlockEntity;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
 import thaumcraft.common.tiles.crafting.TCFocalManipulatorBlockEntity;
@@ -75,6 +76,9 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<TCFocalManipulatorBlockEntity>> FOCAL_MANIPULATOR =
             BLOCK_ENTITY_TYPES.register("wand_workbench", () ->
                     BlockEntityType.Builder.of(TCFocalManipulatorBlockEntity::new, TCBlocks.WAND_WORKBENCH.get()).build(null));
+    public static final Supplier<BlockEntityType<TCGolemBuilderBlockEntity>> GOLEM_BUILDER =
+            BLOCK_ENTITY_TYPES.register("golem_builder", () ->
+                    BlockEntityType.Builder.of(TCGolemBuilderBlockEntity::new, TCBlocks.GOLEM_BUILDER.get()).build(null));
     public static final Supplier<BlockEntityType<TCCrucibleBlockEntity>> CRUCIBLE =
             BLOCK_ENTITY_TYPES.register("crucible", () ->
                     BlockEntityType.Builder.of(TCCrucibleBlockEntity::new, TCBlocks.CRUCIBLE.get()).build(null));

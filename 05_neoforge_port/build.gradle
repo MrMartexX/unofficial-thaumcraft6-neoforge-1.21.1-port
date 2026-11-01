@@ -160,6 +160,8 @@ neoForge {
             def fallingTaintBlockerAuditPath = providers.gradleProperty('tcFallingTaintBlockerAuditPath').orNull ?: System.getProperty('tc.fallingTaintBlockerAuditPath')
             def minimalGameTestFixtureEnabled = providers.gradleProperty('tcMinimalGameTestFixture').orNull ?: System.getProperty('tc.minimalGameTestFixture')
             def minimalGameTestFixturePath = providers.gradleProperty('tcMinimalGameTestFixturePath').orNull ?: System.getProperty('tc.minimalGameTestFixturePath')
+            def golemBehaviorAuditEnabled = providers.gradleProperty('tcGolemBehaviorAudit').orNull ?: System.getProperty('tc.golemBehaviorAudit')
+            def golemBehaviorAuditPath = providers.gradleProperty('tcGolemBehaviorAuditPath').orNull ?: System.getProperty('tc.golemBehaviorAuditPath')
             def completeParityMatrixAuditEnabled = providers.gradleProperty('tcCompleteParityMatrixAudit').orNull ?: System.getProperty('tc.completeParityMatrixAudit')
             def completeParityMatrixAuditPath = providers.gradleProperty('tcCompleteParityMatrixAuditPath').orNull ?: System.getProperty('tc.completeParityMatrixAuditPath')
             if (aspectDumpEnabled != null) {
@@ -380,6 +382,12 @@ neoForge {
             }
             if (minimalGameTestFixturePath != null) {
                 systemProperty 'tc.minimalGameTestFixturePath', minimalGameTestFixturePath
+            }
+            if (golemBehaviorAuditEnabled != null) {
+                systemProperty 'tc.golemBehaviorAudit', golemBehaviorAuditEnabled
+            }
+            if (golemBehaviorAuditPath != null) {
+                systemProperty 'tc.golemBehaviorAuditPath', golemBehaviorAuditPath
             }
             if (completeParityMatrixAuditEnabled != null) {
                 systemProperty 'tc.completeParityMatrixAudit', completeParityMatrixAuditEnabled

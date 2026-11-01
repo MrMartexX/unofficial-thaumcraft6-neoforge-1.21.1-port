@@ -22,5 +22,6 @@ public final class TCBlockEntityRenderers {
         event.registerBlockEntityRenderer(TCBlockEntities.THAUMATORIUM.get(), TCThaumatoriumRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.WARDED_JAR.get(), TCWardedJarRenderer::new);
         event.registerBlockEntityRenderer(TCBlockEntities.JAR_VOID.get(), TCWardedJarRenderer::new);
+        event.registerBlockEntityRenderer(TCBlockEntities.GOLEM_BUILDER.get(), TCGolemBuilderRenderer::new);
     }
 }
