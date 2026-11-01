@@ -106,6 +106,8 @@ import thaumcraft.common.blocks.misc.TCLiquidDeathBlock;
 
 import thaumcraft.common.blocks.misc.TCPurifyingFluidBlock;
 
+import thaumcraft.common.blocks.misc.TCFleshBlock;
+
 import thaumcraft.common.blocks.world.taint.TCFluxGooBlock;
 
 import thaumcraft.common.blocks.world.taint.TCTaintFibreBlock;
@@ -501,6 +503,8 @@ public final class TCBlocks {
     public static final Supplier<TCPurifyingFluidBlock> PURIFYING_FLUID = BLOCKS.register("purifying_fluid", () -> purifyingFluidBlock());
 
     public static final Supplier<Block> FLUX_GOO = BLOCKS.register("flux_goo", () -> fluxGooBlock());
+
+    public static final Supplier<Block> FLESH_BLOCK = BLOCKS.register("flesh_block", () -> new TCFleshBlock());
 
     public static final Supplier<Block> TAINT_FIBRE = BLOCKS.register("taint_fibre", () -> taintFibreBlock());
 

@@ -522,7 +522,7 @@ public final class TCItems {
 
     public static final Supplier<Item> SANE_SOAP = ITEMS.register("sane_soap", ItemSanitySoap::new);
 
-    public static final Supplier<Item> FLESH_BLOCK = simpleItem("flesh_block");
+    public static final Supplier<BlockItem> FLESH_BLOCK = blockItem("flesh_block", TCBlocks.FLESH_BLOCK);
 
     public static final Supplier<Item> CURIO_RITES = ITEMS.register("curio_rites", ItemCurioRites::new);
 
