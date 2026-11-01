@@ -53,9 +53,8 @@ Source of Truth: `Thaumcraft-6-Source-Code-master` (1.12.2) | Target: `05_neofor
 - **Status**: **RESOLVED** - Alembic capacity is aligned to exactly 128 essentia.
 
 ### 6. [P2 Entities] Missing Entity Types in Port
-- **Missing Entities (10)**: None (100% matched)
-- **Action**: Pending registration in entity porting milestone.
-- **Action**: Register remaining boss and construct entities.
+- **Missing Entities (0)**: None (100% matched)
+- **Status**: **RESOLVED** - All legacy entities registered and ported.
 
 ---
 
