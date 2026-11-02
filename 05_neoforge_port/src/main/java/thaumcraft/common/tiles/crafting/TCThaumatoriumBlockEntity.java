@@ -45,6 +45,7 @@ import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.blocks.crafting.TCThaumatoriumBlock;
+import thaumcraft.common.blocks.devices.TCBrainBoxBlock;
 import thaumcraft.common.blocks.misc.TCNitorBlock;
 import thaumcraft.common.crafting.crucible.TCCrucibleAspectCost;
 import thaumcraft.common.crafting.crucible.TCCrucibleRecipe;
@@ -135,11 +136,20 @@ public class TCThaumatoriumBlockEntity extends BlockEntity implements WorldlyCon
     }
 
     public void selectRecipeForValidation(ResourceLocation recipeId, String playerName) {
+        selectRecipesForValidation(recipeId == null ? List.of() : List.of(recipeId), playerName);
+    }
+
+    public void selectRecipesForValidation(List<ResourceLocation> recipeIds, String playerName) {
         selectedRecipes.clear();
         selectedPlayers.clear();
-        if (recipeId != null) {
+        for (ResourceLocation recipeId : recipeIds) {
+            if (recipeId == null) {
+                continue;
+            }
             selectedRecipes.add(recipeId);
             selectedPlayers.add(playerName == null ? "" : playerName);
+        }
+        if (!selectedRecipes.isEmpty()) {
             currentCraft = 0;
         } else {
             currentCraft = -1;
@@ -438,20 +448,28 @@ public class TCThaumatoriumBlockEntity extends BlockEntity implements WorldlyCon
                     continue;
                 }
                 BlockState state = level.getBlockState(origin.relative(direction));
-                if (state.is(TCBlocks.GOLEM_BUILDER.get())) {
+                if (state.is(TCBlocks.BRAIN_BOX.get())
+                        && state.getValue(TCBrainBoxBlock.FACING) == direction.getOpposite()) {
                     next += MNEMONIC_MATRIX_BONUS;
                 }
             }
         }
-        maxRecipes = Math.max(BASE_MAX_RECIPES, next);
+        next = Math.max(BASE_MAX_RECIPES, next);
+        boolean changed = maxRecipes != next;
+        maxRecipes = next;
         while (selectedRecipes.size() > maxRecipes) {
             selectedRecipes.remove(selectedRecipes.size() - 1);
             if (!selectedPlayers.isEmpty()) {
                 selectedPlayers.remove(selectedPlayers.size() - 1);
             }
+            changed = true;
         }
         if (currentCraft >= selectedRecipes.size()) {
             currentCraft = -1;
+            changed = true;
+        }
+        if (changed) {
+            markChangedAndSync();
         }
     }
 

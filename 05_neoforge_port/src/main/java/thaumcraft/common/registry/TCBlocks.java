@@ -3,6 +3,7 @@ package thaumcraft.common.registry;
 import thaumcraft.common.blocks.crafting.TCPatternCrafterBlock;
 import thaumcraft.common.blocks.devices.TCCondenserBlock;
 import thaumcraft.common.blocks.devices.TCCondenserLatticeBlock;
+import thaumcraft.common.blocks.devices.TCBrainBoxBlock;
 import thaumcraft.common.blocks.devices.TCPotionSprayerBlock;
 import thaumcraft.common.blocks.devices.TCVisBatteryBlock;
 import thaumcraft.common.blocks.devices.TCVisGeneratorBlock;
@@ -452,6 +453,13 @@ public final class TCBlocks {
 
 
     public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());
+
+    public static final Supplier<Block> BRAIN_BOX = BLOCKS.register("brain_box", () -> new TCBrainBoxBlock(
+            BlockBehaviour.Properties.of()
+                    .strength(1.0F, 10.0F)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+    ));
 
     public static final Supplier<Block> INLAY = BLOCKS.register("inlay", () -> inlayBlock());
 

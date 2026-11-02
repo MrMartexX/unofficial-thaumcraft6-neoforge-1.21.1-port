@@ -350,6 +350,8 @@ public final class TCItems {
 
     public static final Supplier<BlockItem> GOLEM_BUILDER = blockItem("golem_builder", TCBlocks.GOLEM_BUILDER);
 
+    public static final Supplier<BlockItem> BRAIN_BOX = blockItem("brain_box", TCBlocks.BRAIN_BOX);
+
     public static final Supplier<BlockItem> INLAY = blockItem("inlay", TCBlocks.INLAY);
 
     public static final Supplier<BlockItem> STABILIZER = blockItem("stabilizer", TCBlocks.STABILIZER);

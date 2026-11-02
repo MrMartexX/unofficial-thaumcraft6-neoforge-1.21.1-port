@@ -283,6 +283,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.ESSENTIA_TRANSPORT_OUT.get());
 
         acceptVisible(output, TCItems.THAUMATORIUM.get());
+        acceptVisible(output, TCItems.BRAIN_BOX.get());
 
         acceptVisible(output, TCItems.MIRROR.get());
 

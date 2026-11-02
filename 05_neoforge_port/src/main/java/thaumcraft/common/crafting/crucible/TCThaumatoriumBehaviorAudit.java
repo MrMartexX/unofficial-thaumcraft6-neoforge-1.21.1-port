@@ -26,6 +26,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.blocks.crafting.TCThaumatoriumBlock;
+import thaumcraft.common.blocks.devices.TCBrainBoxBlock;
 import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.essentia.transport.TCEssentiaSuction;
 import thaumcraft.common.essentia.transport.TCEssentiaTransport;
@@ -76,7 +77,9 @@ public final class TCThaumatoriumBehaviorAudit {
         lines.add("- Covers the server-owned two-block machine foundation, not final GUI/screen parity.");
         lines.add("- Uses the loaded `thaumcraft:alumentum` crucible recipe as a stable catalyst/aspect fixture.");
         lines.add("- Verifies legacy-relevant heat, redstone, suction, input-only transport, top delegation and craft completion.");
-        lines.add("- Mnemonic Matrix support is currently mapped to the existing `golem_builder` placeholder until the real brain box block is ported.");
+        lines.add("- Verifies real Mnemonic Matrix capacity, attachment, removal and the brain box self-loot contract.");
+        lines.add("- ItemEntity appearance is not checked here: the audit halts the server before normal entity ticking.");
+        lines.add("- The legacy `thaumcraft:mnemonicmatrix` catalog item remains registered for saved inventories; new recipes produce `thaumcraft:brain_box`.");
         Files.write(output, lines);
         return report;
     }
@@ -90,6 +93,10 @@ public final class TCThaumatoriumBehaviorAudit {
         checks.add(check("thaumatorium_block_item_is_real_block_item",
                 TCItems.THAUMATORIUM.get().getBlock() == TCBlocks.THAUMATORIUM.get(),
                 "item=" + TCItems.THAUMATORIUM.get()));
+        checks.add(check("brain_box_block_item_is_real_block_item",
+                TCItems.BRAIN_BOX.get().getBlock() == TCBlocks.BRAIN_BOX.get()
+                        && TCItems.CATALOG_PLACEHOLDER_MNEMONICMATRIX.get() != TCItems.BRAIN_BOX.get(),
+                "brainBox=" + TCItems.BRAIN_BOX.get() + ", legacyItem=" + TCItems.CATALOG_PLACEHOLDER_MNEMONICMATRIX.get()));
         checks.add(check("thaumatorium_block_entities_registered",
                 TCBlockEntities.THAUMATORIUM.get().isValid(TCBlocks.THAUMATORIUM.get().defaultBlockState())
                         && TCBlockEntities.THAUMATORIUM_TOP.get().isValid(TCBlocks.THAUMATORIUM_TOP.get().defaultBlockState()),
@@ -276,13 +283,94 @@ public final class TCThaumatoriumBehaviorAudit {
         thaumatorium.setCatalystForValidation(new ItemStack(Items.COAL, 1));
         thaumatorium.selectRecipeForValidation(ALUMENTUM, "audit");
         int baseCapacity = thaumatorium.maxRecipes();
-        level.setBlock(origin.south(), TCBlocks.GOLEM_BUILDER.get().defaultBlockState(), 3);
+        checks.add(check("thaumatorium_base_recipe_capacity_is_one",
+                baseCapacity == TCThaumatoriumBlockEntity.BASE_MAX_RECIPES,
+                "capacity=" + baseCapacity));
+        BlockPos matrixPos = origin.south();
+        level.setBlock(origin.west(), Blocks.REDSTONE_BLOCK.defaultBlockState(), 3);
+        level.setBlock(
+                matrixPos,
+                TCBlocks.BRAIN_BOX.get().defaultBlockState().setValue(TCBrainBoxBlock.FACING, Direction.EAST),
+                3
+        );
         tickThaumatorium(level, origin, bottomState, thaumatorium, 40);
-        checks.add(check("thaumatorium_mnemonic_matrix_placeholder_adds_two_recipe_slots",
+        checks.add(check("thaumatorium_brain_box_wrong_facing_adds_no_recipe_slots",
                 baseCapacity == TCThaumatoriumBlockEntity.BASE_MAX_RECIPES
-                        && thaumatorium.maxRecipes() == TCThaumatoriumBlockEntity.BASE_MAX_RECIPES
-                        + TCThaumatoriumBlockEntity.MNEMONIC_MATRIX_BONUS,
+                        && thaumatorium.maxRecipes() == baseCapacity,
+                "base=" + baseCapacity + ", wrongFacing=" + thaumatorium.maxRecipes()));
+
+        level.setBlock(matrixPos, TCBlocks.GOLEM_BUILDER.get().defaultBlockState(), 3);
+        tickThaumatorium(level, origin, bottomState, thaumatorium, 40);
+        checks.add(check("thaumatorium_golem_builder_no_longer_adds_recipe_slots",
+                thaumatorium.maxRecipes() == baseCapacity,
+                "base=" + baseCapacity + ", golemBuilder=" + thaumatorium.maxRecipes()));
+
+        level.setBlock(
+                matrixPos,
+                TCBlocks.BRAIN_BOX.get().defaultBlockState().setValue(TCBrainBoxBlock.FACING, Direction.NORTH),
+                3
+        );
+        tickThaumatorium(level, origin, bottomState, thaumatorium, 40);
+        checks.add(check("thaumatorium_correctly_attached_brain_box_adds_two_recipe_slots",
+                thaumatorium.maxRecipes() == baseCapacity + TCThaumatoriumBlockEntity.MNEMONIC_MATRIX_BONUS,
                 "base=" + baseCapacity + ", upgraded=" + thaumatorium.maxRecipes()));
+
+        BlockPos upperMatrixPos = origin.above().south();
+        level.setBlock(
+                upperMatrixPos,
+                TCBlocks.BRAIN_BOX.get().defaultBlockState().setValue(TCBrainBoxBlock.FACING, Direction.NORTH),
+                3
+        );
+        tickThaumatorium(level, origin, bottomState, thaumatorium, 40);
+        int twoMatrixCapacity = baseCapacity + 2 * TCThaumatoriumBlockEntity.MNEMONIC_MATRIX_BONUS;
+        checks.add(check("thaumatorium_brain_box_on_upper_half_adds_two_recipe_slots",
+                thaumatorium.maxRecipes() == twoMatrixCapacity,
+                "expected=" + twoMatrixCapacity + ", actual=" + thaumatorium.maxRecipes()));
+
+        List<ResourceLocation> capacityRecipes = level.getRecipeManager()
+                .getAllRecipesFor(TCRecipes.CRUCIBLE_TYPE.get())
+                .stream()
+                .map(RecipeHolder::id)
+                .distinct()
+                .limit(twoMatrixCapacity)
+                .toList();
+        thaumatorium.selectRecipesForValidation(capacityRecipes, "audit");
+        checks.add(check("thaumatorium_brain_box_capacity_fixture_has_five_selected_recipes",
+                capacityRecipes.size() == twoMatrixCapacity
+                        && thaumatorium.selectedRecipeCount() == capacityRecipes.size(),
+                "fixture=" + capacityRecipes.size() + ", selected=" + thaumatorium.selectedRecipeCount()));
+
+        level.setBlock(matrixPos, Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(upperMatrixPos, Blocks.AIR.defaultBlockState(), 3);
+        tickThaumatorium(level, origin, bottomState, thaumatorium, 40);
+        checks.add(check("thaumatorium_brain_box_removal_restores_base_capacity_and_truncates_recipes",
+                thaumatorium.maxRecipes() == TCThaumatoriumBlockEntity.BASE_MAX_RECIPES
+                        && thaumatorium.selectedRecipeCount() == TCThaumatoriumBlockEntity.BASE_MAX_RECIPES,
+                "capacity=" + thaumatorium.maxRecipes() + ", selected=" + thaumatorium.selectedRecipeCount()));
+
+        level.setBlock(
+                matrixPos,
+                TCBlocks.BRAIN_BOX.get().defaultBlockState().setValue(TCBrainBoxBlock.FACING, Direction.NORTH),
+                3
+        );
+        BlockState brainBoxBeforeRemoval = level.getBlockState(matrixPos);
+        boolean wasBrainBox = brainBoxBeforeRemoval.is(TCBlocks.BRAIN_BOX.get());
+        long configuredDrops = net.minecraft.world.level.block.Block.getDrops(
+                brainBoxBeforeRemoval, level, matrixPos,
+                level.getBlockEntity(matrixPos), null, ItemStack.EMPTY
+        ).stream().filter(stack -> stack.is(TCItems.BRAIN_BOX.get())).count();
+
+        boolean supportDestroyed = level.destroyBlock(origin, true);
+
+        checks.add(check("brain_box_detaches_after_support_loss",
+                wasBrainBox && supportDestroyed
+                        && !level.getBlockState(matrixPos).is(TCBlocks.BRAIN_BOX.get()),
+                "supportDestroyed=" + supportDestroyed
+                        + ", remaining=" + level.getBlockState(matrixPos).getBlock()));
+
+        checks.add(check("brain_box_loot_contract_drops_self",
+                configuredDrops >= 1,
+                "configuredBrainBoxDrops=" + configuredDrops));
 
         TCPlayerKnowledgeStore.set(player, new TCPlayerKnowledge(), false);
         clearArea(level, origin, 8);

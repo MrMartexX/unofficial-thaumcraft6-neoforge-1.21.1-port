@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    { "item": "thaumcraft:mnemonicmatrix" }
+  ],
+  "result": {
+    "id": "thaumcraft:brain_box",
+    "count": 1
+  }
+}
