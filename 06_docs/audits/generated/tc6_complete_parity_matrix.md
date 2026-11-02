@@ -7,18 +7,18 @@ Source of Truth: `Thaumcraft-6-Source-Code-master` (1.12.2) | Target: `05_neofor
 
 | Subsystem Domain | Metric | Port Count | Legacy Target | Parity % | Status |
 |---|---|---:|---:|---:|---|
-| **1. Registry (Items & Blocks)** | Registered IDs | 664 | 678 | 97.9% | GAPS |
-| | Real Custom Classes | 594 | 678 | 87.6% | IN PROGRESS |
-| | Visual Models & Blockstates | 669 | 678 | 98.7% | READY |
+| **1. Registry (Items & Blocks)** | Registered IDs | 663 | 677 | 97.9% | GAPS |
+| | Real Custom Classes | 594 | 677 | 87.7% | IN PROGRESS |
+| | Visual Models & Blockstates | 668 | 677 | 98.7% | READY |
 | **2. Entities (Mobs & Bosses)** | Registered Entity Types | 43 | 43 | 100.0% | OK |
 | **3. Mob Effects & Potions** | Custom Status Effects | 9 | 9 | 100.0% | OK |
 | **4. Aspects & Alchemy** | Aspect Definitions | 37 | 37 | 100.0% | OK |
 | **5. Sound Events & Audio** | Sound Event Registry | 65 | 65 | 100.0% | OK |
-| **6. Recipes & Crafting** | Total Recipes Scanned | 357 | ~370 | 96.5% | ACTIVE |
+| **6. Recipes & Crafting** | Total Recipes Scanned | 356 | ~370 | 96.2% | ACTIVE |
 | | Arcane Workbench Recipes | 89 | 89 | 100.0% | OK |
 | | Crucible Alchemy Recipes | 78 | 78 | 100.0% | OK |
 | | Infusion Runic Recipes | 40 | 40 | 100.0% | OK |
-| | Container Remainder Safety | 357 / 357 | 100% | 100.0% | OK |
+| | Container Remainder Safety | 356 / 356 | 100% | 100.0% | OK |
 | **7. Research Progression** | Thaumonomicon Entries | 148 | 148 | 100.0% | OK |
 | **8. Loot & Drops** | Loot Tables Scanned | 108 | 108 | 100.0% | OK |
 | **9. Runtime Server Contracts** | Dedicated Server Verification | 28 / 28 | 28 | 100.0% | OK |
@@ -78,7 +78,7 @@ Source of Truth: `Thaumcraft-6-Source-Code-master` (1.12.2) | Target: `05_neofor
 | Type | Total IDs | Custom Real Class | Generic Placeholder | Missing |
 |---|---:|---:|---:|---:|
 | Blocks | 179 | 155 | 21 | 3 |
-| Items | 499 | 439 | 49 | 11 |
+| Items | 498 | 439 | 48 | 11 |
 
 ### 3. Entities Breakdown
 

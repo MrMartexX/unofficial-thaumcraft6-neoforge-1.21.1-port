@@ -1338,8 +1338,6 @@ public final class TCItems {
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_MATRIXMOTION = MATRIX_SPEED;
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_MNEMONICMATRIX = ITEMS.register("mnemonicmatrix", () -> new Item(new Item.Properties()));
-
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_PATTERNCRAFTER = blockItem("patterncrafter", TCBlocks.PATTERN_CRAFTER);
 
     public static final Supplier<Item> CATALOG_PLACEHOLDER_REDSTONERELAY = ITEMS.register("redstonerelay", () -> new Item(new Item.Properties()));

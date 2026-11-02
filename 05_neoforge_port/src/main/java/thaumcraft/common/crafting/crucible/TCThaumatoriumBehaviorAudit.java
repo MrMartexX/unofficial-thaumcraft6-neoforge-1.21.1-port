@@ -79,7 +79,6 @@ public final class TCThaumatoriumBehaviorAudit {
         lines.add("- Verifies legacy-relevant heat, redstone, suction, input-only transport, top delegation and craft completion.");
         lines.add("- Verifies real Mnemonic Matrix capacity, attachment, removal and the brain box self-loot contract.");
         lines.add("- ItemEntity appearance is not checked here: the audit halts the server before normal entity ticking.");
-        lines.add("- The legacy `thaumcraft:mnemonicmatrix` catalog item remains registered for saved inventories; new recipes produce `thaumcraft:brain_box`.");
         Files.write(output, lines);
         return report;
     }
@@ -94,9 +93,8 @@ public final class TCThaumatoriumBehaviorAudit {
                 TCItems.THAUMATORIUM.get().getBlock() == TCBlocks.THAUMATORIUM.get(),
                 "item=" + TCItems.THAUMATORIUM.get()));
         checks.add(check("brain_box_block_item_is_real_block_item",
-                TCItems.BRAIN_BOX.get().getBlock() == TCBlocks.BRAIN_BOX.get()
-                        && TCItems.CATALOG_PLACEHOLDER_MNEMONICMATRIX.get() != TCItems.BRAIN_BOX.get(),
-                "brainBox=" + TCItems.BRAIN_BOX.get() + ", legacyItem=" + TCItems.CATALOG_PLACEHOLDER_MNEMONICMATRIX.get()));
+                TCItems.BRAIN_BOX.get().getBlock() == TCBlocks.BRAIN_BOX.get(),
+                "brainBox=" + TCItems.BRAIN_BOX.get()));
         checks.add(check("thaumatorium_block_entities_registered",
                 TCBlockEntities.THAUMATORIUM.get().isValid(TCBlocks.THAUMATORIUM.get().defaultBlockState())
                         && TCBlockEntities.THAUMATORIUM_TOP.get().isValid(TCBlocks.THAUMATORIUM_TOP.get().defaultBlockState()),
