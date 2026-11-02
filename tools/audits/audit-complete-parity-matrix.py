@@ -595,11 +595,19 @@ def generate_master_report(
     loot_audit: List[LootAudit]
 ) -> Tuple[str, Dict[str, Any]]:
     # 1. Registry stats
-    total_reg = len(items_audit)
-    real_reg = sum(1 for e in items_audit if e.implementation == "REAL")
-    placeholder_reg = sum(1 for e in items_audit if e.implementation == "PLACEHOLDER")
-    missing_reg = sum(1 for e in items_audit if e.implementation == "MISSING")
-    models_ready = sum(1 for e in items_audit if e.has_model or e.has_blockstate)
+    # Count only identities present in the original game in legacy parity.
+    # Port-only IDs are useful inventory, but are not part of the legacy target.
+    legacy_entries = [e for e in items_audit if e.legacy_registered]
+    port_only_entries = [e for e in items_audit if not e.legacy_registered and e.port_registered]
+    total_reg = len(legacy_entries)
+    registered_reg = sum(1 for e in legacy_entries if e.port_registered)
+    real_reg = sum(1 for e in legacy_entries if e.implementation == "REAL")
+    placeholder_reg = sum(1 for e in legacy_entries if e.implementation == "PLACEHOLDER")
+    missing_reg = sum(1 for e in legacy_entries if e.implementation == "MISSING")
+    models_ready = sum(
+        1 for e in legacy_entries
+        if e.port_registered and (e.has_model or e.has_blockstate)
+    )
     reg_parity = (real_reg / total_reg * 100.0) if total_reg else 0.0
 
     # 2. Entities stats
@@ -649,12 +657,23 @@ def generate_master_report(
     runtime_total = 0
     runtime_report = repo_root / "06_docs/audits/generated/tc6_runtime_parity_matrix.md"
     if runtime_report.exists():
-        r_text = runtime_report.read_text(encoding="utf-8")
+        try:
+            r_text = runtime_report.read_text(encoding="utf-8")
+        except OSError:
+            r_text = ""
         m = re.search(r'Overall:\s*(\d+)\s*/\s*(\d+)\s*checks passed', r_text)
         if m:
-            runtime_passed = int(m.group(1))
-            runtime_total = int(m.group(2))
-    runtime_parity = (runtime_passed / runtime_total * 100.0) if runtime_total else 100.0
+            passed, total = int(m.group(1)), int(m.group(2))
+            if total > 0 and 0 <= passed <= total:
+                runtime_passed, runtime_total = passed, total
+    # A missing, invalid, or zero-check runtime report is NOT a passing audit.
+    runtime_available = runtime_total > 0
+    runtime_parity = (runtime_passed / runtime_total * 100.0) if runtime_available else 0.0
+    runtime_status = (
+        "UNVERIFIED" if not runtime_available
+        else "OK" if runtime_passed == runtime_total
+        else f"DISCREPANCY ({runtime_total - runtime_passed})"
+    )
 
     # Weighted composite index
     overall_index = (
@@ -679,9 +698,9 @@ def generate_master_report(
         "",
         "| Subsystem Domain | Metric | Port Count | Legacy Target | Parity % | Status |",
         "|---|---|---:|---:|---:|---|",
-        f"| **1. Registry (Items & Blocks)** | Registered IDs | {sum(1 for e in items_audit if e.port_registered)} | {total_reg} | {(sum(1 for e in items_audit if e.port_registered)/max(1, total_reg)*100):.1f}% | {'OK' if missing_reg == 0 else 'GAPS'} |",
-        f"| | Real Custom Classes | {real_reg} | {total_reg} | {reg_parity:.1f}% | {'OK' if placeholder_reg == 0 else 'IN PROGRESS'} |",
-        f"| | Visual Models & Blockstates | {models_ready} | {total_reg} | {(models_ready/max(1, total_reg)*100):.1f}% | READY |",
+        f"| **1. Registry (Items & Blocks)** | Registered IDs | {registered_reg} | {total_reg} | {(registered_reg/max(1, total_reg)*100):.1f}% | {'OK' if missing_reg == 0 else 'GAPS'} |",
+        f"| | Real Custom Classes | {real_reg} | {total_reg} | {reg_parity:.1f}% | {'OK' if real_reg == total_reg else 'IN PROGRESS'} |",
+        f"| | Visual Models & Blockstates | {models_ready} | {total_reg} | {(models_ready/max(1, total_reg)*100):.1f}% | {'READY' if models_ready == total_reg else 'GAPS'} |",
         f"| **2. Entities (Mobs & Bosses)** | Registered Entity Types | {matched_ent} | {total_ent} | {ent_parity:.1f}% | {'OK' if missing_ent == 0 else 'GAPS'} |",
         f"| **3. Mob Effects & Potions** | Custom Status Effects | {matched_eff} | {total_eff} | {eff_parity:.1f}% | OK |",
         f"| **4. Aspects & Alchemy** | Aspect Definitions | {matched_asp} | {total_asp} | {asp_parity:.1f}% | OK |",
@@ -693,7 +712,11 @@ def generate_master_report(
         f"| | Container Remainder Safety | {total_recipes - unsafe_containers} / {total_recipes} | 100% | {((total_recipes - unsafe_containers)/max(1, total_recipes)*100):.1f}% | {'OK' if unsafe_containers == 0 else '**VIOLATION**'} |",
         f"| **7. Research Progression** | Thaumonomicon Entries | {matched_research} | {total_research} | {research_parity:.1f}% | OK |",
         f"| **8. Loot & Drops** | Loot Tables Scanned | {total_loots} | {total_loots} | {loot_parity:.1f}% | {'OK' if illegal_fortunes == 0 else '**VIOLATION**'} |",
-        f"| **9. Runtime Server Contracts** | Dedicated Server Verification | {runtime_passed} / {runtime_total} | {runtime_total} | {runtime_parity:.1f}% | {'OK' if runtime_passed == runtime_total else f'DISCREPANCY ({runtime_total - runtime_passed})'} |",
+        f"| **9. Runtime Server Contracts** | Dedicated Server Verification | {runtime_passed} / {runtime_total} | {runtime_total} | {runtime_parity:.1f}% | {runtime_status} |",
+        "",
+        f"Port-only registry IDs (excluded from legacy target): {len(port_only_entries)}.",
+        "Registry model counts indicate file presence, not rendered visual parity.",
+        "Runtime numbers come from a saved server audit report, not a live server run.",
         "",
         "---",
         "",
@@ -755,8 +778,8 @@ def generate_master_report(
         "",
         "| Type | Total IDs | Custom Real Class | Generic Placeholder | Missing |",
         "|---|---:|---:|---:|---:|",
-        f"| Blocks | {sum(1 for e in items_audit if e.kind == 'block')} | {sum(1 for e in items_audit if e.kind == 'block' and e.implementation == 'REAL')} | {sum(1 for e in items_audit if e.kind == 'block' and e.implementation == 'PLACEHOLDER')} | {sum(1 for e in items_audit if e.kind == 'block' and e.implementation == 'MISSING')} |",
-        f"| Items | {sum(1 for e in items_audit if e.kind == 'item')} | {sum(1 for e in items_audit if e.kind == 'item' and e.implementation == 'REAL')} | {sum(1 for e in items_audit if e.kind == 'item' and e.implementation == 'PLACEHOLDER')} | {sum(1 for e in items_audit if e.kind == 'item' and e.implementation == 'MISSING')} |",
+        f"| Blocks | {sum(1 for e in legacy_entries if e.kind == 'block')} | {sum(1 for e in legacy_entries if e.kind == 'block' and e.implementation == 'REAL')} | {sum(1 for e in legacy_entries if e.kind == 'block' and e.implementation == 'PLACEHOLDER')} | {sum(1 for e in legacy_entries if e.kind == 'block' and e.implementation == 'MISSING')} |",
+        f"| Items | {sum(1 for e in legacy_entries if e.kind == 'item')} | {sum(1 for e in legacy_entries if e.kind == 'item' and e.implementation == 'REAL')} | {sum(1 for e in legacy_entries if e.kind == 'item' and e.implementation == 'PLACEHOLDER')} | {sum(1 for e in legacy_entries if e.kind == 'item' and e.implementation == 'MISSING')} |",
         "",
         "### 3. Entities Breakdown",
         "",
@@ -784,6 +807,13 @@ def generate_master_report(
         "overall_parity_index": round(overall_index, 2),
         "registry": {
             "total": total_reg,
+            "registered": registered_reg,
+            "port_only": len(port_only_entries),
+            "port_only_ids": [
+                {"kind": e.kind, "id": e.id} for e in sorted(
+                    port_only_entries, key=lambda e: (e.kind, e.id)
+                )
+            ],
             "real": real_reg,
             "placeholder": placeholder_reg,
             "missing": missing_reg,
@@ -826,9 +856,11 @@ def generate_master_report(
             "illegal_fortunes": illegal_fortunes,
         },
         "runtime": {
-            "passed": 26,
-            "total": 28,
+            "passed": runtime_passed,
+            "total": runtime_total,
             "percent": runtime_parity,
+            "status": runtime_status,
+            "source": "06_docs/audits/generated/tc6_runtime_parity_matrix.md",
         }
     }
 

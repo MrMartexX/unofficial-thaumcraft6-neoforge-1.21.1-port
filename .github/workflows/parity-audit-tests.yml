@@ -1,0 +1,27 @@
+name: Parity Audit Unit Tests
+
+on:
+  pull_request:
+    paths:
+      - tools/audits/audit-complete-parity-matrix.py
+      - tools/audits/test_audit_complete_parity_matrix.py
+      - .github/workflows/parity-audit-tests.yml
+  push:
+    branches: [main, dev]
+    paths:
+      - tools/audits/audit-complete-parity-matrix.py
+      - tools/audits/test_audit_complete_parity_matrix.py
+      - .github/workflows/parity-audit-tests.yml
+  workflow_dispatch:
+
+jobs:
+  parity-audit-unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test audit report consistency
+        run: python -m unittest discover -s tools/audits -p 'test_audit_complete_parity_matrix.py' -v
