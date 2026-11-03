@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F39](#additional-source-history-checks-f01f39)
+6. [Additional source-history checks: F01–F50](#additional-source-history-checks-f01f50)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F39
+## Additional source-history checks: F01–F50
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -861,6 +861,112 @@ The global [TCKnowledgeGainHud.renderLayer](https://github.com/MrMartexX/unoffic
 The final uncertainty explains why a user may report that the Research Table appears normal: the extra rendering happens **during an active Knowledge Gain/fade animation**, not on a static empty Research Table screen. It is separate from the historical alpha fix (F36) and from the persistent Instrument HUD outlines (F37–F38).
 
 **Reproduction:** start a Knowledge Gain event with the Research Table open, capture a video/frame sequence including the icon animation at the screen corner, compare to the same event with a different inventory screen and in the world, and count actual draw invocations via instrumented trace. Do not label ordinary Research Table background as visually broken based on these calls alone.
+
+
+
+### F40 — Legacy Creative catalog: ten consecutive screenshot pages actually inspected
+
+**Status:** `confirmed_code` for image presence, order markers and visible icon groups; `requires_client` for a named, slot-for-slot parity matrix.
+
+All ten original images `Thaumcraft_1.12.2_Inventory_1.png` through `Thaumcraft_1.12.2_Inventory_10.png` were fetched at the pinned source commit and visually inspected (not merely found by filename). The repository's [screenshot README](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/07_Test_Instance_and_Comparisons/02_Thaumcraft%201.12.2%20Inventory%20Screenshots/README.md) identifies page 1 as the beginning and page 10 as the end of the original creative list. These images show multiple contiguous groups of variant icons and support the more specific controls below.
+
+- Original [page 2](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/07_Test_Instance_and_Comparisons/02_Thaumcraft%201.12.2%20Inventory%20Screenshots/Thaumcraft_1.12.2_Inventory_2.png) / [page 3](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/07_Test_Instance_and_Comparisons/02_Thaumcraft%201.12.2%20Inventory%20Screenshots/Thaumcraft_1.12.2_Inventory_3.png): colored candles followed by colored banners and the Crimson Cult banner. The dark candle precedes the first banner; the banner group occupies page 3's first two rows.
+- Original [page 5](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/07_Test_Instance_and_Comparisons/02_Thaumcraft%201.12.2%20Inventory%20Screenshots/Thaumcraft_1.12.2_Inventory_5.png) / [page 6](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/07_Test_Instance_and_Comparisons/02_Thaumcraft%201.12.2%20Inventory%20Screenshots/Thaumcraft_1.12.2_Inventory_6.png): mineral and crafting-material icon sequences continue across a page boundary, so checking only one screenshot loses legitimate variants.
+- Original [page 6](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/07_Test_Instance_and_Comparisons/02_Thaumcraft%201.12.2%20Inventory%20Screenshots/Thaumcraft_1.12.2_Inventory_6.png) through [page 8](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/07_Test_Instance_and_Comparisons/02_Thaumcraft%201.12.2%20Inventory%20Screenshots/Thaumcraft_1.12.2_Inventory_8.png): aspect crystal and phial sequences extend over multiple pages; filled phials and the empty phial need stack-level distinction.
+- Original [page 10](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/07_Test_Instance_and_Comparisons/02_Thaumcraft%201.12.2%20Inventory%20Screenshots/Thaumcraft_1.12.2_Inventory_10.png): distinct golem item icons and seal icons are visible. Registration and `getSubItems` code, not icon resemblance alone, identifies which stacks they represent.
+
+**Limitation:** These compact original screenshots have no hover tooltip/registry-ID overlay, and they do not show a matching 1.21.1 runtime view. An icon-only comparison cannot establish exact names, NBT/component equality, slot numbers, or absence of hidden/invisible-stack entries. This finding validates a visual reference corpus, **not** a finished 400+ slot mapping.
+
+### F41 — Sixteen dyed banners and the Crimson Cult banner absent as functional port blocks
+
+**Status:** `confirmed_legacy_mismatch` for active static registrations and the tab output; `requires_client` for visual demonstration.
+
+The original [ConfigBlocks.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/common/config/ConfigBlocks.java) registers **16** `BlockBannerTC` blocks and `BlockBannerTCItem` items by iterating `EnumDyeColor.values()` (lines 315–320), followed by a separate `banner_crimson_cult` block and item (lines 322–325). All **17** distinctive banner icons form the colored-banner sequence on original Creative screenshot 3.
+
+The current [TCBlocks.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java) has **no `BANNER` block declarations**. [TCItems.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java) has 16 `CATALOG_PLACEHOLDER_BANNER*` **generic Item registrations**, without a Crimson Cult-banner counterpart in this family. [TCCreativeTabOrder.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabOrder.java) does not emit these placeholders. A generic item placeholder is not a banner block, not a functional `BlockBannerTCItem`, and not a visible legacy Creative counterpart. This is a larger omission than a mere reorder or wrong model.
+
+**Follow-up:** inventory each exact dye ID and Crimson Cult, resource sprites, banner block geometry/rotation, tile/BE renderer, placement, drops and inventory icons; match 1.12.2 and 1.21.1 client pages. Do not mistake the existence of placeholder registry IDs for restored block behavior.
+
+### F42 — Candles and Nitor: source-based dye ordering disagrees with the explicit modern tab order
+
+**Status:** `confirmed_legacy_mismatch` for source sequence; screenshot-backed for the candle end-points; `requires_client` for exact final slot grid.
+
+Original [ConfigBlocks.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/common/config/ConfigBlocks.java) creates candles (lines 311–313) and Nitor (lines 327–329) by iterating the **1.12.2 `EnumDyeColor.values()`** palette order. Original screenshot 2 ends the candle sequence at page 3's first (black-candle) slot, consistent with a white-first / black-last sequence. Modern [TCCreativeTabOrder.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabOrder.java) explicitly enumerates **`CANDLE_BLACK` first, `CANDLE_WHITE` last** (lines 155–185), and **`NITOR_BLACK` first, `NITOR_WHITE` last** (lines 207–240), along with a different intermediate order.
+
+This demonstrates a creative **ordering** mismatch even if each individual colored item is registered and displayed correctly. The Nitor icon sequence requires its own screenshot-by-slot identification; do not assume its exact original slot positions solely from the candle row.
+
+**Follow-up:** build a normalized 16-color table (legacy metadata/dye key → modern item ID) and test actual tab order and displayed tint. Do not conflate ordering with the separate incorrect-tint defects elsewhere in this report.
+
+### F43 — The four legacy configured golem inventory variants are not emitted in the modern tab
+
+**Status:** `confirmed_legacy_mismatch` for the creative output; `requires_client` for appearance and NBT/component equivalence.
+
+Original [ItemGolemPlacer.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/common/golems/ItemGolemPlacer.java) overrides `getSubItems` (obfuscated as `func_150895_a`) and adds **four distinct `ItemStack`s** with `props` long tags: the default configuration and three deliberately modified heads/arms/materials. Original screenshot 10 visibly shows a four-icon golem group.
+
+Modern [TCItems.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java) **does register** `GOLEM_PLACER` as `golem`. Modern [ItemGolemPlacer.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/golems/ItemGolemPlacer.java) can read/write `props` through `DataComponents.CUSTOM_DATA`; however, the full [Creative tab emitter](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabOrder.java) **never calls** `acceptVisible(output, TCItems.GOLEM_PLACER.get())`, nor constructs any of the four configured stacks.
+
+Thus it is not accurate to say the golem item is unregistered. Its **four original creative sample stacks are absent from this tab builder**, despite port-side component support. Another mod/event could affect runtime tabs; the final runtime result is not claimed here.
+
+### F44 — Blank golem seal is registered as a hidden placeholder; the original tab exposes 17 seal stacks
+
+**Status:** `confirmed_legacy_mismatch` in tab construction; `requires_client` for displayed icons and in-world effects.
+
+Original [ItemSealPlacer.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/common/golems/seals/ItemSealPlacer.java) constructs the `seal` item with an initial `blank` variant, then adds one stack per registered seal via `getVariantNames()` / `getSubItems()`. Original [ConfigItems.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/common/config/ConfigItems.java) registers **16** seal types, so **17** Creative entries are expected, **blank first**. Modern [tab builder](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabOrder.java) emits the **16** functional `SEAL_*` items but not a blank seal. [item registry](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java) registers `CATALOG_PLACEHOLDER_SEALBLANK`, but that is a generic placeholder and is not emitted.
+
+This finding concerns the inventory catalog; it does **not** replace separate F33–F35 evidence of missing **placed seal world rendering**, synchronization and persistence.
+
+### F45 — Missing quartz cluster entry and legacy iron-nugget tab slot
+
+**Status:** `confirmed_legacy_mismatch` for the tab/registrations; `requires_client` for icon, stack name and behavioral mapping.
+
+Original [ConfigItems.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/common/config/ConfigItems.java) registers `cluster` as `ItemTCBase("cluster", "iron", "gold", "copper", "tin", "silver", "lead", "cinnabar", "quartz")` (**eight** visible metadata variants). The [modern registry](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java) defines only seven standalone `CLUSTER_*` items (no `CLUSTER_QUARTZ`), and [the tab](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabOrder.java) emits those seven. Existing legacy-model resources referencing `cluster_quartz` do **not** by themselves establish a registered inventory counterpart.
+
+Original `ItemTCBase("nugget", ...)` also includes **`iron`** among its eleven visible nugget metadata variants. The modern tab emits ten corresponding material/nugget entries, but no dedicated or vanilla **iron nugget** slot there. The vanilla item already exists in 1.21.1, so this is an **original-tab membership/ordering mismatch**, not evidence that iron nuggets are absent from Minecraft.
+
+### F46 — Empty phial appears after the aspect variants, rather than before them
+
+**Status:** `confirmed_legacy_mismatch` in emitted Creative order; `negative_control` for a wholesale missing phial family.
+
+Original [ItemPhial.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/common/items/consumables/ItemPhial.java) `getSubItems` **first** appends the empty metadata-0 phial and **then** one filled stack per `Aspect.aspects.values()`. The modern [tab](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabOrder.java) executes `addPhialVariants(output)` (37 filled aspect variants) at line 534 and only afterwards emits `TCItems.PHIAL` at line 536. This reverses the empty/filled group boundary.
+
+The modern registry intentionally flattens the 37 filled variants into `ItemAspectVariant` IDs backed by data components ([ItemAspectVariant.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/ItemAspectVariant.java)); therefore a one-ID-to-one-ID comparison is the wrong check. The group is largely present, but its **stack construction, semantics and order** are distinct dimensions requiring separate tests.
+
+### F47 — Legacy golem mind and golem module metadata variants not faithfully represented in the tab
+
+**Status:** `confirmed_legacy_mismatch` for explicit creative entries; `requires_client` for semantic/visual replacement analysis.
+
+Original [ConfigItems.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/common/config/ConfigItems.java) registers `ItemTCBase("mind", "clockwork", "biothaumic")` and `ItemTCBase("module", "vision", "aggression")`. Because the inspected [ItemTCBase.getSubItems()](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/common/items/ItemTCBase.java) emits every metadata variant, the original catalog includes **two mind variants and two module variants**.
+
+The modern [registry](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java) contains generic compatibility placeholders `mindclockwork`, `modvision` and `modaggression`, but these are absent from [the explicit tab output](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabOrder.java); no equivalent `mindbiothaumic` field was found in inspected `TCItems.java`. The tab includes `MIND_CLOCKWORK_ADVANCED` as a separate item, which must **not** be assumed to replace either ordinary legacy mind variant without component and gameplay evidence.
+
+### F48 — Two same-item duplicate emissions in the explicit Creative tab construction
+
+**Status:** `confirmed_code` for duplicate source calls; `requires_client` for effective visual duplicate/exception.
+
+Static extraction of every `acceptVisible(output, TCItems.X.get())` in the pinned [tab builder](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabOrder.java) yields **422 explicit accept calls but 420 distinct symbolic item fields**. The repeat calls are:
+
+| Symbol | Source calls | Issue to test |
+| --- | --- | --- |
+| `VIS_GENERATOR` | lines 300 and 352 | Same registry item accepted in two device positions |
+| `ARCANE_EAR_TOGGLE` | lines 360 and 740 | Same registry item accepted in the device and later equipment/item sections |
+
+The source evidence **does not prove** that NeoForge shows two visible slots: the tab output implementation may deduplicate, reject or handle repeated stacks differently. Verify actual client behavior and builder error logs before treating these as user-visible bugs.
+
+### F49 — Blueprint negative control now informed by the full ten-page original screenshot sequence
+
+**Status:** `confirmed_code` for registrations; `negative_control` on any claim that the four standalone IDs are reproduced from original `ConfigItems`; `requires_client` for definitive tooltip-based original slot labeling.
+
+Modern [tab builder](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabOrder.java) includes four standalone items at lines 715–721: `golem_press_blueprint`, `infusion_altar_blueprint`, `infusion_altar_ancient_blueprint`, `infusion_altar_eldritch_blueprint`. The original [item registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/common/config/ConfigItems.java) has no corresponding independent registered items. Original screenshot pages 1–10 were also examined, but their pixels lack tooltips/IDs; **they cannot conclusively prove that a similarly drawn non-blueprint item is not a blueprint**. This reinforces N06's concern without falsely claiming a complete item-by-item visual identification.
+
+Retain two separate checks: (1) whether those four standalone registry identities were present in the original game (the inspected registrations say **no**); and (2) whether existing blueprint-like gameplay concepts should be preserved as research data, book content, or multiblock mechanics (not answered by a Creative icon screenshot).
+
+### F50 — Creative coverage boundary and the next reproducible comparison
+
+**Status:** `confirmed_code` for bounded source counts; `not_checked` for full runtime equivalence.
+
+The modern tab is an explicit ordered emitter, not an automatic listing of every registered item. Its source comment says registered compatibility placeholders remain visible, yet **none of the 40 `CATALOG_PLACEHOLDER_*` fields in inspected `TCItems.java` are referenced by the current `TCCreativeTabOrder.java`**. A subset of those aliases represent active original catalog features with no functional modern replacement (especially banners), while others may intentionally be hidden aliases. Do **not** equate all 40 placeholders with 40 independent missing gameplay objects.
+
+Next reproducible artifact: a page/row/column ledger of legacy screenshots 1–10, with item namespace ID, subtype metadata, NBT, translated name, model/tint, and the matched modern item plus components. Then capture the actual port tab at the **same GUI scale** with hover tooltip and command-sourced IDs for ambiguous icons. Static evidence above supports specific misses; it **does not justify** calling the entire creative catalog finished.
 
 
 ## Black borders: competing causes
