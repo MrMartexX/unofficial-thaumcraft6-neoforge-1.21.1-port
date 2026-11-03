@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F35](#additional-source-history-checks-f01f35)
+6. [Additional source-history checks: F01–F39](#additional-source-history-checks-f01f39)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F35
+## Additional source-history checks: F01–F39
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -801,13 +801,75 @@ The architectural implication is a possible **restart-loss / stale-map split**: 
 **Research scope:** F33–F35 complete a targeted static trace for the user-reported missing placed seals, but not a complete audit of every seal type, resource texture, configuration UI, inventory variant or visual pixel. No production code, tests or auditing scripts have been modified.
 
 
+
+### F36 — Research Table alpha-blending commits do not isolate a single cause for HUD borders
+
+**Status:** `confirmed_code` for historical change; `negative_control` against treating the old fix as proof of the current HUD mechanism.
+
+The historical chain has two distinct commits:
+
+1. [`a0095771`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/commit/a0095771d3127bdab457cb3e2add5a14961a8f34) replaced many `TCResearchTableScreen` ordinary `GuiGraphics.blit(...)` calls with a shared helper that called `guiGraphics.blit(RenderType::guiTextured, ...)`. The commit described an alpha-rendering correction but changed the selected rendering overload along with GUI layout work.
+2. [`d39be45`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/commit/d39be45db1b6d0c577bd85f78fc29c2b269b6a0d) replaced that helper with **both** `RenderSystem.enableBlend(); RenderSystem.defaultBlendFunc();` **and** the ordinary `guiGraphics.blit(...)` overload. The original `RenderType::guiTextured` path was removed in the *same* commit.
+
+Therefore this history proves that an alpha-sensitive GUI problem was addressed, **not which of these two simultaneous changes was necessary**. No isolated A/B commit separately tests the blend state against the blit overload.
+
+The current [Research Table helper](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCResearchTableScreen.java) still uses explicit blending and plain `blit`; the current [Instrument HUD](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCInstrumentHud.java) already uses plain `blit` but does not explicitly set the blend state. Crucially, the [official NeoForge 1.21.1 GuiGraphics documentation](https://docs.neoforged.net/docs/1.21.1/gui/screens/) shows ordinary `graphics.blit(texture, x, y, u, v, width, height)` as standard supported usage: using that overload is not intrinsically wrong and does not itself prove a blending failure.
+
+**Practical evidence limit:** the earlier Research Table fix is a strong reason to inspect current render-state behavior, but **copying the same two lines cannot be justified as the verified fix** without an isolated render-state experiment. Record actual blend enable, equation and source/destination factors for the affected HUD draw calls.
+
+### F37 — Pixel-level HUD atlas inspection: real low-alpha black edge pixels, with identical legacy and port PNG
+
+**Status:** `confirmed_resource` for binary identity and precise RGBA measurements; `probable_cause` for thick black outlines under improper blending; `requires_client` for actual runtime blending state.
+
+Three direct repository files were retrieved as binary base64 and compared: legacy source `textures/gui/hud.png`, self-decompiled `textures/gui/hud.png` and modern port `textures/gui/hud.png`. Their payloads match byte-for-byte and each has Git blob SHA `8dd9f0b75138e7e0be8dc07020ecf6a5b16d8114`. The image is 256×256 pixels in RGBA mode. This eliminates texture-file corruption, size drift, or changed original art as an explanation for a *port-only* thick outline.
+
+Direct Pillow RGBA statistics for the atlas regions used by the two meters:
+
+| Source region (pixel coordinates, exclusive end) | Pixels | Relevant alpha distribution | Implication |
+| --- | ---: | --- | --- |
+| Aura frame `[72,48..88,128)` | 1,280 | 462 alpha=0; 116 black pixels have alpha=33; ~100 black pixels have alpha=6; 68 alpha=255 | The sprite contains a wide band of very faint black fragments that should not be treated as opaque |
+| Sanity back `[152,0..172,76)` | 1,520 | 1,360 alpha=0, 160 alpha=255 | Background is mostly fully transparent, with narrow opaque glyph fragments |
+| Sanity foreground `[176,0..196,76)` | 1,520 | 454 alpha=0; 53 black pixels alpha=1, 39 black pixels alpha=6, 30 black pixels alpha=36, 367 alpha=255 | The foreground contains antialiased black edges and opaque ornamentation; the small-alpha edge pixels are a likely source of amplified black fringe |
+| Aura source fill `[88,56..96,120)` | 512 | all 512 pixels alpha=255 | The original uses a fully opaque, grayscale **textured fill**, tinted via render color, not a flat semi-transparent colored rectangle |
+
+Example of a real foreground pixel: atlas `(188,0)=(0,0,0,60)`; with ordinary source-alpha blending, that black pixel contributes roughly 24% opacity. At `(182,0)=(0,0,0,20)` it contributes under 8%. If source alpha were ignored or a mismatched blend configuration forced opaque rendering, these would become large dark shapes. **That is a quantified mechanism, not yet a proven current render-state failure.**
+
+Original [HudHandler.renderHuds](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/lib/events/HudHandler.java) explicitly enables GL blending with `glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)` before drawing either meter. The modern [TCInstrumentHud](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCInstrumentHud.java) contains no matching explicit setup, but the caller's vanilla `GuiGraphics` render path may still establish correct blending. This remains the central uncertainty.
+
+**Controlled test:** sample screenshot RGBA at the outer contour, record GL/render-pipeline state immediately before and during each meter blit, and compare the same HUD texture fragment rendered under explicitly verified alpha blending vs unchanged vanilla state. Keep GUI scale and shader pack fixed. Check the original model's intended faint dark shadow separately from the user's unexpectedly **thick** border.
+
+### F38 — Meter compositing is also changed: aura frame occlusion, fills, additive effects, and max-Warp symbol
+
+**Status:** `confirmed_legacy_mismatch` for draw sequence and effects; `requires_client` for contribution to border thickness.
+
+The original [HudHandler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/lib/events/HudHandler.java) draws Vis/Flux textured grayscale columns from atlas UV `(88,56)`, colors them via GL color, adds **moving translucent highlight quads** from UV `(96,56+offset)` and `(104,120-offset)` with temporary additive blending `glBlendFunc(770,1)`, restores normal blending, and draws the decorative frame from UV `(72,48)` **after** the fill and highlights. The capacity marker is then drawn from UV `(117,61)`.
+
+Current [TCInstrumentHud.renderAura](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCInstrumentHud.java) draws the frame **before** its fill, uses `graphics.fill` flat `0xD0...` rectangles, does **not** reproduce the animated texture highlights or additive pass, and then draws the marker. Although the destination rectangle is positioned inside the source frame in ordinary geometry, the frame's antialiased inner pixels and fill compositing cannot be presumed identical after changing draw order. The screenshot consequence needs a pixel test.
+
+For the Sanity/Warp meter, the original intentionally draws **two different atlas portions** (`[152,0]` back and `[176,0]` foreground) around a fill sourced from grayscale `[200,...]`. The port preserves two frame blits but changes the interior from grayscale textured color modulation to flat `0xD0...` fills. Thus **two frame layers are not an accidental duplicate**. The original also draws a jittered indicator from UV `[216,0..236,16)` when effective Warp reaches 100; the modern `renderSanity` has no corresponding draw call, another concrete missing original visual. Geometry and vertical stacking deltas are already detailed in N11; they are not reclassified here as a proven black-outline root.
+
+**Separation of mechanisms:** the missing Vis/Flux glow, frame/fill draw order, and absent max-Warp symbol are confirmed parity differences. The **unwanted thick black contour**, however, still needs the blend-state/pixel experiment in F37. The underlying sprite itself intentionally includes some dark antialiasing, so simply removing all dark pixels would damage original artwork.
+
+### F39 — Research Table Knowledge Gain overdraw precisely scoped; not a persistent Research Table background defect
+
+**Status:** `confirmed_code` for repeated calls; `requires_client` for visibility/intensity and whether the user notices the artifact.
+
+Current [TCResearchTableScreen](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCResearchTableScreen.java) invokes `TCKnowledgeGainHud.renderOverScreen(...)` **twice consecutively** at the end of `render(...)` and **twice consecutively** in its `renderTooltip(...)` override. This is four direct call sites, not a claim that exactly four draws occur under every possible `AbstractContainerScreen` call sequence. Depending on superclass tooltip dispatch, the effective count can vary.
+
+The global [TCKnowledgeGainHud.renderLayer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCKnowledgeGainHud.java) intentionally returns early when the current screen is `TCResearchTableScreen`, so the extra calls are not the global layer also drawing on top. `renderInternal` advances Knowledge Gain progress through `tickOncePerClientTick`, which compares player `tickCount` to `lastClientTick`; repeated calls in one tick **do not advance progress multiple times**. They *can* re-blend the same `renderBookIcon` and tracker quads within a frame when `kgFade > 0`.
+
+The final uncertainty explains why a user may report that the Research Table appears normal: the extra rendering happens **during an active Knowledge Gain/fade animation**, not on a static empty Research Table screen. It is separate from the historical alpha fix (F36) and from the persistent Instrument HUD outlines (F37–F38).
+
+**Reproduction:** start a Knowledge Gain event with the Research Table open, capture a video/frame sequence including the icon animation at the screen corner, compare to the same event with a different inventory screen and in the world, and count actual draw invocations via instrumented trace. Do not label ordinary Research Table background as visually broken based on these calls alone.
+
+
 ## Black borders: competing causes
 
 There is **no proven universal cause** yet. Similar black pixels can originate in unrelated systems.
 
 | Observed symptom | Confirmed static evidence | Open hypotheses |
 | --- | --- | --- |
-| Thick black outline around Vis/Flux/Sanity | `hud.png` unchanged; frame positions, fill algorithm and draw order differ; Research Table was once fixed by explicit blending | Blend state/equation, wrong alpha interpretation, overlap of quads, UV bleed/texture sampling, GUI scale, missing glow pass |
+| Thick black outline around Vis/Flux/Sanity | F37 directly confirms byte-identical legacy/port `hud.png` with numerous low-alpha black border pixels; F38 confirms changed layer order and fill effects; F36 shows Research Table history altered two variables together | Incorrect source-alpha blending remains the strongest measurable hypothesis, **not a proved root cause**; also test sampling, frame/fill overlap, GUI scale and the missing additive highlight |
 | Stabilizing Inlay as a black plane | Loss of legacy render-layer semantics and dynamic tint; connection-based selection shape mismatch | Wrong solid/cutout/translucent path, transparent texels, z-order, layer composition; missing tint **alone** does not explain blackness |
 | Dark Cloth/Voidseer/candle/crystal icons | Selected handlers return RGB under ARGB contract; model layers are tintable | Zero high alpha, different tint consumer, premultiplication, actual item render path |
 | Incorrect mob textures | Original custom mesh/UV replaced by vanilla mesh for several mobs | UV and layer mapping, geometry scale, texture dimensions, animation; may have nothing to do with blending |
