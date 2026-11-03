@@ -1,0 +1,5091 @@
+{
+  "schema_version": "v0-source-snapshot-1",
+  "main_sha": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+  "generated_at": "2026-11-03",
+  "source": "GitHub contents at pinned main; static registration extraction (not runtime)",
+  "evidence_scope": "Source-declared registrations and explicit renderer/screen bindings only; no legacy mapping, dynamic variants, resource graph or in-game proof",
+  "categories": {
+    "items": {
+      "source": "05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java",
+      "source_blob_sha": "7583f30a19d5a0ac1830ccfc8bdbcf60c1a84ab1",
+      "count": 487,
+      "rows": [
+        {
+          "id": "thaumcraft:ore_amber",
+          "symbol": "ORE_AMBER",
+          "declared_with": "blockItem",
+          "line": 153
+        },
+        {
+          "id": "thaumcraft:ore_cinnabar",
+          "symbol": "ORE_CINNABAR",
+          "declared_with": "blockItem",
+          "line": 155
+        },
+        {
+          "id": "thaumcraft:ore_quartz",
+          "symbol": "ORE_QUARTZ",
+          "declared_with": "blockItem",
+          "line": 157
+        },
+        {
+          "id": "thaumcraft:deepslate_amber_ore",
+          "symbol": "DEEPSLATE_AMBER_ORE",
+          "declared_with": "blockItem",
+          "line": 159
+        },
+        {
+          "id": "thaumcraft:deepslate_cinnabar_ore",
+          "symbol": "DEEPSLATE_CINNABAR_ORE",
+          "declared_with": "blockItem",
+          "line": 161
+        },
+        {
+          "id": "thaumcraft:deepslate_quartz_ore",
+          "symbol": "DEEPSLATE_QUARTZ_ORE",
+          "declared_with": "blockItem",
+          "line": 163
+        },
+        {
+          "id": "thaumcraft:crystal_aer",
+          "symbol": "CRYSTAL_AER",
+          "declared_with": "blockItem",
+          "line": 167
+        },
+        {
+          "id": "thaumcraft:crystal_ignis",
+          "symbol": "CRYSTAL_IGNIS",
+          "declared_with": "blockItem",
+          "line": 169
+        },
+        {
+          "id": "thaumcraft:crystal_aqua",
+          "symbol": "CRYSTAL_AQUA",
+          "declared_with": "blockItem",
+          "line": 171
+        },
+        {
+          "id": "thaumcraft:crystal_terra",
+          "symbol": "CRYSTAL_TERRA",
+          "declared_with": "blockItem",
+          "line": 173
+        },
+        {
+          "id": "thaumcraft:crystal_ordo",
+          "symbol": "CRYSTAL_ORDO",
+          "declared_with": "blockItem",
+          "line": 175
+        },
+        {
+          "id": "thaumcraft:crystal_perditio",
+          "symbol": "CRYSTAL_PERDITIO",
+          "declared_with": "blockItem",
+          "line": 177
+        },
+        {
+          "id": "thaumcraft:crystal_vitium",
+          "symbol": "CRYSTAL_VITIUM",
+          "declared_with": "blockItem",
+          "line": 179
+        },
+        {
+          "id": "thaumcraft:stone_arcane",
+          "symbol": "STONE_ARCANE",
+          "declared_with": "blockItem",
+          "line": 183
+        },
+        {
+          "id": "thaumcraft:stone_arcane_brick",
+          "symbol": "STONE_ARCANE_BRICK",
+          "declared_with": "blockItem",
+          "line": 185
+        },
+        {
+          "id": "thaumcraft:stone_ancient",
+          "symbol": "STONE_ANCIENT",
+          "declared_with": "blockItem",
+          "line": 187
+        },
+        {
+          "id": "thaumcraft:stone_ancient_tile",
+          "symbol": "STONE_ANCIENT_TILE",
+          "declared_with": "blockItem",
+          "line": 189
+        },
+        {
+          "id": "thaumcraft:stone_ancient_rock",
+          "symbol": "STONE_ANCIENT_ROCK",
+          "declared_with": "blockItem",
+          "line": 191
+        },
+        {
+          "id": "thaumcraft:stone_ancient_glyphed",
+          "symbol": "STONE_ANCIENT_GLYPHED",
+          "declared_with": "blockItem",
+          "line": 193
+        },
+        {
+          "id": "thaumcraft:stone_ancient_doorway",
+          "symbol": "STONE_ANCIENT_DOORWAY",
+          "declared_with": "blockItem",
+          "line": 195
+        },
+        {
+          "id": "thaumcraft:stone_eldritch_tile",
+          "symbol": "STONE_ELDRITCH_TILE",
+          "declared_with": "blockItem",
+          "line": 197
+        },
+        {
+          "id": "thaumcraft:stone_porous",
+          "symbol": "STONE_POROUS",
+          "declared_with": "blockItem",
+          "line": 199
+        },
+        {
+          "id": "thaumcraft:stairs_arcane",
+          "symbol": "STAIRS_ARCANE",
+          "declared_with": "blockItem",
+          "line": 203
+        },
+        {
+          "id": "thaumcraft:stairs_arcane_brick",
+          "symbol": "STAIRS_ARCANE_BRICK",
+          "declared_with": "blockItem",
+          "line": 205
+        },
+        {
+          "id": "thaumcraft:stairs_ancient",
+          "symbol": "STAIRS_ANCIENT",
+          "declared_with": "blockItem",
+          "line": 207
+        },
+        {
+          "id": "thaumcraft:slab_arcane_stone",
+          "symbol": "SLAB_ARCANE_STONE",
+          "declared_with": "blockItem",
+          "line": 211
+        },
+        {
+          "id": "thaumcraft:slab_arcane_brick",
+          "symbol": "SLAB_ARCANE_BRICK",
+          "declared_with": "blockItem",
+          "line": 213
+        },
+        {
+          "id": "thaumcraft:slab_ancient",
+          "symbol": "SLAB_ANCIENT",
+          "declared_with": "blockItem",
+          "line": 215
+        },
+        {
+          "id": "thaumcraft:slab_eldritch",
+          "symbol": "SLAB_ELDRITCH",
+          "declared_with": "blockItem",
+          "line": 217
+        },
+        {
+          "id": "thaumcraft:amber_block",
+          "symbol": "AMBER_BLOCK",
+          "declared_with": "blockItem",
+          "line": 221
+        },
+        {
+          "id": "thaumcraft:amber_brick",
+          "symbol": "AMBER_BRICK",
+          "declared_with": "blockItem",
+          "line": 223
+        },
+        {
+          "id": "thaumcraft:metal_brass",
+          "symbol": "METAL_BRASS",
+          "declared_with": "blockItem",
+          "line": 225
+        },
+        {
+          "id": "thaumcraft:metal_thaumium",
+          "symbol": "METAL_THAUMIUM",
+          "declared_with": "blockItem",
+          "line": 227
+        },
+        {
+          "id": "thaumcraft:metal_void",
+          "symbol": "METAL_VOID",
+          "declared_with": "blockItem",
+          "line": 229
+        },
+        {
+          "id": "thaumcraft:metal_alchemical",
+          "symbol": "METAL_ALCHEMICAL",
+          "declared_with": "blockItem",
+          "line": 231
+        },
+        {
+          "id": "thaumcraft:metal_alchemical_advanced",
+          "symbol": "METAL_ALCHEMICAL_ADVANCED",
+          "declared_with": "blockItem",
+          "line": 233
+        },
+        {
+          "id": "thaumcraft:nitor_black",
+          "symbol": "NITOR_BLACK",
+          "declared_with": "blockItem",
+          "line": 235
+        },
+        {
+          "id": "thaumcraft:nitor_blue",
+          "symbol": "NITOR_BLUE",
+          "declared_with": "blockItem",
+          "line": 237
+        },
+        {
+          "id": "thaumcraft:nitor_brown",
+          "symbol": "NITOR_BROWN",
+          "declared_with": "blockItem",
+          "line": 239
+        },
+        {
+          "id": "thaumcraft:nitor_cyan",
+          "symbol": "NITOR_CYAN",
+          "declared_with": "blockItem",
+          "line": 241
+        },
+        {
+          "id": "thaumcraft:nitor_gray",
+          "symbol": "NITOR_GRAY",
+          "declared_with": "blockItem",
+          "line": 243
+        },
+        {
+          "id": "thaumcraft:nitor_green",
+          "symbol": "NITOR_GREEN",
+          "declared_with": "blockItem",
+          "line": 245
+        },
+        {
+          "id": "thaumcraft:nitor_yellow",
+          "symbol": "NITOR_YELLOW",
+          "declared_with": "blockItem",
+          "line": 247
+        },
+        {
+          "id": "thaumcraft:nitor_lightblue",
+          "symbol": "NITOR_LIGHTBLUE",
+          "declared_with": "blockItem",
+          "line": 249
+        },
+        {
+          "id": "thaumcraft:nitor_lime",
+          "symbol": "NITOR_LIME",
+          "declared_with": "blockItem",
+          "line": 251
+        },
+        {
+          "id": "thaumcraft:nitor_magenta",
+          "symbol": "NITOR_MAGENTA",
+          "declared_with": "blockItem",
+          "line": 253
+        },
+        {
+          "id": "thaumcraft:nitor_orange",
+          "symbol": "NITOR_ORANGE",
+          "declared_with": "blockItem",
+          "line": 255
+        },
+        {
+          "id": "thaumcraft:nitor_pink",
+          "symbol": "NITOR_PINK",
+          "declared_with": "blockItem",
+          "line": 257
+        },
+        {
+          "id": "thaumcraft:nitor_purple",
+          "symbol": "NITOR_PURPLE",
+          "declared_with": "blockItem",
+          "line": 259
+        },
+        {
+          "id": "thaumcraft:nitor_red",
+          "symbol": "NITOR_RED",
+          "declared_with": "blockItem",
+          "line": 261
+        },
+        {
+          "id": "thaumcraft:nitor_silver",
+          "symbol": "NITOR_SILVER",
+          "declared_with": "blockItem",
+          "line": 263
+        },
+        {
+          "id": "thaumcraft:nitor_white",
+          "symbol": "NITOR_WHITE",
+          "declared_with": "blockItem",
+          "line": 265
+        },
+        {
+          "id": "thaumcraft:candle_black",
+          "symbol": "CANDLE_BLACK",
+          "declared_with": "blockItem",
+          "line": 267
+        },
+        {
+          "id": "thaumcraft:candle_blue",
+          "symbol": "CANDLE_BLUE",
+          "declared_with": "blockItem",
+          "line": 269
+        },
+        {
+          "id": "thaumcraft:candle_brown",
+          "symbol": "CANDLE_BROWN",
+          "declared_with": "blockItem",
+          "line": 271
+        },
+        {
+          "id": "thaumcraft:candle_cyan",
+          "symbol": "CANDLE_CYAN",
+          "declared_with": "blockItem",
+          "line": 273
+        },
+        {
+          "id": "thaumcraft:candle_gray",
+          "symbol": "CANDLE_GRAY",
+          "declared_with": "blockItem",
+          "line": 275
+        },
+        {
+          "id": "thaumcraft:candle_green",
+          "symbol": "CANDLE_GREEN",
+          "declared_with": "blockItem",
+          "line": 277
+        },
+        {
+          "id": "thaumcraft:candle_lightblue",
+          "symbol": "CANDLE_LIGHTBLUE",
+          "declared_with": "blockItem",
+          "line": 279
+        },
+        {
+          "id": "thaumcraft:candle_lime",
+          "symbol": "CANDLE_LIME",
+          "declared_with": "blockItem",
+          "line": 281
+        },
+        {
+          "id": "thaumcraft:candle_magenta",
+          "symbol": "CANDLE_MAGENTA",
+          "declared_with": "blockItem",
+          "line": 283
+        },
+        {
+          "id": "thaumcraft:candle_orange",
+          "symbol": "CANDLE_ORANGE",
+          "declared_with": "blockItem",
+          "line": 285
+        },
+        {
+          "id": "thaumcraft:candle_pink",
+          "symbol": "CANDLE_PINK",
+          "declared_with": "blockItem",
+          "line": 287
+        },
+        {
+          "id": "thaumcraft:candle_purple",
+          "symbol": "CANDLE_PURPLE",
+          "declared_with": "blockItem",
+          "line": 289
+        },
+        {
+          "id": "thaumcraft:candle_red",
+          "symbol": "CANDLE_RED",
+          "declared_with": "blockItem",
+          "line": 291
+        },
+        {
+          "id": "thaumcraft:candle_silver",
+          "symbol": "CANDLE_SILVER",
+          "declared_with": "blockItem",
+          "line": 293
+        },
+        {
+          "id": "thaumcraft:candle_white",
+          "symbol": "CANDLE_WHITE",
+          "declared_with": "blockItem",
+          "line": 295
+        },
+        {
+          "id": "thaumcraft:candle_yellow",
+          "symbol": "CANDLE_YELLOW",
+          "declared_with": "blockItem",
+          "line": 297
+        },
+        {
+          "id": "thaumcraft:table_wood",
+          "symbol": "TABLE_WOOD",
+          "declared_with": "blockItem",
+          "line": 299
+        },
+        {
+          "id": "thaumcraft:table_stone",
+          "symbol": "TABLE_STONE",
+          "declared_with": "blockItem",
+          "line": 301
+        },
+        {
+          "id": "thaumcraft:arcane_workbench",
+          "symbol": "ARCANE_WORKBENCH",
+          "declared_with": "blockItem",
+          "line": 303
+        },
+        {
+          "id": "thaumcraft:arcane_workbench_charger",
+          "symbol": "ARCANE_WORKBENCH_CHARGER",
+          "declared_with": "blockItem",
+          "line": 305
+        },
+        {
+          "id": "thaumcraft:research_table",
+          "symbol": "RESEARCH_TABLE",
+          "declared_with": "blockItem",
+          "line": 307
+        },
+        {
+          "id": "thaumcraft:crucible",
+          "symbol": "CRUCIBLE",
+          "declared_with": "blockItem",
+          "line": 309
+        },
+        {
+          "id": "thaumcraft:smelter_basic",
+          "symbol": "SMELTER_BASIC",
+          "declared_with": "blockItem",
+          "line": 311
+        },
+        {
+          "id": "thaumcraft:bellows",
+          "symbol": "BELLOWS",
+          "declared_with": "blockItem",
+          "line": 313
+        },
+        {
+          "id": "thaumcraft:smelter_vent",
+          "symbol": "SMELTER_VENT",
+          "declared_with": "blockItem",
+          "line": 315
+        },
+        {
+          "id": "thaumcraft:smelter_aux",
+          "symbol": "SMELTER_AUX",
+          "declared_with": "blockItem",
+          "line": 317
+        },
+        {
+          "id": "thaumcraft:jar_normal",
+          "symbol": "JAR_NORMAL",
+          "declared_with": "ITEMS.register",
+          "line": 321
+        },
+        {
+          "id": "thaumcraft:jar_void",
+          "symbol": "JAR_VOID",
+          "declared_with": "ITEMS.register",
+          "line": 323
+        },
+        {
+          "id": "thaumcraft:centrifuge",
+          "symbol": "CENTRIFUGE",
+          "declared_with": "blockItem",
+          "line": 325
+        },
+        {
+          "id": "thaumcraft:alembic",
+          "symbol": "ALEMBIC",
+          "declared_with": "blockItem",
+          "line": 327
+        },
+        {
+          "id": "thaumcraft:essentiatransportin",
+          "symbol": "ESSENTIA_TRANSPORT_IN",
+          "declared_with": "blockItem",
+          "line": 329
+        },
+        {
+          "id": "thaumcraft:essentiatransportout",
+          "symbol": "ESSENTIA_TRANSPORT_OUT",
+          "declared_with": "blockItem",
+          "line": 331
+        },
+        {
+          "id": "thaumcraft:smelter_thaumium",
+          "symbol": "SMELTER_THAUMIUM",
+          "declared_with": "blockItem",
+          "line": 333
+        },
+        {
+          "id": "thaumcraft:smelter_void",
+          "symbol": "SMELTER_VOID",
+          "declared_with": "blockItem",
+          "line": 335
+        },
+        {
+          "id": "thaumcraft:wand_workbench",
+          "symbol": "WAND_WORKBENCH",
+          "declared_with": "blockItem",
+          "line": 337
+        },
+        {
+          "id": "thaumcraft:infusion_matrix",
+          "symbol": "INFUSION_MATRIX",
+          "declared_with": "blockItem",
+          "line": 339
+        },
+        {
+          "id": "thaumcraft:pillar_arcane",
+          "symbol": "PILLAR_ARCANE",
+          "declared_with": "blockItem",
+          "line": 341
+        },
+        {
+          "id": "thaumcraft:pillar_ancient",
+          "symbol": "PILLAR_ANCIENT",
+          "declared_with": "blockItem",
+          "line": 343
+        },
+        {
+          "id": "thaumcraft:pillar_eldritch",
+          "symbol": "PILLAR_ELDRITCH",
+          "declared_with": "blockItem",
+          "line": 345
+        },
+        {
+          "id": "thaumcraft:matrix_speed",
+          "symbol": "MATRIX_SPEED",
+          "declared_with": "blockItem",
+          "line": 347
+        },
+        {
+          "id": "thaumcraft:matrix_cost",
+          "symbol": "MATRIX_COST",
+          "declared_with": "blockItem",
+          "line": 349
+        },
+        {
+          "id": "thaumcraft:golem_builder",
+          "symbol": "GOLEM_BUILDER",
+          "declared_with": "blockItem",
+          "line": 351
+        },
+        {
+          "id": "thaumcraft:inlay",
+          "symbol": "INLAY",
+          "declared_with": "blockItem",
+          "line": 353
+        },
+        {
+          "id": "thaumcraft:stabilizer",
+          "symbol": "STABILIZER",
+          "declared_with": "blockItem",
+          "line": 355
+        },
+        {
+          "id": "thaumcraft:flux_goo",
+          "symbol": "FLUX_GOO",
+          "declared_with": "blockItem",
+          "line": 357
+        },
+        {
+          "id": "thaumcraft:taint_fibre",
+          "symbol": "TAINT_FIBRE",
+          "declared_with": "blockItem",
+          "line": 359
+        },
+        {
+          "id": "thaumcraft:taint_crust",
+          "symbol": "TAINT_CRUST",
+          "declared_with": "blockItem",
+          "line": 361
+        },
+        {
+          "id": "thaumcraft:taint_soil",
+          "symbol": "TAINT_SOIL",
+          "declared_with": "blockItem",
+          "line": 363
+        },
+        {
+          "id": "thaumcraft:taint_rock",
+          "symbol": "TAINT_ROCK",
+          "declared_with": "blockItem",
+          "line": 365
+        },
+        {
+          "id": "thaumcraft:taint_geyser",
+          "symbol": "TAINT_GEYSER",
+          "declared_with": "blockItem",
+          "line": 367
+        },
+        {
+          "id": "thaumcraft:taint_log",
+          "symbol": "TAINT_LOG",
+          "declared_with": "blockItem",
+          "line": 369
+        },
+        {
+          "id": "thaumcraft:taint_feature",
+          "symbol": "TAINT_FEATURE",
+          "declared_with": "blockItem",
+          "line": 371
+        },
+        {
+          "id": "thaumcraft:log_greatwood",
+          "symbol": "LOG_GREATWOOD",
+          "declared_with": "blockItem",
+          "line": 373
+        },
+        {
+          "id": "thaumcraft:log_silverwood",
+          "symbol": "LOG_SILVERWOOD",
+          "declared_with": "blockItem",
+          "line": 375
+        },
+        {
+          "id": "thaumcraft:leaves_greatwood",
+          "symbol": "LEAVES_GREATWOOD",
+          "declared_with": "blockItem",
+          "line": 377
+        },
+        {
+          "id": "thaumcraft:leaves_silverwood",
+          "symbol": "LEAVES_SILVERWOOD",
+          "declared_with": "blockItem",
+          "line": 379
+        },
+        {
+          "id": "thaumcraft:sapling_greatwood",
+          "symbol": "SAPLING_GREATWOOD",
+          "declared_with": "blockItem",
+          "line": 381
+        },
+        {
+          "id": "thaumcraft:sapling_silverwood",
+          "symbol": "SAPLING_SILVERWOOD",
+          "declared_with": "blockItem",
+          "line": 383
+        },
+        {
+          "id": "thaumcraft:shimmerleaf",
+          "symbol": "SHIMMERLEAF",
+          "declared_with": "blockItem",
+          "line": 385
+        },
+        {
+          "id": "thaumcraft:cinderpearl",
+          "symbol": "CINDERPEARL",
+          "declared_with": "blockItem",
+          "line": 387
+        },
+        {
+          "id": "thaumcraft:vishroom",
+          "symbol": "VISHROOM",
+          "declared_with": "blockItem",
+          "line": 389
+        },
+        {
+          "id": "thaumcraft:plank_greatwood",
+          "symbol": "PLANK_GREATWOOD",
+          "declared_with": "blockItem",
+          "line": 391
+        },
+        {
+          "id": "thaumcraft:plank_silverwood",
+          "symbol": "PLANK_SILVERWOOD",
+          "declared_with": "blockItem",
+          "line": 393
+        },
+        {
+          "id": "thaumcraft:stairs_greatwood",
+          "symbol": "STAIRS_GREATWOOD",
+          "declared_with": "blockItem",
+          "line": 395
+        },
+        {
+          "id": "thaumcraft:stairs_silverwood",
+          "symbol": "STAIRS_SILVERWOOD",
+          "declared_with": "blockItem",
+          "line": 397
+        },
+        {
+          "id": "thaumcraft:slab_greatwood",
+          "symbol": "SLAB_GREATWOOD",
+          "declared_with": "blockItem",
+          "line": 399
+        },
+        {
+          "id": "thaumcraft:slab_silverwood",
+          "symbol": "SLAB_SILVERWOOD",
+          "declared_with": "blockItem",
+          "line": 401
+        },
+        {
+          "id": "thaumcraft:thaumonomicon",
+          "symbol": "THAUMONOMICON",
+          "declared_with": "ITEMS.register",
+          "line": 405
+        },
+        {
+          "id": "thaumcraft:thaumometer",
+          "symbol": "THAUMOMETER",
+          "declared_with": "ITEMS.register",
+          "line": 407
+        },
+        {
+          "id": "thaumcraft:goggles",
+          "symbol": "GOGGLES",
+          "declared_with": "ITEMS.register",
+          "line": 409
+        },
+        {
+          "id": "thaumcraft:amber",
+          "symbol": "AMBER",
+          "declared_with": "ITEMS.register",
+          "line": 413
+        },
+        {
+          "id": "thaumcraft:quicksilver",
+          "symbol": "QUICKSILVER",
+          "declared_with": "ITEMS.register",
+          "line": 415
+        },
+        {
+          "id": "thaumcraft:quicksilver_nugget",
+          "symbol": "QUICKSILVER_NUGGET",
+          "declared_with": "simpleItem",
+          "line": 417
+        },
+        {
+          "id": "thaumcraft:fabric",
+          "symbol": "FABRIC",
+          "declared_with": "ITEMS.register",
+          "line": 419
+        },
+        {
+          "id": "thaumcraft:thaumium_ingot",
+          "symbol": "THAUMIUM_INGOT",
+          "declared_with": "simpleItem",
+          "line": 421
+        },
+        {
+          "id": "thaumcraft:brass_ingot",
+          "symbol": "BRASS_INGOT",
+          "declared_with": "simpleItem",
+          "line": 423
+        },
+        {
+          "id": "thaumcraft:brass_nugget",
+          "symbol": "BRASS_NUGGET",
+          "declared_with": "simpleItem",
+          "line": 425
+        },
+        {
+          "id": "thaumcraft:copper_nugget",
+          "symbol": "COPPER_NUGGET",
+          "declared_with": "simpleItem",
+          "line": 427
+        },
+        {
+          "id": "thaumcraft:tin_nugget",
+          "symbol": "TIN_NUGGET",
+          "declared_with": "simpleItem",
+          "line": 429
+        },
+        {
+          "id": "thaumcraft:silver_nugget",
+          "symbol": "SILVER_NUGGET",
+          "declared_with": "simpleItem",
+          "line": 431
+        },
+        {
+          "id": "thaumcraft:lead_nugget",
+          "symbol": "LEAD_NUGGET",
+          "declared_with": "simpleItem",
+          "line": 433
+        },
+        {
+          "id": "thaumcraft:thaumium_nugget",
+          "symbol": "THAUMIUM_NUGGET",
+          "declared_with": "simpleItem",
+          "line": 435
+        },
+        {
+          "id": "thaumcraft:void_nugget",
+          "symbol": "VOID_NUGGET",
+          "declared_with": "simpleItem",
+          "line": 437
+        },
+        {
+          "id": "thaumcraft:quartz_nugget",
+          "symbol": "QUARTZ_NUGGET",
+          "declared_with": "simpleItem",
+          "line": 439
+        },
+        {
+          "id": "thaumcraft:brass_plate",
+          "symbol": "BRASS_PLATE",
+          "declared_with": "simpleItem",
+          "line": 441
+        },
+        {
+          "id": "thaumcraft:iron_plate",
+          "symbol": "IRON_PLATE",
+          "declared_with": "simpleItem",
+          "line": 443
+        },
+        {
+          "id": "thaumcraft:thaumium_plate",
+          "symbol": "THAUMIUM_PLATE",
+          "declared_with": "simpleItem",
+          "line": 445
+        },
+        {
+          "id": "thaumcraft:void_plate",
+          "symbol": "VOID_PLATE",
+          "declared_with": "simpleItem",
+          "line": 447
+        },
+        {
+          "id": "thaumcraft:filter",
+          "symbol": "FILTER",
+          "declared_with": "simpleItem",
+          "line": 449
+        },
+        {
+          "id": "thaumcraft:morphic_resonator",
+          "symbol": "MORPHIC_RESONATOR",
+          "declared_with": "simpleItem",
+          "line": 451
+        },
+        {
+          "id": "thaumcraft:rare_earth",
+          "symbol": "RARE_EARTH",
+          "declared_with": "simpleItem",
+          "line": 453
+        },
+        {
+          "id": "thaumcraft:primordial_pearl",
+          "symbol": "PRIMORDIAL_PEARL",
+          "declared_with": "simpleItem",
+          "line": 455
+        },
+        {
+          "id": "thaumcraft:salis_mundus",
+          "symbol": "SALIS_MUNDUS",
+          "declared_with": "simpleItem",
+          "line": 457
+        },
+        {
+          "id": "thaumcraft:tallow",
+          "symbol": "TALLOW",
+          "declared_with": "simpleItem",
+          "line": 459
+        },
+        {
+          "id": "thaumcraft:cluster_iron",
+          "symbol": "CLUSTER_IRON",
+          "declared_with": "simpleItem",
+          "line": 461
+        },
+        {
+          "id": "thaumcraft:cluster_gold",
+          "symbol": "CLUSTER_GOLD",
+          "declared_with": "simpleItem",
+          "line": 463
+        },
+        {
+          "id": "thaumcraft:cluster_copper",
+          "symbol": "CLUSTER_COPPER",
+          "declared_with": "simpleItem",
+          "line": 465
+        },
+        {
+          "id": "thaumcraft:cluster_tin",
+          "symbol": "CLUSTER_TIN",
+          "declared_with": "simpleItem",
+          "line": 467
+        },
+        {
+          "id": "thaumcraft:cluster_silver",
+          "symbol": "CLUSTER_SILVER",
+          "declared_with": "simpleItem",
+          "line": 469
+        },
+        {
+          "id": "thaumcraft:cluster_lead",
+          "symbol": "CLUSTER_LEAD",
+          "declared_with": "simpleItem",
+          "line": 471
+        },
+        {
+          "id": "thaumcraft:cluster_cinnabar",
+          "symbol": "CLUSTER_CINNABAR",
+          "declared_with": "simpleItem",
+          "line": 473
+        },
+        {
+          "id": "thaumcraft:mechanism_simple",
+          "symbol": "MECHANISM_SIMPLE",
+          "declared_with": "simpleItem",
+          "line": 475
+        },
+        {
+          "id": "thaumcraft:mechanism_complex",
+          "symbol": "MECHANISM_COMPLEX",
+          "declared_with": "simpleItem",
+          "line": 477
+        },
+        {
+          "id": "thaumcraft:vis_resonator",
+          "symbol": "VIS_RESONATOR",
+          "declared_with": "simpleItem",
+          "line": 479
+        },
+        {
+          "id": "thaumcraft:mirrored_glass",
+          "symbol": "MIRRORED_GLASS",
+          "declared_with": "simpleItem",
+          "line": 481
+        },
+        {
+          "id": "thaumcraft:brain",
+          "symbol": "BRAIN",
+          "declared_with": "simpleItem",
+          "line": 483
+        },
+        {
+          "id": "thaumcraft:alumentum",
+          "symbol": "ALUMENTUM",
+          "declared_with": "simpleItem",
+          "line": 485
+        },
+        {
+          "id": "thaumcraft:chunk_chicken",
+          "symbol": "CHUNK_CHICKEN",
+          "declared_with": "simpleItem",
+          "line": 487
+        },
+        {
+          "id": "thaumcraft:chunk_beef",
+          "symbol": "CHUNK_BEEF",
+          "declared_with": "simpleItem",
+          "line": 489
+        },
+        {
+          "id": "thaumcraft:chunk_pork",
+          "symbol": "CHUNK_PORK",
+          "declared_with": "simpleItem",
+          "line": 491
+        },
+        {
+          "id": "thaumcraft:chunk_fish",
+          "symbol": "CHUNK_FISH",
+          "declared_with": "simpleItem",
+          "line": 493
+        },
+        {
+          "id": "thaumcraft:chunk_rabbit",
+          "symbol": "CHUNK_RABBIT",
+          "declared_with": "simpleItem",
+          "line": 495
+        },
+        {
+          "id": "thaumcraft:chunk_mutton",
+          "symbol": "CHUNK_MUTTON",
+          "declared_with": "simpleItem",
+          "line": 497
+        },
+        {
+          "id": "thaumcraft:bath_salts",
+          "symbol": "BATH_SALTS",
+          "declared_with": "ITEMS.register",
+          "line": 499
+        },
+        {
+          "id": "thaumcraft:bottle_taint",
+          "symbol": "BOTTLE_TAINT",
+          "declared_with": "ITEMS.register",
+          "line": 501
+        },
+        {
+          "id": "thaumcraft:liquid_death_bucket",
+          "symbol": "LIQUID_DEATH_BUCKET",
+          "declared_with": "ITEMS.register",
+          "line": 503
+        },
+        {
+          "id": "thaumcraft:purifying_fluid_bucket",
+          "symbol": "PURIFYING_FLUID_BUCKET",
+          "declared_with": "ITEMS.register",
+          "line": 513
+        },
+        {
+          "id": "thaumcraft:sane_soap",
+          "symbol": "SANE_SOAP",
+          "declared_with": "ITEMS.register",
+          "line": 523
+        },
+        {
+          "id": "thaumcraft:flesh_block",
+          "symbol": "FLESH_BLOCK",
+          "declared_with": "blockItem",
+          "line": 525
+        },
+        {
+          "id": "thaumcraft:curio_rites",
+          "symbol": "CURIO_RITES",
+          "declared_with": "ITEMS.register",
+          "line": 527
+        },
+        {
+          "id": "thaumcraft:crimson_blade",
+          "symbol": "CRIMSON_BLADE",
+          "declared_with": "ITEMS.register",
+          "line": 531
+        },
+        {
+          "id": "thaumcraft:crimson_plate_helm",
+          "symbol": "CRIMSON_PLATE_HELM",
+          "declared_with": "ITEMS.register",
+          "line": 533
+        },
+        {
+          "id": "thaumcraft:crimson_plate_chest",
+          "symbol": "CRIMSON_PLATE_CHEST",
+          "declared_with": "ITEMS.register",
+          "line": 535
+        },
+        {
+          "id": "thaumcraft:crimson_plate_legs",
+          "symbol": "CRIMSON_PLATE_LEGS",
+          "declared_with": "ITEMS.register",
+          "line": 537
+        },
+        {
+          "id": "thaumcraft:crimson_boots",
+          "symbol": "CRIMSON_BOOTS",
+          "declared_with": "ITEMS.register",
+          "line": 539
+        },
+        {
+          "id": "thaumcraft:crimson_robe_helm",
+          "symbol": "CRIMSON_ROBE_HELM",
+          "declared_with": "ITEMS.register",
+          "line": 541
+        },
+        {
+          "id": "thaumcraft:crimson_robe_chest",
+          "symbol": "CRIMSON_ROBE_CHEST",
+          "declared_with": "ITEMS.register",
+          "line": 543
+        },
+        {
+          "id": "thaumcraft:crimson_robe_legs",
+          "symbol": "CRIMSON_ROBE_LEGS",
+          "declared_with": "ITEMS.register",
+          "line": 545
+        },
+        {
+          "id": "thaumcraft:crimson_praetor_helm",
+          "symbol": "CRIMSON_PRAETOR_HELM",
+          "declared_with": "ITEMS.register",
+          "line": 547
+        },
+        {
+          "id": "thaumcraft:crimson_praetor_chest",
+          "symbol": "CRIMSON_PRAETOR_CHEST",
+          "declared_with": "ITEMS.register",
+          "line": 549
+        },
+        {
+          "id": "thaumcraft:crimson_praetor_legs",
+          "symbol": "CRIMSON_PRAETOR_LEGS",
+          "declared_with": "ITEMS.register",
+          "line": 551
+        },
+        {
+          "id": "thaumcraft:curio_arcane",
+          "symbol": "CURIO_ARCANE",
+          "declared_with": "ITEMS.register",
+          "line": 557
+        },
+        {
+          "id": "thaumcraft:curio_preserved",
+          "symbol": "CURIO_PRESERVED",
+          "declared_with": "ITEMS.register",
+          "line": 559
+        },
+        {
+          "id": "thaumcraft:curio_ancient",
+          "symbol": "CURIO_ANCIENT",
+          "declared_with": "ITEMS.register",
+          "line": 561
+        },
+        {
+          "id": "thaumcraft:curio_eldritch",
+          "symbol": "CURIO_ELDRITCH",
+          "declared_with": "ITEMS.register",
+          "line": 563
+        },
+        {
+          "id": "thaumcraft:curio_knowledge",
+          "symbol": "CURIO_KNOWLEDGE",
+          "declared_with": "ITEMS.register",
+          "line": 565
+        },
+        {
+          "id": "thaumcraft:curio_twisted",
+          "symbol": "CURIO_TWISTED",
+          "declared_with": "ITEMS.register",
+          "line": 567
+        },
+        {
+          "id": "thaumcraft:loot_bag_common",
+          "symbol": "LOOT_BAG_COMMON",
+          "declared_with": "ITEMS.register",
+          "line": 573
+        },
+        {
+          "id": "thaumcraft:loot_bag_uncommon",
+          "symbol": "LOOT_BAG_UNCOMMON",
+          "declared_with": "ITEMS.register",
+          "line": 575
+        },
+        {
+          "id": "thaumcraft:loot_bag_rare",
+          "symbol": "LOOT_BAG_RARE",
+          "declared_with": "ITEMS.register",
+          "line": 577
+        },
+        {
+          "id": "thaumcraft:pech_wand",
+          "symbol": "PECH_WAND",
+          "declared_with": "ITEMS.register",
+          "line": 581
+        },
+        {
+          "id": "thaumcraft:sanity_checker",
+          "symbol": "SANITY_CHECKER",
+          "declared_with": "ITEMS.register",
+          "line": 583
+        },
+        {
+          "id": "thaumcraft:scribing_tools",
+          "symbol": "SCRIBING_TOOLS",
+          "declared_with": "simpleItem",
+          "line": 585
+        },
+        {
+          "id": "thaumcraft:caster_basic",
+          "symbol": "CASTER_BASIC",
+          "declared_with": "ITEMS.register",
+          "line": 587
+        },
+        {
+          "id": "thaumcraft:focus_1",
+          "symbol": "FOCUS_1",
+          "declared_with": "ITEMS.register",
+          "line": 589
+        },
+        {
+          "id": "thaumcraft:focus_2",
+          "symbol": "FOCUS_2",
+          "declared_with": "ITEMS.register",
+          "line": 591
+        },
+        {
+          "id": "thaumcraft:focus_3",
+          "symbol": "FOCUS_3",
+          "declared_with": "ITEMS.register",
+          "line": 593
+        },
+        {
+          "id": "thaumcraft:focus_pouch",
+          "symbol": "FOCUS_POUCH",
+          "declared_with": "ITEMS.register",
+          "line": 595
+        },
+        {
+          "id": "thaumcraft:thaumium_axe",
+          "symbol": "THAUMIUM_AXE",
+          "declared_with": "simpleItem",
+          "line": 597
+        },
+        {
+          "id": "thaumcraft:thaumium_hoe",
+          "symbol": "THAUMIUM_HOE",
+          "declared_with": "simpleItem",
+          "line": 599
+        },
+        {
+          "id": "thaumcraft:thaumium_pick",
+          "symbol": "THAUMIUM_PICK",
+          "declared_with": "simpleItem",
+          "line": 601
+        },
+        {
+          "id": "thaumcraft:thaumium_shovel",
+          "symbol": "THAUMIUM_SHOVEL",
+          "declared_with": "simpleItem",
+          "line": 603
+        },
+        {
+          "id": "thaumcraft:thaumium_sword",
+          "symbol": "THAUMIUM_SWORD",
+          "declared_with": "simpleItem",
+          "line": 605
+        },
+        {
+          "id": "thaumcraft:phial",
+          "symbol": "PHIAL",
+          "declared_with": "ITEMS.register",
+          "line": 607
+        },
+        {
+          "id": "thaumcraft:jar_label",
+          "symbol": "JAR_LABEL",
+          "declared_with": "ITEMS.register",
+          "line": 609
+        },
+        {
+          "id": "thaumcraft:golem",
+          "symbol": "GOLEM_PLACER",
+          "declared_with": "ITEMS.register",
+          "line": 611
+        },
+        {
+          "id": "thaumcraft:golem_bell",
+          "symbol": "GOLEM_BELL",
+          "declared_with": "ITEMS.register",
+          "line": 613
+        },
+        {
+          "id": "thaumcraft:seal_pickup",
+          "symbol": "SEAL_PICKUP",
+          "declared_with": "ITEMS.register",
+          "line": 615
+        },
+        {
+          "id": "thaumcraft:seal_pickup_advanced",
+          "symbol": "SEAL_PICKUP_ADVANCED",
+          "declared_with": "ITEMS.register",
+          "line": 617
+        },
+        {
+          "id": "thaumcraft:seal_fill",
+          "symbol": "SEAL_FILL",
+          "declared_with": "ITEMS.register",
+          "line": 619
+        },
+        {
+          "id": "thaumcraft:seal_fill_advanced",
+          "symbol": "SEAL_FILL_ADVANCED",
+          "declared_with": "ITEMS.register",
+          "line": 621
+        },
+        {
+          "id": "thaumcraft:seal_empty",
+          "symbol": "SEAL_EMPTY",
+          "declared_with": "ITEMS.register",
+          "line": 623
+        },
+        {
+          "id": "thaumcraft:seal_empty_advanced",
+          "symbol": "SEAL_EMPTY_ADVANCED",
+          "declared_with": "ITEMS.register",
+          "line": 625
+        },
+        {
+          "id": "thaumcraft:seal_guard",
+          "symbol": "SEAL_GUARD",
+          "declared_with": "ITEMS.register",
+          "line": 627
+        },
+        {
+          "id": "thaumcraft:seal_guard_advanced",
+          "symbol": "SEAL_GUARD_ADVANCED",
+          "declared_with": "ITEMS.register",
+          "line": 629
+        },
+        {
+          "id": "thaumcraft:seal_breaker",
+          "symbol": "SEAL_BREAKER",
+          "declared_with": "ITEMS.register",
+          "line": 631
+        },
+        {
+          "id": "thaumcraft:seal_breaker_advanced",
+          "symbol": "SEAL_BREAKER_ADVANCED",
+          "declared_with": "ITEMS.register",
+          "line": 633
+        },
+        {
+          "id": "thaumcraft:seal_lumber",
+          "symbol": "SEAL_LUMBER",
+          "declared_with": "ITEMS.register",
+          "line": 635
+        },
+        {
+          "id": "thaumcraft:seal_provider",
+          "symbol": "SEAL_PROVIDER",
+          "declared_with": "ITEMS.register",
+          "line": 637
+        },
+        {
+          "id": "thaumcraft:seal_stock",
+          "symbol": "SEAL_STOCK",
+          "declared_with": "ITEMS.register",
+          "line": 639
+        },
+        {
+          "id": "thaumcraft:seal_use",
+          "symbol": "SEAL_USE",
+          "declared_with": "ITEMS.register",
+          "line": 641
+        },
+        {
+          "id": "thaumcraft:jar_brain",
+          "symbol": "JAR_BRAIN",
+          "declared_with": "ITEMS.register",
+          "line": 643
+        },
+        {
+          "id": "thaumcraft:seal_butcher",
+          "symbol": "SEAL_BUTCHER",
+          "declared_with": "ITEMS.register",
+          "line": 645
+        },
+        {
+          "id": "thaumcraft:seal_harvest",
+          "symbol": "SEAL_HARVEST",
+          "declared_with": "ITEMS.register",
+          "line": 647
+        },
+        {
+          "id": "thaumcraft:traveller_boots",
+          "symbol": "TRAVELLER_BOOTS",
+          "declared_with": "ITEMS.register",
+          "line": 649
+        },
+        {
+          "id": "thaumcraft:cloud_ring",
+          "symbol": "CLOUD_RING",
+          "declared_with": "ITEMS.register",
+          "line": 651
+        },
+        {
+          "id": "thaumcraft:charm_undying",
+          "symbol": "CHARM_UNDYING",
+          "declared_with": "ITEMS.register",
+          "line": 652
+        },
+        {
+          "id": "thaumcraft:elemental_axe",
+          "symbol": "ELEMENTAL_AXE",
+          "declared_with": "ITEMS.register",
+          "line": 653
+        },
+        {
+          "id": "thaumcraft:elemental_pick",
+          "symbol": "ELEMENTAL_PICK",
+          "declared_with": "ITEMS.register",
+          "line": 655
+        },
+        {
+          "id": "thaumcraft:elemental_sword",
+          "symbol": "ELEMENTAL_SWORD",
+          "declared_with": "ITEMS.register",
+          "line": 657
+        },
+        {
+          "id": "thaumcraft:elemental_shovel",
+          "symbol": "ELEMENTAL_SHOVEL",
+          "declared_with": "ITEMS.register",
+          "line": 659
+        },
+        {
+          "id": "thaumcraft:elemental_hoe",
+          "symbol": "ELEMENTAL_HOE",
+          "declared_with": "ITEMS.register",
+          "line": 661
+        },
+        {
+          "id": "thaumcraft:thaumium_fortress_helm",
+          "symbol": "THAUMIUM_FORTRESS_HELM",
+          "declared_with": "ITEMS.register",
+          "line": 663
+        },
+        {
+          "id": "thaumcraft:thaumium_fortress_helm_goggles",
+          "symbol": "THAUMIUM_FORTRESS_HELM_GOGGLES",
+          "declared_with": "ITEMS.register",
+          "line": 665
+        },
+        {
+          "id": "thaumcraft:thaumium_fortress_chest",
+          "symbol": "THAUMIUM_FORTRESS_CHEST",
+          "declared_with": "ITEMS.register",
+          "line": 667
+        },
+        {
+          "id": "thaumcraft:thaumium_fortress_legs",
+          "symbol": "THAUMIUM_FORTRESS_LEGS",
+          "declared_with": "ITEMS.register",
+          "line": 669
+        },
+        {
+          "id": "thaumcraft:verdant_heart",
+          "symbol": "VERDANT_HEART",
+          "declared_with": "ITEMS.register",
+          "line": 677
+        },
+        {
+          "id": "thaumcraft:verdant_heart_life",
+          "symbol": "VERDANT_HEART_LIFE",
+          "declared_with": "ITEMS.register",
+          "line": 678
+        },
+        {
+          "id": "thaumcraft:verdant_heart_sustain",
+          "symbol": "VERDANT_HEART_SUSTAIN",
+          "declared_with": "ITEMS.register",
+          "line": 679
+        },
+        {
+          "id": "thaumcraft:triple_meat_treat",
+          "symbol": "TRIPLE_MEAT_TREAT",
+          "declared_with": "simpleItem",
+          "line": 680
+        },
+        {
+          "id": "thaumcraft:mask_grinning_devil",
+          "symbol": "MASK_GRINNING_DEVIL",
+          "declared_with": "simpleItem",
+          "line": 682
+        },
+        {
+          "id": "thaumcraft:mask_angry_ghost",
+          "symbol": "MASK_ANGRY_GHOST",
+          "declared_with": "simpleItem",
+          "line": 684
+        },
+        {
+          "id": "thaumcraft:mask_sipping_fiend",
+          "symbol": "MASK_SIPPING_FIEND",
+          "declared_with": "simpleItem",
+          "line": 686
+        },
+        {
+          "id": "thaumcraft:mindclockwork_advanced",
+          "symbol": "MIND_CLOCKWORK_ADVANCED",
+          "declared_with": "simpleItem",
+          "line": 688
+        },
+        {
+          "id": "thaumcraft:golem_press_blueprint",
+          "symbol": "GOLEM_PRESS_BLUEPRINT",
+          "declared_with": "simpleItem",
+          "line": 690
+        },
+        {
+          "id": "thaumcraft:infusion_altar_eldritch_blueprint",
+          "symbol": "INFUSION_ALTAR_ELDRITCH_BLUEPRINT",
+          "declared_with": "simpleItem",
+          "line": 692
+        },
+        {
+          "id": "thaumcraft:infusion_altar_ancient_blueprint",
+          "symbol": "INFUSION_ALTAR_ANCIENT_BLUEPRINT",
+          "declared_with": "simpleItem",
+          "line": 694
+        },
+        {
+          "id": "thaumcraft:infusion_altar_blueprint",
+          "symbol": "INFUSION_ALTAR_BLUEPRINT",
+          "declared_with": "simpleItem",
+          "line": 696
+        },
+        {
+          "id": "thaumcraft:eldritch_pedestal",
+          "symbol": "ELDRITCH_PEDESTAL",
+          "declared_with": "blockItem",
+          "line": 698
+        },
+        {
+          "id": "thaumcraft:ancient_pedestal",
+          "symbol": "ANCIENT_PEDESTAL",
+          "declared_with": "blockItem",
+          "line": 700
+        },
+        {
+          "id": "thaumcraft:arcane_pedestal",
+          "symbol": "ARCANE_PEDESTAL",
+          "declared_with": "blockItem",
+          "line": 702
+        },
+        {
+          "id": "thaumcraft:pedestal_arcane",
+          "symbol": "PEDESTAL_ARCANE",
+          "declared_with": "blockItem",
+          "line": 704
+        },
+        {
+          "id": "thaumcraft:pedestal_ancient",
+          "symbol": "PEDESTAL_ANCIENT",
+          "declared_with": "blockItem",
+          "line": 706
+        },
+        {
+          "id": "thaumcraft:pedestal_eldritch",
+          "symbol": "PEDESTAL_ELDRITCH",
+          "declared_with": "blockItem",
+          "line": 708
+        },
+        {
+          "id": "thaumcraft:recharge_pedestal",
+          "symbol": "RECHARGE_PEDESTAL",
+          "declared_with": "blockItem",
+          "line": 710
+        },
+        {
+          "id": "thaumcraft:paving_stone_travel",
+          "symbol": "PAVING_STONE_TRAVEL",
+          "declared_with": "blockItem",
+          "line": 712
+        },
+        {
+          "id": "thaumcraft:paving_stone_barrier",
+          "symbol": "PAVING_STONE_BARRIER",
+          "declared_with": "blockItem",
+          "line": 714
+        },
+        {
+          "id": "thaumcraft:loot_crate_common",
+          "symbol": "LOOT_CRATE_COMMON",
+          "declared_with": "blockItem",
+          "line": 716
+        },
+        {
+          "id": "thaumcraft:loot_crate_uncommon",
+          "symbol": "LOOT_CRATE_UNCOMMON",
+          "declared_with": "blockItem",
+          "line": 718
+        },
+        {
+          "id": "thaumcraft:loot_crate_rare",
+          "symbol": "LOOT_CRATE_RARE",
+          "declared_with": "blockItem",
+          "line": 720
+        },
+        {
+          "id": "thaumcraft:loot_urn_common",
+          "symbol": "LOOT_URN_COMMON",
+          "declared_with": "blockItem",
+          "line": 722
+        },
+        {
+          "id": "thaumcraft:loot_urn_uncommon",
+          "symbol": "LOOT_URN_UNCOMMON",
+          "declared_with": "blockItem",
+          "line": 724
+        },
+        {
+          "id": "thaumcraft:loot_urn_rare",
+          "symbol": "LOOT_URN_RARE",
+          "declared_with": "blockItem",
+          "line": 726
+        },
+        {
+          "id": "thaumcraft:vis_generator",
+          "symbol": "VIS_GENERATOR",
+          "declared_with": "blockItem",
+          "line": 728
+        },
+        {
+          "id": "thaumcraft:vis_battery",
+          "symbol": "VIS_BATTERY",
+          "declared_with": "blockItem",
+          "line": 729
+        },
+        {
+          "id": "thaumcraft:condenser",
+          "symbol": "CONDENSER",
+          "declared_with": "blockItem",
+          "line": 730
+        },
+        {
+          "id": "thaumcraft:condenser_lattice",
+          "symbol": "CONDENSER_LATTICE",
+          "declared_with": "blockItem",
+          "line": 731
+        },
+        {
+          "id": "thaumcraft:condenser_lattice_dirty",
+          "symbol": "CONDENSER_LATTICE_DIRTY",
+          "declared_with": "blockItem",
+          "line": 732
+        },
+        {
+          "id": "thaumcraft:pattern_crafter",
+          "symbol": "PATTERN_CRAFTER",
+          "declared_with": "blockItem",
+          "line": 733
+        },
+        {
+          "id": "thaumcraft:potion_sprayer",
+          "symbol": "POTION_SPRAYER",
+          "declared_with": "blockItem",
+          "line": 734
+        },
+        {
+          "id": "thaumcraft:grapple_gun",
+          "symbol": "GRAPPLE_GUN",
+          "declared_with": "ITEMS.register",
+          "line": 735
+        },
+        {
+          "id": "thaumcraft:grapple_gun_tip",
+          "symbol": "GRAPPLE_GUN_TIP",
+          "declared_with": "simpleItem",
+          "line": 736
+        },
+        {
+          "id": "thaumcraft:grapple_gun_spool",
+          "symbol": "GRAPPLE_GUN_SPOOL",
+          "declared_with": "simpleItem",
+          "line": 737
+        },
+        {
+          "id": "thaumcraft:causality_collapser",
+          "symbol": "CAUSALITY_COLLAPSER",
+          "declared_with": "ITEMS.register",
+          "line": 740
+        },
+        {
+          "id": "thaumcraft:cultist_leader_spawn_egg",
+          "symbol": "CULTIST_LEADER_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 750
+        },
+        {
+          "id": "thaumcraft:taintacle_giant_spawn_egg",
+          "symbol": "TAINTACLE_GIANT_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 752
+        },
+        {
+          "id": "thaumcraft:brainy_zombie_spawn_egg",
+          "symbol": "BRAINY_ZOMBIE_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 754
+        },
+        {
+          "id": "thaumcraft:giant_brainy_zombie_spawn_egg",
+          "symbol": "GIANT_BRAINY_ZOMBIE_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 756
+        },
+        {
+          "id": "thaumcraft:wisp_spawn_egg",
+          "symbol": "WISP_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 758
+        },
+        {
+          "id": "thaumcraft:firebat_spawn_egg",
+          "symbol": "FIREBAT_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 760
+        },
+        {
+          "id": "thaumcraft:pech_spawn_egg",
+          "symbol": "PECH_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 762
+        },
+        {
+          "id": "thaumcraft:mind_spider_spawn_egg",
+          "symbol": "MIND_SPIDER_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 764
+        },
+        {
+          "id": "thaumcraft:eldritch_guardian_spawn_egg",
+          "symbol": "ELDRITCH_GUARDIAN_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 766
+        },
+        {
+          "id": "thaumcraft:eldritch_warden_spawn_egg",
+          "symbol": "ELDRITCH_WARDEN_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 767
+        },
+        {
+          "id": "thaumcraft:eldritch_golem_spawn_egg",
+          "symbol": "ELDRITCH_GOLEM_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 768
+        },
+        {
+          "id": "thaumcraft:cultist_knight_spawn_egg",
+          "symbol": "CULTIST_KNIGHT_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 770
+        },
+        {
+          "id": "thaumcraft:cultist_cleric_spawn_egg",
+          "symbol": "CULTIST_CLERIC_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 772
+        },
+        {
+          "id": "thaumcraft:eldritch_crab_spawn_egg",
+          "symbol": "ELDRITCH_CRAB_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 774
+        },
+        {
+          "id": "thaumcraft:inhabited_zombie_spawn_egg",
+          "symbol": "INHABITED_ZOMBIE_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 776
+        },
+        {
+          "id": "thaumcraft:thaum_slime_spawn_egg",
+          "symbol": "THAUM_SLIME_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 778
+        },
+        {
+          "id": "thaumcraft:taint_crawler_spawn_egg",
+          "symbol": "TAINT_CRAWLER_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 780
+        },
+        {
+          "id": "thaumcraft:taintacle_spawn_egg",
+          "symbol": "TAINTACLE_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 782
+        },
+        {
+          "id": "thaumcraft:taint_swarm_spawn_egg",
+          "symbol": "TAINT_SWARM_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 784
+        },
+        {
+          "id": "thaumcraft:taint_seed_spawn_egg",
+          "symbol": "TAINT_SEED_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 786
+        },
+        {
+          "id": "thaumcraft:taint_seed_prime_spawn_egg",
+          "symbol": "TAINT_SEED_PRIME_SPAWN_EGG",
+          "declared_with": "spawnEgg",
+          "line": 788
+        },
+        {
+          "id": "thaumcraft:void_siphon",
+          "symbol": "VOID_SIPHON",
+          "declared_with": "blockItem",
+          "line": 790
+        },
+        {
+          "id": "thaumcraft:spa",
+          "symbol": "SPA",
+          "declared_with": "blockItem",
+          "line": 792
+        },
+        {
+          "id": "thaumcraft:thaumatorium",
+          "symbol": "THAUMATORIUM",
+          "declared_with": "blockItem",
+          "line": 794
+        },
+        {
+          "id": "thaumcraft:essentia_exporter",
+          "symbol": "ESSENTIA_EXPORTER",
+          "declared_with": "simpleItem",
+          "line": 796
+        },
+        {
+          "id": "thaumcraft:essentia_importer",
+          "symbol": "ESSENTIA_IMPORTER",
+          "declared_with": "simpleItem",
+          "line": 798
+        },
+        {
+          "id": "thaumcraft:alchemical_construct",
+          "symbol": "ALCHEMICAL_CONSTRUCT",
+          "declared_with": "simpleItem",
+          "line": 800
+        },
+        {
+          "id": "thaumcraft:jar_label_essence",
+          "symbol": "JAR_LABEL_ESSENCE",
+          "declared_with": "ITEMS.register",
+          "line": 802
+        },
+        {
+          "id": "thaumcraft:everfull_urn",
+          "symbol": "EVERFULL_URN",
+          "declared_with": "blockItem",
+          "line": 804
+        },
+        {
+          "id": "thaumcraft:lamp_arcane",
+          "symbol": "LAMP_ARCANE",
+          "declared_with": "blockItem",
+          "line": 806
+        },
+        {
+          "id": "thaumcraft:hand_mirror",
+          "symbol": "HAND_MIRROR",
+          "declared_with": "ITEMS.register",
+          "line": 808
+        },
+        {
+          "id": "thaumcraft:mirror",
+          "symbol": "MIRROR",
+          "declared_with": "ITEMS.register",
+          "line": 810
+        },
+        {
+          "id": "thaumcraft:mirror_essentia",
+          "symbol": "MIRROR_ESSENTIA",
+          "declared_with": "ITEMS.register",
+          "line": 812
+        },
+        {
+          "id": "thaumcraft:lamp_fertility",
+          "symbol": "LAMP_FERTILITY",
+          "declared_with": "blockItem",
+          "line": 814
+        },
+        {
+          "id": "thaumcraft:lamp_growth",
+          "symbol": "LAMP_GROWTH",
+          "declared_with": "blockItem",
+          "line": 816
+        },
+        {
+          "id": "thaumcraft:infernal_furnace",
+          "symbol": "INFERNAL_FURNACE",
+          "declared_with": "blockItem",
+          "line": 818
+        },
+        {
+          "id": "thaumcraft:arcane_bore",
+          "symbol": "ARCANE_BORE",
+          "declared_with": "ITEMS.register",
+          "line": 820
+        },
+        {
+          "id": "thaumcraft:primal_crusher",
+          "symbol": "PRIMAL_CRUSHER",
+          "declared_with": "ITEMS.register",
+          "line": 822
+        },
+        {
+          "id": "thaumcraft:voidseer_pearl",
+          "symbol": "VOIDSEER_PEARL",
+          "declared_with": "ITEMS.register",
+          "line": 824
+        },
+        {
+          "id": "thaumcraft:void_robe_legs",
+          "symbol": "VOID_ROBE_LEGS",
+          "declared_with": "ITEMS.register",
+          "line": 825
+        },
+        {
+          "id": "thaumcraft:void_robe_chest",
+          "symbol": "VOID_ROBE_CHEST",
+          "declared_with": "ITEMS.register",
+          "line": 827
+        },
+        {
+          "id": "thaumcraft:void_robe_helm",
+          "symbol": "VOID_ROBE_HELM",
+          "declared_with": "ITEMS.register",
+          "line": 829
+        },
+        {
+          "id": "thaumcraft:cloth_legs",
+          "symbol": "CLOTH_LEGS",
+          "declared_with": "ITEMS.register",
+          "line": 831
+        },
+        {
+          "id": "thaumcraft:cloth_chest",
+          "symbol": "CLOTH_CHEST",
+          "declared_with": "ITEMS.register",
+          "line": 833
+        },
+        {
+          "id": "thaumcraft:cloth_boots",
+          "symbol": "CLOTH_BOOTS",
+          "declared_with": "ITEMS.register",
+          "line": 835
+        },
+        {
+          "id": "thaumcraft:void_seed",
+          "symbol": "VOID_SEED",
+          "declared_with": "simpleItem",
+          "line": 837
+        },
+        {
+          "id": "thaumcraft:arcane_ear",
+          "symbol": "ARCANE_EAR",
+          "declared_with": "blockItem",
+          "line": 839
+        },
+        {
+          "id": "thaumcraft:arcane_ear_toggle",
+          "symbol": "ARCANE_EAR_TOGGLE",
+          "declared_with": "blockItem",
+          "line": 841
+        },
+        {
+          "id": "thaumcraft:hungry_chest",
+          "symbol": "HUNGRY_CHEST",
+          "declared_with": "blockItem",
+          "line": 843
+        },
+        {
+          "id": "thaumcraft:dioptra",
+          "symbol": "DIOPTRA",
+          "declared_with": "blockItem",
+          "line": 845
+        },
+        {
+          "id": "thaumcraft:levitator",
+          "symbol": "LEVITATOR",
+          "declared_with": "blockItem",
+          "line": 847
+        },
+        {
+          "id": "thaumcraft:bauble_amulet",
+          "symbol": "BAUBLE_AMULET",
+          "declared_with": "ITEMS.register",
+          "line": 849
+        },
+        {
+          "id": "thaumcraft:vis_amulet",
+          "symbol": "VIS_AMULET",
+          "declared_with": "ITEMS.register",
+          "line": 850
+        },
+        {
+          "id": "thaumcraft:bauble_amulet_fancy",
+          "symbol": "BAUBLE_AMULET_FANCY",
+          "declared_with": "ITEMS.register",
+          "line": 851
+        },
+        {
+          "id": "thaumcraft:bauble_girdle",
+          "symbol": "BAUBLE_GIRDLE",
+          "declared_with": "ITEMS.register",
+          "line": 852
+        },
+        {
+          "id": "thaumcraft:bauble_girdle_fancy",
+          "symbol": "BAUBLE_GIRDLE_FANCY",
+          "declared_with": "ITEMS.register",
+          "line": 853
+        },
+        {
+          "id": "thaumcraft:bauble_ring",
+          "symbol": "BAUBLE_RING",
+          "declared_with": "ITEMS.register",
+          "line": 854
+        },
+        {
+          "id": "thaumcraft:bauble_charm",
+          "symbol": "BAUBLE_CHARM",
+          "declared_with": "ITEMS.register",
+          "line": 855
+        },
+        {
+          "id": "thaumcraft:bauble_ring_fancy",
+          "symbol": "BAUBLE_RING_FANCY",
+          "declared_with": "ITEMS.register",
+          "line": 856
+        },
+        {
+          "id": "thaumcraft:ring_apprentice",
+          "symbol": "RING_APPRENTICE",
+          "declared_with": "ITEMS.register",
+          "line": 857
+        },
+        {
+          "id": "thaumcraft:curiosity_band",
+          "symbol": "CURIOSITY_BAND",
+          "declared_with": "ITEMS.register",
+          "line": 858
+        },
+        {
+          "id": "thaumcraft:brass_brace",
+          "symbol": "BRASS_BRACE",
+          "declared_with": "simpleItem",
+          "line": 859
+        },
+        {
+          "id": "thaumcraft:thaumium_helm",
+          "symbol": "THAUMIUM_HELM",
+          "declared_with": "ITEMS.register",
+          "line": 861
+        },
+        {
+          "id": "thaumcraft:thaumium_chest",
+          "symbol": "THAUMIUM_CHEST",
+          "declared_with": "ITEMS.register",
+          "line": 863
+        },
+        {
+          "id": "thaumcraft:thaumium_legs",
+          "symbol": "THAUMIUM_LEGS",
+          "declared_with": "ITEMS.register",
+          "line": 865
+        },
+        {
+          "id": "thaumcraft:thaumium_boots",
+          "symbol": "THAUMIUM_BOOTS",
+          "declared_with": "ITEMS.register",
+          "line": 867
+        },
+        {
+          "id": "thaumcraft:void_ingot",
+          "symbol": "VOID_INGOT",
+          "declared_with": "simpleItem",
+          "line": 869
+        },
+        {
+          "id": "thaumcraft:void_axe",
+          "symbol": "VOID_AXE",
+          "declared_with": "simpleItem",
+          "line": 871
+        },
+        {
+          "id": "thaumcraft:void_hoe",
+          "symbol": "VOID_HOE",
+          "declared_with": "simpleItem",
+          "line": 873
+        },
+        {
+          "id": "thaumcraft:void_pick",
+          "symbol": "VOID_PICK",
+          "declared_with": "simpleItem",
+          "line": 875
+        },
+        {
+          "id": "thaumcraft:void_shovel",
+          "symbol": "VOID_SHOVEL",
+          "declared_with": "simpleItem",
+          "line": 877
+        },
+        {
+          "id": "thaumcraft:void_sword",
+          "symbol": "VOID_SWORD",
+          "declared_with": "simpleItem",
+          "line": 879
+        },
+        {
+          "id": "thaumcraft:void_helm",
+          "symbol": "VOID_HELM",
+          "declared_with": "ITEMS.register",
+          "line": 881
+        },
+        {
+          "id": "thaumcraft:void_chest",
+          "symbol": "VOID_CHEST",
+          "declared_with": "ITEMS.register",
+          "line": 883
+        },
+        {
+          "id": "thaumcraft:void_legs",
+          "symbol": "VOID_LEGS",
+          "declared_with": "ITEMS.register",
+          "line": 885
+        },
+        {
+          "id": "thaumcraft:void_boots",
+          "symbol": "VOID_BOOTS",
+          "declared_with": "ITEMS.register",
+          "line": 887
+        },
+        {
+          "id": "thaumcraft:crystal_essence_aer",
+          "symbol": "CRYSTAL_ESSENCE_AER",
+          "declared_with": "simpleItem",
+          "line": 891
+        },
+        {
+          "id": "thaumcraft:crystal_essence_terra",
+          "symbol": "CRYSTAL_ESSENCE_TERRA",
+          "declared_with": "simpleItem",
+          "line": 893
+        },
+        {
+          "id": "thaumcraft:crystal_essence_ignis",
+          "symbol": "CRYSTAL_ESSENCE_IGNIS",
+          "declared_with": "simpleItem",
+          "line": 895
+        },
+        {
+          "id": "thaumcraft:crystal_essence_aqua",
+          "symbol": "CRYSTAL_ESSENCE_AQUA",
+          "declared_with": "simpleItem",
+          "line": 897
+        },
+        {
+          "id": "thaumcraft:crystal_essence_ordo",
+          "symbol": "CRYSTAL_ESSENCE_ORDO",
+          "declared_with": "simpleItem",
+          "line": 899
+        },
+        {
+          "id": "thaumcraft:crystal_essence_perditio",
+          "symbol": "CRYSTAL_ESSENCE_PERDITIO",
+          "declared_with": "simpleItem",
+          "line": 901
+        },
+        {
+          "id": "thaumcraft:crystal_essence_vacuos",
+          "symbol": "CRYSTAL_ESSENCE_VACUOS",
+          "declared_with": "simpleItem",
+          "line": 903
+        },
+        {
+          "id": "thaumcraft:crystal_essence_lux",
+          "symbol": "CRYSTAL_ESSENCE_LUX",
+          "declared_with": "simpleItem",
+          "line": 905
+        },
+        {
+          "id": "thaumcraft:crystal_essence_motus",
+          "symbol": "CRYSTAL_ESSENCE_MOTUS",
+          "declared_with": "simpleItem",
+          "line": 907
+        },
+        {
+          "id": "thaumcraft:crystal_essence_gelum",
+          "symbol": "CRYSTAL_ESSENCE_GELUM",
+          "declared_with": "simpleItem",
+          "line": 909
+        },
+        {
+          "id": "thaumcraft:crystal_essence_vitreus",
+          "symbol": "CRYSTAL_ESSENCE_VITREUS",
+          "declared_with": "simpleItem",
+          "line": 911
+        },
+        {
+          "id": "thaumcraft:crystal_essence_metallum",
+          "symbol": "CRYSTAL_ESSENCE_METALLUM",
+          "declared_with": "simpleItem",
+          "line": 913
+        },
+        {
+          "id": "thaumcraft:crystal_essence_victus",
+          "symbol": "CRYSTAL_ESSENCE_VICTUS",
+          "declared_with": "simpleItem",
+          "line": 915
+        },
+        {
+          "id": "thaumcraft:crystal_essence_mortuus",
+          "symbol": "CRYSTAL_ESSENCE_MORTUUS",
+          "declared_with": "simpleItem",
+          "line": 917
+        },
+        {
+          "id": "thaumcraft:crystal_essence_potentia",
+          "symbol": "CRYSTAL_ESSENCE_POTENTIA",
+          "declared_with": "simpleItem",
+          "line": 919
+        },
+        {
+          "id": "thaumcraft:crystal_essence_permutatio",
+          "symbol": "CRYSTAL_ESSENCE_PERMUTATIO",
+          "declared_with": "simpleItem",
+          "line": 921
+        },
+        {
+          "id": "thaumcraft:crystal_essence_praecantatio",
+          "symbol": "CRYSTAL_ESSENCE_PRAECANTATIO",
+          "declared_with": "simpleItem",
+          "line": 923
+        },
+        {
+          "id": "thaumcraft:crystal_essence_auram",
+          "symbol": "CRYSTAL_ESSENCE_AURAM",
+          "declared_with": "simpleItem",
+          "line": 925
+        },
+        {
+          "id": "thaumcraft:crystal_essence_alkimia",
+          "symbol": "CRYSTAL_ESSENCE_ALKIMIA",
+          "declared_with": "simpleItem",
+          "line": 927
+        },
+        {
+          "id": "thaumcraft:crystal_essence_vitium",
+          "symbol": "CRYSTAL_ESSENCE_VITIUM",
+          "declared_with": "simpleItem",
+          "line": 929
+        },
+        {
+          "id": "thaumcraft:crystal_essence_tenebrae",
+          "symbol": "CRYSTAL_ESSENCE_TENEBRAE",
+          "declared_with": "simpleItem",
+          "line": 931
+        },
+        {
+          "id": "thaumcraft:crystal_essence_alienis",
+          "symbol": "CRYSTAL_ESSENCE_ALIENIS",
+          "declared_with": "simpleItem",
+          "line": 933
+        },
+        {
+          "id": "thaumcraft:crystal_essence_volatus",
+          "symbol": "CRYSTAL_ESSENCE_VOLATUS",
+          "declared_with": "simpleItem",
+          "line": 935
+        },
+        {
+          "id": "thaumcraft:crystal_essence_herba",
+          "symbol": "CRYSTAL_ESSENCE_HERBA",
+          "declared_with": "simpleItem",
+          "line": 937
+        },
+        {
+          "id": "thaumcraft:crystal_essence_instrumentum",
+          "symbol": "CRYSTAL_ESSENCE_INSTRUMENTUM",
+          "declared_with": "simpleItem",
+          "line": 939
+        },
+        {
+          "id": "thaumcraft:crystal_essence_fabrico",
+          "symbol": "CRYSTAL_ESSENCE_FABRICO",
+          "declared_with": "simpleItem",
+          "line": 941
+        },
+        {
+          "id": "thaumcraft:crystal_essence_machina",
+          "symbol": "CRYSTAL_ESSENCE_MACHINA",
+          "declared_with": "simpleItem",
+          "line": 943
+        },
+        {
+          "id": "thaumcraft:crystal_essence_vinculum",
+          "symbol": "CRYSTAL_ESSENCE_VINCULUM",
+          "declared_with": "simpleItem",
+          "line": 945
+        },
+        {
+          "id": "thaumcraft:crystal_essence_spiritus",
+          "symbol": "CRYSTAL_ESSENCE_SPIRITUS",
+          "declared_with": "simpleItem",
+          "line": 947
+        },
+        {
+          "id": "thaumcraft:crystal_essence_cognitio",
+          "symbol": "CRYSTAL_ESSENCE_COGNITIO",
+          "declared_with": "simpleItem",
+          "line": 949
+        },
+        {
+          "id": "thaumcraft:crystal_essence_sensus",
+          "symbol": "CRYSTAL_ESSENCE_SENSUS",
+          "declared_with": "simpleItem",
+          "line": 951
+        },
+        {
+          "id": "thaumcraft:crystal_essence_aversio",
+          "symbol": "CRYSTAL_ESSENCE_AVERSIO",
+          "declared_with": "simpleItem",
+          "line": 953
+        },
+        {
+          "id": "thaumcraft:crystal_essence_praemunio",
+          "symbol": "CRYSTAL_ESSENCE_PRAEMUNIO",
+          "declared_with": "simpleItem",
+          "line": 955
+        },
+        {
+          "id": "thaumcraft:crystal_essence_desiderium",
+          "symbol": "CRYSTAL_ESSENCE_DESIDERIUM",
+          "declared_with": "simpleItem",
+          "line": 957
+        },
+        {
+          "id": "thaumcraft:crystal_essence_exanimis",
+          "symbol": "CRYSTAL_ESSENCE_EXANIMIS",
+          "declared_with": "simpleItem",
+          "line": 959
+        },
+        {
+          "id": "thaumcraft:crystal_essence_bestia",
+          "symbol": "CRYSTAL_ESSENCE_BESTIA",
+          "declared_with": "simpleItem",
+          "line": 961
+        },
+        {
+          "id": "thaumcraft:crystal_essence_humanus",
+          "symbol": "CRYSTAL_ESSENCE_HUMANUS",
+          "declared_with": "simpleItem",
+          "line": 963
+        },
+        {
+          "id": "thaumcraft:phial_aer",
+          "symbol": "PHIAL_AER",
+          "declared_with": "simpleItem",
+          "line": 967
+        },
+        {
+          "id": "thaumcraft:phial_terra",
+          "symbol": "PHIAL_TERRA",
+          "declared_with": "simpleItem",
+          "line": 969
+        },
+        {
+          "id": "thaumcraft:phial_ignis",
+          "symbol": "PHIAL_IGNIS",
+          "declared_with": "simpleItem",
+          "line": 971
+        },
+        {
+          "id": "thaumcraft:phial_aqua",
+          "symbol": "PHIAL_AQUA",
+          "declared_with": "simpleItem",
+          "line": 973
+        },
+        {
+          "id": "thaumcraft:phial_ordo",
+          "symbol": "PHIAL_ORDO",
+          "declared_with": "simpleItem",
+          "line": 975
+        },
+        {
+          "id": "thaumcraft:phial_perditio",
+          "symbol": "PHIAL_PERDITIO",
+          "declared_with": "simpleItem",
+          "line": 977
+        },
+        {
+          "id": "thaumcraft:phial_vacuos",
+          "symbol": "PHIAL_VACUOS",
+          "declared_with": "simpleItem",
+          "line": 979
+        },
+        {
+          "id": "thaumcraft:phial_lux",
+          "symbol": "PHIAL_LUX",
+          "declared_with": "simpleItem",
+          "line": 981
+        },
+        {
+          "id": "thaumcraft:phial_motus",
+          "symbol": "PHIAL_MOTUS",
+          "declared_with": "simpleItem",
+          "line": 983
+        },
+        {
+          "id": "thaumcraft:phial_gelum",
+          "symbol": "PHIAL_GELUM",
+          "declared_with": "simpleItem",
+          "line": 985
+        },
+        {
+          "id": "thaumcraft:phial_vitreus",
+          "symbol": "PHIAL_VITREUS",
+          "declared_with": "simpleItem",
+          "line": 987
+        },
+        {
+          "id": "thaumcraft:phial_metallum",
+          "symbol": "PHIAL_METALLUM",
+          "declared_with": "simpleItem",
+          "line": 989
+        },
+        {
+          "id": "thaumcraft:phial_victus",
+          "symbol": "PHIAL_VICTUS",
+          "declared_with": "simpleItem",
+          "line": 991
+        },
+        {
+          "id": "thaumcraft:phial_mortuus",
+          "symbol": "PHIAL_MORTUUS",
+          "declared_with": "simpleItem",
+          "line": 993
+        },
+        {
+          "id": "thaumcraft:phial_potentia",
+          "symbol": "PHIAL_POTENTIA",
+          "declared_with": "simpleItem",
+          "line": 995
+        },
+        {
+          "id": "thaumcraft:phial_permutatio",
+          "symbol": "PHIAL_PERMUTATIO",
+          "declared_with": "simpleItem",
+          "line": 997
+        },
+        {
+          "id": "thaumcraft:phial_praecantatio",
+          "symbol": "PHIAL_PRAECANTATIO",
+          "declared_with": "simpleItem",
+          "line": 999
+        },
+        {
+          "id": "thaumcraft:phial_auram",
+          "symbol": "PHIAL_AURAM",
+          "declared_with": "simpleItem",
+          "line": 1001
+        },
+        {
+          "id": "thaumcraft:phial_alkimia",
+          "symbol": "PHIAL_ALKIMIA",
+          "declared_with": "simpleItem",
+          "line": 1003
+        },
+        {
+          "id": "thaumcraft:phial_vitium",
+          "symbol": "PHIAL_VITIUM",
+          "declared_with": "simpleItem",
+          "line": 1005
+        },
+        {
+          "id": "thaumcraft:phial_tenebrae",
+          "symbol": "PHIAL_TENEBRAE",
+          "declared_with": "simpleItem",
+          "line": 1007
+        },
+        {
+          "id": "thaumcraft:phial_alienis",
+          "symbol": "PHIAL_ALIENIS",
+          "declared_with": "simpleItem",
+          "line": 1009
+        },
+        {
+          "id": "thaumcraft:phial_volatus",
+          "symbol": "PHIAL_VOLATUS",
+          "declared_with": "simpleItem",
+          "line": 1011
+        },
+        {
+          "id": "thaumcraft:phial_herba",
+          "symbol": "PHIAL_HERBA",
+          "declared_with": "simpleItem",
+          "line": 1013
+        },
+        {
+          "id": "thaumcraft:phial_instrumentum",
+          "symbol": "PHIAL_INSTRUMENTUM",
+          "declared_with": "simpleItem",
+          "line": 1015
+        },
+        {
+          "id": "thaumcraft:phial_fabrico",
+          "symbol": "PHIAL_FABRICO",
+          "declared_with": "simpleItem",
+          "line": 1017
+        },
+        {
+          "id": "thaumcraft:phial_machina",
+          "symbol": "PHIAL_MACHINA",
+          "declared_with": "simpleItem",
+          "line": 1019
+        },
+        {
+          "id": "thaumcraft:phial_vinculum",
+          "symbol": "PHIAL_VINCULUM",
+          "declared_with": "simpleItem",
+          "line": 1021
+        },
+        {
+          "id": "thaumcraft:phial_spiritus",
+          "symbol": "PHIAL_SPIRITUS",
+          "declared_with": "simpleItem",
+          "line": 1023
+        },
+        {
+          "id": "thaumcraft:phial_cognitio",
+          "symbol": "PHIAL_COGNITIO",
+          "declared_with": "simpleItem",
+          "line": 1025
+        },
+        {
+          "id": "thaumcraft:phial_sensus",
+          "symbol": "PHIAL_SENSUS",
+          "declared_with": "simpleItem",
+          "line": 1027
+        },
+        {
+          "id": "thaumcraft:phial_aversio",
+          "symbol": "PHIAL_AVERSIO",
+          "declared_with": "simpleItem",
+          "line": 1029
+        },
+        {
+          "id": "thaumcraft:phial_praemunio",
+          "symbol": "PHIAL_PRAEMUNIO",
+          "declared_with": "simpleItem",
+          "line": 1031
+        },
+        {
+          "id": "thaumcraft:phial_desiderium",
+          "symbol": "PHIAL_DESIDERIUM",
+          "declared_with": "simpleItem",
+          "line": 1033
+        },
+        {
+          "id": "thaumcraft:phial_exanimis",
+          "symbol": "PHIAL_EXANIMIS",
+          "declared_with": "simpleItem",
+          "line": 1035
+        },
+        {
+          "id": "thaumcraft:phial_bestia",
+          "symbol": "PHIAL_BESTIA",
+          "declared_with": "simpleItem",
+          "line": 1037
+        },
+        {
+          "id": "thaumcraft:phial_humanus",
+          "symbol": "PHIAL_HUMANUS",
+          "declared_with": "simpleItem",
+          "line": 1039
+        },
+        {
+          "id": "thaumcraft:enchanted_placeholder_protection_1",
+          "symbol": "ENCHANTED_PLACEHOLDER_PROTECTION_1",
+          "declared_with": "simpleItem",
+          "line": 1043
+        },
+        {
+          "id": "thaumcraft:enchanted_placeholder_sharpness_1",
+          "symbol": "ENCHANTED_PLACEHOLDER_SHARPNESS_1",
+          "declared_with": "simpleItem",
+          "line": 1045
+        },
+        {
+          "id": "thaumcraft:enchanted_placeholder_silk_touch_1",
+          "symbol": "ENCHANTED_PLACEHOLDER_SILK_TOUCH_1",
+          "declared_with": "simpleItem",
+          "line": 1047
+        },
+        {
+          "id": "thaumcraft:enchanted_placeholder_fortune_1",
+          "symbol": "ENCHANTED_PLACEHOLDER_FORTUNE_1",
+          "declared_with": "simpleItem",
+          "line": 1049
+        },
+        {
+          "id": "thaumcraft:activatorrail",
+          "symbol": "CATALOG_PLACEHOLDER_ACTIVATORRAIL",
+          "declared_with": "ITEMS.register",
+          "line": 1269
+        },
+        {
+          "id": "thaumcraft:ancientpedestal",
+          "symbol": "CATALOG_PLACEHOLDER_ANCIENTPEDESTAL",
+          "declared_with": "ITEMS.register",
+          "line": 1271
+        },
+        {
+          "id": "thaumcraft:arcanepedestal",
+          "symbol": "CATALOG_PLACEHOLDER_ARCANEPEDESTAL",
+          "declared_with": "ITEMS.register",
+          "line": 1273
+        },
+        {
+          "id": "thaumcraft:bannerblack",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERBLACK",
+          "declared_with": "ITEMS.register",
+          "line": 1275
+        },
+        {
+          "id": "thaumcraft:bannerblue",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERBLUE",
+          "declared_with": "ITEMS.register",
+          "line": 1277
+        },
+        {
+          "id": "thaumcraft:bannerbrown",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERBROWN",
+          "declared_with": "ITEMS.register",
+          "line": 1279
+        },
+        {
+          "id": "thaumcraft:bannercyan",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERCYAN",
+          "declared_with": "ITEMS.register",
+          "line": 1281
+        },
+        {
+          "id": "thaumcraft:bannergray",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERGRAY",
+          "declared_with": "ITEMS.register",
+          "line": 1283
+        },
+        {
+          "id": "thaumcraft:bannergreen",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERGREEN",
+          "declared_with": "ITEMS.register",
+          "line": 1285
+        },
+        {
+          "id": "thaumcraft:bannerlightblue",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERLIGHTBLUE",
+          "declared_with": "ITEMS.register",
+          "line": 1287
+        },
+        {
+          "id": "thaumcraft:bannerlime",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERLIME",
+          "declared_with": "ITEMS.register",
+          "line": 1289
+        },
+        {
+          "id": "thaumcraft:bannermagenta",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERMAGENTA",
+          "declared_with": "ITEMS.register",
+          "line": 1291
+        },
+        {
+          "id": "thaumcraft:bannerorange",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERORANGE",
+          "declared_with": "ITEMS.register",
+          "line": 1293
+        },
+        {
+          "id": "thaumcraft:bannerpink",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERPINK",
+          "declared_with": "ITEMS.register",
+          "line": 1295
+        },
+        {
+          "id": "thaumcraft:bannerpurple",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERPURPLE",
+          "declared_with": "ITEMS.register",
+          "line": 1297
+        },
+        {
+          "id": "thaumcraft:bannerred",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERRED",
+          "declared_with": "ITEMS.register",
+          "line": 1299
+        },
+        {
+          "id": "thaumcraft:bannersilver",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERSILVER",
+          "declared_with": "ITEMS.register",
+          "line": 1301
+        },
+        {
+          "id": "thaumcraft:bannerwhite",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERWHITE",
+          "declared_with": "ITEMS.register",
+          "line": 1303
+        },
+        {
+          "id": "thaumcraft:banneryellow",
+          "symbol": "CATALOG_PLACEHOLDER_BANNERYELLOW",
+          "declared_with": "ITEMS.register",
+          "line": 1305
+        },
+        {
+          "id": "thaumcraft:eldritchpedestal",
+          "symbol": "CATALOG_PLACEHOLDER_ELDRITCHPEDESTAL",
+          "declared_with": "ITEMS.register",
+          "line": 1307
+        },
+        {
+          "id": "thaumcraft:pavebarrier",
+          "symbol": "CATALOG_PLACEHOLDER_PAVEBARRIER",
+          "declared_with": "ITEMS.register",
+          "line": 1309
+        },
+        {
+          "id": "thaumcraft:pavetravel",
+          "symbol": "CATALOG_PLACEHOLDER_PAVETRAVEL",
+          "declared_with": "ITEMS.register",
+          "line": 1311
+        },
+        {
+          "id": "thaumcraft:rechargepedestal",
+          "symbol": "CATALOG_PLACEHOLDER_RECHARGEPEDESTAL",
+          "declared_with": "ITEMS.register",
+          "line": 1313
+        },
+        {
+          "id": "thaumcraft:redstoneinlay",
+          "symbol": "CATALOG_PLACEHOLDER_REDSTONEINLAY",
+          "declared_with": "ITEMS.register",
+          "line": 1315
+        },
+        {
+          "id": "thaumcraft:advalchemyconstruct",
+          "symbol": "CATALOG_PLACEHOLDER_ADVALCHEMYCONSTRUCT",
+          "declared_with": "ITEMS.register",
+          "line": 1317
+        },
+        {
+          "id": "thaumcraft:alchemicalconstruct",
+          "symbol": "CATALOG_PLACEHOLDER_ALCHEMICALCONSTRUCT",
+          "declared_with": "ITEMS.register",
+          "line": 1319
+        },
+        {
+          "id": "thaumcraft:condenserlattice",
+          "symbol": "CATALOG_PLACEHOLDER_CONDENSERLATTICE",
+          "declared_with": "blockItem",
+          "line": 1325
+        },
+        {
+          "id": "thaumcraft:hungrychest",
+          "symbol": "CATALOG_PLACEHOLDER_HUNGRYCHEST",
+          "declared_with": "blockItem",
+          "line": 1329
+        },
+        {
+          "id": "thaumcraft:jarvoid",
+          "symbol": "CATALOG_PLACEHOLDER_JARVOID",
+          "declared_with": "ITEMS.register",
+          "line": 1331
+        },
+        {
+          "id": "thaumcraft:mnemonicmatrix",
+          "symbol": "CATALOG_PLACEHOLDER_MNEMONICMATRIX",
+          "declared_with": "ITEMS.register",
+          "line": 1339
+        },
+        {
+          "id": "thaumcraft:patterncrafter",
+          "symbol": "CATALOG_PLACEHOLDER_PATTERNCRAFTER",
+          "declared_with": "blockItem",
+          "line": 1341
+        },
+        {
+          "id": "thaumcraft:redstonerelay",
+          "symbol": "CATALOG_PLACEHOLDER_REDSTONERELAY",
+          "declared_with": "ITEMS.register",
+          "line": 1343
+        },
+        {
+          "id": "thaumcraft:resonator",
+          "symbol": "CATALOG_PLACEHOLDER_RESONATOR",
+          "declared_with": "ITEMS.register",
+          "line": 1345
+        },
+        {
+          "id": "thaumcraft:visbattery",
+          "symbol": "CATALOG_PLACEHOLDER_VISBATTERY",
+          "declared_with": "blockItem",
+          "line": 1349
+        },
+        {
+          "id": "thaumcraft:visgenerator",
+          "symbol": "CATALOG_PLACEHOLDER_VISGENERATOR",
+          "declared_with": "blockItem",
+          "line": 1351
+        },
+        {
+          "id": "thaumcraft:advancedcrossbow",
+          "symbol": "ADVANCEDCROSSBOW",
+          "declared_with": "ITEMS.register",
+          "line": 1355
+        },
+        {
+          "id": "thaumcraft:arcaneear",
+          "symbol": "CATALOG_PLACEHOLDER_ARCANEEAR",
+          "declared_with": "ITEMS.register",
+          "line": 1358
+        },
+        {
+          "id": "thaumcraft:automatedcrossbow",
+          "symbol": "AUTOMATEDCROSSBOW",
+          "declared_with": "ITEMS.register",
+          "line": 1362
+        },
+        {
+          "id": "thaumcraft:turret_placer",
+          "symbol": "TURRET_PLACER",
+          "declared_with": "ITEMS.register",
+          "line": 1363
+        },
+        {
+          "id": "thaumcraft:focuspouch",
+          "symbol": "CATALOG_PLACEHOLDER_FOCUSPOUCH",
+          "declared_with": "ITEMS.register",
+          "line": 1366
+        },
+        {
+          "id": "thaumcraft:grapplegun",
+          "symbol": "CATALOG_PLACEHOLDER_GRAPPLEGUN",
+          "declared_with": "ITEMS.register",
+          "line": 1368
+        },
+        {
+          "id": "thaumcraft:grapplegunspool",
+          "symbol": "CATALOG_PLACEHOLDER_GRAPPLEGUNSPOOL",
+          "declared_with": "simpleItem",
+          "line": 1370
+        },
+        {
+          "id": "thaumcraft:grappleguntip",
+          "symbol": "CATALOG_PLACEHOLDER_GRAPPLEGUNTIP",
+          "declared_with": "simpleItem",
+          "line": 1372
+        },
+        {
+          "id": "thaumcraft:mindclockwork",
+          "symbol": "CATALOG_PLACEHOLDER_MINDCLOCKWORK",
+          "declared_with": "ITEMS.register",
+          "line": 1374
+        },
+        {
+          "id": "thaumcraft:modaggression",
+          "symbol": "CATALOG_PLACEHOLDER_MODAGGRESSION",
+          "declared_with": "ITEMS.register",
+          "line": 1376
+        },
+        {
+          "id": "thaumcraft:modvision",
+          "symbol": "CATALOG_PLACEHOLDER_MODVISION",
+          "declared_with": "ITEMS.register",
+          "line": 1378
+        },
+        {
+          "id": "thaumcraft:potionsprayer",
+          "symbol": "CATALOG_PLACEHOLDER_POTIONSPRAYER",
+          "declared_with": "blockItem",
+          "line": 1380
+        },
+        {
+          "id": "thaumcraft:robeboots",
+          "symbol": "CATALOG_PLACEHOLDER_ROBEBOOTS",
+          "declared_with": "ITEMS.register",
+          "line": 1382
+        },
+        {
+          "id": "thaumcraft:robechest",
+          "symbol": "CATALOG_PLACEHOLDER_ROBECHEST",
+          "declared_with": "ITEMS.register",
+          "line": 1384
+        },
+        {
+          "id": "thaumcraft:robelegs",
+          "symbol": "CATALOG_PLACEHOLDER_ROBELEGS",
+          "declared_with": "ITEMS.register",
+          "line": 1386
+        },
+        {
+          "id": "thaumcraft:sealblank",
+          "symbol": "CATALOG_PLACEHOLDER_SEALBLANK",
+          "declared_with": "ITEMS.register",
+          "line": 1388
+        },
+        {
+          "id": "thaumcraft:tube",
+          "symbol": "CATALOG_PLACEHOLDER_TUBE",
+          "declared_with": "blockItem",
+          "line": 1398
+        },
+        {
+          "id": "thaumcraft:tube_buffer",
+          "symbol": "CATALOG_PLACEHOLDER_TUBEBUFFER",
+          "declared_with": "blockItem",
+          "line": 1400
+        },
+        {
+          "id": "thaumcraft:tube_filter",
+          "symbol": "CATALOG_PLACEHOLDER_TUBEFILTER",
+          "declared_with": "blockItem",
+          "line": 1402
+        },
+        {
+          "id": "thaumcraft:tube_oneway",
+          "symbol": "CATALOG_PLACEHOLDER_TUBEONEWAY",
+          "declared_with": "blockItem",
+          "line": 1404
+        },
+        {
+          "id": "thaumcraft:tube_restrict",
+          "symbol": "CATALOG_PLACEHOLDER_TUBERESTRICT",
+          "declared_with": "blockItem",
+          "line": 1406
+        },
+        {
+          "id": "thaumcraft:tube_valve",
+          "symbol": "CATALOG_PLACEHOLDER_TUBEVALVE",
+          "declared_with": "blockItem",
+          "line": 1408
+        }
+      ],
+      "default_review_status": "NOT_CHECKED",
+      "scope": "static source registrations"
+    },
+    "blocks": {
+      "source": "05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java",
+      "source_blob_sha": "a857eac646b36105fbde2b7bc8524b3bc5d23d83",
+      "count": 175,
+      "rows": [
+        {
+          "id": "thaumcraft:ore_amber",
+          "symbol": "ORE_AMBER",
+          "declared_with": "BLOCKS.register",
+          "line": 156
+        },
+        {
+          "id": "thaumcraft:ore_cinnabar",
+          "symbol": "ORE_CINNABAR",
+          "declared_with": "BLOCKS.register",
+          "line": 158
+        },
+        {
+          "id": "thaumcraft:ore_quartz",
+          "symbol": "ORE_QUARTZ",
+          "declared_with": "BLOCKS.register",
+          "line": 160
+        },
+        {
+          "id": "thaumcraft:deepslate_amber_ore",
+          "symbol": "DEEPSLATE_AMBER_ORE",
+          "declared_with": "BLOCKS.register",
+          "line": 162
+        },
+        {
+          "id": "thaumcraft:deepslate_cinnabar_ore",
+          "symbol": "DEEPSLATE_CINNABAR_ORE",
+          "declared_with": "BLOCKS.register",
+          "line": 164
+        },
+        {
+          "id": "thaumcraft:deepslate_quartz_ore",
+          "symbol": "DEEPSLATE_QUARTZ_ORE",
+          "declared_with": "BLOCKS.register",
+          "line": 166
+        },
+        {
+          "id": "thaumcraft:crystal_aer",
+          "symbol": "CRYSTAL_AER",
+          "declared_with": "BLOCKS.register",
+          "line": 170
+        },
+        {
+          "id": "thaumcraft:crystal_ignis",
+          "symbol": "CRYSTAL_IGNIS",
+          "declared_with": "BLOCKS.register",
+          "line": 172
+        },
+        {
+          "id": "thaumcraft:crystal_aqua",
+          "symbol": "CRYSTAL_AQUA",
+          "declared_with": "BLOCKS.register",
+          "line": 174
+        },
+        {
+          "id": "thaumcraft:crystal_terra",
+          "symbol": "CRYSTAL_TERRA",
+          "declared_with": "BLOCKS.register",
+          "line": 176
+        },
+        {
+          "id": "thaumcraft:crystal_ordo",
+          "symbol": "CRYSTAL_ORDO",
+          "declared_with": "BLOCKS.register",
+          "line": 178
+        },
+        {
+          "id": "thaumcraft:crystal_perditio",
+          "symbol": "CRYSTAL_PERDITIO",
+          "declared_with": "BLOCKS.register",
+          "line": 180
+        },
+        {
+          "id": "thaumcraft:crystal_vitium",
+          "symbol": "CRYSTAL_VITIUM",
+          "declared_with": "BLOCKS.register",
+          "line": 182
+        },
+        {
+          "id": "thaumcraft:stone_arcane",
+          "symbol": "STONE_ARCANE",
+          "declared_with": "BLOCKS.register",
+          "line": 186
+        },
+        {
+          "id": "thaumcraft:stone_arcane_brick",
+          "symbol": "STONE_ARCANE_BRICK",
+          "declared_with": "BLOCKS.register",
+          "line": 188
+        },
+        {
+          "id": "thaumcraft:stone_ancient",
+          "symbol": "STONE_ANCIENT",
+          "declared_with": "BLOCKS.register",
+          "line": 190
+        },
+        {
+          "id": "thaumcraft:stone_ancient_tile",
+          "symbol": "STONE_ANCIENT_TILE",
+          "declared_with": "BLOCKS.register",
+          "line": 192
+        },
+        {
+          "id": "thaumcraft:stone_ancient_rock",
+          "symbol": "STONE_ANCIENT_ROCK",
+          "declared_with": "BLOCKS.register",
+          "line": 194
+        },
+        {
+          "id": "thaumcraft:stone_ancient_glyphed",
+          "symbol": "STONE_ANCIENT_GLYPHED",
+          "declared_with": "BLOCKS.register",
+          "line": 196
+        },
+        {
+          "id": "thaumcraft:stone_ancient_doorway",
+          "symbol": "STONE_ANCIENT_DOORWAY",
+          "declared_with": "BLOCKS.register",
+          "line": 198
+        },
+        {
+          "id": "thaumcraft:stone_eldritch_tile",
+          "symbol": "STONE_ELDRITCH_TILE",
+          "declared_with": "BLOCKS.register",
+          "line": 200
+        },
+        {
+          "id": "thaumcraft:stone_porous",
+          "symbol": "STONE_POROUS",
+          "declared_with": "BLOCKS.register",
+          "line": 202
+        },
+        {
+          "id": "thaumcraft:stairs_arcane",
+          "symbol": "STAIRS_ARCANE",
+          "declared_with": "BLOCKS.register",
+          "line": 206
+        },
+        {
+          "id": "thaumcraft:stairs_arcane_brick",
+          "symbol": "STAIRS_ARCANE_BRICK",
+          "declared_with": "BLOCKS.register",
+          "line": 208
+        },
+        {
+          "id": "thaumcraft:stairs_ancient",
+          "symbol": "STAIRS_ANCIENT",
+          "declared_with": "BLOCKS.register",
+          "line": 210
+        },
+        {
+          "id": "thaumcraft:slab_arcane_stone",
+          "symbol": "SLAB_ARCANE_STONE",
+          "declared_with": "BLOCKS.register",
+          "line": 214
+        },
+        {
+          "id": "thaumcraft:slab_arcane_brick",
+          "symbol": "SLAB_ARCANE_BRICK",
+          "declared_with": "BLOCKS.register",
+          "line": 216
+        },
+        {
+          "id": "thaumcraft:slab_ancient",
+          "symbol": "SLAB_ANCIENT",
+          "declared_with": "BLOCKS.register",
+          "line": 218
+        },
+        {
+          "id": "thaumcraft:slab_eldritch",
+          "symbol": "SLAB_ELDRITCH",
+          "declared_with": "BLOCKS.register",
+          "line": 220
+        },
+        {
+          "id": "thaumcraft:amber_block",
+          "symbol": "AMBER_BLOCK",
+          "declared_with": "BLOCKS.register",
+          "line": 224
+        },
+        {
+          "id": "thaumcraft:amber_brick",
+          "symbol": "AMBER_BRICK",
+          "declared_with": "BLOCKS.register",
+          "line": 226
+        },
+        {
+          "id": "thaumcraft:metal_brass",
+          "symbol": "METAL_BRASS",
+          "declared_with": "BLOCKS.register",
+          "line": 230
+        },
+        {
+          "id": "thaumcraft:metal_thaumium",
+          "symbol": "METAL_THAUMIUM",
+          "declared_with": "BLOCKS.register",
+          "line": 232
+        },
+        {
+          "id": "thaumcraft:metal_void",
+          "symbol": "METAL_VOID",
+          "declared_with": "BLOCKS.register",
+          "line": 234
+        },
+        {
+          "id": "thaumcraft:metal_alchemical",
+          "symbol": "METAL_ALCHEMICAL",
+          "declared_with": "BLOCKS.register",
+          "line": 236
+        },
+        {
+          "id": "thaumcraft:metal_alchemical_advanced",
+          "symbol": "METAL_ALCHEMICAL_ADVANCED",
+          "declared_with": "BLOCKS.register",
+          "line": 238
+        },
+        {
+          "id": "thaumcraft:nitor_black",
+          "symbol": "NITOR_BLACK",
+          "declared_with": "BLOCKS.register",
+          "line": 240
+        },
+        {
+          "id": "thaumcraft:nitor_blue",
+          "symbol": "NITOR_BLUE",
+          "declared_with": "BLOCKS.register",
+          "line": 242
+        },
+        {
+          "id": "thaumcraft:nitor_brown",
+          "symbol": "NITOR_BROWN",
+          "declared_with": "BLOCKS.register",
+          "line": 244
+        },
+        {
+          "id": "thaumcraft:nitor_cyan",
+          "symbol": "NITOR_CYAN",
+          "declared_with": "BLOCKS.register",
+          "line": 246
+        },
+        {
+          "id": "thaumcraft:nitor_gray",
+          "symbol": "NITOR_GRAY",
+          "declared_with": "BLOCKS.register",
+          "line": 248
+        },
+        {
+          "id": "thaumcraft:nitor_green",
+          "symbol": "NITOR_GREEN",
+          "declared_with": "BLOCKS.register",
+          "line": 250
+        },
+        {
+          "id": "thaumcraft:nitor_yellow",
+          "symbol": "NITOR_YELLOW",
+          "declared_with": "BLOCKS.register",
+          "line": 252
+        },
+        {
+          "id": "thaumcraft:nitor_lightblue",
+          "symbol": "NITOR_LIGHTBLUE",
+          "declared_with": "BLOCKS.register",
+          "line": 254
+        },
+        {
+          "id": "thaumcraft:nitor_lime",
+          "symbol": "NITOR_LIME",
+          "declared_with": "BLOCKS.register",
+          "line": 256
+        },
+        {
+          "id": "thaumcraft:nitor_magenta",
+          "symbol": "NITOR_MAGENTA",
+          "declared_with": "BLOCKS.register",
+          "line": 258
+        },
+        {
+          "id": "thaumcraft:nitor_orange",
+          "symbol": "NITOR_ORANGE",
+          "declared_with": "BLOCKS.register",
+          "line": 260
+        },
+        {
+          "id": "thaumcraft:nitor_pink",
+          "symbol": "NITOR_PINK",
+          "declared_with": "BLOCKS.register",
+          "line": 262
+        },
+        {
+          "id": "thaumcraft:nitor_purple",
+          "symbol": "NITOR_PURPLE",
+          "declared_with": "BLOCKS.register",
+          "line": 264
+        },
+        {
+          "id": "thaumcraft:nitor_red",
+          "symbol": "NITOR_RED",
+          "declared_with": "BLOCKS.register",
+          "line": 266
+        },
+        {
+          "id": "thaumcraft:nitor_silver",
+          "symbol": "NITOR_SILVER",
+          "declared_with": "BLOCKS.register",
+          "line": 268
+        },
+        {
+          "id": "thaumcraft:nitor_white",
+          "symbol": "NITOR_WHITE",
+          "declared_with": "BLOCKS.register",
+          "line": 270
+        },
+        {
+          "id": "thaumcraft:candle_black",
+          "symbol": "CANDLE_BLACK",
+          "declared_with": "BLOCKS.register",
+          "line": 272
+        },
+        {
+          "id": "thaumcraft:candle_blue",
+          "symbol": "CANDLE_BLUE",
+          "declared_with": "BLOCKS.register",
+          "line": 274
+        },
+        {
+          "id": "thaumcraft:candle_brown",
+          "symbol": "CANDLE_BROWN",
+          "declared_with": "BLOCKS.register",
+          "line": 276
+        },
+        {
+          "id": "thaumcraft:candle_cyan",
+          "symbol": "CANDLE_CYAN",
+          "declared_with": "BLOCKS.register",
+          "line": 278
+        },
+        {
+          "id": "thaumcraft:candle_gray",
+          "symbol": "CANDLE_GRAY",
+          "declared_with": "BLOCKS.register",
+          "line": 280
+        },
+        {
+          "id": "thaumcraft:candle_green",
+          "symbol": "CANDLE_GREEN",
+          "declared_with": "BLOCKS.register",
+          "line": 282
+        },
+        {
+          "id": "thaumcraft:candle_lightblue",
+          "symbol": "CANDLE_LIGHTBLUE",
+          "declared_with": "BLOCKS.register",
+          "line": 284
+        },
+        {
+          "id": "thaumcraft:candle_lime",
+          "symbol": "CANDLE_LIME",
+          "declared_with": "BLOCKS.register",
+          "line": 286
+        },
+        {
+          "id": "thaumcraft:candle_magenta",
+          "symbol": "CANDLE_MAGENTA",
+          "declared_with": "BLOCKS.register",
+          "line": 288
+        },
+        {
+          "id": "thaumcraft:candle_orange",
+          "symbol": "CANDLE_ORANGE",
+          "declared_with": "BLOCKS.register",
+          "line": 290
+        },
+        {
+          "id": "thaumcraft:candle_pink",
+          "symbol": "CANDLE_PINK",
+          "declared_with": "BLOCKS.register",
+          "line": 292
+        },
+        {
+          "id": "thaumcraft:candle_purple",
+          "symbol": "CANDLE_PURPLE",
+          "declared_with": "BLOCKS.register",
+          "line": 294
+        },
+        {
+          "id": "thaumcraft:candle_red",
+          "symbol": "CANDLE_RED",
+          "declared_with": "BLOCKS.register",
+          "line": 296
+        },
+        {
+          "id": "thaumcraft:candle_silver",
+          "symbol": "CANDLE_SILVER",
+          "declared_with": "BLOCKS.register",
+          "line": 298
+        },
+        {
+          "id": "thaumcraft:candle_white",
+          "symbol": "CANDLE_WHITE",
+          "declared_with": "BLOCKS.register",
+          "line": 300
+        },
+        {
+          "id": "thaumcraft:candle_yellow",
+          "symbol": "CANDLE_YELLOW",
+          "declared_with": "BLOCKS.register",
+          "line": 302
+        },
+        {
+          "id": "thaumcraft:table_wood",
+          "symbol": "TABLE_WOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 306
+        },
+        {
+          "id": "thaumcraft:table_stone",
+          "symbol": "TABLE_STONE",
+          "declared_with": "BLOCKS.register",
+          "line": 308
+        },
+        {
+          "id": "thaumcraft:arcane_workbench",
+          "symbol": "ARCANE_WORKBENCH",
+          "declared_with": "BLOCKS.register",
+          "line": 310
+        },
+        {
+          "id": "thaumcraft:arcane_workbench_charger",
+          "symbol": "ARCANE_WORKBENCH_CHARGER",
+          "declared_with": "BLOCKS.register",
+          "line": 312
+        },
+        {
+          "id": "thaumcraft:research_table",
+          "symbol": "RESEARCH_TABLE",
+          "declared_with": "BLOCKS.register",
+          "line": 314
+        },
+        {
+          "id": "thaumcraft:crucible",
+          "symbol": "CRUCIBLE",
+          "declared_with": "BLOCKS.register",
+          "line": 316
+        },
+        {
+          "id": "thaumcraft:smelter_basic",
+          "symbol": "SMELTER_BASIC",
+          "declared_with": "BLOCKS.register",
+          "line": 318
+        },
+        {
+          "id": "thaumcraft:smelter_vent",
+          "symbol": "SMELTER_VENT",
+          "declared_with": "BLOCKS.register",
+          "line": 320
+        },
+        {
+          "id": "thaumcraft:smelter_aux",
+          "symbol": "SMELTER_AUX",
+          "declared_with": "BLOCKS.register",
+          "line": 332
+        },
+        {
+          "id": "thaumcraft:bellows",
+          "symbol": "BELLOWS",
+          "declared_with": "BLOCKS.register",
+          "line": 344
+        },
+        {
+          "id": "thaumcraft:jar_normal",
+          "symbol": "JAR_NORMAL",
+          "declared_with": "BLOCKS.register",
+          "line": 350
+        },
+        {
+          "id": "thaumcraft:jar_void",
+          "symbol": "JAR_VOID",
+          "declared_with": "BLOCKS.register",
+          "line": 354
+        },
+        {
+          "id": "thaumcraft:jar_brain",
+          "symbol": "JAR_BRAIN",
+          "declared_with": "BLOCKS.register",
+          "line": 358
+        },
+        {
+          "id": "thaumcraft:centrifuge",
+          "symbol": "CENTRIFUGE",
+          "declared_with": "BLOCKS.register",
+          "line": 360
+        },
+        {
+          "id": "thaumcraft:alembic",
+          "symbol": "ALEMBIC",
+          "declared_with": "BLOCKS.register",
+          "line": 362
+        },
+        {
+          "id": "thaumcraft:essentiatransportin",
+          "symbol": "ESSENTIA_TRANSPORT_IN",
+          "declared_with": "BLOCKS.register",
+          "line": 364
+        },
+        {
+          "id": "thaumcraft:essentiatransportout",
+          "symbol": "ESSENTIA_TRANSPORT_OUT",
+          "declared_with": "BLOCKS.register",
+          "line": 368
+        },
+        {
+          "id": "thaumcraft:tube",
+          "symbol": "TUBE",
+          "declared_with": "BLOCKS.register",
+          "line": 374
+        },
+        {
+          "id": "thaumcraft:tube_buffer",
+          "symbol": "TUBE_BUFFER",
+          "declared_with": "BLOCKS.register",
+          "line": 376
+        },
+        {
+          "id": "thaumcraft:tube_filter",
+          "symbol": "TUBE_FILTER",
+          "declared_with": "BLOCKS.register",
+          "line": 378
+        },
+        {
+          "id": "thaumcraft:tube_oneway",
+          "symbol": "TUBE_ONEWAY",
+          "declared_with": "BLOCKS.register",
+          "line": 380
+        },
+        {
+          "id": "thaumcraft:tube_restrict",
+          "symbol": "TUBE_RESTRICT",
+          "declared_with": "BLOCKS.register",
+          "line": 382
+        },
+        {
+          "id": "thaumcraft:tube_valve",
+          "symbol": "TUBE_VALVE",
+          "declared_with": "BLOCKS.register",
+          "line": 384
+        },
+        {
+          "id": "thaumcraft:smelter_thaumium",
+          "symbol": "SMELTER_THAUMIUM",
+          "declared_with": "BLOCKS.register",
+          "line": 386
+        },
+        {
+          "id": "thaumcraft:smelter_void",
+          "symbol": "SMELTER_VOID",
+          "declared_with": "BLOCKS.register",
+          "line": 388
+        },
+        {
+          "id": "thaumcraft:wand_workbench",
+          "symbol": "WAND_WORKBENCH",
+          "declared_with": "BLOCKS.register",
+          "line": 390
+        },
+        {
+          "id": "thaumcraft:infusion_matrix",
+          "symbol": "INFUSION_MATRIX",
+          "declared_with": "BLOCKS.register",
+          "line": 392
+        },
+        {
+          "id": "thaumcraft:pillar_arcane",
+          "symbol": "PILLAR_ARCANE",
+          "declared_with": "BLOCKS.register",
+          "line": 394
+        },
+        {
+          "id": "thaumcraft:pillar_ancient",
+          "symbol": "PILLAR_ANCIENT",
+          "declared_with": "BLOCKS.register",
+          "line": 396
+        },
+        {
+          "id": "thaumcraft:pillar_eldritch",
+          "symbol": "PILLAR_ELDRITCH",
+          "declared_with": "BLOCKS.register",
+          "line": 398
+        },
+        {
+          "id": "thaumcraft:matrix_speed",
+          "symbol": "MATRIX_SPEED",
+          "declared_with": "BLOCKS.register",
+          "line": 400
+        },
+        {
+          "id": "thaumcraft:matrix_cost",
+          "symbol": "MATRIX_COST",
+          "declared_with": "BLOCKS.register",
+          "line": 402
+        },
+        {
+          "id": "thaumcraft:arcane_pedestal",
+          "symbol": "ARCANE_PEDESTAL",
+          "declared_with": "BLOCKS.register",
+          "line": 404
+        },
+        {
+          "id": "thaumcraft:ancient_pedestal",
+          "symbol": "ANCIENT_PEDESTAL",
+          "declared_with": "BLOCKS.register",
+          "line": 406
+        },
+        {
+          "id": "thaumcraft:eldritch_pedestal",
+          "symbol": "ELDRITCH_PEDESTAL",
+          "declared_with": "BLOCKS.register",
+          "line": 408
+        },
+        {
+          "id": "thaumcraft:pedestal_arcane",
+          "symbol": "PEDESTAL_ARCANE",
+          "declared_with": "BLOCKS.register",
+          "line": 410
+        },
+        {
+          "id": "thaumcraft:pedestal_ancient",
+          "symbol": "PEDESTAL_ANCIENT",
+          "declared_with": "BLOCKS.register",
+          "line": 412
+        },
+        {
+          "id": "thaumcraft:pedestal_eldritch",
+          "symbol": "PEDESTAL_ELDRITCH",
+          "declared_with": "BLOCKS.register",
+          "line": 414
+        },
+        {
+          "id": "thaumcraft:recharge_pedestal",
+          "symbol": "RECHARGE_PEDESTAL",
+          "declared_with": "BLOCKS.register",
+          "line": 416
+        },
+        {
+          "id": "thaumcraft:paving_stone_travel",
+          "symbol": "PAVING_STONE_TRAVEL",
+          "declared_with": "BLOCKS.register",
+          "line": 418
+        },
+        {
+          "id": "thaumcraft:paving_stone_barrier",
+          "symbol": "PAVING_STONE_BARRIER",
+          "declared_with": "BLOCKS.register",
+          "line": 420
+        },
+        {
+          "id": "thaumcraft:loot_crate_common",
+          "symbol": "LOOT_CRATE_COMMON",
+          "declared_with": "BLOCKS.register",
+          "line": 422
+        },
+        {
+          "id": "thaumcraft:loot_crate_uncommon",
+          "symbol": "LOOT_CRATE_UNCOMMON",
+          "declared_with": "BLOCKS.register",
+          "line": 424
+        },
+        {
+          "id": "thaumcraft:loot_crate_rare",
+          "symbol": "LOOT_CRATE_RARE",
+          "declared_with": "BLOCKS.register",
+          "line": 426
+        },
+        {
+          "id": "thaumcraft:loot_urn_common",
+          "symbol": "LOOT_URN_COMMON",
+          "declared_with": "BLOCKS.register",
+          "line": 428
+        },
+        {
+          "id": "thaumcraft:loot_urn_uncommon",
+          "symbol": "LOOT_URN_UNCOMMON",
+          "declared_with": "BLOCKS.register",
+          "line": 430
+        },
+        {
+          "id": "thaumcraft:loot_urn_rare",
+          "symbol": "LOOT_URN_RARE",
+          "declared_with": "BLOCKS.register",
+          "line": 432
+        },
+        {
+          "id": "thaumcraft:vis_generator",
+          "symbol": "VIS_GENERATOR",
+          "declared_with": "BLOCKS.register",
+          "line": 434
+        },
+        {
+          "id": "thaumcraft:vis_battery",
+          "symbol": "VIS_BATTERY",
+          "declared_with": "BLOCKS.register",
+          "line": 435
+        },
+        {
+          "id": "thaumcraft:condenser",
+          "symbol": "CONDENSER",
+          "declared_with": "BLOCKS.register",
+          "line": 436
+        },
+        {
+          "id": "thaumcraft:condenser_lattice",
+          "symbol": "CONDENSER_LATTICE",
+          "declared_with": "BLOCKS.register",
+          "line": 437
+        },
+        {
+          "id": "thaumcraft:condenser_lattice_dirty",
+          "symbol": "CONDENSER_LATTICE_DIRTY",
+          "declared_with": "BLOCKS.register",
+          "line": 438
+        },
+        {
+          "id": "thaumcraft:pattern_crafter",
+          "symbol": "PATTERN_CRAFTER",
+          "declared_with": "BLOCKS.register",
+          "line": 439
+        },
+        {
+          "id": "thaumcraft:potion_sprayer",
+          "symbol": "POTION_SPRAYER",
+          "declared_with": "BLOCKS.register",
+          "line": 440
+        },
+        {
+          "id": "thaumcraft:hungry_chest",
+          "symbol": "HUNGRY_CHEST",
+          "declared_with": "BLOCKS.register",
+          "line": 442
+        },
+        {
+          "id": "thaumcraft:dioptra",
+          "symbol": "DIOPTRA",
+          "declared_with": "BLOCKS.register",
+          "line": 444
+        },
+        {
+          "id": "thaumcraft:arcane_ear",
+          "symbol": "ARCANE_EAR",
+          "declared_with": "BLOCKS.register",
+          "line": 446
+        },
+        {
+          "id": "thaumcraft:arcane_ear_toggle",
+          "symbol": "ARCANE_EAR_TOGGLE",
+          "declared_with": "BLOCKS.register",
+          "line": 448
+        },
+        {
+          "id": "thaumcraft:levitator",
+          "symbol": "LEVITATOR",
+          "declared_with": "BLOCKS.register",
+          "line": 450
+        },
+        {
+          "id": "thaumcraft:golem_builder",
+          "symbol": "GOLEM_BUILDER",
+          "declared_with": "BLOCKS.register",
+          "line": 454
+        },
+        {
+          "id": "thaumcraft:inlay",
+          "symbol": "INLAY",
+          "declared_with": "BLOCKS.register",
+          "line": 456
+        },
+        {
+          "id": "thaumcraft:stabilizer",
+          "symbol": "STABILIZER",
+          "declared_with": "BLOCKS.register",
+          "line": 458
+        },
+        {
+          "id": "thaumcraft:mirror",
+          "symbol": "MIRROR",
+          "declared_with": "BLOCKS.register",
+          "line": 460
+        },
+        {
+          "id": "thaumcraft:mirror_essentia",
+          "symbol": "MIRROR_ESSENTIA",
+          "declared_with": "BLOCKS.register",
+          "line": 462
+        },
+        {
+          "id": "thaumcraft:lamp_arcane",
+          "symbol": "LAMP_ARCANE",
+          "declared_with": "BLOCKS.register",
+          "line": 464
+        },
+        {
+          "id": "thaumcraft:lamp_growth",
+          "symbol": "LAMP_GROWTH",
+          "declared_with": "BLOCKS.register",
+          "line": 466
+        },
+        {
+          "id": "thaumcraft:lamp_fertility",
+          "symbol": "LAMP_FERTILITY",
+          "declared_with": "BLOCKS.register",
+          "line": 468
+        },
+        {
+          "id": "thaumcraft:infernal_furnace",
+          "symbol": "INFERNAL_FURNACE",
+          "declared_with": "BLOCKS.register",
+          "line": 470
+        },
+        {
+          "id": "thaumcraft:placeholder_brick",
+          "symbol": "PLACEHOLDER_NETHER_BRICK",
+          "declared_with": "BLOCKS.register",
+          "line": 472
+        },
+        {
+          "id": "thaumcraft:placeholder_obsidian",
+          "symbol": "PLACEHOLDER_OBSIDIAN",
+          "declared_with": "BLOCKS.register",
+          "line": 476
+        },
+        {
+          "id": "thaumcraft:placeholder_bars",
+          "symbol": "PLACEHOLDER_BARS",
+          "declared_with": "BLOCKS.register",
+          "line": 480
+        },
+        {
+          "id": "thaumcraft:placeholder_anvil",
+          "symbol": "PLACEHOLDER_ANVIL",
+          "declared_with": "BLOCKS.register",
+          "line": 482
+        },
+        {
+          "id": "thaumcraft:placeholder_cauldron",
+          "symbol": "PLACEHOLDER_CAULDRON",
+          "declared_with": "BLOCKS.register",
+          "line": 484
+        },
+        {
+          "id": "thaumcraft:placeholder_table",
+          "symbol": "PLACEHOLDER_TABLE",
+          "declared_with": "BLOCKS.register",
+          "line": 486
+        },
+        {
+          "id": "thaumcraft:void_siphon",
+          "symbol": "VOID_SIPHON",
+          "declared_with": "BLOCKS.register",
+          "line": 489
+        },
+        {
+          "id": "thaumcraft:spa",
+          "symbol": "SPA",
+          "declared_with": "BLOCKS.register",
+          "line": 491
+        },
+        {
+          "id": "thaumcraft:everfull_urn",
+          "symbol": "EVERFULL_URN",
+          "declared_with": "BLOCKS.register",
+          "line": 493
+        },
+        {
+          "id": "thaumcraft:thaumatorium",
+          "symbol": "THAUMATORIUM",
+          "declared_with": "BLOCKS.register",
+          "line": 495
+        },
+        {
+          "id": "thaumcraft:thaumatorium_top",
+          "symbol": "THAUMATORIUM_TOP",
+          "declared_with": "BLOCKS.register",
+          "line": 497
+        },
+        {
+          "id": "thaumcraft:effect_glimmer",
+          "symbol": "EFFECT_GLIMMER",
+          "declared_with": "BLOCKS.register",
+          "line": 499
+        },
+        {
+          "id": "thaumcraft:liquid_death",
+          "symbol": "LIQUID_DEATH",
+          "declared_with": "BLOCKS.register",
+          "line": 501
+        },
+        {
+          "id": "thaumcraft:purifying_fluid",
+          "symbol": "PURIFYING_FLUID",
+          "declared_with": "BLOCKS.register",
+          "line": 503
+        },
+        {
+          "id": "thaumcraft:flux_goo",
+          "symbol": "FLUX_GOO",
+          "declared_with": "BLOCKS.register",
+          "line": 505
+        },
+        {
+          "id": "thaumcraft:flesh_block",
+          "symbol": "FLESH_BLOCK",
+          "declared_with": "BLOCKS.register",
+          "line": 507
+        },
+        {
+          "id": "thaumcraft:taint_fibre",
+          "symbol": "TAINT_FIBRE",
+          "declared_with": "BLOCKS.register",
+          "line": 509
+        },
+        {
+          "id": "thaumcraft:taint_crust",
+          "symbol": "TAINT_CRUST",
+          "declared_with": "BLOCKS.register",
+          "line": 511
+        },
+        {
+          "id": "thaumcraft:taint_soil",
+          "symbol": "TAINT_SOIL",
+          "declared_with": "BLOCKS.register",
+          "line": 513
+        },
+        {
+          "id": "thaumcraft:taint_rock",
+          "symbol": "TAINT_ROCK",
+          "declared_with": "BLOCKS.register",
+          "line": 515
+        },
+        {
+          "id": "thaumcraft:taint_geyser",
+          "symbol": "TAINT_GEYSER",
+          "declared_with": "BLOCKS.register",
+          "line": 517
+        },
+        {
+          "id": "thaumcraft:taint_log",
+          "symbol": "TAINT_LOG",
+          "declared_with": "BLOCKS.register",
+          "line": 519
+        },
+        {
+          "id": "thaumcraft:taint_feature",
+          "symbol": "TAINT_FEATURE",
+          "declared_with": "BLOCKS.register",
+          "line": 521
+        },
+        {
+          "id": "thaumcraft:log_greatwood",
+          "symbol": "LOG_GREATWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 525
+        },
+        {
+          "id": "thaumcraft:log_silverwood",
+          "symbol": "LOG_SILVERWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 527
+        },
+        {
+          "id": "thaumcraft:leaves_greatwood",
+          "symbol": "LEAVES_GREATWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 531
+        },
+        {
+          "id": "thaumcraft:leaves_silverwood",
+          "symbol": "LEAVES_SILVERWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 533
+        },
+        {
+          "id": "thaumcraft:sapling_greatwood",
+          "symbol": "SAPLING_GREATWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 537
+        },
+        {
+          "id": "thaumcraft:sapling_silverwood",
+          "symbol": "SAPLING_SILVERWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 539
+        },
+        {
+          "id": "thaumcraft:shimmerleaf",
+          "symbol": "SHIMMERLEAF",
+          "declared_with": "BLOCKS.register",
+          "line": 543
+        },
+        {
+          "id": "thaumcraft:cinderpearl",
+          "symbol": "CINDERPEARL",
+          "declared_with": "BLOCKS.register",
+          "line": 545
+        },
+        {
+          "id": "thaumcraft:vishroom",
+          "symbol": "VISHROOM",
+          "declared_with": "BLOCKS.register",
+          "line": 547
+        },
+        {
+          "id": "thaumcraft:plank_greatwood",
+          "symbol": "PLANK_GREATWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 551
+        },
+        {
+          "id": "thaumcraft:plank_silverwood",
+          "symbol": "PLANK_SILVERWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 553
+        },
+        {
+          "id": "thaumcraft:stairs_greatwood",
+          "symbol": "STAIRS_GREATWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 557
+        },
+        {
+          "id": "thaumcraft:stairs_silverwood",
+          "symbol": "STAIRS_SILVERWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 559
+        },
+        {
+          "id": "thaumcraft:slab_greatwood",
+          "symbol": "SLAB_GREATWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 563
+        },
+        {
+          "id": "thaumcraft:slab_silverwood",
+          "symbol": "SLAB_SILVERWOOD",
+          "declared_with": "BLOCKS.register",
+          "line": 565
+        },
+        {
+          "id": "thaumcraft:hole",
+          "symbol": "HOLE",
+          "declared_with": "BLOCKS.register",
+          "line": 566
+        }
+      ],
+      "default_review_status": "NOT_CHECKED",
+      "scope": "static source registrations"
+    },
+    "entity_types": {
+      "source": "05_neoforge_port/src/main/java/thaumcraft/common/registry/TCEntityTypes.java",
+      "source_blob_sha": "9f96d7c2191c685a1a92633d816d09b2c4ef782d",
+      "count": 43,
+      "rows": [
+        {
+          "id": "thaumcraft:special_item",
+          "symbol": "SPECIAL_ITEM",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 60
+        },
+        {
+          "id": "thaumcraft:follow_item",
+          "symbol": "FOLLOW_ITEM",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 68
+        },
+        {
+          "id": "thaumcraft:flux_rift",
+          "symbol": "FLUX_RIFT",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 76
+        },
+        {
+          "id": "thaumcraft:focus_cloud",
+          "symbol": "FOCUS_CLOUD",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 84
+        },
+        {
+          "id": "thaumcraft:cultist_portal_lesser",
+          "symbol": "CULTIST_PORTAL_LESSER",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 92
+        },
+        {
+          "id": "thaumcraft:cultist_portal_greater",
+          "symbol": "CULTIST_PORTAL_GREATER",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 102
+        },
+        {
+          "id": "thaumcraft:cultist_knight",
+          "symbol": "CULTIST_KNIGHT",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 112
+        },
+        {
+          "id": "thaumcraft:cultist_cleric",
+          "symbol": "CULTIST_CLERIC",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 121
+        },
+        {
+          "id": "thaumcraft:cultist_leader",
+          "symbol": "CULTIST_LEADER",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 130
+        },
+        {
+          "id": "thaumcraft:arcane_bore",
+          "symbol": "ARCANE_BORE",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 139
+        },
+        {
+          "id": "thaumcraft:falling_taint",
+          "symbol": "FALLING_TAINT",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 147
+        },
+        {
+          "id": "thaumcraft:taint_seed",
+          "symbol": "TAINT_SEED",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 155
+        },
+        {
+          "id": "thaumcraft:taint_seed_prime",
+          "symbol": "TAINT_SEED_PRIME",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 163
+        },
+        {
+          "id": "thaumcraft:thaum_slime",
+          "symbol": "THAUM_SLIME",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 171
+        },
+        {
+          "id": "thaumcraft:taint_crawler",
+          "symbol": "TAINT_CRAWLER",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 179
+        },
+        {
+          "id": "thaumcraft:taintacle",
+          "symbol": "TAINTACLE",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 187
+        },
+        {
+          "id": "thaumcraft:taintacle_tiny",
+          "symbol": "TAINTACLE_TINY",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 195
+        },
+        {
+          "id": "thaumcraft:taintacle_giant",
+          "symbol": "TAINTACLE_GIANT",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 203
+        },
+        {
+          "id": "thaumcraft:taint_swarm",
+          "symbol": "TAINT_SWARM",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 211
+        },
+        {
+          "id": "thaumcraft:wisp",
+          "symbol": "WISP",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 219
+        },
+        {
+          "id": "thaumcraft:firebat",
+          "symbol": "FIREBAT",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 227
+        },
+        {
+          "id": "thaumcraft:pech",
+          "symbol": "PECH",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 236
+        },
+        {
+          "id": "thaumcraft:brainy_zombie",
+          "symbol": "BRAINY_ZOMBIE",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 244
+        },
+        {
+          "id": "thaumcraft:giant_brainy_zombie",
+          "symbol": "GIANT_BRAINY_ZOMBIE",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 253
+        },
+        {
+          "id": "thaumcraft:bottle_taint",
+          "symbol": "BOTTLE_TAINT",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 262
+        },
+        {
+          "id": "thaumcraft:alumentum",
+          "symbol": "ALUMENTUM",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 270
+        },
+        {
+          "id": "thaumcraft:causality_collapser",
+          "symbol": "CAUSALITY_COLLAPSER",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 278
+        },
+        {
+          "id": "thaumcraft:eldritch_orb",
+          "symbol": "ELDRITCH_ORB",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 286
+        },
+        {
+          "id": "thaumcraft:golem_orb",
+          "symbol": "GOLEM_ORB",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 294
+        },
+        {
+          "id": "thaumcraft:mind_spider",
+          "symbol": "MIND_SPIDER",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 302
+        },
+        {
+          "id": "thaumcraft:eldritch_guardian",
+          "symbol": "ELDRITCH_GUARDIAN",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 311
+        },
+        {
+          "id": "thaumcraft:eldritch_crab",
+          "symbol": "ELDRITCH_CRAB",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 321
+        },
+        {
+          "id": "thaumcraft:inhabited_zombie",
+          "symbol": "INHABITED_ZOMBIE",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 330
+        },
+        {
+          "id": "thaumcraft:spellbat",
+          "symbol": "SPELLBAT",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 339
+        },
+        {
+          "id": "thaumcraft:focus_projectile",
+          "symbol": "FOCUS_PROJECTILE",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 347
+        },
+        {
+          "id": "thaumcraft:focusmine",
+          "symbol": "FOCUSMINE",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 355
+        },
+        {
+          "id": "thaumcraft:golem_dart",
+          "symbol": "GOLEM_DART",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 363
+        },
+        {
+          "id": "thaumcraft:golem",
+          "symbol": "GOLEM",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 371
+        },
+        {
+          "id": "thaumcraft:grapple",
+          "symbol": "GRAPPLE",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 379
+        },
+        {
+          "id": "thaumcraft:turret_basic",
+          "symbol": "TURRET_BASIC",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 387
+        },
+        {
+          "id": "thaumcraft:turret_advanced",
+          "symbol": "TURRET_ADVANCED",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 395
+        },
+        {
+          "id": "thaumcraft:eldritch_warden",
+          "symbol": "ELDRITCH_WARDEN",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 403
+        },
+        {
+          "id": "thaumcraft:eldritch_golem",
+          "symbol": "ELDRITCH_GOLEM",
+          "declared_with": "ENTITY_TYPES.register",
+          "line": 411
+        }
+      ],
+      "default_review_status": "NOT_CHECKED",
+      "scope": "static source registrations"
+    },
+    "block_entity_types": {
+      "source": "05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java",
+      "source_blob_sha": "54d3118fa433df141873bc0e97637f636c91daea",
+      "count": 45,
+      "rows": [
+        {
+          "id": "thaumcraft:hungry_chest",
+          "symbol": "HUNGRY_CHEST",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 55
+        },
+        {
+          "id": "thaumcraft:dioptra",
+          "symbol": "DIOPTRA",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 58
+        },
+        {
+          "id": "thaumcraft:arcane_ear",
+          "symbol": "ARCANE_EAR",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 61
+        },
+        {
+          "id": "thaumcraft:arcane_ear_toggle",
+          "symbol": "ARCANE_EAR_TOGGLE",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 64
+        },
+        {
+          "id": "thaumcraft:levitator",
+          "symbol": "LEVITATOR",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 67
+        },
+        {
+          "id": "thaumcraft:research_table",
+          "symbol": "RESEARCH_TABLE",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 70
+        },
+        {
+          "id": "thaumcraft:arcane_workbench",
+          "symbol": "ARCANE_WORKBENCH",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 73
+        },
+        {
+          "id": "thaumcraft:wand_workbench",
+          "symbol": "FOCAL_MANIPULATOR",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 76
+        },
+        {
+          "id": "thaumcraft:golem_builder",
+          "symbol": "GOLEM_BUILDER",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 79
+        },
+        {
+          "id": "thaumcraft:crucible",
+          "symbol": "CRUCIBLE",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 82
+        },
+        {
+          "id": "thaumcraft:smelter_basic",
+          "symbol": "SMELTER_BASIC",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 85
+        },
+        {
+          "id": "thaumcraft:bellows",
+          "symbol": "BELLOWS",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 88
+        },
+        {
+          "id": "thaumcraft:jar_normal",
+          "symbol": "WARDED_JAR",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 91
+        },
+        {
+          "id": "thaumcraft:jar_void",
+          "symbol": "JAR_VOID",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 94
+        },
+        {
+          "id": "thaumcraft:jar_brain",
+          "symbol": "JAR_BRAIN",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 103
+        },
+        {
+          "id": "thaumcraft:centrifuge",
+          "symbol": "CENTRIFUGE",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 106
+        },
+        {
+          "id": "thaumcraft:alembic",
+          "symbol": "ALEMBIC",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 109
+        },
+        {
+          "id": "thaumcraft:essentiatransportin",
+          "symbol": "ESSENTIA_TRANSPORT_IN",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 112
+        },
+        {
+          "id": "thaumcraft:essentiatransportout",
+          "symbol": "ESSENTIA_TRANSPORT_OUT",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 121
+        },
+        {
+          "id": "thaumcraft:infusion_matrix",
+          "symbol": "INFUSION_MATRIX",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 130
+        },
+        {
+          "id": "thaumcraft:infusion_pedestal",
+          "symbol": "INFUSION_PEDESTAL",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 133
+        },
+        {
+          "id": "thaumcraft:stabilizer",
+          "symbol": "STABILIZER",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 144
+        },
+        {
+          "id": "thaumcraft:mirror",
+          "symbol": "MIRROR",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 147
+        },
+        {
+          "id": "thaumcraft:mirror_essentia",
+          "symbol": "MIRROR_ESSENTIA",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 150
+        },
+        {
+          "id": "thaumcraft:lamp",
+          "symbol": "LAMP",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 153
+        },
+        {
+          "id": "thaumcraft:infernal_furnace",
+          "symbol": "INFERNAL_FURNACE",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 160
+        },
+        {
+          "id": "thaumcraft:void_siphon",
+          "symbol": "VOID_SIPHON",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 163
+        },
+        {
+          "id": "thaumcraft:vis_generator",
+          "symbol": "VIS_GENERATOR",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 166
+        },
+        {
+          "id": "thaumcraft:condenser",
+          "symbol": "CONDENSER",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 169
+        },
+        {
+          "id": "thaumcraft:pattern_crafter",
+          "symbol": "PATTERN_CRAFTER",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 172
+        },
+        {
+          "id": "thaumcraft:potion_sprayer",
+          "symbol": "POTION_SPRAYER",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 175
+        },
+        {
+          "id": "thaumcraft:spa",
+          "symbol": "SPA",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 179
+        },
+        {
+          "id": "thaumcraft:everfull_urn",
+          "symbol": "EVERFULL_URN",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 182
+        },
+        {
+          "id": "thaumcraft:thaumatorium",
+          "symbol": "THAUMATORIUM",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 185
+        },
+        {
+          "id": "thaumcraft:thaumatorium_top",
+          "symbol": "THAUMATORIUM_TOP",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 188
+        },
+        {
+          "id": "thaumcraft:nitor",
+          "symbol": "NITOR",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 192
+        },
+        {
+          "id": "thaumcraft:tube",
+          "symbol": "TUBE",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 213
+        },
+        {
+          "id": "thaumcraft:tube_buffer",
+          "symbol": "TUBE_BUFFER",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 218
+        },
+        {
+          "id": "thaumcraft:tube_filter",
+          "symbol": "TUBE_FILTER",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 223
+        },
+        {
+          "id": "thaumcraft:tube_oneway",
+          "symbol": "TUBE_ONEWAY",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 228
+        },
+        {
+          "id": "thaumcraft:tube_restrict",
+          "symbol": "TUBE_RESTRICT",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 233
+        },
+        {
+          "id": "thaumcraft:tube_valve",
+          "symbol": "TUBE_VALVE",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 238
+        },
+        {
+          "id": "thaumcraft:smelter_thaumium",
+          "symbol": "SMELTER_THAUMIUM",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 243
+        },
+        {
+          "id": "thaumcraft:smelter_void",
+          "symbol": "SMELTER_VOID",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 248
+        },
+        {
+          "id": "thaumcraft:hole",
+          "symbol": "HOLE",
+          "declared_with": "BLOCK_ENTITY_TYPES.register",
+          "line": 254
+        }
+      ],
+      "default_review_status": "NOT_CHECKED",
+      "scope": "static source registrations"
+    },
+    "menus": {
+      "source": "05_neoforge_port/src/main/java/thaumcraft/common/registry/TCMenus.java",
+      "source_blob_sha": "371e1310f7de61228ac0d22d8dba2b7a3bdd85b4",
+      "count": 13,
+      "rows": [
+        {
+          "id": "thaumcraft:research_table",
+          "symbol": "RESEARCH_TABLE",
+          "declared_with": "MENUS.register",
+          "line": 27
+        },
+        {
+          "id": "thaumcraft:arcane_workbench",
+          "symbol": "ARCANE_WORKBENCH",
+          "declared_with": "MENUS.register",
+          "line": 29
+        },
+        {
+          "id": "thaumcraft:focal_manipulator",
+          "symbol": "FOCAL_MANIPULATOR",
+          "declared_with": "MENUS.register",
+          "line": 31
+        },
+        {
+          "id": "thaumcraft:smelter",
+          "symbol": "SMELTER",
+          "declared_with": "MENUS.register",
+          "line": 33
+        },
+        {
+          "id": "thaumcraft:thaumatorium",
+          "symbol": "THAUMATORIUM",
+          "declared_with": "MENUS.register",
+          "line": 35
+        },
+        {
+          "id": "thaumcraft:hand_mirror",
+          "symbol": "HAND_MIRROR",
+          "declared_with": "MENUS.register",
+          "line": 37
+        },
+        {
+          "id": "thaumcraft:void_siphon",
+          "symbol": "VOID_SIPHON",
+          "declared_with": "MENUS.register",
+          "line": 39
+        },
+        {
+          "id": "thaumcraft:arcane_bore",
+          "symbol": "ARCANE_BORE",
+          "declared_with": "MENUS.register",
+          "line": 41
+        },
+        {
+          "id": "thaumcraft:pech",
+          "symbol": "PECH",
+          "declared_with": "MENUS.register",
+          "line": 43
+        },
+        {
+          "id": "thaumcraft:golem_builder",
+          "symbol": "GOLEM_BUILDER",
+          "declared_with": "MENUS.register",
+          "line": 45
+        },
+        {
+          "id": "thaumcraft:focus_pouch",
+          "symbol": "FOCUS_POUCH",
+          "declared_with": "MENUS.register",
+          "line": 47
+        },
+        {
+          "id": "thaumcraft:turret_basic",
+          "symbol": "TURRET_BASIC",
+          "declared_with": "MENUS.register",
+          "line": 49
+        },
+        {
+          "id": "thaumcraft:turret_advanced",
+          "symbol": "TURRET_ADVANCED",
+          "declared_with": "MENUS.register",
+          "line": 51
+        }
+      ],
+      "default_review_status": "NOT_CHECKED",
+      "scope": "static source registrations"
+    },
+    "creative_tabs": {
+      "source": "05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabs.java",
+      "source_blob_sha": "72104560fd2460dcf92308b24ac88fda37af5709",
+      "count": 1,
+      "rows": [
+        {
+          "id": "thaumcraft:thaumcraft",
+          "symbol": "THAUMCRAFT",
+          "declared_with": "CREATIVE_MODE_TABS.register",
+          "line": 15
+        }
+      ],
+      "default_review_status": "NOT_CHECKED",
+      "scope": "static source registrations"
+    }
+  },
+  "bindings": {
+    "entity_renderers": {
+      "source": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java",
+      "source_blob_sha": "72329f7714c23e6151ec21ab5ec1661e87530dc2",
+      "count": 43,
+      "rows": [
+        {
+          "registry_symbol": "SPECIAL_ITEM",
+          "id": "thaumcraft:special_item",
+          "provider": "ItemEntityRenderer::new",
+          "line": 18
+        },
+        {
+          "registry_symbol": "FOLLOW_ITEM",
+          "id": "thaumcraft:follow_item",
+          "provider": "ItemEntityRenderer::new",
+          "line": 19
+        },
+        {
+          "registry_symbol": "FLUX_RIFT",
+          "id": "thaumcraft:flux_rift",
+          "provider": "TCFluxRiftRenderer::new",
+          "line": 20
+        },
+        {
+          "registry_symbol": "FOCUS_CLOUD",
+          "id": "thaumcraft:focus_cloud",
+          "provider": "TCInvisibleEntityRenderer::new",
+          "line": 21
+        },
+        {
+          "registry_symbol": "ARCANE_BORE",
+          "id": "thaumcraft:arcane_bore",
+          "provider": "TCArcaneBoreRenderer::new",
+          "line": 22
+        },
+        {
+          "registry_symbol": "FALLING_TAINT",
+          "id": "thaumcraft:falling_taint",
+          "provider": "TCFallingTaintRenderer::new",
+          "line": 23
+        },
+        {
+          "registry_symbol": "TAINT_SEED",
+          "id": "thaumcraft:taint_seed",
+          "provider": "TCTaintSeedRenderer::new",
+          "line": 24
+        },
+        {
+          "registry_symbol": "TAINT_SEED_PRIME",
+          "id": "thaumcraft:taint_seed_prime",
+          "provider": "TCTaintSeedRenderer::new",
+          "line": 25
+        },
+        {
+          "registry_symbol": "THAUM_SLIME",
+          "id": "thaumcraft:thaum_slime",
+          "provider": "TCThaumicSlimeRenderer::new",
+          "line": 26
+        },
+        {
+          "registry_symbol": "TAINT_CRAWLER",
+          "id": "thaumcraft:taint_crawler",
+          "provider": "TCTaintCrawlerRenderer::new",
+          "line": 27
+        },
+        {
+          "registry_symbol": "TAINTACLE",
+          "id": "thaumcraft:taintacle",
+          "provider": "context -> new TCTaintacleRenderer<>(context, 10, 0.6F)",
+          "line": 28
+        },
+        {
+          "registry_symbol": "TAINTACLE_TINY",
+          "id": "thaumcraft:taintacle_tiny",
+          "provider": "context -> new TCTaintacleRenderer<>(context, 6, 0.2F)",
+          "line": 29
+        },
+        {
+          "registry_symbol": "TAINTACLE_GIANT",
+          "id": "thaumcraft:taintacle_giant",
+          "provider": "context -> new TCTaintacleRenderer<>(context, 14, 1.0F)",
+          "line": 30
+        },
+        {
+          "registry_symbol": "TAINT_SWARM",
+          "id": "thaumcraft:taint_swarm",
+          "provider": "TCInvisibleEntityRenderer::new",
+          "line": 31
+        },
+        {
+          "registry_symbol": "WISP",
+          "id": "thaumcraft:wisp",
+          "provider": "TCWispRenderer::new",
+          "line": 32
+        },
+        {
+          "registry_symbol": "FIREBAT",
+          "id": "thaumcraft:firebat",
+          "provider": "TCFirebatRenderer::new",
+          "line": 33
+        },
+        {
+          "registry_symbol": "SPELLBAT",
+          "id": "thaumcraft:spellbat",
+          "provider": "TCFirebatRenderer::new",
+          "line": 34
+        },
+        {
+          "registry_symbol": "FOCUS_PROJECTILE",
+          "id": "thaumcraft:focus_projectile",
+          "provider": "TCInvisibleEntityRenderer::new",
+          "line": 35
+        },
+        {
+          "registry_symbol": "FOCUSMINE",
+          "id": "thaumcraft:focusmine",
+          "provider": "TCInvisibleEntityRenderer::new",
+          "line": 36
+        },
+        {
+          "registry_symbol": "GOLEM_DART",
+          "id": "thaumcraft:golem_dart",
+          "provider": "TCInvisibleEntityRenderer::new",
+          "line": 37
+        },
+        {
+          "registry_symbol": "GOLEM",
+          "id": "thaumcraft:golem",
+          "provider": "TCGolemRenderer::new",
+          "line": 38
+        },
+        {
+          "registry_symbol": "GRAPPLE",
+          "id": "thaumcraft:grapple",
+          "provider": "TCInvisibleEntityRenderer::new",
+          "line": 39
+        },
+        {
+          "registry_symbol": "PECH",
+          "id": "thaumcraft:pech",
+          "provider": "TCPechRenderer::new",
+          "line": 40
+        },
+        {
+          "registry_symbol": "BRAINY_ZOMBIE",
+          "id": "thaumcraft:brainy_zombie",
+          "provider": "TCBrainyZombieRenderer::new",
+          "line": 41
+        },
+        {
+          "registry_symbol": "GIANT_BRAINY_ZOMBIE",
+          "id": "thaumcraft:giant_brainy_zombie",
+          "provider": "TCBrainyZombieRenderer::new",
+          "line": 42
+        },
+        {
+          "registry_symbol": "BOTTLE_TAINT",
+          "id": "thaumcraft:bottle_taint",
+          "provider": "ThrownItemRenderer::new",
+          "line": 43
+        },
+        {
+          "registry_symbol": "ALUMENTUM",
+          "id": "thaumcraft:alumentum",
+          "provider": "TCInvisibleEntityRenderer::new",
+          "line": 44
+        },
+        {
+          "registry_symbol": "CAUSALITY_COLLAPSER",
+          "id": "thaumcraft:causality_collapser",
+          "provider": "TCInvisibleEntityRenderer::new",
+          "line": 45
+        },
+        {
+          "registry_symbol": "ELDRITCH_ORB",
+          "id": "thaumcraft:eldritch_orb",
+          "provider": "TCEldritchOrbRenderer::new",
+          "line": 46
+        },
+        {
+          "registry_symbol": "GOLEM_ORB",
+          "id": "thaumcraft:golem_orb",
+          "provider": "TCGolemOrbRenderer::new",
+          "line": 47
+        },
+        {
+          "registry_symbol": "CULTIST_PORTAL_LESSER",
+          "id": "thaumcraft:cultist_portal_lesser",
+          "provider": "TCCultistPortalLesserRenderer::new",
+          "line": 48
+        },
+        {
+          "registry_symbol": "CULTIST_PORTAL_GREATER",
+          "id": "thaumcraft:cultist_portal_greater",
+          "provider": "TCCultistPortalGreaterRenderer::new",
+          "line": 49
+        },
+        {
+          "registry_symbol": "CULTIST_KNIGHT",
+          "id": "thaumcraft:cultist_knight",
+          "provider": "TCCultistRenderer::new",
+          "line": 50
+        },
+        {
+          "registry_symbol": "CULTIST_CLERIC",
+          "id": "thaumcraft:cultist_cleric",
+          "provider": "TCCultistRenderer::new",
+          "line": 51
+        },
+        {
+          "registry_symbol": "CULTIST_LEADER",
+          "id": "thaumcraft:cultist_leader",
+          "provider": "TCCultistLeaderRenderer::new",
+          "line": 52
+        },
+        {
+          "registry_symbol": "MIND_SPIDER",
+          "id": "thaumcraft:mind_spider",
+          "provider": "TCInvisibleEntityRenderer::new",
+          "line": 53
+        },
+        {
+          "registry_symbol": "ELDRITCH_GUARDIAN",
+          "id": "thaumcraft:eldritch_guardian",
+          "provider": "TCEldritchGuardianRenderer::new",
+          "line": 54
+        },
+        {
+          "registry_symbol": "ELDRITCH_CRAB",
+          "id": "thaumcraft:eldritch_crab",
+          "provider": "TCEldritchCrabRenderer::new",
+          "line": 55
+        },
+        {
+          "registry_symbol": "INHABITED_ZOMBIE",
+          "id": "thaumcraft:inhabited_zombie",
+          "provider": "TCInhabitedZombieRenderer::new",
+          "line": 56
+        },
+        {
+          "registry_symbol": "TURRET_BASIC",
+          "id": "thaumcraft:turret_basic",
+          "provider": "TCTurretRenderer::new",
+          "line": 57
+        },
+        {
+          "registry_symbol": "TURRET_ADVANCED",
+          "id": "thaumcraft:turret_advanced",
+          "provider": "TCTurretRenderer::new",
+          "line": 58
+        },
+        {
+          "registry_symbol": "ELDRITCH_WARDEN",
+          "id": "thaumcraft:eldritch_warden",
+          "provider": "TCEldritchWardenRenderer::new",
+          "line": 59
+        },
+        {
+          "registry_symbol": "ELDRITCH_GOLEM",
+          "id": "thaumcraft:eldritch_golem",
+          "provider": "TCEldritchGolemRenderer::new",
+          "line": 60
+        }
+      ],
+      "unresolved_registry_fields": 0
+    },
+    "block_entity_renderers": {
+      "source": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java",
+      "source_blob_sha": "a648d1277adfde5f79d99c040d196eb5383d844e",
+      "count": 10,
+      "rows": [
+        {
+          "registry_symbol": "RESEARCH_TABLE",
+          "id": "thaumcraft:research_table",
+          "provider": "TCResearchTableRenderer::new",
+          "line": 16
+        },
+        {
+          "registry_symbol": "CRUCIBLE",
+          "id": "thaumcraft:crucible",
+          "provider": "TCCrucibleRenderer::new",
+          "line": 17
+        },
+        {
+          "registry_symbol": "INFUSION_PEDESTAL",
+          "id": "thaumcraft:infusion_pedestal",
+          "provider": "TCInfusionPedestalRenderer::new",
+          "line": 18
+        },
+        {
+          "registry_symbol": "INFUSION_MATRIX",
+          "id": "thaumcraft:infusion_matrix",
+          "provider": "TCInfusionMatrixRenderer::new",
+          "line": 19
+        },
+        {
+          "registry_symbol": "BELLOWS",
+          "id": "thaumcraft:bellows",
+          "provider": "TCBellowsRenderer::new",
+          "line": 20
+        },
+        {
+          "registry_symbol": "TUBE_VALVE",
+          "id": "thaumcraft:tube_valve",
+          "provider": "TCTubeValveRenderer::new",
+          "line": 21
+        },
+        {
+          "registry_symbol": "THAUMATORIUM",
+          "id": "thaumcraft:thaumatorium",
+          "provider": "TCThaumatoriumRenderer::new",
+          "line": 22
+        },
+        {
+          "registry_symbol": "WARDED_JAR",
+          "id": "thaumcraft:jar_normal",
+          "provider": "TCWardedJarRenderer::new",
+          "line": 23
+        },
+        {
+          "registry_symbol": "JAR_VOID",
+          "id": "thaumcraft:jar_void",
+          "provider": "TCWardedJarRenderer::new",
+          "line": 24
+        },
+        {
+          "registry_symbol": "GOLEM_BUILDER",
+          "id": "thaumcraft:golem_builder",
+          "provider": "TCGolemBuilderRenderer::new",
+          "line": 25
+        }
+      ],
+      "unresolved_registry_fields": 0
+    },
+    "menu_screens": {
+      "source": "05_neoforge_port/src/main/java/thaumcraft/client/gui/TCMenuScreens.java",
+      "source_blob_sha": "b29b5917899cd2da76a1c2b31478f07fc3d472da",
+      "count": 13,
+      "rows": [
+        {
+          "registry_symbol": "RESEARCH_TABLE",
+          "id": "thaumcraft:research_table",
+          "provider": "TCResearchTableScreen::new",
+          "line": 16
+        },
+        {
+          "registry_symbol": "ARCANE_WORKBENCH",
+          "id": "thaumcraft:arcane_workbench",
+          "provider": "TCArcaneWorkbenchScreen::new",
+          "line": 17
+        },
+        {
+          "registry_symbol": "FOCAL_MANIPULATOR",
+          "id": "thaumcraft:focal_manipulator",
+          "provider": "TCFocalManipulatorScreen::new",
+          "line": 18
+        },
+        {
+          "registry_symbol": "SMELTER",
+          "id": "thaumcraft:smelter",
+          "provider": "TCSmelterScreen::new",
+          "line": 19
+        },
+        {
+          "registry_symbol": "THAUMATORIUM",
+          "id": "thaumcraft:thaumatorium",
+          "provider": "TCThaumatoriumScreen::new",
+          "line": 20
+        },
+        {
+          "registry_symbol": "HAND_MIRROR",
+          "id": "thaumcraft:hand_mirror",
+          "provider": "TCHandMirrorScreen::new",
+          "line": 21
+        },
+        {
+          "registry_symbol": "VOID_SIPHON",
+          "id": "thaumcraft:void_siphon",
+          "provider": "TCVoidSiphonScreen::new",
+          "line": 22
+        },
+        {
+          "registry_symbol": "ARCANE_BORE",
+          "id": "thaumcraft:arcane_bore",
+          "provider": "TCArcaneBoreScreen::new",
+          "line": 23
+        },
+        {
+          "registry_symbol": "PECH",
+          "id": "thaumcraft:pech",
+          "provider": "TCPechScreen::new",
+          "line": 24
+        },
+        {
+          "registry_symbol": "GOLEM_BUILDER",
+          "id": "thaumcraft:golem_builder",
+          "provider": "TCGolemBuilderScreen::new",
+          "line": 25
+        },
+        {
+          "registry_symbol": "FOCUS_POUCH",
+          "id": "thaumcraft:focus_pouch",
+          "provider": "TCFocusPouchScreen::new",
+          "line": 26
+        },
+        {
+          "registry_symbol": "TURRET_BASIC",
+          "id": "thaumcraft:turret_basic",
+          "provider": "TCTurretBasicScreen::new",
+          "line": 27
+        },
+        {
+          "registry_symbol": "TURRET_ADVANCED",
+          "id": "thaumcraft:turret_advanced",
+          "provider": "TCTurretAdvancedScreen::new",
+          "line": 28
+        }
+      ],
+      "unresolved_registry_fields": 0
+    }
+  },
+  "failures": [],
+  "not_covered": [
+    "ItemStack component/NBT variants and Creative display order",
+    "Legacy-to-port two-way correspondence",
+    "Resource parent/textures/overrides (will require filesystem traversal)",
+    "Unregistered GUI/HUD/overlays",
+    "Particle and sound dispatch callsite graph",
+    "Dynamic entity renderer/BER/FX runtime parity",
+    "Runtime registration/saved state and client visuals"
+  ],
+  "summary": {
+    "items": 487,
+    "blocks": 175,
+    "entity_types": 43,
+    "block_entity_types": 45,
+    "menus": 13,
+    "creative_tabs": 1,
+    "entity_renderers": 43,
+    "block_entity_renderers": 10,
+    "menu_screens": 13,
+    "failures": 0
+  }
+}
