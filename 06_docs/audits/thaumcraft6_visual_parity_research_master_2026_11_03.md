@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F75](#additional-source-history-checks-f01f70)
+6. [Additional source-history checks: F01–F78](#additional-source-history-checks-f01f70)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F75
+## Additional source-history checks: F01–F78
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1250,6 +1250,60 @@ The base `assets/thaumcraft/blockstates/hole.json` still uses legacy `forge_mark
 The branch comparison reports changes in golem/seal rendering, network and saved-data code, including `TCSealSavedData`. Therefore F33–F35 must be interpreted as **main-baseline findings** pending independent reconciliation against that branch, not automatically called fixed. No F71–F74 target block class appears in the 132-file change list.
 
 **Sources:** [base Hole blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/hole.json), [remediation Hole blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/4515ad3f5d08fb317f1689fd49d3e3a916995da9/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/hole.json), [remediation Hole model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/4515ad3f5d08fb317f1689fd49d3e3a916995da9/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/hole.json), [modern Hole block](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/misc/TCHoleBlock.java). **Repro:** compare matched active Hole effects in both branches after confirming client resource loads; do not use an empty JSON element list as evidence of portal animation.
+
+---
+
+## Active blockstate and placement continuation: F76–F78 (November 3, 2026)
+
+This pass inspected the contents of **all 227** `assets/thaumcraft/blockstates/*.json` files on the pinned main snapshot, not just code-search excerpts. The active-ID set was derived from the **175 distinct** `BLOCKS.register("...")` calls in `TCBlocks.java`. Direct model existence was checked against the complete top-level `models/block/` (264 JSON) and `models/item/` (533 JSON) directory listings; the `models/` root has no direct model JSON files. The distinction between direct references, chained model parents, renderer execution and actual screenshots remains essential.
+
+### F76 — All 175 active blocks have blockstate JSON; legacy Forge syntax and unresolved direct models are almost entirely inactive
+
+**Status:** `confirmed_code` inventory, `negative_control` against broad “every legacy blockstate file is a current visual defect” assumptions; one active exception `requires_client`.
+
+Results of a complete pinned-file scan:
+
+| Check | Count | Interpretation |
+| --- | ---: | --- |
+| Blockstate JSON files / successfully parsed JSON | 227 / 227 | Syntactic JSON integrity only; schema/runtime acceptance is separate |
+| Active registered block IDs / matching blockstate files | 175 / 175 | No active-ID-to-blockstate filename absence in this inventory |
+| Blockstate files without an identically named active registration | 52 | Legacy/unused or other-purpose candidates; **not all proven unreachable from every code path** |
+| Files still declaring legacy `forge_marker` | 35 | 34 lack an active same-name block registration |
+| Active `forge_marker` file | 1 | `hole.json`, already isolated in F75 |
+| Direct `model` references across 227 files | 1,036 | Repeated entries in variants and multipart clauses, not unique models |
+| Thaumcraft-namespace direct references | 940 | Checked against present block/item model filenames |
+| Unresolved Thaumcraft direct model references | 85 in 30 files | **83 are in non-active-name blockstate files**; the remaining two are `thaumcraft:empty` in active `hole.json` |
+
+The `hole.json` reference uses the old namespace-root model path `thaumcraft:empty`, while the present modern asset is `models/block/empty.json`; the same source also uses obsolete Forge-specific `normal`, `inventory` and `transform` keys. However the active `TCHoleBlock.getRenderShape` returns `RenderShape.INVISIBLE`. Thus this is a genuine stale **active resource schema** in main, but one cannot conclude that a visible cube is rendered or that it explains the missing portal FX. F75 records a separate unmerged branch correction.
+
+**Blind spots:** existence cannot certify baked-model success, parent chains, dynamic tint, UVs, render layers, model transforms, or in-game output. Files without a matching registry name may still be indirectly referenced; do not delete them based solely on this inventory. A source/path classification is needed before deciding which 34 legacy files should eventually be retired.
+
+**Reproduction:** run a 1.21.1 client resource reload and capture resource/model warnings for `thaumcraft:hole`; confirm that hidden/no-render block paths are handled as intended. Repeat the direct-resource scan on the remediation SHA, but do not mix its results into the pinned baseline.
+
+**Sources:** [modern blockstates directory](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/tree/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates), [modern block models](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/tree/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block), [modern item models](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/tree/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item), [active registration source](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java).
+
+### F77 — State-cardinality controls for Levitator, Mirrors, Vis Battery and both Lattice variants
+
+**Status:** `negative_control` for missing state-model **entries** on the named objects only; transforms, geometry, dynamic visuals and legacy behavior are **not** certified.
+
+- `levitator.json` enumerates all **12** current combinations of six `facing` values and two `enabled` values, selecting `levitator_on/off`. F72's missing control-region targeting is not explained by an absent blockstate variant.
+- `mirror.json` and `mirror_essentia.json` each enumerate all **six** directions for the modern `TCMirrorBlock.FACING`. This does not restore the F15 portal/texture dynamics.
+- `vis_battery.json` enumerates **11** `charge=0..10` values corresponding to `TCVisBatteryBlock.CHARGE`. Model identity and transitions must still be compared with the legacy source.
+- `condenser_lattice.json` and `condenser_lattice_dirty.json` each have **seven** multipart clauses: one core plus conditionally rendered N/S/E/W/UP/DOWN arms. The dirty variant uses a separate `condenser_lattice_core_dirty`, while both refer to `condenser_lattice_side` for arms. A shared side is a factual resource choice, not by itself a confirmed dirty-texture regression. F71's **selection envelope** divergence remains independent of these present multipart model clauses.
+
+**Test gate:** render all Levitator orientations and enabled states, both Mirror kinds at all facings, Vis Battery charges 0/5/10, and isolated/one-arm/multi-arm clean and dirty lattice positions. Compare frame captures and model rotations against 1.12.2. An exact blockstate coverage count is not pixel-level equivalence.
+
+**Sources:** [Levitator blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/levitator.json), [Vis Battery blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/vis_battery.json), [dirty lattice blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/condenser_lattice_dirty.json).
+
+### F78 — Levitator facing at placement: player-relative legacy rule replaced by clicked-face rule
+
+**Active ID:** `thaumcraft:levitator`. **Status:** `confirmed_legacy_mismatch` in placement orientation input, `requires_client` for visual outcome. This is distinct from F72's outline and clickable control.
+
+The original `BlockLevitator` inherits `BlockTCDevice.getStateForPlacement` because it implements `IBlockFacing` and does not override placement. That legacy helper chooses `EnumFacing.getDirectionFromEntityLiving(pos, placer)` when the player is not sneaking, and its **opposite** when sneaking (`BlockTCDevice.java:54–65`). The modern `TCLevitatorBlock.getStateForPlacement` instead assigns `FACING=context.getClickedFace()`, with no sneaking inversion (`TCLevitatorBlock.java:65–72`). Its subsequent effect direction uses the resulting `FACING` property in the block-entity tick, so this is not merely an inventory display-state difference.
+
+**Alternative explanation:** a modern intuitive “face clicked” placement policy could be deliberate, but the strict legacy control scheme has changed. **Repro:** from a fixed player position and camera inclination, place on different target block faces; then repeat with sneak held. Compare resulting `facing`, visible model orientation and the Levitator effect direction in matched versions. Do not infer exact orientation from the JSON rotations alone: the placement rule is a separate data source.
+
+**Sources:** [legacy Levitator](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockLevitator.java), [legacy device placement helper](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCDevice.java), [modern Levitator](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCLevitatorBlock.java).
 
 ---
 
