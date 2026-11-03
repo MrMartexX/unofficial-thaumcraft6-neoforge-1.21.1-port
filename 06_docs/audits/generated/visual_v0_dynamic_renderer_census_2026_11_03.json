@@ -1,0 +1,619 @@
+{
+  "schema": "thaumcraft.v0.dynamic_render_census.v1",
+  "date": "2026-11-03",
+  "source": {
+    "repository": "MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port",
+    "commit": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+    "legacy_tesr_registry": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/proxies/ProxyTESR.java",
+    "legacy_entity_render_registry": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/proxies/ProxyEntities.java",
+    "port_ber_registry": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java",
+    "port_entity_render_registry": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java"
+  },
+  "counts": {
+    "legacy_tesr_bindings": 23,
+    "legacy_tesr_renderer_classes": 22,
+    "modern_ber_bindings": 10,
+    "modern_ber_renderer_classes": 9,
+    "legacy_tesr_without_direct_modern_ber": 13,
+    "legacy_tesr_renderer_classes_without_direct_modern_ber": 12,
+    "legacy_entity_renderer_bindings": 43,
+    "modern_entity_renderer_bindings": 43,
+    "modern_invisible_entities": 9,
+    "modern_invisible_with_legacy_visible_geometry": 4,
+    "modern_invisible_with_legacy_empty_render": 2,
+    "modern_invisible_with_legacy_no_projectile": 3,
+    "legacy_tesr_shared_modern_ber": 1
+  },
+  "legacy_tesr_bindings": [
+    {
+      "tile": "TileCrucible",
+      "renderer": "TileCrucibleRenderer"
+    },
+    {
+      "tile": "TileDioptra",
+      "renderer": "TileDioptraRenderer"
+    },
+    {
+      "tile": "TilePedestal",
+      "renderer": "TilePedestalRenderer"
+    },
+    {
+      "tile": "TileRechargePedestal",
+      "renderer": "TileRechargePedestalRenderer"
+    },
+    {
+      "tile": "TileFocalManipulator",
+      "renderer": "TileFocalManipulatorRenderer"
+    },
+    {
+      "tile": "TileHungryChest",
+      "renderer": "TileHungryChestRenderer"
+    },
+    {
+      "tile": "TileTubeOneway",
+      "renderer": "TileTubeOnewayRenderer"
+    },
+    {
+      "tile": "TileTubeValve",
+      "renderer": "TileTubeValveRenderer"
+    },
+    {
+      "tile": "TileTubeBuffer",
+      "renderer": "TileTubeBufferRenderer"
+    },
+    {
+      "tile": "TileJar",
+      "renderer": "TileJarRenderer"
+    },
+    {
+      "tile": "TileBellows",
+      "renderer": "TileBellowsRenderer"
+    },
+    {
+      "tile": "TileAlembic",
+      "renderer": "TileAlembicRenderer"
+    },
+    {
+      "tile": "TileInfusionMatrix",
+      "renderer": "TileInfusionMatrixRenderer"
+    },
+    {
+      "tile": "TileResearchTable",
+      "renderer": "TileResearchTableRenderer"
+    },
+    {
+      "tile": "TileThaumatorium",
+      "renderer": "TileThaumatoriumRenderer"
+    },
+    {
+      "tile": "TileCentrifuge",
+      "renderer": "TileCentrifugeRenderer"
+    },
+    {
+      "tile": "TileMirror",
+      "renderer": "TileMirrorRenderer"
+    },
+    {
+      "tile": "TileMirrorEssentia",
+      "renderer": "TileMirrorRenderer"
+    },
+    {
+      "tile": "TileGolemBuilder",
+      "renderer": "TileGolemBuilderRenderer"
+    },
+    {
+      "tile": "TilePatternCrafter",
+      "renderer": "TilePatternCrafterRenderer"
+    },
+    {
+      "tile": "TileVoidSiphon",
+      "renderer": "TileVoidSiphonRenderer"
+    },
+    {
+      "tile": "TileBanner",
+      "renderer": "TileBannerRenderer"
+    },
+    {
+      "tile": "TileHole",
+      "renderer": "TileHoleRenderer"
+    }
+  ],
+  "modern_ber_bindings": [
+    {
+      "tile": "RESEARCH_TABLE",
+      "renderer": "TCResearchTableRenderer"
+    },
+    {
+      "tile": "CRUCIBLE",
+      "renderer": "TCCrucibleRenderer"
+    },
+    {
+      "tile": "INFUSION_PEDESTAL",
+      "renderer": "TCInfusionPedestalRenderer"
+    },
+    {
+      "tile": "INFUSION_MATRIX",
+      "renderer": "TCInfusionMatrixRenderer"
+    },
+    {
+      "tile": "BELLOWS",
+      "renderer": "TCBellowsRenderer"
+    },
+    {
+      "tile": "TUBE_VALVE",
+      "renderer": "TCTubeValveRenderer"
+    },
+    {
+      "tile": "THAUMATORIUM",
+      "renderer": "TCThaumatoriumRenderer"
+    },
+    {
+      "tile": "WARDED_JAR",
+      "renderer": "TCWardedJarRenderer"
+    },
+    {
+      "tile": "JAR_VOID",
+      "renderer": "TCWardedJarRenderer"
+    },
+    {
+      "tile": "GOLEM_BUILDER",
+      "renderer": "TCGolemBuilderRenderer"
+    }
+  ],
+  "legacy_tesr_without_explicit_modern_ber": [
+    {
+      "legacy_tile": "TileDioptra",
+      "legacy_renderer": "TileDioptraRenderer",
+      "modern_block_entity_type": "DIOPTRA",
+      "effect": "dynamic colored grid",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileDioptraRenderer.java",
+      "modern_be_type_text_found": true
+    },
+    {
+      "legacy_tile": "TileFocalManipulator",
+      "legacy_renderer": "TileFocalManipulatorRenderer",
+      "modern_block_entity_type": "FOCAL_MANIPULATOR",
+      "effect": "crystal billboards and tinted energy",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileFocalManipulatorRenderer.java",
+      "modern_be_type_text_found": true
+    },
+    {
+      "legacy_tile": "TileHungryChest",
+      "legacy_renderer": "TileHungryChestRenderer",
+      "modern_block_entity_type": "HUNGRY_CHEST",
+      "effect": "animated chest lid",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileHungryChestRenderer.java",
+      "modern_be_type_text_found": true
+    },
+    {
+      "legacy_tile": "TileTubeOneway",
+      "legacy_renderer": "TileTubeOnewayRenderer",
+      "modern_block_entity_type": "TUBE_ONEWAY",
+      "effect": "tinted moving rod",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileTubeOnewayRenderer.java",
+      "modern_be_type_text_found": true
+    },
+    {
+      "legacy_tile": "TileTubeBuffer",
+      "legacy_renderer": "TileTubeBufferRenderer",
+      "modern_block_entity_type": "TUBE_BUFFER",
+      "effect": "tinted valve rods",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileTubeBufferRenderer.java",
+      "modern_be_type_text_found": true
+    },
+    {
+      "legacy_tile": "TileAlembic",
+      "legacy_renderer": "TileAlembicRenderer",
+      "modern_block_entity_type": "ALEMBIC",
+      "effect": "filter aspect tag and nozzle",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileAlembicRenderer.java",
+      "modern_be_type_text_found": true
+    },
+    {
+      "legacy_tile": "TileCentrifuge",
+      "legacy_renderer": "TileCentrifugeRenderer",
+      "modern_block_entity_type": "CENTRIFUGE",
+      "effect": "rotating top mechanism",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileCentrifugeRenderer.java",
+      "modern_be_type_text_found": true
+    },
+    {
+      "legacy_tile": "TileMirror",
+      "legacy_renderer": "TileMirrorRenderer",
+      "modern_block_entity_type": "MIRROR|MIRROR_ESSENTIA",
+      "effect": "shader/portal surface",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileMirrorRenderer.java",
+      "modern_be_type_text_found": true
+    },
+    {
+      "legacy_tile": "TilePatternCrafter",
+      "legacy_renderer": "TilePatternCrafterRenderer",
+      "modern_block_entity_type": "PATTERN_CRAFTER",
+      "effect": "item/recipe icon overlay",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TilePatternCrafterRenderer.java",
+      "modern_be_type_text_found": true
+    },
+    {
+      "legacy_tile": "TileVoidSiphon",
+      "legacy_renderer": "TileVoidSiphonRenderer",
+      "modern_block_entity_type": "VOID_SIPHON",
+      "effect": "animated star shader",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileVoidSiphonRenderer.java",
+      "modern_be_type_text_found": true
+    },
+    {
+      "legacy_tile": "TileBanner",
+      "legacy_renderer": "TileBannerRenderer",
+      "modern_block_entity_type": "NOT_REGISTERED",
+      "effect": "cloth/pole/dye/cult texture",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileBannerRenderer.java",
+      "modern_be_type_text_found": false
+    },
+    {
+      "legacy_tile": "TileHole",
+      "legacy_renderer": "TileHoleRenderer",
+      "modern_block_entity_type": "HOLE",
+      "effect": "end-portal shader on neighbors",
+      "modern_ber_bound": false,
+      "legacy_renderer_source": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileHoleRenderer.java",
+      "modern_be_type_text_found": true
+    }
+  ],
+  "invisible_entities": [
+    {
+      "id": "focus_cloud",
+      "modern_renderer": "TCInvisibleEntityRenderer",
+      "legacy": "RenderFocusCloud",
+      "legacy_paint": "empty_render_method",
+      "modern_notes": "TCFocusCloudEntity.tickClientParticles uses TCFXDispatcher",
+      "flag": "invisible_renderer_consistent_with_legacy_or_fx_separate"
+    },
+    {
+      "id": "taint_swarm",
+      "modern_renderer": "TCInvisibleEntityRenderer",
+      "legacy": "RenderTaintSwarm",
+      "legacy_paint": "empty_render_method",
+      "flag": "invisible_renderer_consistent_with_legacy_or_fx_separate"
+    },
+    {
+      "id": "focus_projectile",
+      "modern_renderer": "TCInvisibleEntityRenderer",
+      "legacy": "RenderNoProjectile",
+      "legacy_paint": "no_projectile",
+      "flag": "invisible_renderer_consistent_with_legacy_or_fx_separate"
+    },
+    {
+      "id": "focusmine",
+      "modern_renderer": "TCInvisibleEntityRenderer",
+      "legacy": "RenderFocusMine",
+      "legacy_paint": "textured_ModelGrappler_and_colored_pulsation",
+      "modern_notes": "TCFocusmineEntity emits vanilla witch particles but has invisible entity renderer",
+      "flag": "confirmed_source_visual_gap"
+    },
+    {
+      "id": "golem_dart",
+      "modern_renderer": "TCInvisibleEntityRenderer",
+      "legacy": "RenderDart",
+      "legacy_paint": "textured_3D_arrow_geometry",
+      "flag": "confirmed_source_visual_gap"
+    },
+    {
+      "id": "grapple",
+      "modern_renderer": "TCInvisibleEntityRenderer",
+      "legacy": "RenderGrapple",
+      "legacy_paint": "ModelGrappler_plus_dynamic_rope_polycone",
+      "flag": "confirmed_source_visual_gap"
+    },
+    {
+      "id": "alumentum",
+      "modern_renderer": "TCInvisibleEntityRenderer",
+      "legacy": "RenderNoProjectile",
+      "legacy_paint": "no_projectile",
+      "flag": "invisible_renderer_consistent_with_legacy_or_fx_separate"
+    },
+    {
+      "id": "causality_collapser",
+      "modern_renderer": "TCInvisibleEntityRenderer",
+      "legacy": "RenderNoProjectile",
+      "legacy_paint": "no_projectile",
+      "flag": "invisible_renderer_consistent_with_legacy_or_fx_separate"
+    },
+    {
+      "id": "mind_spider",
+      "modern_renderer": "TCInvisibleEntityRenderer",
+      "legacy": "RenderMindSpider",
+      "legacy_paint": "translucent_scaled_spider_model_with_viewer_gate",
+      "flag": "confirmed_source_visual_gap"
+    }
+  ],
+  "modern_entity_render_bindings": [
+    {
+      "id": "special_item",
+      "name": "SPECIAL_ITEM",
+      "impl": "ItemEntityRenderer::new"
+    },
+    {
+      "id": "follow_item",
+      "name": "FOLLOW_ITEM",
+      "impl": "ItemEntityRenderer::new"
+    },
+    {
+      "id": "flux_rift",
+      "name": "FLUX_RIFT",
+      "impl": "TCFluxRiftRenderer::new"
+    },
+    {
+      "id": "focus_cloud",
+      "name": "FOCUS_CLOUD",
+      "impl": "TCInvisibleEntityRenderer::new"
+    },
+    {
+      "id": "arcane_bore",
+      "name": "ARCANE_BORE",
+      "impl": "TCArcaneBoreRenderer::new"
+    },
+    {
+      "id": "falling_taint",
+      "name": "FALLING_TAINT",
+      "impl": "TCFallingTaintRenderer::new"
+    },
+    {
+      "id": "taint_seed",
+      "name": "TAINT_SEED",
+      "impl": "TCTaintSeedRenderer::new"
+    },
+    {
+      "id": "taint_seed_prime",
+      "name": "TAINT_SEED_PRIME",
+      "impl": "TCTaintSeedRenderer::new"
+    },
+    {
+      "id": "thaum_slime",
+      "name": "THAUM_SLIME",
+      "impl": "TCThaumicSlimeRenderer::new"
+    },
+    {
+      "id": "taint_crawler",
+      "name": "TAINT_CRAWLER",
+      "impl": "TCTaintCrawlerRenderer::new"
+    },
+    {
+      "id": "taintacle",
+      "name": "TAINTACLE",
+      "impl": "context -> new TCTaintacleRenderer<>(context, 10, 0.6F)"
+    },
+    {
+      "id": "taintacle_tiny",
+      "name": "TAINTACLE_TINY",
+      "impl": "context -> new TCTaintacleRenderer<>(context, 6, 0.2F)"
+    },
+    {
+      "id": "taintacle_giant",
+      "name": "TAINTACLE_GIANT",
+      "impl": "context -> new TCTaintacleRenderer<>(context, 14, 1.0F)"
+    },
+    {
+      "id": "taint_swarm",
+      "name": "TAINT_SWARM",
+      "impl": "TCInvisibleEntityRenderer::new"
+    },
+    {
+      "id": "wisp",
+      "name": "WISP",
+      "impl": "TCWispRenderer::new"
+    },
+    {
+      "id": "firebat",
+      "name": "FIREBAT",
+      "impl": "TCFirebatRenderer::new"
+    },
+    {
+      "id": "spellbat",
+      "name": "SPELLBAT",
+      "impl": "TCFirebatRenderer::new"
+    },
+    {
+      "id": "focus_projectile",
+      "name": "FOCUS_PROJECTILE",
+      "impl": "TCInvisibleEntityRenderer::new"
+    },
+    {
+      "id": "focusmine",
+      "name": "FOCUSMINE",
+      "impl": "TCInvisibleEntityRenderer::new"
+    },
+    {
+      "id": "golem_dart",
+      "name": "GOLEM_DART",
+      "impl": "TCInvisibleEntityRenderer::new"
+    },
+    {
+      "id": "golem",
+      "name": "GOLEM",
+      "impl": "TCGolemRenderer::new"
+    },
+    {
+      "id": "grapple",
+      "name": "GRAPPLE",
+      "impl": "TCInvisibleEntityRenderer::new"
+    },
+    {
+      "id": "pech",
+      "name": "PECH",
+      "impl": "TCPechRenderer::new"
+    },
+    {
+      "id": "brainy_zombie",
+      "name": "BRAINY_ZOMBIE",
+      "impl": "TCBrainyZombieRenderer::new"
+    },
+    {
+      "id": "giant_brainy_zombie",
+      "name": "GIANT_BRAINY_ZOMBIE",
+      "impl": "TCBrainyZombieRenderer::new"
+    },
+    {
+      "id": "bottle_taint",
+      "name": "BOTTLE_TAINT",
+      "impl": "ThrownItemRenderer::new"
+    },
+    {
+      "id": "alumentum",
+      "name": "ALUMENTUM",
+      "impl": "TCInvisibleEntityRenderer::new"
+    },
+    {
+      "id": "causality_collapser",
+      "name": "CAUSALITY_COLLAPSER",
+      "impl": "TCInvisibleEntityRenderer::new"
+    },
+    {
+      "id": "eldritch_orb",
+      "name": "ELDRITCH_ORB",
+      "impl": "TCEldritchOrbRenderer::new"
+    },
+    {
+      "id": "golem_orb",
+      "name": "GOLEM_ORB",
+      "impl": "TCGolemOrbRenderer::new"
+    },
+    {
+      "id": "cultist_portal_lesser",
+      "name": "CULTIST_PORTAL_LESSER",
+      "impl": "TCCultistPortalLesserRenderer::new"
+    },
+    {
+      "id": "cultist_portal_greater",
+      "name": "CULTIST_PORTAL_GREATER",
+      "impl": "TCCultistPortalGreaterRenderer::new"
+    },
+    {
+      "id": "cultist_knight",
+      "name": "CULTIST_KNIGHT",
+      "impl": "TCCultistRenderer::new"
+    },
+    {
+      "id": "cultist_cleric",
+      "name": "CULTIST_CLERIC",
+      "impl": "TCCultistRenderer::new"
+    },
+    {
+      "id": "cultist_leader",
+      "name": "CULTIST_LEADER",
+      "impl": "TCCultistLeaderRenderer::new"
+    },
+    {
+      "id": "mind_spider",
+      "name": "MIND_SPIDER",
+      "impl": "TCInvisibleEntityRenderer::new"
+    },
+    {
+      "id": "eldritch_guardian",
+      "name": "ELDRITCH_GUARDIAN",
+      "impl": "TCEldritchGuardianRenderer::new"
+    },
+    {
+      "id": "eldritch_crab",
+      "name": "ELDRITCH_CRAB",
+      "impl": "TCEldritchCrabRenderer::new"
+    },
+    {
+      "id": "inhabited_zombie",
+      "name": "INHABITED_ZOMBIE",
+      "impl": "TCInhabitedZombieRenderer::new"
+    },
+    {
+      "id": "turret_basic",
+      "name": "TURRET_BASIC",
+      "impl": "TCTurretRenderer::new"
+    },
+    {
+      "id": "turret_advanced",
+      "name": "TURRET_ADVANCED",
+      "impl": "TCTurretRenderer::new"
+    },
+    {
+      "id": "eldritch_warden",
+      "name": "ELDRITCH_WARDEN",
+      "impl": "TCEldritchWardenRenderer::new"
+    },
+    {
+      "id": "eldritch_golem",
+      "name": "ELDRITCH_GOLEM",
+      "impl": "TCEldritchGolemRenderer::new"
+    }
+  ],
+  "legacy_visual_assets_still_available_in_port": [
+    {
+      "path": "textures/entity/mine.png",
+      "in_port_tree": true
+    },
+    {
+      "path": "textures/entity/grappler.png",
+      "in_port_tree": true
+    },
+    {
+      "path": "textures/misc/rope.png",
+      "in_port_tree": true
+    },
+    {
+      "path": "textures/models/chesthungry.png",
+      "in_port_tree": true
+    },
+    {
+      "path": "textures/models/centrifuge.png",
+      "in_port_tree": true
+    },
+    {
+      "path": "textures/models/dioptra_side.png",
+      "in_port_tree": true
+    },
+    {
+      "path": "textures/models/valve.png",
+      "in_port_tree": true
+    }
+  ],
+  "method": {
+    "all_four_registration_files_read": true,
+    "legacy_visual_source_read_for_gaps": true,
+    "source_only": true,
+    "client_game_run": false,
+    "gradle_run": false,
+    "explicit_code_absence_not_equivalent_to_final_game_render_absence": true
+  },
+  "review_priorities": [
+    "hole shader vs invisible block and absent BER",
+    "grapple rope and head",
+    "mind_spider viewer-gated translucent spider",
+    "focusmine model/pulsing, golem dart projectile geometry",
+    "mirror/essentia mirror shaders",
+    "void siphon enabled star portal",
+    "hungry chest lid, centrifuge spin; recharge pedestal shared BER transform comparison",
+    "banner block registration and cloth",
+    "remaining legacy TESR special overlays",
+    "remaining 34 entity renderer behavior, particle and GUI comparisons"
+  ],
+  "shared_renderer_cases": [
+    {
+      "legacy_tile": "TileRechargePedestal",
+      "legacy_renderer": "TileRechargePedestalRenderer",
+      "modern_block": "RECHARGE_PEDESTAL",
+      "modern_block_entity_type": "INFUSION_PEDESTAL",
+      "modern_renderer": "TCInfusionPedestalRenderer",
+      "modern_item_rendering_present": true,
+      "visual_transform_parity_verified": false,
+      "details": "TCBlockEntities.INFUSION_PEDESTAL covers RECHARGE_PEDESTAL and TCInfusionPedestalRenderer renders a stored rotating item; legacy recharge had different position/scale/speed."
+    }
+  ]
+}
