@@ -1,0 +1,8 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "thaumcraft:cultist_portal_lesser"
+  ],
+  "step": "surface_structures"
+}

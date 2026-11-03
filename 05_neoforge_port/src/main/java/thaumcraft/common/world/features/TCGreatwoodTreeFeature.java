@@ -20,6 +20,7 @@ public final class TCGreatwoodTreeFeature extends Feature<NoneFeatureConfigurati
         WorldGenLevel level = context.level();
         BlockPos origin = context.origin();
         RandomSource random = context.random();
-        return new TCGreatwoodTreeGenerator(false).generate(level, random, origin);
+        boolean spiders = random.nextInt(8) == 0;
+        return new TCGreatwoodTreeGenerator(spiders).generate(level, random, origin);
     }
 }

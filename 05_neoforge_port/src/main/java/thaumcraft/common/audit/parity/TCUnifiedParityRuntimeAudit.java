@@ -46,8 +46,10 @@ import thaumcraft.common.crafting.crucible.TCCrucibleRecipe;
 import thaumcraft.common.crafting.infusion.TCInfusionRecipe;
 import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.items.ItemAspectVariant;
+import thaumcraft.common.registry.TCBiomes;
 import thaumcraft.common.registry.TCBlockEntities;
 import thaumcraft.common.registry.TCBlocks;
+import thaumcraft.common.registry.TCFeatures;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCRecipes;
 import thaumcraft.common.research.TCPlayerKnowledge;
@@ -96,6 +98,7 @@ public final class TCUnifiedParityRuntimeAudit {
         lines.add(categoryRow("Equipment, Armor & Mobility", report.equipmentChecks()));
         lines.add(categoryRow("Multiblock Structure Blueprints", report.multiblockChecks()));
         lines.add(categoryRow("Research & Discovery Flow", report.researchChecks()));
+        lines.add(categoryRow("Worldgen, Biomes & Structures", report.worldgenChecks()));
         lines.add("");
         lines.add("### Overall: " + report.passed() + " / " + report.checks().size()
                 + " checks passed (" + String.format("%.1f", report.percent()) + "%).");
@@ -145,6 +148,7 @@ public final class TCUnifiedParityRuntimeAudit {
         checks.addAll(auditEquipment(player));
         checks.addAll(auditMultiblocks(level));
         checks.addAll(auditResearch(player));
+        checks.addAll(auditWorldgen(level));
 
         return new Report(List.copyOf(checks));
     }
@@ -374,6 +378,47 @@ public final class TCUnifiedParityRuntimeAudit {
         return checks;
     }
 
+    private static List<Check> auditWorldgen(ServerLevel level) {
+        ArrayList<Check> checks = new ArrayList<>();
+        checks.add(new Check("Worldgen", "magical_forest_biome_registered",
+                TCBiomes.MAGICAL_FOREST != null && "thaumcraft:magical_forest".equals(TCBiomes.MAGICAL_FOREST.location().toString()),
+                "TCBiomes.MAGICAL_FOREST key is registered (thaumcraft:magical_forest)"));
+        checks.add(new Check("Worldgen", "eerie_biome_registered",
+                TCBiomes.EERIE != null && "thaumcraft:eerie".equals(TCBiomes.EERIE.location().toString()),
+                "TCBiomes.EERIE key is registered (thaumcraft:eerie)"));
+        checks.add(new Check("Worldgen", "eldritch_biome_registered",
+                TCBiomes.ELDRITCH != null && "thaumcraft:eldritch".equals(TCBiomes.ELDRITCH.location().toString()),
+                "TCBiomes.ELDRITCH key is registered (thaumcraft:eldritch)"));
+        checks.add(new Check("Worldgen", "greatwood_tree_feature_registered",
+                TCFeatures.TREE_GREATWOOD.get() != null,
+                "TCFeatures.TREE_GREATWOOD registered"));
+        checks.add(new Check("Worldgen", "silverwood_tree_feature_registered",
+                TCFeatures.TREE_SILVERWOOD.get() != null,
+                "TCFeatures.TREE_SILVERWOOD registered"));
+        checks.add(new Check("Worldgen", "ancient_mound_feature_registered",
+                TCFeatures.MOUND.get() != null,
+                "TCFeatures.MOUND registered (restoring legacy WorldGenMound)"));
+        checks.add(new Check("Worldgen", "cultist_portal_feature_registered",
+                TCFeatures.CULTIST_PORTAL_LESSER.get() != null,
+                "TCFeatures.CULTIST_PORTAL_LESSER registered (restoring legacy surface cult portal generation)"));
+        boolean oresValid = TCBlocks.ORE_AMBER.get() != null
+                && TCBlocks.ORE_CINNABAR.get() != null
+                && TCBlocks.ORE_QUARTZ.get() != null
+                && TCBlocks.DEEPSLATE_AMBER_ORE.get() != null
+                && TCBlocks.DEEPSLATE_CINNABAR_ORE.get() != null
+                && TCBlocks.DEEPSLATE_QUARTZ_ORE.get() != null;
+        checks.add(new Check("Worldgen", "thaumcraft_ores_registered",
+                oresValid,
+                "Amber, Cinnabar, Quartz and Deepslate replacement ore variants registered"));
+        boolean floraValid = TCBlocks.SHIMMERLEAF.get() != null
+                && TCBlocks.CINDERPEARL.get() != null
+                && TCBlocks.VISHROOM.get() != null;
+        checks.add(new Check("Worldgen", "thaumcraft_flora_registered",
+                floraValid,
+                "Shimmerleaf, Cinderpearl and Vishroom wild plants registered"));
+        return checks;
+    }
+
     public record Report(List<Check> checks) {
         public int passed() {
             return (int) checks.stream().filter(Check::passed).count();
@@ -413,6 +458,10 @@ public final class TCUnifiedParityRuntimeAudit {
 
         public List<Check> researchChecks() {
             return checks.stream().filter(c -> "Research".equals(c.subsystem())).toList();
+        }
+
+        public List<Check> worldgenChecks() {
+            return checks.stream().filter(c -> "Worldgen".equals(c.subsystem())).toList();
         }
     }
 

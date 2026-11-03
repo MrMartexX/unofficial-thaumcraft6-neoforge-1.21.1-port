@@ -105,6 +105,12 @@ final class TCAuraBiomeModifiers {
             modifiers.add(0.125F);
         } else if (key.equals(Biomes.WARPED_FOREST) || key.equals(Biomes.CRIMSON_FOREST)) {
             modifiers.add(0.5F);
+        } else if (key.equals(thaumcraft.common.registry.TCBiomes.MAGICAL_FOREST)) {
+            modifiers.add(0.75F);
+        } else if (key.equals(thaumcraft.common.registry.TCBiomes.EERIE)) {
+            modifiers.add(0.5F);
+        } else if (key.equals(thaumcraft.common.registry.TCBiomes.ELDRITCH)) {
+            modifiers.add(0.125F);
         }
     }
 

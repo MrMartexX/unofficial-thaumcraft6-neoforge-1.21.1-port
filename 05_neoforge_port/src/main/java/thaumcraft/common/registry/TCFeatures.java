@@ -7,7 +7,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.world.features.TCCrystalClusterFeature;
+import thaumcraft.common.world.features.TCCultistPortalFeature;
 import thaumcraft.common.world.features.TCGreatwoodTreeFeature;
+import thaumcraft.common.world.features.TCMoundFeature;
 import thaumcraft.common.world.features.TCSilverwoodTreeFeature;
 
 /** NeoForge worldgen feature registrations used by Thaumcraft datapack features. */
@@ -40,6 +42,13 @@ public final class TCFeatures {
     public static final DeferredHolder<Feature<?>, TCSilverwoodTreeFeature> TREE_SILVERWOOD =
             FEATURES.register("tree_silverwood",
                     () -> new TCSilverwoodTreeFeature(NoneFeatureConfiguration.CODEC));
+
+    public static final DeferredHolder<Feature<?>, TCMoundFeature> MOUND =
+            FEATURES.register("mound",
+                    () -> new TCMoundFeature(NoneFeatureConfiguration.CODEC));
+    public static final DeferredHolder<Feature<?>, TCCultistPortalFeature> CULTIST_PORTAL_LESSER =
+            FEATURES.register("cultist_portal_lesser",
+                    () -> new TCCultistPortalFeature(NoneFeatureConfiguration.CODEC));
 
     private TCFeatures() {
     }

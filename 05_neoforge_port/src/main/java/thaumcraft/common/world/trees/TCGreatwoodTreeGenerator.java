@@ -6,6 +6,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -74,8 +78,31 @@ public class TCGreatwoodTreeGenerator {
         generateTrunk();
 
         if (this.spiders) {
-            // Legacy worldgen could create a cave spider dungeon under some Greatwood trees.
-            // Sapling growth always passes spiders=false, so dungeon generation is intentionally not ported here yet.
+            BlockPos spawnerPos = pos.below();
+            if (canWriteBlock(level, spawnerPos)) {
+                level.setBlock(spawnerPos, Blocks.SPAWNER.defaultBlockState(), 3);
+                if (level.getBlockEntity(spawnerPos) instanceof SpawnerBlockEntity spawner) {
+                    spawner.setEntityId(EntityType.CAVE_SPIDER, level.getRandom());
+                }
+
+                for (int a = 0; a < 50; ++a) {
+                    int xx = pos.getX() - 7 + this.rand.nextInt(14);
+                    int yy = pos.getY() + this.rand.nextInt(10);
+                    int zz = pos.getZ() - 7 + this.rand.nextInt(14);
+                    BlockPos webPos = new BlockPos(xx, yy, zz);
+                    if (canWriteBlock(level, webPos) && level.getBlockState(webPos).isAir() && isTouchingGreatwood(level, webPos)) {
+                        level.setBlock(webPos, Blocks.COBWEB.defaultBlockState(), 3);
+                    }
+                }
+
+                BlockPos chestPos = pos.below(2);
+                if (canWriteBlock(level, chestPos)) {
+                    level.setBlock(chestPos, Blocks.CHEST.defaultBlockState(), 3);
+                    if (level.getBlockEntity(chestPos) instanceof RandomizableContainerBlockEntity chest) {
+                        chest.setLootTable(BuiltInLootTables.SIMPLE_DUNGEON, this.rand.nextLong());
+                    }
+                }
+            }
         }
 
 
@@ -446,6 +473,19 @@ public class TCGreatwoodTreeGenerator {
     }
 
     
+    private static boolean isTouchingGreatwood(WorldGenLevel level, BlockPos pos) {
+        for (Direction dir : Direction.values()) {
+            BlockPos adjacent = pos.relative(dir);
+            if (level.hasChunkAt(adjacent)) {
+                BlockState state = level.getBlockState(adjacent);
+                if (state.is(TCBlocks.LOG_GREATWOOD.get()) || state.is(TCBlocks.LEAVES_GREATWOOD.get())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private static boolean canWriteBlock(WorldGenLevel level, BlockPos pos) {
         if (level instanceof net.minecraft.server.level.WorldGenRegion region) {
             net.minecraft.world.level.ChunkPos center = region.getCenter();
