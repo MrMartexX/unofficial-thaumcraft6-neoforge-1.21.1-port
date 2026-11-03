@@ -1,0 +1,501 @@
+{
+  "schema": "thaumcraft.v0.resource_graph_first_pass.v1",
+  "date": "2026-11-03",
+  "source": {
+    "repository": "MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port",
+    "branch": "main",
+    "commit": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+    "assets_root": "05_neoforge_port/src/main/resources/assets/thaumcraft",
+    "trees": {
+      "blockstates": "5485d098ed08a3f1879db99dec91209d636a13fa",
+      "models": "ffbb5e6d9eefc9b8d58c1edc3c640e7aa2d363e8",
+      "textures": "1baa3bbd96112d2fb8d64f9f6fe02b63d7e08e6c"
+    }
+  },
+  "method": {
+    "scope": "static exact-path and JSON reference enumeration",
+    "resource_json_read": "all blockstates and models JSON blobs from pinned source tree",
+    "runtime_executed": false,
+    "gradle_executed": false,
+    "powershell_executed": false,
+    "visual_client_parity_checked": false,
+    "vanilla_references_resolved_in_modpack": false,
+    "aliases_or_animations_semantically_render_checked": false
+  },
+  "counts": {
+    "registered_blocks": 175,
+    "matching_active_blockstate_json": 175,
+    "registered_items": 487,
+    "matching_item_model_json": 487,
+    "blockstate_json": 227,
+    "models_block_json": 253,
+    "models_item_json": 531,
+    "models_json": 784,
+    "non_json_models": 43,
+    "texture_png": 1259,
+    "texture_mcmeta": 124,
+    "texture_jpg": 7,
+    "orphan_blockstate_files": 52,
+    "orphan_legacy_syntax_heuristic": 51,
+    "active_legacy_syntax_blockstates": 1,
+    "active_blockstate_model_references": 862,
+    "active_blockstate_model_ref_to_thaumcraft": 857,
+    "active_blockstate_model_ref_to_minecraft": 5,
+    "missing_active_local_model_json_under_legacy_fallback": 0,
+    "internal_model_parent_links": 214,
+    "external_parent_refs": 524,
+    "internal_model_parent_missing": 0,
+    "internal_model_parent_cycles": 0,
+    "item_model_override_refs": 22,
+    "custom_obj_loader_occurrences": 15,
+    "custom_composite_loader_occurrences": 1,
+    "obj_mtl_asset_reference_occurrences": 28,
+    "missing_obj_mtl_asset_references": 0,
+    "thaumcraft_explicit_texture_reference_occurrences": 966,
+    "missing_explicit_thaumcraft_texture_png": 0
+  },
+  "findings": {
+    "active_legacy_blockstate": {
+      "path": "blockstates/hole.json",
+      "has_forge_marker": true,
+      "old_variant_keys": [
+        "inventory",
+        "normal"
+      ],
+      "model": "thaumcraft:empty",
+      "local_block_model_present": true,
+      "registered_block_class": "TCHoleBlock",
+      "java_get_render_shape": "INVISIBLE",
+      "risk": "resource parser compatibility and data hygiene; no proven visible rendering issue"
+    },
+    "legacy_orphan_thaumometer": {
+      "path": "blockstates/thaumometer.json",
+      "model": "thaumcraft:scanner.obj",
+      "old_unnamespaced_json_model_lookup_missing": true,
+      "modern_item_model": "models/item/thaumometer.json",
+      "modern_item_model_loader": "neoforge:composite",
+      "modern_obj": "models/item/scanner.obj",
+      "interpretation": "orphan old item-side blockstate; do not count as active missing item model"
+    },
+    "orphan_blockstates": [
+      {
+        "path": "blockstates/activator_rail.json",
+        "blob_sha": "3d6082690cdaf658432b7aeba517d55ab1bb0c00",
+        "legacy_syntax_heuristic": false,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/amulet_vis.json",
+        "blob_sha": "0f201ac9544f973256c75df6db5315efc37ac77e",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/banner_black.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_blue.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_brown.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_crimson_cult.json",
+        "blob_sha": "1eef59bf7dc45eb300af514fa40c952413159a93",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_cyan.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_gray.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_green.json",
+        "blob_sha": "015ba71aa12afdb688af3de8a73b8e48f1e8f0ce",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_lightblue.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_lime.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_magenta.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_orange.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_pink.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_purple.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_red.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_silver.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_white.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/banner_yellow.json",
+        "blob_sha": "8b8398e11c83459bc8c932467bce51b6aa8a95cc",
+        "legacy_syntax_heuristic": true,
+        "category": "banner"
+      },
+      {
+        "path": "blockstates/barrier.json",
+        "blob_sha": "c3b309cb33420a43b2ad182129d53ce6034925e7",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/baubles.json",
+        "blob_sha": "7970145d8d7676f29168b413ecffde3c21e1e62c",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/brain_box.json",
+        "blob_sha": "87b8fcc451812263848bb38dea5a2bd9bacaa6e7",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/celestial_notes.json",
+        "blob_sha": "c0091d0bd094214670e966afcc162fe27b92b631",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/chunk.json",
+        "blob_sha": "b92fc3258b13d6bf5078e3b659b8513c32b0acd4",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/cluster.json",
+        "blob_sha": "85c90bdae91fe3ccd2c55942d2361dc80d21302d",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/creative_placer.json",
+        "blob_sha": "e5e2acc6cd83e71ba21205bfcee0905b099a1406",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/crystal_essence.json",
+        "blob_sha": "64ba9835bba43d2e925505636e9616b61fbd7c3e",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/curio.json",
+        "blob_sha": "e2197dd86ec3cb74a439b36b2cc4379582bd7180",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/effect_sap.json",
+        "blob_sha": "58af7c7b5607935c1d6596b48fff2dcc9a6679f5",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/effect_shock.json",
+        "blob_sha": "58af7c7b5607935c1d6596b48fff2dcc9a6679f5",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/empty.json",
+        "blob_sha": "50932e4f7ff8ac3e545c922bcb1939b187f06c7e",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/essentia_input.json",
+        "blob_sha": "69efeac4d118c1752255a0ebc50cfd0705514fc7",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/essentia_output.json",
+        "blob_sha": "aae7948917b951aae6eaed7c84733bcddb474b08",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/grass_ambient.json",
+        "blob_sha": "d3b0087b2c59eb1b72d1b7e4956f80679c22f0f5",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/ingot.json",
+        "blob_sha": "2a7ec0c8c48c0a3941c6a627c73394319c75e49c",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/label.json",
+        "blob_sha": "5979dbc30d967a939bfc07fb952f658d6dcec3d2",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/loot_bag.json",
+        "blob_sha": "bc91acc90d4fe642e54c3d36c19c699d094176ac",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/mind.json",
+        "blob_sha": "38025fb7c1c55bde837d0ff9c3b3f472e36bf8f1",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/module.json",
+        "blob_sha": "416514aa2398b380c041873e9b648d0e4707c69f",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/nugget.json",
+        "blob_sha": "3f02066f4d9f3f6d8c6a3d8412c3fba3f7e83208",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/phial.json",
+        "blob_sha": "eeb6c49cafa170c07d5985051f89abcc1072ad64",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/plate.json",
+        "blob_sha": "bce00d3cc1254ff19d7533490e3dbdc2db0f44c9",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/redstone_relay.json",
+        "blob_sha": "ecc793b9a0b35112e31057a5d6029cb437cc502f",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/slab_double_ancient.json",
+        "blob_sha": "3ce60a5983537c0c1285fd25d5398fc907233c86",
+        "legacy_syntax_heuristic": true,
+        "category": "legacy_double_slab"
+      },
+      {
+        "path": "blockstates/slab_double_arcane_brick.json",
+        "blob_sha": "3cad7ce28cf62a55616586908b25373a67ec9138",
+        "legacy_syntax_heuristic": true,
+        "category": "legacy_double_slab"
+      },
+      {
+        "path": "blockstates/slab_double_arcane_stone.json",
+        "blob_sha": "6035ee768fa52a08af0fc247a25335c51368ed69",
+        "legacy_syntax_heuristic": true,
+        "category": "legacy_double_slab"
+      },
+      {
+        "path": "blockstates/slab_double_eldritch.json",
+        "blob_sha": "fe11bd60bf48040870e8692f61d6047938ed376a",
+        "legacy_syntax_heuristic": true,
+        "category": "legacy_double_slab"
+      },
+      {
+        "path": "blockstates/slab_double_greatwood.json",
+        "blob_sha": "5923339279cc0e08769e413bc9568872fc0d3cab",
+        "legacy_syntax_heuristic": true,
+        "category": "legacy_double_slab"
+      },
+      {
+        "path": "blockstates/slab_double_silverwood.json",
+        "blob_sha": "310952a97304e16e18f85048e6581caac38b8d83",
+        "legacy_syntax_heuristic": true,
+        "category": "legacy_double_slab"
+      },
+      {
+        "path": "blockstates/thaumometer.json",
+        "blob_sha": "b7f7128142c4d86b04d2a1d7b2491eb8a451bf2e",
+        "legacy_syntax_heuristic": true,
+        "category": "old_item_side_blockstate"
+      },
+      {
+        "path": "blockstates/thaumonomicon.json",
+        "blob_sha": "1a8fa7689154770ff3a5ee147c1f630315294256",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      },
+      {
+        "path": "blockstates/turret.json",
+        "blob_sha": "97a27a40c1a34f435cfbbc755b83f13bca996d39",
+        "legacy_syntax_heuristic": true,
+        "category": "review"
+      }
+    ],
+    "slab_double_state_candidates": [
+      {
+        "blockstate": "blockstates/slab_ancient.json",
+        "double_variants_present": true,
+        "double_model_references": [
+          "thaumcraft:block/slab_ancient_double"
+        ],
+        "models": [
+          "thaumcraft:block/slab_ancient",
+          "thaumcraft:block/slab_ancient_top",
+          "thaumcraft:block/slab_ancient_double"
+        ]
+      },
+      {
+        "blockstate": "blockstates/slab_arcane_brick.json",
+        "double_variants_present": true,
+        "double_model_references": [
+          "thaumcraft:block/stone_arcane_brick"
+        ],
+        "models": [
+          "thaumcraft:block/slab_arcane_brick",
+          "thaumcraft:block/slab_arcane_brick_top",
+          "thaumcraft:block/stone_arcane_brick"
+        ]
+      },
+      {
+        "blockstate": "blockstates/slab_arcane_stone.json",
+        "double_variants_present": true,
+        "double_model_references": [
+          "thaumcraft:block/stone_arcane"
+        ],
+        "models": [
+          "thaumcraft:block/slab_arcane_stone",
+          "thaumcraft:block/slab_arcane_stone_top",
+          "thaumcraft:block/stone_arcane"
+        ]
+      },
+      {
+        "blockstate": "blockstates/slab_eldritch.json",
+        "double_variants_present": true,
+        "double_model_references": [
+          "thaumcraft:block/stone_eldritch_tile"
+        ],
+        "models": [
+          "thaumcraft:block/slab_eldritch",
+          "thaumcraft:block/slab_eldritch_top",
+          "thaumcraft:block/stone_eldritch_tile"
+        ]
+      },
+      {
+        "blockstate": "blockstates/slab_greatwood.json",
+        "double_variants_present": true,
+        "double_model_references": [
+          "thaumcraft:block/plank_greatwood"
+        ],
+        "models": [
+          "thaumcraft:block/slab_greatwood",
+          "thaumcraft:block/slab_greatwood_top",
+          "thaumcraft:block/plank_greatwood"
+        ]
+      },
+      {
+        "blockstate": "blockstates/slab_silverwood.json",
+        "double_variants_present": true,
+        "double_model_references": [
+          "thaumcraft:block/plank_silverwood"
+        ],
+        "models": [
+          "thaumcraft:block/slab_silverwood",
+          "thaumcraft:block/slab_silverwood_top",
+          "thaumcraft:block/plank_silverwood"
+        ]
+      }
+    ],
+    "pedestal_pairs": [
+      {
+        "ids": [
+          "arcane_pedestal",
+          "pedestal_arcane"
+        ],
+        "same_model_reference": true,
+        "model": "thaumcraft:block/pedestal_normal"
+      },
+      {
+        "ids": [
+          "ancient_pedestal",
+          "pedestal_ancient"
+        ],
+        "same_model_reference": true,
+        "model": "thaumcraft:block/pedestal_ancient"
+      },
+      {
+        "ids": [
+          "eldritch_pedestal",
+          "pedestal_eldritch"
+        ],
+        "same_model_reference": true,
+        "model": "thaumcraft:block/pedestal_eldritch"
+      }
+    ]
+  },
+  "limitations": [
+    "A referenced local file is not evidence of successful loader parse, correct UV, correct animation or faithful appearance.",
+    "Old unqualified model identifiers were checked with a legacy block/ fallback for triage only; this does not certify loader compatibility.",
+    "Vanilla/NeoForge external parents, material libraries, texture aliases, mcmeta animation behavior, atlases, particles, GUIs/HUD, runtime loading and original-to-modern visual comparisons remain for follow-up.",
+    "Do not delete orphan resources or merge PR as a result of this census."
+  ]
+}
