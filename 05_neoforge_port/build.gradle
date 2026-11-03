@@ -37,12 +37,17 @@ repositories {
         name = "Curios Maven"
         url = "https://maven.theillusivec4.top/"
     }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+    }
 }
 
 dependencies {
     compileOnly "dev.emi:emi-neoforge:1.1.24+1.21.1:api"
     compileOnly "mezz.jei:jei-1.21.1-neoforge-api:19.70.0.468"
     compileOnly "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1:api"
+    compileOnly "maven.modrinth:terrablender:6e8GCrLb"
 }
 
 neoForge {

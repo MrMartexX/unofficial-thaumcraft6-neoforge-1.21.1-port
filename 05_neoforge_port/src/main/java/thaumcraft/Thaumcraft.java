@@ -244,6 +244,9 @@ public final class Thaumcraft {
         event.enqueueWork(() -> {
             thaumcraft.common.golems.GolemProperties.initParts();
             thaumcraft.common.golems.seals.SealHandler.initSeals();
+            if (net.neoforged.fml.ModList.get().isLoaded("terrablender")) {
+                thaumcraft.common.world.biome.TCTerraBlenderCompat.registerRegions();
+            }
         });
     }
 }

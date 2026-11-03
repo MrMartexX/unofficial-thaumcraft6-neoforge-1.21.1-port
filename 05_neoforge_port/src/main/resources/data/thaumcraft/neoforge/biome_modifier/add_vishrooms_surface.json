@@ -1,8 +1,0 @@
-{
-  "type": "neoforge:add_features",
-  "biomes": "#thaumcraft:vishroom_surface_biomes",
-  "features": [
-    "thaumcraft:patch_vishroom_normal"
-  ],
-  "step": "vegetal_decoration"
-}

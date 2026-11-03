@@ -1,8 +1,0 @@
-{
-  "type": "neoforge:add_features",
-  "biomes": "#thaumcraft:silverwood_biomes",
-  "features": [
-    "thaumcraft:patch_shimmerleaf"
-  ],
-  "step": "vegetal_decoration"
-}

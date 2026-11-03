@@ -44,3 +44,10 @@ type="optional"
 versionRange="[19.0.0,)"
 ordering="AFTER"
 side="CLIENT"
+
+[[dependencies.${mod_id}]]
+modId="terrablender"
+type="optional"
+versionRange="[4.1.0,)"
+ordering="AFTER"
+side="BOTH"
