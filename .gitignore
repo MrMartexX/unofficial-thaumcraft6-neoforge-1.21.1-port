@@ -13,6 +13,9 @@ stop
 
 # Local audit output. Commit curated reports under 6_docs/audits/ when they are useful.
 /tools/reports/local/**
+/07_Test_Instance_and_Comparisons/01_Classic Thaumcraft 1.12.2 Forge/minecraft-instance/saves/
+/07_Test_Instance_and_Comparisons/01_Classic Thaumcraft 1.12.2 Forge/minecraft-instance/screenshots/
+/07_Test_Instance_and_Comparisons/paired_flat_worlds/*_READY.zip
 /tools/reports/*.txt
 /tools/reports/*.csv
 /tools/reports/*.log
