@@ -7,6 +7,10 @@ if ((Get-Content -LiteralPath $ClientLog -Raw) -notmatch 'TC_GOLEM_VISUAL_AUDIT_
     throw 'Missing real server-menu and removal acknowledgement marker'
 }
 Add-Type -AssemblyName System.Drawing
+if ((Get-Content -LiteralPath $ClientLog -Raw) -notmatch 'TC_EXCHANGE_RENDER_PASS samples=\d+ vertices=\d+ finite=true atlas=true expires=true' -or
+    (Get-Content -LiteralPath $ClientLog -Raw) -notmatch 'TC_EXCHANGE_PACKET_CLIENT_PASS particles=\d+ dimension=true') {
+    throw 'Missing Exchange actual geometry or clientbound payload acceptance evidence'
+}
 if ((Get-Content -LiteralPath $ClientLog -Raw) -notmatch 'TC_GOLEM_RENDER_CONTRACT_PASS revealVertices=\d+ leashVertices=100 noLeak=true depthState=true dartVertices=24') {
     throw 'Missing actual reveal/leash geometry and reveal-state isolation contract'
 }

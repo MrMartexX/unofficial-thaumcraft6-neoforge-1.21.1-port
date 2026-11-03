@@ -25,6 +25,7 @@ public final class TCClientEvents {
     static {
         TCFXDispatcher.setClientSink(TCLegacyParticleEngine::addEffect);
         TCEntityFXNetwork.setWispZapSink(TCWispClientEffects::accept);
+        thaumcraft.common.items.casters.TCExchangeBamf.setClientSink(thaumcraft.client.fx.TCExchangeClientEffects::accept);
     }
 
     private TCClientEvents() {

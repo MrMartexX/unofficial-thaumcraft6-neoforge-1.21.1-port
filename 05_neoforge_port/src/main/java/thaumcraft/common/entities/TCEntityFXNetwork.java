@@ -27,6 +27,12 @@ public final class TCEntityFXNetwork {
 
     public static void onRegisterPayloadHandlers(RegisterPayloadHandlersEvent event) {
         event.registrar(NETWORK_VERSION)
+                .playToClient(thaumcraft.common.items.casters.TCExchangeFXPayload.TYPE,
+                        thaumcraft.common.items.casters.TCExchangeFXPayload.STREAM_CODEC,
+                        (payload, context) -> context.enqueueWork(() -> {
+                            if (context.player().level().dimension().equals(payload.dimension()))
+                                thaumcraft.common.items.casters.TCExchangeBamf.accept(payload);
+                        }))
                 .playToClient(
                         TCWispZapPayload.TYPE,
                         TCWispZapPayload.STREAM_CODEC,

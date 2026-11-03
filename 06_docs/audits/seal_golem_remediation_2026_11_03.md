@@ -183,8 +183,10 @@ its startup screen and fails on disconnection instead of silently waiting there.
   transaction API. If a handler rejects reinsertion after extracting, escrow
   goes to the explicit player/drop refund path. Conservation is tested; unchanged
   original slots are not falsely promised for such a handler.
-- Unrelated uncommitted worldgen changes, crystal ecology/distribution and
-  remaining Exchange compatibility/fortune/FX acceptance from the parent audit.
+- Unrelated uncommitted worldgen changes and crystal ecology/distribution.
+  Exchange's timing/loot/FX follow-up is now recorded in
+  [its acceptance note](../design/exchange_remediation.md); arbitrary addon
+  side effects and matched-frame visual comparisons remain outside that proof.
 
 ## Remaining Item Disposition
 
@@ -198,4 +200,5 @@ its startup screen and fails on disconnection instead of silently waiting there.
 | Watch/unwatch/reconnect | Actual integrated-client cycle checked; two simultaneous dedicated-server clients remain a separate acceptance scenario. |
 | Exact legacy pixels | Still unverified; requires matched legacy/modern camera, lighting, animation and player state. Nonblank captures are not that proof. |
 | Arbitrary addon dictionary and foreign inventory transactions | Explicit compatibility boundaries, not defects that a local fixture can universally eliminate. |
-| Concurrent crystal/worldgen and Exchange fortune/FX | Not closed by this golem batch; retain the parent report's open classification. |
+| Concurrent crystal/worldgen | Not closed by this golem batch; retain the parent report's open classification. |
+| Exchange fortune/FX | Follow-up now passes 30 focused caster/effect checks and actual client geometry/network acceptance; see the linked Exchange note for remaining compatibility and pixel boundaries. |

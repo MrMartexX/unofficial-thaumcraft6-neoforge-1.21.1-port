@@ -419,6 +419,7 @@ public final class TCFocusMediumEffectParityAudit {
             rows.add(new Row("focus_graph_scatter_forks_and_power_scaling", true,
                     "Level null: skipped runtime entity check"));
         }
+        if (level != null) TCExchangeBehaviorAudit.run(level, rows, casterStack, exchangeFocus);
         return new Report(rows);
     }
 

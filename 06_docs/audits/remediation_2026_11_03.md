@@ -134,8 +134,12 @@ narrowed accordingly; it does not erase that slice's explicit limitations.
   implemented; real renderer checks now cover reveal and vanilla leash geometry.
 - Full crystal ecology/distribution comparison, including attachment/support
   policy, not merely registration/state/drop checks.
-- Remaining Exchange fortune distributions, compatibility cases and legacy swap
-  FX/timing; the basic survival/material/vis/Silk Touch cases above are verified.
+- Exchange follow-up now covers end-tick timing, selection/source snapshots,
+  creative vis gating, seeded unsupported-silk Fortune loot, container contents,
+  cancellation/reentry, material-slot mutation, centered overflow and unload
+  cleanup (focused audit 30/30). See
+  [Exchange acceptance](../design/exchange_remediation.md). Arbitrary addon loot
+  distributions/callbacks and exact 1.12 visual frames remain unverified.
 - Strict cross-mod inventory atomicity beyond the now-tested press escrow/refund
   boundary; reinsertion-rejecting handlers use an explicit conservation fallback.
 - Remaining in-world visual scenarios beyond the ten captured golem/menu phases.

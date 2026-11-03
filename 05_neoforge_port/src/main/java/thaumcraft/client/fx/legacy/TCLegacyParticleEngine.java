@@ -100,6 +100,14 @@ public final class TCLegacyParticleEngine {
         addEffectNow(effect);
     }
 
+    public static void addConfiguredLegacyEffect(Level level, TCLegacyFXData data, double x, double y, double z,
+                                                   double vx, double vy, double vz, float start, float speed, float yaw, float pitch) {
+        if (level == null || !level.isClientSide() || Minecraft.getInstance().level != level) return;
+        var effect = new TCLegacyFXGeneric(level, data, x, y, z, vx, vy, vz);
+        effect.configureLegacyRotation(start, speed, yaw, pitch);
+        addEffectNow(effect);
+    }
+
     public static void addGuiEffect(
             Level level,
             TCLegacyFXData data,

@@ -30,6 +30,9 @@ public final class TCLegacyFXGeneric {
 
     private float roll;
     private float oRoll;
+    private boolean configuredLegacyRotation;
+    private float legacyAngularVelocity;
+    private Quaternionf fixedRotation;
 
     private boolean removed;
 
@@ -62,6 +65,13 @@ public final class TCLegacyFXGeneric {
     public int getLayer() {
         return this.data.layer;
     }
+    public void configureLegacyRotation(float start, float degreesPerTick, float yaw, float pitch) {
+        configuredLegacyRotation = true;
+        roll = oRoll = (float)(start * Math.PI * 2);
+        legacyAngularVelocity = (float)(degreesPerTick * .017453292519943);
+        if (Float.isFinite(yaw) && Float.isFinite(pitch)) fixedRotation = new Quaternionf()
+                .rotationY((float)Math.toRadians(-yaw + 90)).rotateX((float)Math.toRadians(pitch + 90));
+    }
 
     public boolean isRemoved() {
         return this.removed;
@@ -89,7 +99,7 @@ public final class TCLegacyFXGeneric {
             return;
         }
 
-        this.roll += 3.1415927F * this.data.rotationSpeed * 2.0F;
+        this.roll += configuredLegacyRotation ? legacyAngularVelocity : 3.1415927F * this.data.rotationSpeed * 2.0F;
 
         this.yd -= 0.04D * this.data.gravity;
 
@@ -125,7 +135,10 @@ public final class TCLegacyFXGeneric {
 
         Quaternionf rotation;
 
-        if (this.roll == 0.0F) {
+        if (configuredLegacyRotation) {
+            rotation = fixedRotation == null ? new Quaternionf(camera.rotation()) : new Quaternionf(fixedRotation);
+            rotation.rotateZ(roll + (roll - oRoll) * partialTicks);
+        } else if (this.roll == 0.0F) {
             rotation = camera.rotation();
         } else {
             rotation = new Quaternionf(camera.rotation());

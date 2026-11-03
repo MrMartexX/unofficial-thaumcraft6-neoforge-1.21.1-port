@@ -10,7 +10,7 @@ if (!$ServerLog) { $ServerLog = Join-Path $ReportDirectory 'remaining-final.log'
 $log = Get-Content -LiteralPath $ServerLog -Raw
 foreach ($audit in @(
     @{ Name = 'golem-remaining.md'; Exporter = 'TCGolemBehaviorAudit'; Count = 71 },
-    @{ Name = 'focus-remaining.md'; Exporter = 'TCFocusMediumEffectAudit'; Count = 16 }
+    @{ Name = 'focus-remaining.md'; Exporter = 'TCFocusMediumEffectAudit'; Count = 30 }
 )) {
     $path = Join-Path $ReportDirectory $audit.Name
     if ((Get-Item -LiteralPath $path).LastWriteTime -lt $NotBefore) { throw "Stale report: $path" }
@@ -26,4 +26,4 @@ if ((Get-Item -LiteralPath $matrixPath).LastWriteTime -lt $NotBefore) { throw 'S
 if ((Get-Content -LiteralPath $matrixPath -Raw) -notmatch 'Overall: 40 / 40 checks passed' -or $log -notmatch 'checks=40/40 passed') {
     throw 'Missing successful aggregate export in this run'
 }
-Write-Output 'PASS: fresh server evidence: golems71/71, focus16/16, aggregate40/40. Gradle exit status alone is not used.'
+Write-Output 'PASS: fresh server evidence: golems71/71, focus30/30, aggregate40/40. Gradle exit status alone is not used.'

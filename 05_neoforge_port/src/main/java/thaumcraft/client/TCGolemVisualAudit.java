@@ -115,7 +115,10 @@ public final class TCGolemVisualAudit {
         frames = 0;
         actionsSent = false;
         if (phase < 2) {
-            if (phase == 0) thaumcraft.client.renderer.TCGolemClientRenderAudit.run();
+            if (phase == 0) {
+                thaumcraft.client.renderer.TCGolemClientRenderAudit.run();
+                thaumcraft.client.fx.TCExchangeClientAudit.run();
+            }
             mc.setScreen(new ModelSheet(phase)); return;
         }
         if (phase < 10) {

@@ -6,6 +6,14 @@ Reviewed target module: `05_neoforge_port`
 
 ## November 3 Review Branch
 
+Exchange now queues an immutable source/selection snapshot until level Post tick,
+keeps Fortune available to unsupported-silk loot paths, escrows materials before
+replacement callbacks and restores its dimension-scoped bamf payload. The focused
+server audit passes 30/30, including seeded wheat loot, gravel, ore, chest contents,
+recursive cancellation, slot mutation, centered overflow and unload cleanup. See
+[Exchange design and acceptance](design/exchange_remediation.md); arbitrary addon
+callbacks and exact legacy pixels remain distinct acceptance boundaries.
+
 Current local work is on `codex/review-remediation-20261103`, not a new main
 acceptance checkpoint. [The seal/golem/press audit](audits/seal_golem_remediation_2026_11_03.md)
 records real seal configuration/sync, legacy OBJ golem parts, home/follow state,

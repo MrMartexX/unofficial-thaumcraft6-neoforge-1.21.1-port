@@ -8,6 +8,13 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 
 ### November 3 Remediation Checkpoint
 
+Exchange's immediate mutation was replaced by a server-owned end-tick queue;
+loot context retains both silk and Fortune, material escrow precedes replacement
+callbacks, and successful swaps send the original-range false-flair bamf.
+The focused caster/effects server audit now passes 30/30. Modern vanilla loot
+tables remain the version adapter, not proof of unchanged 1.12 loot distributions
+for every block. See [Exchange acceptance](../design/exchange_remediation.md).
+
 The review branch now has real seal menu/sync, articulated legacy golem OBJ
 rendering, home/follow state, compensated press extraction, advanced logistics
 options, actual Breaker mining, flight/climbing, owner combat and reveal/emotes

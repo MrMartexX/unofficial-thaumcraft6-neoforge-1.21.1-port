@@ -10,6 +10,13 @@ individual contract audits pass.
 
 ## Current focus
 
+- Exchange follow-up: end-of-level-tick source/selection snapshots, creative
+  minimum-vis gate, silk plus Fortune loot context, pre-callback material escrow
+  and the legacy false-flair bamf payload. See
+  [Exchange remediation](design/exchange_remediation.md) for scope and acceptance.
+  Focused server audit now passes 30/30; this is not universal cross-mod or
+  pixel-identical visual certification.
+
 - [Seal/golem/press remediation](audits/seal_golem_remediation_2026_11_03.md): real
   server-opened seal configuration and sync, legacy OBJ parts, persisted home/follow,
   safe press extraction/refunds, advanced logistics and real Breaker mining;

@@ -689,7 +689,7 @@ public final class TCFocusCastExecutor {
             }
             case EXCHANGE -> {
                 if (caster instanceof ServerPlayer player) {
-                    TCExchangeHelper.exchange(player, pos, side,
+                    TCExchangeQueue.enqueue(player, pos, side,
                             clamped(settings, "silk", 0, 0, 1) > 0,
                             clamped(settings, "fortune", 0, 0, 4));
                 }
