@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F101](#additional-source-history-checks-additional-source-history-checks-f01f101)
+6. [Additional source-history checks: F01–F107](#additional-source-history-checks-additional-source-history-checks-f01f107)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F101
+## Additional source-history checks: F01–F107
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1634,6 +1634,92 @@ The resource count is **11 explicit enabled-selecting files and 5 without** (fou
 **Test gate:** compare isolated and adjacent Goo at levels 0, 1, 3, 7, including stepped neighboring levels, translucent backfaces, edge occlusion, top-height behavior and actual surface/side UVs; do not conflate missing F97 motes with model geometry.
 
 **Sources:** [legacy flux_goo blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/resources/assets/thaumcraft/blockstates/flux_goo.json); [port flux_goo blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/flux_goo.json); [level-0 cuboid](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/flux_goo_0.json); [level-7 cuboid](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/flux_goo_7.json); [port TCFluxGooBlock](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/world/taint/TCFluxGooBlock.java#L26).
+
+---
+
+### F102 — The original tile-event forwarder is absent from six plain-Block ports; five FX handlers reject server-side callbacks
+
+**Status:** `confirmed_code` for the original/modern dispatch and return-path difference; `probable_cause` for event non-delivery pending an instrumented dedicated-server trace. Refines F26, does not count six new independent defects.
+
+- Original `BlockTCTile.eventReceived(state, world, pos, id, param)` explicitly calls `world.getTileEntity(pos).receiveClientEvent(id, param)` and returns the tile's Boolean result. For example, legacy `TileSmelter.receiveClientEvent(1, data)` returns `true` whether the world is remote or server; drawing itself is client-gated.
+- The six current target blocks catalogued in F26 (`TCWaterJugBlock`, `TCVoidSiphonBlock`, `TCCrucibleBlock`, `TCSmelterBlock`, `TCInfernalFurnaceBlock`, `TCMirrorBlock`) extend `Block implements EntityBlock` without an overriding block `triggerEvent`. The relevant modern five BEs place their visual `triggerEvent` handling inside `level.isClientSide` checks and return `super.triggerEvent` on the server. The mirror emits event 1 but has no matching BE handler.
+- This yields **two distinct source-level gates**: (1) the missing block-level forwarding and (2) the BE's false server return if forwarding alone were added. On the standard server event-acceptance path, simply grafting a delegate into a block is therefore not an independently verified fix. A proper remediation would need to preserve acceptance semantics on the server, and execute visual work only on the client.
+- These event-specific paths are separate from ambient block `animateTick`, ordinary BE `clientTick`, and dedicated infusion packets. Successful animation in one of those channels does not prove this event channel works.
+
+**Test gate:** send a known event per block in a dedicated-server dev session and log server block-state result, server BE result, client packet arrival and client BE invocation. Assert expected `ClientboundBlockEventPacket` delivery; keep this `probable_cause` until the chain is instrumented.
+
+**Sources:** [legacy BlockTCTile](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCTile.java#L67); [legacy TileSmelter](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/essentia/TileSmelter.java#L343); [modern TCWaterJugBlockEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCWaterJugBlockEntity.java); [modern TCVoidSiphonBlockEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCVoidSiphonBlockEntity.java#L190); [modern TCCrucibleBlockEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCCrucibleBlockEntity.java); [modern TCSmelterBlockEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCSmelterBlockEntity.java#L513); [modern TCInfernalFurnaceBlockEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCInfernalFurnaceBlockEntity.java#L393); [modern TCMirrorBlockEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCMirrorBlockEntity.java#L209); [NeoForge 1.21.1 BaseEntityBlock API](https://aldak.netlify.app/javadoc/1.21.1-21.1.x/net/minecraft/world/level/block/baseentityblock).
+
+---
+
+### F103 — Void Siphon drain feedback substitutes local portal motes for original rift-to-siphon void streaks
+
+**Status:** `confirmed_legacy_mismatch` for visual effect content; `probable_cause` of missing playback from F102 delivery gate.
+
+- Legacy `TileVoidSiphon.receiveClientEvent(5, j)` finds every valid `EntityFluxRift` in range and calls `FXDispatcher.INSTANCE.voidStreak` **from each rift position to the siphon center**, with `j` as seed and scale 0.04. The dispatcher constructs an `FXVoidStream` object, so the arc/stream connects two world-space endpoints.
+- The modern server still emits event `5` after a successful drain at eligible counter multiples of 40. Its client `triggerEvent(5, data)` instead spawns **twelve `ParticleTypes.PORTAL` particles distributed only around the siphon**, with small random velocities. It neither queries the rifts nor establishes source-to-target streak geometry.
+- Even if block-event forwarding were fixed, these local portal motes would not reproduce the original connection visual. This is independent of F15's absent Void Siphon TESR portal mesh and F102's event reachability.
+
+**Test gate:** place one and two rifts at different distances, trigger actual siphon drains, verify streak count/endpoints/seeded motion versus current local motes. Evaluate the event path separately from the FX replacement.
+
+**Sources:** [legacy TileVoidSiphon](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/crafting/TileVoidSiphon.java#L126); [legacy FXDispatcher](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java#L896); [modern TCVoidSiphonBlockEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCVoidSiphonBlockEntity.java#L190).
+
+---
+
+### F104 — Smelter vent burst changes custom FXVent/color and lava-extinguish audio to cloud particles and fire-extinguish audio
+
+**Status:** `confirmed_legacy_mismatch` for source-level visual/audio choice; runtime event route still subject to F102.
+
+- Original `TileSmelter.receiveClientEvent(1, facingIndex)` determines the outgoing side, plays `BLOCK_LAVA_EXTINGUISH` and draws four colored `FXVent` particles with RGB integer `11184810`, alpha 0.4 and side-directed jitter; `FXDispatcher.drawVentParticles` creates the dedicated `FXVent` implementation.
+- Modern `TCSmelterBlockEntity.triggerEvent(1, data)` keeps directional four-particle emission but uses ordinary `ParticleTypes.CLOUD`, and plays `SoundEvents.FIRE_EXTINGUISH` rather than the original lava-extinguish sample. Side vectors are still computed, so this is a **particle/sound substitution**, not proof of missing orientation.
+- The original event returned true on the server as well as client (drawing on client only); the modern handler returns the superclass result when not client-side. F102 and this content mismatch require separate tests and eventual fixes.
+
+**Test gate:** activate a smelter with a correctly oriented vent, then compare the four particles' sprite, grayscale tone, alpha/lifespan and motion plus the sound event. A generic cloud particle does not establish equivalence to `FXVent`.
+
+**Sources:** [legacy TileSmelter](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/essentia/TileSmelter.java#L343); [legacy FXDispatcher](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java#L896); [modern TCSmelterBlockEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCSmelterBlockEntity.java#L513).
+
+---
+
+### F105 — Infernal Furnace retains the vanilla lava-particle family but changes the ejection origin and motion
+
+**Status:** `confirmed_code` geometry/velocity difference; `confirmed_legacy_mismatch` for source-level particle trajectory, with client screenshot still pending. The particle family is a `negative_control`.
+
+- Original `TileInfernalFurnace.receiveClientEvent(3, 0)` repeats five times: `FXDispatcher.furnaceLavaFx` plus a quiet lava-pop sound. That dispatcher builds vanilla `ParticleLava.Factory` particles **near the output-side adjacent block**, at `y + 0.3`, with randomized lateral jitter and velocity components up to roughly 0.15 horizontal / 0.2 upward.
+- Port `TCInfernalFurnaceBlockEntity.triggerEvent(3, 0)` likewise repeats five times and uses vanilla `ParticleTypes.LAVA` with lava-pop audio. However the spawn position is `block center + 0.45 * output direction` and `y + 0.65`, and the velocity is fixed at approximately `0.03 * output direction`, `0.02` upward. It is both closer to the center and substantially less randomized.
+- Do not label this a lost particle type: both pathways are vanilla lava-style. The visible difference is directional position/spread and dynamics, conditional on the event ever reaching the client (F102).
+
+**Test gate:** capture output-side high-FPS sequences against the same facing/bellows/smelt setup, comparing five-particle count, spawn offset and trajectories. Test client event acceptance independently.
+
+**Sources:** [legacy TileInfernalFurnace](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/devices/TileInfernalFurnace.java#L279); [legacy FXDispatcher](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java#L896); [modern TCInfernalFurnaceBlockEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCInfernalFurnaceBlockEntity.java#L393).
+
+---
+
+### F106 — Infusion Matrix visual source/essentia trails use an independent, connected custom packet/render pipeline
+
+**Status:** `confirmed_code` end-to-end source-chain positive control; actual visual frame fidelity and multiplayer packet timing still need testing.
+
+- `TCInfusionLegacyCycleExecutor` calls `TCInfusionNetwork.sendEssentiaSource` after draining an aspect and `sendComponentSource` when a pedestal component begins its countdown. `TCInfusionNetwork` registers both `playToClient` payload codecs and sends to nearby players within 32 blocks using `PacketDistributor.sendToPlayer`.
+- `TCInfusionClientFXCache` accepts/deduplicates the payloads. `TCClientEvents.onClientTick` calls `TCInfusionClientEffects.tick`, which drains the cache and spawns/updates streams or component-source effects. The same client event class invokes `TCInfusionClientEffects.render` after particles. `TCInfusionMatrixRenderer` also marks active crafting halos for this rendering pass.
+- The modern `EssentiaStream` uses its own textured geometry; component-source effects can generate sparkles and item debris. This is a genuine alternate path to the original `RenderEventHandler`/`FXDispatcher.essentiaTrailFx`, **not** evidence of a missing effect merely because the older method is uncalled.
+- **Open caveat:** `acceptQueuedPayloads` discards a received stream/source payload when its matrix Block Entity is not present on the client at drain time. Chunk-load/observer-arrival timing must be tested before deciding whether that guard causes missed transient FX. Do not claim such a loss from source alone.
+
+**Test gate:** confirm packet registration, two-player radius, aspect drain, component countdown, client FX cache and render pass in a dedicated server; test late chunk loading, matrix unloading and dimension changes. Compare stream mesh/texture/color and halo over time to the original.
+
+**Sources:** [TCInfusionLegacyCycleExecutor](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionLegacyCycleExecutor.java#L106); [TCInfusionNetwork](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionNetwork.java#L36); [TCInfusionClientFXCache](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionClientFXCache.java); [TCInfusionClientEffects](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/TCInfusionClientEffects.java#L108); [TCClientEvents](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientEvents.java#L34); [TCInfusionMatrixRenderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCInfusionMatrixRenderer.java); [legacy RenderEventHandler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/lib/events/RenderEventHandler.java).
+
+---
+
+### F107 — Dormant legacy-named dispatcher helpers must be distinguished from active infusion effects and idle pedestal runes
+
+**Status:** `confirmed_code` call-site inventory; `negative_control` against falsely counting active infusion as missing, while F89's idle charged-pedestal rune gap remains.
+
+- The port defines `TCFXDispatcher.essentiaTrailFx` and `TCFXDispatcher.drawInfusionPedestalParticles`, but default-branch code search found no external active Java callers for either legacy-named helper. That fact alone does **not** show that infusion effects are absent: F106 traces an independently invoked `TCInfusionClientEffects` implementation that owns the visuals.
+- `TCInfusionClientEffects.spawnPedestalSource` is triggered by the dedicated `TCInfusionSourcePayload` during crafting. It creates effect sprites/sparkles or source-item debris and has a finite source lifetime. That is not the same predicate or geometry as the legacy `BlockPedestal.randomDisplayTick` rune when `CHARGE > 0` outside infusion, already tracked as F89.
+- Thus three different phenomena must be tested separately: (a) aspect streams, (b) crafting component-source particles, and (c) charge-linked idle pedestal runes. A passing test of (a) or (b) does not close (c).
+
+**Test gate:** verify each of the three scenarios independently, and search new call sites when port source changes rather than deleting unused helpers by name alone.
+
+**Sources:** [TCFXDispatcher](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java#L831); [TCInfusionClientEffects](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/TCInfusionClientEffects.java#L108); [TCInfusionNetwork](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionNetwork.java#L36); [legacy BlockTCTile](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCTile.java#L67).
 
 ---
 
