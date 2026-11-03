@@ -49,6 +49,18 @@ public class TCFocusmineEntity extends ThrowableProjectile {
         shoot(look.x, look.y, look.z, 0.75F, 0.0F);
     }
 
+    public TCFocusmineEntity(Level level, Vec3 pos, LivingEntity shooter, boolean targetFriend, String remainingNodes, float power) {
+        super(TCEntityTypes.FOCUSMINE.get(), level);
+        if (shooter != null) {
+            setOwner(shooter);
+        }
+        this.remainingNodes = remainingNodes != null ? remainingNodes : "";
+        this.power = power;
+        setTargetFriend(targetFriend);
+        setPos(pos.x, pos.y, pos.z);
+        setDeltaMovement(Vec3.ZERO);
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(ARMED, false);

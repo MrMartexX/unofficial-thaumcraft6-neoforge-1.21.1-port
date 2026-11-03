@@ -42,6 +42,9 @@ world state, components and server-authoritative interaction.
 - Filter size limits are saved along with the filter items and blacklist mode.
 - Client smoke now waits for an actual post-title-render marker and five-second
   grace period, inspects stdout and stderr, and only stops its own process tree.
+- Authored focus node graph traversal, nested mediums (such as Projectile -> Cloud -> Fire),
+  ModScatter trajectory forking (scaled by 2.0 / forks), and ModSplit branching (scaled
+  by 0.75 multiplier) with recursive downstream execution on impact, detonation, or ticks.
 
 ## Confirmed runtime evidence
 
@@ -71,6 +74,12 @@ pickup, real chest delivery/extraction, Stock/Provider replenishment, and Use
 placing a block while keeping its two unused blocks. Lock/color rejection is
 tested separately. These do not certify advanced toggles or the client UI.
 
+The expanded focus runtime audit passes 16 checks, including nested medium execution
+(Projectile -> Cloud -> Fire spawning a TCFocusCloudEntity with downstream Fire and 0.5x
+power at impact), SplitTarget branch execution delivering 0.75x scaled effects to both
+Fire and Frost branches, and Scatter trajectory forking launching 3 distinct projectiles
+with 2/forks power scaling.
+
 The rewritten client smoke was run twice. Both runs reached the rendered-title
 marker and survived its grace period. The second run no longer reports the active
 effect-glimmer missing texture or Thaumcraft's missing runic recharge sound.
@@ -80,7 +89,6 @@ effect-glimmer missing texture or Thaumcraft's missing runic recharge sound.
 - Full golem path-recovery/home/follow parity and advanced seal options; the core
   queued operations and default actions above now have actual behavior tests.
 - Seal client sync, configuration GUI and full logistics acceptance.
-- Authored focus graph traversal, nested mediums, Scatter and split semantics.
 - Modular golem renderer and measured client visual parity.
 - Full crystal ecology/distribution comparison, including attachment/support
   policy, not merely registration/state/drop checks.

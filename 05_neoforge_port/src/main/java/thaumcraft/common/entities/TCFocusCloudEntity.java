@@ -207,6 +207,14 @@ public class TCFocusCloudEntity extends Entity {
         return effectKey;
     }
 
+    public String getRemainingNodes() {
+        return remainingNodes != null ? remainingNodes : "";
+    }
+
+    public float getPower() {
+        return power;
+    }
+
     public int cloudExecutionsForValidation() {
         return cloudExecutions;
     }

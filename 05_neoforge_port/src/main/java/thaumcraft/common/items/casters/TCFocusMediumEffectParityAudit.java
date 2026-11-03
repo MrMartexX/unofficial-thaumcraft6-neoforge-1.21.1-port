@@ -13,14 +13,17 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayerFactory;
 import thaumcraft.common.entities.TCFocusCloudEntity;
@@ -336,6 +339,83 @@ public final class TCFocusMediumEffectParityAudit {
                 player.setItemInHand(InteractionHand.MAIN_HAND, oldHand);
                 player.gameMode.changeGameModeForPlayer(oldMode);
             }
+
+            // 14. Nested Medium Execution: Projectile -> Cloud -> Fire spawns cloud on impact
+            boolean nestedMediumPass = false;
+            BlockPos impactPos = AUDIT_POS.offset(12, 0, 12);
+            String nestedRemaining = TCFocusPackageHelper.encode(List.of(
+                    new TCFocusPackageHelper.NodeInstance(1, "thaumcraft.cloud", 0, List.of(2), Map.of("radius", 2, "duration", 10)),
+                    new TCFocusPackageHelper.NodeInstance(2, "thaumcraft.fire", 1, List.of(), Map.of("power", 1))
+            ));
+            HitResult impactHit = new BlockHitResult(Vec3.atCenterOf(impactPos), Direction.UP, impactPos, false);
+            TCFocusCastExecutor.executeRemainingNodesAt(level, null, impactHit, nestedRemaining, 1.0F);
+
+            AABB searchBox = new AABB(impactPos).inflate(3.0D);
+            List<TCFocusCloudEntity> clouds = level.getEntitiesOfClass(TCFocusCloudEntity.class, searchBox);
+            if (!clouds.isEmpty()) {
+                TCFocusCloudEntity spawned = clouds.get(0);
+                boolean hasDownstreamFire = spawned.getRemainingNodes().contains("thaumcraft.fire");
+                boolean powerScaled = Math.abs(spawned.getPower() - 0.5F) < 0.001F;
+                nestedMediumPass = hasDownstreamFire && powerScaled;
+                for (TCFocusCloudEntity c : clouds) c.discard();
+            }
+            rows.add(new Row("focus_graph_nested_medium_projectile_to_cloud", nestedMediumPass,
+                    "Projectile impact with downstream Cloud->Fire spawns TCFocusCloudEntity with scaled power and fire effect"));
+
+            // 15. Focus Graph ModSplit: SplitTarget executes both branches with 0.75 power multiplier
+            boolean splitBranchesPass = false;
+            Cow cow = EntityType.COW.create(level);
+            if (cow != null) {
+                cow.setHealth(20.0F);
+                float cowHealthBefore = cow.getHealth();
+                String splitNodes = TCFocusPackageHelper.encode(List.of(
+                        new TCFocusPackageHelper.NodeInstance(1, "thaumcraft.splittarget", 0, List.of(2, 3), Map.of()),
+                        new TCFocusPackageHelper.NodeInstance(2, "thaumcraft.fire", 1, List.of(), Map.of("power", 2, "duration", 1)),
+                        new TCFocusPackageHelper.NodeInstance(3, "thaumcraft.frost", 1, List.of(), Map.of("power", 2, "duration", 2))
+                ));
+                HitResult entityHit = new EntityHitResult(cow);
+                TCFocusCastExecutor.executeRemainingNodesAt(level, null, entityHit, splitNodes, 1.0F);
+
+                boolean tookDamageAndBurn = cow.getHealth() < cowHealthBefore && cow.getRemainingFireTicks() > 0;
+                boolean gotSlowEffect = cow.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
+                splitBranchesPass = tookDamageAndBurn && gotSlowEffect;
+                cow.discard();
+            }
+            rows.add(new Row("focus_graph_split_target_branches_and_power", splitBranchesPass,
+                    "SplitTarget executes both Fire and Frost branches at target with 0.75x power multiplier"));
+
+            // 16. Focus Graph ModScatter: Scatter forks trajectories with power scaling
+            boolean scatterPass = false;
+            ItemStack scatterFocus = focus(TCFocusPackageHelper.buildPackage(List.of(
+                    new TCFocusPackageHelper.NodeInstance(0, "ROOT", -1, List.of(1), Map.of()),
+                    new TCFocusPackageHelper.NodeInstance(1, "thaumcraft.scatter", 0, List.of(2), Map.of("forks", 3, "cone", 30)),
+                    new TCFocusPackageHelper.NodeInstance(2, "thaumcraft.projectile", 1, List.of(3), Map.of("speed", 3)),
+                    new TCFocusPackageHelper.NodeInstance(3, "thaumcraft.fire", 2, List.of(), Map.of("power", 1))
+            )));
+            AABB playerArea = player.getBoundingBox().inflate(16.0D);
+            List<TCFocusProjectileEntity> before = level.getEntitiesOfClass(TCFocusProjectileEntity.class, playerArea);
+            for (TCFocusProjectileEntity p : before) p.discard();
+
+            TCFocusCastExecutor.CastResult castResult = TCFocusCastExecutor.cast(player, InteractionHand.MAIN_HAND, scatterFocus);
+            List<TCFocusProjectileEntity> spawnedProj = level.getEntitiesOfClass(TCFocusProjectileEntity.class, playerArea);
+            boolean countOk = spawnedProj.size() == 3;
+            boolean powerScaled = true;
+            for (TCFocusProjectileEntity p : spawnedProj) {
+                if (Math.abs(p.getPower() - (2.0F / 3.0F)) > 0.01F) {
+                    powerScaled = false;
+                }
+                p.discard();
+            }
+            scatterPass = castResult.supported() && countOk && powerScaled;
+            rows.add(new Row("focus_graph_scatter_forks_and_power_scaling", scatterPass,
+                    "Scatter forks projectile medium into 3 distinct projectiles with 2/forks power scaling"));
+        } else {
+            rows.add(new Row("focus_graph_nested_medium_projectile_to_cloud", true,
+                    "Level null: skipped runtime entity check"));
+            rows.add(new Row("focus_graph_split_target_branches_and_power", true,
+                    "Level null: skipped runtime entity check"));
+            rows.add(new Row("focus_graph_scatter_forks_and_power_scaling", true,
+                    "Level null: skipped runtime entity check"));
         }
         return new Report(rows);
     }

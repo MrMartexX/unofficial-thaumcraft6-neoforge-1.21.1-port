@@ -60,6 +60,20 @@ public class TCFocusProjectileEntity extends ThrowableProjectile {
         shoot(look.x, look.y, look.z, speed, 0.0F);
     }
 
+    public TCFocusProjectileEntity(Level level, Vec3 pos, LivingEntity shooter, float speed, Vec3 direction, int special, String remainingNodes, float power, int color) {
+        super(TCEntityTypes.FOCUS_PROJECTILE.get(), level);
+        if (shooter != null) {
+            setOwner(shooter);
+        }
+        this.remainingNodes = remainingNodes != null ? remainingNodes : "";
+        this.power = power;
+        setSpecial(special);
+        setColor(color);
+        Vec3 look = direction != null && direction.lengthSqr() > 1.0E-6D ? direction.normalize() : new Vec3(0, 1, 0);
+        setPos(pos.x, pos.y, pos.z);
+        shoot(look.x, look.y, look.z, speed, 0.0F);
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(SPECIAL, 0);
@@ -76,6 +90,14 @@ public class TCFocusProjectileEntity extends ThrowableProjectile {
 
     public int getColor() {
         return entityData.get(COLOR);
+    }
+
+    public String getRemainingNodes() {
+        return remainingNodes != null ? remainingNodes : "";
+    }
+
+    public float getPower() {
+        return power;
     }
 
     public void setColor(int color) {

@@ -144,11 +144,17 @@ public final class TCFocusPackageHelper {
             if (node == null || TCFocusElements.normalizeKey(node.key()).isBlank()) {
                 continue;
             }
+            ArrayList<Integer> children = new ArrayList<>(node.children());
+            for (NodeInstance other : nodes) {
+                if (other != null && other.parent() == node.id() && !children.contains(other.id())) {
+                    children.add(other.id());
+                }
+            }
             copy.add(new NodeInstance(
                     Math.max(0, node.id()),
                     TCFocusElements.normalizeKey(node.key()),
                     node.parent(),
-                    List.copyOf(node.children()),
+                    List.copyOf(children),
                     Map.copyOf(node.settings())
             ));
         }
@@ -289,7 +295,7 @@ public final class TCFocusPackageHelper {
             if (entry.isBlank()) {
                 continue;
             }
-            String[] parts = entry.split("=", 2);
+            String[] parts = entry.contains("=") ? entry.split("=", 2) : entry.split(":", 2);
             if (parts.length == 2) {
                 settings.put(parts[0].trim(), parseInt(parts[1], 0));
             }
