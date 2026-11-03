@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F120](#additional-source-history-checks-f01f120)
+6. [Additional source-history checks: F01–F127](#additional-source-history-checks-f01f127)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F120
+## Additional source-history checks: F01–F127
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1904,6 +1904,119 @@ The resource count is **11 explicit enabled-selecting files and 5 without** (fou
 **Test gate:** hold the Thaumometer over unscanned mob/block to verify periodic outline, then scan entities with significantly different eye-height-to-bounds ratios; compare rune center Y, count and colors.
 
 **Sources:** [legacy Thaumometer highlight and scan-use FX](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/tools/ItemThaumometer.java#L56); [legacy drawFX placement](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/tools/ItemThaumometer.java#L103); [modern highlight tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCThaumometerClientEffects.java#L68); [modern rune positions](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCThaumometerClientEffects.java#L101); [modern active item use](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/tools/ItemThaumometer.java#L29).
+
+---
+
+
+### F121 — The ten original focus effects have distinct sprite/behavior families, not a generic universal cast particle
+
+**Status:** `confirmed_code` original-render baseline; modern effect-element registration is a separate positive control.
+
+- The original `FocusEffect.renderParticleFX` implementations are materially different by atlas frame, alpha curve, lifespan, gravity, scale and/or color. A generic particle type cannot reproduce all ten by changing RGB alone. The pinned modern `TCFocusElements` **does** register all ten effect keys for gameplay, but no corresponding effect-specific particle renderer is selected by its projectile, mine, Spellbat or cloud client particle loops (F117, F122–F124).
+- Source-extracted legacy reference map (sprite indices refer to the original sprite grid, not Minecraft's vanilla particle registry):
+
+| Effect | Original sprite indices | Distinctive rendering contract |
+| --- | --- | --- |
+| [Fire](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectFire.java#L86) | 640–649 | Age 10, negative gravity −0.2, alpha 0.7, animated flame |
+| [Frost](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectFrost.java#L98) | 8 | Age 40–79, gravity 0.033, rotating and wandering snowflake |
+| [Air](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectAir.java#L79) | 337–341, grid 32 | Age 20–29, alpha fades 0.5→0, scale grows |
+| [Earth](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectEarth.java#L75) | 75–78 (one randomized sprite), layer 1 | Gravity 0.4, scale shrinks, alpha fades |
+| [Flux](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectFlux.java#L73) | 128–141 | Purple, looping, multistage alpha, random delayed spawn |
+| [Curse](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectCurse.java#L111) | 72–75 (one randomized sprite), grid 16 | Dark-magenta randomized RGBA, 8-tick pulse |
+| [Heal](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectHeal.java#L78) | 0 | White, 10–19 ticks, alpha 0→0.7→0 |
+| [Break](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectBreak.java#L74) | 704/707/710/713 starting index, 3 frames | Age 6–11, three-frame fragment animation |
+| [Exchange](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectExchange.java#L79) | 448–456 | Gray, age 9, 0→0.6→0 alpha |
+| [Rift](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectRift.java#L104) | 384–399 (one randomized sprite) | Blue, age 16–31, alpha fades, randomized movement |
+
+- This is an implementation specification for restoring element-specific rendering, **not** a claim that these assets are absent. The exact source sprites, texture alpha, blend layers and movement updates still require independent port verification.
+
+**Test gate:** exercise one focus of each of the ten effect keys through TOUCH and at least one persistent medium, capturing per-sprite appearance, color, age, alpha and motion under a fixed camera.
+
+**Sources:** [legacy FocusEffect API](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/api/casters/FocusEffect.java#L1); [modern registered effect keys](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusElements.java#L1); [original Flux particle](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectFlux.java#L73).
+
+---
+
+### F122 — Focus Projectile replaces render-driven, effect-colored particles with random vanilla CRIT
+
+**Status:** `confirmed_legacy_mismatch`; comparative runtime density requires client capture.
+
+- Original `EntityFocusProjectile.renderParticle(float coeff)`, called by `RenderNoProjectile` only when the partial-render-tick difference exceeds **0.2**, chooses a random `FocusEffect` from the projectile's `FocusPackage`. It emits `drawFireMote` using that effect's element color at an interpolated position, and once per entity tick adds the chosen effect's own `renderParticleFX`. This includes both a shared colored mote and the effect-specific sprite family (F121).
+- The modern projectile is registered with an intentionally invisible entity renderer and instead emits `ParticleTypes.CRIT` from its client `tick()` with probability **0.8**. The projectile has a synchronized `COLOR` property, yet its current particle call does not read it. Its `remainingNodes` payload is stored as entity state, not a client-visible effect list driving rendering.
+- A tick-based 80% random emission is not the original render-based, interpolated two-family emission. This is a confirmed source-level visual substitution for player-cast PROJECTILE, regardless of whether projectile movement and collision otherwise function.
+
+**Test gate:** compare PROJECTILE+FIRE and PROJECTILE+FROST in motion at 30/60/120 FPS; verify interpolation, effect colors, sprite identity and particles per second.
+
+**Sources:** [legacy projectile rendering](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityFocusProjectile.java#L236); [legacy RenderNoProjectile callback](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/projectile/RenderNoProjectile.java#L18); [modern projectile tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFocusProjectileEntity.java#L90); [modern renderer registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java#L35); [modern PROJECTILE cast](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusCastExecutor.java#L156).
+
+---
+
+### F123 — Focus Mine replaces armed, delayed effect-specific particles with randomized WITCH, and arms on a different schedule
+
+**Status:** `confirmed_legacy_mismatch` for visual source and timing; arming logic is also a nonvisual gameplay regression candidate.
+
+- The original `EntityFocusMine` stores the focus package and initializes a **40-tick counter**. Collision calls `setIsArmed(true)`; only once armed and the counter reaches zero does its client emit `FocusEffect.renderParticleFX` **every five entity ticks**, choosing randomly among the configured effect nodes.
+- The modern `TCFocusmineEntity` instead arms on the server after **`tickCount > 20`** regardless of block impact. Once its synced armed flag becomes true, the client has a **20% chance each tick** to spawn one vanilla `ParticleTypes.WITCH` at a fixed +0.1 Y offset. It does not inspect effect nodes and does not gate visuals with the legacy 40-tick counter. A 20%-chance process is not the same temporal sequence as a five-tick interval.
+- This creates two separate review targets: **(a)** mine particle identity/sequence and **(b)** arming/trigger behavior. The latter should be evaluated by the gameplay team before a visual-only fix alters any collision logic.
+
+**Test gate:** cast MINE+FLUX and MINE+FROST onto a block, timestamp first contact, arm transition, first particle, subsequent particle interval and detonation in both versions.
+
+**Sources:** [original mine impact, counter and particles](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityFocusMine.java#L34); [modern arm and WITCH path](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFocusmineEntity.java#L79); [modern hit handling](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFocusmineEntity.java#L117).
+
+---
+
+### F124 — Spellbat ambient FX ignores the configured focus effect and emits sparse ENCHANT particles
+
+**Status:** `confirmed_legacy_mismatch` for ambient FX; bat body rendering is separate (F125).
+
+- Original `EntitySpellBat.onUpdate` caches `focusPackage.getFocusEffects()` on the client, computes its aggregate color from each effect's element color, then **every surviving client tick** picks a random effect and runs `eff.renderParticleFX` around the bat with ±0.125 positional Gaussian jitter. This means Fire, Frost, Flux and mixed spellbats can have different particle families.
+- Modern `TCSpellbatEntity.tick()` unconditionally uses a **30%-chance** vanilla `ParticleTypes.ENCHANT` with a horizontal ±0.2 uniform offset and upward 0.05 velocity. `remainingNodes` and spell power are stored for server execution but the client FX branch does not decode effect nodes or emit the effect-specific sprite, and no equivalent computed effect-color field is used by the renderer.
+- This is a visible behavior mismatch on the active SPELLBAT medium, independent of AI target selection. Replacing the enchant motes must not regress server-authoritative effect execution.
+
+**Test gate:** summon SPELLBAT+FIRE, SPELLBAT+FROST and mixed-effect SPELLBAT; compare frequency, sprite sheet, colors and velocity around each moving bat.
+
+**Sources:** [original Spellbat effect sampling](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/monster/EntitySpellBat.java#L172); [modern Spellbat tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCSpellbatEntity.java#L79); [modern caster SPELLBAT construction](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusCastExecutor.java#L178).
+
+---
+
+### F125 — Spellbat renderer reuses opaque Firebat texture instead of its translucent, effect-colored original
+
+**Status:** `confirmed_legacy_mismatch` renderer/texture/blending source-level; runtime screenshots required for exact perceived opacity.
+
+- Original `RenderSpellBat` uses `textures/entity/spellbat.png`, the `ModelFireBat`, **alpha blending `SRC_ALPHA, ONE_MINUS_SRC_ALPHA`**, and entity `color` RGB with **alpha 0.5**. It also scales the model to **0.35** and adjusts its pose. The `color` field is computed from the spell's included effects on the original client (F124).
+- In the port `TCEntityRenderers` registers `TCEntityTypes.SPELLBAT` with the **same `TCFirebatRenderer` as ordinary FIREBAT**. That renderer always chooses `textures/entity/firebat.png` and `RenderType.entityCutoutNoCull`, with no Spellbat-specific blending or element-color tint. It does preserve a 0.35 model scale, which is a positive geometric control, but that does not restore translucency or the distinct texture.
+- This visual difference is independent of the particle issue in F124; a particle fix alone would leave the Spellbat body appearance incorrect.
+
+**Test gate:** compare still and animated Spellbat silhouettes against white/black backgrounds, measuring material alpha, RGB tint and wing/body model geometry separately from surrounding particles.
+
+**Sources:** [original RenderSpellBat](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/mob/RenderSpellBat.java#L19); [modern renderer registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java#L32); [modern TCFirebatRenderer texture and render type](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCFirebatRenderer.java#L22); [modern Spellbat subclass](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCSpellbatEntity.java#L28).
+
+---
+
+### F126 — BOLT sends a synchronized FocusZap packet, but the only registered client handler discards it
+
+**Status:** `confirmed_legacy_mismatch` broken active BOLT beam rendering chain; client reproduction remains an explicit gate.
+
+- Original `FocusMediumBolt.execute` computes a target from ray tracing, averages the RGB of its focus effects, and broadcasts `PacketFXZap` with endpoints, color and width. The original packet's client handler invokes `FXDispatcher.arcBolt`, which produces the intended beam.
+- Modern `TCFocusCastExecutor` calls `TCEntityFXNetwork.sendFocusZap` on BOLT casts. `TCFocusZapPayload` correctly declares a codec for the same endpoint/color/width data and the network helper distributes it to players within a 64-block range. **However, the `playToClient(TCFocusZapPayload.TYPE, …, (payload, context) -> { })` handler is empty.** Search of the current modern source found no second consumer of `TCFocusZapPayload`.
+- This is a more severe condition than using an inaccurate particle: the current application-level BOLT beam data reaches a no-op handler. Contrast the Wisp zap payload in the same registrar, which delegates to a client sink installed by `TCClientEvents`. An analogous focus-specific client renderer must be provided and tested, without changing the server ray/hit determination.
+
+**Test gate:** send BOLT+FIRE and BOLT+FROST casts in single-player and dedicated-server client; log payload receipt and beam render invocation; compare width, RGB and endpoints with original `arcBolt`.
+
+**Sources:** [original Bolt cast packet](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusMediumBolt.java#L40); [original PacketFXZap client arcBolt](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/network/fx/PacketFXZap.java#L48); [modern BOLT dispatch](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusCastExecutor.java#L149); [modern no-op packet registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCEntityFXNetwork.java#L28); [modern FocusZap codec](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusZapPayload.java#L9); [Wisp sink positive control](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientEvents.java#L23).
+
+---
+
+### F127 — TOUCH cast and impact effect-specific feedback packets are not reproduced by the general modern executor
+
+**Status:** `confirmed_legacy_mismatch` in inspected TOUCH/general effect execution; do not extrapolate to unrelated particle producers.
+
+- Original `FocusMediumTouch.execute` gathers the effect keys of its `FocusPackage` and sends `PacketFXFocusEffect` to nearby clients at the casting source. The packet allocates `max(1, 10 / effectCount)` calls to each effect's `renderParticleFX`, with directional motion and random dispersion. Additionally, multiple original `FocusEffect.execute` implementations (notably Fire, Frost, Air, Earth, Flux, Heal, Break) broadcast `PacketFXFocusPartImpact` at the hit point, where the client makes `max(1, 15 / effectCount)` effect-specific particles. Curse has a distinct block BAMF route, so not every effect uses the same packet.
+- The port's active `TCFocusCastExecutor.cast` routes TOUCH through `executeTouchAtTarget(..., true)`. That method emits **only eight vanilla `ParticleTypes.FLAME` for FIRE**, at the target, and no matching cast-source particle feedback for other effect keys. Its `executeSingleEffect` is a server-side gameplay operation; it does not encode and broadcast the original effect-keyed cast/impact particle families. BOLT's independent beam packet is also currently a no-op (F126).
+- This report distinguishes **cast-source feedback**, **hit-point feedback**, and **persistent-medium ambient particles**. They are separate legacy events with different velocities and densities; porting a generic trail for one cannot establish parity for the other two.
+
+**Test gate:** compare TOUCH+FIRE vs TOUCH+FROST at no-target, block-target and entity-target positions, logging cast-source and impact packets separately; then verify a multi-effect focus produces each effect family.
+
+**Sources:** [original TOUCH emission](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusMediumTouch.java#L96); [legacy cast-source packet behavior](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/network/fx/PacketFXFocusEffect.java#L75); [original Fire impact call](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectFire.java#L51); [legacy impact packet behavior](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/network/fx/PacketFXFocusPartImpact.java#L65); [modern TOUCH branch](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusCastExecutor.java#L140); [modern eight-FLAME conditional](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusCastExecutor.java#L406).
 
 ---
 
