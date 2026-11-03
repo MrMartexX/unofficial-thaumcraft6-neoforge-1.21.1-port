@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F32](#additional-source-history-checks-f01f32)
+6. [Additional source-history checks: F01–F35](#additional-source-history-checks-f01f35)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F32
+## Additional source-history checks: F01–F35
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -747,6 +747,58 @@ The candle evidence is stronger than a mere suspicion based on a registry name: 
 **Suggested focused batch:** one candle per dye family plus shared parent, the seven crystal items, both leaves and one Nitor control on the same screen. Capture direct pixels and if possible trace the registered callback's returned value through to vertex color. This can distinguish `0x00RRGGBB` from unwanted texture alpha fringes, blend-state errors, and adjacent-quad overdraw.
 
 **Research gate:** F29–F32 are recorded as diagnosis and test design only. No mod code, audit scripts, resource data, CI, or existing PR code branches were altered.
+
+
+
+### F33 — Installed golem seals: original hand-gated world renderer has no port equivalent
+
+**Status:** `confirmed_legacy_mismatch` for the static draw path; `requires_client` for the player's exact observed result.
+
+The original [RenderEventHandler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/lib/events/RenderEventHandler.java) listens to `RenderWorldLastEvent`. When either held item implements `ISealDisplayer`, it calls `drawSeals`. That function iterates `SealHandler.sealEntities` for the current dimension, limits visible seals to squared distance `<=256` (radius 16 blocks), reduces alpha with distance, and draws:
+
+- The surface-aligned seal icon using `renderSeal` and the seal's `getSealIcon()` texture.
+- A rotating, color-coded middle marker.
+- A conditional area wireframe for seals implementing `ISealConfigArea`.
+- A reduced/different depth presentation when the observing player sneaks.
+- A redstone-inactive appearance and occasional spark, conditional on `isStoppedByRedstone`.
+
+The current [TCClientEvents](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientEvents.java) subscribes to `RenderLevelStageEvent` but only renders particle/infusion/wisp effects after particles and a Thaumometer aspect overlay after weather. Its client code contains no seal draw path. A code search for `drawSeals` and direct use of `SealHandler.sealEntities` found the original method and the modern storage declaration, respectively, but **no modern visual consumer**. This is backed by explicit render-stage inspection, not simply the absence of an identically named class.
+
+The item-side gate is **still declared**: [ItemSealPlacer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/golems/seals/ItemSealPlacer.java), [ItemGolemBell](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/golems/ItemGolemBell.java) and [ItemGolemPlacer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/golems/ItemGolemPlacer.java) implement `ISealDisplayer`; the port's [ISealDisplayer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/api/golems/ISealDisplayer.java) describes the visibility behavior. These interfaces alone cannot render anything. The seal's icon and area metadata surviving in APIs do not constitute a drawing path.
+
+**Client tests:** place the same seal on all six block faces; compare empty hands, seal item, Golem Bell, Golem Placer, main/offhand, near/far distance, sneaking, active/redstone-disabled, configured area and custom dye. Original visual gating **must not** be misreported as “seals always visible.” Establish inventory item/icon vs **placed seal world overlay** as separate test targets.
+
+### F34 — Seal client synchronization is not implemented, independently of its absent renderer
+
+**Status:** `confirmed_code` for empty synchronization method and missing original packet path; client state delivery otherwise `not_checked` outside inspected code, with negative source-search results.
+
+In the original [SealHandler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/golems/seals/SealHandler.java) / [PacketSealToClient](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/network/misc/PacketSealToClient.java), seal creation/update/removal can notify clients. The packet includes the seal's position, face, type, configuration/area, color, priority, lock/redstone/owner and removal sentinel; its handler reconstructs the client's local `SealEntity`. [ChunkEvents.chunkWatch](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/events/ChunkEvents.java) additionally sends seals to a player when their chunk becomes visible.
+
+The port's [SealHandler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/golems/seals/SealHandler.java) adds a seal to its static per-dimension map and invokes `sealEntity.syncToClient(level)` on placement. But [SealEntity.syncToClient](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/golems/seals/SealEntity.java) contains only a comment: `// Reserved for client sync packet when needed`. Repository source searches found no modern `PacketSealToClient`, no client-side `SealHandler.sealEntities` consumer, and no equivalent seal payload registration among the inspected [mod event-bus registrations](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/Thaumcraft.java). By contrast, the mod registers explicit payload handlers for Aura, Infusion, Thaumatorium, Knowledge, Warp, Research Table, Thaumonomicon, Focal Manipulator, Golem Builder and Entity FX.
+
+**Interpretation:** the placed-seal symptom comprises at least **two separable failures**: the world overlay draw path is missing (F33), and the authoritative server state is not broadcast as in the original. A renderer-only change would still leave dedicated-server clients without reliable seal state. Do not mistake a shared static map under an integrated client/server JVM for a network protocol.
+
+**Test matrix:** dedicated multiplayer with two clients, dimension transfer, login after seal placement, chunk unload/re-watch, configuration edits, removal, and unloaded-area re-entry. Confirm packet content/sequence *and* rendered state before labeling this solved.
+
+### F35 — Seal chunk persistence and world-lifetime cleanup were not carried over
+
+**Status:** `confirmed_legacy_mismatch` for the inspected persistence path; `probable_cause` for loss of placed seals after restart; `requires_client` for chunk/server lifecycle reproduction.
+
+The original [ChunkEvents](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/events/ChunkEvents.java) includes three distinct lifecycle hooks:
+
+1. `chunkSave` serializes all seals in a chunk as NBT under `Thaumcraft.seals`, using each seal's `writeNBT()`.
+2. `chunkLoad` reconstructs those `SealEntity` values via `readNBT()` and adds them back to the handler.
+3. `chunkWatch` pushes the loaded seals to the observing player via the client packet (F34).
+
+Original [WorldEvents.worldUnload](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/events/WorldEvents.java) also removes the dimension's seal map on world unload.
+
+Modern [SealEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/golems/seals/SealEntity.java) still implements `writeNBT`/`readNBT`, but **nothing in the inspected modern source calls them to save or restore a placed seal**. Modern [SealHandler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/golems/seals/SealHandler.java) keeps a process-static map keyed by `ResourceKey<Level>`, and its code has no chunk serialization, persistent saved-data integration, or world-unload map cleanup. Code search for `sealEntities` in the modern module returned only this map implementation. [TCGolemEvents](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/golems/TCGolemEvents.java) ticks seals on the server and is registered by [Thaumcraft](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/Thaumcraft.java), proving that server-tick execution exists; it does **not** establish persistence or client state reconstruction.
+
+The architectural implication is a possible **restart-loss / stale-map split**: seals are created and ticked in process memory but are not shown to enter any persistent world-save path, while long-lived static maps may survive world transitions in a running JVM. Treat this as an evidence-backed persistence gap and lifetime risk, not as an empirically observed data-loss event until tested.
+
+**Runtime tests:** place/configure seals, save and shut down fully, relaunch dedicated server, re-enter chunk, and check retained count/properties/task execution. Separately unload/reload chunks without restarting and switch integrated worlds. Record server and each client independently, because an invisible seal, an unsynchronized seal and a non-persistent seal are three different outcomes.
+
+**Research scope:** F33–F35 complete a targeted static trace for the user-reported missing placed seals, but not a complete audit of every seal type, resource texture, configuration UI, inventory variant or visual pixel. No production code, tests or auditing scripts have been modified.
 
 
 ## Black borders: competing causes
