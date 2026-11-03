@@ -9,7 +9,8 @@ Reviewed target module: `05_neoforge_port`
 Current local work is on `codex/review-remediation-20261103`, not a new main
 acceptance checkpoint. [The seal/golem/press audit](audits/seal_golem_remediation_2026_11_03.md)
 records real seal configuration/sync, legacy OBJ golem parts, home/follow state,
-press extraction escrow, advanced logistics and Breaker mining, 56 focused server
+press extraction escrow, advanced logistics, Breaker mining, flight/climbing,
+owner-combat, restored Dart projectile/cadence, emotes and through-wall reveal, 71 focused server
 checks and ten client captures with actual server-menu/cache/ghost-click
 acknowledgements. Unmapped external OreDictionary/state metadata, remaining
 movement/render cases, remote multiplayer and the other parent-audit boundaries

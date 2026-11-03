@@ -62,6 +62,10 @@ public final class TCConfig {
             .comment("Legacy Thaumcraft CONFIG_WORLD.allowSpawnPech. Controls Pech natural spawns in magical biomes; the 1.21 tag intentionally contains only Thaumcraft magical biomes until that biome subsystem is ported.")
             .define("allowSpawnPech", true);
 
+    public static final ModConfigSpec.BooleanValue SHOW_GOLEM_EMOTES = BUILDER
+            .comment("Legacy showGolemEmotes: show golem task, follow, stay and rank emotes.")
+            .define("showGolemEmotes", true);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     private TCConfig() {

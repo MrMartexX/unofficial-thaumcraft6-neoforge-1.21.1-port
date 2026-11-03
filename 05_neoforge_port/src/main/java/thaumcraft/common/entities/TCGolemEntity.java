@@ -32,11 +32,7 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -79,6 +75,7 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
             SynchedEntityData.defineId(TCGolemEntity.class, EntityDataSerializers.BOOLEAN);
     private int rankXp = 0;
     private boolean owned = false;
+    private int movementMode = -1;
 
     public TCGolemEntity(EntityType<? extends TCGolemEntity> type, Level level) {
         super(type, level);
@@ -109,21 +106,19 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.25D, true) {
+        this.goalSelector.addGoal(0, new FloatGoal(this) {
+            @Override public boolean canUse() { return getProperties().hasTrait(EnumGolemTrait.FIGHTER)
+                    && !getProperties().hasTrait(EnumGolemTrait.FLYER) && super.canUse(); }
+        });
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15D, false) {
             @Override
             public boolean canUse() {
                 return getProperties().hasTrait(EnumGolemTrait.FIGHTER)
-                        && !getProperties().hasTrait(EnumGolemTrait.RANGED)
                         && super.canUse();
             }
+            @Override public boolean canContinueToUse() { return getProperties().hasTrait(EnumGolemTrait.FIGHTER) && super.canContinueToUse(); }
         });
-        this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.0D, 20, 40, 16.0F) {
-            @Override
-            public boolean canUse() {
-                return getProperties().hasTrait(EnumGolemTrait.RANGED) && super.canUse();
-            }
-        });
+        this.goalSelector.addGoal(1, new thaumcraft.common.golems.tasks.TCGolemRangedAttackGoal(this));
         this.goalSelector.addGoal(2, new thaumcraft.common.golems.tasks.TCGolemTaskGoal(this, (byte) 1));
         this.goalSelector.addGoal(3, new thaumcraft.common.golems.tasks.TCGolemTaskGoal(this, (byte) 0));
         this.goalSelector.addGoal(4, new thaumcraft.common.golems.tasks.TCGolemFollowOwnerGoal(this));
@@ -131,15 +126,22 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false,
-                entity -> entity instanceof Enemy && getProperties().hasTrait(EnumGolemTrait.FIGHTER)));
+        this.targetSelector.addGoal(1, new thaumcraft.common.golems.tasks.TCGolemOwnerTargetGoal(this, true));
+        this.targetSelector.addGoal(2, new thaumcraft.common.golems.tasks.TCGolemOwnerTargetGoal(this, false));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this) {
+            @Override public boolean canUse() { return getProperties().hasTrait(EnumGolemTrait.FIGHTER) && super.canUse(); }
+            @Override public boolean canContinueToUse() { return getProperties().hasTrait(EnumGolemTrait.FIGHTER) && super.canContinueToUse(); }
+        });
     }
 
     @Override
     public void tick() {
+        setNoGravity(getProperties().hasTrait(EnumGolemTrait.FLYER));
         super.tick();
         if (!level().isClientSide) {
+            entityData.set(CLIMBING, getProperties().hasTrait(EnumGolemTrait.CLIMBER) && horizontalCollision);
+            if (getTarget() != null && (!getTarget().isAlive() || !canAttack(getTarget())
+                    || (getProperties().hasTrait(EnumGolemTrait.RANGED) && distanceToSqr(getTarget()) > 1024))) setTarget(null);
             if (tickCount % (getProperties().hasTrait(EnumGolemTrait.REPAIR) ? 40 : 100) == 0) heal(1);
             ItemStack front = carrying.isEmpty() ? ItemStack.EMPTY : carrying.get(0);
             ItemStack back = carrying.size() < 2 ? ItemStack.EMPTY : carrying.get(1);
@@ -164,6 +166,37 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
     public ItemStack getFrontCarriedItem() { return entityData.get(FRONT_CARRIED); }
     public ItemStack getBackCarriedItem() { return entityData.get(BACK_CARRIED); }
     public float getWheelRotation() { return wheelRotation; }
+    public void sendGolemEmote(byte event) {
+        if (!level().isClientSide && thaumcraft.common.config.TCConfig.SHOW_GOLEM_EMOTES.get()) level().broadcastEntityEvent(this, event);
+    }
+    @Override public void handleEntityEvent(byte event) {
+        if (event >= 5 && event <= 9) {
+            if (level().isClientSide && thaumcraft.common.config.TCConfig.SHOW_GOLEM_EMOTES.get()) {
+                for (int i = 0; i < (event == 9 ? 5 : 1); i++) {
+                    var emote = thaumcraft.common.golems.TCGolemEmotes.create(event, random);
+                    thaumcraft.common.lib.fx.TCFXDispatcher.drawLegacyFX(level(), emote.data(), getX(),
+                            getY() + getBbHeight() + (event == 9 ? 0 : .1), getZ(), emote.x(), emote.y(), emote.z());
+                }
+            }
+        } else super.handleEntityEvent(event);
+    }
+    @Override public boolean onClimbable() { return getProperties().hasTrait(EnumGolemTrait.CLIMBER) && entityData.get(CLIMBING); }
+    @Override public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+        return !getProperties().hasTrait(EnumGolemTrait.FLYER) && !getProperties().hasTrait(EnumGolemTrait.CLIMBER)
+                && super.causeFallDamage(distance, multiplier, source);
+    }
+    @Override public boolean canAttack(LivingEntity target) {
+        if (target == null || target.getUUID().equals(getOwnerUUID())) return false;
+        if (target instanceof OwnableEntity ownedTarget && getOwnerUUID() != null && getOwnerUUID().equals(ownedTarget.getOwnerUUID())) return false;
+        if (target instanceof Player && level() instanceof net.minecraft.server.level.ServerLevel server && !server.getServer().isPvpAllowed()) return false;
+        return super.canAttack(target);
+    }
+    @Override public boolean isAlliedTo(net.minecraft.world.entity.Entity other) {
+        if (other.getUUID().equals(getOwnerUUID())) return true;
+        if (other instanceof OwnableEntity pet && getOwnerUUID() != null && getOwnerUUID().equals(pet.getOwnerUUID())) return true;
+        var owner = getOwner();
+        return owner != null && owner != this ? owner.isAlliedTo(other) : super.isAlliedTo(other);
+    }
     public boolean isFollowingOwner() { return entityData.get(FOLLOWING); }
     public void setFollowingOwner(boolean following) {
         releaseAssignedTask();
@@ -249,6 +282,17 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
 
         double follow = props.hasTrait(EnumGolemTrait.SCOUT) ? 56.0D : 40.0D;
         getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(follow);
+        int mode = props.hasTrait(EnumGolemTrait.FLYER) ? 2 : props.hasTrait(EnumGolemTrait.CLIMBER) ? 1 : 0;
+        if (movementMode != mode) {
+            getNavigation().stop();
+            navigation = mode == 2 ? new thaumcraft.common.golems.tasks.TCGolemAirNavigation(this, level())
+                    : mode == 1 ? new net.minecraft.world.entity.ai.navigation.WallClimberNavigation(this, level())
+                    : new net.minecraft.world.entity.ai.navigation.GroundPathNavigation(this, level());
+            moveControl = mode == 2 ? new thaumcraft.common.golems.tasks.TCGolemFlyingMoveControl(this)
+                    : new net.minecraft.world.entity.ai.control.MoveControl(this);
+            movementMode = mode;
+        }
+        setNoGravity(mode == 2);
 
         if (props.hasTrait(EnumGolemTrait.FIGHTER)) {
             double damage = mat.damage;
@@ -380,6 +424,7 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
             if (rankXp >= targetXp) {
                 props.setRank(props.getRank() + 1);
                 setProperties(props);
+                sendGolemEmote((byte)9);
                 level().playSound(null, blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 0.5F, 1.0F);
             }
         }
@@ -415,13 +460,14 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
     @Override
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
         TCGolemDartEntity dart = new TCGolemDartEntity(TCEntityTypes.GOLEM_DART.get(), this, level());
+        float damage = (float)getAttributeValue(Attributes.ATTACK_DAMAGE) / 3;
+        dart.setBaseDamage(damage + distanceFactor + random.nextGaussian() * .25);
         double dx = target.getX() - getX();
-        double dy = target.getY(0.3333333333333333D) - dart.getY();
+        double dy = target.getBoundingBox().minY + target.getEyeHeight() + distanceFactor * distanceFactor - dart.getY();
         double dz = target.getZ() - getZ();
-        double dist = Math.sqrt(dx * dx + dz * dz);
-        dart.shoot(dx, dy + dist * 0.2D, dz, 1.6F, 12.0F);
-        level().playSound(null, getX(), getY(), getZ(), SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1.0F, 1.2F / (getRandom().nextFloat() * 0.2F + 0.9F));
+        dart.shoot(dx, dy, dz, 1.6F, 3.0F);
         level().addFreshEntity(dart);
+        level().playSound(null, getX(), getY(), getZ(), SoundEvents.ARROW_SHOOT, SoundSource.NEUTRAL, 1, 1 / (random.nextFloat() * .4F + .8F));
     }
 
     @Override
@@ -456,6 +502,7 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
                         && thaumcraft.common.research.TCResearchManager.knowsResearchStrict(
                                 thaumcraft.common.research.TCPlayerKnowledgeStore.get(serverPlayer), "GOLEMDIRECT")) {
                     setFollowingOwner(!isFollowingOwner());
+                    sendGolemEmote(isFollowingOwner() ? (byte)5 : (byte)8);
                     player.displayClientMessage(Component.translatable(isFollowingOwner() ? "golem.follow" : "golem.stay"), true);
                     level().playSound(null, blockPosition(), thaumcraft.common.registry.TCSounds.SCAN.get(), SoundSource.PLAYERS, 1, 1);
                 }

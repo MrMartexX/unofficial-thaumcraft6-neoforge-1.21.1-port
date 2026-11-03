@@ -34,7 +34,7 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.SPELLBAT.get(), TCFirebatRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FOCUS_PROJECTILE.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FOCUSMINE.get(), TCInvisibleEntityRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.GOLEM_DART.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.GOLEM_DART.get(), TCGolemDartRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.GOLEM.get(), TCGolemRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.GRAPPLE.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.PECH.get(), TCPechRenderer::new);

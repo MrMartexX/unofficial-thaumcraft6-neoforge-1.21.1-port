@@ -13,7 +13,9 @@ individual contract audits pass.
 - [Seal/golem/press remediation](audits/seal_golem_remediation_2026_11_03.md): real
   server-opened seal configuration and sync, legacy OBJ parts, persisted home/follow,
   safe press extraction/refunds, advanced logistics and real Breaker mining;
-  56 focused server checks, 7200 part/rank attribute combinations and ten live
+  flight/climbing, owner-combat rules, emotes and through-wall reveal;
+  restored Dart projectile/cadence; 71 focused server checks, 7200 part/rank
+  attribute combinations and ten live
   client captures. Unmapped external
   OreDictionary/state metadata and the stated visual/multiplayer boundaries remain
   open. Do not label the whole golemancy subsystem complete from these results.

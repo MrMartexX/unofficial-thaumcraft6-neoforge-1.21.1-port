@@ -23,6 +23,8 @@ import thaumcraft.api.golems.IGolemProperties;
 import thaumcraft.common.entities.TCGolemEntity;
 
 final class TCGolemRenderer extends EntityRenderer<TCGolemEntity> {
+    private boolean normalPass;
+    private boolean revealPass;
     private static final ResourceLocation BASE = ResourceLocation.fromNamespaceAndPath("thaumcraft", "models/obj/golem_base.obj");
     private final WeakHashMap<TCGolemEntity, float[]> grinderAnimation = new WeakHashMap<>();
     private static final ResourceLocation TEX_WOOD =
@@ -65,7 +67,12 @@ final class TCGolemRenderer extends EntityRenderer<TCGolemEntity> {
     @Override
     public void render(TCGolemEntity entity, float yaw, float partial, PoseStack pose, MultiBufferSource buffers, int light) {
         var player = Minecraft.getInstance().player;
-        if (entity.isInvisible() && (player == null || entity.isInvisibleTo(player))) { super.render(entity, yaw, partial, pose, buffers, light); return; }
+        normalPass = !entity.isInvisible() || (player != null && !entity.isInvisibleTo(player));
+        revealPass = player != null && player.isShiftKeyDown()
+                && (player.getMainHandItem().getItem() instanceof thaumcraft.api.golems.ISealDisplayer
+                    || player.getOffhandItem().getItem() instanceof thaumcraft.api.golems.ISealDisplayer)
+                && !player.hasLineOfSight(entity);
+        if (!normalPass && !revealPass) { super.render(entity, yaw, partial, pose, buffers, light); return; }
         var props = entity.getProperties();
         List<PartModel> parts = new ArrayList<>();
         if (props.getHead().model != null) parts.add(props.getHead().model);
@@ -125,7 +132,7 @@ final class TCGolemRenderer extends EntityRenderer<TCGolemEntity> {
             rotate(pose, (float)Math.toDegrees(Mth.cos(walk * .6662F + (left ? Mth.PI : 0)) * amount), 0, 0);
             parts(entity, parts, PartModel.EnumAttachPoint.LEGS, limb, pose, buffers, light, overlay, color, partial); pose.popPose();
         }
-        if (holding) {
+        if (holding && normalPass) {
             pose.pushPose(); pose.translate(0, .625, 0); rotate(pose, -rz * .5F, 0, 0);
             pose.scale(.375F, .375F, .375F); pose.translate(0, .25, -1.5);
             if (!(entity.getFrontCarriedItem().getItem() instanceof BlockItem)) pose.translate(0, -.6, 0);
@@ -146,7 +153,8 @@ final class TCGolemRenderer extends EntityRenderer<TCGolemEntity> {
     }
 
     private void mesh(ResourceLocation model, String group, ResourceLocation texture, PoseStack pose, MultiBufferSource buffers, int light, int overlay, int color) {
-        TCGolemObjMesh.get(model).render(group, pose, buffers.getBuffer(RenderType.entityTranslucent(texture)), light, overlay, color);
+        if (normalPass) TCGolemObjMesh.get(model).render(group, pose, buffers.getBuffer(RenderType.entityTranslucent(texture)), light, overlay, color);
+        if (revealPass) TCGolemObjMesh.get(model).render(group, pose, buffers.getBuffer(TCGolemRenderTypes.reveal(texture)), light, overlay, 0x40404040);
     }
 
     private void parts(TCGolemEntity entity, List<PartModel> parts, PartModel.EnumAttachPoint point, PartModel.EnumLimbSide side,
@@ -172,7 +180,7 @@ final class TCGolemRenderer extends EntityRenderer<TCGolemEntity> {
                 }
                 ResourceLocation texture = part.getTexture() == null || part.useMaterialTextureForObjectPart(group) ? getTextureLocation(entity) : part.getTexture();
                 mesh(part.getObjModel(), group, texture, pose, buffers, light, overlay, color);
-                if (part.getObjModel().getPath().endsWith("golem_hauler.obj") && !entity.getBackCarriedItem().isEmpty()) {
+                if (normalPass && part.getObjModel().getPath().endsWith("golem_hauler.obj") && !entity.getBackCarriedItem().isEmpty()) {
                     pose.pushPose(); pose.scale(.375F, .375F, .375F); pose.translate(0, .33, .825);
                     if (!(entity.getBackCarriedItem().getItem() instanceof BlockItem)) pose.translate(0, 0, -.25);
                     Minecraft.getInstance().getItemRenderer().renderStatic(entity, entity.getBackCarriedItem(), ItemDisplayContext.HEAD, false, pose, buffers, entity.level(), light, overlay, entity.getId());

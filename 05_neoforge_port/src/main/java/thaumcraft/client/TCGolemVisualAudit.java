@@ -29,9 +29,16 @@ import thaumcraft.common.registry.TCEntityTypes;
 @EventBusSubscriber(modid = "thaumcraft", value = Dist.CLIENT)
 public final class TCGolemVisualAudit {
     private static boolean started;
+    private static boolean titleSet;
     private static int phase, frames;
     private static boolean actionsSent;
     private static int startupFrames;
+    private static String fixtureWorld;
+    private static boolean reconnectSealQueued, disconnectQueued, reopenQueued, reconnectCleanupQueued;
+    private static boolean awayQueued, returnQueued;
+    private static net.minecraft.world.phys.Vec3 returnPosition;
+    private static net.minecraft.world.level.GameType returnGameMode;
+    private static final long DEADLINE = System.nanoTime() + java.util.concurrent.TimeUnit.MINUTES.toNanos(5);
     private static net.minecraft.core.BlockPos testPos;
     private static net.minecraft.world.level.block.state.BlockState supportBefore;
     private static final Path OUTPUT = Path.of("../../tools/reports/local/review-20261102/visual-seals-golems");
@@ -39,11 +46,58 @@ public final class TCGolemVisualAudit {
     @SubscribeEvent
     public static void tick(ClientTickEvent.Post event) {
         var mc = Minecraft.getInstance();
-        if (!Boolean.getBoolean("tc.golemVisualAudit") || mc.level == null || mc.player == null) return;
+        if (!Boolean.getBoolean("tc.golemVisualAudit")) return;
+        checkDeadline();
+        if (!titleSet) { mc.getWindow().setTitle("Thaumcraft golem audit - closes automatically"); titleSet = true; }
+        if (phase == 11 && mc.level == null && !reopenQueued) {
+            if (SealHandler.sealEntities.values().stream().anyMatch(map -> !map.isEmpty())) throw new IllegalStateException("Seal cache survived disconnect");
+            reopenQueued = true;
+            mc.createWorldOpenFlows().openWorld(fixtureWorld, () -> { throw new IllegalStateException("Cannot reopen visual fixture"); });
+            return;
+        }
+        if (mc.level == null || mc.player == null) return;
         if (started) {
-            if (phase == 10 && testPos != null && SealHandler.getSealEntity(mc.level, new SealPos(testPos, Direction.UP)) == null) {
-                com.mojang.logging.LogUtils.getLogger().info("TC_GOLEM_VISUAL_AUDIT_CAPTURED phases=10 serverMenus=true ghostClicks=true cacheRemoval=true path={}", OUTPUT.toAbsolutePath());
+            var cached = testPos == null ? null : SealHandler.getSealEntity(mc.level, new SealPos(testPos, Direction.UP));
+            if (phase == 10 && cached == null && !reconnectSealQueued) {
+                reconnectSealQueued = true;
+                mc.getSingleplayerServer().execute(() -> {
+                    var player = mc.getSingleplayerServer().getPlayerList().getPlayer(mc.player.getUUID());
+                    player.serverLevel().setBlock(testPos, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 3);
+                    SealHandler.addSealEntity(player.level(), testPos, Direction.UP, new SealPickupAdvanced(), player);
+                    var seal = SealHandler.getSealEntity(player.level(), new SealPos(testPos, Direction.UP));
+                    seal.setPriority((byte)4); seal.syncToClient(player.level());
+                });
+            } else if (phase == 10 && cached != null && cached.getPriority() == 4 && !awayQueued) {
+                awayQueued = true;
+                mc.getSingleplayerServer().execute(() -> {
+                    var player = mc.getSingleplayerServer().getPlayerList().getPlayer(mc.player.getUUID());
+                    returnPosition = player.position(); returnGameMode = player.gameMode.getGameModeForPlayer();
+                    player.setGameMode(net.minecraft.world.level.GameType.SPECTATOR);
+                    player.teleportTo(returnPosition.x + 1024, 300, returnPosition.z);
+                });
+            } else if (phase == 10 && cached == null && awayQueued && !returnQueued) {
+                returnQueued = true;
+                mc.getSingleplayerServer().execute(() -> {
+                    var player = mc.getSingleplayerServer().getPlayerList().getPlayer(mc.player.getUUID());
+                    player.teleportTo(returnPosition.x, returnPosition.y, returnPosition.z);
+                    player.setGameMode(returnGameMode);
+                });
+            } else if (phase == 10 && cached != null && cached.getPriority() == 4 && returnQueued && !disconnectQueued) {
+                disconnectQueued = true;
                 phase = 11;
+                mc.level.disconnect();
+                mc.disconnect(new net.minecraft.client.gui.screens.TitleScreen());
+            } else if (phase == 11 && reopenQueued && cached != null && cached.getPriority() == 4 && !reconnectCleanupQueued) {
+                reconnectCleanupQueued = true;
+                phase = 12;
+                mc.getSingleplayerServer().execute(() -> {
+                    var player = mc.getSingleplayerServer().getPlayerList().getPlayer(mc.player.getUUID());
+                    SealHandler.removeSealEntity(player.level(), new SealPos(testPos, Direction.UP), true);
+                    player.serverLevel().setBlock(testPos, supportBefore, 3);
+                });
+            } else if (phase == 12 && cached == null) {
+                com.mojang.logging.LogUtils.getLogger().info("TC_GOLEM_VISUAL_AUDIT_CAPTURED phases=10 serverMenus=true ghostClicks=true cacheRemoval=true reconnect=true watchCycle=true path={}", OUTPUT.toAbsolutePath());
+                phase = 13;
                 mc.stop();
             }
             return;
@@ -52,6 +106,7 @@ public final class TCGolemVisualAudit {
         var server = mc.getSingleplayerServer();
         if (server == null || !server.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT).toAbsolutePath().normalize()
                 .getFileName().toString().startsWith("tc_visual_")) throw new IllegalStateException("Visual audit must use a disposable integrated world");
+        fixtureWorld = server.getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT).toAbsolutePath().normalize().getFileName().toString();
         started = true;
         next(mc);
     }
@@ -59,7 +114,10 @@ public final class TCGolemVisualAudit {
     private static void next(Minecraft mc) {
         frames = 0;
         actionsSent = false;
-        if (phase < 2) { mc.setScreen(new ModelSheet(phase)); return; }
+        if (phase < 2) {
+            if (phase == 0) thaumcraft.client.renderer.TCGolemClientRenderAudit.run();
+            mc.setScreen(new ModelSheet(phase)); return;
+        }
         if (phase < 10) {
             mc.setScreen(null);
             mc.getSingleplayerServer().execute(() -> {
@@ -105,9 +163,14 @@ public final class TCGolemVisualAudit {
 
     private static int categoryForPhase() { return phase < 7 ? phase - 2 : phase == 7 ? 3 : 1; }
 
+    private static void checkDeadline() {
+        if (System.nanoTime() > DEADLINE) throw new IllegalStateException("Visual audit timeout at phase " + phase);
+    }
+
     @SubscribeEvent
     public static void rendered(ScreenEvent.Render.Post event) {
         if (!Boolean.getBoolean("tc.golemVisualAudit")) return;
+        checkDeadline();
         var mc = Minecraft.getInstance();
         if (!started) {
             if (++startupFrames == 60) {

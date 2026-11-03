@@ -75,15 +75,49 @@ All paths above are relative to the primary 1.12.2 decompiled source tree.
 - Movement retains base attribute 0.3 and applies the legacy additive rank/trait
   multiplier at work/home navigation requests. Step height is 0.5 for wheels,
   otherwise 0.6. Automatic repair heals one every100 ticks, or40 with REPAIR.
+- Flight now uses the legacy six-axis evaluator, midpoint/six-node path shortcut,
+  normalized .033/.0125 acceleration and half-motion arrival damping. Modern
+  integer pathfinder targets are converted to legacy X/Z centers; copying the
+  old evaluator without this adaptation shifted destinations by one block.
+- Climber installs vanilla WallClimberNavigation, the direct modern successor
+  of legacy PathNavigateClimber, with synced wall contact and fall immunity.
+  A real four-block-wall ascent is exercised, not only a navigation-class check.
+- FIGHTER retaliation and following-owner defense/assistance replace invented
+  proactive nearest-hostile targeting. Owner and same-owner pets stay protected.
+  The original 1.15 melee task is retained alongside the ranged task.
+- The original fixed eye height0.7 is now explicit alongside body dimensions
+  0.4x0.9; the modern default0.765 changed line-of-sight and targeting origins.
+- Dart no longer uses a fixed-damage ThrowableProjectile or invisible renderer.
+  It inherits AbstractArrow flight, hit/embedding, lifetime, damage persistence and
+  NPC pickup restrictions. GolemArmDart's attackDamage/3+range+Gaussian*.25,
+  eye+range-squared aim, speed1.6, spread3 and AIArrowAttack20..25 cadence are
+  restored. The real renderer uses matching arrow geometry at legacy scale0.033.
+- Original entity status5..9 emotes use the original atlas, timing and motion;
+  showGolemEmotes gates their presentation. Acquisition, aborted work, follow,
+  stay and rank-up have their corresponding status triggers.
+- Sneak + seal-displayer + obstructed line-of-sight now produces the legacy
+  gray/alpha.25 silhouette through a buffered no-depth/color-only render type.
+  No global depth/write state is changed. Leashes were already supplied by
+  modern EntityRenderer; the previous blanket "missing leash" boundary was
+  incorrect and has been replaced by an actual emitted-geometry check.
 
 ## Evidence
 
-- Dedicated-server golem/seal/press audit: **56/56 PASS**. Attribute/work-speed
+- Dedicated-server golem/seal/press audit: **71/71 PASS**. Attribute/work-speed
   assertions cover all 7200 registered part combinations at ranks 0, 3 and 10.
 - Focus regression: **16/16 PASS**.
 - Aggregate audit: **40/40 PASS**. Its worldgen entries include registration
   checks, not full ecosystem or generated-shape equivalence.
 - Live client loaded **17 OBJ models / 884 faces**.
+- Real renderer contract emits **760 reveal vertices**, legacy gray/alpha values,
+  and **100 vanilla leash vertices**. Standing or removing the displayer disables
+  reveal again. This is geometry/gating evidence, not a matching legacy screenshot.
+- Dart emits24 vertices with measured maximum span0.528. The legacy and modern
+  vanilla arrow PNGs differ as files, but their rendered UV regions have zero
+  visible-pixel differences; the removed old unused texture rows are irrelevant.
+- GPU depth-state checks establish unconditional depth acceptance and verify
+  cleanup. NeoForge's NO_DEPTH_TEST shard is a no-op, so reveal uses an explicit
+  ALWAYS depth state rather than depending on whatever the preceding pass left.
 - Ten captured client phases: two views of six material/part combinations,
   then priority, filter, area, toggles, required/forbidden traits, nine Use options,
   Stock quotas and advanced Pickup filters.
@@ -93,6 +127,11 @@ All paths above are relative to the primary 1.12.2 decompiled source tree.
   removal must disappear from the client cache before the client exits.
 - Real ghost click packets additionally confirm quota 15+1+10=26, right-click
   filter clearing, and empty carried cursor after those non-consuming operations.
+- Real integrated-client chunk unwatch removes the seal cache after a1024-block
+  spectator teleport; returning restores the current server snapshot. Original
+  position and game mode are restored in the disposable fixture. A subsequent
+  disconnect clears the cache, stops/saves the server and reopens the same world;
+  chunk-watch restores the persisted priority4 seal before final cleanup.
 - Captures were inspected; the automated pixel gate verifies twelve nonblank
   model views and absence of magenta missing-texture checker pixels. Initial
   missing translations were found visually and copied from the legacy language
@@ -100,6 +139,13 @@ All paths above are relative to the primary 1.12.2 decompiled source tree.
 
 Raw reports, client log and PNGs are ignored under
 `tools/reports/local/review-20261102/`; no player world is used.
+The combined server gate is `tools/audits/server/test-golem-remediation-evidence.ps1`.
+Pass the run's start timestamp as `-NotBefore`: it rejects stale/missing reports,
+unexpected totals and missing successful exporter markers. A later server launch
+returned exit0 after registry-loading failure and did not export fresh reports;
+that attempt was rejected, not counted as a pass. A serial retry with fresh
+configuration exported all three reports successfully. Concurrent rebuilds of the
+same live class/resource directories must not be treated as a stable test snapshot.
 
 ## Reproduce Visual Evidence
 
@@ -124,14 +170,32 @@ its startup screen and fails on disconnection instead of silently waiting there.
 - Arbitrary addon OreDictionary equivalence and metadata encoded only in block
   states without an explicit modern mapping. The DataFixer families and current
   behavior fixtures do not certify those cases.
-- Flying/climbing movement, owner-combat assistance, emotes, leash rendering,
-  through-wall golem silhouettes, and full end-to-end follow teleport scenarios.
+- Full navigation/combat campaigns across arbitrary terrain and addon targets.
+  The follow teleport fixture exercises the production fallback after a controlled
+  path failure; it does not certify every natural path-failure situation. Flight
+  tests assert entering the work radius, not an invented stationary-hover rule.
 - Pixel equality against matching 1.12.2 frames. The captures establish actual
   nonblank rendering and working network acknowledgements, not that equality.
-- Dedicated remote/two-client chunk-watch/unwatch and disconnect/reconnect tests.
+- Dedicated remote/two-client testing. Integrated-client watch/unwatch, cache
+  clearing, world reopen and persisted chunk snapshots are now exercised; these
+  are not a claim that two simultaneous remote clients have been run.
 - Strict cross-mod inventory atomicity: NeoForge IItemHandler has no common
   transaction API. If a handler rejects reinsertion after extracting, escrow
   goes to the explicit player/drop refund path. Conservation is tested; unchanged
   original slots are not falsely promised for such a handler.
 - Unrelated uncommitted worldgen changes, crystal ecology/distribution and
   remaining Exchange compatibility/fortune/FX acceptance from the parent audit.
+
+## Remaining Item Disposition
+
+| Previous report item | Disposition |
+| --- | --- |
+| Flying/climbing implementation | Implemented; controller, path graph, actual flight/work radius and four-block wall ascent checked. |
+| Owner combat | Implemented; registered selector does not invent proactive aggro; defense/assistance and owner/pet exclusions checked. |
+| Dart stub found during follow-up | Replaced with arrow physics/dynamic damage and visible legacy-scale renderer; actual hits, embedding, NBT, cadence and rendered geometry checked. |
+| Emotes, silhouette, leash | Emotes/reveal implemented; original atlas contracts, actual vertices and GPU depth setup/cleanup checked. Leash was already provided by the vanilla superclass. |
+| Follow fallback | Production branch checked with controlled path failure and safe landing/water-cost restoration; arbitrary terrain campaigns remain unmeasured. |
+| Watch/unwatch/reconnect | Actual integrated-client cycle checked; two simultaneous dedicated-server clients remain a separate acceptance scenario. |
+| Exact legacy pixels | Still unverified; requires matched legacy/modern camera, lighting, animation and player state. Nonblank captures are not that proof. |
+| Arbitrary addon dictionary and foreign inventory transactions | Explicit compatibility boundaries, not defects that a local fixture can universally eliminate. |
+| Concurrent crystal/worldgen and Exchange fortune/FX | Not closed by this golem batch; retain the parent report's open classification. |

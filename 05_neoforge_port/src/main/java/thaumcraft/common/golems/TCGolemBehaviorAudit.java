@@ -423,6 +423,8 @@ public final class TCGolemBehaviorAudit {
         TCSealActionAudit.run(level, rows);
         TCSealBreakerAudit.run(level, rows);
         TCGolemAttributeAudit.run(level, rows);
+        TCGolemMovementAudit.run(level, rows);
+        TCGolemDartAudit.run(level, rows);
         return new Report(rows);
     }
 

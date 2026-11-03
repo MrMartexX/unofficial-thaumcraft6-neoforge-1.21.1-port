@@ -119,15 +119,19 @@ and unmodified-original resource warnings.
 The subsequent [seal/golem/press slice](seal_golem_remediation_2026_11_03.md)
 implements real menu/sync, articulated OBJ rendering, home/follow foundations and
 press extraction compensation, advanced logistics options and real Breaker mining.
-It adds 56 passing server checks (including 7200 part/rank attribute combinations)
+It adds 71 passing server checks (including 7200 part/rank attribute combinations
+and the restored Dart projectile/cadence)
 and live-client menu/cache acknowledgement plus
 ten rendered captures. The list below is
 narrowed accordingly; it does not erase that slice's explicit limitations.
 
-- Unmapped addon OreDictionary/state metadata, flight/climbing navigation and
-  full follow/combat acceptance.
-- Remote multi-client seal watch/unwatch, reconnect and full logistics acceptance.
-- Measured legacy-frame equality, golem emotes/leashes and through-wall rendering.
+- Unmapped addon OreDictionary/state metadata and broad terrain/addon-target
+  campaigns beyond the now-tested flight, wall ascent, owner combat and controlled
+  follow-teleport fallback.
+- Remote multi-client and full logistics acceptance. An actual integrated-client
+  chunk unwatch/rewatch and saved-world disconnect/reconnect now passes.
+- Measured legacy-frame equality. Emote definitions and through-wall reveal are
+  implemented; real renderer checks now cover reveal and vanilla leash geometry.
 - Full crystal ecology/distribution comparison, including attachment/support
   policy, not merely registration/state/drop checks.
 - Remaining Exchange fortune distributions, compatibility cases and legacy swap

@@ -371,6 +371,7 @@ public final class TCEntityTypes {
     public static final Supplier<EntityType<TCGolemEntity>> GOLEM = ENTITY_TYPES.register("golem", () ->
             EntityType.Builder.<TCGolemEntity>of(TCGolemEntity::new, MobCategory.MISC)
                     .sized(0.4F, 0.9F)
+                    .eyeHeight(0.7F)
                     .setTrackingRange(64)
                     .setUpdateInterval(3)
                     .setShouldReceiveVelocityUpdates(true)

@@ -62,6 +62,7 @@ public final class TCGolemTaskGoal extends Goal {
             destination = target;
             task.setReserved(true);
             golem.setAssignedTask(task);
+            golem.sendGolemEmote((byte)5);
             seal.getSeal().onTaskStarted(golem.level(), golem, task);
             return true;
         }
@@ -122,6 +123,7 @@ public final class TCGolemTaskGoal extends Goal {
     public void stop() {
         golem.getNavigation().stop();
         if (task != null) {
+            if (!task.isCompleted() && task.isReserved()) golem.sendGolemEmote((byte)6);
             task.setReserved(false);
             if (task.isCompleted()) task.setSuspended(true);
         }
