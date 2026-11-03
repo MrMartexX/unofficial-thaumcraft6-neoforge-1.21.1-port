@@ -1,0 +1,2965 @@
+{
+  "schema_version": "v0-model-geometry-uv-audit/1",
+  "generated_date": "2026-11-04",
+  "source_repo": "MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port",
+  "source_ref": "main",
+  "source_sha": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+  "source_legacy_assets_root": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/resources/assets/thaumcraft/models/",
+  "source_modern_assets_root": "05_neoforge_port/src/main/resources/assets/thaumcraft/models/",
+  "method": "Exhaustive Git Trees/blob fingerprints; JSON parsed and recursively compared after only known namespace/path alias substitutions; OBJ exact blob SHA; MTL directives extracted separately. No client runtime/UV raster QA.",
+  "model_counts": {
+    "legacy_total": 307,
+    "modern_total": 827,
+    "legacy_json": 274,
+    "legacy_json_block": 119,
+    "legacy_json_item": 155,
+    "modern_json_legacy_name_coverage": 274,
+    "normalized_json_equivalent": 225,
+    "normalized_json_residual": 49,
+    "block_json_equivalent": 82,
+    "block_json_residual": 37,
+    "item_json_equivalent": 143,
+    "item_json_residual": 12,
+    "legacy_obj": 27,
+    "byte_identical_obj": 27,
+    "legacy_mtl": 6,
+    "changed_mtl": 5,
+    "remaining_mtl_byte_identical": 1
+  },
+  "texture_sha_proofs": {
+    "ancient_tile": "f695b23ec410d018dc8b2241663e0ee3d4761dd5",
+    "ancient_stone_1": "15493daaf938e039e558a66d6d5a8a9485c32596",
+    "arcane_stone_1": "42269b902035ee30773cdae024b5f062fa8fbe76",
+    "arcane_stone_2": "c33bb30ed28e5c272e1cf94e84530658d031c2cd",
+    "arcane_stone_3": "8a369167e29c77a4a24c083863bb0cbfdb499d7f",
+    "caster_advanced": "c2da2725b23bfe79f509e7b98877817ed8fa490e",
+    "caster_basic": "d4209fe2c8ba8f887d2339b0e54ffa1fea427884"
+  },
+  "armor_reference": {
+    "legacy_models": [
+      {
+        "name": "ModelCustomArmor.java",
+        "chars": 13842,
+        "addBox": 0,
+        "modelRenderer": 0,
+        "textureSize": [],
+        "atlasDimensions": [],
+        "hasRender": false
+      },
+      {
+        "name": "ModelFortressArmor.java",
+        "chars": 27683,
+        "addBox": 64,
+        "modelRenderer": 64,
+        "textureSize": [
+          "setTextureSize(128, 64",
+          "setTextureSize(128, 64",
+          "setTextureSize(128, 64",
+          "setTextureSize(128, 64"
+        ],
+        "atlasDimensions": [
+          "textureWidth = 128",
+          "textureHeight = 64"
+        ],
+        "hasRender": true
+      },
+      {
+        "name": "ModelKnightArmor.java",
+        "chars": 13204,
+        "addBox": 38,
+        "modelRenderer": 38,
+        "textureSize": [
+          "setTextureSize(128, 64",
+          "setTextureSize(128, 64",
+          "setTextureSize(128, 64",
+          "setTextureSize(128, 64"
+        ],
+        "atlasDimensions": [
+          "textureWidth = 128",
+          "textureHeight = 64"
+        ],
+        "hasRender": true
+      },
+      {
+        "name": "ModelLeaderArmor.java",
+        "chars": 13685,
+        "addBox": 50,
+        "modelRenderer": 50,
+        "textureSize": [
+          "setTextureSize(128, 64",
+          "setTextureSize(128, 64"
+        ],
+        "atlasDimensions": [
+          "textureWidth = 128",
+          "textureHeight = 64"
+        ],
+        "hasRender": true
+      },
+      {
+        "name": "ModelRobe.java",
+        "chars": 19751,
+        "addBox": 58,
+        "modelRenderer": 58,
+        "textureSize": [
+          "setTextureSize(128, 64",
+          "setTextureSize(128, 64",
+          "setTextureSize(128, 64",
+          "setTextureSize(128, 64"
+        ],
+        "atlasDimensions": [
+          "textureWidth = 128",
+          "textureHeight = 64"
+        ],
+        "hasRender": true
+      }
+    ],
+    "legacy_class_item_bindings": {
+      "ModelFortressArmor": [
+        "ItemFortressArmor"
+      ],
+      "ModelKnightArmor": [
+        "ItemCultistPlateArmor"
+      ],
+      "ModelLeaderArmor": [
+        "ItemCultistLeaderArmor"
+      ],
+      "ModelRobe": [
+        "ItemCultistRobeArmor",
+        "ItemVoidRobeArmor"
+      ]
+    },
+    "modern_java_research": [
+      "ItemFortressArmor extends ArmorItem, does not provide custom armor model hook",
+      "ItemCultistRobeArmor extends ArmorItem, does not provide custom armor model hook",
+      "TCArmorMaterials binds layer textures",
+      "TCClientExtensions only registers fluid client extensions",
+      "GitHub code search for getHumanoidArmorModel and legacy Model* names yielded no modern implementation"
+    ],
+    "statement": "Absent custom armor mesh integration in inspected modern source; verify by rendering before assigning pixel-perfect pass."
+  },
+  "findings": [
+    {
+      "id": "MUV-001",
+      "severity": "P1",
+      "name": "ancient straight stairs substitute ancient_stone_1 for ancient_tile",
+      "active_reference": "blockstates/stairs_ancient.json",
+      "corner_model_texture": "ancient_tile",
+      "straight_model_texture": "ancient_stone_1",
+      "status": "source-proven active model inconsistency"
+    },
+    {
+      "id": "MUV-002",
+      "severity": "P1",
+      "name": "arcane straight stairs top/side use arcane_stone_1 instead of 2/3",
+      "active_reference": "blockstates/stairs_arcane.json",
+      "corner_model_top": "arcane_stone_2",
+      "corner_model_side": "arcane_stone_3",
+      "straight_model_top_side": "arcane_stone_1",
+      "status": "source-proven active model inconsistency"
+    },
+    {
+      "id": "MUV-003",
+      "severity": "P1",
+      "name": "Legacy custom player armor box geometry/UV absent from modern armor models",
+      "legacy_addBox_call_sites": 210,
+      "atlas": "128x64",
+      "status": "strong source-level gap; game render needed"
+    },
+    {
+      "id": "MUV-004",
+      "severity": "P2",
+      "name": "Scribing tools parent handheld→generated affects display posture",
+      "status": "source-proven transform parent substitution; runtime compare"
+    },
+    {
+      "id": "MUV-005",
+      "severity": "P2",
+      "name": "bucket_pure layer0 custom asset reference→vanilla water_bucket",
+      "status": "source-proven ref change; original referenced PNG absent from checked-in legacy textures"
+    },
+    {
+      "id": "MUV-006",
+      "severity": "P2",
+      "name": "redstone relay vanilla stone_slab_top→smooth_stone and torch version mapping",
+      "status": "source candidate; blockstate still legacy Forge syntax so reachability unproven"
+    },
+    {
+      "id": "MUV-007",
+      "severity": "P2",
+      "name": "block/empty zero-volume legacy element removed and model now uses vanilla barrier",
+      "status": "source-proven model shape change; blockstate is legacy forge_marker format, runtime reachability unproven"
+    },
+    {
+      "id": "MUV-008",
+      "severity": "P2",
+      "name": "generic obj/crystal.mtl Ka/Kd 0.588→1.0",
+      "status": "MTL numeric change; active crystal block model uses per-aspect mtl_override so effective rendering unresolved"
+    }
+  ],
+  "block_models": [
+    {
+      "path": "block/activator_rail_active_flat.json",
+      "legacy_sha": "01fec735fc4bf3cba83afe88173d87505ad7d447",
+      "modern_sha": "274280ed4ce46e6584097dc4284c9a56cd380c73",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/activator_rail_active_raised_ne.json",
+      "legacy_sha": "cc2748cb96a601f1be2bbace8d1b23b0fe4ecaea",
+      "modern_sha": "992351b26ed098c1e4dce38ac63e398c56a54bdb",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/activator_rail_active_raised_sw.json",
+      "legacy_sha": "21d93522ed2982099f32ea302228995440b74604",
+      "modern_sha": "8e5e567f379aac47dc84189a3e209635ffe23e86",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/activator_rail_flat.json",
+      "legacy_sha": "26e3e39163593660abd49d4be1cc86079343f2e5",
+      "modern_sha": "42589732e21b1da53d9c0d7d48d85fe4e1e42b8c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/activator_rail_raised_ne.json",
+      "legacy_sha": "55a14ea3b6530977063957be3606f4ace87089b4",
+      "modern_sha": "2fac9e4d13a6981fbdce22a954b5879edf9b3c12",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/activator_rail_raised_sw.json",
+      "legacy_sha": "fec28e3c9ec9759476e348ee7728b74f2be4eed5",
+      "modern_sha": "df80e67ed5328c0f27ada80639bffd19ef7f435d",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/alembic_normal.json",
+      "legacy_sha": "84b148fa6ed6ea95bedc78f9cad7298b71968ea8",
+      "modern_sha": "abf2fc3c2e27ae795f8ab946e42ce5597b57b937",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/ancient_inner_stairs.json",
+      "legacy_sha": "05261aeecad4c35dc0f51f46274f6e7c67b342c9",
+      "modern_sha": "adb5c04b2fc7ea9eb07c77a4edaaa069b5474b66",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/ancient_outer_stairs.json",
+      "legacy_sha": "c9bb0160c9f06817d99846116e95bdcac7ce1037",
+      "modern_sha": "5fab418a5edf02b1f9c8ddbbb1e391ccfeb8ba9f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/ancient_stairs.json",
+      "legacy_sha": "7b7aab694bb025a9a10ada690536a4c46c8ef269",
+      "modern_sha": "04775841047adf1b6bc2a4ae63e9c1409a98c647",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.bottom",
+          "error": "value_changed",
+          "legacy": "thaumcraft:block/ancient_tile",
+          "modern": "thaumcraft:block/ancient_stone_1"
+        },
+        {
+          "path": ".textures.top",
+          "error": "value_changed",
+          "legacy": "thaumcraft:block/ancient_tile",
+          "modern": "thaumcraft:block/ancient_stone_1"
+        },
+        {
+          "path": ".textures.side",
+          "error": "value_changed",
+          "legacy": "thaumcraft:block/ancient_tile",
+          "modern": "thaumcraft:block/ancient_stone_1"
+        }
+      ]
+    },
+    {
+      "path": "block/ancient_stone.json",
+      "legacy_sha": "f7d23c28217af171c062c624f13587630c6c8a71",
+      "modern_sha": "3f4601e8a1fdc02b5be2b4e2d8a582f39ff1c7a1",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/arcane_brick_inner_stairs.json",
+      "legacy_sha": "ef492c73aebd13ff8c1fcd756430ab46b78e55e9",
+      "modern_sha": "8166afac35d9440dd217a6d316a0a269e5092370",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/arcane_brick_outer_stairs.json",
+      "legacy_sha": "f2a4023511426371f8e5c6b86a3f55272cd419c0",
+      "modern_sha": "92b617386093c825406c4e23f7eb2f9715516a69",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/arcane_brick_stairs.json",
+      "legacy_sha": "ca71ae75ac1c389d7c8b1476b36cdf1744e20fec",
+      "modern_sha": "696452a97945f9cb2b2d73aeb6c36cbb1330fe13",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/arcane_ear_off.json",
+      "legacy_sha": "6e7558adbfe6156b4e20dccb52832847291acf17",
+      "modern_sha": "be222bde5dbd5c46a966fd887a9fa44c47377123",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/arcane_ear_on.json",
+      "legacy_sha": "bf272800fd1228a4bdeb3f6dfe1636bf0b74de8e",
+      "modern_sha": "be95a85ca486dc05c8b0692006dd0c94d9b6cbab",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/arcane_inner_stairs.json",
+      "legacy_sha": "54181581438137d86bb97c05d24b42673691bb37",
+      "modern_sha": "3844d7a2e0f9cf71709c2b99ca6d7a44ae625d2e",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/arcane_outer_stairs.json",
+      "legacy_sha": "3bdd6cdd87baabff356ddece7234d5f1e0f37225",
+      "modern_sha": "5bef2a3942c8394ecc9e405ffe64c4da017ed306",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/arcane_stairs.json",
+      "legacy_sha": "d855a0cfcfa03cf7d196081c0ab15d552440f25e",
+      "modern_sha": "6d5633971f9577e41c6c77f406a84f46d4b3f6e6",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.top",
+          "error": "value_changed",
+          "legacy": "thaumcraft:block/arcane_stone_2",
+          "modern": "thaumcraft:block/arcane_stone_1"
+        },
+        {
+          "path": ".textures.side",
+          "error": "value_changed",
+          "legacy": "thaumcraft:block/arcane_stone_3",
+          "modern": "thaumcraft:block/arcane_stone_1"
+        }
+      ]
+    },
+    {
+      "path": "block/arcane_stone.json",
+      "legacy_sha": "b19ea66ea8ef9770e53d4824fce93ae91bda63ef",
+      "modern_sha": "f4c95041ba2983515c3c3dbc6945805ccc511380",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/arcane_workbench.json",
+      "legacy_sha": "649787339fc6c528fca5a54686ebd002abbac034",
+      "modern_sha": "3b9da7c851da453b6d2c1ee50b66e72a371e1247",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/banner.json",
+      "legacy_sha": "f742b28170ef10e4ef47268ef92f4f959cda169c",
+      "modern_sha": "a9c69661e93a637d57decd1db60efc74cda1ecc9",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/bellows.json",
+      "legacy_sha": "6eb67983efaaad105b5e06937d43995ebe0b1866",
+      "modern_sha": "fe4ad355c037573d81f50d39a1853cd29ba351b4",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/brain_box.json",
+      "legacy_sha": "c6c753b292cfcb91d733f17bb6ed2a99c4261d3e",
+      "modern_sha": "b9dd82e2b1f0312072731f7f913e0a96a4ef0a2f",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/candle.json",
+      "legacy_sha": "2b16b9cbca0a3a93c66cb76685456a5b1a823402",
+      "modern_sha": "53bef86b6ea6f92d96554091946fac0fd4aeb76b",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/centrifuge.json",
+      "legacy_sha": "44798e6aec757f84b21c4a7bd4ef4e652373c0f5",
+      "modern_sha": "5e9292d8f06ae68f39536a3bf9049bfa59dacdff",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.particle",
+          "error": "added",
+          "modern": "thaumcraft:block/centrifuge"
+        },
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/chest.json",
+      "legacy_sha": "a3266ebc1080f1482ac265cd2d9cfba6be1123af",
+      "modern_sha": "487b59206949ae89366e9419acc853a03f43f1e9",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.texture",
+          "error": "value_changed",
+          "legacy": "thaumcraft:models/chesthungry",
+          "modern": "thaumcraft:block/chesthungry"
+        }
+      ]
+    },
+    {
+      "path": "block/condenser.json",
+      "legacy_sha": "2911ffceba8122aae5a1596f19a6c56ffa5663cb",
+      "modern_sha": "131d0c15e08609be9d4e6beb9c7ba0551fdcd2cf",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/condenser_lattice_core.json",
+      "legacy_sha": "d8156c3a00f6253d4936497a55d34d19931410c1",
+      "modern_sha": "de4035365fa75277f829b4dd8161f9c419bd9dfa",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/condenser_lattice_core_dirty.json",
+      "legacy_sha": "7c4b71a606b0535411562de05ca2366afb8d3738",
+      "modern_sha": "4c4e7d873b30b20786921c2cd0176a1dee44d13f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/condenser_lattice_side.json",
+      "legacy_sha": "25e9df22a63e6da4aa9194371d59f92a7df898c5",
+      "modern_sha": "cc68fe4c2a1092285c337f1aa805a5365fc94ac7",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/crucible.json",
+      "legacy_sha": "f0bd404f11b9188ec811c1b2132d7d413c65a760",
+      "modern_sha": "41abf58502d5ba2f7f6bbf3e3a007f0c897bb84b",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/dioptra.json",
+      "legacy_sha": "b9ddded8e7c9cf5f116a01dadc3a9c840484e8e0",
+      "modern_sha": "2960250daacb3e11671488ece287e6381d6158ee",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/eldritch_stone.json",
+      "legacy_sha": "061820047e4a76584d523bde4329102fd2978f8b",
+      "modern_sha": "325e33fadba53ac50552cc622a47c6c6d7c0f907",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/empty.json",
+      "legacy_sha": "42aac7d9163d9b6b567d6972fdb0b71b0dedbf58",
+      "modern_sha": "423f1709942130a251a25f098f9498da32ff5844",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".ambientocclusion",
+          "error": "removed",
+          "legacy": false
+        },
+        {
+          "path": ".elements",
+          "error": "removed",
+          "legacy": [
+            {
+              "from": [
+                0,
+                0,
+                0
+              ],
+              "to": [
+                0,
+                0,
+                0
+              ],
+              "faces": {
+                "up": {
+                  "texture": "missingtexture"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/cube_all"
+        },
+        {
+          "path": ".textures",
+          "error": "added",
+          "modern": {
+            "all": "minecraft:block/barrier"
+          }
+        }
+      ]
+    },
+    {
+      "path": "block/essentia_input.json",
+      "legacy_sha": "7d0f30f6d1c220ae05168015dbda28e31e30b7cc",
+      "modern_sha": "dfa755147ce555400928732b9d03f25d9049532d",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/essentia_output.json",
+      "legacy_sha": "b4c102e15910262bdaf1685a5c331b7537f10844",
+      "modern_sha": "2ec9fccdd1c0cb9dadefda7b97c827d03fb495c1",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/everfull_urn.json",
+      "legacy_sha": "4ec64ac9984c498832a547d858b5fe1313b0054f",
+      "modern_sha": "ff31edb119904bf3ee51cabef2ee5fdb1d012155",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/greatwood_inner_stairs.json",
+      "legacy_sha": "0a09b493b07896eb6b0e96ed872e3cdec2e187d4",
+      "modern_sha": "21958615d5e187de8d9ae149fb14cccda9146d1c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/greatwood_outer_stairs.json",
+      "legacy_sha": "56afa18ef9d682a0dad3090162f1d662ac0f8a7a",
+      "modern_sha": "143a7140cb6c46816730807b75c5dab54939cd3a",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/greatwood_stairs.json",
+      "legacy_sha": "39404ffed3356c26903ee4453bd3a1a5592c9ebb",
+      "modern_sha": "be98ceb3c29593a7777dd0b803d78dd13bef6ef6",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/infernal_furnace.json",
+      "legacy_sha": "cc2ec6d588e87bcbab0e6ffed7d0df969af48b7d",
+      "modern_sha": "6fb4a4a289ec0075a33bb72b465cab50bd3ee940",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.core",
+          "error": "value_changed",
+          "legacy": "blocks/lava_still",
+          "modern": "minecraft:block/lava_still"
+        },
+        {
+          "path": ".textures.fire",
+          "error": "value_changed",
+          "legacy": "blocks/fire_layer_0",
+          "modern": "minecraft:block/fire_0"
+        }
+      ]
+    },
+    {
+      "path": "block/infusion_matrix.json",
+      "legacy_sha": "4e455d9bd5596ad7eaa51fff51157658cd8ad321",
+      "modern_sha": "334ba377aa5dda53703cbdb1bfe062627575f4a8",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_dot.json",
+      "legacy_sha": "c105187b922019300d5448aea7e8352c6b0b539d",
+      "modern_sha": "d28fb7cfc1548d279ebdfff0c84692eca962ec99",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_dot_0.json",
+      "legacy_sha": "2dfa8315cd49a13dd3111b3b6004851f0eefcd87",
+      "modern_sha": "1f7bde3010b49df00468714fd04e207a4e0a476a",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_dot_1.json",
+      "legacy_sha": "598a08a1d09a56d8269c9c47b11f2a9f1cfaeeaf",
+      "modern_sha": "f7a3546777bdbe62cf353b11b7d61493600d5a96",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_dot_2.json",
+      "legacy_sha": "f3f33e2de3a9cc6cec002ec4c65c3179f6214863",
+      "modern_sha": "7b62e265201a1c0b53910e93b1a5d520c4d4987a",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_dot_3.json",
+      "legacy_sha": "1132e7db3e7e74cc8e1bc84737e5a9aae494012c",
+      "modern_sha": "e290958de97f6d562fab6efa6257ec44f12b896b",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_extend.json",
+      "legacy_sha": "3f3a5938278f45c9d629b35ba799a098457acc28",
+      "modern_sha": "0c4e0c728f181a12edc3ab5831276c67080f21cf",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_side.json",
+      "legacy_sha": "ad8e3db3d31f24b500b4ce95d589afb8c6953d3f",
+      "modern_sha": "3371dc15c60d9199db1cc583869a413a7c3501b3",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_side0.json",
+      "legacy_sha": "effb95a113b6a0aaf1087ee37108e87d96fe0df7",
+      "modern_sha": "063b97733bc60c4b2b15a7264a01a73f368ca8a9",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_side1.json",
+      "legacy_sha": "21a7d39985ff79ad4711e1453b3a96017306afd5",
+      "modern_sha": "4d3f5ab986baa25272c12d0f9ff72bd2bd1cca06",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_side_alt.json",
+      "legacy_sha": "f21600c1c75b108878828683a57144538524af0c",
+      "modern_sha": "72570fec54c002fa120fe474fd9662b1e86df421",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_side_alt0.json",
+      "legacy_sha": "855be26d53993ab5553f668b103c7414ef414e5e",
+      "modern_sha": "5fed8887efe5f7723af667109057524ecf758272",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/inlay_side_alt1.json",
+      "legacy_sha": "883f3d58e783463756066c559ab03e0b20388b28",
+      "modern_sha": "b47bd5210499e5d6f15fe8e2a6cb6ad92522ad40",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/jar_brain_item.json",
+      "legacy_sha": "0a09ac4e457720ab0cd9b9e8cb67b68d4102b445",
+      "modern_sha": "88b979e3641feffe4c47f3012631029d7ab8e55f",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        },
+        {
+          "path": ".render_type",
+          "error": "added",
+          "modern": "minecraft:translucent"
+        }
+      ]
+    },
+    {
+      "path": "block/jar_normal.json",
+      "legacy_sha": "7781abb1c0bec15286265530cb2f984dedcf6698",
+      "modern_sha": "dc22cdeef9cda1c3216c72d28b932c1b3fa93dde",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".render_type",
+          "error": "added",
+          "modern": "minecraft:translucent"
+        }
+      ]
+    },
+    {
+      "path": "block/jar_normal_100.json",
+      "legacy_sha": "eb572f47c5f2ea6ce1c9e99f4fbea264d8f68262",
+      "modern_sha": "eb572f47c5f2ea6ce1c9e99f4fbea264d8f68262",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/jar_normal_25.json",
+      "legacy_sha": "cfcac91aaa5f00d1b71e47ecba65569086445322",
+      "modern_sha": "cfcac91aaa5f00d1b71e47ecba65569086445322",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/jar_normal_50.json",
+      "legacy_sha": "c860329d5b4dc402fadc546eabe5f3424141aa05",
+      "modern_sha": "c860329d5b4dc402fadc546eabe5f3424141aa05",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/jar_normal_75.json",
+      "legacy_sha": "efa688e16fb56fe1073f6509bf61b5d4951a9ff0",
+      "modern_sha": "efa688e16fb56fe1073f6509bf61b5d4951a9ff0",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/jar_void.json",
+      "legacy_sha": "b7004bf00f8468289ec77cecd80290cbf6e5b29c",
+      "modern_sha": "1315acce34ada84e5905afc5288c6f8f3752121f",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".render_type",
+          "error": "added",
+          "modern": "minecraft:translucent"
+        }
+      ]
+    },
+    {
+      "path": "block/jar_void_100.json",
+      "legacy_sha": "6907723c035249f4a92010662ba8fd59625b87de",
+      "modern_sha": "6907723c035249f4a92010662ba8fd59625b87de",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/jar_void_25.json",
+      "legacy_sha": "0d6e4926f24fd95526ecfdc95a158091648e33b6",
+      "modern_sha": "0d6e4926f24fd95526ecfdc95a158091648e33b6",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/jar_void_50.json",
+      "legacy_sha": "ae892b6593f0b80ea1a137923c19762ff7079d08",
+      "modern_sha": "ae892b6593f0b80ea1a137923c19762ff7079d08",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/jar_void_75.json",
+      "legacy_sha": "20467a5c26560604a3165cc61d5c1e54d392145c",
+      "modern_sha": "20467a5c26560604a3165cc61d5c1e54d392145c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/lamp.json",
+      "legacy_sha": "c6f88ecb98f6cb6880870ecfd6bb379048254a77",
+      "modern_sha": "226dc06a6911f9b35fe78428e1a8c360f4501426",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/lamp_stand.json",
+      "legacy_sha": "b8d970388ff633248ee8b9d9595f8b405af465e5",
+      "modern_sha": "2e74ff0c72873ba4af46025c35976320cfd5e356",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/levitator_off.json",
+      "legacy_sha": "3bf7884aef8035de1fb8bdda188acd1c4cc6552a",
+      "modern_sha": "0ea26d05cbde0c433e3ebce53364984b7a1be7fd",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/levitator_on.json",
+      "legacy_sha": "a85c02e50615fc61a07cf10712cf85abd84eb48e",
+      "modern_sha": "4dd617740aa7034f0e1a42e407f5778ced4be24d",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/log_taintwood.json",
+      "legacy_sha": "5313b436a7e144e5287c4597c194eee032ed1920",
+      "modern_sha": "5e2d2248b3b9305aa9e75123bdc5d53d11425d07",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/loot_crate_common.json",
+      "legacy_sha": "851a555f64aa1af182c930840bdf4f0e1b2bbad0",
+      "modern_sha": "26ab5eb0e2b782cefd884cd332109eb185e89a6a",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/loot_crate_rare.json",
+      "legacy_sha": "3aaf220490f2cba3771889372f87f7e17635fd81",
+      "modern_sha": "fa50f1a1f820ddf94d4b9b3924ca78daef9f428e",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/loot_crate_uncommon.json",
+      "legacy_sha": "d4fd5219023856c126b8ad495f45bbe7d87a9cba",
+      "modern_sha": "f6983f9fa3f823944818b6be3706362ba5dd53c6",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/loot_urn_common.json",
+      "legacy_sha": "cb315e35fd7e3582acfdbed84c6a8aa8e8073602",
+      "modern_sha": "ec6e775d7385e19d65c5eaea7e329c40bb4d9cc1",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/loot_urn_rare.json",
+      "legacy_sha": "1bbbed55eeced221659c54b68bc893b562bf3202",
+      "modern_sha": "90a67220970180d3691467c9cbef8dde7d6d2bc3",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/loot_urn_uncommon.json",
+      "legacy_sha": "b9e9f499639962b2798cfc70607f8ebfa2027042",
+      "modern_sha": "b5555b076fac6656f4f4393f306ac53ef9d41911",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/pattern_crafter.json",
+      "legacy_sha": "8824ea80642c2254746f4bd0d719eaa1b7bd1c68",
+      "modern_sha": "5c5a6da363873909c7f705dd1ba5565456aca025",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.side",
+          "error": "value_changed",
+          "legacy": "blocks/hopper_outside",
+          "modern": "minecraft:block/hopper_outside"
+        },
+        {
+          "path": ".textures.top",
+          "error": "value_changed",
+          "legacy": "blocks/hopper_top",
+          "modern": "minecraft:block/hopper_top"
+        },
+        {
+          "path": ".textures.inside",
+          "error": "value_changed",
+          "legacy": "blocks/hopper_inside",
+          "modern": "minecraft:block/hopper_inside"
+        },
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/pattern_crafter_inv.json",
+      "legacy_sha": "065aae22ccdd47451cbaeae0497f2c472dcf8f5d",
+      "modern_sha": "427b085799cb81a8c629008f00829b039d8c4b5c",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.side",
+          "error": "value_changed",
+          "legacy": "blocks/hopper_outside",
+          "modern": "minecraft:block/hopper_outside"
+        },
+        {
+          "path": ".textures.top",
+          "error": "value_changed",
+          "legacy": "blocks/hopper_top",
+          "modern": "minecraft:block/hopper_top"
+        },
+        {
+          "path": ".textures.inside",
+          "error": "value_changed",
+          "legacy": "blocks/hopper_inside",
+          "modern": "minecraft:block/hopper_inside"
+        },
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/paving_stone_barrier.json",
+      "legacy_sha": "ae62eb966f20d6a1beff599fc2d85d4b0b377a3d",
+      "modern_sha": "5dcfbe16777b81a6c44abb171a2cc096640dcd40",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/paving_stone_travel.json",
+      "legacy_sha": "6c260ea44e085ad7bcdea28e7fa45da8b1b02cce",
+      "modern_sha": "42734c79a56224fe5c393b5a14228716642c870e",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/pedestal_ancient.json",
+      "legacy_sha": "9b1809914b92a77d469d598546e8388239f244ee",
+      "modern_sha": "f94212fec7e16aa8914d8ce3eaed35664152d6cc",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/pedestal_eldritch.json",
+      "legacy_sha": "0e64e87e7e52d0dd61eead474bf5e72aa826f101",
+      "modern_sha": "b233be7f01de09259313892340d227a4b81de090",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/pedestal_normal.json",
+      "legacy_sha": "0905f901cd3f512dd211f5f6f9ca740e61b93315",
+      "modern_sha": "791d0f6bd7d7f58d0674951150321de88541e236",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/recharge_pedestal.json",
+      "legacy_sha": "0902cd0262c3f137141fcf0b5ea15954cc0efc0a",
+      "modern_sha": "b69fe16659f3dc0e0a7d04888ae11ea70b838506",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/redstone_relay_off.json",
+      "legacy_sha": "8b36516f667aa4496e7c3d5142a73dd5ad5e9687",
+      "modern_sha": "5587012a11c0b8df28e245f341ac8d4b6297f3e3",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.torch",
+          "error": "value_changed",
+          "legacy": "blocks/redstone_torch_off",
+          "modern": "minecraft:block/redstone_torch_off"
+        },
+        {
+          "path": ".textures.slab",
+          "error": "value_changed",
+          "legacy": "blocks/stone_slab_top",
+          "modern": "minecraft:block/smooth_stone"
+        },
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/redstone_relay_on.json",
+      "legacy_sha": "073116168012ab63f0b59d0dfee665a7805dac4b",
+      "modern_sha": "d86641aefb6b839617a8949c55e1d346596534a3",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.torch",
+          "error": "value_changed",
+          "legacy": "blocks/redstone_torch_on",
+          "modern": "minecraft:block/redstone_torch"
+        },
+        {
+          "path": ".textures.slab",
+          "error": "value_changed",
+          "legacy": "blocks/stone_slab_top",
+          "modern": "minecraft:block/smooth_stone"
+        },
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/research_table.json",
+      "legacy_sha": "97e47827e46142a5e728d9ff8b8d894358a5a7c1",
+      "modern_sha": "0bb622a5d576be47986b96e11d5be71ae026e845",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/silverwood_inner_stairs.json",
+      "legacy_sha": "4385adcedaa135ce8824be9fdcba0790f657e9bf",
+      "modern_sha": "7f8cb397aa9d2471244741e3c3af72106747d5a2",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/silverwood_outer_stairs.json",
+      "legacy_sha": "71b372ad10c7180a53f3f3e3eab31c891eb9cf40",
+      "modern_sha": "119a0f88cb094924349b5a75b740a0a5da077a19",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/silverwood_stairs.json",
+      "legacy_sha": "bd9468cc2e30daf30a7724d7552476b35fb6ee35",
+      "modern_sha": "4a373156243225e0a22c22b308b894600b555600",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/smelter_aux.json",
+      "legacy_sha": "b12676609440d5c240813b98324c04eda658d44e",
+      "modern_sha": "7738e61979e3ffef54cde50671e7a96639813eff",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/smelter_basic_off.json",
+      "legacy_sha": "d8b2546c1906bbed2c19a2bd1f4788803e3d0b2f",
+      "modern_sha": "2346d61f644e9f05d66a1bdf47611e0c700fb557",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.down",
+          "error": "value_changed",
+          "legacy": "blocks/furnace_top",
+          "modern": "minecraft:block/furnace_top"
+        }
+      ]
+    },
+    {
+      "path": "block/smelter_basic_on.json",
+      "legacy_sha": "065d500bea47475d9ebe5213867e3e1d3a031ec6",
+      "modern_sha": "66191469074e94acbbaf4ac4ba0688ab30854185",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.down",
+          "error": "value_changed",
+          "legacy": "blocks/furnace_top",
+          "modern": "minecraft:block/furnace_top"
+        }
+      ]
+    },
+    {
+      "path": "block/smelter_thaumium_off.json",
+      "legacy_sha": "933d2ec19fc855bd4b32c977c16117481fddeab8",
+      "modern_sha": "3f50a9f71b7eb5e454659621316d1c0a304b000b",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/smelter_thaumium_on.json",
+      "legacy_sha": "ee1dae0a31d375435c1c96c6244a1d674f96da3d",
+      "modern_sha": "6f67ff323d6dd6e02415ad2c2c15dc64d0d2216b",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/smelter_vent.json",
+      "legacy_sha": "9c9292de3ebefd67eb9b1b8c6f06969346609a62",
+      "modern_sha": "1983367c732e4eada1215cccbac9fe53faa70908",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/smelter_void_off.json",
+      "legacy_sha": "17e3c281f8c1457740611647699c7d1eb3741e9a",
+      "modern_sha": "2febf20a7d9c869045953501969bbd58ec7ad554",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/smelter_void_on.json",
+      "legacy_sha": "e8f9e3b5f5f1f82583686e3484796125f1e0f1fb",
+      "modern_sha": "e9d1bb6750580ead278c0c80321624669da9b257",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/stabilizer.json",
+      "legacy_sha": "ce8ac174a1179a32a8ba826a37ef12e19d441c2f",
+      "modern_sha": "6398776ae4169e53210db169bac40a0289374a89",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/table_stone.json",
+      "legacy_sha": "f2cd2d1adcbbcbb494cd6c8085a63f6d580d98ac",
+      "modern_sha": "379485396cea4b3a7153124db2925921be8fb35f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/table_wood.json",
+      "legacy_sha": "7563f26f9ed05ba665df378c3a5084d0ff4fca44",
+      "modern_sha": "7c4279e5e2cceebcb8228e76a2f824a41d0df656",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/taint_fibre.json",
+      "legacy_sha": "ae6d764f49a7956bc47c4e26318f18cf58b7e9ec",
+      "modern_sha": "2a6409a2b8eb87cbe40fa467098816e24397239c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/taint_growth_1.json",
+      "legacy_sha": "4b8885a5c2d487b523efba496f1deb3e07e87845",
+      "modern_sha": "3d289699cc87c34f4edfbb893c372640337fdab5",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/taint_growth_2.json",
+      "legacy_sha": "c952a524287ad2338e55533bc207dab1177de606",
+      "modern_sha": "6ae788fb0c905ccb23d66a81cd2e2e766486cccf",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/taint_growth_3.json",
+      "legacy_sha": "c0b02395106aef4556c7d9604c02e999d271da42",
+      "modern_sha": "6ba129a893c39bcd5ef7f42300fe85173dcb3a81",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/taint_growth_4.json",
+      "legacy_sha": "ed6ea71c0bcd2205512fe75737416b5459343ae4",
+      "modern_sha": "c881c19aafc68ca77d169ea63f11491de5b37444",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/taint_orb_0.json",
+      "legacy_sha": "c5938a0c171915f46c277cfa2be9bec433870cc3",
+      "modern_sha": "8c81ef6a251edb20dfeef6b15d9311fa07a57a27",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/taint_orb_1.json",
+      "legacy_sha": "32e5c918388a3e5ef91ec9e2db446b998b9f492d",
+      "modern_sha": "cbf24629e5725d2d594072187c39e53876a74feb",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/taint_orb_2.json",
+      "legacy_sha": "a284e9f46d914c3c72bfa399714b73e20f39c689",
+      "modern_sha": "6099490a65aba2bd6c5b32f4ceebf5a03a180b6d",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/tube_buffer_core.json",
+      "legacy_sha": "b90c8f57457138176e3f88eb474fd11ab9796e27",
+      "modern_sha": "578ea1244837b32262360205482c51004539a1fc",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/tube_core.json",
+      "legacy_sha": "b65ba5db0e96efa535b9dc8b1ba0dde2c504d060",
+      "modern_sha": "2771f4457f37ed0d8d6c8f054583ad88e4d18f58",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/tube_core_valve.json",
+      "legacy_sha": "16fddb00949ff1b00a12ad4e06ee112aa5847b15",
+      "modern_sha": "58f5633ea2e84e9f8e31efcf3ba2ff99721c34d1",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/tube_filter_core.json",
+      "legacy_sha": "ee39d2f240db3d595ee8e82649a5a54828998619",
+      "modern_sha": "13d718e1dd4e5994ce07781de5bc7d1d07674bfe",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/tube_side.json",
+      "legacy_sha": "85482b9b86b7d4e1da14aa2aa54b147766b79e36",
+      "modern_sha": "0640dfe97a2ea29b3a14f2ede7659d3810860d4c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/tube_side_restrict.json",
+      "legacy_sha": "81a33f7054b026b3734300706a49d2e12a2637bf",
+      "modern_sha": "5f3701e2de690a2d594c3604b164243b28bb5090",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "block/vis_generator.json",
+      "legacy_sha": "fad93e35990eafdaa97241911feeb4a6a419839c",
+      "modern_sha": "9d93e1aac4ffee5f9ff1e88188994128526da1fc",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/void_siphon.json",
+      "legacy_sha": "249f381954ce005b8808dc13f6f628e94f7051a8",
+      "modern_sha": "90dc05d517bc21b4e8d713538bc818e2550eb292",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "error": "added",
+          "modern": "minecraft:block/block"
+        }
+      ]
+    },
+    {
+      "path": "block/wand_workbench.json",
+      "legacy_sha": "714e3620ed5ebaeeb7be9b5a2f0a7268cf73ebcd",
+      "modern_sha": "942bb737e655085f22b92de22d8c0e7e4314c3d5",
+      "normalized_equal": true,
+      "diffs": []
+    }
+  ],
+  "item_models": [
+    {
+      "path": "item/activator_rail.json",
+      "legacy_sha": "d35e9d6999205c7aa0d94e96792b7e5cc313c0f2",
+      "modern_sha": "eb4c7246ced71d46aaaaeb505b6e36983d4dc0a2",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/alumentum.json",
+      "legacy_sha": "604e29a40f4b5381696dd4e8c9f03ee639010c45",
+      "modern_sha": "aee1e62540c81bb6d13abc2cd8c10df39a756fa6",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/amber.json",
+      "legacy_sha": "603bc85ab4dd989708f87c2ef4e78450f47a5b2e",
+      "modern_sha": "8b5d208054708b3e78e0e5c185a2e270d104b585",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/ancient_stairs.json",
+      "legacy_sha": "a2035a2fba475f115a85fe1df473cc0aa8f5637e",
+      "modern_sha": "a2035a2fba475f115a85fe1df473cc0aa8f5637e",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/arcane_brick_stairs.json",
+      "legacy_sha": "04c9041cda7c2c07f5e22b58c3a5013dfebfb407",
+      "modern_sha": "04c9041cda7c2c07f5e22b58c3a5013dfebfb407",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/arcane_stairs.json",
+      "legacy_sha": "51de13863dff55fae7ac34b093ac98efa77f6ead",
+      "modern_sha": "51de13863dff55fae7ac34b093ac98efa77f6ead",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/banner.json",
+      "legacy_sha": "70896a05feec1c6d352bedc78e28f0079f1cb677",
+      "modern_sha": "ab0580d3f8c744677293ce15aef9b152a9b25f61",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/banner_crimson_cult.json",
+      "legacy_sha": "1799cdfeccb61fc6efb369711f039d7048ae7d78",
+      "modern_sha": "6e45b50420f6be7efb61cf9c5f8462c0a8bcae49",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/bath_salts.json",
+      "legacy_sha": "4028f644e3db9ea2cf0979ebdc55e1c257e9e16c",
+      "modern_sha": "5e2a261ab97e3b0a6ef180e8908cb5db61e97b0c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/bottle_taint.json",
+      "legacy_sha": "9eb9c5bf6b06046cc0a759bed6584490a9628e8f",
+      "modern_sha": "48ab0e32721ce1cd309a7660d9cdc41cc77ac328",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/brain.json",
+      "legacy_sha": "6b02424ac55d6ec3d9ce37f5a7a4f8f013a1ec88",
+      "modern_sha": "f33ba2f650b0621b661ef7ad54f21cf566807892",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/bucket_death.json",
+      "legacy_sha": "bf3df4472eaa6d8c1b91d8aa479fff3915748ddd",
+      "modern_sha": "1f1be309d80a88da67bb4a344167040e95712c69",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/bucket_pure.json",
+      "legacy_sha": "1a1414c6575c006ed6c5833f9e30cb43e39276c0",
+      "modern_sha": "285d4ee7078db6e3583575ebf5cdc74a727ac645",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.layer0",
+          "from": "thaumcraft:items/bucket_pure",
+          "to": "minecraft:item/water_bucket"
+        }
+      ]
+    },
+    {
+      "path": "item/caster_advanced.json",
+      "legacy_sha": "7124b27887236bfdf9e77a250761d49af25b8493",
+      "modern_sha": "7124b27887236bfdf9e77a250761d49af25b8493",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/caster_advanced_focus_model.json",
+      "legacy_sha": "bfe3bc4999b05c075aa5f76fe2963546fa1bafe3",
+      "modern_sha": "ace3ec4bd08c426a1c08f9dcf6c248807c19a8e2",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.skin",
+          "from": "thaumcraft:entity/armor/caster_advanced",
+          "to": "thaumcraft:item/caster_advanced_model"
+        }
+      ]
+    },
+    {
+      "path": "item/caster_advanced_model.json",
+      "legacy_sha": "74669efd4415ffdb6b274282a59b8abe119f7d54",
+      "modern_sha": "3e661be583a07df8ccd350cdfd0ee22f3b6628ab",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.skin",
+          "from": "thaumcraft:entity/armor/caster_advanced",
+          "to": "thaumcraft:item/caster_advanced_model"
+        }
+      ]
+    },
+    {
+      "path": "item/caster_basic.json",
+      "legacy_sha": "89f82e0ebc3e3cf05f771edcace328a47ec4560c",
+      "modern_sha": "ad2a32af2371ed86b3666bfc3c616bbade16cd66",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".overrides[0].predicate.focus",
+          "from": 0,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[0].predicate.thaumcraft:focus",
+          "from": "<missing>",
+          "to": 0
+        },
+        {
+          "path": ".overrides[1].predicate.focus",
+          "from": 1,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[1].predicate.thaumcraft:focus",
+          "from": "<missing>",
+          "to": 1
+        }
+      ]
+    },
+    {
+      "path": "item/caster_basic_focus_model.json",
+      "legacy_sha": "0c728eda9e18acac40cd4686c284ebd061f35296",
+      "modern_sha": "e4eb338ba42806b6c8d7f2cf30a4ca507c904629",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.skin",
+          "from": "thaumcraft:entity/armor/caster_basic",
+          "to": "thaumcraft:item/caster_basic_model"
+        }
+      ]
+    },
+    {
+      "path": "item/caster_basic_model.json",
+      "legacy_sha": "034be7b69a7f98871badeda12daa52b8e500f673",
+      "modern_sha": "b9f562ae3688a5aa8e03ca158d0a6b2b4149011e",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.skin",
+          "from": "thaumcraft:entity/armor/caster_basic",
+          "to": "thaumcraft:item/caster_basic_model"
+        }
+      ]
+    },
+    {
+      "path": "item/caster_gauntlet.json",
+      "legacy_sha": "602537171f7dc3d291e4bbab3c901d0a4ad84b93",
+      "modern_sha": "cb0587acc2bf3be8b00fe50c4a624b06c38848d8",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.skin",
+          "from": "thaumcraft:entity/armor/caster_advanced",
+          "to": "thaumcraft:item/caster_advanced_model"
+        }
+      ]
+    },
+    {
+      "path": "item/caster_gauntlet_focus.json",
+      "legacy_sha": "a2dfcc69c7d22e18d2dfea4124e4c2f498cb086c",
+      "modern_sha": "47926e0936130b15c7a1085bf4b188f343672cbe",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".textures.skin",
+          "from": "thaumcraft:entity/armor/caster_advanced",
+          "to": "thaumcraft:item/caster_advanced_model"
+        }
+      ]
+    },
+    {
+      "path": "item/causality_collapser.json",
+      "legacy_sha": "9d2289b3248559a26a7772a6d87f97082c72c585",
+      "modern_sha": "32068e0519021bd31ad7880132b73e5ca7084c82",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/charm_undying.json",
+      "legacy_sha": "6d8ad21b5e8eb9af7f5d1fda0df77cf26c885ae1",
+      "modern_sha": "f44d09a6ad13788d5528bd3c7104c0f1bd7cdaff",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/cloth_boots.json",
+      "legacy_sha": "c37061c395bab8d41994a05088e53f3d79721267",
+      "modern_sha": "5c3690b32b49fdd6cf5aa539c28fe65a1ea96f79",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/cloth_chest.json",
+      "legacy_sha": "8a0fba70e34060a84a7cd8849440b8ac7152adfb",
+      "modern_sha": "c9781b2fe201007ab745f9cdafc7b41e7f33f508",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/cloth_legs.json",
+      "legacy_sha": "3b624952a48d5972ba76767ddb8dc57ff821632a",
+      "modern_sha": "7f1f34d103da90eac1d8d4870775cdac86f79649",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/cloud_ring.json",
+      "legacy_sha": "bc7d8b681e9a45abe2b907de1947cf02b7f4944a",
+      "modern_sha": "2538ae7478d669d81c545e289209f1d15fbdb6ed",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/condenser_lattice.json",
+      "legacy_sha": "6a13340823cda84e7c8b449ed635c8f1456e2c09",
+      "modern_sha": "6a13340823cda84e7c8b449ed635c8f1456e2c09",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/condenser_lattice_dirty.json",
+      "legacy_sha": "da2d531b20fa2d4ecd54444c7ec678db5909592e",
+      "modern_sha": "da2d531b20fa2d4ecd54444c7ec678db5909592e",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/creative_flux_sponge.json",
+      "legacy_sha": "e6ea77034265ec28b522463042e0daa1716d064f",
+      "modern_sha": "f4935f4bdb0c9d332eb4b88dbcd18b189ae6eb0d",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_blade.json",
+      "legacy_sha": "38f77fa49262b1f97b902e434fe1590751dfd163",
+      "modern_sha": "1ae85beca161a869cb4cf837c59fe6c541d6bf70",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_boots.json",
+      "legacy_sha": "e4366dfd757c4ad7dc6286efada71386b72d2e3a",
+      "modern_sha": "c450acb643aa5b79cdc42423a3ee9512503cded9",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_plate_chest.json",
+      "legacy_sha": "dbffbbdbc45a4e44d741bb9590a0b8a8b6e0e96a",
+      "modern_sha": "41ce65f56d12bc03dfba98f70c3b1518d779e07f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_plate_helm.json",
+      "legacy_sha": "9adab5231a4649347621bdca71fccf0d68149a87",
+      "modern_sha": "6d1f6157564b1e509186f9efc25b03b83edb182a",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_plate_legs.json",
+      "legacy_sha": "1b5711587ebe4aaba8ec20e8e78010f7ce00b0f7",
+      "modern_sha": "c4312649e778db50449b0ad2554a2731ee4ab1c1",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_praetor_chest.json",
+      "legacy_sha": "d6f302014018f7a04cad94f2b4c1c0b6ef540334",
+      "modern_sha": "c0e8da246c1b8234f4b337f0736852a9a9c3b4e2",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_praetor_helm.json",
+      "legacy_sha": "be7435c286134dca89f2786840121af5889c70b1",
+      "modern_sha": "e4321f8f0b4fb239db4715f0040e574bb0096a29",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_praetor_legs.json",
+      "legacy_sha": "3c600554de978c28537667c2ac79e8f7a73c14e1",
+      "modern_sha": "c75af818d54b31e9bec768f309a31b6e7fc8f286",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_robe_chest.json",
+      "legacy_sha": "58452f0b5ede6475e7a396480e708a1026077132",
+      "modern_sha": "bd09b4dc56a03f6aae2b1646530baace2a8272f2",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_robe_helm.json",
+      "legacy_sha": "03a0bc396b0e566a124bd9e0327995a112903784",
+      "modern_sha": "ddc0fe1d4d8d293f4dba1e135f2353c081476275",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crimson_robe_legs.json",
+      "legacy_sha": "7ec4d70d2d34a040aa4489ecd7ec45cbd8f735ab",
+      "modern_sha": "67b0da67e5d6913d63c856acfc1c6e814ef8724f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crystal_aer.json",
+      "legacy_sha": "3dab6f9bf964c2f6bef71c025713c272779af90a",
+      "modern_sha": "a3ea823d05d68798baef57c1e315e572621022be",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crystal_aqua.json",
+      "legacy_sha": "3dab6f9bf964c2f6bef71c025713c272779af90a",
+      "modern_sha": "a3ea823d05d68798baef57c1e315e572621022be",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crystal_ignis.json",
+      "legacy_sha": "3dab6f9bf964c2f6bef71c025713c272779af90a",
+      "modern_sha": "a3ea823d05d68798baef57c1e315e572621022be",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crystal_ordo.json",
+      "legacy_sha": "3dab6f9bf964c2f6bef71c025713c272779af90a",
+      "modern_sha": "a3ea823d05d68798baef57c1e315e572621022be",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crystal_perditio.json",
+      "legacy_sha": "3dab6f9bf964c2f6bef71c025713c272779af90a",
+      "modern_sha": "a3ea823d05d68798baef57c1e315e572621022be",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crystal_terra.json",
+      "legacy_sha": "3dab6f9bf964c2f6bef71c025713c272779af90a",
+      "modern_sha": "a3ea823d05d68798baef57c1e315e572621022be",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/crystal_vitium.json",
+      "legacy_sha": "3dab6f9bf964c2f6bef71c025713c272779af90a",
+      "modern_sha": "a3ea823d05d68798baef57c1e315e572621022be",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/curiosity_band.json",
+      "legacy_sha": "9b8af332fb6d46504e0e9815ebc4654f37d7da8e",
+      "modern_sha": "24b2503953e2970586ddda5fc1e89059189534d1",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/elemental_axe.json",
+      "legacy_sha": "56fae27b91585c0448178309aec87b22104e4dae",
+      "modern_sha": "f60d45c78cd53d0491257698467cff8c27c46f61",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/elemental_hoe.json",
+      "legacy_sha": "9146ea784c5583c2683f22e5f0eac82a81c8917e",
+      "modern_sha": "ff9058ddb9de779ff1913ae2adaa4e3a90bcc92c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/elemental_pick.json",
+      "legacy_sha": "43fef0707e400fe61be60581cc0e20ede24b3b53",
+      "modern_sha": "f798551e168c1d1edd1f61740cbe109ee71ccca2",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/elemental_shovel.json",
+      "legacy_sha": "63df78c712e60db7b304025edec54bd61dda97b0",
+      "modern_sha": "fd34d860ef8cfabd0a4b635de82dd4a1161b57ac",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/elemental_sword.json",
+      "legacy_sha": "faeb61cc2055f793c6a14a36102ec1fc43804f3f",
+      "modern_sha": "557e93a4d1860156942fed12b37938a22b2bceb2",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/enchanted_placeholder.json",
+      "legacy_sha": "bbad4eb425a6740bd7689f3c278888bb1f51df6e",
+      "modern_sha": "a6776284ecf95012b70c4b2c94cbb8e8bd5a7d4f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/fabric.json",
+      "legacy_sha": "d77ccbe14ae6e3a360160bc909275e7998776e79",
+      "modern_sha": "e9798d00c7607ac087a65657c71ccc81ab5bf138",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/filter.json",
+      "legacy_sha": "0450b0f47a1877344082721f342bf9746b784936",
+      "modern_sha": "2b7c8177029c6ecc17083cb12e52de4c44137528",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/focus_1.json",
+      "legacy_sha": "ebe25277a0c6955dc1ddc00ad88d4e48ebe6e335",
+      "modern_sha": "c29d56c2f2ed39e4764bfebf6fc5b1a14b4d3761",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/focus_2.json",
+      "legacy_sha": "88263451d255dcc24a927764f59af858753eab7f",
+      "modern_sha": "d865f2180be356e0ab663d076beba90f7b51e577",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/focus_3.json",
+      "legacy_sha": "e696a3e3eb5f5f67d152c2cf742d0ba4b55f424d",
+      "modern_sha": "2fe92437db6b79e571c82c9eedd2db50514eceb8",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/focus_pouch.json",
+      "legacy_sha": "4e484067eaeac7ac88de58eb963fb9e96d1fbb11",
+      "modern_sha": "a4359fbc8ac1d8ffb42788b29b0dc2d5b0969efe",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/fortress_chest.json",
+      "legacy_sha": "92ac461abdb689bb3319ffac8992c55fa5767311",
+      "modern_sha": "0dfa4805d113ba61d3fd2b87e57aba9d9857ce6b",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/fortress_helm.json",
+      "legacy_sha": "d51f35eaf822092598c5b1089d529a296a0a9757",
+      "modern_sha": "921e1372a48af938d30f4e07057fbf27524a6d11",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/fortress_legs.json",
+      "legacy_sha": "2f0210ae8b37b35686e9b77e0896cfaa9b9a3bcb",
+      "modern_sha": "1aef42d67db1419d72e0ae8725a57851687a0468",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/goggles.json",
+      "legacy_sha": "5472885e2715c4f02a9e05fb38a090a0d032fc5f",
+      "modern_sha": "2b31ea94e55acfd426f6d37bfbccaeabfe97ba0f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/golem.json",
+      "legacy_sha": "ba21f1802272f986ed258418256dc08e20a824ac",
+      "modern_sha": "4504633db353f7023d0d0aeb2be3a561f7c2d747",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/golem_bell.json",
+      "legacy_sha": "af7acabef3b1203763fb41bb7093a03a52942d85",
+      "modern_sha": "7d35f83ce7e07c16dac2fe76cfb80389474f0c90",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/grapple_gun.json",
+      "legacy_sha": "6980c6c0f47bad752224e895c215f574999dc254",
+      "modern_sha": "6980c6c0f47bad752224e895c215f574999dc254",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/grapple_gun_1.json",
+      "legacy_sha": "9d095192e271a5dacefff3baccb95fada0e619b2",
+      "modern_sha": "4890ada9e8f211ca8095f88533e41721bf265a7d",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/grapple_gun_2.json",
+      "legacy_sha": "3bc557088893714389a638aa20654d76a109f458",
+      "modern_sha": "db81bd699946706b342ac135b0716794b1737c72",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/grapple_gun_spool.json",
+      "legacy_sha": "e06d9634366583c31f4866bb91007bc74906a293",
+      "modern_sha": "bfbd7896a5f4f4b3a03160a282f22372bb2d0032",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/grapple_gun_tip.json",
+      "legacy_sha": "2b4c6c2eab68602c130104b047b502fb39141179",
+      "modern_sha": "954a79ba2b2bbc4502c2899cb1f730e6b92b739e",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/greatwood_stairs.json",
+      "legacy_sha": "06b2108a85b2b3b678ee084a9fab566b20d669f9",
+      "modern_sha": "06b2108a85b2b3b678ee084a9fab566b20d669f9",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/hand_mirror.json",
+      "legacy_sha": "08ab89a00c4f999413f4883aae4f75b13ffc35db",
+      "modern_sha": "aae78ef61804bf83dce7ae82c01362d9d81d38b0",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/inlay.json",
+      "legacy_sha": "d43c34c51c199721404bfa577d80118643478719",
+      "modern_sha": "55581ddb33ae8576c553d647af489b73067c7ac4",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/jar_brace.json",
+      "legacy_sha": "06b4a54624423df3031d0d8aa46b1cac5c079fe9",
+      "modern_sha": "bb953a651a4fffa8368d4023c66ff402daafad2d",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/jar_normal.json",
+      "legacy_sha": "98f758215eeed46c892d8756b8750ba7573371fa",
+      "modern_sha": "f799104ef5323ca72b6ac8d76e9cccabab8bafa3",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".overrides[0].predicate.fill",
+          "from": 0,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[0].predicate.thaumcraft:fill",
+          "from": "<missing>",
+          "to": 0
+        },
+        {
+          "path": ".overrides[1].predicate.fill",
+          "from": 1,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[1].predicate.thaumcraft:fill",
+          "from": "<missing>",
+          "to": 1
+        },
+        {
+          "path": ".overrides[2].predicate.fill",
+          "from": 2,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[2].predicate.thaumcraft:fill",
+          "from": "<missing>",
+          "to": 2
+        },
+        {
+          "path": ".overrides[3].predicate.fill",
+          "from": 3,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[3].predicate.thaumcraft:fill",
+          "from": "<missing>",
+          "to": 3
+        },
+        {
+          "path": ".overrides[4].predicate.fill",
+          "from": 4,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[4].predicate.thaumcraft:fill",
+          "from": "<missing>",
+          "to": 4
+        }
+      ]
+    },
+    {
+      "path": "item/jar_void.json",
+      "legacy_sha": "8f2082cf0c8330c2c2898d1069c37050c2cc0e1e",
+      "modern_sha": "f94d8ced611df6d789dbeb51d724cb1f993c8e9d",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".overrides[0].predicate.fill",
+          "from": 0,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[0].predicate.thaumcraft:fill",
+          "from": "<missing>",
+          "to": 0
+        },
+        {
+          "path": ".overrides[1].predicate.fill",
+          "from": 1,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[1].predicate.thaumcraft:fill",
+          "from": "<missing>",
+          "to": 1
+        },
+        {
+          "path": ".overrides[2].predicate.fill",
+          "from": 2,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[2].predicate.thaumcraft:fill",
+          "from": "<missing>",
+          "to": 2
+        },
+        {
+          "path": ".overrides[3].predicate.fill",
+          "from": 3,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[3].predicate.thaumcraft:fill",
+          "from": "<missing>",
+          "to": 3
+        },
+        {
+          "path": ".overrides[4].predicate.fill",
+          "from": 4,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[4].predicate.thaumcraft:fill",
+          "from": "<missing>",
+          "to": 4
+        }
+      ]
+    },
+    {
+      "path": "item/mechanism_complex.json",
+      "legacy_sha": "2b367830fc0ba7680e2b3e6a028bbd8af077fa6a",
+      "modern_sha": "79c16fa97ded17f43f83b181d95409dc6efffc98",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/mechanism_simple.json",
+      "legacy_sha": "086d978bcfbc040eff84ec4861f0a12a6e3d3015",
+      "modern_sha": "b7986972e5018927b8aafbd9aad5f64c072db351",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/mirror.json",
+      "legacy_sha": "1a0f03329d96dbabd6771892b519704fbea8152f",
+      "modern_sha": "b2c8a9d1d85fb2b52487b5c8537ebc04cdcd8160",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/mirror_essentia.json",
+      "legacy_sha": "7256731e002280df5be1b7b7dec5fffeaa1b23d8",
+      "modern_sha": "58633650405b700cf29c3ac59625fe0535ee0cd0",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/mirror_essentia_on.json",
+      "legacy_sha": "cfb6ade08a28cc66edbcbe751f6e0919c01f8fe9",
+      "modern_sha": "edca9f7c55c5429a4f75fcbd4b835c2c7243d10c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/mirror_on.json",
+      "legacy_sha": "75cb3dac984410345616aabaf09aa8552057fe88",
+      "modern_sha": "8e23d661790759b63441236589ff1c258bf128af",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/mirrored_glass.json",
+      "legacy_sha": "2eb45a29cff7625cbbd42ae7628f674cb0b96ce6",
+      "modern_sha": "92a6c83564f594bdd7fba64be0f6a708fe7b62de",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/morphic_resonator.json",
+      "legacy_sha": "be9731b660e48b09746a07953c597d217f45b004",
+      "modern_sha": "dc9f821658c7570359fb91ff8866e82384c5911f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/nitor.json",
+      "legacy_sha": "b77212e3e39dcfb9d48239cfb840fd3f25717e5d",
+      "modern_sha": "a204ae94bd2916a6dfc880a131a9e20e96eed8f5",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/pech_wand.json",
+      "legacy_sha": "2e3d9d66a1bc25d020d1dcbd0cb23a1ffca69f00",
+      "modern_sha": "369e8c8a074a36443c80a0a7db0aa6d450cb512c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/primal_crusher.json",
+      "legacy_sha": "74a563c3115449fb4a7440a87cb82a0937bc85a0",
+      "modern_sha": "98b607345597ff09965c6a94891e2ce5c07a538e",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/primordial_pearl.json",
+      "legacy_sha": "9db6088ce6a6355017aa95031ca0bdf671ddb5f8",
+      "modern_sha": "927890994428f9c1095df23e7ef287378fc09e16",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".overrides[0].predicate.type",
+          "from": 0,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[0].predicate.thaumcraft:type",
+          "from": "<missing>",
+          "to": 0
+        },
+        {
+          "path": ".overrides[1].predicate.type",
+          "from": 1,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[1].predicate.thaumcraft:type",
+          "from": "<missing>",
+          "to": 1
+        },
+        {
+          "path": ".overrides[2].predicate.type",
+          "from": 2,
+          "to": "<missing>"
+        },
+        {
+          "path": ".overrides[2].predicate.thaumcraft:type",
+          "from": "<missing>",
+          "to": 2
+        },
+        {
+          "path": ".textures",
+          "from": "<missing>",
+          "to": {
+            "layer0": "thaumcraft:item/primordial_pearl"
+          }
+        }
+      ]
+    },
+    {
+      "path": "item/primordial_pearl_0.json",
+      "legacy_sha": "3f0add68126e384dd2e3cc319b2b81582fe916a9",
+      "modern_sha": "31cd0331b3e520170c167241344d9dc194efc38f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/primordial_pearl_1.json",
+      "legacy_sha": "417e33a23e044a035c97e89e061c72bf2798c22e",
+      "modern_sha": "4bece5362c0f800a878970b3b5e44b90486d77ec",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/primordial_pearl_2.json",
+      "legacy_sha": "3cb05e1175009296f0bba4d2fed6dd9db4cd2e1e",
+      "modern_sha": "8f78f8fe0f814ce8bac9e9bf3e27c4082048c4d9",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/quicksilver.json",
+      "legacy_sha": "a8c96abd04dc6642694d0fa52a15b94b40dc1385",
+      "modern_sha": "ab8207b8d3ba3f2b83db235f32c5c739fac3f29f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/resonator.json",
+      "legacy_sha": "721a958863f85969e0efe2391386bddade5a71ca",
+      "modern_sha": "8421e31b7f4aee379dcf9410fa49f692be0f4b64",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/salis_mundus.json",
+      "legacy_sha": "9b4dae1801a5d476ebc17b35aa3d12c46ed1cc05",
+      "modern_sha": "2f290afe1d6d90ef37b5e985a54a0839bcfa7774",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/sanity_checker.json",
+      "legacy_sha": "43431310073e3493d88bceb2fb80b357915d702f",
+      "modern_sha": "f6fb703cfaa8c5ada8fcc7f644eb1722974a2d04",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/sanity_soap.json",
+      "legacy_sha": "ddf374b86800f2bed25f9f3284a5b024a35824b4",
+      "modern_sha": "af5230aeeacecb3dba928c68da4f005df7e50c75",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/scribing_tools.json",
+      "legacy_sha": "a24bf8167c25442040f50174d7dde171fcb40fc5",
+      "modern_sha": "a3042e86cd36ff9e308b532448d41139b41b2abf",
+      "normalized_equal": false,
+      "diffs": [
+        {
+          "path": ".parent",
+          "from": "item/handheld",
+          "to": "minecraft:item/generated"
+        }
+      ]
+    },
+    {
+      "path": "item/seal_blank.json",
+      "legacy_sha": "18505842c1d49957c8a58a5e42057ec11814ea38",
+      "modern_sha": "f8548033aeac874e76d986ea353a540e39f504af",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_breaker.json",
+      "legacy_sha": "bcfbedde61f875240a3533734d0b46ca5454ecc0",
+      "modern_sha": "4491641c8623fec199e3d4056752765a43cb2ab1",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_breaker_advanced.json",
+      "legacy_sha": "a53054bef45cf6647b533c5a2d6330892a89a4a8",
+      "modern_sha": "aeed0382fc250782b44e717c1c12e7a95c1a4495",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_butcher.json",
+      "legacy_sha": "91198863876a5bfe6e087d9d836e53858ef6931d",
+      "modern_sha": "bf4ee520f06a8e0842e1ff5d8911954071a687ca",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_empty.json",
+      "legacy_sha": "de7705a95b1addd09fd9cd380739c66ebe653ab3",
+      "modern_sha": "5198df89fdab9c8386e9184b1a0d2038032ac8bd",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_empty_advanced.json",
+      "legacy_sha": "667e5e562cfcbe87796bc08d457e2bcce41a256b",
+      "modern_sha": "8f2f1037d0461b9cda508bb48a6b920cced01858",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_fill.json",
+      "legacy_sha": "a2151e64038d8066335ac830a1c882ae311d0e30",
+      "modern_sha": "8a3e6fed600f9793f92348cc96a596d994ddb674",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_fill_advanced.json",
+      "legacy_sha": "5b6de7c5ed200333d45843c46887393fff628cf5",
+      "modern_sha": "d99efc66c6939e85ded6005f6c9c5adcbc9ce8dc",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_guard.json",
+      "legacy_sha": "d610671b2e9269441c1659ee4f5f4a646a9ca06c",
+      "modern_sha": "00c27cb16fc2429bcd5b6b00de58837eb521fa9d",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_guard_advanced.json",
+      "legacy_sha": "ce45724e72f8be831e0eda226dabdac888573e30",
+      "modern_sha": "30b4d87cb7c0642984e7d038187c02333f591459",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_harvest.json",
+      "legacy_sha": "66f4bf95951d65b2c500b010b7e67e190f14b8ff",
+      "modern_sha": "46d67e1c92407f2943dcacc79c5d5da709eabb18",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_lumber.json",
+      "legacy_sha": "12bd138a4b8250ac01944cfe237820f1a7e83eb0",
+      "modern_sha": "cbf26b2ffdad51595c7d949256862cde9a3fe301",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_pickup.json",
+      "legacy_sha": "4bc5ba7f5288cba43862babb952f1f64463823df",
+      "modern_sha": "7e99eb21c0d0b99b5fbaf2e5048c5d74d76f34c2",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_pickup_advanced.json",
+      "legacy_sha": "f6f2839612ee662f3aee1c208da346acb8bf5448",
+      "modern_sha": "715c69c1364a085bc87d69b0133563ef8d0d8330",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_provider.json",
+      "legacy_sha": "392cff3536fa38d7059553d86d95b1c70699c369",
+      "modern_sha": "97689e428ed4b6ae9b3f7fa1405108e589845ac3",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_stock.json",
+      "legacy_sha": "1ad6d115bba6cd4e3d399ebbca038ba3a0b2f6a6",
+      "modern_sha": "36c1bf4ae462d7de5d77b67e94ba6daca62a078c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/seal_use.json",
+      "legacy_sha": "2282d67498bb2b674b6f28c7dc9422e07799efc2",
+      "modern_sha": "3eb4518a451a521bb3a21442acff4b8f37df091c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/silverwood_stairs.json",
+      "legacy_sha": "044b412d80fc7d4fc5beefc72d85657955a1db6e",
+      "modern_sha": "044b412d80fc7d4fc5beefc72d85657955a1db6e",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/taint_fibre.json",
+      "legacy_sha": "1089d99a0ef0f9e6c59c697bd63048fbcee62bc9",
+      "modern_sha": "cd78fcdfd1a61db8cf236260b7ddca539fe4d2b4",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/tallow.json",
+      "legacy_sha": "f8e4a1a0de42a1c086f6bd566accb439f9a57bde",
+      "modern_sha": "565c3c23df087273e7f2a216c9537956d6519b00",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/thaumium_axe.json",
+      "legacy_sha": "0bfe341a97664318bffafe114cf2afdbb83a9bcf",
+      "modern_sha": "feba483b267e7561c159cba7559deefea515141d",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/thaumium_boots.json",
+      "legacy_sha": "89ddbc00be73d83dead05271e39b76d4aace088c",
+      "modern_sha": "7f63fec65e0617fea1809944367627ed5f50994f",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/thaumium_chest.json",
+      "legacy_sha": "2a252fb11e6fd2272498c19b630c9884cd6c9bbf",
+      "modern_sha": "a2e6902317e2e0e286982d4e0460988e5b2fcbf9",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/thaumium_helm.json",
+      "legacy_sha": "f9eef767e1d808b7255d82afe20bffcaf023ff83",
+      "modern_sha": "620569ef3db8711ad1461118102812a2fc4950ad",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/thaumium_hoe.json",
+      "legacy_sha": "b85857c2105a4bdf71d706313a99ce5271740088",
+      "modern_sha": "72474db68ec2cebfb0839e9d44e10584d06260b7",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/thaumium_legs.json",
+      "legacy_sha": "326881acb9d455aaef41f39a27236c70fa51a7ef",
+      "modern_sha": "f805f60b5ea2960c235ba2872fa0f1c44a6839b9",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/thaumium_pick.json",
+      "legacy_sha": "efdb5cdac8f5d23c7b36265b372681b3a4b72cde",
+      "modern_sha": "a2b429239813a885729154282c554ee0e40cfa80",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/thaumium_shovel.json",
+      "legacy_sha": "980878c365b81a8beef289e404709f87b973dcb0",
+      "modern_sha": "65141a8fd813668d4126c9ab3c8aee81d4c8553b",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/thaumium_sword.json",
+      "legacy_sha": "cf0a0700201770ac9ad09b0080d1bbf35dccbff5",
+      "modern_sha": "3d5c409470f9bd8b0b851b9cc27472df75e613b0",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/traveller_boots.json",
+      "legacy_sha": "a0f4b8b032bc76caa5cb84e50b2de4934edcd12d",
+      "modern_sha": "b33714a33435e9fb7068411837cb96bae0b0fc94",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/triple_meat_treat.json",
+      "legacy_sha": "386c0fa3348c8d0c706615600c857512900ef089",
+      "modern_sha": "f266033bafbcc7b1267af42dbf60859aa6592d8b",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/tube.json",
+      "legacy_sha": "25140cd79ddd5e4feeaf4c1a99327e33d354b231",
+      "modern_sha": "199b4dfb0ac99cb60f4df96e3c2b880596b0ec80",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/tube_buffer.json",
+      "legacy_sha": "fb3c45cf0fc5efe7d04373c6ec8f82955c107efa",
+      "modern_sha": "bad52d1110b32ae9a191340eabb708dbe4535c98",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/tube_filter.json",
+      "legacy_sha": "b935bb4cfbf891ad183e301a0e9ed73b2a9231bc",
+      "modern_sha": "83d3bc6d53330e0cf3928ae351b11c1e1309a9bb",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/tube_oneway.json",
+      "legacy_sha": "59dbfe1cb42c8ed2841a093b273cb72d52c89cbf",
+      "modern_sha": "d6bb83fd32c53f664026ab99ac8e9aa0cb507967",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/tube_restrict.json",
+      "legacy_sha": "83db273d4855d219248e26153753754ff336181e",
+      "modern_sha": "681a3ad649ee7226972aab0767db23fc6f993ae8",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/tube_valve.json",
+      "legacy_sha": "e613047c38fcb939d35e02f1267bcfa1fa3c747c",
+      "modern_sha": "70666bd920a7ecdd4f80b89a4e7e9c90d5ea31e0",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/verdant_charm.json",
+      "legacy_sha": "cbd822b9c2b79c93aff10982c04698c405b944e5",
+      "modern_sha": "cbd822b9c2b79c93aff10982c04698c405b944e5",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/verdant_charm_0.json",
+      "legacy_sha": "d499a062728f7711dd2fbb3a2936e0568ca51b41",
+      "modern_sha": "3c34d94b59b5b15572912b4b64ba00a31d62e288",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/verdant_charm_1.json",
+      "legacy_sha": "96f123095e541c09e4765b9f75c4b2c615151d89",
+      "modern_sha": "4cbae56d45d5310a45a45061c2c7c04d3ade49a8",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/verdant_charm_2.json",
+      "legacy_sha": "a605039dec8222d5fc5cfe64e37c23c77f428ecc",
+      "modern_sha": "38731bcae2c19e6433dcad5cad44306e758995df",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/vis_resonator.json",
+      "legacy_sha": "577f868dd62b76831fd96af34646e8027b92771a",
+      "modern_sha": "46a532beb526c8995dfd999662943cba1538b060",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_axe.json",
+      "legacy_sha": "1be4458bedd9819415d455e6cfa6d2fc07ad96f6",
+      "modern_sha": "f476eed973c35ed66c7bdafb06276b2e76bc8f08",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_boots.json",
+      "legacy_sha": "a56170b2cebae4c811611b564d7634646d6d0d2e",
+      "modern_sha": "2766921999b763de7c5702527ee81ac0ccb7bd21",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_chest.json",
+      "legacy_sha": "77e6125a820e08ffb4842575b8d93a74b13db63c",
+      "modern_sha": "d371b3097e54f19290f96388b66ca178073ccb85",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_helm.json",
+      "legacy_sha": "feef2fed7cbd47a7e580236c881a8652ffb2dd55",
+      "modern_sha": "15ae5c526f5d51df40c297868cb188d53f22745c",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_hoe.json",
+      "legacy_sha": "0daf2a29836a7c863a0d804f95442980a0a1a7d9",
+      "modern_sha": "06d55a0144523ff7e3e266103181d09873f0c094",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_legs.json",
+      "legacy_sha": "41b76270585ebbf71cadd978572df2ad2d229a7c",
+      "modern_sha": "3e1a0168503108b45390a6fe7baed3a8789fed10",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_pick.json",
+      "legacy_sha": "41e5ed7e60d907f0d3df0363bb2b336f0c5a9cd7",
+      "modern_sha": "9cede29089e7e44ab0f14bb99304c613b5a83af9",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_robe_chest.json",
+      "legacy_sha": "1cd1c7a9913a97d7210ea86746d784bd332a8132",
+      "modern_sha": "e88cf028ddf3c5520e4c4c788b4d27978ea2a963",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_robe_helm.json",
+      "legacy_sha": "06c9869ce2b84b8d9037ea1abd99afbff4bbc54f",
+      "modern_sha": "e5eea00c72e89157845539c7901bad2916618519",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_robe_legs.json",
+      "legacy_sha": "66e70e2f548ce5e2314d5031e564345a680ee097",
+      "modern_sha": "094f059fdb52c00402270f13f2d53339d10ffca9",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_seed.json",
+      "legacy_sha": "e2389d403f6cf025c8dbda0f8cd77a54f7e2c4e1",
+      "modern_sha": "04523c8f2dd343f2e45588919914b8bab59afccc",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_shovel.json",
+      "legacy_sha": "ddb2b66bf7ed42e24ffdb10ad4eebc79858644f5",
+      "modern_sha": "6aade09f2c834b4f1aea224b9759f5b4a63cac5d",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/void_sword.json",
+      "legacy_sha": "5b6a2c4bc4ffae009583c8cb073fd3c1f3bc321f",
+      "modern_sha": "5481ed3e5ca08f92bf74050f24d2949bc4f620f9",
+      "normalized_equal": true,
+      "diffs": []
+    },
+    {
+      "path": "item/voidseer_charm.json",
+      "legacy_sha": "48f1412f802fa902a26af8a134e3a85e985c225b",
+      "modern_sha": "134389fc7192bd9807818f4b07957ac9be43fae3",
+      "normalized_equal": true,
+      "diffs": []
+    }
+  ],
+  "obj_models": [
+    {
+      "path": "block/arcane_workbench_charger.obj",
+      "legacy_sha": "ae3725748dcfb2e6a24f8e86ea0229360c8774b6",
+      "modern_sha": "ae3725748dcfb2e6a24f8e86ea0229360c8774b6",
+      "same": true
+    },
+    {
+      "path": "block/golembuilder.obj",
+      "legacy_sha": "c07eaecc0c1b295fa630c4600836490fc658345b",
+      "modern_sha": "c07eaecc0c1b295fa630c4600836490fc658345b",
+      "same": true
+    },
+    {
+      "path": "block/pillar.obj",
+      "legacy_sha": "ff226c1509f025792c349df16043e66939049722",
+      "modern_sha": "ff226c1509f025792c349df16043e66939049722",
+      "same": true
+    },
+    {
+      "path": "block/thaumatorium.obj",
+      "legacy_sha": "fb46782e30ce9f399ec266ef8e0a0f36c19a1033",
+      "modern_sha": "fb46782e30ce9f399ec266ef8e0a0f36c19a1033",
+      "same": true
+    },
+    {
+      "path": "item/scanner.obj",
+      "legacy_sha": "5a61cdff7e004745ae07489a602032a8ce8e4188",
+      "modern_sha": "5a61cdff7e004745ae07489a602032a8ce8e4188",
+      "same": true
+    },
+    {
+      "path": "obj/crossbow_advanced.obj",
+      "legacy_sha": "f2130b8c453e5e046c038c8e2b2516c3773a6ba2",
+      "modern_sha": "f2130b8c453e5e046c038c8e2b2516c3773a6ba2",
+      "same": true
+    },
+    {
+      "path": "obj/crystal.obj",
+      "legacy_sha": "6b87cd2950dea2c96a8066eb5cc68942f9d1ddb7",
+      "modern_sha": "6b87cd2950dea2c96a8066eb5cc68942f9d1ddb7",
+      "same": true
+    },
+    {
+      "path": "obj/golem_armor.obj",
+      "legacy_sha": "fbcaec53a8efc9310910436372afa4bf32884a58",
+      "modern_sha": "fbcaec53a8efc9310910436372afa4bf32884a58",
+      "same": true
+    },
+    {
+      "path": "obj/golem_arms_basic.obj",
+      "legacy_sha": "e2883bce17f1aed8a5fec8bd51bdcf9af31eb6d2",
+      "modern_sha": "e2883bce17f1aed8a5fec8bd51bdcf9af31eb6d2",
+      "same": true
+    },
+    {
+      "path": "obj/golem_arms_breakers.obj",
+      "legacy_sha": "d84ba7bfe55eb199211d6738a07c983d4772a6f0",
+      "modern_sha": "d84ba7bfe55eb199211d6738a07c983d4772a6f0",
+      "same": true
+    },
+    {
+      "path": "obj/golem_arms_claws.obj",
+      "legacy_sha": "c13c0b3dd74272a662e8d6fea4b2c5fba285d8e3",
+      "modern_sha": "c13c0b3dd74272a662e8d6fea4b2c5fba285d8e3",
+      "same": true
+    },
+    {
+      "path": "obj/golem_arms_darter.obj",
+      "legacy_sha": "2bb87147fca8b649885f03978d40d6b4591cc558",
+      "modern_sha": "2bb87147fca8b649885f03978d40d6b4591cc558",
+      "same": true
+    },
+    {
+      "path": "obj/golem_arms_fine.obj",
+      "legacy_sha": "04b173936b04507dbb4bf1398569f63d0a4de044",
+      "modern_sha": "04b173936b04507dbb4bf1398569f63d0a4de044",
+      "same": true
+    },
+    {
+      "path": "obj/golem_base.obj",
+      "legacy_sha": "3bb609ad825f1b17f64bbed98d07149b74964bbc",
+      "modern_sha": "3bb609ad825f1b17f64bbed98d07149b74964bbc",
+      "same": true
+    },
+    {
+      "path": "obj/golem_hauler.obj",
+      "legacy_sha": "1fcd3ef2b906dcaa282d107e9a284341da40a0e1",
+      "modern_sha": "1fcd3ef2b906dcaa282d107e9a284341da40a0e1",
+      "same": true
+    },
+    {
+      "path": "obj/golem_head_basic.obj",
+      "legacy_sha": "80e0a69b18e7491640e62d2b192a5d6a9c764fb4",
+      "modern_sha": "80e0a69b18e7491640e62d2b192a5d6a9c764fb4",
+      "same": true
+    },
+    {
+      "path": "obj/golem_head_scout.obj",
+      "legacy_sha": "dc84ae64b254c909a8fdb48061469662e2ce4e23",
+      "modern_sha": "dc84ae64b254c909a8fdb48061469662e2ce4e23",
+      "same": true
+    },
+    {
+      "path": "obj/golem_head_scout_smart.obj",
+      "legacy_sha": "13ed7b826ff333f2fa203f33d10f3a6455a99833",
+      "modern_sha": "13ed7b826ff333f2fa203f33d10f3a6455a99833",
+      "same": true
+    },
+    {
+      "path": "obj/golem_head_smart.obj",
+      "legacy_sha": "d5735ffbdd4b657853d08bfaf5eb9460dafd38ce",
+      "modern_sha": "d5735ffbdd4b657853d08bfaf5eb9460dafd38ce",
+      "same": true
+    },
+    {
+      "path": "obj/golem_head_smart_armor.obj",
+      "legacy_sha": "098f4cfa1cbb1743a18915a858f8d26c9d090aed",
+      "modern_sha": "098f4cfa1cbb1743a18915a858f8d26c9d090aed",
+      "same": true
+    },
+    {
+      "path": "obj/golem_legs_climber.obj",
+      "legacy_sha": "aa460e784c10e4cfaabfbbecd602cd641caad460",
+      "modern_sha": "aa460e784c10e4cfaabfbbecd602cd641caad460",
+      "same": true
+    },
+    {
+      "path": "obj/golem_legs_floater.obj",
+      "legacy_sha": "71e0729b61f76739182314672c19318711e5534b",
+      "modern_sha": "71e0729b61f76739182314672c19318711e5534b",
+      "same": true
+    },
+    {
+      "path": "obj/golem_legs_walker.obj",
+      "legacy_sha": "29245fa6fdc9a7f0b7e6e2c691844a22a5cd081f",
+      "modern_sha": "29245fa6fdc9a7f0b7e6e2c691844a22a5cd081f",
+      "same": true
+    },
+    {
+      "path": "obj/golem_legs_wheel.obj",
+      "legacy_sha": "206cef06819afb668f85f74114851f06689c1f1e",
+      "modern_sha": "206cef06819afb668f85f74114851f06689c1f1e",
+      "same": true
+    },
+    {
+      "path": "obj/hemis.obj",
+      "legacy_sha": "44566b20e559bacac46d2ce8314d168f7ea5c9a7",
+      "modern_sha": "44566b20e559bacac46d2ce8314d168f7ea5c9a7",
+      "same": true
+    },
+    {
+      "path": "obj/orb.obj",
+      "legacy_sha": "e91ec8a15a785564520b9b4e5eaf9083397aa9ee",
+      "modern_sha": "e91ec8a15a785564520b9b4e5eaf9083397aa9ee",
+      "same": true
+    },
+    {
+      "path": "obj/turret.obj",
+      "legacy_sha": "eff6b7fa95aa89be9f02753fb373aa6822851a72",
+      "modern_sha": "eff6b7fa95aa89be9f02753fb373aa6822851a72",
+      "same": true
+    }
+  ],
+  "mtl_models": [
+    {
+      "path": "block/arcane_workbench_charger.mtl",
+      "legacySha": "b76567186b14318c1263e4973ed526210503aca9",
+      "currentSha": "d8e9eb891a30635b8b0dd1b1213fc71d074b3a0c",
+      "changes": [
+        {
+          "key": "texture.map_Ka",
+          "legacy": "C:\\Thaumcraft\\thaumcraft110\\src\\main\\resources\\assets\\thaumcraft\\textures\\blocks\\arcane_workbench_charger.png",
+          "modern": "thaumcraft:block/arcane_workbench_charger"
+        },
+        {
+          "key": "texture.map_Kd",
+          "legacy": "C:\\Thaumcraft\\thaumcraft110\\src\\main\\resources\\assets\\thaumcraft\\textures\\blocks\\arcane_workbench_charger.png",
+          "modern": "thaumcraft:block/arcane_workbench_charger"
+        }
+      ]
+    },
+    {
+      "path": "block/golembuilder.mtl",
+      "legacySha": "33f73e01ac2f827cbec7f0378d972a890ad03832",
+      "currentSha": "7368a9936f5cf75aaccf164a0f0d4a7b3810bec3",
+      "changes": [
+        {
+          "key": "texture.map_Ka",
+          "legacy": "E:\\Thaumcraft\\thaumcraft110\\bin\\assets\\thaumcraft\\textures\\blocks\\golembuilder.png",
+          "modern": "thaumcraft:block/golembuilder"
+        },
+        {
+          "key": "texture.map_Kd",
+          "legacy": "E:\\Thaumcraft\\thaumcraft110\\bin\\assets\\thaumcraft\\textures\\blocks\\golembuilder.png",
+          "modern": "thaumcraft:block/golembuilder"
+        }
+      ]
+    },
+    {
+      "path": "block/thaumatorium.mtl",
+      "legacySha": "0a6b3a882161955e0bb8e0bfe324670ce7766288",
+      "currentSha": "79abc6f6d64f4153250e8f277d9bbddef82cea31",
+      "changes": [
+        {
+          "key": "texture.map_Ka",
+          "legacy": "C:\\Thaumcraft\\thaumcraft110\\src\\main\\resources\\assets\\thaumcraft\\textures\\blocks\\thaumatorium.png",
+          "modern": "thaumcraft:block/thaumatorium"
+        },
+        {
+          "key": "texture.map_Kd",
+          "legacy": "C:\\Thaumcraft\\thaumcraft110\\src\\main\\resources\\assets\\thaumcraft\\textures\\blocks\\thaumatorium.png",
+          "modern": "thaumcraft:block/thaumatorium"
+        }
+      ]
+    },
+    {
+      "path": "item/scanner.mtl",
+      "legacySha": "506292daa932a5718e6ef37efff6ab93537177ce",
+      "currentSha": "ec8727d98415998c117b128744976c6b41bc8894",
+      "changes": [
+        {
+          "key": "body.map_Ka",
+          "legacy": "thaumcraft:items\\scanner.png",
+          "modern": "#body"
+        },
+        {
+          "key": "body.map_Kd",
+          "legacy": "thaumcraft:items\\scanner.png",
+          "modern": "#body"
+        },
+        {
+          "key": "pane.map_Ka",
+          "legacy": "thaumcraft:items\\scanscreen.png",
+          "modern": "#pane"
+        },
+        {
+          "key": "pane.map_Kd",
+          "legacy": "thaumcraft:items\\scanscreen.png",
+          "modern": "#pane"
+        }
+      ]
+    },
+    {
+      "path": "obj/crystal.mtl",
+      "legacySha": "db5717f9b78d94e7c499557decd3e138f450ef17",
+      "currentSha": "2ad7fba517fdca5d747dd513ed98f6716cd1c59a",
+      "changes": [
+        {
+          "key": "Material__25.Ka",
+          "legacy": "0.5880 0.5880 0.5880",
+          "modern": "1.0000 1.0000 1.0000"
+        },
+        {
+          "key": "Material__25.Kd",
+          "legacy": "0.5880 0.5880 0.5880",
+          "modern": "1.0000 1.0000 1.0000"
+        },
+        {
+          "key": "Material__25.map_Ka",
+          "legacy": "C:\\Thaumcraft\\thaumcraft18\\src\\main\\resources\\assets\\thaumcraft\\textures\\blocks\\crystal.png",
+          "modern": "thaumcraft:block/crystal"
+        },
+        {
+          "key": "Material__25.map_Kd",
+          "legacy": "C:\\Thaumcraft\\thaumcraft18\\src\\main\\resources\\assets\\thaumcraft\\textures\\blocks\\crystal.png",
+          "modern": "thaumcraft:block/crystal"
+        }
+      ]
+    }
+  ],
+  "manual_runtime_gate": [
+    "compare stairs ancient/arcane straight, inner, outer at same lighting (world and item)",
+    "compare fortress helmet mask/goggles, Knight, Leader, Robe, Void Robe on players with motion and first/third person",
+    "compare scribing tools handheld poses, bucket pure icon, thaumometer screen emissive/transparency",
+    "render ambient crystal colors/translucency, Golem Builder, Arcane Workbench Charger and Thaumatorium",
+    "inspect fallback model for empty if actually registered; verify redstone relay if registered"
+  ]
+}
