@@ -13,7 +13,7 @@ import thaumcraft.api.golems.seals.ISealConfigArea;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.tasks.Task;
 
-public class SealProvide extends SealFiltered {
+public class SealProvide extends SealFiltered implements thaumcraft.api.golems.seals.ISealConfigToggles {
     private int delay;
 
     @Override
@@ -26,7 +26,7 @@ public class SealProvide extends SealFiltered {
 
     @Override
     public boolean canPlaceAt(Level level, BlockPos pos, Direction side) {
-        return !level.isEmptyBlock(pos);
+        return level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos, side) != null;
     }
 
     @Override
@@ -40,13 +40,16 @@ public class SealProvide extends SealFiltered {
         var inventory = level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos.pos, pos.face);
         if (inventory == null) return;
         for (var request : requests) {
-            if (request.isInvalid() || request.getLinkedTask() != null || !matchesFilter(request.getStack())) continue;
+            if (request.isInvalid() || request.getLinkedTask() != null) continue;
             BlockPos target = request.getSeal() != null ? request.getSeal().getSealPos().pos
                     : request.getEntity() != null ? request.getEntity().blockPosition() : request.getPos();
             if (target == null || target.distSqr(pos.pos) >= 4096) continue;
             for (int slot = 0; slot < inventory.getSlots(); slot++) {
                 ItemStack available = inventory.extractItem(slot, 1, true);
-                if (!ItemStack.isSameItemSameComponents(available, request.getStack())) continue;
+                if (!request.matches(available) || !matchesFilter(available, request.ignoresMetadata())) continue;
+                if (option("pleave") && countStrict(inventory, available) <= 1) continue;
+                // A wildcard request selects one concrete variant, never a mixed carried stack.
+                request.resolve(available);
                 Task task = new Task(pos, pos.pos);
                 task.setPriority(request.getSeal() == null ? (byte) 5 : request.getSeal().getPriority());
                 task.setLifespan((short)(request.getSeal() == null ? 31000 : 10));
@@ -70,6 +73,8 @@ public class SealProvide extends SealFiltered {
         if (task.getData() == 0) {
             var inventory = level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, source.pos, source.face);
             int needed = Math.min(request.getStack().getCount(), golem.canCarryAmount(request.getStack()));
+            if (option("psing")) needed = Math.min(needed, 1);
+            if (inventory != null && option("pleave")) needed = Math.min(needed, Math.max(0, countStrict(inventory, request.getStack()) - 1));
             int extracted = 0;
             if (inventory != null) {
                 for (int slot = 0; slot < inventory.getSlots() && needed > 0; slot++) {
@@ -120,6 +125,15 @@ public class SealProvide extends SealFiltered {
 
     @Override
     public void onTaskSuspension(Level level, Task task) {
+        var request = task.getLinkedProvision();
+        if (request != null && request.getLinkedTask() == task) request.setLinkedTask(null);
+        task.setLinkedProvision(null);
+    }
+
+    private int countStrict(net.neoforged.neoforge.items.IItemHandler inventory, ItemStack sample) {
+        int count = 0;
+        for (int slot = 0; slot < inventory.getSlots(); slot++) if (ItemStack.isSameItemSameComponents(sample, inventory.getStackInSlot(slot))) count += inventory.getStackInSlot(slot).getCount();
+        return count;
     }
 
     @Override
@@ -159,6 +173,6 @@ public class SealProvide extends SealFiltered {
 
     @Override
     public EnumGolemTrait[] getForbiddenTags() {
-        return new EnumGolemTrait[0];
+        return new EnumGolemTrait[]{EnumGolemTrait.CLUMSY};
     }
 }

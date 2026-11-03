@@ -13,6 +13,8 @@ public class ProvisionRequest {
     private BlockPos pos;
     private Direction side;
     private final ItemStack stack;
+    private boolean ignoreMetadata;
+    private ItemStack resolvedStack = ItemStack.EMPTY;
     private final int id;
     private Task linkedTask;
     private boolean invalid;
@@ -48,7 +50,24 @@ public class ProvisionRequest {
     }
 
     public ItemStack getStack() {
-        return stack;
+        return resolvedStack.isEmpty() ? stack : resolvedStack;
+    }
+
+    public ItemStack getRequestedStack() { return stack; }
+
+    public boolean ignoresMetadata() { return ignoreMetadata; }
+
+    public void setIgnoreMetadata(boolean value) { ignoreMetadata = value; }
+
+    public boolean matches(ItemStack candidate) {
+        return ignoreMetadata
+                ? thaumcraft.common.golems.seals.TCSealItemIdentity.matchesWithoutMetadata(stack, candidate)
+                : ItemStack.isSameItemSameComponents(stack, candidate);
+    }
+
+    public void resolve(ItemStack candidate) {
+        if (!matches(candidate)) throw new IllegalArgumentException("Provision variant does not match request");
+        resolvedStack = candidate.copyWithCount(stack.getCount());
     }
 
     public ISealEntity getSeal() {

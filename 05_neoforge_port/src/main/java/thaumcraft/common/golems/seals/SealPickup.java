@@ -19,6 +19,7 @@ import thaumcraft.common.golems.tasks.TaskHandler;
 public class SealPickup extends SealFiltered implements ISealConfigArea {
 
     private int delay = 0;
+    private final java.util.Map<Integer, Integer> itemTasks = new java.util.HashMap<>();
 
     @Override
     public String getKey() {
@@ -32,16 +33,22 @@ public class SealPickup extends SealFiltered implements ISealConfigArea {
 
     @Override
     public void tickSeal(Level level, ISealEntity seal) {
-        if (delay++ % 10 != 0) return;
+        if (delay++ % 5 != 0) return;
+        itemTasks.entrySet().removeIf(entry -> {
+            var item = level.getEntity(entry.getValue());
+            return item == null || !item.isAlive() || TaskHandler.getTask(level, entry.getKey()) == null;
+        });
 
         AABB area = GolemHelper.getBoundsForArea(seal);
         List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, area);
 
         for (ItemEntity item : items) {
-            if (item.isAlive() && !item.getItem().isEmpty() && matchesFilter(item.getItem())) {
+            if (item.isAlive() && item.onGround() && !item.hasPickUpDelay() && !item.getItem().isEmpty()
+                    && !itemTasks.containsValue(item.getId()) && matchesFilter(item.getItem())) {
                 Task task = new Task(seal.getSealPos(), item);
                 task.setPriority(seal.getPriority());
                 TaskHandler.addTask(level, task);
+                itemTasks.put(task.getId(), item.getId());
                 break;
             }
         }
@@ -68,6 +75,7 @@ public class SealPickup extends SealFiltered implements ISealConfigArea {
 
     @Override
     public void onTaskSuspension(Level level, Task task) {
+        itemTasks.remove(task.getId());
     }
 
     @Override
@@ -91,6 +99,6 @@ public class SealPickup extends SealFiltered implements ISealConfigArea {
 
     @Override
     public EnumGolemTrait[] getForbiddenTags() {
-        return new EnumGolemTrait[0];
+        return new EnumGolemTrait[]{EnumGolemTrait.CLUMSY};
     }
 }

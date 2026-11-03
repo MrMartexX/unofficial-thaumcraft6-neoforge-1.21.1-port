@@ -10,7 +10,7 @@ import thaumcraft.api.golems.seals.ISealConfigArea;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.tasks.Task;
 
-public class SealStock extends SealFiltered {
+public class SealStock extends SealFiltered implements thaumcraft.api.golems.seals.ISealConfigToggles {
     private int delay;
 
     @Override
@@ -29,7 +29,7 @@ public class SealStock extends SealFiltered {
 
     @Override
     public boolean canPlaceAt(Level level, BlockPos pos, Direction side) {
-        return !level.isEmptyBlock(pos);
+        return level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos, side) != null;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class SealStock extends SealFiltered {
             int present = 0;
             for (int slot = 0; slot < handler.getSlots(); slot++) {
                 var stack = handler.getStackInSlot(slot);
-                if (net.minecraft.world.item.ItemStack.isSameItemSameComponents(requested, stack)) present += stack.getCount();
+                if (matchesStack(requested, stack)) present += stack.getCount();
             }
             int missing = Math.min(requested.getMaxStackSize(), getFilterSlotSize(filterSlot) - present);
             if (missing <= 0) continue;
@@ -92,6 +92,6 @@ public class SealStock extends SealFiltered {
 
     @Override
     public EnumGolemTrait[] getForbiddenTags() {
-        return new EnumGolemTrait[0];
+        return new EnumGolemTrait[]{EnumGolemTrait.CLUMSY};
     }
 }

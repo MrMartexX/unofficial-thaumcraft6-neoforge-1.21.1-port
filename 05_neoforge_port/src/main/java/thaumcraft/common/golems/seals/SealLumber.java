@@ -89,12 +89,12 @@ public class SealLumber implements ISeal, ISealGui, ISealConfigArea {
 
     @Override
     public int[] getGuiCategories() {
-        return new int[]{CAT_PRIORITY, CAT_AREA};
+        return new int[]{CAT_AREA, CAT_PRIORITY, CAT_TAGS};
     }
 
     @Override
     public EnumGolemTrait[] getRequiredTags() {
-        return new EnumGolemTrait[]{EnumGolemTrait.BREAKER};
+        return new EnumGolemTrait[]{EnumGolemTrait.BREAKER, EnumGolemTrait.SMART};
     }
 
     @Override

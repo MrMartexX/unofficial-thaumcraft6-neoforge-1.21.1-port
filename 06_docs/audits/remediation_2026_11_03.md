@@ -118,11 +118,13 @@ and unmodified-original resource warnings.
 
 The subsequent [seal/golem/press slice](seal_golem_remediation_2026_11_03.md)
 implements real menu/sync, articulated OBJ rendering, home/follow foundations and
-press extraction compensation. It adds 32 passing server checks and live-client
-menu/cache acknowledgement plus seven rendered captures. The list below is
+press extraction compensation, advanced logistics options and real Breaker mining.
+It adds 53 passing server checks and live-client menu/cache acknowledgement plus
+ten rendered captures. The list below is
 narrowed accordingly; it does not erase that slice's explicit limitations.
 
-- Advanced seal options, flight/climbing navigation and full follow/combat acceptance.
+- Unmapped addon OreDictionary/state metadata, flight/climbing navigation and
+  full follow/combat acceptance.
 - Remote multi-client seal watch/unwatch, reconnect and full logistics acceptance.
 - Measured legacy-frame equality, golem emotes/leashes and through-wall rendering.
 - Full crystal ecology/distribution comparison, including attachment/support
@@ -131,7 +133,7 @@ narrowed accordingly; it does not erase that slice's explicit limitations.
   FX/timing; the basic survival/material/vis/Silk Touch cases above are verified.
 - Strict cross-mod inventory atomicity beyond the now-tested press escrow/refund
   boundary; reinsertion-rejecting handlers use an explicit conservation fallback.
-- Remaining in-world visual scenarios beyond the seven captured golem/menu phases.
+- Remaining in-world visual scenarios beyond the ten captured golem/menu phases.
 - The strict resource triage is recorded in `resource_triage_2026_11_03.md`;
   preserved unregistered reference resources are not active runtime defects.
 

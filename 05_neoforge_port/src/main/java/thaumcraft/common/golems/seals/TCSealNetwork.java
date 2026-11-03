@@ -16,7 +16,7 @@ public final class TCSealNetwork {
     private TCSealNetwork() {}
 
     public static void register(RegisterPayloadHandlersEvent event) {
-        event.registrar("1").playToClient(TCSealSyncPayload.TYPE, TCSealSyncPayload.STREAM_CODEC,
+        event.registrar("2").playToClient(TCSealSyncPayload.TYPE, TCSealSyncPayload.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> {
                     var level = context.player().level();
                     if (!level.isClientSide || !level.dimension().equals(payload.dimension()) || payload.data() == null) return;

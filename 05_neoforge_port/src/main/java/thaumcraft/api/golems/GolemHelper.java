@@ -45,8 +45,13 @@ public class GolemHelper {
     private static final int LIST_LIMIT = 1000;
 
     public static void requestProvisioning(Level level, ISealEntity seal, ItemStack stack) {
+        requestProvisioning(level, seal, stack, false);
+    }
+
+    public static void requestProvisioning(Level level, ISealEntity seal, ItemStack stack, boolean ignoreMetadata) {
         List<ProvisionRequest> list = provisionRequests.computeIfAbsent(level.dimension(), k -> new ArrayList<>());
         ProvisionRequest pr = new ProvisionRequest(seal, stack.copy());
+        pr.setIgnoreMetadata(ignoreMetadata);
         if (refreshExisting(list, pr)) return;
         if (!list.contains(pr)) {
             list.add(pr);
@@ -86,8 +91,9 @@ public class GolemHelper {
                     && existing.getEntity() == proposed.getEntity()
                     && java.util.Objects.equals(existing.getPos(), proposed.getPos())
                     && existing.getSide() == proposed.getSide()
-                    && existing.getStack().getCount() == proposed.getStack().getCount()
-                    && ItemStack.isSameItemSameComponents(existing.getStack(), proposed.getStack())) {
+                    && existing.ignoresMetadata() == proposed.ignoresMetadata()
+                    && existing.getRequestedStack().getCount() == proposed.getRequestedStack().getCount()
+                    && ItemStack.isSameItemSameComponents(existing.getRequestedStack(), proposed.getRequestedStack())) {
                 existing.refreshTimeout();
                 return true;
             }

@@ -51,6 +51,7 @@ public class SealFill extends SealFiltered {
             if (!matchesFilter(carried)) continue;
             ItemStack request = carried.copy();
             if (handler != null) {
+                if (option("pexist") && countMatching(handler, carried) == 0) continue;
                 ItemStack leftover = net.neoforged.neoforge.items.ItemHandlerHelper.insertItemStacked(handler, request.copy(), true);
                 request.setCount(request.getCount() - leftover.getCount());
             }
@@ -80,10 +81,16 @@ public class SealFill extends SealFiltered {
         var pos = task.getSealPos();
         var handler = golem.getGolemWorld().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos.pos, pos.face);
         for (ItemStack carried : golem.getCarrying()) {
-            if (matchesFilter(carried) && (handler == null
+            if (matchesFilter(carried) && (handler == null || !option("pexist") || countMatching(handler, carried) > 0) && (handler == null
                     || net.neoforged.neoforge.items.ItemHandlerHelper.insertItemStacked(handler, carried.copy(), true).getCount() < carried.getCount())) return true;
         }
         return false;
+    }
+
+    private int countMatching(net.neoforged.neoforge.items.IItemHandler handler, ItemStack sample) {
+        int count = 0;
+        for (int slot = 0; slot < handler.getSlots(); slot++) if (matchesStack(sample, handler.getStackInSlot(slot))) count += handler.getStackInSlot(slot).getCount();
+        return count;
     }
 
     @Override
@@ -102,6 +109,6 @@ public class SealFill extends SealFiltered {
 
     @Override
     public EnumGolemTrait[] getForbiddenTags() {
-        return new EnumGolemTrait[0];
+        return new EnumGolemTrait[]{EnumGolemTrait.CLUMSY};
     }
 }

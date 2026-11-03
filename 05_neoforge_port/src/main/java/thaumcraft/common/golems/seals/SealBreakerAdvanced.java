@@ -3,6 +3,10 @@ package thaumcraft.common.golems.seals;
 import net.minecraft.resources.ResourceLocation;
 
 public class SealBreakerAdvanced extends SealBreaker {
+    @Override
+    public thaumcraft.api.golems.EnumGolemTrait[] getRequiredTags() {
+        return new thaumcraft.api.golems.EnumGolemTrait[]{thaumcraft.api.golems.EnumGolemTrait.BREAKER, thaumcraft.api.golems.EnumGolemTrait.SMART};
+    }
 
     @Override
     public String getKey() {

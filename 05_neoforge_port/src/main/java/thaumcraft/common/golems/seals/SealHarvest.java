@@ -131,7 +131,7 @@ public class SealHarvest implements ISeal, ISealGui, ISealConfigArea, ISealConfi
 
     @Override
     public int[] getGuiCategories() {
-        return new int[]{CAT_PRIORITY, CAT_AREA, CAT_TOGGLES};
+        return new int[]{CAT_AREA, CAT_TOGGLES, CAT_PRIORITY, CAT_TAGS};
     }
 
     @Override
@@ -148,7 +148,7 @@ public class SealHarvest implements ISeal, ISealGui, ISealConfigArea, ISealConfi
 
     @Override
     public EnumGolemTrait[] getRequiredTags() {
-        return new EnumGolemTrait[0];
+        return new EnumGolemTrait[]{EnumGolemTrait.DEFT, EnumGolemTrait.SMART};
     }
 
     @Override

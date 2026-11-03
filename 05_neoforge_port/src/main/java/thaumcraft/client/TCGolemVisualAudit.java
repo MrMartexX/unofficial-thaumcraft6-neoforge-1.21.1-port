@@ -40,9 +40,9 @@ public final class TCGolemVisualAudit {
         var mc = Minecraft.getInstance();
         if (!Boolean.getBoolean("tc.golemVisualAudit") || mc.level == null || mc.player == null) return;
         if (started) {
-            if (phase == 7 && testPos != null && SealHandler.getSealEntity(mc.level, new SealPos(testPos, Direction.UP)) == null) {
-                com.mojang.logging.LogUtils.getLogger().info("TC_GOLEM_VISUAL_AUDIT_CAPTURED phases=7 serverMenus=true cacheRemoval=true path={}", OUTPUT.toAbsolutePath());
-                phase = 8;
+            if (phase == 10 && testPos != null && SealHandler.getSealEntity(mc.level, new SealPos(testPos, Direction.UP)) == null) {
+                com.mojang.logging.LogUtils.getLogger().info("TC_GOLEM_VISUAL_AUDIT_CAPTURED phases=10 serverMenus=true ghostClicks=true cacheRemoval=true path={}", OUTPUT.toAbsolutePath());
+                phase = 11;
                 mc.stop();
             }
             return;
@@ -59,7 +59,7 @@ public final class TCGolemVisualAudit {
         frames = 0;
         actionsSent = false;
         if (phase < 2) { mc.setScreen(new ModelSheet(phase)); return; }
-        if (phase < 7) {
+        if (phase < 10) {
             mc.setScreen(null);
             mc.getSingleplayerServer().execute(() -> {
                 var player = mc.getSingleplayerServer().getPlayerList().getPlayer(mc.player.getUUID());
@@ -68,14 +68,29 @@ public final class TCGolemVisualAudit {
                 if (testPos == null) { testPos = player.blockPosition().east(2); supportBefore = level.getBlockState(testPos); }
                 player.closeContainer();
                 SealHandler.removeSealEntity(level, new SealPos(testPos, Direction.UP), true);
-                level.setBlock(testPos, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 3);
-                SealHandler.addSealEntity(level, testPos, Direction.UP, phase == 5 ? new SealGuardAdvanced() : new SealPickup(), player);
+                level.setBlock(testPos, (phase == 8 ? net.minecraft.world.level.block.Blocks.CHEST : net.minecraft.world.level.block.Blocks.STONE).defaultBlockState(), 3);
+                thaumcraft.api.golems.seals.ISeal prototype = switch (phase) {
+                    case 5 -> new SealGuardAdvanced();
+                    case 7 -> new SealUse();
+                    case 8 -> new SealStock();
+                    case 9 -> new SealPickupAdvanced();
+                    default -> new SealPickup();
+                };
+                SealHandler.addSealEntity(level, testPos, Direction.UP, prototype, player);
                 var seal = SealHandler.getSealEntity(level, new SealPos(testPos, Direction.UP));
-                if (seal.getSeal() instanceof ISealConfigFilter filter) filter.setFilterSlot(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_INGOT));
+                if (seal.getSeal() instanceof ISealConfigFilter filter) {
+                    var icons = new net.minecraft.world.item.Item[]{net.minecraft.world.item.Items.IRON_INGOT, net.minecraft.world.item.Items.GOLD_INGOT,
+                            net.minecraft.world.item.Items.COPPER_INGOT, net.minecraft.world.item.Items.AMETHYST_SHARD, net.minecraft.world.item.Items.DIAMOND,
+                            net.minecraft.world.item.Items.EMERALD, net.minecraft.world.item.Items.REDSTONE, net.minecraft.world.item.Items.LAPIS_LAZULI, net.minecraft.world.item.Items.QUARTZ};
+                    for (int i = 0; i < filter.getFilterSize(); i++) {
+                        filter.setFilterSlot(i, new net.minecraft.world.item.ItemStack(icons[i % icons.length]));
+                        if (filter.hasStacksizeLimiters()) filter.setFilterSlotSize(i, 15 + i);
+                    }
+                }
                 seal.syncToClient(level);
                 SealHandler.openSealGui(player, seal);
                 var menu = (TCSealMenu)player.containerMenu;
-                for (int i = 0; i < menu.categories.length; i++) if (menu.categories[i] == phase - 2) menu.clickMenuButton(player, i);
+                for (int i = 0; i < menu.categories.length; i++) if (menu.categories[i] == categoryForPhase()) menu.clickMenuButton(player, i);
             });
             return;
         }
@@ -87,6 +102,8 @@ public final class TCGolemVisualAudit {
         });
     }
 
+    private static int categoryForPhase() { return phase < 7 ? phase - 2 : phase == 7 ? 3 : 1; }
+
     @SubscribeEvent
     public static void rendered(ScreenEvent.Render.Post event) {
         if (!started || !Boolean.getBoolean("tc.golemVisualAudit")) return;
@@ -95,19 +112,42 @@ public final class TCGolemVisualAudit {
         frames++;
         if (event.getScreen() instanceof TCSealScreen screen) {
             var menu = screen.getMenu();
-            if (menu.category() != phase - 2) { if (frames > 240) throw new IllegalStateException("Seal category snapshot timeout"); return; }
-            if (frames >= 5 && phase == 2 && !actionsSent) {
+            if (menu.category() != categoryForPhase()) { if (frames > 240) throw new IllegalStateException("Seal category snapshot timeout"); return; }
+            if (frames >= 5 && !actionsSent) {
                 actionsSent = true;
-                mc.gameMode.handleInventoryButtonClick(menu.containerId, 81);
-                mc.gameMode.handleInventoryButtonClick(menu.containerId, 81);
-                mc.gameMode.handleInventoryButtonClick(menu.containerId, 83);
-                mc.gameMode.handleInventoryButtonClick(menu.containerId, 25);
+                switch (phase) {
+                    case 2 -> {
+                        mc.gameMode.handleInventoryButtonClick(menu.containerId, 81);
+                        mc.gameMode.handleInventoryButtonClick(menu.containerId, 81);
+                        mc.gameMode.handleInventoryButtonClick(menu.containerId, 83);
+                        mc.gameMode.handleInventoryButtonClick(menu.containerId, 25);
+                    }
+                    case 4 -> mc.gameMode.handleInventoryButtonClick(menu.containerId, 93);
+                    case 5 -> mc.gameMode.handleInventoryButtonClick(menu.containerId, 60);
+                    case 7 -> mc.gameMode.handleInventoryButtonClick(menu.containerId, 36);
+                    case 8 -> {
+                        mc.gameMode.handleInventoryMouseClick(menu.containerId, 0, 0, net.minecraft.world.inventory.ClickType.PICKUP, mc.player);
+                        mc.gameMode.handleInventoryMouseClick(menu.containerId, 0, 0, net.minecraft.world.inventory.ClickType.QUICK_MOVE, mc.player);
+                    }
+                    case 9 -> mc.gameMode.handleInventoryMouseClick(menu.containerId, 0, 1, net.minecraft.world.inventory.ClickType.PICKUP, mc.player);
+                    default -> { }
+                }
             }
             if (frames >= 30) {
                 var cached = SealHandler.getSealEntity(mc.level, menu.seal.getSealPos());
+                if (cached == null) { if (frames > 240) throw new IllegalStateException("Seal cache snapshot timeout"); return; }
                 boolean valid = cached != null && cached.getOwner().equals(mc.player.getStringUUID());
                 if (phase == 2) valid &= menu.seal.getPriority() == 2 && menu.seal.getColor() == 1 && menu.seal.isLocked()
                         && cached.getPriority() == 2 && cached.getColor() == 1 && cached.isLocked();
+                if (phase == 4) valid &= menu.seal.getArea().getX() == 4 && cached.getArea().getX() == 4;
+                if (phase == 5) valid &= !((ISealConfigToggles)menu.seal.getSeal()).getToggles()[0].getValue()
+                        && !((ISealConfigToggles)cached.getSeal()).getToggles()[0].getValue();
+                if (phase == 7) valid &= ((ISealConfigToggles)menu.seal.getSeal()).getToggles()[6].getValue()
+                        && ((ISealConfigToggles)cached.getSeal()).getToggles()[6].getValue();
+                if (phase == 8) valid &= ((ISealConfigFilter)menu.seal.getSeal()).getFilterSlotSize(0) == 26
+                        && ((ISealConfigFilter)cached.getSeal()).getFilterSlotSize(0) == 26 && menu.getCarried().isEmpty();
+                if (phase == 9) valid &= menu.slots.get(0).getItem().isEmpty()
+                        && ((ISealConfigFilter)cached.getSeal()).getFilterSlot(0).isEmpty() && menu.getCarried().isEmpty();
                 if (!valid) { if (frames > 240) throw new IllegalStateException("Seal menu/cache acknowledgement timeout"); return; }
             }
         }

@@ -47,20 +47,44 @@ All paths above are relative to the primary 1.12.2 decompiled source tree.
   Displayed items are copies, not extra equipment/inventory contents.
 - Golem Press cumulative extraction plan, actual extraction escrow and rollback
   on refusal/short extraction. A failed commit does not start crafting.
+- Advanced Pickup/Fill/Empty matching options, existing-only Fill, cyclic Empty
+  with leave-one, single/leave Provider, matching-aware Stock quotas and Use
+  left/right click, air-target, empty-hand, sneak and whitelist provisioning.
+- Metadata identities come from 38 explicit item families exported through
+  Mojang's real ITEM_STACK DataFixer, from data version 1343 to 3955. They are
+  not inferred from modern item names. The source exporter remains reproducible.
+- The OreDictionary bridge uses explicit vanilla groups from the
+  [original Forge registrations](https://raw.githubusercontent.com/MinecraftForge/MinecraftForge/1.12.x/src/main/java/net/minecraftforge/oredict/OreDictionary.java),
+  separate from aspect assignment tags. New modern role equivalents use tags;
+  arbitrary historical addon OreDictionary registrations are not reconstructed.
+- Use metadata-wildcard requests retain the requested identity for deduplication
+  while Provider resolves a concrete matching variant before moving anything.
+  NBT remains significant. Old oak/birch variants match; new cherry does not
+  silently become an old metadata variant.
+- Required/forbidden traits now match the examined legacy logistics seals.
+- Breaker no longer has an empty tick or instant-destroy stub: actual area scan,
+  position cache, hardness work counter, 21/7 work speeds, crack animation cleanup,
+  normal/Silk Touch loot and cancellation are tested. See
+  [the scoped design and safety adaptation](../design/golem_breaker_remediation.md).
+- Stock quota labels now use vanilla item decorations at the slot baseline;
+  their previous depth intersected item geometry and clipped the numerals.
 
 ## Evidence
 
-- Dedicated-server golem/seal/press audit: **32/32 PASS**.
+- Dedicated-server golem/seal/press audit: **53/53 PASS**.
 - Focus regression: **16/16 PASS**.
 - Aggregate audit: **40/40 PASS**. Its worldgen entries include registration
   checks, not full ecosystem or generated-shape equivalence.
 - Live client loaded **17 OBJ models / 884 faces**.
-- Seven captured client phases: two views of six material/part combinations,
-  then priority, filter, area, toggles and required/forbidden traits.
+- Ten captured client phases: two views of six material/part combinations,
+  then priority, filter, area, toggles, required/forbidden traits, nine Use options,
+  Stock quotas and advanced Pickup filters.
 - Menus in the final visual test are opened by the integrated server through the
   real network, not constructed client-only. Priority/color/lock requests require
   both menu data acknowledgement and matching world seal-cache state. Final seal
   removal must disappear from the client cache before the client exits.
+- Real ghost click packets additionally confirm quota 15+1+10=26, right-click
+  filter clearing, and empty carried cursor after those non-consuming operations.
 - Captures were inspected; the automated pixel gate verifies twelve nonblank
   model views and absence of magenta missing-texture checker pixels. Initial
   missing translations were found visually and copied from the legacy language
@@ -79,7 +103,7 @@ From `05_neoforge_port`, run:
 .\gradlew.bat build runClient --no-daemon --no-build-cache -PtcClientVisualAuditWorld=tc_visual_review_20261103
 ```
 
-The opt-in probe captures its seven phases, cleans up its temporary placed seal
+The opt-in probe captures its ten phases, cleans up its temporary placed seal
 and support block, then stops only that client normally. Other client launches
 do not enable the probe. The world name must match `tc_visual_[A-Za-z0-9_-]+`.
 Run `tools/audits/client/test-golem-visual-evidence.ps1` from the repository to
@@ -87,10 +111,9 @@ check captures and the real server-menu/removal acknowledgement marker.
 
 ## Not Certified
 
-- All advanced Pickup/Fill/Empty/Use/Provider/Stock filter and action options;
-  their full metadata-flattening/OreDictionary-to-modern-tag semantics still
-  need explicit migration and individual behavior fixtures. A menu existing is
-  not proof that every legacy option has been implemented.
+- Arbitrary addon OreDictionary equivalence and metadata encoded only in block
+  states without an explicit modern mapping. The DataFixer families and current
+  behavior fixtures do not certify those cases.
 - Flying/climbing movement, owner-combat assistance, emotes, leash rendering,
   through-wall golem silhouettes, and full end-to-end follow teleport scenarios.
 - Pixel equality against matching 1.12.2 frames. The captures establish actual

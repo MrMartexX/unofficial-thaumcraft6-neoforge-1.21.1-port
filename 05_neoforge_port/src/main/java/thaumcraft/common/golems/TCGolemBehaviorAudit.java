@@ -416,8 +416,12 @@ public final class TCGolemBehaviorAudit {
             }
         }
         TCSealMenuAudit.run(level, rows);
+        TCSealLegacyFamilyExporter.exportIfRequested();
         TCGolemTransactionAudit.run(rows);
         TCGolemHomeAudit.run(level, rows);
+        TCAdvancedSealAudit.run(level, rows);
+        TCSealActionAudit.run(level, rows);
+        TCSealBreakerAudit.run(level, rows);
         return new Report(rows);
     }
 

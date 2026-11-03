@@ -178,9 +178,10 @@ public final class TCSealScreen extends AbstractContainerScreen<TCSealMenu> {
             for (int i = 0; i < filter.getFilterSize(); i++) if (!menu.slots.get(i).getItem().isEmpty()) {
                 var slot = menu.slots.get(i);
                 graphics.pose().pushPose();
-                graphics.pose().translate(0, 0, 250);
-                String count = "" + filter.getFilterSlotSize(i);
-                graphics.drawString(font, count, slot.x + 17 - font.width(count), slot.y + 9, 0xFFFFFF, true);
+                // Use the slot baseline; vanilla decorations supply their own depth offset.
+                graphics.pose().translate(0, 0, 100);
+                graphics.renderItemDecorations(font, slot.getItem(), slot.x, slot.y,
+                        Integer.toString(filter.getFilterSlotSize(i)));
                 graphics.pose().popPose();
             }
         }
