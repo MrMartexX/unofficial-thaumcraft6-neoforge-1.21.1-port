@@ -160,7 +160,7 @@ public class TCGolemBuilderBlockEntity extends BlockEntity implements Container,
             return false;
         }
 
-        consumeComponents(player, components);
+        if (!consumeComponents(player, components)) return false;
 
         int calculatedCost = props.getTraits().size() * 2;
         for (ItemStack s : components) {
@@ -229,53 +229,22 @@ public class TCGolemBuilderBlockEntity extends BlockEntity implements Container,
         return count;
     }
 
-    private void consumeComponents(Player player, ItemStack[] components) {
-        for (ItemStack req : components) {
-            int needed = req.getCount();
-
-            // First from player
-            if (player != null) {
-                for (int i = 0; i < player.getInventory().items.size() && needed > 0; i++) {
-                    ItemStack s = player.getInventory().items.get(i);
-                    if (ItemStack.isSameItemSameComponents(s, req)) {
-                        int take = Math.min(needed, s.getCount());
-                        s.shrink(take);
-                        needed -= take;
-                    }
-                }
-            }
-
-            // Then from adjacent containers
-            if (level != null && needed > 0) {
-                for (Direction dir : Direction.values()) {
-                    if (needed <= 0) break;
-                    BlockPos p = worldPosition.relative(dir);
-                    IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, p, dir.getOpposite());
-                    if (handler != null) {
-                        for (int i = 0; i < handler.getSlots() && needed > 0; i++) {
-                            ItemStack s = handler.getStackInSlot(i);
-                            if (ItemStack.isSameItemSameComponents(s, req)) {
-                                ItemStack extracted = handler.extractItem(i, needed, false);
-                                needed -= extracted.getCount();
-                            }
-                        }
-                    } else {
-                        BlockEntity be = level.getBlockEntity(p);
-                        if (be instanceof Container c) {
-                            for (int i = 0; i < c.getContainerSize() && needed > 0; i++) {
-                                ItemStack s = c.getItem(i);
-                                if (ItemStack.isSameItemSameComponents(s, req)) {
-                                    int take = Math.min(needed, s.getCount());
-                                    s.shrink(take);
-                                    needed -= take;
-                                    c.setChanged();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+    private boolean consumeComponents(Player player, ItemStack[] components) {
+        var sources = new java.util.ArrayList<IItemHandler>();
+        if (player != null) sources.add(new net.neoforged.neoforge.items.wrapper.PlayerMainInvWrapper(player.getInventory()));
+        if (level != null) for (Direction direction : Direction.values()) {
+            BlockPos pos = worldPosition.relative(direction);
+            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, direction.getOpposite());
+            if (handler != null) sources.add(handler);
+            else if (level.getBlockEntity(pos) instanceof net.minecraft.world.WorldlyContainer sided)
+                sources.add(new net.neoforged.neoforge.items.wrapper.SidedInvWrapper(sided, direction.getOpposite()));
+            else if (level.getBlockEntity(pos) instanceof Container container)
+                sources.add(new net.neoforged.neoforge.items.wrapper.InvWrapper(container));
         }
+        return thaumcraft.common.golems.TCGolemComponentTransaction.consume(sources, components, remainder -> {
+            if (player != null) player.getInventory().add(remainder);
+            if (!remainder.isEmpty() && level != null) net.minecraft.world.level.block.Block.popResource(level, worldPosition.above(), remainder);
+        });
     }
 
     // Container implementation

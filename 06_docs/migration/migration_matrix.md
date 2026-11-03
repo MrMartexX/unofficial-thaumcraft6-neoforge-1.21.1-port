@@ -6,6 +6,14 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 
 ## Source baseline
 
+### November 3 Remediation Checkpoint
+
+The review branch now has real seal menu/sync, articulated legacy golem OBJ
+rendering, home/follow state and compensated press extraction. See
+[the focused evidence and explicit remaining boundaries](../audits/seal_golem_remediation_2026_11_03.md).
+This is not closure of all advanced seal actions, movement/visual parity, or the
+separate uncommitted worldgen work. Keep those portions classified as incomplete.
+
 | Area | Location |
 |---|---|
 | Legacy source reference | `02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master` |

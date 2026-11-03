@@ -31,8 +31,14 @@ public final class TCClientEvents {
     }
 
     @SubscribeEvent
+    public static void onLevelUnload(net.neoforged.neoforge.event.level.LevelEvent.Unload event) {
+        if (event.getLevel().isClientSide()) thaumcraft.common.golems.seals.SealHandler.sealEntities.clear();
+    }
+
+    @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Pre event) {
         if (Minecraft.getInstance().level == null) {
+            thaumcraft.common.golems.seals.SealHandler.sealEntities.clear();
             TCLegacyParticleEngine.clear();
             TCKnowledgeClientCache.clear();
             TCWarpClientCache.clear();

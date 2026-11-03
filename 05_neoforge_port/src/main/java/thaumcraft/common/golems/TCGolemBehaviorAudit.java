@@ -415,6 +415,9 @@ public final class TCGolemBehaviorAudit {
                 throw new IllegalArgumentException("Unknown seal persistence phase");
             }
         }
+        TCSealMenuAudit.run(level, rows);
+        TCGolemTransactionAudit.run(rows);
+        TCGolemHomeAudit.run(level, rows);
         return new Report(rows);
     }
 

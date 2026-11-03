@@ -3,6 +3,8 @@ package thaumcraft.common.golems.seals;
 import net.minecraft.resources.ResourceLocation;
 
 public class SealGuardAdvanced extends SealGuard {
+    @Override
+    public int[] getGuiCategories() { return new int[]{CAT_AREA, CAT_TOGGLES, CAT_PRIORITY, CAT_TAGS}; }
 
     @Override
     public String getKey() {

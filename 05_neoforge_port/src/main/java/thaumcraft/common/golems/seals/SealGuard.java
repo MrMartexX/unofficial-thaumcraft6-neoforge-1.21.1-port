@@ -124,7 +124,7 @@ public class SealGuard implements ISeal, ISealGui, ISealConfigArea, ISealConfigT
 
     @Override
     public int[] getGuiCategories() {
-        return new int[]{CAT_PRIORITY, CAT_AREA, CAT_TOGGLES};
+        return new int[]{CAT_AREA, CAT_PRIORITY, CAT_TAGS};
     }
 
     @Override

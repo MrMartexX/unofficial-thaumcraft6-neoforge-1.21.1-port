@@ -116,16 +116,22 @@ and unmodified-original resource warnings.
 
 ### Remaining Acceptance Boundaries
 
-- Full golem path-recovery/home/follow parity and advanced seal options; the core
-  queued operations and default actions above now have actual behavior tests.
-- Seal client sync, configuration GUI and full logistics acceptance.
-- Modular golem renderer and measured client visual parity.
+The subsequent [seal/golem/press slice](seal_golem_remediation_2026_11_03.md)
+implements real menu/sync, articulated OBJ rendering, home/follow foundations and
+press extraction compensation. It adds 32 passing server checks and live-client
+menu/cache acknowledgement plus seven rendered captures. The list below is
+narrowed accordingly; it does not erase that slice's explicit limitations.
+
+- Advanced seal options, flight/climbing navigation and full follow/combat acceptance.
+- Remote multi-client seal watch/unwatch, reconnect and full logistics acceptance.
+- Measured legacy-frame equality, golem emotes/leashes and through-wall rendering.
 - Full crystal ecology/distribution comparison, including attachment/support
   policy, not merely registration/state/drop checks.
 - Remaining Exchange fortune distributions, compatibility cases and legacy swap
   FX/timing; the basic survival/material/vis/Silk Touch cases above are verified.
-- End-to-end press component transactions against extraction-restricting handlers.
-- In-world client visual acceptance, beyond the verified rendered title screen.
+- Strict cross-mod inventory atomicity beyond the now-tested press escrow/refund
+  boundary; reinsertion-rejecting handlers use an explicit conservation fallback.
+- Remaining in-world visual scenarios beyond the seven captured golem/menu phases.
 - The strict resource triage is recorded in `resource_triage_2026_11_03.md`;
   preserved unregistered reference resources are not active runtime defects.
 

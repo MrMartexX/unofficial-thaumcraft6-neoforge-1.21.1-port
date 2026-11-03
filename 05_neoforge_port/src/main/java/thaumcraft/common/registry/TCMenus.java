@@ -23,6 +23,8 @@ import thaumcraft.common.menu.TCVoidSiphonMenu;
 
 public final class TCMenus {
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, Thaumcraft.MODID);
+    public static final Supplier<MenuType<thaumcraft.common.menu.TCSealMenu>> SEAL =
+            MENUS.register("seal", () -> IMenuTypeExtension.create(thaumcraft.common.menu.TCSealMenu::new));
 
     public static final Supplier<MenuType<TCResearchTableMenu>> RESEARCH_TABLE =
             MENUS.register("research_table", () -> IMenuTypeExtension.create(TCResearchTableMenu::new));

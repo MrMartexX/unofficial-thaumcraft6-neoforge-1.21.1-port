@@ -22,6 +22,7 @@ public class SealHandler {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final Map<String, ISeal> types = new LinkedHashMap<>();
     public static final Map<ResourceKey<Level>, Map<SealPos, SealEntity>> sealEntities = new ConcurrentHashMap<>();
+    private static int validityCounter;
 
     private static Map<SealPos, SealEntity> worldSeals(Level level) {
         if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
@@ -79,6 +80,22 @@ public class SealHandler {
         return map != null ? map.get(pos) : null;
     }
 
+    public static void applyClientSync(Level level, TCSealSyncPayload payload) {
+        if (!level.isClientSide) return;
+        Map<SealPos, SealEntity> map = worldSeals(level);
+        var tag = payload.data();
+        if (payload.operation() == TCSealNetwork.CLEAR_CHUNK) {
+            long chunk = tag.getLong("chunk");
+            map.keySet().removeIf(pos -> new net.minecraft.world.level.ChunkPos(pos.pos).toLong() == chunk);
+            return;
+        }
+        SealPos pos = new SealPos(BlockPos.of(tag.getLong("pos")), Direction.from3DDataValue(tag.getByte("face")));
+        if (payload.operation() == TCSealNetwork.REMOVE) { map.remove(pos); return; }
+        if (payload.operation() != TCSealNetwork.UPSERT || getSeal(tag.getString("type")) == null) return;
+        SealEntity seal = map.computeIfAbsent(pos, key -> new SealEntity());
+        seal.readNBT(tag, level.registryAccess());
+    }
+
     public static List<SealEntity> getSealsInRange(Level level, BlockPos source, int range) {
         List<SealEntity> out = new ArrayList<>();
         Map<SealPos, SealEntity> map = worldSeals(level);
@@ -117,6 +134,9 @@ public class SealHandler {
         if (map != null) {
             SealEntity seal = map.remove(pos);
             if (seal != null) dirty(level);
+            if (seal != null && level instanceof net.minecraft.server.level.ServerLevel server) {
+                TCSealNetwork.send(server, seal, TCSealNetwork.REMOVE);
+            }
             if (seal != null && seal.getSeal() != null) {
                 if (!level.isClientSide) {
                     seal.getSeal().onRemoval(level, pos.pos, pos.face);
@@ -135,11 +155,19 @@ public class SealHandler {
 
     public static void tickSeals(Level level) {
         if (level.isClientSide) return;
+        boolean checkSupport = ++validityCounter % 20 == 0;
         Map<SealPos, SealEntity> map = worldSeals(level);
         if (map != null && !map.isEmpty()) {
             for (SealEntity se : map.values()) {
                 if (se != null && level.hasChunkAt(se.getSealPos().pos)) {
-                    se.tickSealEntity(level);
+                    try {
+                        if (checkSupport && !se.getSeal().canPlaceAt(level, se.getSealPos().pos, se.getSealPos().face)) {
+                            removeSealEntity(level, se.getSealPos(), false);
+                        } else se.tickSealEntity(level);
+                    } catch (RuntimeException exception) {
+                        LOGGER.error("Removing failing seal at {}", se.getSealPos(), exception);
+                        removeSealEntity(level, se.getSealPos(), false);
+                    }
                 }
             }
             if (level.getGameTime() % 20 == 0) dirty(level);
@@ -147,8 +175,14 @@ public class SealHandler {
     }
 
     public static void openSealGui(Player player, ISealEntity seal) {
-        // Handled via chat feedback or menu screen
-        player.displayClientMessage(net.minecraft.network.chat.Component.literal("§6Seal: §e" + seal.getSeal().getKey()
-                + " §7[Priority: " + seal.getPriority() + "]"), true);
+        if (!(player instanceof net.minecraft.server.level.ServerPlayer server) || !(seal instanceof SealEntity entity)
+                || !server.getStringUUID().equals(entity.getOwner()) || entity.getSealPos() == null
+                || !server.level().hasChunkAt(entity.getSealPos().pos)
+                || getSealEntity(server.level(), entity.getSealPos()) != entity
+                || server.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(entity.getSealPos().pos)) > 64) return;
+        server.openMenu(new net.minecraft.world.SimpleMenuProvider(
+                (id, inventory, p) -> new thaumcraft.common.menu.TCSealMenu(id, inventory, entity),
+                net.minecraft.network.chat.Component.translatable("item.thaumcraft.seal")),
+                buffer -> buffer.writeNbt(entity.writeNBT()));
     }
 }

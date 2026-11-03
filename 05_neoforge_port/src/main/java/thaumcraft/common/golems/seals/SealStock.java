@@ -10,7 +10,7 @@ import thaumcraft.api.golems.seals.ISealConfigArea;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.tasks.Task;
 
-public class SealStock extends SealFiltered implements ISealConfigArea {
+public class SealStock extends SealFiltered {
     private int delay;
 
     @Override

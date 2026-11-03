@@ -69,6 +69,14 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
             SynchedEntityData.defineId(TCGolemEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
     private final NonNullList<ItemStack> carrying = NonNullList.create();
+    private static final EntityDataAccessor<ItemStack> BACK_CARRIED =
+            SynchedEntityData.defineId(TCGolemEntity.class, EntityDataSerializers.ITEM_STACK);
+    private static final EntityDataAccessor<ItemStack> FRONT_CARRIED =
+            SynchedEntityData.defineId(TCGolemEntity.class, EntityDataSerializers.ITEM_STACK);
+    private float wheelRotation;
+    private thaumcraft.api.golems.tasks.Task assignedTask;
+    private static final EntityDataAccessor<Boolean> FOLLOWING =
+            SynchedEntityData.defineId(TCGolemEntity.class, EntityDataSerializers.BOOLEAN);
     private int rankXp = 0;
     private boolean owned = false;
 
@@ -91,7 +99,10 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
         super.defineSynchedData(builder);
         builder.define(PROPS1, 0);
         builder.define(PROPS2, 0);
-        builder.define(GOLEM_COLOR, (byte) -1);
+        builder.define(GOLEM_COLOR, (byte) 0);
+        builder.define(BACK_CARRIED, ItemStack.EMPTY);
+        builder.define(FRONT_CARRIED, ItemStack.EMPTY);
+        builder.define(FOLLOWING, false);
         builder.define(CLIMBING, false);
         builder.define(OWNER_UUID, Optional.empty());
     }
@@ -115,13 +126,73 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
         });
         this.goalSelector.addGoal(2, new thaumcraft.common.golems.tasks.TCGolemTaskGoal(this, (byte) 1));
         this.goalSelector.addGoal(3, new thaumcraft.common.golems.tasks.TCGolemTaskGoal(this, (byte) 0));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
+        this.goalSelector.addGoal(4, new thaumcraft.common.golems.tasks.TCGolemFollowOwnerGoal(this));
+        this.goalSelector.addGoal(5, new thaumcraft.common.golems.tasks.TCGolemHomeGoal(this));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false,
                 entity -> entity instanceof Enemy && getProperties().hasTrait(EnumGolemTrait.FIGHTER)));
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!level().isClientSide) {
+            ItemStack front = carrying.isEmpty() ? ItemStack.EMPTY : carrying.get(0);
+            ItemStack back = carrying.size() < 2 ? ItemStack.EMPTY : carrying.get(1);
+            if (!ItemStack.matches(front, entityData.get(FRONT_CARRIED))) entityData.set(FRONT_CARRIED, front.copy());
+            if (!ItemStack.matches(back, entityData.get(BACK_CARRIED))) entityData.set(BACK_CARRIED, back.copy());
+        } else if (getProperties().hasTrait(EnumGolemTrait.WHEELED)) {
+            double dx = getX() - xo, dy = getY() - yo, dz = getZ() - zo;
+            double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            float travel = (float)Math.toDegrees(Math.atan2(dz, dx)) - 90;
+            wheelRotation += (float)(distance / 1.571 * (360 - (getYRot() - travel)));
+            if (wheelRotation > 360) wheelRotation -= 360;
+            if (onGround() && !isInWater() && distance > .25) {
+                var ground = level().getBlockState(BlockPos.containing(getX(), getY() - .20000000298023224, getZ()));
+                if (ground.getRenderShape() != net.minecraft.world.level.block.RenderShape.INVISIBLE)
+                    level().addParticle(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK, ground),
+                            getX() + (random.nextFloat() - .5) * getBbWidth(), getBoundingBox().minY + .1,
+                            getZ() + (random.nextFloat() - .5) * getBbWidth(), -getDeltaMovement().x * 4, 1.5, -getDeltaMovement().z * 4);
+            }
+        }
+    }
+
+    public ItemStack getFrontCarriedItem() { return entityData.get(FRONT_CARRIED); }
+    public ItemStack getBackCarriedItem() { return entityData.get(BACK_CARRIED); }
+    public float getWheelRotation() { return wheelRotation; }
+    public boolean isFollowingOwner() { return entityData.get(FOLLOWING); }
+    public void setFollowingOwner(boolean following) {
+        releaseAssignedTask();
+        entityData.set(FOLLOWING, following);
+        getNavigation().stop();
+        if (following) clearRestriction();
+        else restrictTo(blockPosition(), getProperties().hasTrait(EnumGolemTrait.SCOUT) ? 48 : 32);
+    }
+
+    public void setAssignedTask(thaumcraft.api.golems.tasks.Task task) { assignedTask = task; }
+    public thaumcraft.api.golems.tasks.Task getAssignedTask() { return assignedTask; }
+    private void releaseAssignedTask() {
+        if (assignedTask != null) assignedTask.setReserved(false);
+        assignedTask = null;
+    }
+
+    @Override
+    public void remove(net.minecraft.world.entity.Entity.RemovalReason reason) {
+        releaseAssignedTask();
+        super.remove(reason);
+    }
+
+    @Override
+    public void die(net.minecraft.world.damagesource.DamageSource source) {
+        releaseAssignedTask();
+        super.die(source);
+        if (!level().isClientSide) {
+            for (ItemStack stack : carrying) if (!stack.isEmpty()) spawnAtLocation(stack, .25F);
+            carrying.clear();
+        }
     }
 
     @Override
@@ -379,11 +450,12 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
                 }
                 return InteractionResult.sidedSuccess(level().isClientSide);
             } else {
-                if (level().isClientSide) {
-                    IGolemProperties props = getProperties();
-                    player.displayClientMessage(Component.literal("§6Golem: " + props.getMaterial().getLocalizedName().getString()
-                            + " §7| §bRank: §f" + props.getRank()
-                            + (props.hasTrait(EnumGolemTrait.SMART) ? " §a(" + rankXp + ")" : "")), true);
+                if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer
+                        && thaumcraft.common.research.TCResearchManager.knowsResearchStrict(
+                                thaumcraft.common.research.TCPlayerKnowledgeStore.get(serverPlayer), "GOLEMDIRECT")) {
+                    setFollowingOwner(!isFollowingOwner());
+                    player.displayClientMessage(Component.translatable(isFollowingOwner() ? "golem.follow" : "golem.stay"), true);
+                    level().playSound(null, blockPosition(), thaumcraft.common.registry.TCSounds.SCAN.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 return InteractionResult.sidedSuccess(level().isClientSide);
             }
@@ -394,7 +466,7 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
                 return InteractionResult.FAIL;
             }
             if (!level().isClientSide) {
-                setGolemColor((byte) dye.getDyeColor().getId());
+                setGolemColor((byte) (dye.getDyeColor().getId() + 1));
                 if (!player.getAbilities().instabuild) {
                     held.shrink(1);
                 }
@@ -449,6 +521,8 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
         tag.putInt("xp", rankXp);
         tag.putByte("color", getGolemColor());
         tag.putBoolean("owned", owned);
+        tag.putBoolean("following", isFollowingOwner());
+        if (hasRestriction()) tag.putLong("homepos", getRestrictCenter().asLong());
         if (getOwnerUUID() != null) {
             tag.putUUID("owner", getOwnerUUID());
         }
@@ -475,6 +549,10 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
             setGolemColor(tag.getByte("color"));
         }
         this.owned = tag.getBoolean("owned");
+        entityData.set(FOLLOWING, tag.getBoolean("following"));
+        if (isFollowingOwner()) clearRestriction();
+        else restrictTo(tag.contains("homepos") ? BlockPos.of(tag.getLong("homepos")) : blockPosition(),
+                getProperties().hasTrait(EnumGolemTrait.SCOUT) ? 48 : 32);
         if (tag.hasUUID("owner")) {
             setOwnerUUID(tag.getUUID("owner"));
         }

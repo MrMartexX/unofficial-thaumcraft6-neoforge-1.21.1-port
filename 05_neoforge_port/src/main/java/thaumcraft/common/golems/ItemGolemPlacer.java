@@ -82,6 +82,7 @@ public class ItemGolemPlacer extends Item implements ISealDisplayer {
         Direction face = context.getClickedFace();
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
+        if (player == null || !level.mayInteract(player, pos) || !player.mayUseItemAt(pos.relative(face), face, stack)) return InteractionResult.FAIL;
 
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
@@ -92,12 +93,13 @@ public class ItemGolemPlacer extends Item implements ISealDisplayer {
         if (golem != null) {
             golem.moveTo(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, player != null ? player.getYRot() : 0.0F, 0.0F);
             golem.setProperties(getProperties(stack));
+            golem.restrictTo(spawnPos, golem.getProperties().hasTrait(EnumGolemTrait.SCOUT) ? 48 : 32);
             golem.setRankXp(getXp(stack));
             if (player != null) {
                 golem.setOwnerUUID(player.getUUID());
                 golem.setOwned(true);
             }
-            level.addFreshEntity(golem);
+            if (!level.addFreshEntity(golem)) return InteractionResult.FAIL;
             if (player == null || !player.getAbilities().instabuild) {
                 stack.shrink(1);
             }

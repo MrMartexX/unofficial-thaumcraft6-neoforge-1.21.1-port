@@ -57,6 +57,7 @@ public class ItemSealPlacer extends Item implements ISealDisplayer {
         Direction face = context.getClickedFace();
         Player player = context.getPlayer();
         ItemStack stack = context.getItemInHand();
+        if (player == null || !level.mayInteract(player, pos) || !player.mayUseItemAt(pos, face, stack)) return InteractionResult.FAIL;
 
         if (player != null && player.isShiftKeyDown()) {
             return InteractionResult.PASS;
@@ -75,7 +76,7 @@ public class ItemSealPlacer extends Item implements ISealDisplayer {
         try {
             newSeal = proto.getClass().getDeclaredConstructor().newInstance();
         } catch (Exception e) {
-            newSeal = proto;
+            throw new IllegalStateException("Cannot create independent seal " + sealKey, e);
         }
 
         if (SealHandler.addSealEntity(level, pos, face, newSeal, player)) {

@@ -10,6 +10,12 @@ individual contract audits pass.
 
 ## Current focus
 
+- [Seal/golem/press remediation](audits/seal_golem_remediation_2026_11_03.md): real
+  server-opened seal configuration and sync, legacy OBJ parts, persisted home/follow,
+  safe press extraction/refunds; 32 focused server checks and live client evidence.
+  Advanced seal action options and the stated visual/multiplayer boundaries remain
+  open. Do not label the whole golemancy subsystem complete from these results.
+
 - Follow [the November 3 remediation evidence and remaining acceptance boundaries](audits/remediation_2026_11_03.md).
   The older R01-R17 closure below does not close that later review or certify the
   currently uncommitted worldgen changes.

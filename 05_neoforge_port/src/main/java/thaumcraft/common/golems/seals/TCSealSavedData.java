@@ -22,7 +22,7 @@ public final class TCSealSavedData extends SavedData {
         ListTag entries = tag.getList("seals", 10);
         for (int i = 0; i < entries.size(); i++) {
             SealEntity seal = new SealEntity();
-            seal.readNBT(entries.getCompound(i));
+            seal.readNBT(entries.getCompound(i), registries);
             if (seal.getSeal() != null && seal.getSealPos() != null) {
                 data.seals.put(seal.getSealPos(), seal);
             }
@@ -33,7 +33,7 @@ public final class TCSealSavedData extends SavedData {
     @Override
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
         ListTag entries = new ListTag();
-        for (SealEntity seal : seals.values()) entries.add(seal.writeNBT());
+        for (SealEntity seal : seals.values()) entries.add(seal.writeNBT(registries));
         tag.putInt("version", 1);
         tag.put("seals", entries);
         return tag;

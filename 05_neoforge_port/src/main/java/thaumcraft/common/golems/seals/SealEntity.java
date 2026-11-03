@@ -17,7 +17,9 @@ public class SealEntity implements ISealEntity {
     private boolean locked = false;
     private boolean redstoneSensitive = false;
     private String owner = "";
-    private byte color = (byte) -1;
+    private byte color = 0;
+    private boolean stopped;
+    private net.minecraft.core.HolderLookup.Provider registries;
 
     public SealEntity() {
     }
@@ -25,13 +27,25 @@ public class SealEntity implements ISealEntity {
     public SealEntity(Level level, SealPos sealPos, ISeal seal) {
         this.sealPos = sealPos;
         this.seal = seal;
+        this.registries = level.registryAccess();
+        if (seal instanceof thaumcraft.api.golems.seals.ISealConfigArea) {
+            this.area = new BlockPos(sealPos.face.getStepX() == 0 ? 3 : 1,
+                    sealPos.face.getStepY() == 0 ? 3 : 1, sealPos.face.getStepZ() == 0 ? 3 : 1);
+        }
     }
 
     @Override
     public void tickSealEntity(Level level) {
-        if (seal != null && !isStoppedByRedstone(level)) {
-            seal.tickSeal(level, this);
+        if (seal == null) return;
+        if (isStoppedByRedstone(level)) {
+            if (!stopped) for (var task : thaumcraft.common.golems.tasks.TaskHandler.getTasks(level).values()) {
+                if (sealPos.equals(task.getSealPos())) task.setSuspended(true);
+            }
+            stopped = true;
+            return;
         }
+        stopped = false;
+        seal.tickSeal(level, this);
     }
 
     @Override
@@ -115,12 +129,15 @@ public class SealEntity implements ISealEntity {
     @Override
     public boolean isStoppedByRedstone(Level level) {
         if (!redstoneSensitive || sealPos == null) return false;
-        return level.hasNeighborSignal(sealPos.pos);
+        return level.hasNeighborSignal(sealPos.pos) || level.hasNeighborSignal(sealPos.pos.relative(sealPos.face));
     }
 
     @Override
     public void syncToClient(Level level) {
-        // Reserved for client sync packet when needed
+        if (level instanceof net.minecraft.server.level.ServerLevel server) {
+            TCSealSavedData.get(server).setDirty();
+            TCSealNetwork.send(server, this, TCSealNetwork.UPSERT);
+        }
     }
 
     @Override
@@ -150,8 +167,19 @@ public class SealEntity implements ISealEntity {
         this.owner = tag.getString("owner");
         this.color = tag.getByte("color");
         if (seal != null) {
+            if (seal instanceof SealFiltered filtered && registries != null) filtered.setSerializationRegistries(registries);
             seal.readCustomNBT(tag);
         }
+    }
+
+    public void readNBT(CompoundTag tag, net.minecraft.core.HolderLookup.Provider registries) {
+        this.registries = registries;
+        readNBT(tag);
+    }
+
+    public CompoundTag writeNBT(net.minecraft.core.HolderLookup.Provider registries) {
+        this.registries = registries;
+        return writeNBT();
     }
 
     @Override
@@ -162,6 +190,7 @@ public class SealEntity implements ISealEntity {
             tag.putByte("face", (byte) sealPos.face.get3DDataValue());
         }
         if (seal != null) {
+            if (seal instanceof SealFiltered filtered && registries != null) filtered.setSerializationRegistries(registries);
             tag.putString("type", seal.getKey());
             seal.writeCustomNBT(tag);
         }

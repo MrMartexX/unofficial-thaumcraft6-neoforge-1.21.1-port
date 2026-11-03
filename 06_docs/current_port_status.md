@@ -4,6 +4,16 @@ Last reviewed branch: `main`
 Last reviewed checkpoint: `2026-10-31`, `main` at `66b3683a`
 Reviewed target module: `05_neoforge_port`
 
+## November 3 Review Branch
+
+Current local work is on `codex/review-remediation-20261103`, not a new main
+acceptance checkpoint. [The seal/golem/press audit](audits/seal_golem_remediation_2026_11_03.md)
+records real seal configuration/sync, legacy OBJ golem parts, home/follow state,
+press extraction escrow, 32 focused server checks and seven client captures with
+actual server-menu/cache acknowledgements. Advanced seal options, remaining
+movement/render cases, remote multiplayer and the other parent-audit boundaries
+are still incomplete. Preserve the unrelated uncommitted worldgen work.
+
 ## October Review Checkpoint & Remediation
 
 The active target is Minecraft `1.21.1`, NeoForge `21.1.265`, Java `21`, mod `0.2.1-alpha6`.

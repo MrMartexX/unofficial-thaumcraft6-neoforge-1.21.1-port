@@ -153,6 +153,7 @@ public final class Thaumcraft {
         modEventBus.addListener(TCThaumonomiconNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCFocalManipulatorNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCGolemBuilderNetwork::onRegisterPayloadHandlers);
+        modEventBus.addListener(thaumcraft.common.golems.seals.TCSealNetwork::register);
         modEventBus.addListener(TCEntityFXNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCEssentiaCapabilities::register);
         modEventBus.addListener(TCMachineCapabilities::register);

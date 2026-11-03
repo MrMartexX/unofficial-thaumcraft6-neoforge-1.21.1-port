@@ -18,6 +18,7 @@ public final class TCGolemTaskGoal extends Goal {
     private int cooldown;
     private int counter;
     private int pause;
+    private BlockPos previousRamble;
 
     public TCGolemTaskGoal(TCGolemEntity golem, byte type) {
         this.golem = golem;
@@ -27,7 +28,9 @@ public final class TCGolemTaskGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (golem.level().isClientSide || golem.isInCombat()) return false;
+        if (golem.level().isClientSide || golem.isInCombat() || golem.isFollowingOwner()) return false;
+        var assigned = golem.getAssignedTask();
+        if (assigned != null && !assigned.isSuspended() && !assigned.isCompleted()) return false;
         if (cooldown-- > 0) return false;
         cooldown = 5;
         var tasks = type == 0 ? TaskHandler.getBlockTasksSorted(golem.level(), golem.getUUID(), golem)
@@ -58,6 +61,7 @@ public final class TCGolemTaskGoal extends Goal {
             task = candidate;
             destination = target;
             task.setReserved(true);
+            golem.setAssignedTask(task);
             seal.getSeal().onTaskStarted(golem.level(), golem, task);
             return true;
         }
@@ -73,7 +77,14 @@ public final class TCGolemTaskGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return task != null && !task.isCompleted() && !task.isSuspended() && counter <= 1000
+        if (task == null || golem.getAssignedTask() != task || !task.isReserved()
+                || task.getSealPos() == null || golem.isInCombat() || golem.isFollowingOwner()) return false;
+        var seal = SealHandler.getSealEntity(golem.level(), task.getSealPos());
+        if (seal == null || seal.isStoppedByRedstone(golem.level())
+                || (seal.isLocked() && (golem.getOwnerUUID() == null || !golem.getOwnerUUID().toString().equals(seal.getOwner())))
+                || (golem.getGolemColor() > 0 && seal.getColor() > 0 && golem.getGolemColor() != seal.getColor())
+                || !golem.isWithinRestriction(task.getPos())) return false;
+        return !task.isCompleted() && !task.isSuspended() && counter >= 0 && counter <= 1000
                 && golem.level().hasChunkAt(task.getPos())
                 && (type == 0 || (task.getEntity() != null && task.getEntity().isAlive()));
     }
@@ -86,10 +97,19 @@ public final class TCGolemTaskGoal extends Goal {
         if (task == null || pause-- > 0) return;
         double distance = type == 0 ? destination.distToCenterSqr(golem.position()) : golem.distanceToSqr(task.getEntity());
         if (distance > 4) {
-            if (++counter % 5 == 0) moveTo();
+            task.setCompletion(false);
+            if (++counter % 5 == 0) {
+                if (golem.blockPosition().equals(previousRamble)) {
+                    var ramble = net.minecraft.world.entity.ai.util.DefaultRandomPos.getPosTowards(golem, 6, 4,
+                            net.minecraft.world.phys.Vec3.atLowerCornerOf(task.getPos()), Math.PI / 2);
+                    if (ramble != null) golem.getNavigation().moveTo(ramble.x + .5, ramble.y + .5, ramble.z + .5, 1);
+                } else moveTo();
+                previousRamble = golem.blockPosition();
+            }
         } else {
             TaskHandler.completeTask(golem.level(), task, golem);
-            if (!task.isCompleted()) { pause = 10; counter++; }
+            if (!task.isCompleted()) pause = 10;
+            else { pause = 0; counter = -1; }
         }
     }
 
@@ -105,6 +125,7 @@ public final class TCGolemTaskGoal extends Goal {
             task.setReserved(false);
             if (task.isCompleted()) task.setSuspended(true);
         }
+        if (golem.getAssignedTask() == task) golem.setAssignedTask(null);
         task = null;
     }
 }

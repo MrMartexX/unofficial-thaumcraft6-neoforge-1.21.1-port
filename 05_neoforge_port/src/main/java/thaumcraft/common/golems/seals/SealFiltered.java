@@ -15,6 +15,9 @@ public abstract class SealFiltered implements ISeal, ISealGui, ISealConfigFilter
     protected NonNullList<ItemStack> filter;
     protected NonNullList<Integer> filterSize;
     protected boolean blacklist = true;
+    private net.minecraft.core.HolderLookup.Provider registries = net.minecraft.core.RegistryAccess.fromRegistryOfRegistries(net.minecraft.core.registries.BuiltInRegistries.REGISTRY);
+
+    public void setSerializationRegistries(net.minecraft.core.HolderLookup.Provider registries) { this.registries = registries; }
 
     public SealFiltered() {
         this.filter = NonNullList.withSize(getFilterSize(), ItemStack.EMPTY);
@@ -23,7 +26,9 @@ public abstract class SealFiltered implements ISeal, ISealGui, ISealConfigFilter
 
     @Override
     public int[] getGuiCategories() {
-        return new int[]{CAT_PRIORITY, CAT_FILTER, CAT_AREA};
+        return this instanceof thaumcraft.api.golems.seals.ISealConfigArea
+                ? new int[]{CAT_AREA, CAT_FILTER, CAT_PRIORITY, CAT_TAGS}
+                : new int[]{CAT_FILTER, CAT_PRIORITY, CAT_TAGS};
     }
 
     @Override
@@ -54,7 +59,7 @@ public abstract class SealFiltered implements ISeal, ISealGui, ISealConfigFilter
     @Override
     public void setFilterSlot(int i, ItemStack stack) {
         if (i >= 0 && i < filter.size()) {
-            filter.set(i, stack.copy());
+            filter.set(i, stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1));
         }
     }
 
@@ -108,17 +113,11 @@ public abstract class SealFiltered implements ISeal, ISealGui, ISealConfigFilter
         this.filter = NonNullList.withSize(getFilterSize(), ItemStack.EMPTY);
         if (tag.contains("filter", Tag.TAG_LIST)) {
             ListTag list = tag.getList("filter", Tag.TAG_COMPOUND);
-            var lookup = net.minecraft.core.RegistryAccess.fromRegistryOfRegistries(net.minecraft.core.registries.BuiltInRegistries.REGISTRY);
             for (int i = 0; i < list.size() && i < filter.size(); i++) {
                 final int slot = i;
                 CompoundTag itemTag = list.getCompound(i);
-                try {
-                    ItemStack s = ItemStack.parseOptional(lookup, itemTag);
-                    if (!s.isEmpty()) {
-                        filter.set(slot, s);
-                    }
-                } catch (Exception ignored) {
-                }
+                if (!itemTag.isEmpty()) filter.set(slot, ItemStack.parse(registries, itemTag)
+                        .orElseThrow(() -> new IllegalStateException("Invalid saved seal filter at slot " + slot)).copyWithCount(1));
             }
         }
         this.blacklist = tag.getBoolean("bl");
@@ -131,14 +130,10 @@ public abstract class SealFiltered implements ISeal, ISealGui, ISealConfigFilter
         tag.putBoolean("bl", blacklist);
         tag.putIntArray("sizes", filterSize.stream().mapToInt(Integer::intValue).toArray());
         ListTag list = new ListTag();
-        var lookup = net.minecraft.core.RegistryAccess.fromRegistryOfRegistries(net.minecraft.core.registries.BuiltInRegistries.REGISTRY);
         for (ItemStack stack : filter) {
             CompoundTag itemTag = new CompoundTag();
             if (!stack.isEmpty()) {
-                try {
-                    itemTag = (CompoundTag) stack.save(lookup);
-                } catch (Exception ignored) {
-                }
+                itemTag = (CompoundTag) stack.save(registries);
             }
             list.add(itemTag);
         }

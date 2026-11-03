@@ -10,7 +10,7 @@ import thaumcraft.api.golems.seals.ISealConfigArea;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.tasks.Task;
 
-public class SealUse extends SealFiltered implements ISealConfigArea {
+public class SealUse extends SealFiltered {
     private int delay;
     private int watchedTask = Integer.MIN_VALUE;
 
