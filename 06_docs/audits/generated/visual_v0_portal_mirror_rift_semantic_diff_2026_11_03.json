@@ -1,0 +1,305 @@
+{
+  "schema": "thaumcraft_v0_portal_semantic_diff_v1",
+  "snapshot_date": "2026-11-03",
+  "repository": "MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port",
+  "legacy_version": "Thaumcraft 6 Forge 1.12.2 (checked-in decompiled source)",
+  "target_version": "Minecraft 1.21.1 NeoForge",
+  "reference_branch": "main",
+  "reference_sha": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+  "pr_number": 11,
+  "source_only": true,
+  "runtime_validation": "NOT_RUN",
+  "source_records": [
+    {
+      "id": "PV-01",
+      "family": "hole",
+      "priority": "P0",
+      "scope": "client_visual",
+      "classification": "source_path_gap",
+      "legacy_contract": "End-shader face quads when neighbor is opaque and not Hole; client boundary sparkles",
+      "modern_contract": "Invisible block model, no explicit Hole BER in checked registry, 0.3/tick vanilla portal particles",
+      "legacy_anchors": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileHoleRenderer.java",
+          "start_line": 34,
+          "end_line": 58
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/misc/TileHole.java",
+          "start_line": 98,
+          "end_line": 126
+        }
+      ],
+      "modern_anchors": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/blocks/misc/TCHoleBlock.java",
+          "start_line": 42,
+          "end_line": 43
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/misc/TCHoleBlockEntity.java",
+          "start_line": 36,
+          "end_line": 49
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java",
+          "start_line": 13,
+          "end_line": 29
+        }
+      ],
+      "scene_ids": [
+        "S01"
+      ],
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "PV-02",
+      "family": "mirror_and_mirror_essentia",
+      "priority": "P0",
+      "scope": "client_visual",
+      "classification": "source_path_gap",
+      "legacy_contract": "Linked and squared player distance <1024 triggers 16-plane tunnel + translucent overlay in all six facings; unlinked/far shows plain pane",
+      "modern_contract": "Facing-only static baked models; no linked-state dynamic BER path in inspected registry; link and BE update logic exists",
+      "legacy_anchors": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileMirrorRenderer.java",
+          "start_line": 38,
+          "end_line": 116
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileMirrorRenderer.java",
+          "start_line": 525,
+          "end_line": 592
+        }
+      ],
+      "modern_anchors": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCMirrorBlock.java",
+          "start_line": 122,
+          "end_line": 135
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCMirrorBlockEntity.java",
+          "start_line": 114,
+          "end_line": 138
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCMirrorBlockEntity.java",
+          "start_line": 330,
+          "end_line": 345
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCMirrorEssentiaBlockEntity.java",
+          "start_line": 96,
+          "end_line": 122
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java",
+          "start_line": 13,
+          "end_line": 29
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/mirror.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/mirror_essentia.json"
+        }
+      ],
+      "scene_ids": [
+        "S02"
+      ],
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "PV-03",
+      "family": "void_siphon",
+      "priority": "P0",
+      "scope": "client_visual",
+      "classification": "source_path_gap",
+      "legacy_contract": "Enabled-state End-shader rendering with six-face groups at y=0.875 and y=0.3125",
+      "modern_contract": "Redstone-enabled model with same baked model for enabled=true and false, no BER, block event can spawn 12 portal particles when rift drained",
+      "legacy_anchors": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileVoidSiphonRenderer.java",
+          "start_line": 34,
+          "end_line": 83
+        }
+      ],
+      "modern_anchors": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCVoidSiphonBlock.java",
+          "start_line": 122,
+          "end_line": 129
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCVoidSiphonBlock.java",
+          "start_line": 148,
+          "end_line": 149
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCVoidSiphonBlockEntity.java",
+          "start_line": 96,
+          "end_line": 114
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCVoidSiphonBlockEntity.java",
+          "start_line": 189,
+          "end_line": 205
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java",
+          "start_line": 13,
+          "end_line": 29
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/void_siphon.json"
+        }
+      ],
+      "scene_ids": [
+        "S03"
+      ],
+      "runtime_status": "NOT_RUN"
+    },
+    {
+      "id": "PV-04",
+      "family": "flux_rift",
+      "priority": "P1",
+      "scope": "client_visual",
+      "classification": "render_algorithm_difference",
+      "legacy_contract": "Four-pass six-sided polycone with variable glow radius, stability wobble, goggles first-pass depth exception and shader",
+      "modern_contract": "Registered single-pass emissive translucent fixed-purple ribbons from seeded points with portal particles for unstable/collapse",
+      "legacy_anchors": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/RenderFluxRift.java",
+          "start_line": 47,
+          "end_line": 112
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/EntityFluxRift.java",
+          "start_line": 408,
+          "end_line": 438
+        }
+      ],
+      "modern_anchors": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCFluxRiftRenderer.java",
+          "start_line": 21,
+          "end_line": 71
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFluxRiftEntity.java",
+          "start_line": 46,
+          "end_line": 54
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFluxRiftEntity.java",
+          "start_line": 554,
+          "end_line": 588
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFluxRiftEntity.java",
+          "start_line": 367,
+          "end_line": 385
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java",
+          "start_line": 17,
+          "end_line": 22
+        }
+      ],
+      "scene_ids": [
+        "S04"
+      ],
+      "runtime_status": "NOT_RUN",
+      "open_question": "Client seed arriving after initial geometry build might not force rebuild without size change; investigate before classifying bug"
+    },
+    {
+      "id": "GM-01",
+      "family": "hole_footprint",
+      "priority": "P0",
+      "scope": "gameplay_cross_domain",
+      "classification": "source_logic_difference",
+      "legacy_contract": "At start, expand up to eight surrounding holes in 3x3 plane perpendicular to direction then add next longitudinal hole",
+      "modern_contract": "At start, only one longitudinal hole, no eight surrounding cells",
+      "legacy_anchors": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/misc/TileHole.java",
+          "start_line": 51,
+          "end_line": 81
+        }
+      ],
+      "modern_anchors": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/misc/TCHoleBlockEntity.java",
+          "start_line": 52,
+          "end_line": 55
+        }
+      ],
+      "scene_ids": [
+        "S05"
+      ],
+      "runtime_status": "NOT_RUN",
+      "note": "Separate gameplay issue; must not silently modify behavior in visual audit"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "S01",
+      "scenarios": [
+        "hole_opaque_wall",
+        "hole_air_exposure",
+        "two_adjacent_holes"
+      ],
+      "capture": "2 POV screenshots + expiration",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "S02",
+      "scenarios": [
+        "mirror_item_unlinked_linked",
+        "mirror_essentia_unlinked_linked",
+        "six_facing",
+        "observer_8_31_33_blocks",
+        "save_reload"
+      ],
+      "capture": "still+short moving video; BE client linked state",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "S03",
+      "scenarios": [
+        "redstone_enabled_disabled",
+        "rift_present_absent"
+      ],
+      "capture": "front/top/side screenshots + animation",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "S04",
+      "scenarios": [
+        "rift_stability_60_0_-40",
+        "collapse",
+        "goggles_off_on",
+        "fixed_seed_size"
+      ],
+      "capture": "30-60fps video and still screenshots",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "S05",
+      "scenarios": [
+        "hole_count_gt_1_axes_X_Y_Z",
+        "save_reload"
+      ],
+      "capture": "3x3 cell positions and screenshot",
+      "status": "NOT_RUN"
+    }
+  ],
+  "limits": [
+    "No PowerShell extractor run",
+    "No Gradle/Java build run",
+    "No client in-game comparison",
+    "No source or gameplay change",
+    "No claim of 100% visual parity"
+  ]
+}
