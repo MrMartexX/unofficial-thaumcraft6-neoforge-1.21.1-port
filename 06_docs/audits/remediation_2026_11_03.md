@@ -119,7 +119,8 @@ and unmodified-original resource warnings.
 The subsequent [seal/golem/press slice](seal_golem_remediation_2026_11_03.md)
 implements real menu/sync, articulated OBJ rendering, home/follow foundations and
 press extraction compensation, advanced logistics options and real Breaker mining.
-It adds 53 passing server checks and live-client menu/cache acknowledgement plus
+It adds 56 passing server checks (including 7200 part/rank attribute combinations)
+and live-client menu/cache acknowledgement plus
 ten rendered captures. The list below is
 narrowed accordingly; it does not erase that slice's explicit limitations.
 

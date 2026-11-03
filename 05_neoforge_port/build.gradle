@@ -64,6 +64,7 @@ neoForge {
             def visualWorld = providers.gradleProperty('tcClientVisualAuditWorld').orNull
             if (visualWorld != null) {
                 if (!visualWorld.matches('tc_visual_[A-Za-z0-9_-]+')) throw new GradleException('Visual audit requires a disposable tc_visual_ world name without path components')
+                if (!project.file("run/saves/${visualWorld}/level.dat").isFile()) throw new GradleException('Visual audit fixture is missing: prepare a disposable server-world copy before running the client')
                 programArguments.addAll('--quickPlaySingleplayer', visualWorld)
                 systemProperty 'tc.golemVisualAudit', 'true'
             }

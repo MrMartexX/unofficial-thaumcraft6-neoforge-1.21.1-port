@@ -140,6 +140,7 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
     public void tick() {
         super.tick();
         if (!level().isClientSide) {
+            if (tickCount % (getProperties().hasTrait(EnumGolemTrait.REPAIR) ? 40 : 100) == 0) heal(1);
             ItemStack front = carrying.isEmpty() ? ItemStack.EMPTY : carrying.get(0);
             ItemStack back = carrying.size() < 2 ? ItemStack.EMPTY : carrying.get(1);
             if (!ItemStack.matches(front, entityData.get(FRONT_CARRIED))) entityData.set(FRONT_CARRIED, front.copy());
@@ -227,9 +228,9 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
         IGolemProperties props = getProperties();
         GolemMaterial mat = props.getMaterial();
 
-        double maxHealth = 10.0D + mat.healthMod;
+        int maxHealth = 10 + mat.healthMod;
         if (props.hasTrait(EnumGolemTrait.FRAGILE)) {
-            maxHealth *= 0.75D;
+            maxHealth = (int)(maxHealth * .75D);
         }
         maxHealth += props.getRank();
         getAttribute(Attributes.MAX_HEALTH).setBaseValue(maxHealth);
@@ -237,21 +238,14 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
             setHealth((float) maxHealth);
         }
 
-        double armor = mat.armor;
+        int armor = mat.armor;
         if (props.hasTrait(EnumGolemTrait.ARMORED)) {
-            armor += 4.0D;
+            armor = (int)Math.max(armor * 1.5D, armor + 1);
         }
+        if (props.hasTrait(EnumGolemTrait.FRAGILE)) armor = (int)(armor * .75D);
         getAttribute(Attributes.ARMOR).setBaseValue(armor);
-
-        double speed = 0.30D;
-        if (props.hasTrait(EnumGolemTrait.WHEELED)) {
-            speed = 0.38D;
-        } else if (props.hasTrait(EnumGolemTrait.LIGHT)) {
-            speed = 0.34D;
-        } else if (props.hasTrait(EnumGolemTrait.HEAVY)) {
-            speed = 0.26D;
-        }
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(speed);
+        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(.3D);
+        getAttribute(Attributes.STEP_HEIGHT).setBaseValue(props.hasTrait(EnumGolemTrait.WHEELED) ? .5D : .6D);
 
         double follow = props.hasTrait(EnumGolemTrait.SCOUT) ? 56.0D : 40.0D;
         getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(follow);
@@ -278,6 +272,14 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
             return 2;
         }
         return 1;
+    }
+
+    public float getGolemMoveSpeed() {
+        var props = getProperties();
+        return 1 + props.getRank() * .025F + (props.hasTrait(EnumGolemTrait.LIGHT) ? .2F : 0)
+                + (props.hasTrait(EnumGolemTrait.HEAVY) ? -.175F : 0)
+                + (props.hasTrait(EnumGolemTrait.FLYER) ? -.33F : 0)
+                + (props.hasTrait(EnumGolemTrait.WHEELED) ? .25F : 0);
     }
 
     @Override

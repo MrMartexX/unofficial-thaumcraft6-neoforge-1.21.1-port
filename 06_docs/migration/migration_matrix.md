@@ -10,7 +10,7 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 
 The review branch now has real seal menu/sync, articulated legacy golem OBJ
 rendering, home/follow state, compensated press extraction, advanced logistics
-options and actual Breaker mining (53 server checks, ten client captures). See
+options and actual Breaker mining (56 server checks, ten client captures). See
 [the focused evidence and explicit remaining boundaries](../audits/seal_golem_remediation_2026_11_03.md).
 This is not closure of unmapped addon/state metadata, movement/visual parity, or the
 separate uncommitted worldgen work. Keep those portions classified as incomplete.

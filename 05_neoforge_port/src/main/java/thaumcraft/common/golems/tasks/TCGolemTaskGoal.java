@@ -102,7 +102,7 @@ public final class TCGolemTaskGoal extends Goal {
                 if (golem.blockPosition().equals(previousRamble)) {
                     var ramble = net.minecraft.world.entity.ai.util.DefaultRandomPos.getPosTowards(golem, 6, 4,
                             net.minecraft.world.phys.Vec3.atLowerCornerOf(task.getPos()), Math.PI / 2);
-                    if (ramble != null) golem.getNavigation().moveTo(ramble.x + .5, ramble.y + .5, ramble.z + .5, 1);
+                    if (ramble != null) golem.getNavigation().moveTo(ramble.x + .5, ramble.y + .5, ramble.z + .5, golem.getGolemMoveSpeed());
                 } else moveTo();
                 previousRamble = golem.blockPosition();
             }
@@ -114,8 +114,8 @@ public final class TCGolemTaskGoal extends Goal {
     }
 
     private void moveTo() {
-        if (type == 1 && task.getEntity() != null) golem.getNavigation().moveTo(task.getEntity(), 1.0);
-        else golem.getNavigation().moveTo(destination.getX() + 0.5, destination.getY() + 0.5, destination.getZ() + 0.5, 1.0);
+        if (type == 1 && task.getEntity() != null) golem.getNavigation().moveTo(task.getEntity(), golem.getGolemMoveSpeed());
+        else golem.getNavigation().moveTo(destination.getX() + 0.5, destination.getY() + 0.5, destination.getZ() + 0.5, golem.getGolemMoveSpeed());
     }
 
     @Override

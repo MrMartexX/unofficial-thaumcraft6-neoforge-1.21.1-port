@@ -68,10 +68,18 @@ All paths above are relative to the primary 1.12.2 decompiled source tree.
   [the scoped design and safety adaptation](../design/golem_breaker_remediation.md).
 - Stock quota labels now use vanilla item decorations at the slot baseline;
   their previous depth intersected item geometry and clipped the numerals.
+- Original-jar `javap -p -c` inspection of EntityThaumcraftGolem confirmed that
+  FRAGILE multiplies health/armor by double 0.75, then truncates to integer. The
+  decompiler's `value *= (int)0.75` is misleading and must not be copied literally.
+  ARMORED uses integer max(base*1.5,base+1), not an invented flat +4.
+- Movement retains base attribute 0.3 and applies the legacy additive rank/trait
+  multiplier at work/home navigation requests. Step height is 0.5 for wheels,
+  otherwise 0.6. Automatic repair heals one every100 ticks, or40 with REPAIR.
 
 ## Evidence
 
-- Dedicated-server golem/seal/press audit: **53/53 PASS**.
+- Dedicated-server golem/seal/press audit: **56/56 PASS**. Attribute/work-speed
+  assertions cover all 7200 registered part combinations at ranks 0, 3 and 10.
 - Focus regression: **16/16 PASS**.
 - Aggregate audit: **40/40 PASS**. Its worldgen entries include registration
   checks, not full ecosystem or generated-shape equivalence.
@@ -108,6 +116,8 @@ and support block, then stops only that client normally. Other client launches
 do not enable the probe. The world name must match `tc_visual_[A-Za-z0-9_-]+`.
 Run `tools/audits/client/test-golem-visual-evidence.ps1` from the repository to
 check captures and the real server-menu/removal acknowledgement marker.
+Gradle rejects a missing fixture before launch. The opt-in probe also captures
+its startup screen and fails on disconnection instead of silently waiting there.
 
 ## Not Certified
 

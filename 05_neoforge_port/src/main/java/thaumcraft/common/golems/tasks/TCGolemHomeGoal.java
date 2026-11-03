@@ -21,7 +21,7 @@ public final class TCGolemHomeGoal extends Goal {
         destination = distance <= 1024 ? home : DefaultRandomPos.getPosTowards(golem, 16, 7, home, Math.PI / 2);
         return destination != null;
     }
-    public void start() { golem.getNavigation().moveTo(destination.x, destination.y, destination.z, 1); }
+    public void start() { golem.getNavigation().moveTo(destination.x, destination.y, destination.z, golem.getGolemMoveSpeed()); }
     public boolean canContinueToUse() {
         return !golem.isFollowingOwner() && golem.hasRestriction() && !golem.getNavigation().isDone()
                 && golem.getRestrictCenter().distToCenterSqr(golem.position()) > 3;

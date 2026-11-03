@@ -31,6 +31,7 @@ public final class TCGolemVisualAudit {
     private static boolean started;
     private static int phase, frames;
     private static boolean actionsSent;
+    private static int startupFrames;
     private static net.minecraft.core.BlockPos testPos;
     private static net.minecraft.world.level.block.state.BlockState supportBefore;
     private static final Path OUTPUT = Path.of("../../tools/reports/local/review-20261102/visual-seals-golems");
@@ -106,8 +107,24 @@ public final class TCGolemVisualAudit {
 
     @SubscribeEvent
     public static void rendered(ScreenEvent.Render.Post event) {
-        if (!started || !Boolean.getBoolean("tc.golemVisualAudit")) return;
+        if (!Boolean.getBoolean("tc.golemVisualAudit")) return;
         var mc = Minecraft.getInstance();
+        if (!started) {
+            if (++startupFrames == 60) {
+                try {
+                    event.getGuiGraphics().flush();
+                    Files.createDirectories(OUTPUT);
+                    try (var image = Screenshot.takeScreenshot(mc.getMainRenderTarget())) {
+                        image.writeToFile(OUTPUT.resolve("startup.png"));
+                    }
+                } catch (java.io.IOException exception) { throw new IllegalStateException("Cannot capture audit startup", exception); }
+                com.mojang.logging.LogUtils.getLogger().info("TC_GOLEM_VISUAL_AUDIT_STARTUP screen={} level={}",
+                        event.getScreen().getClass().getName(), mc.level != null);
+                if (event.getScreen() instanceof net.minecraft.client.gui.screens.DisconnectedScreen)
+                    throw new IllegalStateException("Visual audit could not enter its fixture; see startup.png");
+            }
+            return;
+        }
         if (!(event.getScreen() instanceof ModelSheet) && !(event.getScreen() instanceof TCSealScreen)) return;
         frames++;
         if (event.getScreen() instanceof TCSealScreen screen) {
