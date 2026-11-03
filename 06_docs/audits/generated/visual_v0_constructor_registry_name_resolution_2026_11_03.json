@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "pinned_main_sha": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+  "based_on": "visual_v0_legacy_port_crosswalk_candidates_2026_11_03.json",
+  "scope": "Limited constructor registry-name resolution for six original blocks and 17 original items; source-level evidence only",
+  "original_registry_name_rule": {
+    "items": "ItemTCBase constructor calls setRegistryName(name), ItemTCEssentiaContainer also sets name directly; ItemChunksEdible calls setRegistryName(chunk)",
+    "blocks": "BlockTC constructor calls setRegistryName(thaumcraft,name), BlockTCDevice -> BlockTCTile -> BlockTC; direct special classes set name"
+  },
+  "readme": "This delta is not a full old-JAR comparison, gameplay parity report, or claim that unmatched gameplay is missing. Modern matches are name-only.",
+  "entries": [
+    {
+      "category": "block",
+      "legacy_symbol": "grassAmbient",
+      "legacy_java_class": "BlockGrassAmbient",
+      "legacy_id": "grass_ambient",
+      "legacy_config_line": 261,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/world/BlockGrassAmbient.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [],
+      "classification": "NO_SAME_ID_IN_PORT_SOURCE_REVIEW",
+      "reason": "Direct setRegistryName in BlockGrassAmbient."
+    },
+    {
+      "category": "block",
+      "legacy_symbol": "brainBox",
+      "legacy_java_class": "BlockBrainBox",
+      "legacy_id": "brain_box",
+      "legacy_config_line": 332,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockBrainBox.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [],
+      "classification": "NO_SAME_ID_IN_PORT_SOURCE_REVIEW",
+      "reason": "BlockBrainBox -> BlockTC constructor sets registry name."
+    },
+    {
+      "category": "block",
+      "legacy_symbol": "redstoneRelay",
+      "legacy_java_class": "BlockRedstoneRelay",
+      "legacy_id": "redstone_relay",
+      "legacy_config_line": 339,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockRedstoneRelay.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [],
+      "classification": "NO_SAME_ID_IN_PORT_SOURCE_REVIEW",
+      "reason": "BlockRedstoneRelay -> BlockTCDevice -> BlockTCTile -> BlockTC."
+    },
+    {
+      "category": "block",
+      "legacy_symbol": "condenserlattice",
+      "legacy_java_class": "BlockCondenserLattice",
+      "legacy_id": "condenser_lattice",
+      "legacy_config_line": 346,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockCondenserLattice.java",
+      "modern_exact_id_present": true,
+      "modern_id_candidates": [
+        "condenser_lattice"
+      ],
+      "classification": "SAME_ID_IN_PORT_SOURCE",
+      "reason": "BlockCondenserLattice(false) sets clean ID."
+    },
+    {
+      "category": "block",
+      "legacy_symbol": "condenserlatticeDirty",
+      "legacy_java_class": "BlockCondenserLattice",
+      "legacy_id": "condenser_lattice_dirty",
+      "legacy_config_line": 347,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockCondenserLattice.java",
+      "modern_exact_id_present": true,
+      "modern_id_candidates": [
+        "condenser_lattice_dirty"
+      ],
+      "classification": "SAME_ID_IN_PORT_SOURCE",
+      "reason": "BlockCondenserLattice(true) sets dirty ID."
+    },
+    {
+      "category": "block",
+      "legacy_symbol": "barrier",
+      "legacy_java_class": "BlockBarrier",
+      "legacy_id": "barrier",
+      "legacy_config_line": 368,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/misc/BlockBarrier.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [],
+      "classification": "NO_SAME_ID_IN_PORT_SOURCE_REVIEW",
+      "reason": "Direct setRegistryName in BlockBarrier; paving_stone_barrier is a distinct ID."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemCurio",
+      "legacy_id": "curio",
+      "legacy_config_line": 176,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/curios/ItemCurio.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [
+        "curio_arcane",
+        "curio_preserved",
+        "curio_ancient",
+        "curio_eldritch",
+        "curio_knowledge",
+        "curio_twisted",
+        "curio_rites"
+      ],
+      "classification": "VARIANT_ID_CANDIDATES",
+      "reason": "Seven original metadata variants and seven candidate split registrations."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemLootBag",
+      "legacy_id": "loot_bag",
+      "legacy_config_line": 177,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/curios/ItemLootBag.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [
+        "loot_bag_common",
+        "loot_bag_uncommon",
+        "loot_bag_rare"
+      ],
+      "classification": "VARIANT_ID_CANDIDATES",
+      "reason": "Original metadata variants common/uncommon/rare."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemCelestialNotes",
+      "legacy_id": "celestial_notes",
+      "legacy_config_line": 180,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/curios/ItemCelestialNotes.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [],
+      "classification": "NO_SAME_ID_IN_PORT_SOURCE_REVIEW",
+      "reason": "Original metadata family contains 13 celestial variants; no obvious modern names in this registry census."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemCrystalEssence",
+      "legacy_id": "crystal_essence",
+      "legacy_config_line": 199,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/resources/ItemCrystalEssence.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [
+        "crystal_essence_aer",
+        "crystal_essence_terra",
+        "crystal_essence_ignis",
+        "crystal_essence_aqua"
+      ],
+      "classification": "VARIANT_ID_CANDIDATES",
+      "reason": "Current registry has 37 crystal_essence_* entries; source semantics/NBT require separate review."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemChunksEdible",
+      "legacy_id": "chunk",
+      "legacy_config_line": 200,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/consumables/ItemChunksEdible.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [
+        "chunk_chicken",
+        "chunk_beef",
+        "chunk_pork",
+        "chunk_fish",
+        "chunk_rabbit",
+        "chunk_mutton"
+      ],
+      "classification": "VARIANT_ID_CANDIDATES",
+      "reason": "Six split chunk names are candidate equivalents, content parity untested."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemLabel",
+      "legacy_id": "label",
+      "legacy_config_line": 203,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/consumables/ItemLabel.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [
+        "jar_label",
+        "jar_label_essence"
+      ],
+      "classification": "RENAMED_ID_CANDIDATES",
+      "reason": "Source ItemLabel uses base label and metadata blank/filled, port offers jar_label names."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemSanitySoap",
+      "legacy_id": "sanity_soap",
+      "legacy_config_line": 208,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/consumables/ItemSanitySoap.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [
+        "sane_soap"
+      ],
+      "classification": "RENAMED_ID_CANDIDATES",
+      "reason": "Source uses sanity_soap, port declares sane_soap; behavioral mapping unverified."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemBaubles",
+      "legacy_id": "baubles",
+      "legacy_config_line": 266,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/baubles/ItemBaubles.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [
+        "bauble_amulet",
+        "bauble_ring",
+        "bauble_girdle",
+        "ring_apprentice",
+        "bauble_amulet_fancy",
+        "bauble_ring_fancy",
+        "bauble_girdle_fancy"
+      ],
+      "classification": "VARIANT_ID_CANDIDATES",
+      "reason": "Seven original ItemTCBase subtypes; plausible modern split items."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemAmuletVis",
+      "legacy_id": "amulet_vis",
+      "legacy_config_line": 267,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/baubles/ItemAmuletVis.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [
+        "vis_amulet"
+      ],
+      "classification": "RENAMED_ID_CANDIDATES",
+      "reason": "Original found/crafted metadata are not necessarily represented as separate modern registrations."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemVerdantCharm",
+      "legacy_id": "verdant_charm",
+      "legacy_config_line": 268,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/baubles/ItemVerdantCharm.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [],
+      "classification": "NO_SAME_ID_IN_PORT_SOURCE_REVIEW",
+      "reason": "Neither exact name nor proven equivalent; verdant_heart or bauble_charm must not be assumed equivalent."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemCuriosityBand",
+      "legacy_id": "curiosity_band",
+      "legacy_config_line": 269,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/baubles/ItemCuriosityBand.java",
+      "modern_exact_id_present": true,
+      "modern_id_candidates": [
+        "curiosity_band"
+      ],
+      "classification": "SAME_ID_IN_PORT_SOURCE",
+      "reason": "Registry ID only, renderer, behavior and balance unverified."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemVoidseerCharm",
+      "legacy_id": "voidseer_charm",
+      "legacy_config_line": 270,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/baubles/ItemVoidseerCharm.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [],
+      "classification": "NO_SAME_ID_IN_PORT_SOURCE_REVIEW",
+      "reason": "Do not conflate voidseer_pearl with legacy charm without class/behavior evidence."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemCloudRing",
+      "legacy_id": "cloud_ring",
+      "legacy_config_line": 271,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/baubles/ItemCloudRing.java",
+      "modern_exact_id_present": true,
+      "modern_id_candidates": [
+        "cloud_ring"
+      ],
+      "classification": "SAME_ID_IN_PORT_SOURCE",
+      "reason": "Registry ID only, renderer, behavior and balance unverified."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemCreativeFluxSponge",
+      "legacy_id": "creative_flux_sponge",
+      "legacy_config_line": 273,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/misc/ItemCreativeFluxSponge.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [],
+      "classification": "NO_SAME_ID_IN_PORT_SOURCE_REVIEW",
+      "reason": "No same-name or obvious synonym in current item registry census."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemEnchantmentPlaceholder",
+      "legacy_id": "enchanted_placeholder",
+      "legacy_config_line": 274,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/curios/ItemEnchantmentPlaceholder.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [
+        "enchanted_placeholder_protection_1",
+        "enchanted_placeholder_sharpness_1",
+        "enchanted_placeholder_silk_touch_1",
+        "enchanted_placeholder_fortune_1"
+      ],
+      "classification": "VARIANT_ID_CANDIDATES",
+      "reason": "Current four example placeholder item IDs; do not infer completeness from registration names."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemGolemPlacer",
+      "legacy_id": "golem",
+      "legacy_config_line": 281,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/golems/ItemGolemPlacer.java",
+      "modern_exact_id_present": true,
+      "modern_id_candidates": [
+        "golem"
+      ],
+      "classification": "SAME_ID_IN_PORT_SOURCE",
+      "reason": "Exact registry ID exists, but not validated as original golem placement logic."
+    },
+    {
+      "category": "item",
+      "legacy_java_class": "ItemSealPlacer",
+      "legacy_id": "seal",
+      "legacy_config_line": 282,
+      "legacy_class_source_url": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/golems/seals/ItemSealPlacer.java",
+      "modern_exact_id_present": false,
+      "modern_id_candidates": [
+        "seal_pickup",
+        "seal_fill",
+        "seal_empty",
+        "seal_guard",
+        "seal_breaker",
+        "seal_lumber",
+        "seal_provider",
+        "seal_stock",
+        "seal_use",
+        "seal_butcher",
+        "seal_harvest",
+        "sealblank"
+      ],
+      "classification": "VARIANT_ID_CANDIDATES",
+      "reason": "Original seal item has subtype blank and NBT-specific seal selection; port has many seal items."
+    }
+  ]
+}
