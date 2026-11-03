@@ -1,0 +1,213 @@
+{
+  "schema": "thaumcraft.v0.client_fx_animation_semantic_diff.v1",
+  "date": "2026-11-03",
+  "source": {
+    "repository": "MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port",
+    "commit": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+    "branch": "main",
+    "comparison": "checked-in decompiled legacy tree vs NeoForge port",
+    "review_pr": 11
+  },
+  "counts": {
+    "source_features": 8,
+    "source_level_visual_gaps_or_substitutions": 3,
+    "confirmed_timing_phase_shifts": 1,
+    "feature_paths_requiring_runtime_acceptance": 8
+  },
+  "features": [
+    {
+      "id": "V0FX-01",
+      "priority": "P0",
+      "feature": "Arcane Bore mining beam",
+      "classification": "source_gap_high_confidence",
+      "original": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/construct/RenderArcaneBore.java",
+          "anchor": "if (bore.clientDigging ...), beam1.png and beam quads"
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/construct/EntityArcaneBore.java",
+          "anchor": "PacketFXBoreDig on mine start"
+        }
+      ],
+      "port": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCArcaneBoreRenderer.java",
+          "anchor": "render() draws model only"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCArcaneBoreEntity.java",
+          "anchor": "server digTarget, levelEvent 2001 on break"
+        }
+      ],
+      "runtime_verified": false
+    },
+    {
+      "id": "V0FX-02",
+      "priority": "P1",
+      "feature": "Taint bottle impact",
+      "classification": "source_recipe_substitution_confirmed",
+      "original": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityBottleTaint.java",
+          "anchor": "100 taintsplosionFX + bottleTaintBreak on byte 3"
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java",
+          "anchor": "bottleTaintBreak adds 8 ITEM_CRACK and splash sound"
+        }
+      ],
+      "port": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCBottleTaintEntity.java",
+          "anchor": "24 ITEM + 24 MYCELIUM, no direct break sound in handler"
+        }
+      ],
+      "runtime_verified": false
+    },
+    {
+      "id": "V0FX-03",
+      "priority": "P2",
+      "feature": "Nitor first core",
+      "classification": "timing_phase_shift_confirmed",
+      "original": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/misc/TileNitor.java",
+          "anchor": "count++ % 10 == 0"
+        }
+      ],
+      "port": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/misc/TCNitorBlockEntity.java",
+          "anchor": "pre-increment count"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/fx/TCNitorClientEffects.java",
+          "anchor": "count % 10 == 0"
+        }
+      ],
+      "runtime_verified": false
+    },
+    {
+      "id": "V0FX-04",
+      "priority": "P1",
+      "feature": "Taint seed shape/motion",
+      "classification": "foundation_approximation",
+      "original": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/models/entity/ModelTaintSeed.java",
+          "anchor": "dynamic ModelRendererTaintSeed tentacle segments"
+        }
+      ],
+      "port": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCTaintSeedRenderer.java",
+          "anchor": "simple box geometry and sine-based sway"
+        }
+      ],
+      "runtime_verified": false
+    },
+    {
+      "id": "V0FX-05",
+      "priority": "P2",
+      "feature": "General beams/arcs",
+      "classification": "caller_level_review_required",
+      "original": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java",
+          "anchor": "beamCont, beamBore, arcLightning, arcBolt"
+        }
+      ],
+      "port": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java",
+          "anchor": "different dispatcher API"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/fx/TCWispClientEffects.java",
+          "anchor": "dedicated Wisp zap bolt"
+        }
+      ],
+      "runtime_verified": false
+    },
+    {
+      "id": "V0FX-06",
+      "priority": "P2",
+      "feature": "Wisp zap",
+      "classification": "dedicated_path_found",
+      "original": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/network/fx/PacketFXWispZap.java",
+          "anchor": "aspect-colored FXBolt width 0.6"
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/beams/FXBolt.java",
+          "anchor": "3-tick life"
+        }
+      ],
+      "port": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/fx/TCWispClientEffects.java",
+          "anchor": "aspect-color ZapBolt width 0.6 and 3 ticks"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCWispEntity.java",
+          "anchor": "TCEntityFXNetwork.sendWispZap"
+        }
+      ],
+      "runtime_verified": false
+    },
+    {
+      "id": "V0FX-07",
+      "priority": "P2",
+      "feature": "Infusion essentia stream",
+      "classification": "dedicated_animated_path_found",
+      "original": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/other/FXEssentiaStream.java",
+          "anchor": "keyed streams, tapering and droplets"
+        }
+      ],
+      "port": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/fx/TCInfusionClientEffects.java",
+          "anchor": "EssentiaStream keyed packet cache, 8-sided textured ribbon"
+        }
+      ],
+      "runtime_verified": false
+    },
+    {
+      "id": "V0FX-08",
+      "priority": "P2",
+      "feature": "Generic essentia trail API",
+      "classification": "same_name_different_algorithm",
+      "original": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java",
+          "anchor": "essentiaTrailFx creates FXEssentiaStream"
+        }
+      ],
+      "port": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java",
+          "anchor": "essentiaTrailFx samples straight line and generic particles"
+        }
+      ],
+      "runtime_verified": false
+    }
+  ],
+  "acceptance_scenes": [
+    "arcane_bore_active_dig",
+    "taint_bottle_impact_audio",
+    "nitor_first_20_client_ticks",
+    "taint_seed_idle_attack",
+    "wisp_zap_aspect_color",
+    "infusion_essentia_stream"
+  ],
+  "limitations": [
+    "No client runtime or visual screenshots",
+    "No Gradle/CI run",
+    "Caller-level feature audit still incomplete",
+    "Source statuses do not establish full visual parity"
+  ]
+}
