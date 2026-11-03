@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F28](#additional-source-history-checks-f01f28)
+6. [Additional source-history checks: F01–F32](#additional-source-history-checks-f01f32)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F28
+## Additional source-history checks: F01–F32
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -671,6 +671,83 @@ Eight inspected modern block classes (`TCFocalManipulatorBlock`, `TCDioptraBlock
 One real alternative was found: Void Siphon has a client `ParticleTypes.PORTAL` branch in its BE (F26), although likely disconnected by block-event dispatch. Thus the correct defect description is **missing legacy animated portal mesh plus an at-risk modern particle branch**, not “Void Siphon has no FX code.”
 
 **Next:** complete active registry and indirect render/resource dispatch coverage, extend item/equipment/entity comparison, and obtain controlled client screenshots. No existing code has been changed.
+
+
+### F29 — Grappler icon: inactive legacy `type` predicates and missing loaded-state transitions
+
+**Status:** `confirmed_code` / `confirmed_legacy_mismatch` for the item property and stored state; `probable_cause` for the user-observed icon; `requires_client` for exact rendering.
+
+The original [ItemGrappleGun](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/tools/ItemGrappleGun.java) registers a legacy item property named `type`. It returns 1 when the held stack's `loaded` NBT byte is 1 and 0 otherwise. Firing sets `loaded=1`; when the grapple is no longer attached, the state returns to zero. The corresponding original model [grapple_gun.json](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/resources/assets/thaumcraft/models/item/grapple_gun.json) has a `parent: item/generated`, *no base textures*, and two predicate-selected complete models: `grapple_gun_1` (value 0) and `grapple_gun_2` (value 1).
+
+The present [port model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/grapple_gun.json) retains this same predicate structure **unchanged**. The two detailed 3D JSON models [variant 1](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/grapple_gun_1.json) and [variant 2](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/grapple_gun_2.json) exist. However, [TCItemProperties](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCItemProperties.java) registers `thaumcraft:type` only for `PRIMORDIAL_PEARL`, **not** `GRAPPLE_GUN`. Its model correctly requests `thaumcraft:type`; the Grappler model instead requests the unqualified legacy `type`, whose resolved key is `minecraft:type`. [TCGrappleGunItem](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/tools/TCGrappleGunItem.java) launches a projectile and handles charge but contains no `loaded` item state, matching property getter, or state reset.
+
+This produces **two independent gaps**: (1) no registered predicate value for the active Grappler item, also with a legacy-vs-modern namespace mismatch; and (2) no item-specific loaded/idle state transition to drive the two 3D variants even if a predicate were registered. Because the top-level JSON defines no fallback layer texture, failed override selection is particularly high-risk. The missing icon's exact form needs an in-game render, not a claim based solely on JSON.
+
+**Negative controls:** the Primordial Pearl uses `thaumcraft:type` consistently, the Caster `thaumcraft:focus`, and both Warded Jars `thaumcraft:fill`. This is a Grappler-specific registration/state issue, not proof all item predicates are broken.
+
+**Client confirmation:** inspect inventory, dropped stack, item frame, hotbar, GUI, and first-/third-person poses at idle, launch, active tether, and detach. Record which of the two variants actually bakes and renders; do not conflate projectile gameplay with item icon parity.
+
+### F30 — Cloth / Void Robe icon tint: alpha-bit risk; original layer order is not a regression
+
+**Status:** `confirmed_code` for returned color values and model-layer comparisons; `probable_cause` for color/opacity defects; `requires_client` for pixel appearance. The previously reported Thaumaturge/Darkseer icon symptoms are treated as observations, not proof of one common rendering bug.
+
+The six armor icon registrations in [TCColorHandlers](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCColorHandlers.java) use:
+
+`ItemColor robeColor = (stack, tintIndex) -> tintIndex == 0 ? DyedItemColor.getOrDefault(stack, ItemRobeArmor.LEGACY_DEFAULT_COLOR) : WHITE;`
+
+Here `WHITE=0xFFFFFF`, while the default dyed component and `DyedItemColor` colors supply 24-bit RGB. Therefore the callback returns values with the high byte `0x00` rather than guaranteed opaque `0xFF`. In the same modern class the jar, label, and essentia item handlers explicitly return `0xFF000000 | (color & 0xFFFFFF)`, and Nitor item handlers use literal `0xFFRRGGBB`. This creates an **inconsistent item tint representation**. It is a plausible shared mechanism for color/black-edge defects if the 1.21.1 rendering path consumes item tint values as ARGB; controlled screenshots and/or an instrumented item-tint trace are required before asserting a specific visible alpha outcome.
+
+Original [ColorHandler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/ColorHandler.java) returned the armor item's RGB or `-1` for the untinted layer. The modern callback preserves the original intended tint-index semantics but has not demonstrated the appropriate 1.21.1 color packing.
+
+**Rejected alternative (negative control):** precise legacy vs modern item model comparison shows the **same** two-layer ordering for Cloth chest, legs and boots (`layer0` body, `layer1` overlay); Void Robe chest/legs both put the `_over` texture in `layer0` and body in `layer1`; Void Robe helmet has just `layer0` in both versions. Thus the layer reversal between armor families is **legacy behavior**, not a port-introduced reversal. The original `items/` texture paths were migrated to modern `item/`, as expected.
+
+**Separation:** this callback applies to **item icons**. The equipped robe armor model/render pass may use a different tint/overlay pipeline, so nothing here proves that worn armor has the same defect.
+
+**Client confirmation:** capture all six icons in default and custom-dyed color, with transparent and opaque UI backgrounds and GUI-scale/shader variations, then separately check worn armor on player and armor stand. Compare full RGBA samples and the original overlay position; avoid blanket fixes for item and worn-armor layers.
+
+### F31 — Missing legacy dynamic item color handlers: focus, Caster focus, and golem item
+
+**Status:** `confirmed_legacy_mismatch` for static item-color registration absence; `requires_client` for exact on-screen colors and item-model pipeline interactions.
+
+The legacy [ColorHandler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/ColorHandler.java) registers **three** distinct dynamic color callbacks:
+
+1. `ItemsTC.casterBasic`: if an installed focus is present, use that focus's color for the higher-index focus layer.
+2. `ItemsTC.focus1`, `focus2`, `focus3`: color the focus item with `ItemFocus.getFocusColor(stack)`.
+3. `ItemsTC.golemPlacer`: read NBT `props` and tint the item according to the chosen golem material's `itemColor`.
+
+Modern [TCColorHandlers](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCColorHandlers.java) registers **none of** `TCItems.CASTER_BASIC`, `TCItems.FOCUS_1/2/3`, or `TCItems.GOLEM_PLACER`. Their items remain registered in [TCItems](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java), so this is not a case of removed legacy content.
+
+The data and model hooks otherwise still expose the intended visual variation:
+
+- [modern ItemFocus](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/ItemFocus.java) has `getFocusColor` reading the focus-package component, while [focus_1 model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/focus_1.json) (and focus_2/3) supplies a generated tintable layer.
+- [ItemCaster](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/ItemCaster.java) exposes the installed focus stack. The modern [Caster model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/caster_basic.json) selects a focus variant using registered `thaumcraft:focus`; [its focused gauntlet geometry](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/caster_gauntlet_focus.json) has faces with `tintindex: 1`. Model variant switching can therefore work while its intended focus color remains absent.
+- [ItemGolemPlacer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/golems/ItemGolemPlacer.java) stores the golem `props` in modern custom stack data, and [golem item model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/golem.json) is a generated tintable texture. Data preservation does not restore the missing color callback.
+
+**Why this matters:** a scan that checks only missing textures or JSON validity misses the absence of a registry callback when all relevant resources and item IDs exist. Conversely, missing dynamic tint does **not** by itself prove an item renders black; vanilla untinted pixels and hardcoded texture colors still affect the visual result.
+
+**Client confirmation:** vary focus package colors and Caster-mounted focus, compare all three focus item sizes, and vary golem material. Record whether the generated item and focused gauntlet respond to those values. Keep the base Caster item without a focus as a negative control.
+
+### F32 — Broader 24-bit vs 32-bit ItemColor risk: candles, crystals, leaves; counterexamples
+
+**Status:** `confirmed_code` for returned integer values and active model tint indices; `probable_cause` for visual alpha corruption; `requires_client` for actual screenshots. Distinguish **item** coloration from **block** coloration.
+
+The same modern [TCColorHandlers](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCColorHandlers.java) uses mixed color conventions across items:
+
+| Active item family | Source colors returned by item callback | Packed high byte | Checked item model or geometry | Interpretation |
+| --- | --- | --- | --- | --- |
+| Cloth/Void Robe pieces | `DyedItemColor.getOrDefault` / `0xFFFFFF` | `0x00` | generated robe layers | As F30; likely alpha-risk |
+| Six primal + Flux crystals | `AIR=0xFFFF7E`, `FIRE=0xFF5A01`, `WATER=0x3CD4FC`, `EARTH=0x56C000`, `ORDER=0xD5D4EC`, `ENTROPY=0x404040`, `FLUX=0x800080` | `0x00` | e.g. `models/item/crystal_aer.json` generated `layer0: thaumcraft:item/crystal_planter` | Shared-risk item tints, not proof of every crystal appearance |
+| Sixteen colored candles | `DYE_*` constants, `0xFFFFFF` for non-tinted layer | `0x00` on index 0 | `models/item/candle_red.json` inherits `thaumcraft:block/candle`, whose five elements expose 24 faces with `tintindex:0` and five untinted faces | A verified tintable path with a potentially wrong packed alpha byte |
+| Greatwood/Silverwood leaf items | `FoliageColor.getDefaultColor()` / `WHITE=0xFFFFFF` | conventionally RGB / `0x00` for WHITE | active registered leaf items | Probe separately; foliage value source and world rendering differ |
+| Nitor item family | explicit `0xFFRRGGBB` literals | `0xFF` | e.g. `models/item/nitor_red.json` | Negative control for color packing |
+| Jar fill, jar label, dynamic aspect item variants | explicit `0xFF000000 | (color & 0xFFFFFF)` | jar/item tint layers | Negative control for dynamic ARGB packing |
+
+The candle evidence is stronger than a mere suspicion based on a registry name: its shared block-model faces actually carry tint index 0. Nonetheless, the precise NeoForge 1.21.1 item tint path and its pixel interpretation must be validated before calling the alpha hypothesis proven. **Do not carry this item-color suspicion into world block colors without checking their distinct shader/renderer contract.**
+
+**Suggested focused batch:** one candle per dye family plus shared parent, the seven crystal items, both leaves and one Nitor control on the same screen. Capture direct pixels and if possible trace the registered callback's returned value through to vertex color. This can distinguish `0x00RRGGBB` from unwanted texture alpha fringes, blend-state errors, and adjacent-quad overdraw.
+
+**Research gate:** F29–F32 are recorded as diagnosis and test design only. No mod code, audit scripts, resource data, CI, or existing PR code branches were altered.
+
 
 ## Black borders: competing causes
 
