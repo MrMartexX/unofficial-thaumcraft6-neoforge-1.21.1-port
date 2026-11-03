@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F70](#additional-source-history-checks-f01f70)
+6. [Additional source-history checks: F01–F75](#additional-source-history-checks-f01f70)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F70
+## Additional source-history checks: F01–F75
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1192,6 +1192,66 @@ These source-level results are additive to earlier F29–F62 and the archived D0
 **Minimum next evidence:** paired 1.12.2/1.21.1 captures or reproducible client-state replay for every listed active entity, with camera angle, FPS, shader settings, alpha, graphics quality, equipment and animation state held constant. No runtime captures were produced in this source-only pass. The source study does **not** prove a single shared cause for thick black HUD outlines; blend changes are known in multiple independent renderers but their onscreen symptoms require separate tests.
 
 
+
+## Focused block-geometry continuation: F71–F75 (November 3, 2026)
+
+The following findings extend, rather than replace, N12–N16 and F10–F28. The pinned **main** code baseline is `72eaac17a1e1c0c51b27cb151ef7f244944c89d5`; the research branch is documentation-only. These findings concern selection/raycast geometry or a branch-specific asset check. They do **not** establish pixel-color, shader, or black-border causes. Confirmed interaction differences may be deliberate modern UX choices, but strict legacy behavior must be evaluated explicitly.
+
+### F71 — Condenser Lattice: multi-arm outline is no longer the original rectangular bounding envelope
+
+**Active IDs:** `thaumcraft:condenser_lattice`, `thaumcraft:condenser_lattice_dirty` (both registered in `TCBlocks.java:437–438`). **Status:** `confirmed_legacy_mismatch` for the block selection shape; screenshot outcome `requires_client`.
+
+Legacy `BlockCondenserLattice.getBoundingBox` starts from `[5,5,5]..[11,11,11]` in sixteenths, then expands the **one enclosing AABB** to the corresponding block boundary for every connected lattice side or a condenser directly below (`BlockCondenserLattice.java:159–199`). Modern `TCCondenserLatticeBlock.getShape` instead unions a 6×6×6 center with six independently connected 6-pixel-wide arms (`TCCondenserLatticeBlock.java:47–53, 86–93, 124–134`). Its six directional blockstate connections are updated, so this is not a claim that connections or all arms are absent.
+
+With **NORTH + EAST** connections, the legacy outline encloses the entire box `[5,5,0]..[16,11,11]`; the modern outline is the union of the core, north arm and east arm, excluding the diagonal upper-right corner of that box. The difference is invisible for an isolated node or a single arm and is easy to miss in a single-position audit. For a node also connected downward, Y may extend to zero, but the diagonal X/Z gap remains. Selection/raycast behavior is code-confirmed; exact collision semantics and in-game selection outlines must be separately measured.
+
+**Alternative explanation:** The modern L-shaped outline is an intentional tighter hitbox aligned with the model, not a broken rendering layer. **Repro:** place condenser at `(0,0,0)`, lattice at `(0,1,0)`, adjacent lattice at `(0,1,-1)` and `(1,1,0)`; compare crosshair target/outline against the original in the diagonal X/Z gap at the center node. Check connected-state stabilization, both clean/dirty versions, and one-arm negative controls.
+
+**Sources:** [legacy lattice](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockCondenserLattice.java), [modern lattice](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCCondenserLatticeBlock.java), [active registrations](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java). **Audit blind spot:** a one-block or one-arm VoxelShape test cannot detect the multi-arm envelope difference.
+
+### F72 — Levitator: six-facing outline and control-face subHit gating lost
+
+**Active ID:** `thaumcraft:levitator` (`TCBlocks.java:450`). **Status:** `confirmed_legacy_mismatch` for selection and interaction gating, `requires_client` for precise outline presentation.
+
+Legacy `BlockLevitator.getBoundingBox` contracts the AABB by 2/16 on the side indicated by its `facing` (`BlockLevitator.java:93–102`). Modern `TCLevitatorBlock.getShape` always returns the full `[0,0,0]..[16,16,16]` cube regardless of facing (`TCLevitatorBlock.java:36, 55–58`). The original also uses `RayTracer.retraceBlock`, `collisionRayTrace` over `IndexedCuboid6`, `getSelectedBoundingBox`, and `subHit == 0` to gate a range adjustment (`BlockLevitator.java:64–75, 78–90, 113–125`). `TileLevitator.addTraceableCuboids` identifies the tiny control region for all six orientations (`TileLevitator.java:181–206`). The port simply calls `levitator.increaseRange(player)` on any `useWithoutItem`, without a sub-part check (`TCLevitatorBlock.java:95–103`).
+
+**Expected original behavior:** the outline changes with orientation; the range cycles only after a hit on the specific control surface. **Current code:** full-cube outline, generic interaction across the targetable surface. **Alternative explanation:** simplified controls may be an intentional accessibility change; they are still a strict-parity delta. **Repro:** six facings, click the center control and a visually distinct housing surface, record range/message changes and compare selection outlines to 1.12.2. Perform the test with an empty hand to isolate `useWithoutItem` and do not infer the exact framebuffer highlight from static geometry alone.
+
+**Sources:** [legacy Levitator block](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockLevitator.java), [legacy Levitator tile](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/devices/TileLevitator.java), [modern block](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCLevitatorBlock.java). **Audit blind spot:** registration, rendered-model, and generic right-click tests do not verify sub-part hit semantics.
+
+### F73 — Infusion/Recharge Pedestals: tight multipart modern selection replaces full-cube legacy selection
+
+**Active original counterparts:** `thaumcraft:arcane_pedestal`, `thaumcraft:ancient_pedestal`, `thaumcraft:eldritch_pedestal`, and `thaumcraft:recharge_pedestal` (`TCBlocks.java:404–416`). Modern extra `pedestal_arcane/ancient/eldritch` aliases exist, but are not counted as separate confirmed original counterparts here. **Status:** `confirmed_legacy_mismatch` for the default outline, `requires_client` for screenshots and intended-parity decision.
+
+Original `BlockPedestal` and `BlockRechargePedestal` have `isFullCube=false` and `isOpaqueCube=false` but do **not** override `getBoundingBox`; neither `BlockTCTile` nor `BlockTCDevice` replaces the vanilla selection shape. Their legacy general outline is therefore a full cube. Modern `TCInfusionPedestalBlock.SHAPE` is a union of full-width base `[0,0,0]..[16,4,16]`, center column `[4,4,4]..[12,12,12]`, and upper cap `[2,12,2]..[14,16,14]` (`TCInfusionPedestalBlock.java:33–39, 120–123`). These are separate from F18/F24, which concern a **present** BER and a pending floating-item transform comparison.
+
+**Repro:** point at the empty side gap above the base of each original/port pedestal, including Recharge, and compare targetability/outline. Independently test item placement/removal; a geometry mismatch does not alone prove a failed GUI, BER, or inventory action. **Alternative explanation:** tighter current geometry could be intentional. **Audit blind spot:** a `BER exists` check or `noOcclusion` flag does not certify raycast/selection behavior.
+
+**Sources:** [legacy Pedestal](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockPedestal.java), [legacy Recharge Pedestal](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockRechargePedestal.java), [modern Pedestal](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCInfusionPedestalBlock.java).
+
+### F74 — Negative controls from the adjacent block-shape sweep
+
+**Status:** `negative_control` **for the specified geometry/render-shape mechanism only**; not full visual parity.
+
+- **Everfull Urn / Water Jug:** legacy `BlockWaterJug.getBoundingBox` is `[3,0,3]..[13,16,13]`; port `TCWaterJugBlock.LEGACY_SHAPE` is numerically equal. This does not resolve F27, the separate missing water-trail FX.
+- **Infernal Furnace:** original `BlockInfernalFurnace.getBoundingBox` is `[0,0,0]..[16,8,16]`; modern `TCInfernalFurnaceBlock.SHAPE` matches and is explicitly used for selection and collision.
+- **Mirrors:** the original `BlockMirror` six-direction selection boxes are 2/16-thick, and `TCMirrorBlock` defines the same six corresponding boxes. This does not restore the F15 animated portal-facing visual mechanism.
+- **Thaumatorium:** legacy `BlockThaumatorium.getRenderType` makes the top block `INVISIBLE` and the lower block `MODEL`; modern `TCThaumatoriumBlock.getRenderShape` preserves this split. Both modern positions use full `Shapes.block()` selection. An invisible top is not automatically a missing renderer.
+- **Condenser:** legacy `BlockCondenser` has no special bounding override (despite non-full visual flags), and the modern `TCCondenserBlock` explicitly keeps a full-cube outline. Do not infer the opposite solely from the condenser model.
+
+**Sources:** [legacy devices directory](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/tree/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices), [modern devices directory](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/tree/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices), [modern crafting blocks](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/tree/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting). **Audit blind spot:** matching shape constants do not validate alpha blending, dynamic models, particles, or GUI.
+
+### F75 — The unmerged remediation branch changes Hole JSON, but not the pinned visual baseline
+
+**Status:** `confirmed_code` branch-specific difference, **not** confirmed resolution of F15. As checked on November 3, `main` remains `72eaac17a1e1c0c51b27cb151ef7f244944c89d5`, the research head `88a7d7ddf4f2785065c0e431345c4850aaee1dc7` before this documentation update, and `codex/review-remediation-20261103` has advanced to `4515ad3f5d08fb317f1689fd49d3e3a916995da9` (**11 commits ahead of main**). This is a separate code branch; its changes are not silently included in the F71–F74 baseline.
+
+The base `assets/thaumcraft/blockstates/hole.json` still uses legacy `forge_marker`, `inventory/normal` variants and `thaumcraft:empty`; the other branch replaces this with a 1.21-style empty variant pointing to `thaumcraft:block/hole`, and adds a model with `"elements":[]`. However `TCHoleBlock.getRenderShape` on the pinned baseline returns `RenderShape.INVISIBLE`, while the original `BlockHole` has no collision box and a zero-sized selected bounding box. The changed JSON **alone** cannot establish that the original animated Hole appearance is restored; the actual client effect path remains a separate F15 test.
+
+The branch comparison reports changes in golem/seal rendering, network and saved-data code, including `TCSealSavedData`. Therefore F33–F35 must be interpreted as **main-baseline findings** pending independent reconciliation against that branch, not automatically called fixed. No F71–F74 target block class appears in the 132-file change list.
+
+**Sources:** [base Hole blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/hole.json), [remediation Hole blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/4515ad3f5d08fb317f1689fd49d3e3a916995da9/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/hole.json), [remediation Hole model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/4515ad3f5d08fb317f1689fd49d3e3a916995da9/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/hole.json), [modern Hole block](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/misc/TCHoleBlock.java). **Repro:** compare matched active Hole effects in both branches after confirming client resource loads; do not use an empty JSON element list as evidence of portal animation.
+
+---
 
 ## Black borders: competing causes
 
