@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F18](#additional-source-history-checks-f01f09)
+6. [Additional source-history checks: F01–F25](#additional-source-history-checks-f01f25)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F18
+## Additional source-history checks: F01–F25
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -536,6 +536,94 @@ Legacy [`TilePatternCrafterRenderer`](https://github.com/MrMartexX/unofficial-th
 6. **Numbers are not interchangeable:** 23 legacy TESR registrations, 10 modern BER registrations, 45 modern block-entity types, 13 unpaired TESR registrations, and 12 active unpaired types refer to different denominators. Avoid reporting "13 confirmed broken blocks" without per-case inspection.
 
 **Next investigation queue after F18:** cross-check all twelve active unpaired TESR paths against independent modern particle/render callbacks; then inspect the mapped ten BERs for partial legacy animation loss, validate item vs placed-block render pipelines, and continue the complete active-registry parity ledger. All visual claims remain subject to client verification.
+
+
+### F19 — Mapped block-entity renderer coverage: registrations are not feature-completeness evidence
+
+**Scope:** all ten `EntityRenderersEvent.RegisterRenderers` registrations at the pinned main baseline. These map to nine renderer classes because ordinary and void Warded Jars share the same class. The original and current code paths were inspected for the corresponding mechanisms. **Status:** `confirmed_code` for registered paths; individual outcomes below; pixel equivalence remains `requires_client`.
+
+| Registered modern type(s) | Legacy dynamic paths | Modern implementation | Current assessment |
+| --- | --- | --- | --- |
+| `RESEARCH_TABLE` | Scroll, tinted ribbon, inkwell, 3-D quill | `TCResearchTableRenderer` has all three, including a custom quill mesh | `negative_control` for total missing props; alignment/alpha remain `requires_client` |
+| `CRUCIBLE` | Fluid-surface height and aspect-dependent tint | `TCCrucibleRenderer` uses `getFluidHeight()` and the same `visSize()/500` color algorithm | `negative_control` for missing liquid surface; screenshot needed |
+| `INFUSION_PEDESTAL` (also recharge variant) | Floating rotating stack | `TCInfusionPedestalRenderer` renders stack with different transform/display pipeline | `confirmed_code` transform difference, `requires_client` for visual impact (F24) |
+| `INFUSION_MATRIX` | Eight rotating cubes, overlay and additive crafting halo | `TCInfusionMatrixRenderer` plus `TCInfusionClientEffects` implement those paths | `negative_control` for alleged missing halo (F23); stage ordering still `requires_client` |
+| `BELLOWS` | Dynamic inflated bag/planks/nozzle and Tube Buffer extension | `TCBellowsRenderer` reconstructs these mechanisms | `negative_control` for missing renderer/mechanism; geometry parity needs client |
+| `TUBE_VALVE` | Rotating/offset rod and ring, facing-dependent transforms | `TCTubeValveRenderer` reconstructs both mesh parts and orientation logic | `negative_control` for loss of moving valve parts; client verification pending |
+| `THAUMATORIUM` | Facing-specific floating recipe-output stack | `TCThaumatoriumRenderer` preserves position, facing, output preview | `negative_control` for missing preview; item display pipeline differs |
+| `WARDED_JAR` and `JAR_VOID` | Colored fluid, conditional lid/connector and aspect-filter label | `TCWardedJarRenderer` renders fluid only | `confirmed_legacy_mismatch` for missing dynamic labels and connector/brace branches (F21) |
+| `GOLEM_BUILDER` | 3-D OBJ body, animated press and lava quad | Static OBJ block model; BER renders *only* an output item | `confirmed_legacy_mismatch` for animation/lava renderer paths (F20) |
+
+**Method:** a shared modern renderer should be evaluated for *all* original branches, not merely the existence of `registerBlockEntityRenderer`. The nine-class/ten-registration denominator must not be mixed with the previously identified twelve active unpaired TESR paths.
+
+Source: [modern BER registrations](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java).
+
+### F20 — Golem Builder: the OBJ press remains static and the legacy lava pass is not reproduced
+
+**Status:** `confirmed_legacy_mismatch` for missing dynamic render paths; `requires_client` for final appearance.
+
+1. The [legacy `TileGolemBuilderRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileGolemBuilderRenderer.java) draws `model.renderAllExcept("press")`, moves the press by `sin(radians(tile.press)) * 0.625`, separately draws `model.renderPart("press")`, then draws a lava-textured quad.
+2. The [modern `golem_builder.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/golem_builder.json) **does load the original OBJ asset**. The [referenced OBJ](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/golembuilder.obj) explicitly contains groups `table`, `press`, `anvil` and `box`; the press is therefore likely baked into the static model, not missing as an asset.
+3. The [modern `TCGolemBuilderRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCGolemBuilderRenderer.java) only renders `entity.getItem(0)` as a rotating stack at `(0.5, 0.65, 0.5)`. It never reads `entity.press` and contains neither an OBJ part transform nor a lava quad.
+4. Crucially, [`TCGolemBuilderBlockEntity.clientTick`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCGolemBuilderBlockEntity.java) **does update `press`** while crafting. The state-to-render bridge is the missing piece.
+5. Negative control: do **not** report that the entire machine model is absent; the static OBJ is the registered world model. The additional modern output-item preview is a separate path not present in the original TESR and merits screenshot review.
+
+**Client checks:** press motion at idle/start/mid-craft/completion, lava texture visibility and depth, object group visibility/orientation in four facing states, floating result item.
+
+### F21 — Warded / Void Jar: stored aspect-filter state has no label or conditional fitting render path
+
+**Status:** `confirmed_legacy_mismatch` for code-path loss; `requires_client` for exact visible occlusion/translucency.
+
+- [Legacy `TileJarRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileJarRenderer.java) conditionally renders `ModelJar.renderLidBrace()` when blocked, `renderLidExtension()` for a top connection, and an oriented `textures/models/label.png` quad plus `UtilsFX.drawTag(aspectFilter)` when an aspect filter is set. These branches work independently of nonempty fluid.
+- [Modern `TCWardedJarBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCWardedJarBlockEntity.java) preserves `aspectFilter`, `labelFacing` and `blocked`, including NBT/network updates. Those states have no counterpart in the actual dynamic draw code.
+- [Modern `TCWardedJarRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCWardedJarRenderer.java) exits early whenever there is no fluid, otherwise renders only six tinted quads for the fluid volume. It does **not** read `aspectFilter`, `labelFacing` or `blocked`.
+- [`jar_normal.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/jar_normal.json) and [`jar_void.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/jar_void.json) provide static container/fixed lid geometry, not dynamic label text or conditionally extended connectors.
+
+**Reproduction matrix:** ordinary and void jars × empty/filled × unfiltered/filtered × blocked/open × top connection/no connection × each label facing. An *empty, filtered* jar is a particularly clear regression probe: the original label branch still exists while the modern BER returns before drawing anything.
+
+### F22 — Brain in a Jar: original animated 3-D brain replaced by cuboid block model
+
+**Status:** `confirmed_legacy_mismatch` for renderer/model behavior; `requires_client` for appearance.
+
+- The original [`TileJarBrain`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/devices/TileJarBrain.java) extends `TileJar` and has client rotation state. The original [`TileJarRenderer.renderBrain`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileJarRenderer.java) draws `ModelBrain` with `brain2.png`, a sinusoidal bob, interpolated facing rotation and a separate brine mesh/texture.
+- The modern [`JAR_BRAIN`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java) has no entry in [modern BER registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java). [`TCBrainJarBlock`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCBrainJarBlock.java) uses `RenderShape.MODEL`, [`jar_brain.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/jar_brain.json) refers to [`jar_brain_item.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/jar_brain_item.json).
+- The referenced model contains **axis-aligned cuboids** for the `flesh` brain, brine and container. The [modern `TCBrainJarBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCBrainJarBlockEntity.java) implements the XP behavior but no original camera/nearby-entity tracking or client brain-rotation renderer.
+- This is distinct from F15–F18's missing BER tally and supports the user-observed boxed appearance. It must not be misattributed to `brain_box.json` merely because that separate asset also exists: the *active blockstate* is `jar_brain_item.json`.
+
+**Client checks:** idle and XP-attracting brain motion, near/far player, brine transparency and layering, inventory item vs placed block, side/above viewpoints.
+
+### F23 — Infusion Matrix halo: negative control established by following the independent client effects path
+
+**Status:** `negative_control` for “halo omitted”; `confirmed_code` for moved rendering implementation; `requires_client` for event-stage outcome and pixel equality.
+
+- The [original `TileInfusionMatrixRenderer.drawHalo`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileInfusionMatrixRenderer.java) emits additive radial rays using seed `245L`, 10 rays on fast graphics or 20 on fancy, and progress-scaled geometry.
+- The [modern `TCInfusionMatrixRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCInfusionMatrixRenderer.java) invokes `TCInfusionClientEffects.noteCraftingMatrix` when crafting, while rendering the eight base cubes and emissive overlays itself.
+- [`TCInfusionClientEffects.renderCraftingHalos`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/TCInfusionClientEffects.java) applies additive alpha/one blending, the same deterministic seed and 10/20 ray count, generating three triangles per ray.
+- [`TCClientEvents.onRenderLevelStage`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientEvents.java) calls `TCInfusionClientEffects.render` at `AFTER_PARTICLES`. The halo queue is then cleared. Whether the BER supplies positions *before* that render stage in actual 1.21.1 client execution, and whether transparency/depth looks equivalent, are still **open runtime checks**.
+
+Do not reopen “halo absent” solely because `drawHalo` is not inside the new BER.
+
+### F24 — Infusion Pedestal: float-item transforms differ; visual result not yet measured
+
+**Status:** `confirmed_code` for the input transform/display differences; `requires_client` for whether the item is visibly mispositioned or wrongly sized.
+
+- [Legacy `TilePedestalRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TilePedestalRenderer.java): translate to `y + 0.75`, scale `1.25`, rotate by `ticks % 360`, then render an `EntityItem` with zeroed `hoverStart`.
+- [Modern `TCInfusionPedestalRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCInfusionPedestalRenderer.java): translate to `y + 1.08`, scale `0.5`, rotate by `(gameTime + partialTick) * 2`, render `ItemDisplayContext.GROUND` without an entity renderer.
+- These are **input matrix/API differences**, not a demonstrated 0.33-block screen-space error: old entity-item internal transforms and new display transforms are not identical. Compare matched stack models, dropped/flat item, pedestal/recharge variants and rotating frames.
+- [Legacy `TileThaumatoriumRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileThaumatoriumRenderer.java) versus [modern `TCThaumatoriumRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCThaumatoriumRenderer.java) provides a useful control: the facing-dependent preview position and `0.75` scale were explicitly retained, although the item render implementation changed.
+
+### F25 — BER negative controls: original mechanisms were substantially reimplemented
+
+**Status:** `negative_control` for missing *core mechanism* only, not a certification of pixel parity.
+
+1. **Crucible:** [original](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileCrucibleRenderer.java) and [modern](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCCrucibleRenderer.java) both gate on nonempty water, use the fluid height and derive RGB tint from `visSize()/500`. Lighting and water atlas sampling still merit screenshots.
+2. **Bellows:** [original](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileBellowsRenderer.java) and [modern](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBellowsRenderer.java) both animate bag/top/bottom planks and draw optional Tube Buffer nozzle extensions. Exact model-part geometry, lighting and orientation require runtime verification.
+3. **Tube Valve:** [original](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileTubeValveRenderer.java) and [modern](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCTubeValveRenderer.java) share the `-rotation * 1.5` ring angle and `-0.03 - rotation/360 * 0.09` translation, and have ring+rod parts. Exact active/idle interpolation and orientation need an in-game check.
+4. **Research Table:** [original](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileResearchTableRenderer.java) and [modern](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCResearchTableRenderer.java) both render the conditional scroll, inkwell and quill, including a 3-D quill reconstruction. The three declared `QUILL_COMPENSATE_*` constants in modern source do not appear in the actual render transform; assess any alignment issue with screenshots, **not as an established defect**. Do not conflate block BER with earlier Research Table *screen* blend/Knowledge Gain findings (F01/N09).
+5. **Thaumatorium:** [original](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileThaumatoriumRenderer.java) and [modern](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCThaumatoriumRenderer.java) have matching facing-position formulae and scaling for floating recipe output. The user-reported *held Thaumatorium item orientation* belongs to the item-model/display pipeline, not this placed-block BER.
+
+**After F25:** the mapped BER pass has now reached all ten registrations. Next source-led work: audit unrelated client callbacks/particles for the twelve previously unpaired TESR types, then expand an active-ID manifest across block/item model display paths, entities and HUD. Still missing matched client capture and proof ledger for every active object.
+
 
 ## Black borders: competing causes
 
