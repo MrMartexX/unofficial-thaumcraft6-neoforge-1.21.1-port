@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F62](#additional-source-history-checks-f01f62)
+6. [Additional source-history checks: F01–F70](#additional-source-history-checks-f01f70)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F62
+## Additional source-history checks: F01–F70
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1108,6 +1108,89 @@ The above are carefully bounded structural results, **not a claim of 100% visual
 5. Preserve F29 and F33–F39 outstanding Grappler/HUD/seal causes; complete block, entity, special-equipment and particle parity by active ID.
 
 **Cross-checks:** no reported byte-identical source texture or passing path existence test should be upgraded into a runtime visual pass. The missing-name findings require translation-key checks, not a mere `en_us.json` parse test.
+
+
+
+### F63 — Entity-renderer registration completeness is not a visual-completeness test
+
+**Status:** `confirmed_code` as a registration-level negative control; **not** 43/43 visual-parity completion.
+
+A direct count at the pinned SHA finds **43 distinct legacy registrations** in [ProxyEntities.setupEntityRenderers](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/proxies/ProxyEntities.java) and **43 modern registrations** in [TCEntityRenderers.onRegisterRenderers](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java). All 43 modern entity slots receive some renderer factory. **Nine** choose the same [invisible no-op placeholder](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCInvisibleEntityRenderer.java); **three** use vanilla `ItemEntityRenderer` or `ThrownItemRenderer`. The other 31 registrations use port-owned renderers. This is positive evidence against a simple missing-registration cause but not against missing geometry, particle calls, held items or animation.
+
+The previously archived source-level classification still holds: **four** definite losses of original entity geometry or visibility semantics (`GRAPPLE`, `FOCUSMINE`, `GOLEM_DART`, `MIND_SPIDER`); **one** FX-path difference (`FOCUS_PROJECTILE`, where original focus-colored particles are now generic `CRIT`); and **four** legitimate invisible renderer geometries (`FOCUS_CLOUD`, `TAINT_SWARM`, `ALUMENTUM`, `CAUSALITY_COLLAPSER`), whose client-side effects require separate validation. These were already recorded in the archived Russian investigation; **do not count them as newly discovered independent defects** here.
+
+**Guardrail:** the 43/43 number concerns renderer registrations, not matching entities' runtime spawns, texture UVs, shadow, animations or client deserialization.
+
+### F64 — Arcane Bore retains its solid model but loses the digging laser and luminous head effect
+
+**Status:** `confirmed_renderer_behavior_mismatch` for this renderer's absent geometry; `requires_client` for full scene composition and impact under normal digging.
+
+Legacy [RenderArcaneBore](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/entity/construct/RenderArcaneBore.java) first renders its `ModelArcaneBore`, then **only when** `clientDigging && isActive() && validInventory()` constructs a glowing head sprite and an approximately five-block beam with three rotating textured quads. It draws with additive blend (`SRC_ALPHA, ONE`), depth-write disabled and `textures/misc/beam1.png`. The modern [TCArcaneBoreRenderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCArcaneBoreRenderer.java) draws legs, tripod and body parts, then exits; it contains no beam, particle quad or condition for active digging. The [modern Arcane Bore entity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCArcaneBoreEntity.java) includes digging state and world block-break events but no directly equivalent client beam renderer.
+
+The original `beam1.png` image is **still present** under [modern assets](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/textures/misc/beam1.png); this is a missing consumer/effect, not an absent texture. Confirm under active mining, idle, obstructed and no-tool states; compare light and occlusion separately from the model's dimensions.
+
+### F65 — Flux Rift geometry, shader, goggles visibility and stability-reactive movement are materially simplified
+
+**Status:** `confirmed_renderer_behavior_mismatch` for inspected algorithms; `requires_client` for overall visual severity.
+
+Legacy [RenderFluxRift](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/entity/RenderFluxRift.java) executes **four** rendering passes over a **three-dimensional polycone** (`CoreGLE.glePolyCone`): three additive inner/glow passes and one alpha-blended pass. It uses `ShaderHelper.endShader`, a shader callback for camera yaw and pitch, animation offsets and changing radius tied to rift stability, and optional temporary depth-test disable when the viewer wears revealing goggles.
+
+Modern [TCFluxRiftRenderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCFluxRiftRenderer.java) draws **one four-vertex ribbon quad per segment** with `entityTranslucentEmissive`, a fixed magenta tint, static segment width scaling and vanilla end-portal texture. The renderer contains no four-pass volume, shader callback, stability-based oscillation or viewer-goggles depth behavior. It retains the concept of a segmented rift and a textured bright surface: this is **not** evidence that the Rift is entirely invisible.
+
+**Reproduction:** equal stability, age and segment count; orbit camera around each rift, record with/without goggles and at low/high stability. A single front-facing still cannot verify three-dimensional volume parity.
+
+### F66 — Lesser/Greater Cultist Portal lose legacy 16-frame atlas playback and state-dependent transparency
+
+**Status:** `confirmed_renderer_behavior_mismatch` for texture UV selection, alpha math and blend mode; `requires_client` for observed appearance.
+
+The legacy [Lesser](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/entity/construct/RenderCultistPortalLesser.java) and [Greater](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/entity/construct/RenderCultistPortalGreater.java) portal renderers select one of **16 horizontal texture frames** (`frame = 15 - (time % 16)`; U interval `frame / 16` through `(frame + 1) / 16`). Both modulate portal size, vertical stretch and opacity using activation, damage, pulse and health, and use conventional `SRC_ALPHA, ONE_MINUS_SRC_ALPHA` blending. Lesser also gates all rendering on `isActive()`.
+
+Modern [common portal renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCCultistPortalRenderer.java) uses the same `cultist_portal.png` image but **samples the entire [0,1] U range in every frame** rather than selecting a 1/16 stripe. Its alpha is mostly fixed around `0.72 + 0.02 * pulse`, its size is based on hitbox plus pulse, and its blend is additive `SRC_ALPHA, ONE`. The modern Lesser retains a visibility gate (`isActive() || pulseForValidation() > 0`), so the error is not simply that both portals always render.
+
+**Expected risk:** apparent frame-striping/compression, different transparency and missing health/damage-driven pulsation. Test both portal types at spawn, steady state, damaged/pulsing and despawn; the exact screenshot appearance still needs runtime confirmation.
+
+### F67 — Advanced Crossbow Turret is rendered with the basic cuboid model instead of its dedicated animated OBJ assembly
+
+**Status:** `confirmed_renderer_behavior_mismatch` for advanced geometry and moving parts; `requires_client` for visual screenshots.
+
+The original [advanced turret renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/entity/construct/RenderTurretCrossbowAdvanced.java) loads `models/obj/crossbow_advanced.obj` and separately renders `legs`, `mech`, `box`, `shield`, `brain`, `loader`, `bow1`, `bow2`. It rotates the weapon with interpolated aim and animates the loader/bow halves using draw progress; hit wobble and minecart mounting scale are also considered. By contrast, the [original basic turret](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/entity/construct/RenderTurretCrossbow.java) uses `ModelCrossbow`.
+
+The modern [TCTurretRenderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCTurretRenderer.java) binds **both** `TURRET_BASIC` and `TURRET_ADVANCED` from [the registry](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java) to one generic crossbow `ModelPart` assembly. It switches only between `crossbow.png` and `crossbow_advanced.png`; the modern `head` rotates with aim but has no separately animated loader, bow halves, shield, brain or damage wobble. The advanced OBJ [exists in the port resources](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/obj/crossbow_advanced.obj).
+
+The continued presence of both textures and the advanced OBJ should not be counted as visual parity. Validate basic and advanced variants separately, including reloading, firing, damage and mounting.
+
+### F68 — Pech custom body geometry survives, but held items and Pech-specific item poses do not
+
+**Status:** `confirmed_renderer_behavior_mismatch` for missing held-item rendering path; `requires_client` for live trade/combat poses.
+
+The legacy [RenderPech](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/entity/mob/RenderPech.java) adds a dedicated [LayerHeldItemPech](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/entity/mob/LayerHeldItemPech.java) to its custom `ModelPech`. That layer draws both hand stacks with left/right-specific transforms, special bow positioning and adjusted offsets when sneaking. The modern [TCPechRenderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCPechRenderer.java) **does** reconstruct and animate a detailed original-inspired Pech model and chooses the three correct type-specific texture paths, but its complete `render` routine draws only the nine model parts and never calls a held-item renderer or equivalent hand-item layer.
+
+This is a targeted loss on an otherwise substantially custom renderer, **not** a claim that Pech was replaced wholesale with a vanilla entity. Compare occupied/empty hands, bow and non-bow items, both hands, sneaking and walking; verify separately whether client entity equipment synchronization supplies the stacks.
+
+### F69 — Taint Seed's recursive segmented motion is replaced by a fixed four-direction cross
+
+**Status:** `confirmed_renderer_behavior_mismatch` for topology and time-dependent local transformations; `requires_client` for the final animated silhouette.
+
+The legacy [ModelTaintSeed](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/models/entity/ModelTaintSeed.java) creates an **eight-segment tentacle chain** (main root plus seven linked children), applies per-segment pitch/roll wave motion, and changes overall height/scale during the early lifetime. Its recursive [ModelRendererTaintSeed](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/models/entity/ModelRendererTaintSeed.java) scales nested parts with trigonometric pulse and phase offsets. Both normal and Prime Seeds receive this model through [RenderTaintSeed](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/03_self_decompiled_check/vineflower_thaumcraft6/thaumcraft/client/renderers/entity/mob/RenderTaintSeed.java).
+
+Modern [TCTaintSeedRenderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCTaintSeedRenderer.java) builds a central cuboid plus **four fixed cardinal protrusions**. It rotates the whole root slightly and changes a single global scale based on `seed.getArea() > 1`, but does not render the original linked tentacle topology or per-child wave/scale transforms. The material texture path `textures/entity/taintseed.png` remains shared. Compare normal/Prime at spawn, idle, attacking and late-life animation; texture availability by itself is not equivalent model behavior.
+
+### F70 — Renderer evidence gates and a resource-presence trap
+
+**Status:** `confirmed_code` for present assets and consumers; `not_checked` for client parity.
+
+These source-level results are additive to earlier F29–F62 and the archived D09/N04 entity checks. This pass specifically upgrades **Bore beam, Rift volume/shader, portal atlas animation, Advanced Turret mechanics, Pech held items and Taint Seed segmentation** from generic risk categories into linked and falsifiable code differences. It does **not** reopen previously resolved legitimate invisible/no-op renderers.
+
+| Existing port resource | Legacy visible consumer | Modern corresponding renderer outcome |
+| --- | --- | --- |
+| `textures/misc/beam1.png` | Arcane Bore rotating digging beam | Model drawn; beam path absent in the inspected renderer |
+| `models/obj/crossbow_advanced.obj` | Advanced turret articulated machinery | Both turret types use common cuboid model; OBJ not referenced there |
+| `textures/misc/cultist_portal.png` | 16-frame animated portal atlas | Whole texture UV `[0,1]` used as one billboard |
+| `textures/entity/taintseed.png` | Animated linked tentacle model | Same texture onto a different static cross-shaped mesh |
+| `textures/entity/mine.png` | Legacy Focus Mine model | Already established: modern `FOCUSMINE` invisible renderer (archive Section 14) |
+
+**Minimum next evidence:** paired 1.12.2/1.21.1 captures or reproducible client-state replay for every listed active entity, with camera angle, FPS, shader settings, alpha, graphics quality, equipment and animation state held constant. No runtime captures were produced in this source-only pass. The source study does **not** prove a single shared cause for thick black HUD outlines; blend changes are known in multiple independent renderers but their onscreen symptoms require separate tests.
+
 
 
 ## Black borders: competing causes
