@@ -333,7 +333,7 @@
         "sealblank"
       ],
       "classification": "VARIANT_ID_CANDIDATES",
-      "reason": "Original seal item has subtype blank and NBT-specific seal selection; port has many seal items."
+      "reason": "Original seal item dynamically expands metadata variants from SealHandler types; current separate seal IDs require behavioral mapping."
     }
   ]
 }
