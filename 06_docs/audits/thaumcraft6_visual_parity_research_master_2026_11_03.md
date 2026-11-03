@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F107](#additional-source-history-checks-additional-source-history-checks-f01f107)
+6. [Additional source-history checks: F01–F114](#additional-source-history-checks-f01f114)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F107
+## Additional source-history checks: F01–F114
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1720,6 +1720,104 @@ The resource count is **11 explicit enabled-selecting files and 5 without** (fou
 **Test gate:** verify each of the three scenarios independently, and search new call sites when port source changes rather than deleting unused helpers by name alone.
 
 **Sources:** [TCFXDispatcher](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java#L831); [TCInfusionClientEffects](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/TCInfusionClientEffects.java#L108); [TCInfusionNetwork](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/crafting/infusion/TCInfusionNetwork.java#L36); [legacy BlockTCTile](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCTile.java#L67).
+
+---
+
+### F108 — Research Table GUI particles bypass frame interpolation by passing `partialTick = 0`
+
+**Status:** `confirmed_code` source-level interpolation mismatch; perceived stutter requires client capture.
+
+- The original `ParticleEngine.renderTick(RenderTickEvent.END)` passes the live `event.renderTickTime` to `Particle.renderParticle`, allowing between-tick position interpolation and time-dependent appearance.
+- Current `TCResearchTableScreen.renderBg(..., float partialTick, ...)` receives the correct partial tick but invokes `TCLegacyParticleEngine.renderGui(guiGraphics, 0.0F)`. The engine relays this unchanged to `TCLegacyFXGenericGui.render`, which calls `Mth.lerp(partialTicks, xo, x)` / `Mth.lerp(partialTicks, yo, y)` and uses `(age + partialTicks) / maxAge` for color progression.
+- Therefore those particle positions render at the **previous tick's coordinates** between simulation ticks and advance in discrete steps even when the client frame rate exceeds 20 FPS. This is a supported code-level difference from legacy rendering; its visual severity depends on particle movement speed and actual screen FPS.
+
+**Test gate:** spawn Research Table GUI sparkle effects at stable 60/120 FPS and record at frame boundaries; compare `partialTick=0` with the live screen partial tick in a controlled test branch only after research approval.
+
+**Sources:** [legacy ParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L48); [TCResearchTableScreen](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCResearchTableScreen.java#L170); [modern TCLegacyParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L190); [TCLegacyFXGenericGui.render](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyFXGenericGui.java#L105).
+
+---
+
+### F109 — GUI particle updates are screen-scoped in the port, unlike the original global particle tick
+
+**Status:** `confirmed_code` lifecycle difference; `probable_legacy_mismatch` for paused/reappearing effects pending UI reproduction.
+
+- Legacy `ParticleEngine.updateParticles(ClientTickEvent.START)` ticks **all six layers**, including GUI layers 4 and 5, whenever a world is present. Its `RenderTickEvent.END` additionally draws GUI particles independently of which screen is open, until they expire.
+- Modern `TCClientEvents.onClientTick` updates only `TCLegacyParticleEngine.tick()` for world particles. The sole inspected call to `TCLegacyParticleEngine.tickGui()` is `TCResearchTableScreen.containerTick`. Modern GUI FX rendering is likewise invoked only from `TCResearchTableScreen.renderBg`.
+- GUI effects are stored in shared static `GUI_EFFECTS` and `DELAYED_GUI` collections, and `TCLegacyParticleEngine.clear()` is invoked from the general client handler when `Minecraft.level == null`, not specifically on Research Table screen close. No screen-specific cleanup call was identified. Thus, on closing a Research Table while GUI particles remain, their age/delay **stops advancing** until a future GUI tick or a full cache clear; reopening can resume stale effects instead of having them expire normally.
+
+**Test gate:** initiate a long-lived GUI sparkle, close the table, wait longer than its remaining lifetime without disconnecting, then reopen; compare observed count/age with original Thaumcraft and confirm whether the old global-over-screen rendering intentionally persisted after close.
+
+**Sources:** [legacy global particle tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L249); [legacy ParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L48); [TCClientEvents](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientEvents.java#L34); [TCResearchTableScreen.containerTick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCResearchTableScreen.java#L140); [modern GUI tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L145); [modern clear/layer arrays](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L65).
+
+---
+
+### F110 — World FX storage lost the original dimension-keyed isolation
+
+**Status:** `confirmed_code` data-ownership difference; `test_required` potential cross-level trail persistence, NOT an observed bug.
+
+- The original engine keeps a `HashMap` for each layer keyed by `world.provider.getDimension()`; add, tick and render all consult the current dimension key. Delayed particles also retain a dimension identifier.
+- `TCLegacyParticleEngine` now uses single static per-layer lists of `TCLegacyFXGeneric` and delayed effects, without dimension or level identity in the containing keys. `TCLegacyFXGeneric` does hold a `Level` reference but its inspected `canRender`/`render` path does not reject a different active client level. The common `TCClientEvents` handler calls `clear()` only on client ticks where `Minecraft.level == null`.
+- A client-level replacement without an intervening **null-level client tick** could therefore allow old-world particles to be rendered briefly in the new world, or delayed effects to be admitted there. Whether ordinary Nether/End travel always executes a null-level tick is not established here; do not mark this runtime-confirmed.
+
+**Test gate:** produce slow/high-lifetime visible FX, switch dimension and reconnect rapidly; record client `level` transitions and active/delayed counts, ensuring no stale FX across worlds. Add a client lifecycle teardown hook only if reproduced.
+
+**Sources:** [legacy global particle tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L249); [legacy world renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L124); [modern clear/layer arrays](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L65); [modern TCLegacyParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L190); [TCLegacyFXGeneric.canRender](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyFXGeneric.java#L70); [TCClientEvents](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientEvents.java#L34).
+
+---
+
+### F111 — Six-layer additive/alpha and depth-test semantics are explicitly retained in the port
+
+**Status:** `confirmed_code` positive control for blend/depth states; overall shader/GL-state parity still requires rendering tests.
+
+- Legacy world FX render layers **3→0**: layers 0 and 2 use `SRC_ALPHA, ONE` (additive), layers 1 and 3 use `SRC_ALPHA, ONE_MINUS_SRC_ALPHA` (standard alpha), and layers 2/3 disable depth testing. The legacy GUI loop renders layers **5→4**, using additive blend for 4 and standard alpha for 5.
+- Modern `TCLegacyParticleEngine` deliberately renders world layers **3→0**, GUI layers **5→4**, selects exactly the same four blend pairings and disables/restores depth testing for world layers 2/3. These are concrete source-backed controls against claiming that every particle's black/bright border comes from loss of its historical layer-blend selection.
+- The rendering stage has changed from legacy `RenderWorldLastEvent` to NeoForge `RenderLevelStageEvent.AFTER_PARTICLES`; draw ordering relative to other mod render passes is not proved equal. The accurate blend functions alone do not establish correct texture sampling, depth-writing, atlas UVs or particles' per-frame visuals.
+
+**Test gate:** compare one test sprite on each of six layers against dark/light/occluded backgrounds, and record depth behavior with a foreground solid wall.
+
+**Sources:** [legacy world renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L124); [legacy ParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L48); [modern layer state](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L328); [modern TCLegacyParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L190).
+
+---
+
+### F112 — Ported particle shaders preserve the legacy `1/255` alpha cutoff but have an explicit shader-unavailable fallback
+
+**Status:** `confirmed_code` shader and registration positive control; runtime shader-loading failure not established.
+
+- Original `ParticleEngine` calls `glAlphaFunc(GREATER, 0.003921569)` for world and GUI particles. The modern `tc_legacy_particle.fsh` and `tc_legacy_particle_gui.fsh` both discard a fragment only below **0.003921569**, preserving soft low-alpha fringe pixels rather than applying a high cutoff.
+- `TCLegacyShaders.registerShaders` registers two custom shaders under the `minecraft` core-shader namespace with matching resource files. `TCLegacyParticleEngine` selects the custom world shader if it is available, otherwise falls back to `GameRenderer.getPositionTexColorShader`.
+- This confirms the intended alpha threshold in the bundled shader and an explicit fallback. It does **not** prove the shader always loads on every GPU/resource pack, or that dark outlines in unrelated HUD textures share the particle cutoff issue.
+
+**Test gate:** verify successful shader registration in development logs, inspect the bound program during world and GUI effect rendering, and compare low-alpha fringe pixels with and without the fallback.
+
+**Sources:** [legacy ParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L48); [shader registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/lib/TCLegacyShaders.java#L21); [world particle fragment shader](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/minecraft/shaders/core/tc_legacy_particle.fsh); [GUI particle fragment shader](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/minecraft/shaders/core/tc_legacy_particle_gui.fsh); [modern TCLegacyParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L190).
+
+---
+
+### F113 — Research Table GUI FX drawing moved from global end-of-frame to the middle of `renderBg`
+
+**Status:** `confirmed_code` draw-order difference; `probable_legacy_mismatch` only for particle overlap with later UI elements.
+
+- Original `ParticleEngine.renderTick` draws GUI-layer particles during `RenderTickEvent.END`, after the normal in-world/screen rendering sequence.
+- The port invokes `TCLegacyParticleEngine.renderGui` inside `TCResearchTableScreen.renderBg`, **after** the theory sheets/category panel but **before** `renderLegacyActionButtons`; `renderLabels` and tooltip/UI overlays can also be rendered later. This can place translucent GUI sparks underneath later button/tooltip surfaces instead of on top of the final screen, if they overlap in screen space.
+- This concerns the GUI particle pass only, not the ambient Research Table world motes missing in F91 or the repeated Knowledge Gain HUD draws already tracked in F39.
+
+**Test gate:** capture an active Research Table sparkle crossing a legacy action button or tooltip; compare sprite blending, occlusion and z-order at identical GUI scale. Confirm the original end-phase ordering under a real 1.12.2 client.
+
+**Sources:** [legacy ParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L48); [TCResearchTableScreen](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCResearchTableScreen.java#L170); [modern TCLegacyParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L190).
+
+---
+
+### F114 — Particle-setting culling and per-layer FIFO caps are preserved, with runtime FPS effects still testable
+
+**Status:** `confirmed_code` positive control for count-based limits; no claim of identical random sequence or performance.
+
+- Both original and port map particle settings to per-layer capacity **2000 (all), 1000 (decreased), 500 (minimal)**. Both apply the old culling rule using a random `nextInt(3)` against the particle setting, incrementing the effective culling level when reported FPS falls below 30.
+- On overflow, both implementations remove the **oldest element at index 0** before appending the new particle. This exact FIFO behavior matters when visual scenes create many wispy motes or sparks.
+- The original also partitions lists by dimension (F110), while modern has flat static lists. Matching the integer limits does not guarantee matched FPS, event frequency or random distribution; compare counts on an otherwise identical controlled scene.
+
+**Test gate:** in the same effect-rich scene, record active particle counts and churn with settings All/Decreased/Minimal and client FPS above/below 30.
+
+**Sources:** [legacy particle limit](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L216); [legacy global particle tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L249); [modern TCLegacyParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L190); [modern clear/layer arrays](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L65).
 
 ---
 
