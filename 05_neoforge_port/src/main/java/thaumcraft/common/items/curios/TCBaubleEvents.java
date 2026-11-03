@@ -10,6 +10,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -68,6 +71,8 @@ public final class TCBaubleEvents {
     private static final long SHIELD_RECHARGE_MS = 2000L;
     private static final long SHIELD_WAIT_MS = 4000L;
     private static final float SHIELD_COST = 1.0F;
+    private static final ResourceLocation RUNIC_ABSORPTION_LIMIT =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "runic_absorption_limit");
 
     private static final Set<UUID> CLOUD_RING_AIRBORNE_JUMPS = new HashSet<>();
     private static final Map<UUID, Integer> RUNIC_INFO = new HashMap<>();
@@ -80,6 +85,7 @@ public final class TCBaubleEvents {
 
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        updateRunicAbsorptionLimit(event.getEntity(), 0);
         UUID uuid = event.getEntity().getUUID();
         CLOUD_RING_AIRBORNE_JUMPS.remove(uuid);
         RUNIC_INFO.remove(uuid);
@@ -232,6 +238,7 @@ public final class TCBaubleEvents {
                     LAST_MAX_CHARGE.remove(uuid);
                 }
             }
+            updateRunicAbsorptionLimit(player, max);
             if (max > 0) {
                 RUNIC_INFO.put(uuid, max);
                 LAST_MAX_CHARGE.put(uuid, max);
@@ -257,7 +264,9 @@ public final class TCBaubleEvents {
                 Level level = player.level();
                 BlockPos pos = player.blockPosition();
                 if (!AuraHelper.shouldPreserveAura(level, player, pos) && AuraHelper.getVis(level, pos) >= SHIELD_COST) {
-                    AuraHelper.drainVis(level, pos, SHIELD_COST, false);
+                    if (AuraHelper.drainVis(level, pos, SHIELD_COST, false) < SHIELD_COST) {
+                        return;
+                    }
                     NEXT_CYCLE.put(uuid, time + SHIELD_RECHARGE_MS);
                     player.setAbsorptionAmount((float) (charge + 1));
                     LAST_CHARGE.put(uuid, charge + 1);
@@ -267,6 +276,21 @@ public final class TCBaubleEvents {
                 }
             }
         }
+    }
+
+    public static void updateRunicAbsorptionLimit(Player player, int charge) {
+        var attribute = player.getAttribute(Attributes.MAX_ABSORPTION);
+        if (attribute == null) return;
+        double amount = Math.max(0, charge);
+        var previous = attribute.getModifier(RUNIC_ABSORPTION_LIMIT);
+        if (previous != null && previous.amount() == amount) return;
+        if (amount > 0) {
+            attribute.addOrUpdateTransientModifier(new AttributeModifier(
+                    RUNIC_ABSORPTION_LIMIT, amount, AttributeModifier.Operation.ADD_VALUE));
+        } else if (previous != null) {
+            attribute.removeModifier(RUNIC_ABSORPTION_LIMIT);
+        }
+        player.setAbsorptionAmount(Math.min(player.getAbsorptionAmount(), player.getMaxAbsorption()));
     }
 
     public static int getRunicCharge(ItemStack stack) {

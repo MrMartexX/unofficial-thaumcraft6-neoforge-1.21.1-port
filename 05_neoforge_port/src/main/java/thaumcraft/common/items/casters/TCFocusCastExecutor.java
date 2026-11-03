@@ -287,7 +287,7 @@ public final class TCFocusCastExecutor {
                 target.hurt(dmgSource, (3.0F + p) * power);
                 if (target instanceof LivingEntity living) {
                     int ticks = Math.max(20, 20 * d);
-                    int amp = Math.max(0, (int)(p * power / 3.0F));
+                    int amp = (int)(1.0F + p * power / 3.0F);
                     living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, ticks, amp));
                 }
             }
@@ -309,9 +309,28 @@ public final class TCFocusCastExecutor {
                 target.hurt(dmgSource, (1.0F + p) * power);
                 if (target instanceof LivingEntity living) {
                     int ticks = Math.max(20, 20 * d);
-                    living.addEffect(new MobEffectInstance(MobEffects.POISON, ticks, 0));
-                    living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, ticks, 0));
-                    living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, ticks, 0));
+                    int amplifier = Math.max(0, (int)(p * power / 2.0F));
+                    living.addEffect(new MobEffectInstance(MobEffects.POISON, ticks, amplifier));
+                    float chance = 0.85F;
+                    if (level.random.nextFloat() < chance) {
+                        living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, ticks, amplifier));
+                        chance -= 0.15F;
+                    }
+                    if (level.random.nextFloat() < chance) {
+                        living.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, ticks, amplifier));
+                        chance -= 0.15F;
+                    }
+                    if (level.random.nextFloat() < chance) {
+                        living.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, ticks * 2, amplifier));
+                        chance -= 0.15F;
+                    }
+                    if (level.random.nextFloat() < chance) {
+                        living.addEffect(new MobEffectInstance(MobEffects.HUNGER, ticks * 3, amplifier));
+                        chance -= 0.15F;
+                    }
+                    if (level.random.nextFloat() < chance) {
+                        living.addEffect(new MobEffectInstance(MobEffects.UNLUCK, ticks * 3, amplifier));
+                    }
                 }
             }
             case HEAL -> {
@@ -353,6 +372,7 @@ public final class TCFocusCastExecutor {
             case EARTH, BREAK -> {
                 BlockState state = level.getBlockState(pos);
                 if (!state.isAir() && state.getDestroySpeed(level, pos) >= 0.0F) {
+                    if (EARTH.equals(effectKey) && state.getDestroySpeed(level, pos) > 2.0F * p * power / 25.0F) return;
                     if (caster instanceof ServerPlayer sp) {
                         sp.gameMode.destroyBlock(pos);
                     } else {
@@ -361,16 +381,10 @@ public final class TCFocusCastExecutor {
                 }
             }
             case EXCHANGE -> {
-                if (caster instanceof Player player) {
-                    ItemStack off = player.getOffhandItem();
-                    if (!off.isEmpty() && off.getItem() instanceof net.minecraft.world.item.BlockItem bi) {
-                        BlockState newState = bi.getBlock().defaultBlockState();
-                        level.destroyBlock(pos, true, player);
-                        level.setBlock(pos, newState, 3);
-                        if (!player.isCreative()) {
-                            off.shrink(1);
-                        }
-                    }
+                if (caster instanceof ServerPlayer player) {
+                    TCExchangeHelper.exchange(player, pos, side,
+                            clamped(settings, "silk", 0, 0, 1) > 0,
+                            clamped(settings, "fortune", 0, 0, 4));
                 }
             }
             case RIFT -> {

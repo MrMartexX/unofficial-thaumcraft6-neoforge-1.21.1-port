@@ -172,6 +172,10 @@ neoForge {
             def golemBehaviorAuditEnabled = providers.gradleProperty('tcGolemBehaviorAudit').orNull ?: System.getProperty('tc.golemBehaviorAudit')
             def golemBehaviorAuditPath = providers.gradleProperty('tcGolemBehaviorAuditPath').orNull ?: System.getProperty('tc.golemBehaviorAuditPath')
             def completeParityMatrixAuditEnabled = providers.gradleProperty('tcCompleteParityMatrixAudit').orNull ?: System.getProperty('tc.completeParityMatrixAudit')
+            def artificeAudit = providers.gradleProperty('tcArtificeDeviceBehaviorAudit').orNull
+            def artificeAuditPath = providers.gradleProperty('tcArtificeDeviceBehaviorAuditPath').orNull
+            if (artificeAudit != null) systemProperty 'tc.artificeDeviceBehaviorAudit', artificeAudit
+            if (artificeAuditPath != null) systemProperty 'tc.artificeDeviceBehaviorAuditPath', artificeAuditPath
             def completeParityMatrixAuditPath = providers.gradleProperty('tcCompleteParityMatrixAuditPath').orNull ?: System.getProperty('tc.completeParityMatrixAuditPath')
             if (aspectDumpEnabled != null) {
                 systemProperty 'tc.aspectDump', aspectDumpEnabled

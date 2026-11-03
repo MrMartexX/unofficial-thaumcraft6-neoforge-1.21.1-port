@@ -329,6 +329,29 @@ public final class TCItemEquipmentBehaviorAudit {
         checks.add(new Check("runic_shielding_charge_component_contract", runicPassed,
                 "TCDataComponents.RUNIC_CHARGE correctly read by getRunicCharge"));
 
+        var absorption = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_ABSORPTION);
+        double oldBase = absorption.getBaseValue();
+        float oldAmount = player.getAbsorptionAmount();
+        try {
+            absorption.setBaseValue(2);
+            TCBaubleEvents.updateRunicAbsorptionLimit(player, 4);
+            player.setAbsorptionAmount(6);
+            boolean charged = player.getAbsorptionAmount() == 6;
+            TCBaubleEvents.updateRunicAbsorptionLimit(player, 4);
+            boolean stable = player.getMaxAbsorption() == 6;
+            TCBaubleEvents.updateRunicAbsorptionLimit(player, 5);
+            boolean resized = player.getMaxAbsorption() == 7 && player.getAbsorptionAmount() == 6;
+            TCBaubleEvents.updateRunicAbsorptionLimit(player, 0);
+            checks.add(new Check("runic_shielding_modern_absorption_limit",
+                    charged && stable && resized && player.getMaxAbsorption() == 2
+                            && player.getAbsorptionAmount() == 2,
+                    "Runic capacity supports actual absorption, is idempotent, and preserves external capacity"));
+        } finally {
+            TCBaubleEvents.updateRunicAbsorptionLimit(player, 0);
+            absorption.setBaseValue(oldBase);
+            player.setAbsorptionAmount(oldAmount);
+        }
+
         return checks;
     }
 

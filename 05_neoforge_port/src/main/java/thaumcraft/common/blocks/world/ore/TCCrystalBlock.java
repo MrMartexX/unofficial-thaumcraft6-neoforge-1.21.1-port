@@ -38,6 +38,7 @@ import thaumcraft.common.world.aura.AuraHandler;
 public class TCCrystalBlock extends Block implements SimpleWaterloggedBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final IntegerProperty SIZE = IntegerProperty.create("size", 0, 3);
+    public static final IntegerProperty GENERATION = IntegerProperty.create("gen", 1, 4);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     private static final VoxelShape UP_SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 12.0, 14.0);
@@ -57,6 +58,7 @@ public class TCCrystalBlock extends Block implements SimpleWaterloggedBlock {
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.UP)
                 .setValue(SIZE, 0)
+                .setValue(GENERATION, 1)
                 .setValue(WATERLOGGED, false));
     }
 
@@ -66,7 +68,7 @@ public class TCCrystalBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, SIZE, WATERLOGGED);
+        builder.add(FACING, SIZE, GENERATION, WATERLOGGED);
     }
 
     @Override
@@ -133,7 +135,7 @@ public class TCCrystalBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (random.nextInt(3) != 0) {
+        if (random.nextInt(3 + state.getValue(GENERATION)) != 0) {
             return;
         }
 
@@ -149,17 +151,17 @@ public class TCCrystalBlock extends Block implements SimpleWaterloggedBlock {
                 if (size > 0) {
                     level.setBlock(pos, state.setValue(SIZE, size - 1), Block.UPDATE_ALL);
                     AuraHelper.addVis(level, pos, threshold);
-                } else {
+                } else if (hasNeighborCrystal(level, pos)) {
                     level.removeBlock(pos, false);
                     AuraHelper.addVis(level, pos, threshold);
                 }
             } else if (vis > base + threshold) {
                 // Growing when abundant
-                if (size < 3) {
+                if (size < 3 && size < 5 - state.getValue(GENERATION) + pos.asLong() % 3L) {
                     if (AuraHelper.drainVis(level, pos, threshold, false) >= threshold) {
                         level.setBlock(pos, state.setValue(SIZE, size + 1), Block.UPDATE_ALL);
                     }
-                } else {
+                } else if (state.getValue(GENERATION) < 4) {
                     // Spreading to neighbor
                     trySpread(state, level, pos, random);
                 }
@@ -167,24 +169,27 @@ public class TCCrystalBlock extends Block implements SimpleWaterloggedBlock {
         } else {
             // Vitium / Flux crystals consume flux
             float flux = AuraHandler.getAuraChunk(level, pos).map(AuraChunk::getFlux).orElse(0.0F);
-            if (flux > threshold) {
-                if (size < 3) {
+            if (flux > AuraHandler.getAuraBase(level, pos) + threshold) {
+                if (size < 3 && size < 5 - state.getValue(GENERATION) + pos.asLong() % 3L) {
                     if (AuraHelper.drainFlux(level, pos, threshold, false) >= threshold) {
                         level.setBlock(pos, state.setValue(SIZE, size + 1), Block.UPDATE_ALL);
                     }
-                } else {
+                } else if (state.getValue(GENERATION) < 4) {
                     trySpread(state, level, pos, random);
                 }
-            } else if (size > 0) {
+            } else if (flux <= threshold && size > 0) {
                 level.setBlock(pos, state.setValue(SIZE, size - 1), Block.UPDATE_ALL);
+                AuraHelper.polluteAura(level, pos, threshold, false);
+            } else if (flux <= threshold && hasNeighborCrystal(level, pos)) {
+                level.removeBlock(pos, false);
                 AuraHelper.polluteAura(level, pos, threshold, false);
             }
         }
     }
 
     private void trySpread(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        Direction dir = Direction.getRandom(random);
-        BlockPos target = pos.relative(dir);
+        BlockPos target = pos.offset(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1);
+        if (target.equals(pos) || random.nextInt(16) != 0) return;
         if (level.isEmptyBlock(target)) {
             for (Direction checkFace : Direction.values()) {
                 BlockPos support = target.relative(checkFace);
@@ -193,13 +198,26 @@ public class TCCrystalBlock extends Block implements SimpleWaterloggedBlock {
                     BlockState newState = this.defaultBlockState()
                             .setValue(FACING, checkFace.getOpposite())
                             .setValue(SIZE, 0);
-                    if (AuraHelper.drainVis(level, pos, 10.0F, false) >= 10.0F) {
+                    float drained = aspect == Aspect.FLUX
+                            ? AuraHelper.drainFlux(level, pos, 10.0F, false)
+                            : AuraHelper.drainVis(level, pos, 10.0F, false);
+                    if (drained > 0) {
+                        int generation = state.getValue(GENERATION);
+                        if (random.nextInt(6) == 0) generation--;
+                        newState = newState.setValue(GENERATION, generation + 1);
                         level.setBlock(target, newState, Block.UPDATE_ALL);
                     }
                     break;
                 }
             }
         }
+    }
+
+    private boolean hasNeighborCrystal(ServerLevel level, BlockPos pos) {
+        for (Direction direction : Direction.values()) {
+            if (level.getBlockState(pos.relative(direction)).is(this)) return true;
+        }
+        return false;
     }
 
     @Override

@@ -23,6 +23,17 @@ public class SealHandler {
     public static final Map<String, ISeal> types = new LinkedHashMap<>();
     public static final Map<ResourceKey<Level>, Map<SealPos, SealEntity>> sealEntities = new ConcurrentHashMap<>();
 
+    private static Map<SealPos, SealEntity> worldSeals(Level level) {
+        if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            return TCSealSavedData.get(serverLevel).seals;
+        }
+        return sealEntities.computeIfAbsent(level.dimension(), key -> new ConcurrentHashMap<>());
+    }
+
+    private static void dirty(Level level) {
+        if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) TCSealSavedData.get(serverLevel).setDirty();
+    }
+
     public static void registerSeal(ISeal seal) {
         if (types.containsKey(seal.getKey())) {
             LOGGER.error("Attempting to register Seal [{}] twice. Ignoring.", seal.getKey());
@@ -64,13 +75,13 @@ public class SealHandler {
     }
 
     public static SealEntity getSealEntity(Level level, SealPos pos) {
-        Map<SealPos, SealEntity> map = sealEntities.get(level.dimension());
+        Map<SealPos, SealEntity> map = worldSeals(level);
         return map != null ? map.get(pos) : null;
     }
 
     public static List<SealEntity> getSealsInRange(Level level, BlockPos source, int range) {
         List<SealEntity> out = new ArrayList<>();
-        Map<SealPos, SealEntity> map = sealEntities.get(level.dimension());
+        Map<SealPos, SealEntity> map = worldSeals(level);
         if (map != null) {
             double rangeSq = (double) range * range;
             for (SealEntity se : map.values()) {
@@ -86,7 +97,7 @@ public class SealHandler {
 
     public static boolean addSealEntity(Level level, BlockPos pos, Direction side, ISeal seal, Player player) {
         SealPos sealPos = new SealPos(pos, side);
-        Map<SealPos, SealEntity> map = sealEntities.computeIfAbsent(level.dimension(), k -> new ConcurrentHashMap<>());
+        Map<SealPos, SealEntity> map = worldSeals(level);
         if (map.containsKey(sealPos)) {
             return false;
         }
@@ -96,14 +107,16 @@ public class SealHandler {
             sealEntity.setOwner(player.getStringUUID());
         }
         map.put(sealPos, sealEntity);
+        dirty(level);
         sealEntity.syncToClient(level);
         return true;
     }
 
     public static void removeSealEntity(Level level, SealPos pos, boolean quiet) {
-        Map<SealPos, SealEntity> map = sealEntities.get(level.dimension());
+        Map<SealPos, SealEntity> map = worldSeals(level);
         if (map != null) {
             SealEntity seal = map.remove(pos);
+            if (seal != null) dirty(level);
             if (seal != null && seal.getSeal() != null) {
                 if (!level.isClientSide) {
                     seal.getSeal().onRemoval(level, pos.pos, pos.face);
@@ -122,13 +135,14 @@ public class SealHandler {
 
     public static void tickSeals(Level level) {
         if (level.isClientSide) return;
-        Map<SealPos, SealEntity> map = sealEntities.get(level.dimension());
+        Map<SealPos, SealEntity> map = worldSeals(level);
         if (map != null && !map.isEmpty()) {
             for (SealEntity se : map.values()) {
-                if (se != null) {
+                if (se != null && level.hasChunkAt(se.getSealPos().pos)) {
                     se.tickSealEntity(level);
                 }
             }
+            if (level.getGameTime() % 20 == 0) dirty(level);
         }
     }
 

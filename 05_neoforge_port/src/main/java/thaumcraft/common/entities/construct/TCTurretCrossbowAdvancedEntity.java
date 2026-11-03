@@ -108,6 +108,10 @@ public class TCTurretCrossbowAdvancedEntity extends TCTurretCrossbowEntity {
         if (isOwner(target)) {
             return false;
         }
+        if (!getTargetFriendly() && target instanceof OwnableEntity ownable
+                && getOwnerUUID() != null && getOwnerUUID().equals(ownable.getOwnerUUID())) {
+            return false;
+        }
         if (target instanceof Animal && !(target instanceof Enemy)) {
             return getTargetAnimal();
         }

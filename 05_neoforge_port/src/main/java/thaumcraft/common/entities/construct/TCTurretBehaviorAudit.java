@@ -173,6 +173,15 @@ public final class TCTurretBehaviorAudit {
             adv.setTargetPlayer(true);
             adv.setTargetFriendly(false);
             boolean ownerSafe = !adv.isTargetValid(dummyPlayer);
+            var pet = new net.minecraft.world.entity.animal.Wolf(net.minecraft.world.entity.EntityType.WOLF, level);
+            pet.setOwnerUUID(dummyPlayer.getUUID());
+            adv.setTargetAnimal(true);
+            boolean petSafe = !adv.isTargetValid(pet);
+            adv.setTargetFriendly(true);
+            boolean friendlyEnabled = adv.isTargetValid(pet);
+            adv.setTargetFriendly(false);
+            rows.add(new Row("turret_owned_pet_filter", petSafe && friendlyEnabled,
+                    "Animal category cannot bypass same-owner protection; explicit friendly targeting remains effective"));
             rows.add(new Row(
                     "turret_owner_team_safety",
                     ownerSafe,

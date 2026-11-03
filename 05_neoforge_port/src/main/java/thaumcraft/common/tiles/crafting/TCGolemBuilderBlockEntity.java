@@ -135,11 +135,25 @@ public class TCGolemBuilderBlockEntity extends BlockEntity implements Container,
     }
 
     public boolean startCraft(long id, Player player) {
+        if (cost > 0 || id < 0 || GolemProperties.fromLong(id).getRank() != 0) {
+            return false;
+        }
         if (!getItem(0).isEmpty()) {
             return false;
         }
 
         IGolemProperties props = GolemProperties.fromLong(id);
+        if (!(player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) || (id & 0xFFFFL) != 0
+                || GolemProperties.getByteInLong(id, 0) != props.getMaterial().id
+                || GolemProperties.getByteInLong(id, 1) != props.getHead().id
+                || GolemProperties.getByteInLong(id, 2) != props.getArms().id
+                || GolemProperties.getByteInLong(id, 3) != props.getLegs().id
+                || GolemProperties.getByteInLong(id, 4) != props.getAddon().id) return false;
+        var knowledge = thaumcraft.common.research.TCPlayerKnowledgeStore.get(serverPlayer);
+        for (String[] requirements : new String[][]{props.getMaterial().research, props.getHead().research,
+                props.getArms().research, props.getLegs().research, props.getAddon().research}) {
+            if (requirements != null && !thaumcraft.common.research.TCResearchManager.knowsResearchStrict(knowledge, requirements)) return false;
+        }
         ItemStack[] components = props.generateComponents();
 
         if (!hasComponents(player, components)) {
@@ -189,12 +203,7 @@ public class TCGolemBuilderBlockEntity extends BlockEntity implements Container,
                 BlockPos p = worldPosition.relative(dir);
                 IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, p, dir.getOpposite());
                 if (handler != null) {
-                    for (int i = 0; i < handler.getSlots(); i++) {
-                        ItemStack s = handler.getStackInSlot(i);
-                        if (ItemStack.isSameItemSameComponents(s, target)) {
-                            count += s.getCount();
-                        }
-                    }
+                    count += countExtractable(handler, target);
                 } else {
                     BlockEntity be = level.getBlockEntity(p);
                     if (be instanceof Container c) {
@@ -207,6 +216,15 @@ public class TCGolemBuilderBlockEntity extends BlockEntity implements Container,
                     }
                 }
             }
+        }
+        return count;
+    }
+
+    public static int countExtractable(IItemHandler handler, ItemStack target) {
+        int count = 0;
+        for (int slot = 0; slot < handler.getSlots(); slot++) {
+            ItemStack accessible = handler.extractItem(slot, Integer.MAX_VALUE, true);
+            if (ItemStack.isSameItemSameComponents(accessible, target)) count += accessible.getCount();
         }
         return count;
     }

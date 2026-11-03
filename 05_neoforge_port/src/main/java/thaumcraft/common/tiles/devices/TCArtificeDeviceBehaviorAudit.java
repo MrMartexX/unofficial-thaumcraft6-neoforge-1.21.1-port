@@ -149,6 +149,17 @@ public final class TCArtificeDeviceBehaviorAudit {
     }
 
     private static void addVisBatteryChecks(ServerLevel level, BlockPos pos, ArrayList<Check> checks) {
+        var remainders = net.minecraft.core.NonNullList.withSize(4, new ItemStack(Items.GLASS_BOTTLE));
+        var oneSlot = new net.neoforged.neoforge.items.ItemStackHandler(1);
+        var twoSlots = new net.neoforged.neoforge.items.ItemStackHandler(2);
+        ItemStack honey = new ItemStack(Items.HONEY_BLOCK);
+        checks.add(check("pattern_crafter_cumulative_remainder_capacity",
+                !TCPatternCrafterBlockEntity.canFitAll(oneSlot, honey, remainders)
+                        && TCPatternCrafterBlockEntity.canFitAll(twoSlots, honey, remainders)
+                        && oneSlot.getStackInSlot(0).isEmpty()
+                        && twoSlots.getStackInSlot(0).isEmpty()
+                        && twoSlots.getStackInSlot(1).isEmpty(),
+                "Honey block and four bottles require separate slots; planning must not mutate inventory"));
         level.setBlock(pos, TCBlocks.VIS_BATTERY.get().defaultBlockState().setValue(TCVisBatteryBlock.CHARGE, 5), 3);
         BlockState state = level.getBlockState(pos);
 

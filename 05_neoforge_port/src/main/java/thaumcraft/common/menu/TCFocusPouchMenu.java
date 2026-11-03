@@ -25,6 +25,7 @@ public class TCFocusPouchMenu extends AbstractContainerMenu {
     private final Player player;
     private final InteractionHand hand;
     private final int selectedSlot;
+    private final ItemStack boundPouch;
     private final SimpleContainer pouchContainer = new SimpleContainer(POUCH_SLOTS);
 
     public TCFocusPouchMenu(int containerId, Inventory inventory, RegistryFriendlyByteBuf extraData) {
@@ -38,6 +39,7 @@ public class TCFocusPouchMenu extends AbstractContainerMenu {
         this.selectedSlot = selectedSlot;
 
         ItemStack pouch = getPouchStack();
+        this.boundPouch = pouch;
         if (!pouch.isEmpty() && pouch.getItem() instanceof ItemFocusPouch) {
             var items = ItemFocusPouch.getInventory(pouch);
             for (int i = 0; i < POUCH_SLOTS && i < items.size(); i++) {
@@ -61,7 +63,12 @@ public class TCFocusPouchMenu extends AbstractContainerMenu {
 
         // Hotbar (1x9)
         for (int i = 0; i < 9; ++i) {
-            addSlot(new Slot(inventory, i, 8 + i * 18, 209));
+            addSlot(new Slot(inventory, i, 8 + i * 18, 209) {
+                @Override
+                public boolean mayPickup(Player player) {
+                    return getItem() != boundPouch;
+                }
+            });
         }
     }
 
@@ -70,6 +77,14 @@ public class TCFocusPouchMenu extends AbstractContainerMenu {
             return InteractionHand.MAIN_HAND;
         }
         return extraData.readByte() == 1 ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+    }
+
+    @Override
+    public void clicked(int slotId, int button, net.minecraft.world.inventory.ClickType clickType, Player player) {
+        if (clickType == net.minecraft.world.inventory.ClickType.SWAP
+                && ((hand == InteractionHand.MAIN_HAND && button == selectedSlot)
+                    || (hand == InteractionHand.OFF_HAND && button == 40))) return;
+        super.clicked(slotId, button, clickType, player);
     }
 
     private static int readSelectedSlot(RegistryFriendlyByteBuf extraData) {
@@ -92,7 +107,7 @@ public class TCFocusPouchMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player player) {
         ItemStack pouch = getPouchStack();
-        return !pouch.isEmpty() && pouch.getItem() instanceof ItemFocusPouch;
+        return pouch == boundPouch && !pouch.isEmpty() && pouch.getItem() instanceof ItemFocusPouch;
     }
 
     @Override
@@ -108,7 +123,7 @@ public class TCFocusPouchMenu extends AbstractContainerMenu {
     }
 
     private void savePouch() {
-        ItemStack pouch = getPouchStack();
+        ItemStack pouch = boundPouch;
         if (!pouch.isEmpty() && pouch.getItem() instanceof ItemFocusPouch) {
             List<ItemStack> list = new ArrayList<>();
             for (int i = 0; i < POUCH_SLOTS; i++) {

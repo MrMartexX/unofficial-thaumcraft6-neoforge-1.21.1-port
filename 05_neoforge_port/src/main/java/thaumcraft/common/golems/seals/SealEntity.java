@@ -132,7 +132,14 @@ public class SealEntity implements ISealEntity {
         }
         if (tag.contains("type")) {
             String type = tag.getString("type");
-            this.seal = SealHandler.getSeal(type);
+            ISeal prototype = SealHandler.getSeal(type);
+            if (prototype != null) {
+                try {
+                    this.seal = prototype.getClass().getDeclaredConstructor().newInstance();
+                } catch (ReflectiveOperationException exception) {
+                    throw new IllegalStateException("Cannot restore seal " + type, exception);
+                }
+            }
         }
         this.priority = tag.getByte("priority");
         if (tag.contains("area")) {

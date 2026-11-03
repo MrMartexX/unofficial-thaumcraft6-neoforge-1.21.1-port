@@ -19,11 +19,13 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.common.blocks.crafting.TCPatternCrafterBlock;
@@ -89,35 +91,60 @@ public class TCPatternCrafterBlockEntity extends BlockEntity {
             if (!canFitAll(below, result, remaining)) continue;
 
             if (power >= 1.0F) {
+                ItemStack preview = above.extractItem(slot, needed, true);
+                if (preview.getCount() != needed || !ItemStack.isSameItemSameComponents(preview, sample)) continue;
                 // Extract consumed items from above
                 ItemStack extracted = above.extractItem(slot, needed, false);
-                if (extracted.getCount() == needed) {
+                if (extracted.getCount() == needed && ItemStack.isSameItemSameComponents(extracted, sample)) {
                     // Insert result
-                    ItemHandlerHelper.insertItem(below, result.copy(), false);
+                    insertOrDrop(below, result.copy());
                     for (ItemStack rem : remaining) {
                         if (!rem.isEmpty()) {
-                            ItemHandlerHelper.insertItem(below, rem.copy(), false);
+                            insertOrDrop(below, rem.copy());
                         }
                     }
                     power -= 1.0F;
                     setChanged();
                     level.playSound(null, worldPosition, SoundEvents.DISPENSER_DISPENSE, SoundSource.BLOCKS, 0.25F, 1.2F);
                     break;
+                } else if (!extracted.isEmpty()) {
+                    ItemStack leftover = ItemHandlerHelper.insertItem(above, extracted, false);
+                    if (!leftover.isEmpty()) Block.popResource(level, worldPosition, leftover);
                 }
             }
         }
     }
 
-    private static boolean canFitAll(IItemHandler handler, ItemStack result, NonNullList<ItemStack> remaining) {
-        if (!ItemHandlerHelper.insertItem(handler, result.copy(), true).isEmpty()) {
+    public static boolean canFitAll(IItemHandler handler, ItemStack result, NonNullList<ItemStack> remaining) {
+        ItemStackHandler planned = new ItemStackHandler(handler.getSlots()) {
+            @Override
+            public int getSlotLimit(int slot) {
+                return handler.getSlotLimit(slot);
+            }
+
+            @Override
+            public boolean isItemValid(int slot, ItemStack stack) {
+                return handler.isItemValid(slot, stack)
+                        && !ItemStack.matches(stack, handler.insertItem(slot, stack.copy(), true));
+            }
+        };
+        for (int slot = 0; slot < handler.getSlots(); slot++) {
+            planned.setStackInSlot(slot, handler.getStackInSlot(slot).copy());
+        }
+        if (!ItemHandlerHelper.insertItem(planned, result.copy(), false).isEmpty()) {
             return false;
         }
         for (ItemStack rem : remaining) {
-            if (!rem.isEmpty() && !ItemHandlerHelper.insertItem(handler, rem.copy(), true).isEmpty()) {
+            if (!rem.isEmpty() && !ItemHandlerHelper.insertItem(planned, rem.copy(), false).isEmpty()) {
                 return false;
             }
         }
         return true;
+    }
+
+    private void insertOrDrop(IItemHandler handler, ItemStack stack) {
+        ItemStack leftover = ItemHandlerHelper.insertItem(handler, stack, false);
+        if (!leftover.isEmpty()) Block.popResource(level, worldPosition, leftover);
     }
 
     public static int getRequiredCount(byte patternType) {

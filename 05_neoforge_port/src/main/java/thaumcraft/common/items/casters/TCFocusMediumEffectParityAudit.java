@@ -233,10 +233,110 @@ public final class TCFocusMediumEffectParityAudit {
             player.setItemInHand(InteractionHand.MAIN_HAND, pouch);
             TCFocusPouchMenu menu = new TCFocusPouchMenu(1, player.getInventory(), InteractionHand.MAIN_HAND, player.getInventory().selected);
             menuValid = menu.stillValid(player) && menu.slots.size() == (18 + 27 + 9);
+            int otherSlot = (player.getInventory().selected + 1) % 9;
+            ItemStack oldOther = player.getInventory().getItem(otherSlot);
+            ItemStack otherPouch = new ItemStack(TCItems.FOCUS_POUCH.get());
+            try {
+                player.getInventory().setItem(otherSlot, otherPouch);
+                menu.clicked(TCFocusPouchMenu.PLAYER_HOTBAR_START + otherSlot,
+                        player.getInventory().selected, net.minecraft.world.inventory.ClickType.SWAP, player);
+                menuValid &= player.getMainHandItem() == pouch
+                        && player.getInventory().getItem(otherSlot) == otherPouch
+                        && !menu.getSlot(TCFocusPouchMenu.PLAYER_HOTBAR_START + player.getInventory().selected).mayPickup(player);
+            } finally {
+                player.getInventory().setItem(otherSlot, oldOther);
+            }
         }
         rows.add(new Row("focus_pouch_inventory_and_menu", pouchInvOk && (menuValid || level == null),
                 "ItemFocusPouch persists 18-slot inventory via DataComponents.CONTAINER and opens TCFocusPouchMenu"));
 
+        ItemStack casterStack = new ItemStack(TCItems.CASTER_BASIC.get());
+        ItemCaster caster = (ItemCaster) casterStack.getItem();
+        ItemStack exchangeFocus = focus(TCFocusPackageHelper.buildPackage(List.of(
+                new TCFocusPackageHelper.NodeInstance(0, "ROOT", -1, List.of(1), Map.of()),
+                new TCFocusPackageHelper.NodeInstance(1, "thaumcraft.touch", 0, List.of(2), Map.of()),
+                new TCFocusPackageHelper.NodeInstance(2, "thaumcraft.exchange", 1, List.of(), Map.of())
+        )));
+        caster.setFocus(casterStack, exchangeFocus);
+        ItemStack selected = new ItemStack(Blocks.STONE, 12);
+        caster.storePickedBlock(casterStack, selected);
+        selected.setCount(3);
+        ItemStack recoveredSelection = caster.getPickedBlock(casterStack);
+        boolean selectionPass = recoveredSelection.is(Blocks.STONE.asItem()) && recoveredSelection.getCount() == 1;
+        recoveredSelection.setCount(9);
+        selectionPass &= caster.getPickedBlock(casterStack).getCount() == 1;
+        caster.setFocus(casterStack, ItemStack.EMPTY);
+        selectionPass &= caster.getPickedBlock(casterStack).isEmpty();
+        rows.add(new Row("caster_selected_block_component", selectionPass,
+                "Exchange selection is copied, normalized to one item, and hidden without a picker focus"));
+        if (level != null) {
+            ServerPlayer player = FakePlayerFactory.getMinecraft(level);
+            var oldMode = player.gameMode.getGameModeForPlayer();
+            ItemStack oldHand = player.getMainHandItem();
+            BlockPos exchangePos = new BlockPos(1024, 180, 1024);
+            level.getChunkAt(exchangePos);
+            var previousState = level.getBlockState(exchangePos);
+            try {
+                player.gameMode.changeGameModeForPlayer(net.minecraft.world.level.GameType.CREATIVE);
+                caster.setFocus(casterStack, exchangeFocus);
+                caster.storePickedBlock(casterStack, new ItemStack(Blocks.OAK_PLANKS));
+                player.setItemInHand(InteractionHand.MAIN_HAND, casterStack);
+                level.setBlock(exchangePos, Blocks.STONE.defaultBlockState(), 3);
+                boolean success = TCExchangeHelper.exchange(player, exchangePos, net.minecraft.core.Direction.UP, false, 0)
+                        && level.getBlockState(exchangePos).is(Blocks.OAK_PLANKS);
+                level.setBlock(exchangePos, Blocks.BEDROCK.defaultBlockState(), 3);
+                boolean bedrockSafe = !TCExchangeHelper.exchange(player, exchangePos, net.minecraft.core.Direction.UP, false, 0)
+                        && level.getBlockState(exchangePos).is(Blocks.BEDROCK);
+                level.setBlock(exchangePos, Blocks.STONE.defaultBlockState(), 3);
+                java.util.function.Consumer<net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent> cancel = event -> {
+                    if (event.getPos().equals(exchangePos)) event.setCanceled(true);
+                };
+                net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(cancel);
+                boolean canceled;
+                try {
+                    canceled = !TCExchangeHelper.exchange(player, exchangePos, net.minecraft.core.Direction.UP, false, 0)
+                            && level.getBlockState(exchangePos).is(Blocks.STONE);
+                } finally {
+                    net.neoforged.neoforge.common.NeoForge.EVENT_BUS.unregister(cancel);
+                }
+                rows.add(new Row("exchange_selected_block_and_permission_gates", success && bedrockSafe && canceled,
+                        "Selected material replaces stone, bedrock survives, and canceled placement does not mutate the block"));
+                var inventory = player.getInventory();
+                List<ItemStack> inventoryBefore = new ArrayList<>();
+                for (int i = 0; i < inventory.getContainerSize(); i++) inventoryBefore.add(inventory.getItem(i).copy());
+                float visBefore = thaumcraft.api.aura.AuraHelper.getVis(level, exchangePos);
+                try {
+                    inventory.clearContent();
+                    player.setItemInHand(InteractionHand.MAIN_HAND, casterStack);
+                    inventory.setItem(9, new ItemStack(Blocks.OAK_PLANKS, 2));
+                    player.gameMode.changeGameModeForPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+                    thaumcraft.api.aura.AuraHelper.drainVis(level, exchangePos, visBefore, false);
+                    level.setBlock(exchangePos, Blocks.STONE.defaultBlockState(), 3);
+                    boolean noVisSafe = !TCExchangeHelper.exchange(player, exchangePos, net.minecraft.core.Direction.UP, false, 0)
+                            && inventory.getItem(9).getCount() == 2 && level.getBlockState(exchangePos).is(Blocks.STONE);
+                    thaumcraft.api.aura.AuraHelper.addVis(level, exchangePos, 10);
+                    float beforeNormal = thaumcraft.api.aura.AuraHelper.getVis(level, exchangePos);
+                    boolean normalSwap = TCExchangeHelper.exchange(player, exchangePos, net.minecraft.core.Direction.UP, false, 0)
+                            && inventory.getItem(9).getCount() == 1
+                            && inventory.countItem(net.minecraft.world.item.Items.COBBLESTONE) == 1
+                            && Math.abs(thaumcraft.api.aura.AuraHelper.getVis(level, exchangePos) - (beforeNormal - 0.25F)) < 0.001F;
+                    level.setBlock(exchangePos, Blocks.STONE.defaultBlockState(), 3);
+                    boolean silkSwap = TCExchangeHelper.exchange(player, exchangePos, net.minecraft.core.Direction.UP, true, 0)
+                            && inventory.getItem(9).isEmpty() && inventory.countItem(net.minecraft.world.item.Items.STONE) == 1;
+                    rows.add(new Row("exchange_survival_costs_and_silk", noVisSafe && normalSwap && silkSwap,
+                            "No-vis rejection preserves input; normal swap consumes one block/0.25 vis and picks up cobble; silk returns stone"));
+                } finally {
+                    for (int i = 0; i < inventoryBefore.size(); i++) inventory.setItem(i, inventoryBefore.get(i));
+                    float currentVis = thaumcraft.api.aura.AuraHelper.getVis(level, exchangePos);
+                    thaumcraft.api.aura.AuraHelper.drainVis(level, exchangePos, currentVis, false);
+                    thaumcraft.api.aura.AuraHelper.addVis(level, exchangePos, visBefore);
+                }
+            } finally {
+                level.setBlock(exchangePos, previousState, 3);
+                player.setItemInHand(InteractionHand.MAIN_HAND, oldHand);
+                player.gameMode.changeGameModeForPlayer(oldMode);
+            }
+        }
         return new Report(rows);
     }
 

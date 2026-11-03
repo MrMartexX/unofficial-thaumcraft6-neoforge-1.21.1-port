@@ -38,6 +38,9 @@ public class ItemGolemBell extends Item implements ISealDisplayer {
         if (!level.isClientSide) {
             ISealEntity seal = SealHandler.getSealEntity(level, new SealPos(pos, face));
             if (seal != null) {
+                if (player == null || !player.getStringUUID().equals(seal.getOwner())) {
+                    return InteractionResult.FAIL;
+                }
                 if (player != null && player.isShiftKeyDown()) {
                     SealHandler.removeSealEntity(level, seal.getSealPos(), false);
                     level.playSound(null, pos, TCSounds.ZAP.get(), SoundSource.BLOCKS, 0.5F, 1.0F);

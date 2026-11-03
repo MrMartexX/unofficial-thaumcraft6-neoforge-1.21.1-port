@@ -81,7 +81,41 @@ public class ItemCaster extends Item implements ICaster {
 
     @Override
     public ItemStack getPickedBlock(ItemStack stack) {
-        return ItemStack.EMPTY;
+        if (!supportsBlockPicking(stack)) return ItemStack.EMPTY;
+        var selected = net.minecraft.core.NonNullList.withSize(1, ItemStack.EMPTY);
+        stack.getOrDefault(TCDataComponents.CASTER_PICKED_BLOCK.get(),
+                net.minecraft.world.item.component.ItemContainerContents.EMPTY).copyInto(selected);
+        return selected.get(0);
+    }
+
+    private boolean supportsBlockPicking(ItemStack stack) {
+        ItemStack focus = getFocusStack(stack);
+        if (focus.isEmpty()) return false;
+        return TCFocusPackageHelper.decode(TCFocusPackageHelper.getPackage(focus).nodes()).stream()
+                .anyMatch(node -> "thaumcraft.exchange".equals(TCFocusElements.normalizeKey(node.key())));
+    }
+
+    public void storePickedBlock(ItemStack stack, ItemStack selected) {
+        if (selected.isEmpty()) stack.remove(TCDataComponents.CASTER_PICKED_BLOCK.get());
+        else stack.set(TCDataComponents.CASTER_PICKED_BLOCK.get(),
+                net.minecraft.world.item.component.ItemContainerContents.fromItems(List.of(selected.copyWithCount(1))));
+    }
+
+    @Override
+    public net.minecraft.world.InteractionResult onItemUseFirst(ItemStack stack, net.minecraft.world.item.context.UseOnContext context) {
+        Player player = context.getPlayer();
+        Level level = context.getLevel();
+        var pos = context.getClickedPos();
+        if (player == null || !player.isShiftKeyDown() || !supportsBlockPicking(stack)
+                || level.getBlockEntity(pos) != null) return net.minecraft.world.InteractionResult.PASS;
+        if (!level.isClientSide) {
+            var state = level.getBlockState(pos);
+            ItemStack selected = state.getBlock().getCloneItemStack(state,
+                    new net.minecraft.world.phys.BlockHitResult(context.getClickLocation(), context.getClickedFace(), pos, false),
+                    level, pos, player);
+            storePickedBlock(stack, selected);
+        }
+        return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
     }
 
     @Override

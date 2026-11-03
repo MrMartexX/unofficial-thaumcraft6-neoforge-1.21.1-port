@@ -152,6 +152,16 @@ public final class TCGolemBehaviorAudit {
                 boolean placed = SealHandler.addSealEntity(level, testPos, testSide, pickupSeal, null);
                 SealEntity entity = SealHandler.getSealEntity(level, new SealPos(testPos, testSide));
                 boolean found = entity != null && entity.getSeal() == pickupSeal;
+                var saved = thaumcraft.common.golems.seals.TCSealSavedData.get(level)
+                        .save(new net.minecraft.nbt.CompoundTag(), level.registryAccess());
+                var restored = thaumcraft.common.golems.seals.TCSealSavedData.load(saved, level.registryAccess());
+                var roundTrip = restored.save(new net.minecraft.nbt.CompoundTag(), level.registryAccess());
+                SealEntity isolated = new SealEntity();
+                if (entity != null) isolated.readNBT(entity.writeNBT());
+                rows.add(new Row("seal_saved_data_round_trip",
+                        saved.equals(roundTrip) && entity != null && isolated.getSeal() != pickupSeal
+                                && isolated.getSeal().getKey().equals(pickupSeal.getKey()),
+                        "World-scoped SavedData preserves seal fields and restores independent seal instances"));
                 SealHandler.removeSealEntity(level, new SealPos(testPos, testSide), true);
                 boolean removed = SealHandler.getSealEntity(level, new SealPos(testPos, testSide)) == null;
                 worldSealPass = placed && found && removed;
@@ -173,9 +183,41 @@ public final class TCGolemBehaviorAudit {
             boolean noSuctionWhenIdle = builder.getSuction(Direction.DOWN).amount() == 0;
             builderPass = initZero && noSuctionWhenIdle;
         }
-        rows.add(new Row("golem_builder_crafting_cycle", builderPass || level == null,
-                "TCGolemBuilderBlockEntity verifies suction 128 for machina during craft and proper ItemGolemPlacer output"));
+        rows.add(new Row("golem_builder_idle_contract", builderPass || level == null,
+                "Idle builder has zero cost, empty output and zero suction; this does not test a full crafting cycle"));
 
+        var lockedInventory = new net.neoforged.neoforge.items.ItemStackHandler(1) {
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                return ItemStack.EMPTY;
+            }
+        };
+        var iron = new ItemStack(net.minecraft.world.item.Items.IRON_INGOT, 16);
+        lockedInventory.setStackInSlot(0, iron);
+        rows.add(new Row("golem_builder_restricted_extraction",
+                TCGolemBuilderBlockEntity.countExtractable(lockedInventory, iron) == 0
+                        && lockedInventory.getStackInSlot(0).getCount() == 16,
+                "Visible but extraction-locked ingredients must not satisfy press costs"));
+        String persistencePhase = System.getProperty("tc.sealPersistencePhase", "");
+        if (level != null && !persistencePhase.isEmpty()) {
+            BlockPos persistedPos = new BlockPos(1024, 180, 1025);
+            var sealPos = new SealPos(persistedPos, Direction.UP);
+            if ("write".equals(persistencePhase)) {
+                SealHandler.removeSealEntity(level, sealPos, true);
+                boolean added = SealHandler.addSealEntity(level, persistedPos, Direction.UP,
+                        SealHandler.getSeal("thaumcraft:pickup"), null);
+                SealHandler.getSealEntity(level, sealPos).setOwner("parity-persistence-owner");
+                rows.add(new Row("seal_restart_write", added, "Seal queued for world save before server shutdown"));
+            } else if ("read".equals(persistencePhase)) {
+                SealEntity persisted = SealHandler.getSealEntity(level, sealPos);
+                rows.add(new Row("seal_restart_read", persisted != null
+                        && "parity-persistence-owner".equals(persisted.getOwner()),
+                        "Fresh JVM restored placed seal and owner from disk"));
+                SealHandler.removeSealEntity(level, sealPos, true);
+            } else {
+                throw new IllegalArgumentException("Unknown seal persistence phase");
+            }
+        }
         return new Report(rows);
     }
 

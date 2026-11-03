@@ -327,7 +327,9 @@ public final class TCUnifiedParityRuntimeAudit {
             net.minecraft.world.level.block.state.BlockState stateSize0 = cb.defaultBlockState().setValue(thaumcraft.common.blocks.world.ore.TCCrystalBlock.SIZE, 0);
             net.minecraft.world.level.block.state.BlockState stateSize3 = cb.defaultBlockState().setValue(thaumcraft.common.blocks.world.ore.TCCrystalBlock.SIZE, 3);
             crystalValid = cb.getDrops(stateSize0, null).size() == 1
-                    && cb.getDrops(stateSize3, null).size() == 4;
+                    && cb.getDrops(stateSize3, null).stream().mapToInt(ItemStack::getCount).sum() == 4
+                    && cb.defaultBlockState().getValue(thaumcraft.common.blocks.world.ore.TCCrystalBlock.GENERATION) == 1
+                    && thaumcraft.common.blocks.world.ore.TCCrystalBlock.GENERATION.getPossibleValues().size() == 4;
         }
         checks.add(new Check("Worldgen", "crystal_growth_and_drops_contract",
                 crystalValid,

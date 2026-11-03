@@ -42,7 +42,7 @@ Write-Host "=================================================="
 
 # Check for stale java processes if requested
 if ($KillStaleRunClient) {
-    Get-Process -Name java -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -match 'Minecraft' } | Stop-Process -Force -ErrorAction SilentlyContinue
+    throw 'Global Minecraft cleanup is disabled. Stop the specific stale project instance explicitly.'
 }
 
 $startInfo = New-Object System.Diagnostics.ProcessStartInfo
@@ -112,7 +112,7 @@ try {
         }
 
         if ($readyFound) {
-            Write-Host "[SUCCESS] Client initialized successfully (models, textures, and renderers verified)!"
+            Write-Host "[SUCCESS] Client startup signal received; this does not verify models, textures, or renderers."
             break
         }
 

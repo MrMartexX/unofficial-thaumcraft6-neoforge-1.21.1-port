@@ -65,9 +65,7 @@ def lint_assets(repo_root: Path) -> Tuple[int, Dict[str, Any]]:
                 if tex.startswith("thaumcraft:"):
                     tex_clean = tex.replace("thaumcraft:", "")
                     target_png = textures_dir / f"{tex_clean}.png"
-                    # Allow legacy block/ vs blocks/, item/ vs items/
-                    alt_png = textures_dir / f"{tex_clean.replace('block/', 'blocks/').replace('item/', 'items/')}.png"
-                    if not target_png.exists() and not alt_png.exists():
+                    if not target_png.exists():
                         errors.append(f"[Missing Texture] Model '{m_path.name}' ({slot}) references missing texture '{tex}'")
 
     # 2. Check all blockstates
@@ -103,10 +101,8 @@ def lint_assets(repo_root: Path) -> Tuple[int, Dict[str, Any]]:
         for m_ref in model_refs:
             if m_ref.startswith("thaumcraft:"):
                 clean = m_ref.replace("thaumcraft:", "")
-                # Can be block/<name> or direct <name>
                 target1 = models_dir / f"{clean}.json"
-                target2 = models_dir / "block" / f"{Path(clean).name}.json"
-                if not target1.exists() and not target2.exists():
+                if not target1.exists():
                     errors.append(f"[Missing Model] Blockstate '{b_path.name}' references missing model '{m_ref}'")
 
     # 3. Check texture file integrity

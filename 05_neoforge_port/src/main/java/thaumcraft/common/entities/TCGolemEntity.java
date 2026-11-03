@@ -354,6 +354,9 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
         ItemStack held = player.getItemInHand(hand);
 
         if (held.getItem() instanceof ItemGolemBell) {
+            if (!player.getUUID().equals(getOwnerUUID())) {
+                return InteractionResult.FAIL;
+            }
             if (player.isShiftKeyDown()) {
                 if (!level().isClientSide) {
                     ItemStack placer = new ItemStack(TCItems.GOLEM_PLACER.get());
@@ -385,6 +388,9 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
         }
 
         if (held.getItem() instanceof DyeItem dye) {
+            if (!player.getUUID().equals(getOwnerUUID())) {
+                return InteractionResult.FAIL;
+            }
             if (!level().isClientSide) {
                 setGolemColor((byte) dye.getDyeColor().getId());
                 if (!player.getAbilities().instabuild) {
