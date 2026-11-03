@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F83](#additional-source-history-checks-f01f70)
+6. [Additional source-history checks: F01–F87](#additional-source-history-checks-f01f70)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F83
+## Additional source-history checks: F01–F87
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1369,6 +1369,75 @@ The modern `TCVisGeneratorBlock` declares only `FACING`, registers no `ENABLED` 
 **Blind spot:** a generic “implements `IBlockFacing`” search is insufficient: overridden legacy placement methods must be checked before alleging a regression. Test each identified class's use of the base helper and compare the actual modern rule.
 
 **Sources:** [legacy device base](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCDevice.java), [modern Golem Builder](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCGolemBuilderBlock.java), [modern Thaumatorium](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCThaumatoriumBlock.java).
+
+---
+
+## Redstone-driven visual-state audit: F84–F87 (November 3, 2026)
+
+This pass uses the original `IBlockEnabled` implementers and the actual modern block/BE consumers, not an assumption that an `enabled` JSON variant is automatically necessary. The pinned code baseline remains `main` at `72eaac17a1e1c0c51b27cb151ef7f244944c89d5`. Results are source-level; no world was launched. The separate remediation branch at `5cfc7f35926e3f2b2665b63d5a7d19a247e0aa39` remains outside this baseline.
+
+### F84 — Eleven active legacy enabled-block families: ten keep a modern enabled property, Vis Generator is the known exception
+
+**Status:** `confirmed_code` inventory and `negative_control` against a claim of broad enabled-property disappearance. F82 remains the confirmed exception.
+
+A targeted `implements IBlockEnabled` search and active registry reconciliation identifies these **eleven active legacy class families**: Arcane Ear (including Toggle), Bellows, Condenser, Dioptra, Lamp (Arcane/Growth/Fertility), Levitator, Pattern Crafter, Potion Sprayer, Smelter (Basic/Thaumium/Void), Vis Generator, and Void Siphon. The modern classes for the first **ten** declare and include `ENABLED` in their blockstate definitions. The modern `TCVisGeneratorBlock` declares only `FACING`, as separately established in F82. Legacy `BlockBrainBox` and `BlockRedstoneRelay` also implement `IBlockEnabled` but lack matching active modern block registrations and must not inflate the active-family count.
+
+A blockstate property does **not** by itself establish correct Redstone behavior. Consumers and lifecycle events matter, and some original classes deliberately override the generic `BlockTCDevice` behavior. Test coverage must therefore record `initial placement | redstone transition | updateState override | server tick gate | saved state | model/BER/FX` per family.
+
+**Sources:** [legacy device classes](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/tree/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices), [legacy crafting blocks](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/tree/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting), [modern block registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java).
+
+### F85 — Enabled-state consumer controls: Dioptra is manually switched; several device gates survive
+
+**Status:** `negative_control` for the specific inspected Redstone or manual state paths. This does not certify visual animations or all transitions.
+
+- **Dioptra:** original `BlockDioptra.updateState` is **intentionally empty** (`BlockDioptra.java:51–53`), suppressing the base `IBlockEnabled` Redstone auto-update. Original `onBlockActivated` manually toggles `ENABLED`; modern `TCDioptraBlock.useWithoutItem` also toggles `ENABLED` and has no generic Redstone neighbor handler. Calling the absent modern redstone handler a defect here would be a false positive. F12's missing 13×13 height-field visual remains independent.
+- **Condenser:** modern `TCCondenserBlock.neighborChanged` computes `ENABLED=!hasNeighborSignal`, and `TCCondenserBlockEntity.tick` explicitly gates its lattice/aura work by the resulting state. The neighbor-transition and consumer gate exist.
+- **Pattern Crafter:** modern `TCPatternCrafterBlock.neighborChanged` updates `ENABLED`, and the block entity checks it before server work. This does not restore F16's missing dynamic gear and mode-indicator rendering, nor N13's sub-part-specific interaction.
+- **Bellows:** modern placement reads `hasNeighborSignal`, neighbor updates keep `ENABLED` consistent, and the block entity uses it in server/client animation and attached-device calculations. Missing redstone support must not be alleged solely because the 12 blockstate JSON variants reference one static `bellows` model.
+- **Void Siphon:** modern placement and neighbor updates check Redstone; the server tick checks `ENABLED` before draining rifts. The separate F15 portal-style rendering gap is not resolved by this state gate.
+- **Potion Sprayer:** legacy `TilePotionSprayer.update` activates spray when `!ENABLED`; modern `TCPotionSprayerBlockEntity.tickServer` retains the same **active-low** trigger condition. A powered pulse causing the spray is intentional, not a reversed-state bug.
+- **Smelter:** original `BlockSmelter` overrides placement, block-added, and neighbor handlers rather than simply inheriting the base Redstone toggle. Do not generalize `BlockTCDevice.updateState` to its operation without tracing its furnace-state changes.
+
+These are narrowly scoped checks of **code pathways**, not client-screenshot evidence. Explicitly separate state availability from trigger semantics and from animation/particles.
+
+**Sources:** [original Dioptra](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockDioptra.java), [modern Dioptra](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCDioptraBlock.java), [modern Bellows BE](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCBellowsBlockEntity.java), [modern Potion Sprayer BE](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCPotionSprayerBlockEntity.java).
+
+### F86 — Possible initial-powered placement divergence in Condenser, Pattern Crafter and Potion Sprayer
+
+**Status:** `confirmed_code` for different placement/update hooks; `probable_cause` / `requires_client` for a visible or functional initial-state mismatch. **Do not call a reproduced defect yet.**
+
+Original `BlockTCDevice.onBlockAdded` calls `updateState(world,pos,state)`, which sets `ENABLED=!world.isBlockPowered(pos)` on its `IBlockEnabled` subclasses (`BlockTCDevice.java:44–46, 68–74`). Legacy Condenser, Pattern Crafter and Potion Sprayer do not override this placement-time behavior. In the port:
+
+1. `TCCondenserBlock` initializes `ENABLED=true`, has no `getStateForPlacement` or `onPlace` power test, and updates `ENABLED` only from `neighborChanged`.
+2. `TCPatternCrafterBlock.getStateForPlacement` sets `ENABLED=true` without reading power; likewise its state correction is in `neighborChanged`.
+3. `TCPotionSprayerBlock.getStateForPlacement` sets `ENABLED=true` without reading power; likewise it corrects on `neighborChanged`.
+
+This establishes a **different source-level initialization contract**. Whether Minecraft/NeoForge placement event ordering happens to deliver a corrective neighbor notification to the just-placed block must be verified, not assumed. An already-powered adjacent block may expose an initially wrong `ENABLED` state, incorrect Condenser on/off model, or an incorrect initial device tick; those are hypotheses pending a controlled test. Conversely, placing an unpowered block and later toggling the neighbor is likely to exercise the implemented `neighborChanged` logic and can mask an initialization bug.
+
+**Repro:** before placement, provide stable Redstone power at the target location; place each device; read `ENABLED` immediately after the placement event, after one server tick, and after a forced neighbor update. Repeat with power added **after** placement as a negative control. For Condenser capture the `condenser_off` vs `condenser` model, for Crafter measure actual work progression, and for Sprayer test a pre-charged unit to distinguish activation edges. Add an explicit block-placement lifecycle assertion only after proving the runtime effect. No code change is authorized in this research PR.
+
+**Sources:** [legacy base onBlockAdded/updateState](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCDevice.java), [modern Condenser block](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCCondenserBlock.java), [modern Pattern Crafter block](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCPatternCrafterBlock.java), [modern Potion Sprayer block](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCPotionSprayerBlock.java).
+
+### F87 — The 16 active enabled-family blockstate files divide into eleven explicit on/off visuals and five shared-model cases
+
+**Status:** `confirmed_code` resource inventory, `negative_control` against treating every missing `enabled` variant as a visible missing model. Cross-reference F82 for the one missing runtime property.
+
+The **16 active blockstate JSON filenames** mapped to the eleven original enabled families were parsed individually:
+
+| Class-family active IDs | JSON mapping | Interpretation |
+| --- | --- | --- |
+| `arcane_ear`, `arcane_ear_toggle` | 12 variants each, differentiated `enabled` and `facing`; separate on/off model files | Explicit visual state selection exists |
+| `lamp_arcane`, `lamp_growth`, `lamp_fertility` | Eight multipart clauses each, conditional on enabled/facing and including the stand | Explicit on/off visuals exist |
+| `smelter_basic`, `smelter_thaumium`, `smelter_void` | Eight variants each; separate on/off models | Explicit state visuals exist |
+| `condenser`, `dioptra`, `levitator` | Two, two, twelve variants respectively; explicit enabled-dependent models | Explicit state visuals exist |
+| `bellows`, `pattern_crafter`, `potion_sprayer`, `void_siphon` | Enabled is registered but blockstate JSON does not select distinct models by that property | Not automatically a defect: animated BER, separate particles or visually invariant geometry may own the change |
+| `vis_generator` | Six facing-only variants | No registered `ENABLED` property; the functional state loss is F82, not a missing JSON variant for an existing property |
+
+The resource count is **11 explicit enabled-selecting files and 5 without** (four still owning the runtime property, plus Vis Generator). This count measures model-selection declarations, not frame-level parity.
+
+**Test gate:** compare on/off rendered states and particle/BER updates for each class family, with the enabled transition triggered both before/after placement and through actual controls (manual Dioptra versus Redstone-gated devices). Do not require every animated block to implement separate JSON models when the legacy effect can be faithfully handled elsewhere.
+
+**Sources:** [active blockstates directory](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/tree/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates), [modern Vis Generator](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCVisGeneratorBlock.java).
 
 ---
 
