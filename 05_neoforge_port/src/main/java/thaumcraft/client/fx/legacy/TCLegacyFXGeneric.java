@@ -35,6 +35,9 @@ public final class TCLegacyFXGeneric {
     private Quaternionf fixedRotation;
 
     private boolean removed;
+    private boolean flipped;
+
+    public void setFlipped(boolean value) { flipped = value; }
 
     public TCLegacyFXGeneric(
             Level level,
@@ -163,6 +166,7 @@ public final class TCLegacyFXGeneric {
         int frame = getCurrentFrame();
         float u0 = getFrameU(frame, 0.0F);
         float u1 = getFrameU(frame, 1.0F);
+        if (flipped) { float swap = u0; u0 = u1; u1 = swap; }
         float v0 = getFrameV(frame, 0.0F);
         float v1 = getFrameV(frame, 1.0F);
 

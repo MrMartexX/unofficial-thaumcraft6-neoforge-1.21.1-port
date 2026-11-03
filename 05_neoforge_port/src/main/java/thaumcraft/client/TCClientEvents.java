@@ -79,6 +79,7 @@ public final class TCClientEvents {
         }
 
         if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER) {
+            thaumcraft.client.renderer.TCSealWorldRenderer.render(event);
             TCThaumometerClientEffects.renderAspectOverlay(event);
         }
     }

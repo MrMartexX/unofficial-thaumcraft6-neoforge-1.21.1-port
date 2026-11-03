@@ -6,6 +6,14 @@ Reviewed target module: `05_neoforge_port`
 
 ## November 3 Review Branch
 
+The follow-up [seal world renderer](design/seal_world_rendering.md) corrects a
+real omission not covered by the earlier menu-only screenshots: synced seals now
+render while holding ISealDisplayer, with legacy range/opacity, six faces,
+extrusion/Shift reveal, area graphics and redstone sparks. Geometry/atlas and
+actual world-submission markers pass. Corrected flat fixtures have natural ground
+at Y=63 and sixteen seals both in inventory and the new near-spawn chest. Use new
+reset copies; old saves and currently running clients are not silently rewritten.
+
 Exchange now queues an immutable source/selection snapshot until level Post tick,
 keeps Fortune available to unsupported-silk loot paths, escrows materials before
 replacement callbacks and restores its dimension-scoped bamf payload. The focused

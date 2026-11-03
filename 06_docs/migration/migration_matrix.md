@@ -8,6 +8,12 @@ For current implementation status, always read `06_docs/current_port_status.md` 
 
 ### November 3 Remediation Checkpoint
 
+Seal world rendering is now an explicit slice rather than an inference from
+working menus: held-item gating, distance fade, face-aligned atlas extrusion,
+Shift reveal, area/corner markers and stop sparks have a client-only renderer.
+See [design and measured acceptance](../design/seal_world_rendering.md).
+Matched-frame visual parity remains separate from the passing render contracts.
+
 Exchange's immediate mutation was replaced by a server-owned end-tick queue;
 loot context retains both silk and Fortune, material escrow precedes replacement
 callbacks, and successful swaps send the original-range false-flair bamf.

@@ -7,6 +7,22 @@ if ((Get-Content -LiteralPath $ClientLog -Raw) -notmatch 'TC_GOLEM_VISUAL_AUDIT_
     throw 'Missing real server-menu and removal acknowledgement marker'
 }
 Add-Type -AssemblyName System.Drawing
+if ((Get-Content -LiteralPath $ClientLog -Raw) -notmatch 'TC_SEAL_GEOMETRY_PASS faces=6 modes=2 vertices=4368 visibility=true alpha=true atlas=true' -or
+    (Get-Content -LiteralPath $ClientLog -Raw) -notmatch 'TC_SEAL_WORLD_RENDER_PASS synced=true submitted=true') {
+    throw 'Missing seal geometry or actual synced in-world rendering evidence'
+}
+$sealCapture = Join-Path $repo 'tools/reports/local/paired-worlds/seal-world.png'
+$sealImage = [Drawing.Bitmap]::new($sealCapture)
+try {
+    $red = 0
+    for ($y = [int]($sealImage.Height * .2); $y -lt $sealImage.Height * .6; $y += 2) {
+        for ($x = [int]($sealImage.Width * .35); $x -lt $sealImage.Width * .65; $x += 2) {
+            $pixel = $sealImage.GetPixel($x, $y)
+            if ($pixel.R -gt 60 -and $pixel.R -gt $pixel.G * 1.8 -and $pixel.R -gt $pixel.B * 1.8) { $red++ }
+        }
+    }
+    if ($red -lt 80) { throw "Missing rendered pickup seal in the world capture: red pixels=$red" }
+} finally { $sealImage.Dispose() }
 if ((Get-Content -LiteralPath $ClientLog -Raw) -notmatch 'TC_EXCHANGE_RENDER_PASS samples=\d+ vertices=\d+ finite=true atlas=true expires=true' -or
     (Get-Content -LiteralPath $ClientLog -Raw) -notmatch 'TC_EXCHANGE_PACKET_CLIENT_PASS particles=\d+ dimension=true') {
     throw 'Missing Exchange actual geometry or clientbound payload acceptance evidence'

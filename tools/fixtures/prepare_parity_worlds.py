@@ -132,6 +132,7 @@ def functions(modern):
     seal_items = [item(modern, f'thaumcraft:seal_{key}', 4) if modern else
                   item(False, 'thaumcraft:seal', 4, damage=i+1) for i, key in enumerate(SEALS)]
     chest(-26, 17, 'All sixteen seals', seal_items)
+    chest(-3, -9, 'ALL SEALS - spare kit', seal_items)
     for i in range(6):
         build.append(f'setblock {-23+i*4} 64 25 minecraft:stone')
     chest(-18, 31, 'Seal inventory', [item(modern, 'minecraft:iron_ingot', 16), item(modern, plain, 32)])
@@ -152,20 +153,24 @@ def functions(modern):
     starter = [item(modern,'thaumcraft:thaumonomicon'), item(modern,'thaumcraft:thaumometer'),
                item(modern,'thaumcraft:golem_bell'), caster(modern,0,0), caster(modern,1,0), caster(modern,0,4),
                item(modern,plain,64), item(modern,'minecraft:stone',64), item(modern,'minecraft:chest',16)]
-    for stack in starter:
-        if modern:
-            components = stack.get('components', {})
-            suffix = '[' + ','.join(f'{key}={value.snbt()}' for key,value in components.items()) + ']' if components else ''
-            kit.append(f'give @s {stack["id"]}{suffix} {int(stack["count"])}')
-        else:
-            kit.append(f'give @s {stack["id"]} {int(stack["Count"])} {int(stack["Damage"])} {stack.get("tag",n.Compound()).snbt()}')
+    def give_commands(stacks):
+        commands = []
+        for stack in stacks:
+            if modern:
+                components = stack.get('components', {})
+                suffix = '[' + ','.join(f'{key}={value.snbt()}' for key,value in components.items()) + ']' if components else ''
+                commands.append(f'give @s {stack["id"]}{suffix} {int(stack["count"])}')
+            else:
+                commands.append(f'give @s {stack["id"]} {int(stack["Count"])} {int(stack["Damage"])} {stack.get("tag",n.Compound()).snbt()}')
+        return commands
+    kit += give_commands(starter + seal_items)
     kit += ['tag @s add tc_parity_ready' if modern else 'scoreboard players tag @s add tc_parity_ready',
             'tellraw @s {"text":"Kit ready. Golems/seals are in labelled chests. Research is intentionally fresh.","color":"green"}']
     tick = ['execute unless data storage tc_parity:state built run function tc_parity:build',
             'execute as @a[tag=!tc_parity_ready] run function tc_parity:kit'] if modern else [
             'execute @a[tag=!tc_parity_ready] ~ ~ ~ function tc_parity:kit']
     unlock = ['tc research @s all' if modern else 'thaumcraft research @s all']
-    return {'build': build, 'players': tick, 'kit': kit, 'unlock': unlock,
+    return {'build': build, 'players': tick, 'kit': kit, 'unlock': unlock, 'seals': give_commands(seal_items),
             'home': ['tp @s 0.5 64 -12.5 0 0'],
             'refill': [line for line in kit if line.startswith('give ')]}
 
@@ -184,7 +189,7 @@ def prepare(modern):
         settings['generate_features'] = n.Byte(0)
         settings['dimensions']['minecraft:overworld']['generator'] = compound('''{
             type:"minecraft:flat",settings:{biome:"minecraft:plains",features:0b,lakes:0b,structure_overrides:[],
-            layers:[{block:"minecraft:bedrock",height:1},{block:"minecraft:dirt",height:62},{block:"minecraft:grass_block",height:1}]}}''')
+            layers:[{block:"minecraft:bedrock",height:1},{block:"minecraft:dirt",height:126},{block:"minecraft:grass_block",height:1}]}}''')
         data['DataPacks'] = compound('{Enabled:["vanilla","mod:neoforge","mod:thaumcraft","file/tc_parity"],Disabled:[]}')
     else:
         data = compound('''{version:19133,DataVersion:1343,Version:{Id:1343,Name:"1.12.2",Snapshot:0b},
@@ -228,6 +233,29 @@ def prepare(modern):
 
 if __name__ == '__main__':
     import sys
+    if '--refresh-baselines' in sys.argv:
+        import gzip
+        import io
+        for version in (False,True):
+            archive = OUT/f'{NAMES[version]}_PRISTINE.zip'
+            with zipfile.ZipFile(archive) as z:
+                original = {name:z.read(name) for name in z.namelist()}
+            prefix = NAMES[version] + ('/datapacks/tc_parity/data/tc_parity/function/' if version else '/data/functions/tc_parity/')
+            for name,lines in functions(version).items():
+                original[prefix + name + '.mcfunction'] = ('\n'.join(lines)+'\n').encode('utf-8')
+            key = NAMES[version] + '/level.dat'
+            level = n.File.parse(io.BytesIO(gzip.decompress(original[key])))
+            if version:
+                layers = level['Data']['WorldGenSettings']['dimensions']['minecraft:overworld']['generator']['settings']['layers']
+                layers[1]['height'] = n.Int(126)
+                assert sum(int(layer['height']) for layer in layers) - 64 - 1 == 63
+            buffer = io.BytesIO()
+            level.write(buffer)
+            original[key] = gzip.compress(buffer.getvalue())
+            with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
+                for name,content in original.items(): z.writestr(name,content)
+        print('Updated pristine baselines only; installed worlds and player progress untouched.')
+        raise SystemExit(0)
     if '--refresh-functions' in sys.argv:
         for version in (False,True):
             dest = (MODERN if version else LEGACY)/NAMES[version]

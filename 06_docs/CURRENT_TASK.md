@@ -10,6 +10,12 @@ individual contract audits pass.
 
 ## Current focus
 
+- Seal world display was missing despite working menus/cache. The focused
+  [world-rendering follow-up](design/seal_world_rendering.md) restores legacy held
+  item gates, 16-block fade, face/extrusion transforms, area markers and stop FX.
+  Paired fixture baselines now correct modern flat-world ground to Y=63 and give
+  all sixteen seals directly. Existing user saves and sessions are not reset.
+
 - Exchange follow-up: end-of-level-tick source/selection snapshots, creative
   minimum-vis gate, silk plus Fortune loot context, pre-callback material escrow
   and the legacy false-flair bamf payload. See

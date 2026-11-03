@@ -118,10 +118,17 @@ public final class TCGolemVisualAudit {
             if (phase == 0) {
                 thaumcraft.client.renderer.TCGolemClientRenderAudit.run();
                 thaumcraft.client.fx.TCExchangeClientAudit.run();
+                thaumcraft.client.renderer.TCSealRenderAudit.run();
             }
             mc.setScreen(new ModelSheet(phase)); return;
         }
         if (phase < 10) {
+            mc.player.setYRot(-90); mc.player.yRotO = -90;
+            mc.player.setXRot(29); mc.player.xRotO = 29;
+            for (int slot = 0; slot < 9; slot++) if (mc.player.getInventory().getItem(slot).is(thaumcraft.common.registry.TCItems.GOLEM_BELL.get())) {
+                mc.player.getInventory().selected = slot;
+                break;
+            }
             mc.setScreen(null);
             mc.getSingleplayerServer().execute(() -> {
                 var player = mc.getSingleplayerServer().getPlayerList().getPlayer(mc.player.getUUID());

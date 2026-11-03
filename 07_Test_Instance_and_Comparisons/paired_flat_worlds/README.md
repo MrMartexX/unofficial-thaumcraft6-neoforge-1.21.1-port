@@ -14,7 +14,8 @@ Detailed Russian walkthrough: [CHECKLIST_RU.md](CHECKLIST_RU.md).
 The saves are already installed in each instance's own `saves` directory.
 Do not open one version's save in the other version.
 
-Both worlds use a 64-block-deep flat plains preset, seed `61222121`, creative,
+Both worlds have their natural flat ground at Y=63: legacy uses 64 layers from
+Y=0, modern uses 128 layers from Y=-64. They use seed `61222121`, creative,
 cheats enabled, normal difficulty, fixed noon, clear weather, no natural mob
 spawning and `randomTickSpeed=0`. The seed does not promise identical aura or
 other version-specific procedural output. These are controlled comparison worlds,
@@ -26,7 +27,8 @@ clients; the fixture intentionally does not overwrite instance-wide preferences.
 
 ## Equipment
 
-The first login supplies nine hotbar stacks: Thaumonomicon, Thaumometer,
+The first login supplies nine hotbar stacks plus all sixteen seal stacks in the
+main inventory. The hotbar contains Thaumonomicon, Thaumometer,
 Golemancer's Bell, three configured caster gauntlets (normal Exchange, Silk,
 Fortune IV), oak planks, stone and chests. The caster's selected replacement is
 already oak planks. The selected-block gesture can still change it normally.
@@ -72,8 +74,21 @@ the two copies with the same reset timestamp.
 `*_PRISTINE.zip` are compact, uninitialized native saves with their version-specific
 setup functions. Stations are built by Minecraft once on first load; the starter
 kit is given once per new player. They contain no imported account credentials.
+The corrected baseline also gives all sixteen seal types directly into inventory
+(after the original nine hotbar stacks) and puts a duplicate seal chest near
+spawn at `-3 64 -9`. `/function tc_parity:seals` gives just the seals again.
+These changes do not retroactively rewrite already generated old saves: use a
+NEW reset copy after updating the archives. In particular old modern worlds with
+natural ground at Y=-1 retain that error; the correction is in fresh generation.
+
+Restarting a client normally SAVES the world; it does not reset progress.
+The reset button is the supported full reset: inventory, research, placed seals,
+golems and terrain start fresh in new paired copies. No destructive auto-reset
+is enabled, and the original tested saves remain available.
 `*_READY.zip` are local full snapshots after actual in-game construction and
 verification; they are intentionally excluded from Git.
+Earlier READY snapshots preserve the original elevated-platform setup; use the
+updated PRISTINE/reset workflow for the corrected ground-level fixtures.
 
 The reset button uses the configured local Python runtime and `nbtlib` installed
 under ignored `tools/reports/local/fixture-python`. On another PC install nbtlib

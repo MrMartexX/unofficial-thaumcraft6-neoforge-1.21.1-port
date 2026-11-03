@@ -108,6 +108,15 @@ public final class TCLegacyParticleEngine {
         addEffectNow(effect);
     }
 
+    public static void addSealStopSpark(Level level,double x,double y,double z,float red) {
+        if (level == null || Minecraft.getInstance().level != level) return;
+        int age=5+level.random.nextInt(5), cell=8+level.random.nextInt(3)*16;
+        var data=new TCLegacyFXData(age,cell,8,1,16,false,0,red,0,0,red,0,0,
+                new float[]{1},new float[]{2},TCLegacyFXData.LEGACY_DEFAULT_SLOWDOWN,0,0,0,0,0,0,0,false);
+        var effect=new TCLegacyFXGeneric(level,data,x,y,z,0,0,0);
+        effect.setFlipped(level.random.nextBoolean()); addEffectNow(effect);
+    }
+
     public static void addGuiEffect(
             Level level,
             TCLegacyFXData data,
