@@ -1,0 +1,531 @@
+{
+  "schema": "thaumcraft.v0.gui_fx_hud_source_census.v1",
+  "date": "2026-11-03",
+  "source": {
+    "repository": "MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port",
+    "branch": "main",
+    "commit": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+    "legacy_proxy_gui": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/proxies/ProxyGUI.java",
+    "port_menu_screens": "05_neoforge_port/src/main/java/thaumcraft/client/gui/TCMenuScreens.java",
+    "port_menu_registry": "05_neoforge_port/src/main/java/thaumcraft/common/registry/TCMenus.java",
+    "legacy_hud": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/lib/events/HudHandler.java",
+    "port_instrument_hud": "05_neoforge_port/src/main/java/thaumcraft/client/gui/TCInstrumentHud.java",
+    "port_knowledge_hud": "05_neoforge_port/src/main/java/thaumcraft/client/gui/TCKnowledgeGainHud.java",
+    "legacy_fx_dispatcher": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java",
+    "modern_fx_dispatcher": "05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java"
+  },
+  "counts": {
+    "legacy_proxy_client_gui_cases": 18,
+    "modern_central_menu_types": 13,
+    "modern_menu_screen_bindings": 13,
+    "legacy_gui_routes_with_modern_menu": 13,
+    "legacy_gui_routes_with_modern_standalone": 1,
+    "legacy_gui_routes_without_matching_central_menu": 4,
+    "legacy_texture_files": 855,
+    "port_texture_files": 1390,
+    "missing_original_texture_paths": 0,
+    "extra_port_texture_paths": 535,
+    "legacy_gui_png": 34,
+    "legacy_gui_png_present_in_port": 34,
+    "legacy_fx_dispatcher_unique_method_names": 70,
+    "modern_fx_dispatcher_unique_method_names": 25,
+    "same_name_dispatcher_methods": 15,
+    "legacy_only_dispatcher_method_names": 55
+  },
+  "gui_routes": [
+    {
+      "id": 13,
+      "gui": "GuiArcaneWorkbench",
+      "modern_menu": "ARCANE_WORKBENCH",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 12,
+      "gui": "GuiResearchBrowser",
+      "modern_menu": null,
+      "status": "modern_standalone_screen",
+      "review": null
+    },
+    {
+      "id": 10,
+      "gui": "GuiResearchTable",
+      "modern_menu": "RESEARCH_TABLE",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 9,
+      "gui": "GuiSmelter",
+      "modern_menu": "SMELTER",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 1,
+      "gui": "GuiPech",
+      "modern_menu": "PECH",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 16,
+      "gui": "GuiTurretBasic",
+      "modern_menu": "TURRET_BASIC",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 17,
+      "gui": "GuiTurretAdvanced",
+      "modern_menu": "TURRET_ADVANCED",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 3,
+      "gui": "GuiThaumatorium",
+      "modern_menu": "THAUMATORIUM",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 14,
+      "gui": "GuiArcaneBore",
+      "modern_menu": "ARCANE_BORE",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 4,
+      "gui": "GuiHandMirror",
+      "modern_menu": "HAND_MIRROR",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 5,
+      "gui": "GuiFocusPouch",
+      "modern_menu": "FOCUS_POUCH",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 6,
+      "gui": "GuiSpa",
+      "modern_menu": null,
+      "status": "no_matching_central_menu",
+      "review": "source_explicit_gui_deferred"
+    },
+    {
+      "id": 7,
+      "gui": "GuiFocalManipulator",
+      "modern_menu": "FOCAL_MANIPULATOR",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 19,
+      "gui": "GuiGolemBuilder",
+      "modern_menu": "GOLEM_BUILDER",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 21,
+      "gui": "GuiPotionSprayer",
+      "modern_menu": null,
+      "status": "no_matching_central_menu",
+      "review": null
+    },
+    {
+      "id": 22,
+      "gui": "GuiVoidSiphon",
+      "modern_menu": "VOID_SIPHON",
+      "status": "registered_menu_and_screen",
+      "review": null
+    },
+    {
+      "id": 18,
+      "gui": "conditional",
+      "modern_menu": null,
+      "status": "no_matching_central_menu",
+      "review": "chat_feedback_in_SealHandler_openSealGui"
+    },
+    {
+      "id": 20,
+      "gui": "GuiLogistics",
+      "modern_menu": null,
+      "status": "no_matching_central_menu",
+      "review": null
+    }
+  ],
+  "modern_menu_bindings": [
+    {
+      "id": "RESEARCH_TABLE",
+      "screen": "TCResearchTableScreen"
+    },
+    {
+      "id": "ARCANE_WORKBENCH",
+      "screen": "TCArcaneWorkbenchScreen"
+    },
+    {
+      "id": "FOCAL_MANIPULATOR",
+      "screen": "TCFocalManipulatorScreen"
+    },
+    {
+      "id": "SMELTER",
+      "screen": "TCSmelterScreen"
+    },
+    {
+      "id": "THAUMATORIUM",
+      "screen": "TCThaumatoriumScreen"
+    },
+    {
+      "id": "HAND_MIRROR",
+      "screen": "TCHandMirrorScreen"
+    },
+    {
+      "id": "VOID_SIPHON",
+      "screen": "TCVoidSiphonScreen"
+    },
+    {
+      "id": "ARCANE_BORE",
+      "screen": "TCArcaneBoreScreen"
+    },
+    {
+      "id": "PECH",
+      "screen": "TCPechScreen"
+    },
+    {
+      "id": "GOLEM_BUILDER",
+      "screen": "TCGolemBuilderScreen"
+    },
+    {
+      "id": "FOCUS_POUCH",
+      "screen": "TCFocusPouchScreen"
+    },
+    {
+      "id": "TURRET_BASIC",
+      "screen": "TCTurretBasicScreen"
+    },
+    {
+      "id": "TURRET_ADVANCED",
+      "screen": "TCTurretAdvancedScreen"
+    }
+  ],
+  "modern_menu_ids": [
+    "research_table",
+    "arcane_workbench",
+    "focal_manipulator",
+    "smelter",
+    "thaumatorium",
+    "hand_mirror",
+    "void_siphon",
+    "arcane_bore",
+    "pech",
+    "golem_builder",
+    "focus_pouch",
+    "turret_basic",
+    "turret_advanced"
+  ],
+  "gui_gaps": {
+    "spa": {
+      "legacy_gui_id": 6,
+      "original": "GuiSpa",
+      "port_block": "TCArcaneSpaBlock",
+      "evidence": "Block class comment says full GUI is intentionally separate from automation slice",
+      "status": "explicit_deferred"
+    },
+    "potion_sprayer": {
+      "legacy_gui_id": 21,
+      "original": "GuiPotionSprayer",
+      "port_block": "TCPotionSprayerBlock",
+      "status": "no_corresponding_registered_menu_or_screen",
+      "behavior_note": "block item interactions exist; UI equivalence not established"
+    },
+    "logistics": {
+      "legacy_gui_id": 20,
+      "original": "GuiLogistics",
+      "status": "no_corresponding_registered_menu_or_screen"
+    },
+    "seal": {
+      "legacy_gui_id": 18,
+      "original": "dynamic seal UI via ISeal.returnGui",
+      "port_method": "SealHandler.openSealGui",
+      "status": "chat_actionbar_feedback_only",
+      "source": "ItemGolemBell invokes SealHandler.openSealGui which displays seal key/priority via displayClientMessage"
+    }
+  },
+  "hud_routes": [
+    {
+      "legacy": "renderThaumometerHud",
+      "current": "TCInstrumentHud.renderAura",
+      "status": "source_implementation_exists_visual_parity_unchecked"
+    },
+    {
+      "legacy": "renderSanityHud",
+      "current": "TCInstrumentHud.renderSanity",
+      "status": "source_implementation_exists_visual_parity_unchecked"
+    },
+    {
+      "legacy": "renderKnowledgeGains",
+      "current": "TCKnowledgeGainHud",
+      "status": "source_implementation_exists_visual_parity_unchecked"
+    },
+    {
+      "legacy": "casting wand HUD",
+      "current": null,
+      "status": "no_counterpart_found_in_inspected_HUD_registration_files"
+    },
+    {
+      "legacy": "wand trade HUD",
+      "current": null,
+      "status": "no_counterpart_found_in_inspected_HUD_registration_files"
+    },
+    {
+      "legacy": "wand focus radial selector",
+      "current": null,
+      "status": "no_counterpart_found_in_inspected_HUD_registration_files"
+    },
+    {
+      "legacy": "thaumometer aspect scan/highlight",
+      "current": "TCThaumometerClientEffects",
+      "status": "source_implementation_exists_visual_parity_unchecked"
+    },
+    {
+      "legacy": "seal area world overlay",
+      "current": null,
+      "status": "no_counterpart_found_in_inspected_client_events"
+    }
+  ],
+  "fx_inventory": {
+    "legacy_java_fx_classes": 31,
+    "modern_fx_subpackage_java_classes": 6,
+    "legacy_dispatcher_methods": [
+      "getWorld",
+      "drawFireMote",
+      "drawAlumentum",
+      "drawTaintParticles",
+      "drawLightningFlash",
+      "drawGenericParticles",
+      "drawGenericParticles16",
+      "drawLevitatorParticles",
+      "drawStabilizerParticles",
+      "drawGolemFlyParticles",
+      "drawPollutionParticles",
+      "drawBlockSparkles",
+      "drawLineSparkle",
+      "drawSimpleSparkle",
+      "drawSimpleSparkleGui",
+      "drawBlockMistParticles",
+      "drawFocusCloudParticle",
+      "drawWispyMotesOnBlock",
+      "drawWispyMotes",
+      "drawBlockMistParticlesFlat",
+      "crucibleBubble",
+      "crucibleBoil",
+      "crucibleFroth",
+      "crucibleFrothDown",
+      "drawBamf",
+      "drawPedestalShield",
+      "drawCurlyWisp",
+      "pechsCurseTick",
+      "scanHighlight",
+      "sparkle",
+      "visSparkle",
+      "voidStreak",
+      "splooshFX",
+      "taintsplosionFX",
+      "tentacleAriseFX",
+      "slimeJumpFX",
+      "taintLandFX",
+      "drawInfusionParticles1",
+      "drawInfusionParticles2",
+      "drawInfusionParticles3",
+      "drawInfusionParticles4",
+      "drawVentParticles",
+      "drawVentParticles2",
+      "spark",
+      "smokeSpiral",
+      "wispFXEG",
+      "burst",
+      "excavateFX",
+      "beamCont",
+      "beamBore",
+      "boreDigFx",
+      "essentiaTrailFx",
+      "boreTrailFx",
+      "essentiaDropFx",
+      "jarSplashFx",
+      "waterTrailFx",
+      "furnaceLavaFx",
+      "blockRunes",
+      "blockRunes2",
+      "drawSlash",
+      "blockWard",
+      "swarmParticleFX",
+      "bottleTaintBreak",
+      "arcLightning",
+      "arcBolt",
+      "cultistSpawn",
+      "drawWispyMotesEntity",
+      "drawWispParticles",
+      "drawNitorCore",
+      "drawNitorFlames"
+    ],
+    "modern_dispatcher_methods": [
+      "setClientSink",
+      "drawLegacyFX",
+      "drawLegacyFXWithDelay",
+      "drawWispyMotesOnBlock",
+      "drawWispyMotes",
+      "drawWispParticles",
+      "drawAlumentum",
+      "drawAlumentumGenericTrail",
+      "drawFocusCloudParticle",
+      "drawFluxFocusEffectParticle",
+      "drawGenericParticles",
+      "drawVentParticles",
+      "scanHighlight",
+      "blockRunes",
+      "crucibleBubble",
+      "crucibleBoil",
+      "crucibleFroth",
+      "crucibleFrothDown",
+      "drawCrucibleBamf",
+      "signed",
+      "drawSimpleSparkle",
+      "drawShimmerleafMote",
+      "drawVishroomMote",
+      "essentiaTrailFx",
+      "drawInfusionPedestalParticles"
+    ],
+    "exact_common_dispatcher_names": [
+      "drawAlumentum",
+      "drawGenericParticles",
+      "drawSimpleSparkle",
+      "drawFocusCloudParticle",
+      "drawWispyMotesOnBlock",
+      "drawWispyMotes",
+      "crucibleBubble",
+      "crucibleBoil",
+      "crucibleFroth",
+      "crucibleFrothDown",
+      "scanHighlight",
+      "drawVentParticles",
+      "essentiaTrailFx",
+      "blockRunes",
+      "drawWispParticles"
+    ],
+    "legacy_only_names": [
+      "getWorld",
+      "drawFireMote",
+      "drawTaintParticles",
+      "drawLightningFlash",
+      "drawGenericParticles16",
+      "drawLevitatorParticles",
+      "drawStabilizerParticles",
+      "drawGolemFlyParticles",
+      "drawPollutionParticles",
+      "drawBlockSparkles",
+      "drawLineSparkle",
+      "drawSimpleSparkleGui",
+      "drawBlockMistParticles",
+      "drawBlockMistParticlesFlat",
+      "drawBamf",
+      "drawPedestalShield",
+      "drawCurlyWisp",
+      "pechsCurseTick",
+      "sparkle",
+      "visSparkle",
+      "voidStreak",
+      "splooshFX",
+      "taintsplosionFX",
+      "tentacleAriseFX",
+      "slimeJumpFX",
+      "taintLandFX",
+      "drawInfusionParticles1",
+      "drawInfusionParticles2",
+      "drawInfusionParticles3",
+      "drawInfusionParticles4",
+      "drawVentParticles2",
+      "spark",
+      "smokeSpiral",
+      "wispFXEG",
+      "burst",
+      "excavateFX",
+      "beamCont",
+      "beamBore",
+      "boreDigFx",
+      "boreTrailFx",
+      "essentiaDropFx",
+      "jarSplashFx",
+      "waterTrailFx",
+      "furnaceLavaFx",
+      "blockRunes2",
+      "drawSlash",
+      "blockWard",
+      "swarmParticleFX",
+      "bottleTaintBreak",
+      "arcLightning",
+      "arcBolt",
+      "cultistSpawn",
+      "drawWispyMotesEntity",
+      "drawNitorCore",
+      "drawNitorFlames"
+    ],
+    "modern_only_names": [
+      "setClientSink",
+      "drawLegacyFX",
+      "drawLegacyFXWithDelay",
+      "drawAlumentumGenericTrail",
+      "drawFluxFocusEffectParticle",
+      "drawCrucibleBamf",
+      "signed",
+      "drawShimmerleafMote",
+      "drawVishroomMote",
+      "drawInfusionPedestalParticles"
+    ],
+    "alternative_modern_implementations": [
+      "TCInfusionClientEffects",
+      "TCNitorClientEffects",
+      "TCWispClientEffects",
+      "TCLegacyParticleEngine",
+      "TCLegacyFXGeneric",
+      "TCLegacyFXGenericGui",
+      "TCThaumometerClientEffects",
+      "TCClientEvents"
+    ],
+    "risk_note": "Method/class count differences are only identifiers, not evidence of missing gameplay effect semantics."
+  },
+  "texture_inventory": {
+    "missing_original_paths": [],
+    "all_original_gui_png_preserved": true,
+    "added_port_gui_png": [
+      "gui/gui_research_back_1.png",
+      "gui/gui_research_back_2.png",
+      "gui/gui_research_back_3.png",
+      "gui/gui_research_back_4.png",
+      "gui/gui_research_back_5.png",
+      "gui/gui_research_back_6.png",
+      "gui/gui_research_back_7.png"
+    ],
+    "not_yet_verified": [
+      "mcmeta parse",
+      "shader/pipeline compatibility",
+      "GUI dimensions/UVs",
+      "animated state",
+      "render time and world overlay position",
+      "visual match in client"
+    ]
+  },
+  "verification": {
+    "all_enumerated_java_files_fetched": true,
+    "git_tree_recursive_complete": true,
+    "runtime_executed": false,
+    "compilation_executed": false,
+    "screen_capture_performed": false,
+    "original_jars_runtime_compared": false
+  }
+}
