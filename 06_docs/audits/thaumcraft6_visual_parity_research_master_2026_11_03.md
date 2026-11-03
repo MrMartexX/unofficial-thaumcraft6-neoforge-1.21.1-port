@@ -17,10 +17,11 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F133](#additional-source-history-checks-f01f133)
+6. [Additional source-history checks: F01–F136](#additional-source-history-checks-f01f136)
 7. [Black borders: competing causes](#black-borders-competing-causes)
-8. [What remains before completion](#what-remains-before-completion)
-9. [Provenance and source archive](#provenance-and-source-archive)
+8. [Proposed remediation batches and consolidated verification](#proposed-remediation-batches-and-consolidated-verification-planning-only)
+9. [What remains before completion](#what-remains-before-completion)
+10. [Provenance and source archive](#provenance-and-source-archive)
 
 ## Evidence and confidence levels
 
@@ -302,7 +303,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F133
+## Additional source-history checks: F01–F136
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -2103,6 +2104,43 @@ The resource count is **11 explicit enabled-selecting files and 5 without** (fou
 
 **Sources:** [legacy WispZap handler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/network/fx/PacketFXWispZap.java#L41); [modern Wisp network registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCEntityFXNetwork.java#L28); [client sink wiring](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientEvents.java#L23); [modern Wisp zap renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/TCWispClientEffects.java#L37).
 
+
+### F134 — Golem Dart: the original arrow geometry, orientation and impact wobble are not rendered
+
+**Status:** `confirmed_legacy_mismatch` in the registered renderer; `requires_client` for pixel parity and any projectile-motion impact.
+
+- Legacy `ProxyEntities` explicitly binds `EntityGolemDart` to `RenderDart`; `EntityGolemDart` extends vanilla `EntityArrow`. `RenderDart` draws an **arrow-shaped multi-quad mesh** using `textures/entity/arrow.png`, normal-based faces, **0.033** model scaling, interpolated yaw/pitch and an `arrowShake` hit-wobble rotation. This is actual rendered body geometry, not merely an optional particle.
+- Current `TCEntityRenderers` binds `GOLEM_DART` to `TCInvisibleEntityRenderer`. `TCGolemDartEntity` is a `ThrowableProjectile` with impact/damage behavior, not an arrow renderer or equivalent custom mesh. Thus the legacy dart visual cannot appear through this registered renderer.
+- The changed base projectile class also deserves a **separate mechanics review** (gravity, heading and impact behavior); visual restoration must not silently rewrite server damage, hit detection or ballistic timing.
+
+**Bundled client gate:** a ranged golem fires darts under two viewing angles, including flight and impact frames. Compare 3D body, UVs, apparent size, pitch/yaw and hit wobble with original; independently assert server hit/damage behavior.
+
+**Sources:** [legacy golem-dart binding](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/proxies/ProxyEntities.java); [legacy arrow mesh](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/projectile/RenderDart.java); [legacy projectile class](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityGolemDart.java); [current renderer binding](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java); [current dart entity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCGolemDartEntity.java).
+
+### F135 — Mind Spider: viewer-specific, low-alpha hallucination rendering is lost despite preserving synced viewer identity
+
+**Status:** `confirmed_legacy_mismatch` for render visibility and appearance; `requires_client` for layered blending appearance.
+
+- Legacy `RenderMindSpider` inherits the regular spider model, attaches the spider-eye render layer and scales geometry to **0.6**. It renders only if `getViewer()` is blank or matches the active camera entity's name.
+- The spider body is translucent: `alpha = min(0.1, ticksExisted / 100.0)`; consequently it reaches **0.1 at about ten ticks**, not one hundred. It disables depth writes during the body pass, uses SRC_ALPHA/ONE_MINUS_SRC_ALPHA blending and lowers the alpha cutoff to **1/255**, then restores render state. The eye layer is also present and must be checked independently from the body.
+- `TCMindSpiderEntity` retains its `VIEWER` string as synchronized entity data and serializes it to NBT, but `MIND_SPIDER` is bound to `TCInvisibleEntityRenderer`. Thus even the intended viewer sees no spider; this is not merely the absence of a viewer filter.
+
+**Bundled client gate:** two-player test, viewer-bound spider vs blank-viewer spider, with screenshots at creation and after >10 ticks; inspect 0.6 geometry, body translucency, eye layer, visibility isolation and save/reload behavior.
+
+**Sources:** [original Mind Spider renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/mob/RenderMindSpider.java); [port's synced VIEWER and lifecycle](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCMindSpiderEntity.java); [port's invisible binding](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java).
+
+### F136 — Focus Mine: animated, full-bright grappler geometry is entirely omitted by the invisible renderer
+
+**Status:** `confirmed_legacy_mismatch` for the renderer; `requires_client` for frame-perfect animation and lighting.
+
+- Original `RenderFocusMine` binds `thaumcraft:textures/entity/mine.png`, renders a **ModelGrappler** (one 3×3×3 core plus three crossed 1×1×5 prongs at 1/16 scale), interpolates yaw/pitch and forces a high lightmap level using the **61680 packed-light constant**.
+- Its red channel variation is deliberately periodic: `f = ((mine.counter + partialTick) % 8) / 8`; the drawn color is `(1, 1-f, 1-f, 1)`. Therefore this is a visible animated mine with eight-phase red pulsing, not an invisible trap represented solely by particles.
+- The original registration binds `EntityFocusMine` to `RenderFocusMine`, whereas modern `TCEntityRenderers` binds `FOCUSMINE` to `TCInvisibleEntityRenderer`. This visual gap is independent from the armed-state and WITCH-particle mismatches already established in F123.
+
+**Bundled client gate:** spawn/cast mine at matching ages and lighting (including low-light), capture the 8-phase pulse, orientation, geometry and appearance before and after arming; combine with F123's state/particle test without treating them as the same failure.
+
+**Sources:** [legacy Focus Mine renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/projectile/RenderFocusMine.java); [legacy ModelGrappler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/models/entity/ModelGrappler.java); [legacy entity and counter](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityFocusMine.java); [modern renderer registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java); [modern mine entity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFocusmineEntity.java).
+
 ---
 
 ## Black borders: competing causes
@@ -2118,6 +2156,34 @@ There is **no proven universal cause** yet. Similar black pixels can originate i
 | Old Research Table GUI | Specific historic commits changed its alpha/blit implementation | Potentially analogous to HUD, **not automatically the same bug** |
 
 **Criterion for closing an outline issue:** repeatable client screenshots under matched settings, isolated affected quad/texture, verified state changes, and an explanation tied to the exact pipeline. Do not reclassify a guess as a confirmed root cause merely because it is plausible across several elements.
+
+
+## Proposed remediation batches and consolidated verification (planning only)
+
+**Status: proposal, not implemented or approved.** The project has many proven *source-level* mismatches, but no all-object runtime proof ledger. The packages below group shared code causes and avoid one test cycle after every tiny change. They **do not override** the earlier R01–R17 remediation history or authorize modifying gameplay code in this documentation PR. Recheck the target main SHA, current working branches and newer fixes before executing any package.
+
+| Package | Scope and source evidence | Dependency / ownership boundary | Single integrated acceptance gate per package |
+| --- | --- | --- | --- |
+| **V0 — Active-ID/visual proof baseline** | D/H/N + F05/F10/F40–F64/F76; enumerate active items, variants, blocks/states, BERs, GUIs, renderers, particles and resource parents; identify exclusions | **First**; research/inventory work, not a renderer rewrite | Diff the registry manifest against runtime entries; every active object has a row, named legacy counterpart or explicitly documented non-legacy status, and `not_checked` until observed |
+| **V1 — Shared FX dispatch and world/client lifecycle** | F26, F102, F108–F114, F126; inspect missing tile events, client event sinks, dimension isolation, render timing and shader fallback | Shared infrastructure ahead of V2/V4/V5; preserve positive controls F106, F111, F112, F114, F133 | One Java 21/NeoForge Gradle build, dedicated-server packet/lifecycle smoke, FX layering/interpolation and cross-dimension/client-reconnect checks; a packet received must produce its declared client effect |
+| **V2 — Focus transport and effect-specific rendering** | F115, F117, F121–F127; focus nodes, projectile/cloud/mine/spellbat/TOUCH/BOLT, texture families, per-effect RGB and impact feedback | Requires V1's reliable sink/state plumbing; own caster/FX behavior without broad entity model changes | One **effect × valid medium × event** scenario matrix for the ten legacy effects, with representative casting, trail, arming, collision and impact captures; verify data-driven effects and no silent empty handlers |
+| **V3 — Projectile, grapple and special encounter visuals** | F05/F06, F63–F70, F116/F118/F119/F128–F136; special entity models, Grapple rope, Mind Spider viewer filter, mine mesh, darts and impact bursts | Can be split into distinct commits (renderer geometry vs packet-dependent effects); shares V1 client lifecycle; must not rewrite server combat as a side effect | One controlled **entity gallery** using original/port matched setups; captures at multiple yaw/age states and two-player visibility where applicable; preserve verified Golem Orb/Eldritch Orb/Wisp effects F131–F133 |
+| **V4 — Animated block entities and world rendering** | F07/F10–F28; missing BER/TESR counterparts, custom models and dynamic geometry, labels, infusion and mechanisms | Stabilize BER registrations and world render paths before cosmetic tuning; retain Infusion Matrix and other positive controls | One representative **block-entity showcase** (active/toggled/empty/full/oriented states) plus save/reload, update packets and dedicated-server smoke for interactive devices |
+| **V5 — Block-state visuals, ambient and fluid FX** | F65–F105, F102–F105; special shape/occlusion, orientation/enable state, fluid appearance, colored emitters, tick sounds and effects | Depends on V1 for block events; separate geometry/collision mechanics from translucent rendering so fixes are testable | One **block/fluid state matrix** with each active orientation/condition, hitbox vs rendered outline and screenshots at matching light/time; assert server interaction and negative controls F74/F83/F94/F98/F100 |
+| **V6 — Inventory, item, armor, Curios and localization** | F03/F04/F29–F32/F40–F62 and initial D/H/N items; Creative order, variants, naming, model transforms, tint alpha, wearable overlays | Mostly independent of V1; a coherent resource/client PR with separate gameplay validation where equip bonuses change | One **all-item export/Creative gallery** plus first/third person, GUI, dropped and equipped views; compare the ten original Creative pages, variants, overlays and language keys, including false-positive controls |
+| **V7 — GUI, HUD and research overlays** | F01/F02/F36–F39/F108/F109/F113; Research Table, Thaumonomicon, instrument HUD, focus GUI and particle compositing | Needs stable FX engine V1 for GUI particle tick/draw; keep HUD black-outline investigations separate from block opacity | One **pixel-controlled GUI pass** at ≥2 GUI scales with identical atlas, alpha/blend, UV, draw order and time; instrument HUD and Research Table investigated independently before attributing a common cause |
+| **V8 — Placed seals, aspect state and lifecycle** | F33–F35 and unresolved D/N aspect findings; place/remove/render packet/state recovery, overlays and tooltip sources | Server-authoritative state, persistence and client renderer are a bounded feature; coordinate with V4/V6 but separate review | One **multiplayer + save/reload** scenario: seal install/uninstall, holder/tools, other player render visibility, reconnect/chunk unload, aspect queries for both legacy variants and non-craftable items |
+| **V9 — Whole-mod visual regression and evidence closeout** | All packages; update the proof ledger, exclusions and intentional deviations | **Last**; requires actual completed V0–V8 implementations and a stable main SHA | Fresh client/server launch, CI + dedicated-server smoke, full active-ID mapping, paired screenshots, no unresolved invisible renderer for a legacy-visible object and no misleading `passed` statuses for uncaptured states |
+
+### Efficient batch execution rule
+
+1. **Research first, then approve a bounded package.** Rebase/revalidate exact active paths, identify shared root causes and list acceptance fixtures *before* editing. Do not assume an item is broken merely because a legacy class name is absent; use alternative active client paths (F106/F131–F133).
+2. **Make several controlled, reviewable commits per logical package**, not a giant unrelated commit. Run focused local checks only where a change is risky; run one consolidated Gradle build, resource/registration audits and client scenario pass **after the cohesive patch set**. CI and dedicated-server smoke remain mandatory where network/state is affected; batching must not hide regressions.
+3. **Capture matched legacy and port evidence once per scenario batch**: same item/state, seed/world surface, lighting, camera, GUI scale, particle settings, effect configuration and animation frame. Record screenshots/logs with source SHA, reproducible commands and result classification (`confirmed`, `requires_client`, `negative_control`).
+4. **Fail gates by evidence, not guesses.** A passing build proves compilation, not original sprite geometry, translucent blending or multiplayer behavior. A single representative screenshot does not make a complete object-family parity claim. Resolve blockers or explicitly defer a documented subset, without silently reporting full completion.
+
+**Fastest practical initial order:** V0 partial baseline → V1 (shared infrastructure) → V2 + V3 as one **coordinated client-FX/renderer development window**, with separate commits and one comprehensive visual regression run; V4/V5 coordinated block window; V6 and V8 may proceed independently; V7 follows stabilized V1; V9 completes only after the active inventory is evidenced. This cuts repeated ad-hoc test cycles while preserving isolation at review boundaries.
+
 
 ## What remains before completion
 
