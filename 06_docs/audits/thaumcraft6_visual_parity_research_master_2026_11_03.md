@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F127](#additional-source-history-checks-f01f127)
+6. [Additional source-history checks: F01–F133](#additional-source-history-checks-f01f133)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F127
+## Additional source-history checks: F01–F133
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -2017,6 +2017,91 @@ The resource count is **11 explicit enabled-selecting files and 5 without** (fou
 **Test gate:** compare TOUCH+FIRE vs TOUCH+FROST at no-target, block-target and entity-target positions, logging cast-source and impact packets separately; then verify a multi-effect focus produces each effect family.
 
 **Sources:** [original TOUCH emission](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusMediumTouch.java#L96); [legacy cast-source packet behavior](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/network/fx/PacketFXFocusEffect.java#L75); [original Fire impact call](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/casters/foci/FocusEffectFire.java#L51); [legacy impact packet behavior](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/network/fx/PacketFXFocusPartImpact.java#L65); [modern TOUCH branch](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusCastExecutor.java#L140); [modern eight-FLAME conditional](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusCastExecutor.java#L406).
+
+---
+
+
+### F128 — Grappling hook renderer and live rope are absent despite a functioning invisible hook entity
+
+**Status:** `confirmed_legacy_mismatch` registered renderer path; no claim yet about equivalent rope rendering in unseen extension code.
+
+- Original `RenderGrapple` draws **three separate visual elements**: the animated `ModelGrappler` using `textures/entity/grappler.png`; a luminous/additive billboard at the hook; and a textured **3D polycone rope** using `textures/misc/rope.png` from the hook back to the thrower. `calcPoints` interpolates both ends with partial ticks, shifts the hand anchor for first-person main/off-hand view, and applies a damped sinusoidal displacement using `grapple.ampl`.
+- Modern `TCEntityRenderers` binds `TCEntityTypes.GRAPPLE` to `TCInvisibleEntityRenderer`, not a grapple-specific renderer. `TCGrappleEntity` does maintain a server/client pulling state and may spawn a small **30% CRIT** particle during pulling, but contains no hook model, rope mesh, interpolated rope points, or rendering source. The port also does not synchronize the original projectile's spawn-time `hand` field, limiting faithful first-person anchor reconstruction.
+- This is a major silhouette/motion difference: a successfully pulling invisible entity does not reproduce a physically visible, moving rope. Treat the server pull mechanic as a separate contract; restoring only a spark or item predicate (F29) would not repair this world visual.
+
+**Test gate:** fire Grapple from main and off hands in first- and third-person views, capture flight/attach/pull/release; inspect hook geometry, line attachment, sag/wave amplitude, and length against original.
+
+**Sources:** [legacy renderer, hook and rope](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/projectile/RenderGrapple.java#L23); [legacy hand and spawn data](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityGrapple.java#L17); [modern invisible registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java#L39); [modern grapple tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCGrappleEntity.java#L23).
+
+---
+
+### F129 — Bottle of Taint's 100-fragment purple explosion and eight glass fragments become 24 ITEM plus 24 MYCELIUM particles
+
+**Status:** `confirmed_legacy_mismatch` particle family, count and fade behavior; actual entity-event delivery still needs a client test.
+
+- Original `EntityBottleTaint.handleStatusUpdate(3)` calls `FXDispatcher.taintsplosionFX` **100 times**, then `bottleTaintBreak`. Each `taintsplosionFX` spawns a `FXBreakingFade` using **SLIME_BALL** texture, purple/magenta tints, high-velocity burst and a randomized lifetime. `bottleTaintBreak` emits **eight** bottle item-crack fragments and plays `ENTITY_SPLASH_POTION_BREAK` locally.
+- Modern `TCBottleTaintEntity.handleEntityEvent(3)` keeps the server-to-client break event **3** but instead loops **24 times**, spawning one `ParticleTypes.ITEM` bottle fragment and one `ParticleTypes.MYCELIUM` mote per iteration. The modern entity method does not explicitly play the legacy splash-potion-break sound. The server-side taint splash and Flux Goo placement paths exist separately and are not the subject of this visual finding.
+- The source-level mismatch is not just density (**108 original spawned effects vs 48 modern particles**): the old primary 100 particles used purple slimeball material and a specialized fade/lifetime, while the replacement uses vanilla item and mycelium particles. The two paths cannot be considered visually interchangeable without comparative evidence.
+
+**Test gate:** break the bottle over a solid floor and in air; count emission types/particles and record tint, frame, speed, fade duration and potion-break audio in both versions.
+
+**Sources:** [legacy bottle client event](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityBottleTaint.java#L35); [legacy taintsplosionFX](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java#L645); [legacy bottleTaintBreak](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java#L933); [modern event handler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCBottleTaintEntity.java#L50); [modern broadcast event](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCBottleTaintEntity.java#L74).
+
+---
+
+### F130 — Golem Orb impact omits the original 31-frame burst while the flying orb renderer remains independent
+
+**Status:** `confirmed_code` missing entity-level impact effect; separate external impact path not demonstrated.
+
+- Original `EntityGolemOrb.onImpact` plays the shock sound and, if client-side, executes `FXDispatcher.burst(pos, 1.0F)`; the dispatcher creates an **age-31**, **grid-16**, **sprite-range 208–238** animated `FXGeneric` particle.
+- Modern `TCGolemOrbEntity.onHit` retains the shock sound and server-side discard/damage, but has no client `burst` call, entity event payload or corresponding particle emission in its impact path. The dedicated `TCGolemOrbRenderer` is active during the projectile's lifetime (F131), but it does not itself draw an impact burst at removal.
+- Do not infer that the orb body is absent: the missing lifecycle event is the *terminal burst*, not the projectile's persistent billboard.
+
+**Test gate:** film red/blue orbs during hit and expiration, distinguishing sprite disappearance, original expanding burst and any generic Minecraft hit feedback.
+
+**Sources:** [legacy Golem Orb impact](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityGolemOrb.java#L61); [legacy FX burst implementation](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java#L781); [modern Golem Orb hit](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCGolemOrbEntity.java#L76); [modern renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCGolemOrbRenderer.java#L27).
+
+---
+
+### F131 — Golem Orb's flying red/blue atlas sprite and additive blend are retained (positive control)
+
+**Status:** `confirmed_code` source-level positive control; GL state, lighting and atlas sampling still require screenshots.
+
+- Original `RenderElectricOrb` chooses one of **six horizontal frames** on a **32×32 atlas**, using red row **6** or blue row **7**, additive blending (`SRC_ALPHA, ONE`), depth-write disabled, full camera-facing quad and a `sin(age / 5)×0.2+0.2` bob/scale.
+- Modern `TCGolemOrbRenderer` + `TCGolemOrbRenderContract` preserve the same sprite index arithmetic, distinct red/blue atlas rows, six-frame cycle, blend pair and sinusoidal scaling; render data flows from the synced modern `isRed()` state. This gives a concrete control case where direct historical render behavior was re-created instead of replaced by vanilla particles.
+- The positive source comparison does **not** cancel F130's missing impact burst. The shader/texture coordinates should still be checked visually because legacy GL and modern RenderSystem are not equivalent by construction.
+
+**Test gate:** freeze red and blue orbs on each of six successive frames against dark and occluded surfaces; compare atlas UVs, blend and bob independently of impact.
+
+**Sources:** [legacy electric orb renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/projectile/RenderElectricOrb.java#L26); [modern renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCGolemOrbRenderer.java#L27); [modern sprite contract](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCGolemOrbRenderContract.java#L1).
+
+---
+
+### F132 — Eldritch Orb's seeded tendrils and animated central billboard are reproduced (positive control)
+
+**Status:** `confirmed_code` positive for source-level geometry and frame parameters; no full equivalence assertion for shading or sampling.
+
+- Original `RenderEldritchOrb` starts from the fixed random seed **187**, renders **12** additive tendrils that grow over the first ten ticks, and draws an alpha-blended central billboard selecting **13 frames** from the **64×64** sprite grid at V row **3**, scaled **0.75**.
+- Modern `TCEldritchOrbRenderer` explicitly recreates a seeded 12-tendril triangle-fan path and a 13-frame, 64-grid, 0.75-scale billboard using `TCEldritchOrbRenderContract`. This is a significant positive reference for translating original bespoke GL renderers to NeoForge.
+- The old renderer's fixed-function smooth shading, lighting toggles and face culling differ from NeoForge shaders; these still need actual client capture. The correct seeded topology is not evidence of pixel-perfect lighting.
+
+**Test gate:** capture orb at ages 1, 5, 10 and 20 ticks with fixed pose, comparing tendril width, seeded shape, additive glow, lighting and billboard frame.
+
+**Sources:** [original Eldritch renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/projectile/RenderEldritchOrb.java#L24); [modern tendril/billboard renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEldritchOrbRenderer.java#L30); [modern render constants](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCEldritchOrbRenderContract.java#L1).
+
+---
+
+### F133 — Wisp zap has a complete client sink and FX renderer, unlike the inert FocusZap payload
+
+**Status:** `confirmed_code` end-to-end source-backed positive control for Wisp zap transport/render; geometry remains subject to runtime comparison.
+
+- Original `PacketFXWispZap` identifies two entities, tints an `arcBolt` according to the Wisp's aspect, and uses beam width **0.6**. The modern `TCEntityFXNetwork` registers `TCWispZapPayload` with a real callback to a Wisp client sink, and `TCClientEvents` binds that sink to `TCWispClientEffects.accept`.
+- The modern client resolves both entity IDs, extracts the Wisp aspect RGB, builds a width-**0.6** `ZapBolt`, advances its short three-tick lifetime and renders its segmented additive beam during the client level render stage. This is a concrete alternate client path and must not be counted as missing merely because original `FXDispatcher.arcBolt` was not ported by name.
+- In contrast, the FocusZap payload's handler is the empty lambda already identified in F126. Wisp zap's architecture provides an existing tested-in-source pattern for an independent focus-beam sink, **not** proof that both beams should have identical geometry or lifetime.
+
+**Test gate:** trace Wisp zap packet receipt, client entity ID resolution, queue admission, three render frames and world-change cleanup; compare aspect-tinted path/width with the original bolt.
+
+**Sources:** [legacy WispZap handler](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/network/fx/PacketFXWispZap.java#L41); [modern Wisp network registration](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCEntityFXNetwork.java#L28); [client sink wiring](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientEvents.java#L23); [modern Wisp zap renderer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/TCWispClientEffects.java#L37).
 
 ---
 
