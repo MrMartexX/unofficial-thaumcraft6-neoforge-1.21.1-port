@@ -453,6 +453,7 @@ configurations {
 dependencies {
     clientRunMods "mezz.jei:jei-1.21.1-neoforge:19.70.0.468"
     clientRunMods "top.theillusivec4.curios:curios-neoforge:9.5.1+1.21.1"
+    clientRunMods "maven.modrinth:terrablender:6e8GCrLb"
 }
 
 def prepareRunMods = tasks.register('prepareRunMods', Sync) {

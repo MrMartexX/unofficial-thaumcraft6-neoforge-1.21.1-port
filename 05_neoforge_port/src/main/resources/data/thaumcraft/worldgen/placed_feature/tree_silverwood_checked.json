@@ -1,0 +1,17 @@
+{
+  "feature": "thaumcraft:tree_silverwood",
+  "placement": [
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:would_survive",
+        "state": {
+          "Name": "thaumcraft:sapling_silverwood",
+          "Properties": {
+            "stage": "0"
+          }
+        }
+      }
+    }
+  ]
+}
