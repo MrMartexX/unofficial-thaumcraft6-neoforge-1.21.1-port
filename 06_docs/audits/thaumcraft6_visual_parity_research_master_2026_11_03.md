@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F87](#additional-source-history-checks-f01f70)
+6. [Additional source-history checks: F01–F94](#additional-source-history-checks-additional-source-history-checks-f01f94)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F87
+## Additional source-history checks: F01–F94
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1438,6 +1438,104 @@ The resource count is **11 explicit enabled-selecting files and 5 without** (fou
 **Test gate:** compare on/off rendered states and particle/BER updates for each class family, with the enabled transition triggered both before/after placement and through actual controls (manual Dioptra versus Redstone-gated devices). Do not require every animated block to implement separate JSON models when the legacy effect can be faithfully handled elsewhere.
 
 **Sources:** [active blockstates directory](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/tree/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates), [modern Vis Generator](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCVisGeneratorBlock.java).
+
+---
+
+### F88 — Barrier Paving Stone has lost its three original context-sensitive rune-emission branches
+
+**Status:** `confirmed_legacy_mismatch` for the inspected client particle-emission path; visual reproduction pending.
+
+- Legacy `BlockPavingStone.randomDisplayTick` gates this behavior on `pavingStoneBarrier`. It spawns four colored runes when redstone-powered; six differently colored runes when a passable Barrier block appears one or two blocks above; otherwise, a nearby non-player living entity can trigger a further set of runes. The trigger cases and colors are distinct, not a generic idle particle.
+- Active `PAVING_STONE_BARRIER` is registered with the plain `stoneBlock(2.0F, 10.0F)` helper, which instantiates `new Block(...)`, without a block `animateTick` implementation. No separate paving-stone emitter was identified in the inspected client FX/event paths.
+- The existing static texture, including legacy CTM metadata, is not a substitute for these conditional, world-space particles.
+
+**Test gate:** client capture under (1) unpowered/clear, (2) redstone-powered, (3) legacy Barrier-above configuration when the equivalent block exists, and (4) adjacent non-player mob; compare both sprite/color and conditions. Treat inapplicable Barrier-above content as an explicit missing prerequisite, not evidence that that trigger works.
+
+**Sources:** [BlockPavingStone.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/basic/BlockPavingStone.java#L66); [TCBlocks.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java#L420).
+
+---
+
+### F89 — Charged Infusion Pedestals no longer emit the legacy below-top rune effect
+
+**Status:** `confirmed_legacy_mismatch` for the local emission path; client screenshot still required. Distinct from F24 item-render transform and F73 selection geometry.
+
+- Legacy `BlockPedestal.randomDisplayTick` reads `BlockInlay.CHARGE` and, for any positive charge, calls `FXDispatcher.INSTANCE.blockRunes2(x, y - 0.375, z, ..., lifetime=10, ...)`.
+- Modern `TCInfusionPedestalBlock` still declares a 0–15 `CHARGE` blockstate, and `TCInlayNetwork` propagates a charge into that state; the underlying charge mechanic has not simply disappeared.
+- The modern pedestal block has no `animateTick` or corresponding particle call. Its `TCInfusionPedestalRenderer` renders the stored floating item only, without reading charge or spawning rune particles. No equivalent charge-linked client emitter was identified in inspected client paths.
+
+**Test gate:** compare the same pedestal at charge 0 versus a positive charge using a connected stabilizer/inlay network, with and without an item; inspect the rune origin below the upper platform as well as charge synchronization.
+
+**Sources:** [BlockPedestal.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockPedestal.java#L98); [TCInfusionPedestalBlock.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCInfusionPedestalBlock.java#L34); [TCInlayNetwork.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCInlayNetwork.java#L100); [TCInfusionPedestalRenderer.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCInfusionPedestalRenderer.java#L32).
+
+---
+
+### F90 — Charged Stabilizing Inlay has lost its direction-dependent colored line sparkles
+
+**Status:** `confirmed_legacy_mismatch` for inspected particle-emission code; runtime visibility unverified.
+
+- In legacy `BlockInlay.randomDisplayTick`, `CHARGE > 0` gates a frequency of `1 / (20 - charge)` per display-tick attempt. After selecting a connected horizontal side, it calls `FXDispatcher.INSTANCE.drawLineSparkle` with small lateral velocity, a red/green-biased randomized palette and lifetime 16.
+- The modern `TCInlayBlock` has attachment-direction properties and `CHARGE`, and the server `TCInlayNetwork` still propagates charge. However the block has no `animateTick`; inspected client dispatch and rendering paths contain no equivalent charge/direction-based line emission. Search for the legacy `drawLineSparkle` call did not identify an active port consumer.
+- This is a dynamic particle omission, separate from F08/D04 inlay tint/model concerns and any static `charge` model-state representation.
+
+**Test gate:** charge an isolated strip and an inlay-to-pedestal link, record the particle frequency at low/high charge and verify that spark movement follows only connected horizontal sides.
+
+**Sources:** [BlockInlay.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockInlay.java#L185); [TCInlayBlock.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCInlayBlock.java#L29); [TCInlayNetwork.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCInlayNetwork.java#L100).
+
+---
+
+### F91 — Research Table no longer emits original study-state motes
+
+**Status:** `confirmed_legacy_mismatch` for inspected block/BE/BER particle path; no client capture yet.
+
+- Legacy `BlockResearchTable.randomDisplayTick` checks `TileResearchTable.data != null` and a one-in-five random branch, then inserts an `FXGeneric` particle with randomized velocity/color, a 40–59-tick lifetime, an alpha/scale gradient and a sprite from atlas indices 384–399.
+- The modern `TCResearchTableBlock` has no `animateTick`, and `TCResearchTableBlockEntity` plus `TCResearchTableRenderer` have no corresponding particle producer. The BER continues to handle quill/scroll geometry; that presence does not restore the separate ambient motes.
+- The original predicate is **research data present**, not simply a placed table or an open GUI. Do not collapse this issue into F36/F39 UI overlay/HUD effects.
+
+**Test gate:** compare empty vs populated/usable table for 60–120 seconds on the same graphics settings, verify particle origin above table and suppression without study data; inspect whether the modern data lifecycle preserves an equivalent trigger.
+
+**Sources:** [BlockResearchTable.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockResearchTable.java#L66); [TCResearchTableBlock.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCResearchTableBlock.java#L31); [TCResearchTableBlockEntity.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCResearchTableBlockEntity.java#L38); [TCResearchTableRenderer.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCResearchTableRenderer.java#L30).
+
+---
+
+### F92 — Tallow/Infusion Candle has no matching per-tick smoke and flame
+
+**Status:** `confirmed_legacy_mismatch` for inspected class-level ambient FX path; rendered light and model are not substitutes.
+
+- Legacy `BlockCandle.randomDisplayTick` calls vanilla `SMOKE_NORMAL` and `FLAME` at approximately `(x + 0.5, y + 0.7, z + 0.5)` each client display-tick invocation.
+- The active `TCInfusionCandleBlock` directly extends `Block`, not Minecraft's built-in `CandleBlock`, and implements shape/infusion-stabilization/place/remove behavior without `animateTick` or a particle call. The `tallowCandleBlock` factory copies candle-like properties but constructs this custom class; copying properties does not inherit `CandleBlock`'s animated behavior.
+- A light-level property of 15 establishes emitted block light; it does **not** establish visible flame or smoke particles. Other candle variants using the same factory should be tested together.
+
+**Test gate:** compare each dye variant at close range in darkness and daylight; distinguish static texture/light from actual continuously rising flame/smoke sprites.
+
+**Sources:** [BlockCandle.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/basic/BlockCandle.java#L75); [TCInfusionCandleBlock.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/basic/TCInfusionCandleBlock.java#L17); [TCBlocks.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java).
+
+---
+
+### F93 — Full Brain Jar retains its XP threshold but replaces Thaumcraft sparks with vanilla enchant glyphs
+
+**Status:** `confirmed_code` and `confirmed_legacy_mismatch` for chosen particle implementation; XP trigger is a `negative_control`.
+
+- Original `BlockJar.randomDisplayTick` emits the custom `FXDispatcher.INSTANCE.spark` in a color/scale configuration only if its Brain Jar tile has `xp >= xpMax`.
+- Port `TCBrainJarBlock.animateTick` correctly checks `jar.xp() >= TCBrainJarBlockEntity.XP_MAX`, but calls `level.addParticle(ParticleTypes.ENCHANT, ...)` with small randomized motion instead of the legacy spark effect. The full-XP predicate survives; the visual language, sprite and velocity parameters differ.
+- Do not report this as a missing effect or an unconditional-particle bug; it is a specific **effect-substitution** fidelity issue.
+
+**Test gate:** compare full and one-below-capacity jars, with front and oblique views, including particle color, motion and lifespan.
+
+**Sources:** [BlockJar.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/essentia/BlockJar.java#L243); [TCBrainJarBlock.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCBrainJarBlock.java#L127).
+
+---
+
+### F94 — Ambient block-effect inventory: plant emitters are positive controls, not blanket omissions
+
+**Status:** `confirmed_code` presence of current FX paths; exact per-frame parity not yet established.
+
+- An initial scan of **18 relevant legacy block classes** with explicit `randomDisplayTick` found only **four obvious modern class-level `animateTick` implementations**. This count is a triage indicator, **not** an assertion that fourteen families lost FX: BER, custom client dispatch, and vanilla inherited behavior can replace old hooks.
+- In particular, `TCPlantBlock.animateTick` dispatches `CINDERPEARL` to smoke+flame, `SHIMMERLEAF` to `TCFXDispatcher.drawShimmerleafMote`, and `VISHROOM` to `TCFXDispatcher.drawVishroomMote`. The original three plants also have explicit `randomDisplayTick` effects. The modern Cinderpearl still uses a one-half random branch, smoke and flame, with roughly equivalent emission positions.
+- `TCBrainJarBlock`, `TCSmelterBlock` and `TCVisGeneratorBlock` are the other observed classes with direct `animateTick` overrides. Vis Generator effect substitution is already tracked in F81; do not double-count it. `BlockGrassAmbient`, old fluid/effect blocks, jars and crucible require their own active-registry and alternate-path checks before claiming an overall failure rate.
+
+**Test gate:** compare legacy/port plant particles by kind, count, lifetime, alpha, and motion; search active BER/network/client FX consumers for each remaining legacy block individually. Keep obsolete legacy IDs out of the actionable defect count.
+
+**Sources:** [TCPlantBlock.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/world/plants/TCPlantBlock.java#L99); [BlockPlantCinderpearl.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/world/plants/BlockPlantCinderpearl.java#L56); [BlockPlantShimmerleaf.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/world/plants/BlockPlantShimmerleaf.java); [BlockPlantVishroom.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/world/plants/BlockPlantVishroom.java); [TCBrainJarBlock.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCBrainJarBlock.java#L127).
 
 ---
 
