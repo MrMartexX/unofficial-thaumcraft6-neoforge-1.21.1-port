@@ -2,6 +2,8 @@
 
 Prepared on 2026-11-03. No gameplay source or original mod jars were modified.
 
+Detailed Russian walkthrough: [CHECKLIST_RU.md](CHECKLIST_RU.md).
+
 ## Open These Worlds
 
 | Version | World in Singleplayer | Instance |
