@@ -342,7 +342,8 @@ public final class TCFocusMediumEffectParityAudit {
 
             // 14. Nested Medium Execution: Projectile -> Cloud -> Fire spawns cloud on impact
             boolean nestedMediumPass = false;
-            BlockPos impactPos = AUDIT_POS.offset(12, 0, 12);
+            BlockPos impactPos = level.getSharedSpawnPos().above(8);
+            level.getChunkAt(impactPos);
             String nestedRemaining = TCFocusPackageHelper.encode(List.of(
                     new TCFocusPackageHelper.NodeInstance(1, "thaumcraft.cloud", 0, List.of(2), Map.of("radius", 2, "duration", 10)),
                     new TCFocusPackageHelper.NodeInstance(2, "thaumcraft.fire", 1, List.of(), Map.of("power", 1))
@@ -360,7 +361,8 @@ public final class TCFocusMediumEffectParityAudit {
                 for (TCFocusCloudEntity c : clouds) c.discard();
             }
             rows.add(new Row("focus_graph_nested_medium_projectile_to_cloud", nestedMediumPass,
-                    "Projectile impact with downstream Cloud->Fire spawns TCFocusCloudEntity with scaled power and fire effect"));
+                    "Projectile impact with downstream Cloud->Fire spawns TCFocusCloudEntity with scaled power and fire effect; observed="
+                            + clouds.stream().map(c -> "power=" + c.getPower() + ",nodes=" + c.getRemainingNodes()).toList()));
 
             // 15. Focus Graph ModSplit: SplitTarget executes both branches with 0.75 power multiplier
             boolean splitBranchesPass = false;

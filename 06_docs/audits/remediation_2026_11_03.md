@@ -86,6 +86,36 @@ effect-glimmer missing texture or Thaumcraft's missing runic recharge sound.
 
 ## Still incomplete
 
+### Follow-up On 2026-11-03
+
+The subsequent worldgen work is present in the working tree and is not certified
+as complete by this remediation report. A current dedicated-server attempt caught
+an unknown `thaumcraft:grass_ambient` block in the new configured feature despite
+a successful build. The missing legacy `BlockGrassAmbient` now has a registered
+`GrassBlock` implementation, copied grass loot, modern snowy model variants,
+biome grass tint, and the legacy night/light/position/lifetime particle formula.
+The pending placed feature also needs a minus-one Y offset after its heightmap
+so its grass predicate tests the surface block rather than the air above it.
+
+The nested-cloud audit initially failed because its hard-coded impact position
+was outside accessible entity sections. Merely obtaining the chunk was not
+sufficient. The fixture now uses the prepared spawn area and reports observed
+cloud power/downstream nodes; all 16 focus checks pass again without changing the
+focus execution logic. The 17 golem checks and rendered-title client smoke also
+pass on the current local tree. The expanded aggregate audit passes 40/40 checks
+(including registration checks for the new worldgen work). These checks do not certify arbitrary worldgen
+or full client/gameplay parity.
+
+The original Forge 1.12.2 comparison instance was found and its official-launcher
+profile restored with the current D: path and Java 8. JEI 4.16.1.302 was installed
+from its published Modrinth release with SHA-512 verification. A diagnostic launch
+loaded all seven mods, including Thaumcraft/Baubles/JEI; the wrapper's different
+expected JEI message caused a timeout, not a demonstrated mod-loading failure.
+No world was opened. See the comparison instance README for launch instructions
+and unmodified-original resource warnings.
+
+### Remaining Acceptance Boundaries
+
 - Full golem path-recovery/home/follow parity and advanced seal options; the core
   queued operations and default actions above now have actual behavior tests.
 - Seal client sync, configuration GUI and full logistics acceptance.

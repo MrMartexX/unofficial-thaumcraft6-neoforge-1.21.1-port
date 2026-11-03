@@ -56,6 +56,9 @@ public final class TCColorHandlers {
 
     @SubscribeEvent
     public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+        event.register((state, level, pos, tintIndex) -> level != null && pos != null
+                        ? BiomeColors.getAverageGrassColor(level, pos) : 0x7CBD6B,
+                TCBlocks.GRASS_AMBIENT.get());
         BlockColor leafColor = (state, level, pos, tintIndex) -> {
             if (state.is(TCBlocks.LEAVES_SILVERWOOD.get())) {
                 return 0xFFFFFFFF;

@@ -498,6 +498,11 @@ public final class TCBlocks {
 
     public static final Supplier<Block> EFFECT_GLIMMER = BLOCKS.register("effect_glimmer", () -> effectGlimmerBlock());
 
+    public static final Supplier<Block> GRASS_AMBIENT = BLOCKS.register("grass_ambient",
+            () -> new thaumcraft.common.blocks.world.TCGrassAmbientBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.GRASS_BLOCK).strength(0.6F).sound(SoundType.GRAVEL)
+                            .lootFrom(() -> Blocks.GRASS_BLOCK)));
+
     public static final Supplier<TCLiquidDeathBlock> LIQUID_DEATH = BLOCKS.register("liquid_death", () -> liquidDeathBlock());
 
     public static final Supplier<TCPurifyingFluidBlock> PURIFYING_FLUID = BLOCKS.register("purifying_fluid", () -> purifyingFluidBlock());

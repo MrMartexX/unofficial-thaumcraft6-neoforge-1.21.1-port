@@ -1,12 +1,21 @@
 # Current task
 
-Last updated: 2026-10-31
+Last updated: 2026-11-03
 
 ## Current branch
 
-`main` is the active working branch.
+`codex/review-remediation-20261103` is the current local working branch.
+Do not merge its current worldgen work into `main` merely because build or
+individual contract audits pass.
 
 ## Current focus
+
+- Follow [the November 3 remediation evidence and remaining acceptance boundaries](audits/remediation_2026_11_03.md).
+  The older R01-R17 closure below does not close that later review or certify the
+  currently uncommitted worldgen changes.
+- The original 1.12.2 comparison instance has a restored official-launcher profile,
+  `Thaumcraft 6 - Legacy reference 1.12.2`, with Java 8 and checksum-verified JEI.
+  Use it for the remaining in-world/client visual comparisons, not the 1.20.1 port.
 
 - All 17 confirmed findings (R01 through R17) from [the October 31 main review](audits/main_review_2026_10_31.md) across all 5 remediation batches have been resolved, verified, and synchronized across `main` and `dev`.
 - Retain honest classification in parity matrices and ensure all runtime tests remain enforceable and green.
