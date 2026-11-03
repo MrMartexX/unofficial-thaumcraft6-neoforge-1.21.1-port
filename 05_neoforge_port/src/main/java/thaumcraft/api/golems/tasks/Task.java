@@ -7,6 +7,7 @@ import thaumcraft.api.golems.ProvisionRequest;
 import thaumcraft.api.golems.seals.SealPos;
 
 public class Task {
+    private static final java.util.concurrent.atomic.AtomicInteger NEXT_ID = new java.util.concurrent.atomic.AtomicInteger();
     private UUID golemUUID;
     private final int id;
     private final byte type; // 0 = Block, 1 = Entity
@@ -24,11 +25,7 @@ public class Task {
     public Task(SealPos sealPos, BlockPos pos) {
         this.sealPos = sealPos;
         this.pos = pos;
-        if (sealPos == null) {
-            this.id = (System.currentTimeMillis() + "/BNPOS/" + pos.toString()).hashCode();
-        } else {
-            this.id = (System.currentTimeMillis() + "/B/" + sealPos.face.toString() + "/" + sealPos.pos.toString() + "/" + pos.toString()).hashCode();
-        }
+        this.id = NEXT_ID.getAndIncrement();
         this.type = 0;
         this.lifespan = 300;
     }
@@ -36,11 +33,7 @@ public class Task {
     public Task(SealPos sealPos, Entity entity) {
         this.sealPos = sealPos;
         this.entity = entity;
-        if (sealPos == null) {
-            this.id = (System.currentTimeMillis() + "/ENPOS/" + entity.getId()).hashCode();
-        } else {
-            this.id = (System.currentTimeMillis() + "/E/" + sealPos.face.toString() + "/" + sealPos.pos.toString() + "/" + entity.getId()).hashCode();
-        }
+        this.id = NEXT_ID.getAndIncrement();
         this.type = 1;
         this.lifespan = 300;
     }

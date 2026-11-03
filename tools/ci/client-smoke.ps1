@@ -1,152 +1,49 @@
 param(
-    [int]$TimeoutSeconds = 300,
+    [ValidateRange(10, 3600)][int]$TimeoutSeconds = 300,
     [switch]$KillStaleRunClient
 )
 
 $ErrorActionPreference = 'Stop'
-
-$repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
+if ($KillStaleRunClient) { throw 'Global Minecraft cleanup is disabled. Stop the specific stale project instance explicitly.' }
+$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 $moduleRoot = Join-Path $repoRoot '05_neoforge_port'
 $gradleBat = Join-Path $moduleRoot 'gradlew.bat'
 $logDir = Join-Path $moduleRoot 'build\ci-logs'
+New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 $runId = Get-Date -Format 'yyyyMMdd-HHmmss-ffff'
 $stdoutPath = Join-Path $logDir "runClient-smoke.$runId.stdout.log"
 $stderrPath = Join-Path $logDir "runClient-smoke.$runId.stderr.log"
-$logPath = Join-Path $logDir "runClient-smoke.$runId.log"
-$latestLogPath = Join-Path $logDir 'runClient-smoke.log'
-$runDir = Join-Path $moduleRoot 'run'
-
-New-Item -ItemType Directory -Force -Path $logDir | Out-Null
-New-Item -ItemType Directory -Force -Path $runDir | Out-Null
-
-$clientReadyPatterns = @(
-    'Sound engine started',
-    'OpenAL initialized',
-    'Setting user:',
-    'Narrator library for',
-    'Backend library: LWJGL',
-    'Reloading ResourceManager'
-)
-
-$clientFatalPatterns = @(
-    'Crash report',
-    'Exception in thread "Render thread"',
-    '# A fatal error has been detected by the Java Runtime Environment',
-    'Failed to register entity renderer'
-)
-
-Write-Host "=================================================="
-Write-Host "TC6 Client Smoke Test"
-Write-Host "Timeout: ${TimeoutSeconds}s"
-Write-Host "=================================================="
-
-# Check for stale java processes if requested
-if ($KillStaleRunClient) {
-    throw 'Global Minecraft cleanup is disabled. Stop the specific stale project instance explicitly.'
-}
-
-$startInfo = New-Object System.Diagnostics.ProcessStartInfo
-$startInfo.FileName = 'cmd.exe'
-$startInfo.Arguments = "/d /c `"$gradleBat`" runClient --no-daemon"
-$startInfo.WorkingDirectory = $moduleRoot
-$startInfo.UseShellExecute = $false
-$startInfo.RedirectStandardOutput = $true
-$startInfo.RedirectStandardError = $true
-$startInfo.CreateNoWindow = $true
-
-$proc = New-Object System.Diagnostics.Process
-$proc.StartInfo = $startInfo
-
-$stdoutStream = [System.IO.File]::CreateText($stdoutPath)
-$stderrStream = [System.IO.File]::CreateText($stderrPath)
-$combinedStream = [System.IO.File]::CreateText($logPath)
-
-$readyFound = $false
-$fatalFound = $false
-$fatalMessage = ""
-
-$outputHandler = {
-    param($sender, $e)
-    if ($e.Data -ne $null) {
-        $line = $e.Data
-        $stdoutStream.WriteLine($line)
-        $combinedStream.WriteLine($line)
-        
-        foreach ($pattern in $clientReadyPatterns) {
-            if ($line -match $pattern) {
-                $script:readyFound = $true
-            }
-        }
-        foreach ($fatal in $clientFatalPatterns) {
-            if ($line -match $fatal) {
-                $script:fatalFound = $true
-                $script:fatalMessage = $line
-            }
-        }
-    }
-}
-
-$proc.add_OutputDataReceived($outputHandler)
-$proc.add_ErrorDataReceived({
-    param($sender, $e)
-    if ($e.Data -ne $null) {
-        $stderrStream.WriteLine($e.Data)
-        $combinedStream.WriteLine("[STDERR] " + $e.Data)
-    }
-})
-
-$proc.Start() | Out-Null
-$proc.BeginOutputReadLine()
-$proc.BeginErrorReadLine()
-
-$stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
-$pollIntervalMs = 500
-
+$combinedPath = Join-Path $logDir "runClient-smoke.$runId.log"
+$oldOptions = $env:JAVA_TOOL_OPTIONS
+$process = $null
+$readyAt = $null
+$passed = $false
+$failure = 'Client did not reach a rendered title screen before the timeout.'
+$fatalPattern = 'Crash report|Exception in thread "Render thread"|A fatal error has been detected by the Java Runtime Environment|Failed to register entity renderer|Encountered an unexpected exception'
+$clock = [Diagnostics.Stopwatch]::StartNew()
 try {
-    while ($stopwatch.Elapsed.TotalSeconds -lt $TimeoutSeconds) {
-        Start-Sleep -Milliseconds $pollIntervalMs
-
-        if ($fatalFound) {
-            Write-Host "[ERROR] Client fatal error detected: $fatalMessage"
-            break
-        }
-
-        if ($readyFound) {
-            Write-Host "[SUCCESS] Client startup signal received; this does not verify models, textures, or renderers."
-            break
-        }
-
-        if ($proc.HasExited) {
-            Write-Host "[WARN] Process exited prematurely with code $($proc.ExitCode)"
-            break
-        }
+    $env:JAVA_TOOL_OPTIONS = ($oldOptions + ' -Dtc.clientSmoke=true').Trim()
+    $process = Start-Process -FilePath $env:ComSpec -ArgumentList @('/d', '/c', "`"$gradleBat`" runClient --no-daemon") `
+        -WorkingDirectory $moduleRoot -WindowStyle Hidden -PassThru `
+        -RedirectStandardOutput $stdoutPath -RedirectStandardError $stderrPath
+    $env:JAVA_TOOL_OPTIONS = $oldOptions
+    while ($clock.Elapsed.TotalSeconds -lt $TimeoutSeconds) {
+        Start-Sleep -Milliseconds 500
+        $stdout = if (Test-Path -LiteralPath $stdoutPath) { Get-Content -LiteralPath $stdoutPath -Raw } else { '' }
+        $stderr = if (Test-Path -LiteralPath $stderrPath) { Get-Content -LiteralPath $stderrPath -Raw } else { '' }
+        $combined = $stdout + "`n[STDERR]`n" + $stderr
+        if ($combined -match $fatalPattern) { $failure = 'Client reported a fatal error; inspect the captured stdout/stderr.'; break }
+        if ($process.HasExited) { $failure = "Client launch exited before acceptance (exit $($process.ExitCode))."; break }
+        if ($null -eq $readyAt -and $combined -match 'TC_CLIENT_READY_AFTER_TITLE_RENDER') { $readyAt = $clock.Elapsed.TotalSeconds }
+        if ($null -ne $readyAt -and $clock.Elapsed.TotalSeconds - $readyAt -ge 5) { $passed = $true; break }
     }
 } finally {
-    if (-not $proc.HasExited) {
-        Write-Host "Stopping client process..."
-        try {
-            # Gracefully stop or kill
-            $proc.Kill($true)
-        } catch {}
-    }
-    $stdoutStream.Flush()
-    $stderrStream.Flush()
-    $combinedStream.Flush()
-    $stdoutStream.Close()
-    $stderrStream.Close()
-    $combinedStream.Close()
-    Copy-Item -Force -LiteralPath $logPath -Destination $latestLogPath
+    $env:JAVA_TOOL_OPTIONS = $oldOptions
+    if ($null -ne $process -and -not $process.HasExited) { $process.Kill($true); $process.WaitForExit(10000) | Out-Null }
+    $stdout = if (Test-Path -LiteralPath $stdoutPath) { Get-Content -LiteralPath $stdoutPath -Raw } else { '' }
+    $stderr = if (Test-Path -LiteralPath $stderrPath) { Get-Content -LiteralPath $stderrPath -Raw } else { '' }
+    [IO.File]::WriteAllText($combinedPath, $stdout + "`n[STDERR]`n" + $stderr)
+    Copy-Item -LiteralPath $combinedPath -Destination (Join-Path $logDir 'runClient-smoke.log') -Force
 }
-
-if ($fatalFound) {
-    Write-Error "Client smoke failed: $fatalMessage"
-    exit 1
-}
-
-if ($readyFound) {
-    Write-Host "Client smoke passed in $($stopwatch.Elapsed.TotalSeconds) seconds."
-    exit 0
-} else {
-    Write-Error "Client smoke timed out or exited without reaching ready state."
-    exit 1
-}
+if (-not $passed) { throw $failure }
+Write-Host 'Client rendered the title screen and survived the startup grace period. Gameplay and visual parity require separate tests.'

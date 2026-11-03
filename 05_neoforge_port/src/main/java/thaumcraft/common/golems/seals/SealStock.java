@@ -11,6 +11,16 @@ import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.tasks.Task;
 
 public class SealStock extends SealFiltered implements ISealConfigArea {
+    private int delay;
+
+    @Override
+    public int getFilterSize() { return 9; }
+
+    @Override
+    public boolean hasStacksizeLimiters() { return true; }
+
+    @Override
+    public boolean isBlacklist() { return false; }
 
     @Override
     public String getKey() {
@@ -24,6 +34,27 @@ public class SealStock extends SealFiltered implements ISealConfigArea {
 
     @Override
     public void tickSeal(Level level, ISealEntity seal) {
+        if (delay++ % 20 != 0) return;
+        var pos = seal.getSealPos();
+        var handler = level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos.pos, pos.face);
+        if (handler == null) return;
+        for (int filterSlot = 0; filterSlot < getFilterSize(); filterSlot++) {
+            var requested = getFilterSlot(filterSlot).copy();
+            if (requested.isEmpty()) continue;
+            int present = 0;
+            for (int slot = 0; slot < handler.getSlots(); slot++) {
+                var stack = handler.getStackInSlot(slot);
+                if (net.minecraft.world.item.ItemStack.isSameItemSameComponents(requested, stack)) present += stack.getCount();
+            }
+            int missing = Math.min(requested.getMaxStackSize(), getFilterSlotSize(filterSlot) - present);
+            if (missing <= 0) continue;
+            requested.setCount(missing);
+            int accepted = missing - net.neoforged.neoforge.items.ItemHandlerHelper.insertItemStacked(handler, requested.copy(), true).getCount();
+            if (accepted > 0) {
+                requested.setCount(accepted);
+                thaumcraft.api.golems.GolemHelper.requestProvisioning(level, pos.pos, pos.face, requested);
+            }
+        }
     }
 
     @Override
@@ -42,7 +73,7 @@ public class SealStock extends SealFiltered implements ISealConfigArea {
 
     @Override
     public boolean canGolemPerformTask(IGolemAPI golem, Task task) {
-        return true;
+        return false;
     }
 
     @Override

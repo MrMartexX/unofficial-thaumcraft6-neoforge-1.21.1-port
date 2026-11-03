@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.item.ItemStack;
 import thaumcraft.api.golems.EnumGolemTrait;
 import thaumcraft.api.golems.IGolemAPI;
 import thaumcraft.api.golems.seals.ISealConfigArea;
@@ -40,7 +41,21 @@ public class SealEmpty extends SealFiltered implements ISealConfigArea {
 
     @Override
     public boolean onTaskCompletion(Level level, IGolemAPI golem, Task task) {
-        golem.addRankXp(1);
+        var pos = task.getSealPos();
+        var handler = level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos.pos, pos.face);
+        if (handler != null) {
+            for (int slot = 0; slot < handler.getSlots(); slot++) {
+                ItemStack sample = handler.extractItem(slot, Integer.MAX_VALUE, true);
+                if (!matchesFilter(sample)) continue;
+                int limit = golem.canCarryAmount(sample);
+                if (limit <= 0) continue;
+                ItemStack leftover = golem.holdItem(handler.extractItem(slot, Math.min(limit, sample.getCount()), false));
+                if (!leftover.isEmpty()) net.minecraft.world.level.block.Block.popResource(level, pos.pos.relative(pos.face), leftover);
+                golem.swingArm();
+                break;
+            }
+        }
+        task.setSuspended(true);
         return true;
     }
 
@@ -50,7 +65,14 @@ public class SealEmpty extends SealFiltered implements ISealConfigArea {
 
     @Override
     public boolean canGolemPerformTask(IGolemAPI golem, Task task) {
-        return true;
+        var pos = task.getSealPos();
+        var handler = golem.getGolemWorld().getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK, pos.pos, pos.face);
+        if (handler == null) return false;
+        for (int slot = 0; slot < handler.getSlots(); slot++) {
+            ItemStack sample = handler.extractItem(slot, Integer.MAX_VALUE, true);
+            if (matchesFilter(sample) && golem.canCarry(sample, true)) return true;
+        }
+        return false;
     }
 
     @Override

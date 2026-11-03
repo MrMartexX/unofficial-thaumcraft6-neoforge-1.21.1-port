@@ -186,6 +186,203 @@ public final class TCGolemBehaviorAudit {
         rows.add(new Row("golem_builder_idle_contract", builderPass || level == null,
                 "Idle builder has zero cost, empty output and zero suction; this does not test a full crafting cycle"));
 
+        if (level != null) {
+            BlockPos pickupPos = new BlockPos(1030, 180, 1030);
+            level.getChunkAt(pickupPos);
+            var oldState = level.getBlockState(pickupPos);
+            var pickupSeal = new thaumcraft.common.golems.seals.SealPickup();
+            var pickupSealPos = new SealPos(pickupPos, Direction.UP);
+            var golem = new thaumcraft.common.entities.TCGolemEntity(TCEntityTypes.GOLEM.get(), level);
+            golem.moveTo(pickupPos.getX() + 0.5, pickupPos.getY() + 1, pickupPos.getZ() + 0.5, 0, 0);
+            var item = new net.minecraft.world.entity.item.ItemEntity(level,
+                    golem.getX() + 0.5, golem.getY(), golem.getZ(), new ItemStack(net.minecraft.world.item.Items.IRON_INGOT, 3));
+            var pickupTask = new thaumcraft.api.golems.tasks.Task(pickupSealPos, item);
+            var goal = new thaumcraft.common.golems.tasks.TCGolemTaskGoal(golem, (byte) 1);
+            try {
+                level.setBlock(pickupPos, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 3);
+                SealHandler.addSealEntity(level, pickupPos, Direction.UP, pickupSeal, null);
+                thaumcraft.common.golems.tasks.TaskHandler.addTask(level, pickupTask);
+                var placedSeal = SealHandler.getSealEntity(level, pickupSealPos);
+                placedSeal.setLocked(true);
+                placedSeal.setOwner("different-owner");
+                boolean lockSafe = !new thaumcraft.common.golems.tasks.TCGolemTaskGoal(golem, (byte) 1).canUse() && !pickupTask.isReserved();
+                placedSeal.setLocked(false);
+                placedSeal.setColor((byte) 1);
+                golem.setGolemColor((byte) 2);
+                boolean colorSafe = !new thaumcraft.common.golems.tasks.TCGolemTaskGoal(golem, (byte) 1).canUse() && !pickupTask.isReserved();
+                placedSeal.setColor((byte) -1);
+                golem.setGolemColor((byte) -1);
+                rows.add(new Row("golem_task_access_and_color_gates", lockSafe && colorSafe,
+                        "Foreign locked seals and mismatched non-neutral colors cannot reserve the task"));
+                boolean acquired = goal.canUse() && pickupTask.isReserved();
+                if (acquired) { goal.start(); goal.tick(); }
+                boolean executed = pickupTask.isCompleted() && !item.isAlive()
+                        && golem.getCarrying().stream().mapToInt(ItemStack::getCount).sum() == 3;
+                goal.stop();
+                rows.add(new Row("golem_task_queue_pickup_execution", acquired && executed && !pickupTask.isReserved(),
+                        "Goal acquires and reserves a real queued task, invokes pickup, carries items, then releases reservation"));
+                BlockPos chestPos = pickupPos.east();
+                var oldChestState = level.getBlockState(chestPos);
+                var chestSealPos = new SealPos(chestPos, Direction.UP);
+                try {
+                    level.setBlock(chestPos, net.minecraft.world.level.block.Blocks.CHEST.defaultBlockState(), 3);
+                    var fill = new thaumcraft.common.golems.seals.SealFill();
+                    fill.setBlacklist(true);
+                    SealHandler.addSealEntity(level, chestPos, Direction.UP, fill, null);
+                    var delivery = new thaumcraft.api.golems.tasks.Task(chestSealPos, chestPos);
+                    thaumcraft.common.golems.tasks.TaskHandler.addTask(level, delivery);
+                    var deliveryGoal = new thaumcraft.common.golems.tasks.TCGolemTaskGoal(golem, (byte) 0);
+                    boolean delivering = deliveryGoal.canUse();
+                    if (delivering) { deliveryGoal.start(); deliveryGoal.tick(); }
+                    deliveryGoal.stop();
+                    var chest = (net.minecraft.world.level.block.entity.ChestBlockEntity) level.getBlockEntity(chestPos);
+                    boolean delivered = delivering && delivery.isCompleted()
+                            && chest.countItem(net.minecraft.world.item.Items.IRON_INGOT) == 3
+                            && golem.getCarrying().isEmpty();
+                    rows.add(new Row("golem_task_queue_filtered_delivery", delivered,
+                            "Block task delivers carried iron into a real chest through its sided item capability"));
+                    SealHandler.removeSealEntity(level, chestSealPos, true);
+                    var empty = new thaumcraft.common.golems.seals.SealEmpty();
+                    empty.setBlacklist(true);
+                    SealHandler.addSealEntity(level, chestPos, Direction.UP, empty, null);
+                    var extraction = new thaumcraft.api.golems.tasks.Task(chestSealPos, chestPos);
+                    thaumcraft.common.golems.tasks.TaskHandler.addTask(level, extraction);
+                    var extractionGoal = new thaumcraft.common.golems.tasks.TCGolemTaskGoal(golem, (byte) 0);
+                    boolean extracting = extractionGoal.canUse();
+                    if (extracting) { extractionGoal.start(); extractionGoal.tick(); }
+                    extractionGoal.stop();
+                    rows.add(new Row("golem_task_queue_container_extraction", extracting && extraction.isCompleted()
+                            && chest.isEmpty() && golem.getCarrying().stream().mapToInt(ItemStack::getCount).sum() == 3,
+                            "Empty seal extracts the actual chest stack into golem carrying inventory"));
+                    SealHandler.removeSealEntity(level, chestSealPos, true);
+                    chest.setItem(0, golem.dropItem(new ItemStack(net.minecraft.world.item.Items.IRON_INGOT, 3)));
+                    var provider = new thaumcraft.common.golems.seals.SealProvide();
+                    provider.setBlacklist(true);
+                    SealHandler.addSealEntity(level, chestPos, Direction.UP, provider, null);
+                    BlockPos stockPos = pickupPos.west();
+                    var stockSealPos = new SealPos(stockPos, Direction.UP);
+                    var oldStockState = level.getBlockState(stockPos);
+                    var requestsBefore = new java.util.ArrayList<>(thaumcraft.api.golems.GolemHelper.provisionRequests
+                            .getOrDefault(level.dimension(), java.util.List.of()));
+                    try {
+                        level.setBlock(stockPos, net.minecraft.world.level.block.Blocks.CHEST.defaultBlockState(), 3);
+                        var stock = new thaumcraft.common.golems.seals.SealStock();
+                        stock.setFilterSlot(0, new ItemStack(net.minecraft.world.item.Items.IRON_INGOT));
+                        stock.setFilterSlotSize(0, 3);
+                        SealHandler.addSealEntity(level, stockPos, Direction.UP, stock, null);
+                        stock.tickSeal(level, SealHandler.getSealEntity(level, stockSealPos));
+                        provider.tickSeal(level, SealHandler.getSealEntity(level, chestSealPos));
+                        var supplyingGoal = new thaumcraft.common.golems.tasks.TCGolemTaskGoal(golem, (byte) 0);
+                        boolean supplied = supplyingGoal.canUse();
+                        if (supplied) { supplyingGoal.start(); supplyingGoal.tick(); }
+                        supplyingGoal.stop();
+                        var stockingGoal = new thaumcraft.common.golems.tasks.TCGolemTaskGoal(golem, (byte) 0);
+                        boolean stocking = stockingGoal.canUse();
+                        if (stocking) { stockingGoal.start(); stockingGoal.tick(); }
+                        stockingGoal.stop();
+                        var stockedChest = (net.minecraft.world.level.block.entity.ChestBlockEntity) level.getBlockEntity(stockPos);
+                        rows.add(new Row("golem_stock_provider_delivery", supplied && stocking && chest.isEmpty()
+                                && stockedChest.countItem(net.minecraft.world.item.Items.IRON_INGOT) == 3 && golem.getCarrying().isEmpty(),
+                                "Stock request creates provider pickup and delivery jobs, moving exactly three items between real chests"));
+                        stockedChest.clearContent();
+                    } finally {
+                        thaumcraft.api.golems.GolemHelper.provisionRequests.put(level.dimension(), requestsBefore);
+                        SealHandler.removeSealEntity(level, stockSealPos, true);
+                        level.setBlock(stockPos, oldStockState, 3);
+                    }
+                    thaumcraft.common.golems.tasks.TaskHandler.getTasks(level).remove(delivery.getId());
+                    thaumcraft.common.golems.tasks.TaskHandler.getTasks(level).remove(extraction.getId());
+                    SealHandler.removeSealEntity(level, pickupSealPos, true);
+                    var use = new thaumcraft.common.golems.seals.SealUse();
+                    use.setBlacklist(false);
+                    use.setFilterSlot(0, new ItemStack(net.minecraft.world.item.Items.OAK_PLANKS));
+                    SealHandler.addSealEntity(level, pickupPos, Direction.UP, use, null);
+                    var useProps = GolemProperties.fromLong(0);
+                    for (var head : thaumcraft.api.golems.parts.GolemHead.getHeads()) {
+                        if (java.util.Arrays.asList(head.traits).contains(thaumcraft.api.golems.EnumGolemTrait.SMART)) { useProps.setHead(head); break; }
+                    }
+                    for (var arms : thaumcraft.api.golems.parts.GolemArm.getArms()) {
+                        if (java.util.Arrays.asList(arms.traits).contains(thaumcraft.api.golems.EnumGolemTrait.DEFT)) { useProps.setArms(arms); break; }
+                    }
+                    golem.setProperties(useProps);
+                    golem.holdItem(new ItemStack(net.minecraft.world.item.Items.OAK_PLANKS, 3));
+                    var useTask = new thaumcraft.api.golems.tasks.Task(pickupSealPos, pickupPos);
+                    thaumcraft.common.golems.tasks.TaskHandler.addTask(level, useTask);
+                    var useGoal = new thaumcraft.common.golems.tasks.TCGolemTaskGoal(golem, (byte) 0);
+                    var aboveBefore = level.getBlockState(pickupPos.above());
+                    var standingFloor = pickupPos.north();
+                    var standingBefore = level.getBlockState(standingFloor);
+                    try {
+                        level.setBlock(standingFloor, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 3);
+                        golem.moveTo(standingFloor.getX() + 0.5, standingFloor.getY() + 1, standingFloor.getZ() + 0.5, 0, 0);
+                        level.addFreshEntity(golem);
+                        level.removeBlock(pickupPos.above(), false);
+                        boolean using = useGoal.canUse();
+                        if (using) { useGoal.start(); useGoal.tick(); }
+                        useGoal.stop();
+                        rows.add(new Row("golem_use_block_placement", using && useTask.isCompleted()
+                                && level.getBlockState(pickupPos.above()).is(net.minecraft.world.level.block.Blocks.OAK_PLANKS)
+                                && golem.getCarrying().stream().mapToInt(ItemStack::getCount).sum() == 2,
+                                "using=" + using + ", completed=" + useTask.isCompleted()
+                                        + ", allowed=" + use.canGolemPerformTask(golem, useTask)
+                                        + ", seal=" + SealHandler.getSealEntity(level, pickupSealPos).getSeal().getKey()
+                                        + ", queued=" + thaumcraft.common.golems.tasks.TaskHandler.getBlockTasksSorted(level, golem.getUUID(), golem).size()
+                                        + ", home=" + golem.isWithinRestriction(pickupPos)
+                                        + ", combat=" + golem.isInCombat()
+                                        + ", traits=" + golem.getProperties().getTraits()
+                                        + ", block=" + level.getBlockState(pickupPos.above())
+                                        + ", carrying=" + golem.getCarrying()));
+                    } finally {
+                        useGoal.stop();
+                        thaumcraft.common.golems.tasks.TaskHandler.getTasks(level).remove(useTask.getId());
+                        level.setBlock(pickupPos.above(), aboveBefore, 3);
+                        level.setBlock(standingFloor, standingBefore, 3);
+                    }
+                } finally {
+                    SealHandler.removeSealEntity(level, chestSealPos, true);
+                    level.setBlock(chestPos, oldChestState, 3);
+                }
+            } finally {
+                goal.stop();
+                item.discard();
+                golem.discard();
+                thaumcraft.common.golems.tasks.TaskHandler.getTasks(level).remove(pickupTask.getId());
+                SealHandler.removeSealEntity(level, pickupSealPos, true);
+                level.setBlock(pickupPos, oldState, 3);
+            }
+        }
+        if (level != null) {
+            BlockPos origin = new BlockPos(1060, 180, 1060);
+            var floorBefore = new java.util.HashMap<BlockPos, BlockState>();
+            var walker = new thaumcraft.common.entities.TCGolemEntity(TCEntityTypes.GOLEM.get(), level);
+            var item = new net.minecraft.world.entity.item.ItemEntity(level, origin.getX() + 9.5, origin.getY() + 1, origin.getZ() + 0.5,
+                    new ItemStack(net.minecraft.world.item.Items.IRON_INGOT, 2));
+            var sealPos = new SealPos(origin.offset(9, 0, 0), Direction.UP);
+            var task = new thaumcraft.api.golems.tasks.Task(sealPos, item);
+            try {
+                for (int x = -1; x <= 11; x++) for (int z = -2; z <= 2; z++) {
+                    BlockPos at = origin.offset(x, 0, z);
+                    floorBefore.put(at, level.getBlockState(at));
+                    level.setBlock(at, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 3);
+                }
+                walker.moveTo(origin.getX() + 0.5, origin.getY() + 1, origin.getZ() + 0.5, 0, 0);
+                level.addFreshEntity(walker);
+                level.addFreshEntity(item);
+                SealHandler.addSealEntity(level, sealPos.pos, sealPos.face, new thaumcraft.common.golems.seals.SealPickup(), null);
+                thaumcraft.common.golems.tasks.TaskHandler.addTask(level, task);
+                for (int tick = 0; tick < 200 && !task.isCompleted(); tick++) walker.tick();
+                rows.add(new Row("golem_navigation_to_remote_pickup", task.isCompleted() && !item.isAlive()
+                        && walker.getX() > origin.getX() + 4
+                        && walker.getCarrying().stream().mapToInt(ItemStack::getCount).sum() == 2,
+                        "Registered AI walks from nine blocks away and completes pickup without direct goal invocation"));
+            } finally {
+                walker.discard();
+                item.discard();
+                thaumcraft.common.golems.tasks.TaskHandler.getTasks(level).remove(task.getId());
+                SealHandler.removeSealEntity(level, sealPos, true);
+                floorBefore.forEach((pos, state) -> level.setBlock(pos, state, 3));
+            }
+        }
         var lockedInventory = new net.neoforged.neoforge.items.ItemStackHandler(1) {
             @Override
             public ItemStack extractItem(int slot, int amount, boolean simulate) {

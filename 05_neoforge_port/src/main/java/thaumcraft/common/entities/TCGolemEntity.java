@@ -113,6 +113,8 @@ public class TCGolemEntity extends PathfinderMob implements IGolemAPI, RangedAtt
                 return getProperties().hasTrait(EnumGolemTrait.RANGED) && super.canUse();
             }
         });
+        this.goalSelector.addGoal(2, new thaumcraft.common.golems.tasks.TCGolemTaskGoal(this, (byte) 1));
+        this.goalSelector.addGoal(3, new thaumcraft.common.golems.tasks.TCGolemTaskGoal(this, (byte) 0));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));

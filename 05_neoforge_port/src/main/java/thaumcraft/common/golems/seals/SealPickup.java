@@ -72,7 +72,7 @@ public class SealPickup extends SealFiltered implements ISealConfigArea {
 
     @Override
     public boolean canGolemPerformTask(IGolemAPI golem, Task task) {
-        return !golem.getCarrying().isEmpty() || task.getEntity() instanceof ItemEntity;
+        return task.getEntity() instanceof ItemEntity item && item.isAlive() && golem.canCarry(item.getItem(), true);
     }
 
     @Override

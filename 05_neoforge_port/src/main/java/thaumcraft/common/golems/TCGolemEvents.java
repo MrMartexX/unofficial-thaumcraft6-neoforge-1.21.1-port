@@ -15,11 +15,13 @@ public final class TCGolemEvents {
             thaumcraft.common.golems.tasks.TaskHandler.clear(level);
         }
         SealHandler.sealEntities.clear();
+        thaumcraft.api.golems.GolemHelper.provisionRequests.clear();
     }
 
     public static void onServerTick(ServerTickEvent.Post event) {
         for (ServerLevel level : event.getServer().getAllLevels()) {
             SealHandler.tickSeals(level);
+            if (level.getGameTime() % 20 == 0) thaumcraft.common.golems.tasks.TaskHandler.expireTasks(level);
         }
     }
 }

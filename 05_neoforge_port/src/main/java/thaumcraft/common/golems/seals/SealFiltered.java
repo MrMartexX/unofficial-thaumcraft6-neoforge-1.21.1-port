@@ -122,11 +122,14 @@ public abstract class SealFiltered implements ISeal, ISealGui, ISealConfigFilter
             }
         }
         this.blacklist = tag.getBoolean("bl");
+        int[] sizes = tag.getIntArray("sizes");
+        for (int i = 0; i < filterSize.size(); i++) filterSize.set(i, i < sizes.length ? sizes[i] : 0);
     }
 
     @Override
     public void writeCustomNBT(CompoundTag tag) {
         tag.putBoolean("bl", blacklist);
+        tag.putIntArray("sizes", filterSize.stream().mapToInt(Integer::intValue).toArray());
         ListTag list = new ListTag();
         var lookup = net.minecraft.core.RegistryAccess.fromRegistryOfRegistries(net.minecraft.core.registries.BuiltInRegistries.REGISTRY);
         for (ItemStack stack : filter) {

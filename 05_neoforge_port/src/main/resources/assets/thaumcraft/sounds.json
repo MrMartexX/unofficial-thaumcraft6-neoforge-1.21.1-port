@@ -356,6 +356,9 @@
             }
         ]
     },
+    "runicshieldcharge": {
+        "sounds": [ "thaumcraft:runicshieldcharge" ]
+    },
     "runicshieldecharge": {
         "category": "player",
         "sounds": [

@@ -108,12 +108,23 @@ public class TaskHandler {
     }
 
     public static void completeTask(Level level, Task task, IGolemAPI golem) {
-        task.setCompletion(true);
-        task.setReserved(false);
-        if (task.getSealPos() != null) {
-            // Task completed for seal
-        }
-        getTasks(level).remove(task.getId());
+        if (task.isCompleted() || task.isSuspended()) return;
+        var seal = task.getSealPos() == null ? null
+                : thaumcraft.common.golems.seals.SealHandler.getSealEntity(level, task.getSealPos());
+        task.setCompletion(seal == null || seal.getSeal().onTaskCompletion(level, golem, task));
+    }
+
+    public static void expireTasks(Level level) {
+        getTasks(level).values().removeIf(task -> {
+            if (!task.isSuspended() && task.getLifespan() > 0) {
+                task.setLifespan((short)(task.getLifespan() - 1));
+                return false;
+            }
+            var seal = task.getSealPos() == null ? null
+                    : thaumcraft.common.golems.seals.SealHandler.getSealEntity(level, task.getSealPos());
+            if (seal != null) seal.getSeal().onTaskSuspension(level, task);
+            return true;
+        });
     }
 
     public static void clear(Level level) {

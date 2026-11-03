@@ -33,6 +33,15 @@ world state, components and server-authoritative interaction.
 - The asset linter requires exact runtime resource locations. The client smoke
   script refuses global Java/Minecraft cleanup and no longer calls an early
   startup signal verified rendering.
+- Queued golem jobs now have acquisition, reservation, tag/lock/color gates,
+  navigation, seal callbacks and expiry. Fill/Empty transfer real stacks;
+  Stock/Provider create and execute pickup/delivery jobs. Use executes its default
+  right-click behavior with a fake player and returns unused items to the golem.
+- Task IDs are monotonic instead of millisecond hashes, avoiding replacement of
+  jobs created for the same position in the same millisecond.
+- Filter size limits are saved along with the filter items and blacklist mode.
+- Client smoke now waits for an actual post-title-render marker and five-second
+  grace period, inspects stdout and stderr, and only stops its own process tree.
 
 ## Confirmed runtime evidence
 
@@ -56,9 +65,20 @@ world state, components and server-authoritative interaction.
 Raw outputs are ignored under `tools/reports/local/review-20261102/`.
 No player save or unrelated Minecraft instance was used.
 
+The follow-up golem runtime audit passes 17 checks, including actual navigation
+from nine blocks away using the registered AI (not a direct goal call), three-item
+pickup, real chest delivery/extraction, Stock/Provider replenishment, and Use
+placing a block while keeping its two unused blocks. Lock/color rejection is
+tested separately. These do not certify advanced toggles or the client UI.
+
+The rewritten client smoke was run twice. Both runs reached the rendered-title
+marker and survived its grace period. The second run no longer reports the active
+effect-glimmer missing texture or Thaumcraft's missing runic recharge sound.
+
 ## Still incomplete
 
-- Golem task acquisition/navigation/execution and Provider/Stock/Use actions.
+- Full golem path-recovery/home/follow parity and advanced seal options; the core
+  queued operations and default actions above now have actual behavior tests.
 - Seal client sync, configuration GUI and full logistics acceptance.
 - Authored focus graph traversal, nested mediums, Scatter and split semantics.
 - Modular golem renderer and measured client visual parity.
@@ -67,9 +87,9 @@ No player save or unrelated Minecraft instance was used.
 - Remaining Exchange fortune distributions, compatibility cases and legacy swap
   FX/timing; the basic survival/material/vis/Silk Touch cases above are verified.
 - End-to-end press component transactions against extraction-restricting handlers.
-- A genuine post-render readiness signal for client smoke; it remains startup-only.
-- Triage the strict asset linter's 77 findings into active resources and imported
-  legacy references. Do not restore path fallbacks to hide them.
+- In-world client visual acceptance, beyond the verified rendered title screen.
+- The strict resource triage is recorded in `resource_triage_2026_11_03.md`;
+  preserved unregistered reference resources are not active runtime defects.
 
 The historical all-findings-resolved/aggregate-parity claims are not acceptance
 criteria. Keep these open boundaries explicit until their actual scenarios pass.

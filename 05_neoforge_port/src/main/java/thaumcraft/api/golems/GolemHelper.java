@@ -47,6 +47,7 @@ public class GolemHelper {
     public static void requestProvisioning(Level level, ISealEntity seal, ItemStack stack) {
         List<ProvisionRequest> list = provisionRequests.computeIfAbsent(level.dimension(), k -> new ArrayList<>());
         ProvisionRequest pr = new ProvisionRequest(seal, stack.copy());
+        if (refreshExisting(list, pr)) return;
         if (!list.contains(pr)) {
             list.add(pr);
         }
@@ -58,6 +59,7 @@ public class GolemHelper {
     public static void requestProvisioning(Level level, BlockPos pos, Direction side, ItemStack stack) {
         List<ProvisionRequest> list = provisionRequests.computeIfAbsent(level.dimension(), k -> new ArrayList<>());
         ProvisionRequest pr = new ProvisionRequest(pos, side, stack.copy());
+        if (refreshExisting(list, pr)) return;
         if (!list.contains(pr)) {
             list.add(pr);
         }
@@ -69,12 +71,28 @@ public class GolemHelper {
     public static void requestProvisioning(Level level, Entity entity, ItemStack stack) {
         List<ProvisionRequest> list = provisionRequests.computeIfAbsent(level.dimension(), k -> new ArrayList<>());
         ProvisionRequest pr = new ProvisionRequest(entity, stack.copy());
+        if (refreshExisting(list, pr)) return;
         if (!list.contains(pr)) {
             list.add(pr);
         }
         if (list.size() > LIST_LIMIT) {
             list.remove(0);
         }
+    }
+
+    private static boolean refreshExisting(List<ProvisionRequest> requests, ProvisionRequest proposed) {
+        for (ProvisionRequest existing : requests) {
+            if (!existing.isInvalid() && existing.getSeal() == proposed.getSeal()
+                    && existing.getEntity() == proposed.getEntity()
+                    && java.util.Objects.equals(existing.getPos(), proposed.getPos())
+                    && existing.getSide() == proposed.getSide()
+                    && existing.getStack().getCount() == proposed.getStack().getCount()
+                    && ItemStack.isSameItemSameComponents(existing.getStack(), proposed.getStack())) {
+                existing.refreshTimeout();
+                return true;
+            }
+        }
+        return false;
     }
 
     public static BlockPos getPosInArea(ISealEntity seal, int count) {
