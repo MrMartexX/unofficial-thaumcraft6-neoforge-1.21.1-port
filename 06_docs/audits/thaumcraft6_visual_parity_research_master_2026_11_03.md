@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F78](#additional-source-history-checks-f01f70)
+6. [Additional source-history checks: F01–F83](#additional-source-history-checks-f01f70)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F78
+## Additional source-history checks: F01–F83
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1304,6 +1304,71 @@ The original `BlockLevitator` inherits `BlockTCDevice.getStateForPlacement` beca
 **Alternative explanation:** a modern intuitive “face clicked” placement policy could be deliberate, but the strict legacy control scheme has changed. **Repro:** from a fixed player position and camera inclination, place on different target block faces; then repeat with sneak held. Compare resulting `facing`, visible model orientation and the Levitator effect direction in matched versions. Do not infer exact orientation from the JSON rotations alone: the placement rule is a separate data source.
 
 **Sources:** [legacy Levitator](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockLevitator.java), [legacy device placement helper](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCDevice.java), [modern Levitator](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCLevitatorBlock.java).
+
+---
+
+## Directional devices and Vis Generator continuation: F79–F83 (November 3, 2026)
+
+This source-level pass checked additional placement-direction rules against the legacy `BlockTCDevice` base class rather than treating every 1.21.1 `FACING` property or model variant as equivalent. All links are pinned to `main` at `72eaac17a1e1c0c51b27cb151ef7f244944c89d5`. The independent remediation branch had advanced to `5cfc7f35926e3f2b2665b63d5a7d19a247e0aa39` (12 commits ahead); its file-change list did not include the targeted Vis Generator, Potion Sprayer or Levitator block classes.
+
+### F79 — Potion Sprayer lost the original sneak-reversed placement orientation
+
+**Active ID:** `thaumcraft:potion_sprayer`. **Status:** `confirmed_legacy_mismatch` for the placement input rule; `requires_client` for visible orientation.
+
+Legacy `BlockPotionSprayer` extends `BlockTCDevice` and implements `IBlockFacing`, without overriding `getStateForPlacement`. The inherited implementation sets `FACING` to `EnumFacing.getDirectionFromEntityLiving(pos, placer)` normally and its **opposite** when sneaking (`BlockTCDevice.java:54–65`). Modern `TCPotionSprayerBlock.getStateForPlacement` unconditionally uses `context.getNearestLookingDirection().getOpposite()` and sets `ENABLED=true` (`TCPotionSprayerBlock.java:61–67`). It does not inspect the secondary-use/sneaking flag.
+
+The legacy direction derives from player/block position and posture; the new rule derives from the nearest looking direction, with no sneaking inversion. These may coincide in some normal placements but cannot be assumed equivalent in all cases. The six facing variants in `potion_sprayer.json` are present, so this is **not** missing JSON coverage.
+
+**Repro:** in matched 1.12.2 and 1.21.1 worlds, place facing upward, downward and sideways from the same player position, first normally and then while sneaking. Compare resulting `facing`, model rotation and emitted spray direction; confirm not just the inventory icon. **Alternative:** modern placement UX could be deliberate but must be documented as a strict-parity decision.
+
+**Sources:** [original Sprayer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockPotionSprayer.java), [legacy placement base](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCDevice.java), [modern Sprayer](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCPotionSprayerBlock.java).
+
+### F80 — Vis Generator auto-connect priority survives, but the placement fallback changes direction semantics
+
+**Active ID:** `thaumcraft:vis_generator`. **Status:** `confirmed_legacy_mismatch` for the no-receiver fallback; `negative_control` for the existence of neighbor capability scanning; `requires_client` for placement demonstrations.
+
+Original `BlockVisGenerator.getStateForPlacement` scans each neighboring facing for a tile with an energy capability that can receive FE and automatically faces such a receiver (`BlockVisGenerator.java:53–67`). **Only if no receiver exists**, it delegates to `BlockTCDevice.getStateForPlacement`, inheriting player-relative facing plus the sneaking reversal. Modern `TCVisGeneratorBlock.getStateForPlacement` still scans neighbors for a receiving energy capability (`TCVisGeneratorBlock.java:74–84`) but uses `context.getClickedFace().getOpposite()` as its fallback (`:85`), without the original posture-dependent rule.
+
+**Repro:** place with no FE receiver nearby, repeat with and without sneak and different target faces, then install a receiver on each of six sides one at a time. Record model orientation and energy-output direction. Do not mislabel the existing auto-connect capability scan as missing. **Alternative:** the fallback could have been intentionally made face-relative. A single neighbor-present placement test will mask the difference.
+
+**Sources:** [legacy Generator block](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockVisGenerator.java), [modern Generator block](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCVisGeneratorBlock.java), [legacy placement base](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCDevice.java).
+
+### F81 — Vis Generator sparks exist, but the custom legacy visual is replaced by a vanilla particle
+
+**Active ID:** `thaumcraft:vis_generator`. **Status:** `confirmed_code` effect-type divergence; pixel-level presentation `requires_client`. **Explicit negative control:** the port is **not missing sparks altogether**.
+
+Legacy `BlockVisGenerator.randomDisplayTick` checks the facing energy capability's stored energy and dispatches `FXDispatcher.INSTANCE.spark` with randomized position and characteristic explicit color/size parameters (`BlockVisGenerator.java:70–87`). Modern `TCVisGeneratorBlock.animateTick` checks `TCVisGeneratorBlockEntity.getEnergy()>0` and emits vanilla `ParticleTypes.ELECTRIC_SPARK` with three small random velocity components (`TCVisGeneratorBlock.java:105–120`). The code path is active, but it uses a different particle implementation rather than the custom legacy `FXDispatcher.spark`. The exact appearance, lifetime and color difference needs matched frame capture; the source proves a changed mechanism, not a precise pixel delta.
+
+**Sync control:** the modern block entity includes `energy` in `getUpdateTag`, supplies `ClientboundBlockEntityDataPacket`, and sends block updates at refilling/zero transitions (`TCVisGeneratorBlockEntity.java:46–69, 104–115`). Therefore do **not** classify this as an obviously absent energy sync path. Inspect whether actual client energy values and particle cadence match only with runtime tracing.
+
+**Repro:** compare active output in daylight and darkness, with identical direction, nearby receiver, aura and energy states; capture spark color, size, duration, velocity and distribution over several frames. Also compare idle/empty state as a negative control.
+
+**Sources:** [legacy FX call](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockVisGenerator.java), [modern particle](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCVisGeneratorBlock.java), [modern energy and sync](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCVisGeneratorBlockEntity.java). **Audit blind spot:** presence of `animateTick` is not equivalent to a comparison of the particle implementation.
+
+### F82 — Vis Generator redstone-disable state and energy-production gate are absent in the modern block
+
+**Active ID:** `thaumcraft:vis_generator`. **Status:** `confirmed_legacy_mismatch` in functional state/behavior, discovered during visual-state tracing. The visual outcome itself is `requires_client`.
+
+Legacy `BlockVisGenerator` implements `IBlockEnabled`; its base `BlockTCDevice.updateState` sets `ENABLED = !world.isBlockPowered(pos)` during block updates (`BlockTCDevice.java:68–74`). Legacy `TileVisGenerator.update` performs recharge and energy forwarding **only** when `!world.isRemote && BlockStateUtils.isEnabled(getBlockMetadata())` (`TileVisGenerator.java:17–41`). Thus powering the legacy generator disables its operational tick path.
+
+The modern `TCVisGeneratorBlock` declares only `FACING`, registers no `ENABLED` state, and does not implement the original redstone-update gate. Its `TCVisGeneratorBlockEntity.tickServer` calls `tickServer` regardless of neighboring redstone power, with no equivalent early return (`TCVisGeneratorBlockEntity.java:35–73`). The modern `vis_generator.json` accordingly lists only six `facing` variants. This is **not** a case of missing `enabled` model variants for a registered property; the property and its energy gating are absent altogether.
+
+**Expected:** with redstone power applied, legacy generation/export stops; on power removal it can resume. **Modern code:** no such gate before aura drain or FE forwarding. **Repro:** use a receiving FE storage with measurable energy and a powered/unpowered lever, record energy and aura deltas over a fixed number of server ticks in both versions; check the blockstate, not merely particles. Test stored energy before applying power to isolate export gating from recharge. **Risk:** this is a real gameplay/balance difference, not only a model concern. Preserve the research-only boundary; any implementation fix requires separate authorization.
+
+**Sources:** [legacy Generator block](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/devices/BlockVisGenerator.java), [legacy device state gate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCDevice.java), [legacy Generator tile](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/devices/TileVisGenerator.java), [modern Generator tile](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCVisGeneratorBlockEntity.java).
+
+### F83 — Placement-rule negative controls prevent a blanket “all directional blocks lost sneak parity” conclusion
+
+**Status:** `negative_control` for placement-rule differences on the named paths only; not full rendering parity.
+
+- **Golem Builder:** legacy inherits horizontal player-relative `BlockTCDevice` placement, including sneaking reversal. Modern `TCGolemBuilderBlock.getStateForPlacement` explicitly tests `player.isShiftKeyDown()` and selects forward versus opposite horizontal direction. The posture inversion is present.
+- **Thaumatorium:** the original inherited horizontal placement behavior; `TCThaumatoriumBlock.getStateForPlacement` uses `context.isSecondaryUseActive()` to choose the opposite or same horizontal direction. The control inversion is explicitly represented. Its separate support/multiblock preconditions are not certified by this result.
+- **Smelter and Infernal Furnace:** both legacy classes override placement to face opposite the player's horizontal direction without a sneak inversion. The corresponding modern placement uses `context.getHorizontalDirection().getOpposite()`; no missing sneak toggle should be alleged.
+- **Arcane Ear and Lamp:** original classes explicitly chose the clicked face (Lamp takes its opposite); modern `TCArcaneEarBlock` and `TCLampBlock` preserve those relationships at placement. This does not negate N12's Ear shape defect or prove complete model parity.
+
+**Blind spot:** a generic “implements `IBlockFacing`” search is insufficient: overridden legacy placement methods must be checked before alleging a regression. Test each identified class's use of the base helper and compare the actual modern rule.
+
+**Sources:** [legacy device base](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/BlockTCDevice.java), [modern Golem Builder](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCGolemBuilderBlock.java), [modern Thaumatorium](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCThaumatoriumBlock.java).
 
 ---
 
