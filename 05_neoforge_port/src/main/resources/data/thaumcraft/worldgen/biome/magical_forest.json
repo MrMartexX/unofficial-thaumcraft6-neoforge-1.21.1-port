@@ -84,17 +84,16 @@
     [
       "minecraft:glow_lichen",
       "minecraft:forest_flowers",
+      "thaumcraft:trees_magical_forest",
+      "minecraft:flower_default",
       "minecraft:patch_grass_forest",
-      "minecraft:patch_tall_grass",
-      "minecraft:patch_large_fern",
       "thaumcraft:huge_brown_mushroom",
       "thaumcraft:huge_red_mushroom",
       "thaumcraft:patch_vishroom",
       "minecraft:brown_mushroom_normal",
       "minecraft:red_mushroom_normal",
       "minecraft:patch_sugar_cane",
-      "minecraft:patch_pumpkin",
-      "thaumcraft:trees_magical_forest"
+      "minecraft:patch_pumpkin"
     ],
     [
       "minecraft:freeze_top_layer"
