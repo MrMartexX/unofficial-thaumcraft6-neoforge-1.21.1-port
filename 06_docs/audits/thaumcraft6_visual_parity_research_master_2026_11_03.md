@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F25](#additional-source-history-checks-f01f25)
+6. [Additional source-history checks: F01–F28](#additional-source-history-checks-f01f28)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F25
+## Additional source-history checks: F01–F28
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -624,6 +624,53 @@ Do not reopen “halo absent” solely because `drawHalo` is not inside the new 
 
 **After F25:** the mapped BER pass has now reached all ten registrations. Next source-led work: audit unrelated client callbacks/particles for the twelve previously unpaired TESR types, then expand an active-ID manifest across block/item model display paths, entities and HUD. Still missing matched client capture and proof ledger for every active object.
 
+
+
+### F26 — Cross-cutting block-event delivery risk: effect handlers are in block entities without a forwarding block
+
+**Status:** `confirmed_code` for six missing block-level dispatch overrides; `probable_cause` of suppressed event-driven client particles/audio until server/client event tracing confirms actual delivery. This is **independent of BER registration**.
+
+The modern code uses `Level.blockEvent(pos, block, id, data)` in several block entities, then puts client visuals in `BlockEntity.triggerEvent(id, data)`. Under 1.21.1 block-event dispatch, the *block's* `BlockState.triggerEvent` path controls whether an event is accepted/broadcast. `BaseEntityBlock` provides a dedicated override to pass an event on to its tile; merely declaring `extends Block implements EntityBlock` does not supply that override. API references: [NeoForge 1.21.1 `BlockBehaviour.triggerEvent`](https://lexxie.dev/neoforge/1.21.1/net/minecraft/world/level/block/state/BlockBehaviour.html) and [`BaseEntityBlock.triggerEvent` API](https://aldak.netlify.app/javadoc/1.21.1-21.1.x/net/minecraft/world/level/block/baseentityblock).
+
+At the pinned source SHA, the following six blocks extend plain `Block` and declare `EntityBlock` but have **no `triggerEvent` override**. Their corresponding BEs emit block events:
+
+| Block → BE | Emitted event / intended client behavior | Dispatch finding |
+| --- | --- | --- |
+| [`TCWaterJugBlock`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCWaterJugBlock.java) → [`TCWaterJugBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCWaterJugBlockEntity.java) | `1`, client target-zone/trail state | No block-level event forwarding; a second dead-trail gap is F27 |
+| [`TCVoidSiphonBlock`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCVoidSiphonBlock.java) → [`TCVoidSiphonBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCVoidSiphonBlockEntity.java) | `5`, twelve `ParticleTypes.PORTAL` particles on successful rift drain | A particle handler exists but is probably unreachable through the queued block event; this *does not* replace the legacy animated portal mesh |
+| [`TCCrucibleBlock`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java) → [`TCCrucibleBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCCrucibleBlockEntity.java) | `1` / `2` / `99`, `TCFXDispatcher` crucible bamf/boil and local sound | Event-driven visual/audio branch probably not reached; Crucible's separate water-surface BER remains present (F25) |
+| [`TCSmelterBlock`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCSmelterBlock.java) → [`TCSmelterBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCSmelterBlockEntity.java) | `1`, directional vent sound and smoke/particle burst | The **event-specific** vent burst is at risk; this does *not* imply all ambient smelter particles are absent |
+| [`TCInfernalFurnaceBlock`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCInfernalFurnaceBlock.java) → [`TCInfernalFurnaceBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCInfernalFurnaceBlockEntity.java) | `3`, lava pop sounds and output-side lava particles | Event-driven burst at risk |
+| [`TCMirrorBlock`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCMirrorBlock.java) → [`TCMirrorBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCMirrorBlockEntity.java) | `1` on item intake/ejection | No matching `TCMirrorBlockEntity.triggerEvent` handler found; this is an orphaned event emission, *not* yet evidence of a particular missing particle |
+
+**Second independent guard:** several BE `triggerEvent` methods explicitly return the superclass result (normally `false`) on the server and only return `true` in their `level.isClientSide` branch. Under vanilla's acceptance/broadcast condition, even simply adding a forwarding block would not necessarily accept the server-side event. A correct eventual solution requires tracing *both* the block delegate and server-side return behavior, not merely calling the BE handler on clients.
+
+**Negative control:** [`TCHungryChestBlock`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCHungryChestBlock.java) actually `extends BaseEntityBlock`. Its chest-opener event path therefore does not share the same *missing block-level override* problem; its wrong visible model and absent lid BER remain separately tracked in F11. The [`TCHungryChestBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCHungryChestBlockEntity.java) also does not implement a lid-state `triggerEvent` consumer.
+
+**Required test before promoting cause to runtime-confirmed:** instrument a dev client/server with one event sent per target, record whether `BlockState.triggerEvent` and `BlockEntity.triggerEvent` run server/client and whether a `ClientboundBlockEventPacket` is sent. Do not modify live source during this research phase.
+
+### F27 — Everfull Urn / Water Jug: original animated water trail has no active client-side consumer
+
+**Status:** `confirmed_legacy_mismatch` for omitted trail-generation code; `probable_cause` for event non-delivery per F26; visual effects require client reproduction.
+
+- In the original [`TileWaterJug.update`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/devices/TileWaterJug.java), a received client event `1` sets `zc` (target zone) and `tcount=5`; on client ticks the tile calls `FXDispatcher.INSTANCE.waterTrailFx` towards the target offset and decrements the timer.
+- Modern [`TCWaterJugBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCWaterJugBlockEntity.java) still emits event `1` and has `triggerEvent` code setting `lastClientTrailZone` and `clientTrailTicks=5`; **neither field is subsequently decremented or consumed by a client tick, world renderer, particle dispatcher, or other inspected modern implementation**.
+- Repository Java code search at this baseline finds `clientTrailTicks` and `lastClientTrailZone` only in their defining BE; no `waterTrailFx` equivalent call exists under the modern Java source tree. These searches corroborate the direct source inspection but cannot independently prove the absence of renamed/general-purpose visual effects.
+- The event-dispatch gap F26 may prevent the values from being assigned at all, a separate and earlier failure. Even if event forwarding were repaired, the original rendered water stream would still be absent unless a client-side consumer is implemented.
+
+**Reproduction:** place an active Everfull Urn adjacent to a valid refillable target at a nonzero zone offset, wait for a successful automatic transfer, compare original and port for an animated target-directed water stream.
+
+### F28 — Focused search for alternate render paths for the unpaired TESR set
+
+**Status:** `confirmed_code` for inspected references/registration paths; `not_checked` for all possible indirect resource-driven callbacks and client pixels.
+
+A cross-check of current `thaumcraft/client` Java source symbols found **no direct client-world-renderer references** to `TCDioptraBlockEntity`, `TCCentrifugeBlockEntity`, `TCHungryChestBlockEntity`, `TCMirrorBlockEntity`, `TCMirrorEssentiaBlockEntity`, `TCVoidSiphonBlockEntity`, `TCAlembicBlockEntity`, `TCPatternCrafterBlockEntity` or `TCHoleBlockEntity`. `TCFocalManipulatorBlockEntity` is referenced by menus/networks but not by a client world-renderer. `TCLegacyTubeBlockEntity` is referenced by `TCTubeValveRenderer`, but that BER is only registered to the valve type rather than all tube variants. This corroborates the F10–F17 observation that dedicated world dynamic effects were not simply moved to a similarly named BER.
+
+Eight inspected modern block classes (`TCFocalManipulatorBlock`, `TCDioptraBlock`, `TCHungryChestBlock`, `TCCentrifugeBlock`, `TCPatternCrafterBlock`, `TCVoidSiphonBlock`, `TCMirrorBlock`, `TCAlembicBlock`) had no `animateTick` override. This is a **bounded negative check**, not a global absence proof: entity-level event-driven FX (F26), generic particle dispatch, JSON model variants and vanilla render behavior can still contribute visuals.
+
+One real alternative was found: Void Siphon has a client `ParticleTypes.PORTAL` branch in its BE (F26), although likely disconnected by block-event dispatch. Thus the correct defect description is **missing legacy animated portal mesh plus an at-risk modern particle branch**, not “Void Siphon has no FX code.”
+
+**Next:** complete active registry and indirect render/resource dispatch coverage, extend item/equipment/entity comparison, and obtain controlled client screenshots. No existing code has been changed.
 
 ## Black borders: competing causes
 
