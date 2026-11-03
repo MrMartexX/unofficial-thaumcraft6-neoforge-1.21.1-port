@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F09](#additional-source-history-checks-f01f09)
+6. [Additional source-history checks: F01–F18](#additional-source-history-checks-f01f09)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F09
+## Additional source-history checks: F01–F18
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -425,6 +425,117 @@ Importantly, original Inlay/Stabilizer handlers already produced **opaque** `0xF
 7. The 19 alpha candidates with no proven **legacy-layer** change are not cleared of other visual problems.
 8. No broken **direct** internal JSON parent/texture/override model reference was found in the selected resource integrity scan; indirect OBJ/MTL, baked model geometry and runtime effects remain outside that control.
 9. Successful build/startup, asset linting, and parity report scores cannot establish 100% visual equivalence.
+
+
+## New renderer-path investigation: F10–F18 (November 3, 2026)
+
+This section continues the investigation **after F09**. It compares the registered legacy tile-entity special renderers (TESRs) to modern block-entity renderer (BER) bindings and checks the actual models/state, rather than treating a missing Java class name as proof of a missing on-screen feature.
+
+### F10 — Registered legacy TESR → modern BER coverage, with active-ID exclusions
+
+**Status:** `confirmed_static_registration_delta`; client-rendering parity remains open.
+
+A complete enumeration of [legacy `ProxyTESR.setupTESR`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/proxies/ProxyTESR.java) yields **23** renderer registrations (22 renderer instances/classes because the same Mirror TESR was used for two tile classes). The only modern call site for `registerBlockEntityRenderer` found under `05_neoforge_port/` is [`TCBlockEntityRenderers.java`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java), containing **10** modern BER registrations. The modern [`TCBlockEntities` registry](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlockEntities.java) has **45** registered block-entity type names. These are distinct counting universes, not a direct "23 minus 10 bugs" result.
+
+| Legacy TESR registration | Modern rendering path at this SHA | Classification |
+| --- | --- | --- |
+| Crucible | `TCCrucibleRenderer` | Mapped; parity still requires visual review |
+| Infusion Pedestal | `TCInfusionPedestalRenderer` | Mapped |
+| Recharge Pedestal | Shares modern `INFUSION_PEDESTAL` block-entity type/renderer | **Covered through a shared path**, not automatically missing |
+| Tube Valve | `TCTubeValveRenderer` | Mapped |
+| Warded Jar | `TCWardedJarRenderer` for normal and void jar registrations | Mapped; separate jar shape issue N14 persists |
+| Bellows | `TCBellowsRenderer` | Mapped |
+| Infusion Matrix | `TCInfusionMatrixRenderer` | Mapped |
+| Research Table | `TCResearchTableRenderer` | Mapped; GUI overdraw N09 is separate |
+| Thaumatorium | `TCThaumatoriumRenderer` | Mapped |
+| Golem Builder | `TCGolemBuilderRenderer` | Mapped |
+| Dioptra | No direct BER registration | Active and affected; F12 |
+| Focal Manipulator / Wand Workbench | No direct BER registration | Active and affected; F14 |
+| Hungry Chest | No direct BER registration | Active; **confirmed wrong visible block model**; F11 |
+| Tube Oneway | No direct BER registration | Active; investigate missing rod/pose; F17 |
+| Tube Buffer | No direct BER registration | Active; investigate missing rod/pose; F17 |
+| Alembic | No direct BER registration | Active; dynamic label/nozzle difference; F17 |
+| Centrifuge | No direct BER registration | Active; missing animated rotor path; F13 |
+| Item Mirror | No direct BER registration | Active; legacy portal tunnel not recreated by static pane; F15 |
+| Essentia Mirror | No direct BER registration | Active; same portal renderer gap; F15 |
+| Pattern Crafter | No direct BER registration | Active; lost mode/gear overlay; F16 |
+| Void Siphon | No direct BER registration | Active; missing animated portal quads; F15 |
+| Hole | No direct BER registration; block explicitly `RenderShape.INVISIBLE` | Active; no verified replacement for legacy portal effect; F15 |
+| Banner | No matching active banner block/entity type in modern `TCBlocks`/`TCBlockEntities` | **Not an active visual defect on this evidence**; classify separately as legacy content coverage |
+
+**Interpretation:** the original list contains **13 registrations without a direct modern counterpart**, of which **12 have corresponding active modern block-entity types**. One (Banner) cannot be scored as a runtime renderer bug without an active ID. For each of the twelve, assess static model alternatives and other render event/particle paths before calling the full *visual* feature absent.
+
+### F11 — Hungry Chest: confirmed oak-plank block model; preserved chest geometry is orphaned
+
+**Status:** `confirmed_active_block_resource_regression`; lid animation also missing from the registered modern rendering path.
+
+Source chain:
+
+1. Original [`TileHungryChestRenderer.java`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileHungryChestRenderer.java) uses vanilla `ModelChest` geometry, `textures/models/chesthungry.png`, facing-specific rotation, an interpolated easing function on `prevLidAngle/lidAngle`, and `chestLid.rotateAngleX`.
+2. Modern [`TCBlocks.HUNGRY_CHEST`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java) is an active registered ID `hungry_chest`. [`TCHungryChestBlock`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCHungryChestBlock.java) returns `RenderShape.MODEL`, while the BER registry has no `HUNGRY_CHEST` binding.
+3. Active [`blockstates/hungry_chest.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/hungry_chest.json) selects [`models/block/hungry_chest.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/hungry_chest.json), a **single [1,0,1]–[15,14,15] box** with **`minecraft:block/oak_planks`** on all six faces. Its different facing variants merely rotate this identical texture cube.
+4. Active [`models/item/hungry_chest.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/hungry_chest.json) also inherits that plank model.
+5. A more faithful but apparently **unused** legacy-named [`models/block/chest.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/chest.json) still exists, featuring a chest body, lid/lock elements, and `thaumcraft:block/chesthungry`. A separate [`models/item/hungrychest.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/hungrychest.json) points to it; there is no corresponding `hungrychest` active block registration. The modern texture directory also contains `chesthungry.png`, so lack of artwork is **not** the blocker.
+6. [`TCHungryChestBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCHungryChestBlockEntity.java) retains open/close event tracking and sounds via `ContainerOpenersCounter`, but no lid animation is consumed by a registered BER. The gameplay inventory/eating behavior is separate.
+
+**Root cause supported by the registration/model chain:** the active block points to a plank placeholder and does not use the preserved chest geometry or original lid renderer. This directly explains the reported "block of planks" appearance. Runtime testing remains necessary for precise animation and view comparisons, not for establishing the wrong active model mapping.
+
+### F12 — Dioptra: the 13×13 aura data is computed and synced but never rendered as the legacy height field
+
+**Status:** `confirmed_visual_data_pipeline_gap`; exact GPU/framebuffer parity requires runtime.
+
+Legacy [`TileDioptraRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileDioptraRenderer.java) builds a **12×12 mesh of quads from a 13×13 vertex-height array**, animates color/height, and uses additive blending and side surfaces. Modern [`TCDioptraBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCDioptraBlockEntity.java) still maintains a **169-byte grid**, recalculates values from vis/flux every **20 ticks** and sends them to the client via `getUpdateTag` and `ClientboundBlockEntityDataPacket`. The `getGridAmt()` access point was found only in the block-entity class in the modern source search, with no rendering consumer.
+
+The active [`dioptra.json` blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/dioptra.json) merely alternates fixed models for enabled and disabled modes. The static [`models/block/dioptra.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/dioptra.json) contains stationary side/top elements; `DIOPTRA` has no BER registration. **The data and network work survive, but the hallmark dynamic field visualization does not have an equivalent rendering path.**
+
+### F13 — Centrifuge: client rotation logic survives, animated rotor rendering does not
+
+**Status:** `confirmed_legacy_animation_render_path_loss`.
+
+Legacy [`TileCentrifugeRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileCentrifugeRenderer.java) renders the fixed body and separately rotates `ModelCentrifuge.renderSpinnyBit()` by the tile's `rotation`. Modern [`TCCentrifugeBlockEntity.clientTick`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCCentrifugeBlockEntity.java) still updates `rotationSpeed` and `rotation` and triggers a pump sound on rotation thresholds. However the active `centrifuge` blockstate references a fixed [`models/block/centrifuge.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/centrifuge.json) and no `CENTRIFUGE` BER exists. The retained rotation state has no visible rotor consumer in that path.
+
+### F14 — Focal Manipulator: missing rotating focus crystals and rendering layers
+
+**Status:** `confirmed_legacy_TESR_path_loss`; particles outside BER still need source/runtime inspection.
+
+Legacy [`TileFocalManipulatorRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileFocalManipulatorRenderer.java) contains tick-based rotating/bobbing geometry and billboards, additive particle/blend passes, multiple transforms and dynamic highlights. The modern active block ID is `wand_workbench` with [`blockstates/wand_workbench.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/wand_workbench.json) pointing to a static model inheriting `arcane_workbench`; [`TCFocalManipulatorBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCFocalManipulatorBlockEntity.java) handles crafting progression but there is no `FOCAL_MANIPULATOR` BER. The original dynamic scene is not reproduced by the static block model. Check for independent client particles before closing the entire visual-effects path.
+
+### F15 — Mirror, Void Siphon and Hole: three related portal/shader-style visual paths
+
+**Status:** `confirmed_special_renderer_absence`; individual framebuffer effects require visual tests.
+
+| Active object | Legacy rendering | Modern block rendering at the inspected SHA |
+| --- | --- | --- |
+| `mirror` and `mirror_essentia` | Shared ~29 kB `TileMirrorRenderer`; camera-relative portal planes, multi-pass textures, animated transforms, additive blending and apparent tunnel depth | Both active block-entity types lack BER; [`models/block/mirror.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/mirror.json) supplies a fixed frame and thin translucent pane. It does **not** implement the legacy camera-dependent portal shader |
+| `void_siphon` | `TileVoidSiphonRenderer` draws two end-portal-textured quads with specific transforms/blend modes | [Static block model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/void_siphon.json), enabled/disabled variants share the same model, and no BER; the portal-plane pass is absent |
+| `hole` | `TileHoleRenderer` draws an end-portal-textured quad in the appropriate facing orientation | [`TCHoleBlock`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/misc/TCHoleBlock.java) explicitly returns `RenderShape.INVISIBLE` and has no BER; [legacy-format blockstates/hole.json](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/hole.json) refers to `thaumcraft:empty`. No verified replacement for the original visible hole shader |
+
+The blockstate/BER absence is a strong code finding; do not misattribute all effects to missing textures, and check any independent particles or custom world overlay before claiming exhaustive framebuffer behavior.
+
+### F16 — Pattern Crafter: legacy mode indicator and rotating gears are no longer tied to its active model
+
+**Status:** `confirmed_dynamic_visual_state_loss`; complements N13 interaction `subHit` loss.
+
+Legacy [`TilePatternCrafterRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TilePatternCrafterRenderer.java) renders a mode icon from `textures/blocks/pattern_crafter_modes.png` (selected by tile `type`) and two counter-rotating 3D gear elements. Modern [`TCPatternCrafterBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCPatternCrafterBlockEntity.java) still stores/cycles `type` in the 0–9 range. But active [`blockstates/pattern_crafter.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/pattern_crafter.json) varies only by `facing` and points to a fixed [block model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/pattern_crafter.json), while no `PATTERN_CRAFTER` BER is registered. A mode-changing block entity alone does not update the visible mode icon or animate gears.
+
+### F17 — Alembic and tube mechanisms: dynamic overlays/rods require specific parity checks
+
+**Status:** `confirmed_TESR_path_loss`; exact static-model geometry parity and independent visual paths remain open.
+
+- **Alembic:** legacy [`TileAlembicRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileAlembicRenderer.java) draws a label quad, `UtilsFX.drawTag(... tile.aspectFilter)` and a nozzle element. Modern `ALEMBIC` uses a fixed [`alembic.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/alembic.json) inheriting `alembic_normal`, with no BER. A static model cannot directly reproduce per-tile aspect labeling.
+- **Tube Buffer:** legacy [`TileTubeBufferRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileTubeBufferRenderer.java) uses `ModelTubeValve.renderRod()` with direction-dependent rotation. The active modern [`tube_buffer.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/tube_buffer.json) assembles fixed `tube_side` pieces plus `tube_buffer_core` and has no own BER; verify whether this static arrangement matches rod alignment and sub-state geometry.
+- **Tube Oneway:** legacy [`TileTubeOnewayRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileTubeOnewayRenderer.java) similarly rotates a model rod according to tile direction. Modern [`tube_oneway.json`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/tube_oneway.json) is connection-flag multipart JSON without BER. Direction is also tracked in [`TCLegacyTubeBlockEntity`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/blockentity/TCLegacyTubeBlockEntity.java); audit whether `facing` is reflected visually in every state. Missing TESR does not by itself prove the static tube is visually wrong in every pose.
+
+### F18 — Negative controls and stronger audit methodology from this comparison
+
+1. **Recharge Pedestal:** the modern `INFUSION_PEDESTAL` block entity type also includes `RECHARGE_PEDESTAL`; [`TCInfusionPedestalRenderer`](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCInfusionPedestalRenderer.java) does render a rotating stored item. The missing *separate class name* is **not** proof of loss.
+2. **Banner:** original `TileBannerRenderer` had a waving model and aspect emblem, but no active modern banner block/entity registration was found. Track a possible **content coverage gap**, not an active renderer regression.
+3. **Already mapped BERs:** Crucible, Warded Jar, Bellows, Research Table, Golem Builder, Infusion Matrix/Pedestal, Thaumatorium and Tube Valve are present in the modern renderer registry. Their registration does **not** prove legacy-perfect animation/geometry.
+4. **Static asset leftovers:** `models/block/chest.json` and `models/item/hungrychest.json` preserve closer Hungry Chest geometry but are not on the active `hungry_chest` model path. Asset existence/JSON validity tests cannot detect this **active reference mismatch**.
+5. **State-to-renderer closure:** every active block-entity type with a legacy TESR needs a path `active block ID → blockstate/model → block entity → dynamic state → BER or explicitly equivalent alternate renderer → screenshot`. A registration-only audit or PNG existence check will miss Dioptra, Centrifuge, Pattern Crafter and Hungry Chest.
+6. **Numbers are not interchangeable:** 23 legacy TESR registrations, 10 modern BER registrations, 45 modern block-entity types, 13 unpaired TESR registrations, and 12 active unpaired types refer to different denominators. Avoid reporting "13 confirmed broken blocks" without per-case inspection.
+
+**Next investigation queue after F18:** cross-check all twelve active unpaired TESR paths against independent modern particle/render callbacks; then inspect the mapped ten BERs for partial legacy animation loss, validate item vs placed-block render pipelines, and continue the complete active-registry parity ledger. All visual claims remain subject to client verification.
 
 ## Black borders: competing causes
 
