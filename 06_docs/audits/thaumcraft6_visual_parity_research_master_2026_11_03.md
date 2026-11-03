@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F94](#additional-source-history-checks-additional-source-history-checks-f01f94)
+6. [Additional source-history checks: F01–F101](#additional-source-history-checks-additional-source-history-checks-f01f101)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F94
+## Additional source-history checks: F01–F101
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1536,6 +1536,104 @@ The resource count is **11 explicit enabled-selecting files and 5 without** (fou
 **Test gate:** compare legacy/port plant particles by kind, count, lifetime, alpha, and motion; search active BER/network/client FX consumers for each remaining legacy block individually. Keep obsolete legacy IDs out of the actionable defect count.
 
 **Sources:** [TCPlantBlock.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/world/plants/TCPlantBlock.java#L99); [BlockPlantCinderpearl.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/world/plants/BlockPlantCinderpearl.java#L56); [BlockPlantShimmerleaf.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/world/plants/BlockPlantShimmerleaf.java); [BlockPlantVishroom.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/world/plants/BlockPlantVishroom.java); [TCBrainJarBlock.java](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/essentia/TCBrainJarBlock.java#L127).
+
+---
+
+### F95 — Liquid Death lost its legacy purple slimy bubbles and occasional pop audio
+
+**Status:** `confirmed_legacy_mismatch` for inspected effect/audio emission pathways; no matched game capture.
+
+- Original `BlockFluidDeath.randomDisplayTick` has two separate random events: with probability 1/20 per display tick it constructs an `FXSlimyBubble` at a fluid-level-dependent height, purple/magenta RGB and alpha 0.8; with probability 1/50 it plays low-volume `BLOCK_LAVA_POP` at a random location on the surface.
+- Modern `TCLiquidDeathBlock` handles entity slowing and dissolving damage but has no explicit `animateTick`, bubble creator or lava-pop audio. Its `TCFluids` registration constructs stock NeoForge `BaseFlowingFluid.Source` / `.Flowing` with water-like properties; the inspected client extensions and FX/event dispatch expose texture/tint, not a replacement purple-bubble emitter.
+- The inherited vanilla/NeoForge liquid rendering and any default fluid ambient sound are not proof of faithful replication of this custom particle's sprite, color, fluid-level-dependent origin or original pop event. The original liquid's distinctive texture/tint is separately acknowledged in F100.
+
+**Test gate:** compare source and shallow flowing states for bubble height/frequency, purple tint, surface animation and 1/50 random pop; make the sound test distinguish the original lava-pop sample from generic water ambience.
+
+**Sources:** [legacy BlockFluidDeath](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/misc/BlockFluidDeath.java#L51); [port TCLiquidDeathBlock](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/misc/TCLiquidDeathBlock.java#L14); [port TCFluids](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCFluids.java#L22); [port TCClientExtensions](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientExtensions.java#L24); [client events](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientEvents.java).
+
+---
+
+### F96 — Purifying Fluid lost its original upward motes and occasional pop audio
+
+**Status:** `confirmed_legacy_mismatch` for the inspected custom emitter and sound path; runtime capture pending.
+
+- Original `BlockFluidPure.randomDisplayTick` spawns an `FXGeneric` with probability 1/10, at a height derived from the old fluid meta. The white translucent mote uses particle frame 64, final frames 65/66, negative gravity (-0.01), small randomized wandering, and a lifespan of 10–19 ticks. A separate 1/50 chance plays a quiet `BLOCK_LAVA_POP`.
+- Modern `TCPurifyingFluidBlock` manages source consumption, warp-ward application and entity slowing, with no custom client particle/audio path. The registered fluid instances are `BaseFlowingFluid` and their client extension sets the legacy water textures/tint, but does not synthesize the original upward mote.
+- This visual-FX omission and the distinct luminosity-source mismatch in F99 are not equivalent: restoring one would not restore the other.
+
+**Test gate:** record particles above source and multiple flowing depths, validate white alpha/final-frame behavior and independent pop-sound frequency; test glow separately.
+
+**Sources:** [legacy BlockFluidPure](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/misc/BlockFluidPure.java#L58); [port TCPurifyingFluidBlock](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/misc/TCPurifyingFluidBlock.java#L18); [port TCFluids](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCFluids.java#L22); [port TCClientExtensions](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientExtensions.java#L24).
+
+---
+
+### F97 — Flux Goo lost its short magenta surface motes
+
+**Status:** `confirmed_legacy_mismatch` for the inspected local particle-emission path; screenshot difference requires replication.
+
+- Legacy `BlockFluxGoo.randomDisplayTick` generates a bright magenta `FXGeneric` at `y + 0.125 * level`, with 2–4-tick lifespan, alpha 0.25 and atlas frame 64 progressing to 65/66. Its trigger frequency is `(level + 1) / 44` for levels 0–7: **one in 44** at level 0 versus **eight in 44** at level 7.
+- Modern `TCFluxGooBlock` preserves an eight-value level property, decays/pollutes aura via server `randomTick`, and applies entity effects, but has no `animateTick` and no client particle emitter. The inspected `TCClientEvents`/`TCFXDispatcher` do not identify a Flux-Goo-specific substitute.
+- The active visual model is translucent (F101), yet a texture-driven surface is not equivalent to drifting short-lived magic motes.
+
+**Test gate:** capture level 0/3/7 under identical particle settings, checking original emission probability and low/high particle origin independently of liquid surface geometry.
+
+**Sources:** [legacy BlockFluxGoo](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/world/taint/BlockFluxGoo.java#L118); [port TCFluxGooBlock](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/world/taint/TCFluxGooBlock.java#L26); [client events](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientEvents.java); [port TCFXDispatcher](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java).
+
+---
+
+### F98 — Crucible's froth/bubbles have a real client-tick replacement, but boiling ambient pop is separately missing
+
+**Status:** `confirmed_code` **positive control** for three particle families; `confirmed_legacy_mismatch` for the inspected idle audio path.
+
+- Legacy `TileCrucible.update` calls `drawEffects` client-side when water is present. It emits `crucibleFroth` when heat is above 150, four-direction `crucibleFrothDown` sprays when essentia exceeds the 500 cap, and colored `crucibleBubble` approximately one in six ticks when aspects are present.
+- Current `TCCrucibleBlock.getTicker` explicitly selects `TCCrucibleBlockEntity.clientTick` on the client. That method retains the same water/heat/aspect gates and calls `TCFXDispatcher.crucibleFroth`, `.crucibleFrothDown` and `.crucibleBubble`. `TCCrucibleRenderer` separately draws the water surface. Therefore, **absence of a block `animateTick` is not evidence that these three Crucible effects are missing**.
+- However, legacy `BlockCrucible.randomDisplayTick` separately attempts a quiet `BLOCK_LAVA_POP` at one-in-ten rate, provided the tank has fluid and heat is above 150. The modern block has no corresponding `animateTick`, and the client tick contains no audio call. The modern BE's `playBubbleSound()` is associated with crafting/interactions, not an idle random boiling-pop loop. A source search for `LAVA_POP` in the active port identifies Infernal Furnace, not Crucible.
+
+**Test gate:** check that client BE ticking is active and synchronized (water, heat, aspect count), then compare froth/downflow/bubble dynamics and separately test idle boiling audio without item input. Keep `TCSounds.BUBBLE` interaction audio out of the ambient-pop verdict.
+
+**Sources:** [legacy TileCrucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/crafting/TileCrucible.java#L127); [legacy BlockCrucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java#L166); [port TCCrucibleBlock](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java#L58); [port TCCrucibleBlockEntity](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCCrucibleBlockEntity.java#L84).
+
+---
+
+### F99 — Purifying Fluid's original luminosity of five is not configured in the port
+
+**Status:** `confirmed_code` missing configuration with `probable_legacy_mismatch` in emitted light pending a runtime light-level probe.
+
+- Original `ConfigBlocks.FluidPure` explicitly calls `setLuminosity(5)` on the Forge fluid definition.
+- Port `TCFluids.PURIFYING_FLUID_TYPE` uses `waterLikeProperties()` without a light-level setting. The corresponding `TCBlocks.purifyingFluidBlock()` copies water properties and does not call `.lightLevel(state -> 5)`. Neither the tint-bearing `IClientFluidTypeExtensions` nor the transparent surface texture represents a light-emission registration.
+- The source-level **5 versus absent explicit setting** is confirmed. The actual rendered/blockstate light level must be measured on a clean client and server; do not infer a screenshot brightness from the ARGB fluid tint.
+
+**Test gate:** place a purifying-fluid source in an enclosed dark room, read emitted block light using the debug screen or a small probe, compare to the original level 5 and inspect light propagation across flowing levels.
+
+**Sources:** [legacy ConfigBlocks fluid definitions](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/config/ConfigBlocks.java#L448); [port TCFluids](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCFluids.java#L22); [port TCBlocks fluid factories](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java#L846); [port TCClientExtensions](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientExtensions.java#L24).
+
+---
+
+### F100 — Fluid surface texture and tint migration are positive controls despite missing ambient FX
+
+**Status:** `confirmed_code` mapping-level positive control; GPU/atlas-frame visual match not yet proven.
+
+- Legacy `ConfigBlocks.FluidDeath` references `thaumcraft:blocks/animatedglow` for both still and flowing sprites and returns ARGB **-263978855** (`0xF0440099`). Legacy `FluidPure` references vanilla water-still/flow sprites and returns **2013252778** (`0x77FFCCAA`).
+- Modern `TCClientExtensions` maps Liquid Death to `thaumcraft:block/animatedglow` for still/flowing, with the same signed tint integer; it maps Purifying Fluid to `minecraft:block/water_still` and `minecraft:block/water_flow`, preserving the second tint integer. The namespace/path changes are modern resource-location conventions; they are not, by themselves, missing textures.
+- This is **not** evidence that UV flow, alpha blending, atlas animation speed, particle systems, lighting or viscosity are parity-complete. The specific missing custom particle/audio behaviors remain F95/F96, and the light configuration is F99.
+
+**Test gate:** verify that animatedglow is correctly stitched/animated, that flowing textures and tint alpha survive on a live GPU, and compare all depth/underwater camera cases.
+
+**Sources:** [legacy ConfigBlocks fluid definitions](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/config/ConfigBlocks.java#L448); [port TCClientExtensions](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCClientExtensions.java#L24); [port TCFluids](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCFluids.java#L22).
+
+---
+
+### F101 — Flux Goo changed from a Forge fluid model to eight static full-width translucent cuboids
+
+**Status:** `confirmed_code` model-strategy difference; `probable_cause` only for possible hard edges/seams, NOT a demonstrated in-game artifact.
+
+- The legacy `flux_goo` blockstate delegates to the Forge `forge:fluid` model with a `fluid=flux_goo` custom binding. Its flowing-fluid rendering is controlled by that legacy pipeline.
+- The modern active blockstate selects `thaumcraft:block/flux_goo_0` through `_7`. Individual `render_type: minecraft:translucent` models contain a solid 16×16 footprint, six textured faces and a fixed top height: `_0` is 2/16 tall and `_7` is 16/16 tall. `TCFluxGooBlock` reports `RenderShape.MODEL`.
+- This establishes a structural replacement of flow-surface geometry and interpolation by discrete cuboids. Whether that produces visible horizontal seams, inappropriate internal faces or loss of slopes at neighboring unequal levels is **not yet proven**; special culling and context may still mask differences. Do not attribute black outlines (D04/F08) to this without reproduced evidence.
+
+**Test gate:** compare isolated and adjacent Goo at levels 0, 1, 3, 7, including stepped neighboring levels, translucent backfaces, edge occlusion, top-height behavior and actual surface/side UVs; do not conflate missing F97 motes with model geometry.
+
+**Sources:** [legacy flux_goo blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/resources/assets/thaumcraft/blockstates/flux_goo.json); [port flux_goo blockstate](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/flux_goo.json); [level-0 cuboid](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/flux_goo_0.json); [level-7 cuboid](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/flux_goo_7.json); [port TCFluxGooBlock](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/world/taint/TCFluxGooBlock.java#L26).
 
 ---
 
