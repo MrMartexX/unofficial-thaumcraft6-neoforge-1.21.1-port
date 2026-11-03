@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F50](#additional-source-history-checks-f01f50)
+6. [Additional source-history checks: F01–F62](#additional-source-history-checks-f01f62)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F50
+## Additional source-history checks: F01–F62
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -967,6 +967,147 @@ Retain two separate checks: (1) whether those four standalone registry identitie
 The modern tab is an explicit ordered emitter, not an automatic listing of every registered item. Its source comment says registered compatibility placeholders remain visible, yet **none of the 40 `CATALOG_PLACEHOLDER_*` fields in inspected `TCItems.java` are referenced by the current `TCCreativeTabOrder.java`**. A subset of those aliases represent active original catalog features with no functional modern replacement (especially banners), while others may intentionally be hidden aliases. Do **not** equate all 40 placeholders with 40 independent missing gameplay objects.
 
 Next reproducible artifact: a page/row/column ledger of legacy screenshots 1–10, with item namespace ID, subtype metadata, NBT, translated name, model/tint, and the matched modern item plus components. Then capture the actual port tab at the **same GUI scale** with hover tooltip and command-sourced IDs for ambiguous icons. Static evidence above supports specific misses; it **does not justify** calling the entire creative catalog finished.
+
+
+
+### F51 — Full modern item/block JSON-model structure audit: no direct resource-path absence
+
+**Status:** `negative_control` for a missing modern JSON file, JSON parse error, or broken direct internal parent/texture reference as a *universal* explanation; `not_checked` for recursive runtime/model-bakery/texture-appearance parity.
+
+On the pinned snapshot, the modern asset directories contain **533 item-model entries** (**531 JSON** plus two non-JSON assets) and **264 block-model entries** (**253 JSON** plus other resources). Every one of the **531 + 253 JSON** files was fetched and parsed successfully. Every one of the **420 distinct active item identities** explicitly emitted by `TCCreativeTabOrder` has its expected `models/item/<registry-id>.json` file (422 calls with two repeated identities; see F48). For parsed models, every direct `thaumcraft:item/*` or `thaumcraft:block/*` parent target exists in the inspected item/block model directories. Direct nonnested `thaumcraft:item/*` and `thaumcraft:block/*` texture names referenced in the inspected model JSON also exist; the nested item `seals/*` texture directory was separately listed and checked.
+
+**Important scope:** These are **filename/direct-reference** tests. They do not validate model loader execution, resource-pack precedence, complete recursive inheritance or UV correctness, missing dynamic properties, GUI display transform equivalence, `BlockEntityRenderer` paths, tint correctness, optional dependencies, or screenshot results. Missing rendered geometry remains real despite all JSON files existing (e.g. Hungry Chest F11/F61).
+
+A second bounded historical comparison found **157 legacy item-model directory entries** (**155 JSON** and two OBJ/MTL assets). All 157 names exist in the current item-model directory. The 155 JSON originals were fetched and structurally compared against their same-name modern counterparts. Normalize only the routine resource spelling migration `thaumcraft:items/* → thaumcraft:item/*` and the standard generated/handheld namespace; **do not infer identical visuals from a matching basename**. This negative control narrows future model audits toward content, loader behavior and render state, not wholesale file absence.
+
+**Paths:** [modern item models](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/) · [modern block models](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/) · [legacy item models](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/resources/assets/thaumcraft/models/item/) · [visible-item emitter](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCCreativeTabOrder.java).
+
+### F52 — Scribing Tools migrated from the handheld preset to generated-item transforms
+
+**Status:** `confirmed_legacy_mismatch` in item model parent; `requires_client` for measured in-hand impact.
+
+The original [scribing_tools.json](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/resources/assets/thaumcraft/models/item/scribing_tools.json) has `"parent": "item/handheld"`, while [the active modern model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/scribing_tools.json) uses `"parent": "minecraft:item/generated"`. This is **not** a mere namespace conversion: `handheld` and `generated` carry different standard transform presets. The texture name was appropriately migrated from `thaumcraft:items/scribing_tools` to `thaumcraft:item/scribing_tools`; the substantive difference is the preset.
+
+Of the **155 comparable original JSON item models**, this was the **only parent change not explained by ordinary `item/*` → `minecraft:item/*` namespace qualification** in the source-field comparison. Do not extrapolate this to every 420 visible modern item, since many have no one-to-one legacy JSON name.
+
+**Follow-up:** compare first-person, third-person, GUI, fixed and dropped appearances for Scribing Tools under matched client settings; establish whether a deliberate transform override elsewhere compensates for the changed parent.
+
+### F53 — Caster texture-path migration passes a byte-level negative control
+
+**Status:** `negative_control` for the hypothesis that the five changed Caster item-model skin locations introduced different source bitmaps; `requires_client` for final appearance.
+
+Six original/modern same-name model JSON files change the Caster skin from an entity armor texture reference to `thaumcraft:item/caster_basic_model` or `caster_advanced_model`: `caster_basic_model`, `caster_basic_focus_model`, `caster_advanced_model`, `caster_advanced_focus_model`, and the shared `caster_gauntlet` / `caster_gauntlet_focus` parent models. Direct Git blob SHA comparisons confirm that the relocated assets are **byte-identical** to the corresponding legacy armor-skin textures:
+
+| Skin | Legacy entity-armour texture SHA | Modern item texture SHA | Result |
+| --- | --- | --- | --- |
+| Basic Caster | `d4209fe2c8ba8f887d2339b0e54ffa1fea427884` | `d4209fe2c8ba8f887d2339b0e54ffa1fea427884` | Equal |
+| Advanced Caster | `c2da2725b23bfe79f509e7b98877817ed8fa490e` | `c2da2725b23bfe79f509e7b98877817ed8fa490e` | Equal |
+
+This rejects one texture-content explanation for bad Caster visuals, **not** model UV/parent/display defects. The model overrides of `caster_basic` were correctly namespaced to `thaumcraft:focus` and are registered in [TCItemProperties](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCItemProperties.java); likewise `thaumcraft:fill` for jar models and `thaumcraft:type` for Primordial Pearl. These are useful negative controls when distinguishing the independently **missing Grappler predicate** in F29.
+
+**Sources:** [modern basic model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/caster_basic_model.json) · [legacy basic model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/resources/assets/thaumcraft/models/item/caster_basic_model.json) · [modern advanced model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/caster_advanced_model.json).
+
+### F54 — Purifying Fluid Bucket points to a vanilla water-bucket icon; historical reference is inconclusive
+
+**Status:** `confirmed_code` for the modern model reference; `requires_client` / `not_checked` for whether it is a genuine legacy-parity defect.
+
+Original [bucket_pure.json](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/resources/assets/thaumcraft/models/item/bucket_pure.json) requests `thaumcraft:items/bucket_pure`; current [bucket_pure.json](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/bucket_pure.json) requests `minecraft:item/water_bucket`. The original asset directory visible in this repository **also lacks a `bucket_pure.png`**, and the modern item directory lacks it too. Consequently the current substitution is **measurable**, but it is **not safe to infer** that the original game displayed a valid unique icon without inspecting the actual original JAR/runtime resource packs. The port may be compensating for a missing imported resource. Keep this as an evidence-backed unresolved rendering choice.
+
+### F55 — Two banner JSON models retain obsolete first/third-person transform keys
+
+**Status:** `confirmed_code` for old key spelling in resource files; **not currently a visible active-item regression**, because the functional banners are absent (F41).
+
+Among all **531** modern item-model JSON files, only `banner.json` and `banner_crimson_cult.json` use the legacy `display.thirdperson` and `display.firstperson` keys. These were retained when the texture references were migrated to modern paths. The current usable 1.21.1 transform naming uses explicit `firstperson_righthand`, `firstperson_lefthand`, `thirdperson_righthand`, etc. This is a **dormant migration issue** to check when restoring banners, not proof of a present in-game symptom while they are not active entries.
+
+**Sources:** [banner.json](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/banner.json) · [banner_crimson_cult.json](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/banner_crimson_cult.json) · F41.
+
+### F56 — Nine visible Creative entries lack the effective English registry-name translation key
+
+**Status:** `confirmed_code` for the key/registry mismatch; `requires_client` for exact final tooltip presentation and possible resource-pack overrides.
+
+A deterministic join of (a) **420 unique** `TCCreativeTabOrder` item fields, (b) their `TCItems` registry IDs/types (including aliases) and (c) current [en_us.json](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/lang/en_us.json) finds **nine** entries without their normal `item.thaumcraft.<id>` or, for the actual `BlockItem`'s block, `block.thaumcraft.<id>` key. Direct inspection of [TCItems.blockItem()](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCItems.java) confirms these six block items use ordinary `new BlockItem(...)` registration; their actual [block registry IDs](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/registry/TCBlocks.java) match the listed underscored names. No relevant `getDescriptionId` override was found in the 735 inspected mod Java sources.
+
+| Active item ID | Effective expected translation key (absent) | Existing legacy-style alternate key, if any |
+| --- | --- | --- |
+| `vis_battery` | `block.thaumcraft.vis_battery` | `item.thaumcraft.visbattery` |
+| `condenser` | `block.thaumcraft.condenser` | `item.thaumcraft.condenser` |
+| `condenser_lattice` | `block.thaumcraft.condenser_lattice` | `item.thaumcraft.condenserlattice` |
+| `condenser_lattice_dirty` | `block.thaumcraft.condenser_lattice_dirty` | no matching active key |
+| `pattern_crafter` | `block.thaumcraft.pattern_crafter` | `item.thaumcraft.patterncrafter` |
+| `potion_sprayer` | `block.thaumcraft.potion_sprayer` | `item.thaumcraft.potionsprayer` |
+| `grapple_gun` | `item.thaumcraft.grapple_gun` | `item.thaumcraft.grapplegun` |
+| `grapple_gun_tip` | `item.thaumcraft.grapple_gun_tip` | `item.thaumcraft.grappleguntip` |
+| `grapple_gun_spool` | `item.thaumcraft.grapple_gun_spool` | `item.thaumcraft.grapplegunspool` |
+
+The presence of a *similar-looking key* in JSON does not translate the active registry ID. This provides a concrete cause of raw technical names in affected inventory contexts. It is a **separate** issue from Grappler's missing model predicate (F29).
+
+### F57 — Active Java tooltip/GUI translation calls include 23 missing literal keys
+
+**Status:** `confirmed_code` for exact missing keys in current English JSON; `requires_client` for which paths are reachable and visible.
+
+A source-backed static scan fetched all **735** `05_neoforge_port/src/main/java/thaumcraft/**/*.java` files (API, client, common and main entry class). It found **266** `Component.translatable(...)` calls, of which **237** start with a literal; **27** of those literal-start calls concatenate dynamic suffixes, so they are **not** counted as exact keys. Of the **210** exact literal calls, **26 call sites** referencing **23 unique keys** have no entry in `en_us.json`. Examples:
+
+| UI / feature | Exact missing keys in active source |
+| --- | --- |
+| Golem Builder | `gui.golem_builder.craft`, `gui.golem_builder.missing_materials`, `gui.golem_builder.crafting`, `gui.golem_builder.ready` |
+| Research Table / Thaumonomicon | `tc.card.unknown`, `tc.search.more` |
+| Caster / Focus | `tc.caster.no_focus`, `tc.caster.focus`, `tc.focus.vis_cost`, `tc.focus.max_complexity`, `tc.focus.complexity`, `tc.focus_pouch.foci` |
+| Golem tooltip | `golem.rank` |
+| Other equipment | `item.goggles.name`, `item.charm_undying.text`, `item.charge`, `tc.lootbag`, `enchantment.special.sapgreat` |
+| Special content | `tc.potion_sprayer.charges`, `tc.fluxevent.2`, `card.truth.name`, `card.truth.text`, `tile.golem_builder.name` |
+
+Several missing keys **exist in the old `en_us.lang`** but not in modern JSON; others are brand-new modern strings with no legacy key. Source call-site verification must be followed by context-specific in-game checks; not every branch or optional screen is necessarily reachable.
+
+**Representative sources:** [Golem Builder](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCGolemBuilderScreen.java) · [Research Table](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/gui/TCResearchTableScreen.java) · [Focus tooltips](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/ItemFocus.java) · [Grappler tooltip](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/tools/TCGrappleGunItem.java) · [Caster tooltips](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/ItemCaster.java).
+
+### F58 — All 114 original `golem.*` localization entries are missing from the modern JSON
+
+**Status:** `confirmed_code` for complete namespace absence and active lookup construction; `requires_client` for individual UI surfaces.
+
+The legacy [English language file](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/resources/assets/thaumcraft/lang/en_us.lang) contains **114 `golem.*` translation keys** for traits, heads, arms, legs, materials, addons, descriptions, ranks and other golem strings. The current [English JSON](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/lang/en_us.json) contains **zero** keys starting with `golem.`. This is not just an unused old namespace: current [EnumGolemTrait](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/api/golems/EnumGolemTrait.java) and part classes [GolemHead](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/api/golems/parts/GolemHead.java), [GolemArm](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/api/golems/parts/GolemArm.java), [GolemLeg](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/api/golems/parts/GolemLeg.java), [GolemMaterial](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/api/golems/parts/GolemMaterial.java), [GolemAddon](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/api/golems/parts/GolemAddon.java) actively assemble `golem.<part>.<key>` / `golem.<part>.text.<key>` and call `Component.translatable`.
+
+Therefore the modern JSON does not supply names/descriptions to those live lookups. This is highly relevant to the user's technical-name complaint and golem equipment/variant auditing. Do not invent which entire UI panels are visible until the client pathways are exercised.
+
+### F59 — Dynamic translation-prefix scan flags fortress masks and Pattern Crafter modes
+
+**Status:** `confirmed_code` for missing key families; `requires_client` for exact runtime-generated suffix values.
+
+Of **27** translation calls beginning with literal prefixes concatenated with runtime data, `tc.aspect.*`, `research.*`, `tc.research_category.*`, `tc.forbidden.level.*` and `tc.type.*` already have corresponding prefix families in `en_us.json` (this is **not** proof every computed suffix resolves). Two inspected families have **zero** JSON entries:
+
+- [ItemFortressArmor](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/armor/ItemFortressArmor.java) builds `item.fortress_helm.mask.<index>`; the original English `.lang` includes the three mask names `.0`, `.1`, `.2`, but modern JSON has none.
+- [TCPatternCrafterBlock](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCPatternCrafterBlock.java) builds `tc.pattern_crafter.mode.<mode>`; there are no matching modern JSON keys. The legacy `.lang` also lacks this newly introduced family.
+
+This means technical labels may arise even when the item ID's own display-name translation is present. Validate runtime suffix enumeration before counting how many exact labels are missing.
+
+### F60 — Legacy language files are retained as `.lang`, not active 1.21.1 JSON localizations
+
+**Status:** `confirmed_code` for resource-file formats; `confirmed_legacy_mismatch` for supplied locale coverage; excludes external resource packs.
+
+The modern `assets/thaumcraft/lang/` directory contains **only two native JSON localizations**: `en_us.json` and `uk_ua.json`. The original `en_us.lang`, `ru_ru.lang` and other `*.lang` files remain verbatim; the compared legacy and modern `en_us.lang` are **byte-identical** (Git SHA `3083a2a5e01178c1a877b0b4bd0c5e04727b8224`). NeoForge 1.21.1 expects language mappings under `assets/<modid>/lang/<locale>.json` and falls back to US English for keys unavailable in the selected locale ([official NeoForge 1.21.1 language documentation](https://docs.neoforged.net/docs/1.21.1/resources/client/i18n/)).
+
+Therefore the bundled `ru_ru.lang` cannot itself restore Russian-localized item names on a 1.21.1 client, and the incomplete `en_us.json` keys in F56–F59 still matter under fallback. Do not claim *no* Russian text can appear (the base game or separate resource packs may provide some). Treat localization parity as **key-level, locale-level and screen-level** audits rather than a boolean file-existence test.
+
+### F61 — Hungry Chest wooden-cube appearance is directly specified by its active item/block model
+
+**Status:** `confirmed_code` for active mesh and texture assignment; reinforces the missing BER diagnosis in F11; `requires_client` for final animation comparison.
+
+Current [item model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/item/hungry_chest.json) inherits the [block model](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/hungry_chest.json), which explicitly sets both `particle` and `all` to `minecraft:block/oak_planks`. Its principal cuboid runs from `[1, 0, 1]` to `[15, 14, 15]`, with all six visible faces using the same `#all` texture. It is therefore **a non-full-size oak-plank cuboid**, not a visually articulated chest in that model path. This directly explains why the user sees a plank-like block when the client uses that model, while F11 separately established the missing legacy Hungry Chest lid/body block-entity rendering path.
+
+A static model alone does not prove every runtime layer; compare placed-world, inventory item, breaking particles and lid animation separately. Do not mistake this texture choice for a fix to the HUD black-border problem.
+
+### F62 — Remaining checks after the extended model/localization scan
+
+**Status:** `not_checked` for parity completion; **no mod code or auditors changed**.
+
+The above are carefully bounded structural results, **not a claim of 100% visual parity or perfect inventory coverage**. Remaining evidence gates now include:
+
+1. Resolve the exact client runtime Creative stack order (including F41–F50 discrepancies) and recorded tooltip keys with identical GUI scale.
+2. For visual models, verify resolved inherited transforms, `neoforge:obj` loaders, display contexts and GPU/render-type behavior despite all direct JSON references existing.
+3. Reproduce Caster and Scribing Tools first-/third-person appearances, mobile/dynamic model property changes, color handlers and the phantom black contours.
+4. Verify which of the 23 missing static labels and dynamic golem/mask/mode families appear in real active GUI flows; check localization files in all selected languages.
+5. Preserve F29 and F33–F39 outstanding Grappler/HUD/seal causes; complete block, entity, special-equipment and particle parity by active ID.
+
+**Cross-checks:** no reported byte-identical source texture or passing path existence test should be upgraded into a runtime visual pass. The missing-name findings require translation-key checks, not a mere `en_us.json` parse test.
 
 
 ## Black borders: competing causes
