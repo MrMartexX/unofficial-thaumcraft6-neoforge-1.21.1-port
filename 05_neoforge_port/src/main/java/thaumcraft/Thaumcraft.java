@@ -76,6 +76,7 @@ import thaumcraft.common.registry.TCMenus;
 import thaumcraft.common.registry.TCMobEffects;
 import thaumcraft.common.registry.TCRecipes;
 import thaumcraft.common.registry.TCSounds;
+import thaumcraft.common.registry.TCStructures;
 import thaumcraft.common.research.TCKnowledgeCommands;
 import thaumcraft.common.research.TCKnowledgeNetwork;
 import thaumcraft.common.research.TCArcaneRecipeAuditExporter;
@@ -120,6 +121,8 @@ public final class Thaumcraft {
         TCFluids.FLUIDS.register(modEventBus);
         TCBlocks.BLOCKS.register(modEventBus);
         TCFeatures.FEATURES.register(modEventBus);
+        TCStructures.STRUCTURE_TYPES.register(modEventBus);
+        TCStructures.STRUCTURE_PIECES.register(modEventBus);
         TCBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         TCMobEffects.MOB_EFFECTS.register(modEventBus);
         TCEntityTypes.ENTITY_TYPES.register(modEventBus);
@@ -143,6 +146,7 @@ public final class Thaumcraft {
             TCItemProperties.register(modEventBus);
             TCClientExtensions.register(modEventBus);
             TCResearchIconRenderer.register(modEventBus);
+            thaumcraft.client.world.TCMagicalForestAmbientClient.register();
         }
         modEventBus.addListener(TCAuraNetwork::onRegisterPayloadHandlers);
         modEventBus.addListener(TCInfusionNetwork::onRegisterPayloadHandlers);
@@ -159,6 +163,7 @@ public final class Thaumcraft {
         modEventBus.addListener(TCMachineCapabilities::register);
         modContainer.registerConfig(ModConfig.Type.COMMON, TCConfig.SPEC);
         NeoForge.EVENT_BUS.addListener(TCAspectAssignments::onAddReloadListeners);
+        NeoForge.EVENT_BUS.addListener(thaumcraft.common.world.TCWorldgenAudit::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFuelEvents::onFuelBurnTime);
         NeoForge.EVENT_BUS.addListener(TCLiquidDeathEvents::onLivingDrops);
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onAddReloadListeners);

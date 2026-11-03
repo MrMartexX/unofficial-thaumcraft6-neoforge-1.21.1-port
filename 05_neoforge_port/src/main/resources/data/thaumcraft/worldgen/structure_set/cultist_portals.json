@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "thaumcraft:cultist_portal_lesser",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 14357620,
+    "locate_offset": [8, 0, 8],
+    "spacing": 1,
+    "separation": 0,
+    "frequency": 0.00198
+  }
+}

@@ -1,8 +1,6 @@
 {
-  "type": "minecraft:ore",
+  "type": "minecraft:replace_single_block",
   "config": {
-    "size": 2,
-    "discard_chance_on_air_exposure": 0.0,
     "targets": [
       {
         "target": {

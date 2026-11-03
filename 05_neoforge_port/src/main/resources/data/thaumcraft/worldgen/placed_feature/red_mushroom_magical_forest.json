@@ -1,0 +1,20 @@
+{
+  "feature": "thaumcraft:red_mushroom_magical_forest",
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 6
+    },
+    { "type": "minecraft:rarity_filter", "chance": 8 },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:heightmap",
+      "heightmap": "MOTION_BLOCKING"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -6,6 +6,15 @@ Reviewed target module: `05_neoforge_port`
 
 ## November 3 Review Branch
 
+The [worldgen audit and implementation notes](audits/worldgen_2026_11_03.md)
+supersede the earlier blanket ore/surface-amber parity claim below. Persisted mound
+plans, real chunk clipping, client-side heightmap selection, legacy vegetation
+anchor distributions, single-block ores and surface-relative amber now have
+focused tests. Thirty source/data contracts, dedicated natural-mound/reload
+checks and a real night/day client probe are separate evidence, not a complete
+Gate 11 or global statistical/pixel-parity certificate. Existing player worlds
+are not rewritten; saved ghost starts are not automatically regenerated.
+
 The follow-up [seal world renderer](design/seal_world_rendering.md) corrects a
 real omission not covered by the earlier menu-only screenshots: synced seals now
 render while holding ISealDisplayer, with legacy range/opacity, six faces,
@@ -30,7 +39,7 @@ owner-combat, restored Dart projectile/cadence, emotes and through-wall reveal, 
 checks and ten client captures with actual server-menu/cache/ghost-click
 acknowledgements. Unmapped external OreDictionary/state metadata, remaining
 movement/render cases, remote multiplayer and the other parent-audit boundaries
-are still incomplete. Preserve the unrelated uncommitted worldgen work.
+are still incomplete. The worldgen follow-up above does not close those boundaries.
 
 ## October Review Checkpoint & Remediation
 

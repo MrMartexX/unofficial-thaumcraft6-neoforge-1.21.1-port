@@ -1,8 +1,6 @@
 {
-  "type": "minecraft:ore",
+  "type": "thaumcraft:surface_amber_ore",
   "config": {
-    "size": 2,
-    "discard_chance_on_air_exposure": 0.0,
     "targets": [
       {
         "target": {

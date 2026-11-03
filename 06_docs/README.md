@@ -48,6 +48,7 @@ This folder is the main documentation area for the Thaumcraft 6 -> NeoForge 1.21
 - [Arcane crafting design](crafting/arcane_crafting_design.md)
 - [Creative tab order reference](resources/creative_tab_order_reference.md)
 - [Aura design](gameplay/aura_design.md)
+- [Worldgen defects, density policy and evidence](audits/worldgen_2026_11_03.md)
 - [Essentia transport design](gameplay/essentia_transport_design.md)
 
 ## Rendering, assets and visual parity references

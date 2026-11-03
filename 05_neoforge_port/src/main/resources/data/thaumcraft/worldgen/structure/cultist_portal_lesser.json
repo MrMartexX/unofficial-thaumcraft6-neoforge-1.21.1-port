@@ -1,0 +1,6 @@
+{
+  "type": "thaumcraft:cultist_portal_lesser",
+  "biomes": "#minecraft:is_overworld",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

@@ -193,10 +193,15 @@ public class TCSilverwoodTreeGenerator {
             BlockPos target = new BlockPos(x, y, z);
             BlockPos below = target.below();
 
-            if (canWriteBlock(level, target) && canWriteBlock(level, below)
-                    && level.getBlockState(target).isAir()
-                    && (level.getBlockState(below).is(Blocks.GRASS_BLOCK) || level.getBlockState(below).is(Blocks.DIRT))) {
-                level.setBlock(target, TCBlocks.SHIMMERLEAF.get().defaultBlockState(), 3);
+            if (canWriteBlock(level, target) && canWriteBlock(level, below)) {
+                BlockState targetState = level.getBlockState(target);
+                BlockState belowState = level.getBlockState(below);
+                if ((targetState.isAir() || targetState.canBeReplaced())
+                        && level.getFluidState(target).isEmpty()
+                        && level.getFluidState(below).isEmpty()
+                        && (belowState.is(Blocks.GRASS_BLOCK) || belowState.is(Blocks.DIRT) || belowState.is(Blocks.PODZOL) || belowState.is(Blocks.MOSS_BLOCK))) {
+                    level.setBlock(target, TCBlocks.SHIMMERLEAF.get().defaultBlockState(), 3);
+                }
             }
         }
     }
@@ -237,7 +242,6 @@ public class TCSilverwoodTreeGenerator {
                 .setValue(RotatedPillarBlock.AXIS, axis);
     }
 
-    
     private static boolean canWriteBlock(WorldGenLevel level, BlockPos pos) {
         if (level instanceof net.minecraft.server.level.WorldGenRegion region) {
             net.minecraft.world.level.ChunkPos center = region.getCenter();

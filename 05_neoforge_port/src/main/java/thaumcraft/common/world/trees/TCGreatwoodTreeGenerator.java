@@ -402,7 +402,7 @@ public class TCGreatwoodTreeGenerator {
             }
             BlockState state = this.level.getBlockState(pos);
 
-            if (!state.isAir() && !state.is(TCBlocks.LEAVES_GREATWOOD.get())) {
+            if (!state.isAir() && !state.is(TCBlocks.LEAVES_GREATWOOD.get()) && !state.canBeReplaced()) {
                 break;
             }
         }
@@ -472,7 +472,6 @@ public class TCGreatwoodTreeGenerator {
                 .setValue(RotatedPillarBlock.AXIS, axis);
     }
 
-    
     private static boolean isTouchingGreatwood(WorldGenLevel level, BlockPos pos) {
         for (Direction dir : Direction.values()) {
             BlockPos adjacent = pos.relative(dir);

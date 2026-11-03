@@ -61,6 +61,13 @@ neoForge {
     runs {
         client {
             client()
+            def ambientWorld = providers.gradleProperty('tcForestAmbientAuditWorld').orNull
+            if (ambientWorld != null) {
+                if (!ambientWorld.matches('tc_worldgen_ambient_audit_[A-Za-z0-9_-]+')) throw new GradleException('Ambient audit requires a disposable world name')
+                if (!project.file("run/saves/${ambientWorld}/level.dat").isFile()) throw new GradleException('Missing ambient audit fixture')
+                programArguments.addAll('--quickPlaySingleplayer', ambientWorld)
+                systemProperty 'tc.forestAmbientAudit', 'true'
+            }
             def visualWorld = providers.gradleProperty('tcClientVisualAuditWorld').orNull
             if (visualWorld != null) {
                 if (!visualWorld.matches('tc_visual_[A-Za-z0-9_-]+')) throw new GradleException('Visual audit requires a disposable tc_visual_ world name without path components')
@@ -101,6 +108,10 @@ neoForge {
         }
 
         configureEach {
+            if (providers.gradleProperty('tcWorldgenAudit').isPresent()) {
+                systemProperty 'tc.worldgenAudit', providers.gradleProperty('tcWorldgenAudit').get()
+                systemProperty 'tc.worldgenAuditPath', providers.gradleProperty('tcWorldgenAuditPath').getOrElse('worldgen-audit.md')
+            }
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             def aspectDumpEnabled = providers.gradleProperty('tcAspectDump').orNull ?: System.getProperty('tc.aspectDump')
             def aspectDumpPath = providers.gradleProperty('tcAspectDumpPath').orNull ?: System.getProperty('tc.aspectDumpPath')

@@ -37,7 +37,7 @@
     ],
     [
       "minecraft:amethyst_geode",
-      "minecraft:forest_rock"
+      "thaumcraft:magical_forest_rock"
     ],
     [
       "minecraft:monster_room",
@@ -83,15 +83,17 @@
     ],
     [
       "minecraft:glow_lichen",
-      "minecraft:forest_flowers",
       "thaumcraft:trees_magical_forest",
-      "minecraft:flower_default",
-      "minecraft:patch_grass_forest",
+      "thaumcraft:flower_magical_forest",
+      "thaumcraft:patch_grass_magical_forest",
+      "thaumcraft:patch_waterlily_magical_forest",
       "thaumcraft:huge_brown_mushroom",
       "thaumcraft:huge_red_mushroom",
       "thaumcraft:patch_vishroom",
-      "minecraft:brown_mushroom_normal",
-      "minecraft:red_mushroom_normal",
+      "thaumcraft:brown_mushroom_magical_forest",
+      "thaumcraft:red_mushroom_magical_forest",
+      "thaumcraft:brown_mushroom_extra",
+      "thaumcraft:red_mushroom_extra",
       "minecraft:patch_sugar_cane",
       "minecraft:patch_pumpkin"
     ],

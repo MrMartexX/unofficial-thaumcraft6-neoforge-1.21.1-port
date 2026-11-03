@@ -1,20 +1,39 @@
 package thaumcraft.common.world.biome;
 
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Climate;
 import terrablender.api.Regions;
 import thaumcraft.Thaumcraft;
 
+/** Isolates TerraBlender API calls so the mod can still load if TerraBlender is absent. */
 public final class TCTerraBlenderCompat {
-    private TCTerraBlenderCompat() {}
+    private static final int MAGICAL_FOREST_REGION_WEIGHT = 1;
+    private static volatile boolean enabled = false;
+
+    private TCTerraBlenderCompat() {
+    }
 
     public static void registerRegions() {
-        // Legacy Thaumcraft 6 biomeMagicalForestWeight = 5 in WARM and COOL types.
-        // In TerraBlender overworld (default weight = 10), weight 3 provides an authentic,
-        // well-balanced distribution (~1 magical forest per 10-15 temperate forest encounters).
         Regions.register(new TCMagicalForestRegion(
                 ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "overworld_magical_forest"),
-                3
+                MAGICAL_FOREST_REGION_WEIGHT
         ));
-        Thaumcraft.LOGGER.info("Registered Thaumcraft Magical Forest region with TerraBlender (weight: 3).");
+        enabled = true;
+    }
+
+    public static boolean isEnabled() {
+        return enabled;
+    }
+
+    public static Holder<Biome> filterMagicalForest(
+            Climate.ParameterList<Holder<Biome>> parameters,
+            int quartX,
+            int quartY,
+            int quartZ,
+            Climate.Sampler sampler,
+            Holder<Biome> current) {
+        return TCMagicalForestShapeFilter.filterMagicalForest(parameters, quartX, quartY, quartZ, sampler, current);
     }
 }

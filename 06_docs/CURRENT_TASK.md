@@ -10,6 +10,13 @@ individual contract audits pass.
 
 ## Current focus
 
+- Worldgen remediation and evidence: see [the November 3 generation audit](audits/worldgen_2026_11_03.md).
+  Mounds use persisted chunk-clipped plans, forest motes use a client-transmitted
+  heightmap, and vegetation/ore/crystal attempt budgets have explicit legacy checks.
+  Gate 11 is NOT closed: natural-density statistics, exact biome-dictionary
+  translation, portal lifecycle, profiling and cross-mod/visual acceptance remain.
+  Do not silently regenerate existing player chunks or claim old ghost starts were repaired.
+
 - Seal world display was missing despite working menus/cache. The focused
   [world-rendering follow-up](design/seal_world_rendering.md) restores legacy held
   item gates, 16-block fade, face/extrusion transforms, area markers and stop FX.
@@ -35,7 +42,7 @@ individual contract audits pass.
 
 - Follow [the November 3 remediation evidence and remaining acceptance boundaries](audits/remediation_2026_11_03.md).
   The older R01-R17 closure below does not close that later review or certify the
-  currently uncommitted worldgen changes.
+  worldgen's remaining statistical and visual acceptance boundaries.
 - The original 1.12.2 comparison instance has a restored official-launcher profile,
   `Thaumcraft 6 - Legacy reference 1.12.2`, with Java 8 and checksum-verified JEI.
   Use it for the remaining in-world/client visual comparisons, not the 1.20.1 port.

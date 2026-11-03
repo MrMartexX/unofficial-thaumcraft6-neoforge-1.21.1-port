@@ -2,13 +2,17 @@
   "replace": false,
   "values": [
     "#minecraft:is_forest",
+    "#minecraft:is_taiga",
+    "#minecraft:is_savanna",
+    "minecraft:grove",
     "minecraft:plains",
     "minecraft:sunflower_plains",
     "minecraft:meadow",
     "minecraft:savanna",
     "minecraft:swamp",
+    "minecraft:mangrove_swamp",
     {
-      "id": "thaumcraft:legacy_magical_spawn_biomes",
+      "id": "#thaumcraft:legacy_magical_spawn_biomes",
       "required": false
     }
   ]

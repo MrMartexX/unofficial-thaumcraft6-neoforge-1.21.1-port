@@ -1,5 +1,5 @@
 {
-  "feature": "thaumcraft:tree_silverwood",
+  "feature": "thaumcraft:tree_silverwood_canopy",
   "placement": [
     {
       "type": "minecraft:block_predicate_filter",

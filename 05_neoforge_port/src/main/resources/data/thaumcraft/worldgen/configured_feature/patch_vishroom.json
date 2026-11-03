@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:random_patch",
+  "type": "thaumcraft:legacy_vishroom",
   "config": {
     "feature": {
       "feature": {
@@ -21,21 +21,273 @@
             "predicates": [
               {
                 "type": "minecraft:matching_blocks",
-                "blocks": "minecraft:air"
+                "blocks": [
+                  "minecraft:air",
+                  "minecraft:short_grass",
+                  "minecraft:fern"
+                ]
+              },
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  0,
+                  -1,
+                  0
+                ],
+                "blocks": "minecraft:grass_block"
               },
               {
                 "type": "minecraft:would_survive",
                 "state": {
                   "Name": "thaumcraft:vishroom"
                 }
+              },
+              {
+                "type": "minecraft:any_of",
+                "predicates": [
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      -1,
+                      -1,
+                      -1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      -1,
+                      -1,
+                      0
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      -1,
+                      -1,
+                      1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      -1,
+                      0,
+                      -1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      -1,
+                      0,
+                      0
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      -1,
+                      0,
+                      1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      -1,
+                      1,
+                      -1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      -1,
+                      1,
+                      0
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      -1,
+                      1,
+                      1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      0,
+                      -1,
+                      -1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      0,
+                      -1,
+                      0
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      0,
+                      -1,
+                      1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      0,
+                      0,
+                      -1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      0,
+                      0,
+                      1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      0,
+                      1,
+                      -1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      0,
+                      1,
+                      0
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      0,
+                      1,
+                      1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      1,
+                      -1,
+                      -1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      1,
+                      -1,
+                      0
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      1,
+                      -1,
+                      1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      1,
+                      0,
+                      -1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      1,
+                      0,
+                      0
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      1,
+                      0,
+                      1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      1,
+                      1,
+                      -1
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      1,
+                      1,
+                      0
+                    ],
+                    "tag": "minecraft:logs"
+                  },
+                  {
+                    "type": "minecraft:matching_block_tag",
+                    "offset": [
+                      1,
+                      1,
+                      1
+                    ],
+                    "tag": "minecraft:logs"
+                  }
+                ]
               }
             ]
           }
         }
       ]
     },
-    "tries": 32,
-    "xz_spread": 6,
-    "y_spread": 2
+    "tries": 1,
+    "xz_spread": 0,
+    "y_spread": 0
   }
 }

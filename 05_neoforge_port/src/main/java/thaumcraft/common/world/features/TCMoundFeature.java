@@ -3,10 +3,13 @@ package thaumcraft.common.world.features;
 import com.mojang.serialization.Codec;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ChunkPos;
@@ -21,6 +24,8 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -62,16 +67,43 @@ public final class TCMoundFeature extends Feature<NoneFeatureConfiguration> {
         BlockPos origin = context.origin();
         RandomSource random = context.random();
 
+        // Match Legacy ThaumcraftWorldGenerator.java:74-75 (chunkX * 16 + 8 + [-4..4] -> offset 4..12)
+        // so that the 19x19 mound (dx=0..18, dz=0..18) reaches at most offset 30 (<= 31) and never
+        // crosses into chunk center+2 where canWriteBlock would reject 23.4% of attempts.
+        int chunkMinX = SectionPos.sectionToBlockCoord(SectionPos.blockToSectionCoord(origin.getX()));
+        int chunkMinZ = SectionPos.sectionToBlockCoord(SectionPos.blockToSectionCoord(origin.getZ()));
+        int i = chunkMinX + 4 + random.nextInt(9);
+        int k = chunkMinZ + 4 + random.nextInt(9);
+
+        return placeMoundAt(level, random, i, k);
+    }
+
+    public static boolean placeMoundAt(WorldGenLevel level, RandomSource random, int i, int k) {
         byte[] data = getMoundData();
         if (data.length == 0 || data.length % 4 != 0) {
             return false;
         }
 
-        // Validate spawn suitability across 4 corners and center at surface height (origin.getY() + 9)
-        // Offset down by 9 so origin is at surface and chambers are subterranean (matching legacy p = surface.down(9))
-        int i = origin.getX();
-        int j = origin.getY() - 9;
-        int k = origin.getZ();
+        // Legacy passes getPrecipitationHeight(...).down(9), i.e. first-air Y minus 9.
+        int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, i, k);
+        int groundY = surfaceY - 1;
+        if (groundY < level.getLevel().getSeaLevel()
+                || !level.getFluidState(new BlockPos(i, surfaceY, k)).isEmpty()
+                || !level.getFluidState(new BlockPos(i, groundY, k)).isEmpty()) {
+            return false;
+        }
+        int j = surfaceY - 9;
+
+        // Ensure the entire 19x19 bounds are fully writable in the current WorldGenRegion
+        // to prevent partial chunk carving or sharp rectangular slice artifacts along chunk borders.
+        if (!canWriteBlock(level, new BlockPos(i, j - 1, k))
+                || !canWriteBlock(level, new BlockPos(i + 18, j, k))
+                || !canWriteBlock(level, new BlockPos(i, j, k + 18))
+                || !canWriteBlock(level, new BlockPos(i + 18, j, k + 18))
+                || !canWriteBlock(level, new BlockPos(i, j + 15, k))
+                || !canWriteBlock(level, new BlockPos(i + 18, j + 15, k + 18))) {
+            return false;
+        }
 
         if (!locationIsValidSpawn(level, new BlockPos(i + 9, j + 9, k + 9))
                 || !locationIsValidSpawn(level, new BlockPos(i, j + 9, k))
@@ -81,9 +113,26 @@ public final class TCMoundFeature extends Feature<NoneFeatureConfiguration> {
             return false;
         }
 
-        Block loot1 = pickLootContainer(random);
-        Block loot2 = pickLootContainer(random);
-        boolean trapped = random.nextInt(3) == 0;
+        placeSlice(level, new BlockPos(i, j, k), bounds(i, groundY, k), random.nextLong());
+        return true;
+    }
+
+    public static BoundingBox bounds(int x, int groundY, int z) {
+        // Binary dy is stored as dy + 1; actual records cover -1..15 relative to groundY - 8.
+        return new BoundingBox(x, groundY - 9, z, x + 18, groundY + 7, z + 18);
+    }
+
+    /** A committed structure plan must never reroll terrain, position or loot between chunk slices. */
+    public static void placeSlice(WorldGenLevel level, BlockPos base, BoundingBox clip, long seed) {
+        byte[] data = getMoundData();
+        if (data.length == 0 || data.length % 4 != 0) {
+            throw new IllegalStateException("Missing or invalid ancient_mound.bin");
+        }
+        RandomSource choices = RandomSource.create(seed);
+        Block loot1 = pickLootContainer(choices);
+        Block loot2 = pickLootContainer(choices);
+        boolean trapped = choices.nextInt(3) == 0;
+        List<BlockPos> shapePositions = new ArrayList<>();
 
         int recordCount = data.length / 4;
         for (int idx = 0; idx < recordCount; idx++) {
@@ -93,15 +142,28 @@ public final class TCMoundFeature extends Feature<NoneFeatureConfiguration> {
             int dz = data[offset + 2] & 0xFF;
             int palette = data[offset + 3] & 0xFF;
 
-            BlockPos target = new BlockPos(i + dx, j + dy, k + dz);
-            if (!canWriteBlock(level, target)) {
+            BlockPos target = base.offset(dx, dy, dz);
+            if (!clip.isInside(target)) {
                 continue;
             }
-
-            placeMoundBlock(level, random, target, palette, loot1, loot2, trapped, dx, dz);
+            if (!canWriteBlock(level, target)) {
+                throw new IllegalStateException("Mound slice outside writable generation region: " + target);
+            }
+            RandomSource blockRandom = (palette == 17 || palette == 20 || palette == 21)
+                    ? RandomSource.create(seed ^ target.asLong()) : choices;
+            placeMoundBlock(level, blockRandom, target, palette, loot1, loot2, trapped, dx, dz);
+            if (palette == 13 || palette == 14 || (palette >= 6 && palette <= 12)) {
+                shapePositions.add(target);
+            }
         }
-
-        return true;
+        for (BlockPos target : shapePositions) {
+            if (level instanceof WorldGenRegion) {
+                level.getChunk(target).markPosForPostprocessing(target);
+            } else {
+                BlockState state = level.getBlockState(target);
+                level.setBlock(target, Block.updateFromNeighbourShapes(state, level, target), 20);
+            }
+        }
     }
 
     private static void placeMoundBlock(
@@ -116,51 +178,51 @@ public final class TCMoundFeature extends Feature<NoneFeatureConfiguration> {
             int dz
     ) {
         switch (palette) {
-            case 0 -> level.setBlock(target, Blocks.AIR.defaultBlockState(), 3);
-            case 1 -> level.setBlock(target, Blocks.DIRT.defaultBlockState(), 3);
-            case 2 -> level.setBlock(target, Blocks.COBBLESTONE.defaultBlockState(), 3);
-            case 3 -> level.setBlock(target, Blocks.MOSSY_COBBLESTONE.defaultBlockState(), 3);
-            case 4 -> level.setBlock(target, Blocks.GRASS_BLOCK.defaultBlockState(), 3);
-            case 5 -> level.setBlock(target, Blocks.CHISELED_STONE_BRICKS.defaultBlockState(), 3);
+            case 0 -> level.setBlock(target, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+            case 1 -> level.setBlock(target, Blocks.DIRT.defaultBlockState(), Block.UPDATE_CLIENTS);
+            case 2 -> level.setBlock(target, Blocks.COBBLESTONE.defaultBlockState(), Block.UPDATE_CLIENTS);
+            case 3 -> level.setBlock(target, Blocks.MOSSY_COBBLESTONE.defaultBlockState(), Block.UPDATE_CLIENTS);
+            case 4 -> level.setBlock(target, Blocks.GRASS_BLOCK.defaultBlockState(), Block.UPDATE_CLIENTS);
+            case 5 -> level.setBlock(target, Blocks.CHISELED_STONE_BRICKS.defaultBlockState(), Block.UPDATE_CLIENTS);
             case 6 -> level.setBlock(target, Blocks.COBBLESTONE_STAIRS.defaultBlockState()
-                    .setValue(StairBlock.FACING, Direction.EAST).setValue(StairBlock.HALF, Half.BOTTOM), 3);
+                    .setValue(StairBlock.FACING, Direction.EAST).setValue(StairBlock.HALF, Half.BOTTOM), Block.UPDATE_CLIENTS);
             case 7 -> level.setBlock(target, Blocks.COBBLESTONE_STAIRS.defaultBlockState()
-                    .setValue(StairBlock.FACING, Direction.WEST).setValue(StairBlock.HALF, Half.BOTTOM), 3);
+                    .setValue(StairBlock.FACING, Direction.WEST).setValue(StairBlock.HALF, Half.BOTTOM), Block.UPDATE_CLIENTS);
             case 8 -> level.setBlock(target, Blocks.COBBLESTONE_STAIRS.defaultBlockState()
-                    .setValue(StairBlock.FACING, Direction.SOUTH).setValue(StairBlock.HALF, Half.BOTTOM), 3);
+                    .setValue(StairBlock.FACING, Direction.SOUTH).setValue(StairBlock.HALF, Half.BOTTOM), Block.UPDATE_CLIENTS);
             case 9 -> level.setBlock(target, Blocks.COBBLESTONE_STAIRS.defaultBlockState()
-                    .setValue(StairBlock.FACING, Direction.EAST).setValue(StairBlock.HALF, Half.TOP), 3);
+                    .setValue(StairBlock.FACING, Direction.EAST).setValue(StairBlock.HALF, Half.TOP), Block.UPDATE_CLIENTS);
             case 10 -> level.setBlock(target, Blocks.COBBLESTONE_STAIRS.defaultBlockState()
-                    .setValue(StairBlock.FACING, Direction.WEST).setValue(StairBlock.HALF, Half.TOP), 3);
+                    .setValue(StairBlock.FACING, Direction.WEST).setValue(StairBlock.HALF, Half.TOP), Block.UPDATE_CLIENTS);
             case 11 -> level.setBlock(target, Blocks.COBBLESTONE_STAIRS.defaultBlockState()
-                    .setValue(StairBlock.FACING, Direction.SOUTH).setValue(StairBlock.HALF, Half.TOP), 3);
+                    .setValue(StairBlock.FACING, Direction.SOUTH).setValue(StairBlock.HALF, Half.TOP), Block.UPDATE_CLIENTS);
             case 12 -> level.setBlock(target, Blocks.COBBLESTONE_STAIRS.defaultBlockState()
-                    .setValue(StairBlock.FACING, Direction.NORTH).setValue(StairBlock.HALF, Half.TOP), 3);
-            case 13 -> level.setBlock(target, Blocks.IRON_BARS.defaultBlockState(), 3);
+                    .setValue(StairBlock.FACING, Direction.NORTH).setValue(StairBlock.HALF, Half.TOP), Block.UPDATE_CLIENTS);
+            case 13 -> level.setBlock(target, Blocks.IRON_BARS.defaultBlockState(), Block.UPDATE_CLIENTS);
             case 14 -> level.setBlock(target, Blocks.LADDER.defaultBlockState()
-                    .setValue(LadderBlock.FACING, Direction.EAST), 3);
-            case 15 -> level.setBlock(target, Blocks.SHORT_GRASS.defaultBlockState(), 3);
+                    .setValue(LadderBlock.FACING, Direction.EAST), Block.UPDATE_CLIENTS);
+            case 15 -> level.setBlock(target, Blocks.SHORT_GRASS.defaultBlockState(), Block.UPDATE_CLIENTS);
             case 16 -> {
                 if (trapped) {
-                    level.setBlock(target, Blocks.TNT.defaultBlockState(), 3);
+                    level.setBlock(target, Blocks.TNT.defaultBlockState(), Block.UPDATE_CLIENTS);
                 } else {
-                    level.setBlock(target, Blocks.COBBLESTONE.defaultBlockState(), 3);
+                    level.setBlock(target, Blocks.COBBLESTONE.defaultBlockState(), Block.UPDATE_CLIENTS);
                 }
             }
             case 17 -> {
-                level.setBlock(target, Blocks.SPAWNER.defaultBlockState(), 3);
+                level.setBlock(target, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_CLIENTS);
                 BlockEntity be = level.getBlockEntity(target);
                 if (be instanceof SpawnerBlockEntity spawner) {
                     EntityType<?> mobType = (dx == 4 && dz == 4) ? EntityType.SKELETON : EntityType.ZOMBIE;
-                    spawner.setEntityId(mobType, level.getRandom());
+                    spawner.setEntityId(mobType, random);
                 }
             }
-            case 18 -> level.setBlock(target, loot1.defaultBlockState(), 3);
-            case 19 -> level.setBlock(target, loot2.defaultBlockState(), 3);
+            case 18 -> level.setBlock(target, loot1.defaultBlockState(), Block.UPDATE_CLIENTS);
+            case 19 -> level.setBlock(target, loot2.defaultBlockState(), Block.UPDATE_CLIENTS);
             case 20, 21 -> {
                 BlockState chestState = (trapped ? Blocks.TRAPPED_CHEST : Blocks.CHEST).defaultBlockState()
                         .setValue(ChestBlock.FACING, Direction.WEST);
-                level.setBlock(target, chestState, 3);
+                level.setBlock(target, chestState, Block.UPDATE_CLIENTS);
                 BlockEntity be = level.getBlockEntity(target);
                 if (be instanceof RandomizableContainerBlockEntity chest) {
                     chest.setLootTable(BuiltInLootTables.SIMPLE_DUNGEON, random.nextLong());
@@ -190,7 +252,7 @@ public final class TCMoundFeature extends Feature<NoneFeatureConfiguration> {
         }
 
         int distanceToAir = 0;
-        while (!level.getBlockState(pos.above(distanceToAir)).isAir() && distanceToAir < 3) {
+        while (!isAirOrReplaceablePlant(level.getBlockState(pos.above(distanceToAir))) && distanceToAir < 3) {
             distanceToAir++;
         }
         if (distanceToAir > 2) {
@@ -201,7 +263,7 @@ public final class TCMoundFeature extends Feature<NoneFeatureConfiguration> {
         BlockState blockState = level.getBlockState(pos2);
         BlockState blockBelow = level.getBlockState(pos2.below());
 
-        if (!level.getBlockState(pos2.above()).isAir()) {
+        if (!isAirOrReplaceablePlant(level.getBlockState(pos2.above()))) {
             return false;
         }
 
@@ -209,18 +271,34 @@ public final class TCMoundFeature extends Feature<NoneFeatureConfiguration> {
             return true;
         }
 
-        return (blockState.is(Blocks.SNOW) || blockState.is(Blocks.SHORT_GRASS))
+        return (blockState.is(Blocks.SNOW) || isAirOrReplaceablePlant(blockState))
                 && isValidSpawnBlock(blockBelow);
     }
 
-    private static boolean isValidSpawnBlock(BlockState state) {
+    private static boolean isAirOrReplaceablePlant(BlockState state) {
+        return (state.isAir()
+                || state.canBeReplaced()
+                || state.is(BlockTags.FLOWERS)
+                || state.is(BlockTags.REPLACEABLE_BY_TREES))
+                && state.getFluidState().isEmpty();
+    }
+
+    public static boolean isValidSpawnBlock(BlockState state) {
         return state.is(Blocks.STONE)
                 || state.is(Blocks.GRASS_BLOCK)
-                || state.is(Blocks.DIRT);
+                || state.is(Blocks.DIRT)
+                || state.is(Blocks.COARSE_DIRT)
+                || state.is(Blocks.ROOTED_DIRT)
+                || state.is(Blocks.PODZOL)
+                || state.is(Blocks.MOSS_BLOCK);
     }
 
     private static boolean canWriteBlock(WorldGenLevel level, BlockPos pos) {
+        if (level.isOutsideBuildHeight(pos)) return false;
         if (level instanceof WorldGenRegion region) {
+            if (!region.ensureCanWrite(pos)) {
+                return false;
+            }
             ChunkPos center = region.getCenter();
             int chunkX = SectionPos.blockToSectionCoord(pos.getX());
             int chunkZ = SectionPos.blockToSectionCoord(pos.getZ());
