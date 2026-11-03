@@ -17,7 +17,7 @@ The **reader-facing report is in English**. The two original Russian research re
 3. [Initial findings: D01–D13](#initial-findings-d01d13)
 4. [Recovered first-pass details: H01–H10](#recovered-first-pass-details-h01h10)
 5. [Follow-up investigation: N01–N16](#follow-up-investigation-n01n16)
-6. [Additional source-history checks: F01–F114](#additional-source-history-checks-f01f114)
+6. [Additional source-history checks: F01–F120](#additional-source-history-checks-f01f120)
 7. [Black borders: competing causes](#black-borders-competing-causes)
 8. [What remains before completion](#what-remains-before-completion)
 9. [Provenance and source archive](#provenance-and-source-archive)
@@ -302,7 +302,7 @@ These are **behavior differences**, not six automatically proven bugs. The port 
 [Legacy Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/blocks/crafting/BlockCrucible.java) · [modern Crucible](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/blocks/crafting/TCCrucibleBlock.java).
 
 
-## Additional source-history checks: F01–F114
+## Additional source-history checks: F01–F120
 
 These findings were collected after the N16 checkpoint, including commit-level research into the earlier Research Table border fix. They supplement, rather than erase, the older D/N observations.
 
@@ -1818,6 +1818,92 @@ The resource count is **11 explicit enabled-selecting files and 5 without** (fou
 **Test gate:** in the same effect-rich scene, record active particle counts and churn with settings All/Decreased/Minimal and client FPS above/below 30.
 
 **Sources:** [legacy particle limit](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L216); [legacy global particle tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/ParticleEngine.java#L249); [modern TCLegacyParticleEngine](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L190); [modern clear/layer arrays](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/fx/legacy/TCLegacyParticleEngine.java#L65).
+
+---
+
+
+### F115 — Active call-site audit separates live visual behavior from legacy-named helper methods
+
+**Status:** `confirmed_code` scoped active-path inventory; not a proof of global unused-code elimination.
+
+- The modern `TCFXDispatcher` is a helper library, not a registry that automatically renders every effect it declares. A method's implementation or a parity audit's call is not evidence that an in-game producer invokes it. For example, `drawVentParticles`, `drawInfusionPedestalParticles`, and `essentiaTrailFx` have no non-dispatcher production caller in the searched main-branch code paths. The older Smelter vent and pedestal gaps already have independent evidence (F89, F104).
+- Concrete active chains **do** exist: `TCWispEntity.tick → drawWispParticles`; `TCAlumentumEntity.tick` / `TCCausalityCollapserEntity.tick → drawAlumentum + drawAlumentumGenericTrail`; `TCFocusCloudEntity.tick → drawFocusCloudParticle + drawFluxFocusEffectParticle`; `TCCrucibleBlockEntity → crucibleBubble`; `TCInfusionClientEffects → drawSimpleSparkle`; and `ItemThaumometer.use → TCThaumometerClientEffects.onUse → blockRunes`. The Thaumometer also invokes `scanHighlight` while held (F120).
+- Hence a blanket conclusion like “all moved dispatcher FX are dead” is contradicted by active entity and item sources. The significant parity questions concern *what* active calls emit and *which original producers disappeared*, not mere method presence.
+
+**Test gate:** use in-client tracing to count emissions by specific source and renderer under representative scenarios, distinguishing client events, packets, BE tick paths and direct item use.
+
+**Sources:** [modern dispatcher](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java#L1); [modern Wisp](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCWispEntity.java#L124); [modern Alumentum](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCAlumentumEntity.java#L90); [modern Focus Cloud](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFocusCloudEntity.java#L355); [Thaumometer item use](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/tools/ItemThaumometer.java#L29).
+
+---
+
+### F116 — Alumentum and Causality Collapser trails emit an extra vanilla FLAME over both legacy particle families
+
+**Status:** `confirmed_legacy_mismatch` in emission calls; the net visible brightness/density must be checked in-game.
+
+- Original `EntityAlumentum.onUpdate` and `EntityCausalityCollapser.onUpdate` each perform **three** per-tick samples, emitting **one `drawAlumentum` particle and one white `drawGenericParticles`** particle per sample. The generic uses sprite range beginning at **448**, eight frames, eight-tick age, layer 1, scale 0.3 and alpha 0.7; neither original class adds a Minecraft flame particle in the loop.
+- Both modern entities retain three `drawAlumentum` samples and reproduce the generic particle through `drawAlumentumGenericTrail`, with its matching sprite/frame/layer/alpha configuration. But **between these two preserved calls each modern sample also invokes `level().addParticle(ParticleTypes.FLAME, …)`**. Thus a vanilla flame is added alongside both original families, **three additional vanilla particles per entity tick** during the client-side flight trail.
+- This is an additive visual difference, not a replacement or disappearance of the original trail. Do not “fix” it by removing either original custom particle. Compare pixel coverage, luminance and particle counts for both projectiles before deciding whether the vanilla overlay is intentional.
+
+**Test gate:** record side-by-side original/port Alumentum and Causality Collapser in-flight captures; separately count `FLAME` and legacy custom particles for five moving ticks.
+
+**Sources:** [legacy Alumentum](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityAlumentum.java#L28); [legacy Collapser](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityCausalityCollapser.java#L32); [modern Alumentum](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCAlumentumEntity.java#L90); [modern Collapser](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCCausalityCollapserEntity.java#L108); [generic trail adapter](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java#L248).
+
+---
+
+### F117 — Player-cast focus clouds render Flux-specific motes even for other focus-effect nodes
+
+**Status:** `confirmed_legacy_mismatch` for the general CLOUD casting path; Flux-only rift clouds are a separate compatible subset.
+
+- Original `EntityFocusCloud` holds its `FocusPackage`; on the client it selects a random member from `focusPackage.getFocusEffects()` on each sample, colors `drawFocusCloudParticle` by **that effect's own element color**, then calls **`eff.renderParticleFX(…)`**. Mixed-effect clouds can therefore display multiple corresponding element colors and effect-specific particle types.
+- The port's general `TCFocusCastExecutor` **does** spawn `TCFocusCloudEntity` for player CLOUD spells and carries an encoded `remainingNodes` payload and a package-level color. But `TCFocusCloudEntity.tickClientParticles` always pairs its generic cloud particle, tinted with one synchronized `EFFECT_COLOR`, with **`drawFluxFocusEffectParticle`** regardless of the spell nodes. The client particle loop does not read the effect list or choose effect-specific renderers. `effectKey` is initialized to `thaumcraft.FLUX` and is not changed by the general constructor.
+- This is not merely a potential missing future feature: the audit's Frost cloud example and the active general CLOUD casting branch establish non-Flux configurations. The rift event's originally Flux-based cloud can still reasonably use Flux particles; that exception does not establish correctness for a Frost, Fire or mixed CLOUD spell.
+- A parity solution needs an explicit **client-visible effect descriptor** (or another semantically equivalent source) and effect-specific render dispatch. Keep server-authoritative execution of `remainingNodes` separate from cosmetic client selection; never rely on server-only fields being visible on the client.
+
+**Test gate:** compare cast CLOUD+FLUX, CLOUD+FROST, CLOUD+FIRE and mixed-effect CLOUD under stable camera/light; verify per-sample colors, effect-specific emitters and actual client synchronization.
+
+**Sources:** [original Focus Cloud effect sampling](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityFocusCloud.java#L143); [modern generic Cloud construction](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusCastExecutor.java#L167); [modern Focus Cloud constructors/data](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFocusCloudEntity.java#L61); [modern unconditional Flux FX](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFocusCloudEntity.java#L355); [Frost cloud validation fixture](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/casters/TCFocusMediumEffectParityAudit.java#L118).
+
+---
+
+### F118 — Wisp's continuous aspect-colored particle emission is wired to the legacy sprite path
+
+**Status:** `confirmed_code` positive control for ambient Wisp trail; no claim of total entity visual parity.
+
+- Original `EntityWisp.onUpdate` rolls `world.rand.nextBoolean()` client-side and, when an aspect exists, draws one `drawWispParticles` at the same ±0.7 randomized position with color `Aspect.getAspect(getType()).getColor()`, zero velocity and zero delay.
+- Modern `TCWispEntity.tick` retains the 50%-chance, aspect lookup, color, position formula, zero velocity and zero-delay dispatcher call. Modern `TCFXDispatcher.drawWispParticles` also retains sprite **264**, eight frames, grid **64**, loop flag, 10–14-tick age, start alpha **0.5**, wind and random-movement magnitude from the legacy dispatcher.
+- This active, matched trace is a useful control against treating the whole modern Wisp particle implementation as absent. Spawn/death bursts are **separate** original FX events (F119).
+
+**Test gate:** inspect Wisp continuously for one minute, comparing count/color/scale of ambient motes across a selection of aspect types.
+
+**Sources:** [original Wisp tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/monster/EntityWisp.java#L92); [legacy Wisp dispatcher](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java#L976); [modern Wisp tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCWispEntity.java#L124); [modern dispatcher](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java#L154).
+
+---
+
+### F119 — Wisp's birth and death bursts have no counterpart in its modern entity lifecycle
+
+**Status:** `confirmed_code` entity-level omission; requires client to rule out a separate external death/spawn effect.
+
+- Original `EntityWisp.onUpdate` emits `FXDispatcher.burst(x,y,z,10.0F)` during the initial one-tick appearance; `onDeath` emits a smaller `burst(x,y+0.45,z,1.0F)`. These are distinct from the per-tick aspect-colored particles preserved in F118.
+- The modern `TCWispEntity` has a client `tick` path for ambient motes but **no birth-burst condition**, `die`/death-particle override, or `burst` call. Its normal death sound and drop handling are not replacements for that legacy client visual. No separate Wisp-specific burst chain has yet been verified, so mark an entity-level omission rather than claiming an exhaustive global absence.
+- Because `FXDispatcher.burst` is historically a composite effect, parity should compare sprite count, size and timing, not substitute arbitrary vanilla death-smoke without an explicit design decision.
+
+**Test gate:** spawn a Wisp and kill one in both versions at matching camera distance; observe initial tick and death frame, and trace entity event handling before implementation.
+
+**Sources:** [legacy Wisp death and first tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/monster/EntityWisp.java#L85); [modern entity client tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCWispEntity.java#L124); [modern sound/death loot methods](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/entities/TCWispEntity.java#L175).
+
+---
+
+### F120 — Thaumometer highlights and scan-use runes are active positive controls, with a scoped entity Y offset
+
+**Status:** `confirmed_code` active source-backed visual path, with one coordinate mismatch; actual sprite appearance still requires client screenshots.
+
+- The original `ItemThaumometer` performs held-client highlights every **five ticks** on still-scannable entities and blocks, and right-click `drawFX` emits **ten** `blockRunes` per entity or block scan. The modern `TCThaumometerClientEffects.onClientTick` likewise gates to every fifth tick, invokes `TCFXDispatcher.scanHighlight` for unknown-scannable targets, and its `onUse` emits ten `blockRunes`; `ItemThaumometer.use` directly invokes this client method. Thus neither helper should be classified unused.
+- The original entity-use rune anchor is `target.posY + target.getEyeHeight()/2`; modern uses `target.getY() + target.getBbHeight()/2`. Those values differ for entities whose eye height differs from total bounding-box height, shifting runes vertically on some scan targets. The block-use anchor still adds **0.25** to Y, and both paths preserve the ten-sample pattern.
+- This is a precise local spatial mismatch amid otherwise intact source-level feature wiring. Avoid extending that result to scanning progression, texture atlas parity, or matching the full item animation.
+
+**Test gate:** hold the Thaumometer over unscanned mob/block to verify periodic outline, then scan entities with significantly different eye-height-to-bounds ratios; compare rune center Y, count and colors.
+
+**Sources:** [legacy Thaumometer highlight and scan-use FX](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/tools/ItemThaumometer.java#L56); [legacy drawFX placement](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/items/tools/ItemThaumometer.java#L103); [modern highlight tick](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCThaumometerClientEffects.java#L68); [modern rune positions](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/client/TCThaumometerClientEffects.java#L101); [modern active item use](https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/72eaac17a1e1c0c51b27cb151ef7f244944c89d5/05_neoforge_port/src/main/java/thaumcraft/common/items/tools/ItemThaumometer.java#L29).
 
 ---
 
