@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Thaumcraft Visual A/B source-derived state candidates",
+  "type": "object",
+  "required": ["schema", "version", "source", "status", "sessionGroups", "scenes"],
+  "properties": {
+    "schema": {"const": "tc6-visual-ab-scene-candidates/1"},
+    "version": {"type": "string"},
+    "source": {"type": "object", "required": ["groupCatalogVersion", "researchBaselineSha"]},
+    "status": {"const": "SOURCE_DERIVED_RECIPE_INCOMPLETE_CLIENT_NOT_RUN"},
+    "sessionGroups": {"type": "object"},
+    "scenes": {"type": "array", "minItems": 43, "items": {"$ref": "#/$defs/scene"}}
+  },
+  "$defs": {
+    "setup": {
+      "type": "object",
+      "required": ["status", "verifiedInClient", "commands"],
+      "properties": {
+        "status": {"enum": ["MANUAL_RECIPE_REQUIRED", "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED"]},
+        "verifiedInClient": {"const": false},
+        "commands": {"type": "array"}
+      }
+    },
+    "scene": {
+      "type": "object",
+      "required": ["id", "groupId", "findingIds", "title", "state", "view", "capture", "setup", "stateStatus", "clientVerification"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^G(0[0-9]|1[0-2])\\.[A-Za-z0-9-]+\\.[A-Z0-9_]+\\.[A-Z0-9_]+$"},
+        "groupId": {"type": "string", "pattern": "^G(0[0-9]|1[0-2])$"},
+        "findingIds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "title": {"type": "string", "minLength": 1},
+        "state": {"type": "string"},
+        "view": {"type": "string"},
+        "capture": {
+          "type": "object",
+          "required": ["screenshots", "video", "logs"],
+          "properties": {"screenshots": {"type": "integer", "minimum": 0}, "video": {"type": "boolean"}, "logs": {"type": "boolean"}}
+        },
+        "setup": {
+          "type": "object",
+          "required": ["legacy", "modern"],
+          "properties": {"legacy": {"$ref": "#/$defs/setup"}, "modern": {"$ref": "#/$defs/setup"}}
+        },
+        "stateStatus": {"enum": ["CANDIDATE_NEEDS_DECOMPOSITION", "PILOT_RECIPE_DRAFT"]},
+        "clientVerification": {"const": "NOT_RUN"}
+      }
+    }
+  }
+}
