@@ -1,0 +1,349 @@
+{
+  "schema": "tc6-visual-ab-scene-catalog/1",
+  "catalogVersion": "v0-import-2026-11-04",
+  "source": {
+    "repo": "MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port",
+    "findingsPr": 11,
+    "findingsPrHead": "66d239663355bd433f960b48540ae6fd8d3f1603",
+    "researchBaselineSha": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+    "researchMasterPr": 10,
+    "researchMasterHead": "a1f39e81cd83ef349b4cf7b4a45d6766942a06a9",
+    "sourceSchema": "visual-v0-consolidated-finding-register/1"
+  },
+  "scope": {
+    "classification": "SOURCE_ONLY_NOT_CLIENT_VERIFIED",
+    "findingCount": 37,
+    "groupCount": 13,
+    "warning": "Group-level catalog, not validated spawn commands or complete state-level scenes. F01-F136 additional investigations require separate mapping review."
+  },
+  "findingIds": [
+    "GM-01",
+    "MUV-001",
+    "MUV-002",
+    "MUV-003",
+    "MUV-004",
+    "MUV-005",
+    "MUV-006",
+    "MUV-007",
+    "MUV-008",
+    "PV-01",
+    "PV-02",
+    "PV-03",
+    "PV-04",
+    "V0-MCH-01",
+    "V0-MCH-02",
+    "V0-MCH-03",
+    "V0-MCH-04",
+    "V0-MCH-05",
+    "V0-MCH-06",
+    "V0-MCH-07",
+    "V0-MCH-08",
+    "V0ER-focusmine",
+    "V0ER-golem_dart",
+    "V0ER-grapple",
+    "V0ER-mind_spider",
+    "V0FX-01",
+    "V0FX-02",
+    "V0FX-03",
+    "V0FX-04",
+    "V0FX-05",
+    "V0FX-06",
+    "V0FX-07",
+    "V0FX-08",
+    "V0GUI-logistics",
+    "V0GUI-potion_sprayer",
+    "V0GUI-seal",
+    "V0GUI-spa"
+  ],
+  "groups": [
+    {
+      "id": "G00",
+      "title": "Client environment and resource reload",
+      "researchFindingIds": [
+        "W-04",
+        "W-05"
+      ],
+      "prerequisites": "Clean 1.21.1 NeoForge with current port at exact commit; record mod list, Java, shaders/CTM, resource-pack order, resolution, FOV and gamma; F3+T resource reload.",
+      "requiredObservations": [
+        "client latest.log and reload warnings",
+        "manifest of mod/resource-pack versions"
+      ],
+      "sourceAcceptanceNote": "No errors for active models, OBJ loader, animation metadata; unresolved legacy syntax reported separately.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G01",
+      "title": "Portal and device shaders",
+      "researchFindingIds": [
+        "PV-01",
+        "PV-02",
+        "PV-03",
+        "GM-01"
+      ],
+      "prerequisites": "Side-by-side recreated scenes in legacy 1.12.2 and modern 1.21.1 at matched positions, time, light and viewing angle.",
+      "requiredObservations": [
+        "Hole open faces/sparkles from all four sides",
+        "Mirror and Essentia Mirror linked near/linked far/unlinked",
+        "Siphon redstone off/on at both shader heights",
+        "Hole initial tunnel 3x3 footprint"
+      ],
+      "sourceAcceptanceNote": "Record exact shader/tunnel/state differences; GM-01 tagged gameplay, never silently fixed in V0.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G02",
+      "title": "Arcane Bore mining beam",
+      "researchFindingIds": [
+        "V0FX-01"
+      ],
+      "prerequisites": "Place operational Arcane Bore with mineable target and active digging sequence.",
+      "requiredObservations": [
+        "first mining tick, mid-beam, end beam",
+        "beam color/width/endpoints and break FX"
+      ],
+      "sourceAcceptanceNote": "Compare legacy beam1 textured quads and updated start/end points; no assumption from static device render.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G03",
+      "title": "Flux Rift depth and motion",
+      "researchFindingIds": [
+        "PV-04"
+      ],
+      "prerequisites": "Two stable rifts matched in size/stability, record goggles on/off and unstable/steady animation.",
+      "requiredObservations": [
+        "4 angle views",
+        "5–10s video of wobble, glow, depth and transparency"
+      ],
+      "sourceAcceptanceNote": "Compare polycone passes, light and goggles depth; determine whether seed updates rebuild geometry.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G04",
+      "title": "Four invisible-entity geometry gaps",
+      "researchFindingIds": [
+        "V0ER-focusmine",
+        "V0ER-golem_dart",
+        "V0ER-grapple",
+        "V0ER-mind_spider"
+      ],
+      "prerequisites": "Use approved test harness or known-valid registry IDs to trigger focusmine, golem_dart, grapple and mind_spider; do not invent summon commands.",
+      "requiredObservations": [
+        "focusmine color/pulse, dart 3D mesh, grapple head and moving rope",
+        "mind_spider translucent model from eligible/ineligible viewers"
+      ],
+      "sourceAcceptanceNote": "Record visibility and motion against legacy; separate from projectile mechanics.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G05",
+      "title": "Special armor silhouettes and UV",
+      "researchFindingIds": [
+        "MUV-003"
+      ],
+      "prerequisites": "Same player skin/FOV, compare 1.0/0.5 piece sets; test mask variants, goggles states, crouch/walk/idle.",
+      "requiredObservations": [
+        "Fortress, Cultist Plate/Knight, Cultist Leader, Cultist Robe and Void Robe front/back/side",
+        "UV distortion and 128x64 atlas mapping video"
+      ],
+      "sourceAcceptanceNote": "Classify missing custom geometry, mask/ornament motion and texture region alignment.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G06",
+      "title": "Stairs geometry and face-texture continuity",
+      "researchFindingIds": [
+        "MUV-001",
+        "MUV-002"
+      ],
+      "prerequisites": "Build straight, inner and outer rotations for ancient and arcane stairs in matching light.",
+      "requiredObservations": [
+        "same-frame adjacent stairs and inventory models",
+        "top/side/bottom image details"
+      ],
+      "sourceAcceptanceNote": "Verify distinct source PNG selection, tile seams and shape consistency.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G07",
+      "title": "GUI and HUD interaction sweep",
+      "researchFindingIds": [
+        "V0GUI-spa",
+        "V0GUI-potion_sprayer",
+        "V0GUI-logistics",
+        "V0GUI-seal",
+        "W-03"
+      ],
+      "prerequisites": "Prepare Arcane Spa, Potion Sprayer, Logistics, Golem Seal and compatible casting/focus gear.",
+      "requiredObservations": [
+        "right-click and server-authoritative interaction outcomes",
+        "HUD both hands, multiple GUI scales, focus radial selector, seal area"
+      ],
+      "sourceAcceptanceNote": "For each legacy GUI either show functioning modern equivalent or record explicit deferred/missing with reproduction.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G08",
+      "title": "FX burst and per-tick cadence",
+      "researchFindingIds": [
+        "V0FX-02",
+        "V0FX-03",
+        "V0FX-04",
+        "V0FX-05",
+        "V0FX-06",
+        "V0FX-07",
+        "V0FX-08"
+      ],
+      "prerequisites": "Use consistent random seed where controllable; capture first 20 Nitor ticks and Taint Bottle/Seed impacts.",
+      "requiredObservations": [
+        "Taint 100 burst legacy vs modern counts/sounds",
+        "Nitor core first-frame delay",
+        "Taint Seed geometry",
+        "wand beam/arc, Wisp zap and infusion/generic essentia streams"
+      ],
+      "sourceAcceptanceNote": "Classify by caller/state, emission, motion and lifetime; dedicated preserved paths count positive but still runtime-unverified.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G09",
+      "title": "Remaining dynamic tile animations",
+      "researchFindingIds": [
+        "V0-MCH-01",
+        "V0-MCH-02",
+        "V0-MCH-03",
+        "V0-MCH-04",
+        "V0-MCH-05",
+        "V0-MCH-06",
+        "V0-MCH-07",
+        "V0-MCH-08"
+      ],
+      "prerequisites": "Empty/active/full and rotation states for Hungry Chest, Centrifuge, Dioptra, Focal Manipulator, Alembic, One-way/Buffer Tubes, Pattern Crafter, Recharge Pedestal.",
+      "requiredObservations": [
+        "Dioptra: vis/flux 13x13 mesh and top/side glows",
+        "Focal Manipulator: focus and aspect crystal orbit FX",
+        "Hungry Chest: custom texture/silhouette/lid",
+        "One-way and Buffer tubes: connected directional rods, choke colors",
+        "Alembic: filter label and dynamic nozzle",
+        "Centrifuge: rotor start/stop",
+        "Pattern Crafter: ten mode icons and two rotating gears"
+      ],
+      "sourceAcceptanceNote": "Original vs port side-by-side video/screenshots in all state combinations; classify each source gap after live capture.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G10",
+      "title": "Texture metadata / Thaumonomicon backgrounds",
+      "researchFindingIds": [
+        "W-04"
+      ],
+      "prerequisites": "Compare seven research pages with JPEG original vs modern PNG and animated seals; optionally CTM-enabled client only if supported.",
+      "requiredObservations": [
+        "seven aligned 1024x1024 backgrounds",
+        "11 seal sprite sequences and tile joins",
+        "CTM vanilla vs enabled A/B"
+      ],
+      "sourceAcceptanceNote": "Pixel/crop/tiling and timing checks; source byte fingerprints are not render equivalence.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G11",
+      "title": "Item display and OBJ material smoke",
+      "researchFindingIds": [
+        "MUV-004",
+        "MUV-005",
+        "MUV-008"
+      ],
+      "prerequisites": "Compare held, item-frame and inventory displays plus crystals and OBJ machinery under matched lighting.",
+      "requiredObservations": [
+        "Scribing tools pose; pure bucket icon",
+        "Thaumometer screen translucency and pane order",
+        "six crystals, Workbench Charger, Golem Builder, Thaumatorium"
+      ],
+      "sourceAcceptanceNote": "Classify material coefficients, atlas alias and model parent behavior by effective render, not raw MTL differences.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    },
+    {
+      "id": "G12",
+      "title": "Registry orphans and world banners",
+      "researchFindingIds": [
+        "W-01",
+        "MUV-006",
+        "MUV-007",
+        "W-06"
+      ],
+      "prerequisites": "Use original world screenshot and current block/item registry dumps; test banners only if corresponding modern world blocks exist.",
+      "requiredObservations": [
+        "17 original banner place/render identity",
+        "double-slab 6 model states and old-save policy",
+        "relay/empty/helper block reachability and resource-load error state"
+      ],
+      "sourceAcceptanceNote": "Classify missing world identities separately from dormant model files; no destructive old-save migration.",
+      "preparation": {
+        "legacy": "UNVERIFIED",
+        "modern": "UNVERIFIED"
+      },
+      "stateCatalogStatus": "NEEDS_DECOMPOSITION",
+      "captureStatus": "NOT_RUN"
+    }
+  ]
+}
