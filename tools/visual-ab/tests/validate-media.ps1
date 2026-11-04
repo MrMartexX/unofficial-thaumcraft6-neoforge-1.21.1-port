@@ -81,7 +81,8 @@ try {
         throw 'Media inventory was confused with reviewed game evidence'
     }
     if ($reportText.Contains($syntheticText) -or $reportText.Contains($video) -or
-        $reportText.Contains('FixturePerson') -or $reportText.Contains('fake@example.invalid')) {
+        $reportText.Contains('FixturePerson') -or $reportText.Contains('fake@example.invalid') -or
+        $reportText.Contains('synthetic.mp4') -or $reportText.Contains('sourcePathLocal')) {
         throw 'Private media data leaked into report JSON'
     }
 
