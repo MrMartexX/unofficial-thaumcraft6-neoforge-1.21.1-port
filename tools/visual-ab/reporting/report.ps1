@@ -54,9 +54,34 @@ function Read-Run([string]$Directory) {
     return [pscustomobject]@{ root = $resolved; data = $session }
 }
 
+function Get-MediaRecords([object]$Run) {
+    $manifestPath = Join-Path $Run.root 'media.json'
+    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) { return @() }
+    if ((Get-Item -LiteralPath $manifestPath).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+        throw 'Media manifest reparse point rejected'
+    }
+    $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($manifest.schema -ne 'tc6-visual-ab-media/1' -or $manifest.runId -cne $Run.data.runId -or
+        $manifest.catalogVersion -cne $Run.data.catalogVersion) { throw 'Invalid media manifest identity' }
+    $records = @($manifest.entries)
+    if ($records.Count -gt 4096) { throw 'Media manifest entry limit exceeded' }
+    $knownSceneIds = @($script:catalog.scenes | ForEach-Object { $_.id })
+    foreach ($entry in $records) {
+        if ($entry.kind -notin @('log', 'video') -or $entry.side -notin @('legacy', 'modern') -or
+            $knownSceneIds -cnotcontains [string]$entry.sceneId -or
+            [string]$entry.sha256 -notmatch '^[0-9a-f]{64}$' -or
+            $entry.privacyReview -ne 'REVIEW_REQUIRED' -or $entry.observation -ne 'NOT_RUN') {
+            throw 'Invalid media record; refusing report'
+        }
+    }
+    return $records
+}
+
 function Get-ReportData([object]$Run) {
     $session = $Run.data
+    $mediaRecords = @(Get-MediaRecords $Run)
     $sceneIds = @($session.evidence | ForEach-Object { $_.sceneId }) + @($session.notes | ForEach-Object { $_.sceneId })
+    $sceneIds += @($mediaRecords | ForEach-Object { $_.sceneId })
     if ($null -ne $session.selection) { $sceneIds += [string]$session.selection.sceneId }
     $sceneIds = @($sceneIds | Where-Object { $_ } | Sort-Object -Unique)
     $records = [System.Collections.Generic.List[object]]::new()
@@ -96,6 +121,8 @@ function Get-ReportData([object]$Run) {
             candidateStatus = $def.stateStatus
             expectedImagesPerSide = $required
             legacyImages = $legacy.Count; modernImages = $modern.Count
+            logCopiesRecorded = @($mediaRecords | Where-Object { $_.sceneId -ceq $sceneId -and $_.kind -eq 'log' }).Count
+            externalVideosIndexed = @($mediaRecords | Where-Object { $_.sceneId -ceq $sceneId -and $_.kind -eq 'video' }).Count
             logsPending = [bool]$def.capture.logs
             videoPending = [bool]$def.capture.video
             preparationVerified = $false
@@ -116,6 +143,14 @@ function Get-ReportData([object]$Run) {
         calibrationStatus = $session.calibrationStatus
         sceneResults = @($records.ToArray())
         evidence = @($evidenceOut.ToArray())
+        media = [pscustomobject][ordered]@{
+            logCopiesRecorded = @($mediaRecords | Where-Object { $_.kind -eq 'log' }).Count
+            externalVideosIndexed = @($mediaRecords | Where-Object { $_.kind -eq 'video' }).Count
+            privacyReviewsPending = $mediaRecords.Count
+            sourceAssociation = 'NOT_VERIFIED'
+            mediaContentReviewed = $false
+            exportedMediaFiles = 0
+        }
         integrity = if ($allValid) { 'VALIDATED' } else { 'INVALID' }
         observation = 'NOT_RUN'
         review = 'NOT_REVIEWED'
@@ -146,6 +181,7 @@ function Build-Report([object]$Run) {
     $lines.Add('')
     $lines.Add('Evidence integrity: `' + $data.integrity + '`. SHA-256 is checked for every listed image.')
     $lines.Add('Full game preparation, logs/video, visual alignment and human review remain separate gates.')
+    $lines.Add('Local log snapshots: ' + $data.media.logCopiesRecorded + '; external videos indexed: ' + $data.media.externalVideosIndexed + '. Neither was exported or reviewed.')
     $lines.Add('Notes omitted from export by default: ' + $data.notesOmittedForPrivacy + '.')
     [IO.File]::WriteAllText($jsonPath, ($data | ConvertTo-Json -Depth 25) + "`n", [Text.UTF8Encoding]::new($false))
     [IO.File]::WriteAllText($mdPath, ($lines -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
