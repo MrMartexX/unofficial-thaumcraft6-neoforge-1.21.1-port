@@ -50,9 +50,29 @@ The optional doctor report is created only under the existing Git-ignored tools/
 - Paired-world guide: 07_Test_Instance_and_Comparisons/paired_flat_worlds/README.md and CHECKLIST_RU.md in the remediation branch.
 - Local environment inventory: TC6_AB_inventory.json supplied on 2026-11-04 (not committed).
 
+## Cycle 1 incremental additions (04.11.2026)
+
+The Windows `doctor` run on the user's isolated detached worktree `D:\TC6_AB_Cycle1` succeeded on PowerShell 7.6.9: **0 errors, 4 expected graphics-calibration warnings**. Runtime game verification remains `NOT_RUN`.
+
+Additional read-only commands are now available:
+
+```powershell
+pwsh -NoProfile -File D:\TC6_AB_Cycle1\tools\visual-ab\ab.ps1 -Action findings
+pwsh -NoProfile -File D:\TC6_AB_Cycle1\tools\visual-ab\ab.ps1 -Action fixtures -SaveReport
+pwsh -NoProfile -File D:\TC6_AB_Cycle1\tools\visual-ab\tests\validate-cycle1.ps1
+```
+
+- `catalog/v0-finding-ledger.json`: 37 detailed source records, legacy/modern code anchor references, and all **6 watchlist** entries. `W-02` is explicitly unmapped in the group catalog rather than silently discarded. Additional D/H/N/F master research records remain a separate import task.
+- `-Action findings`: verifies ledger IDs, per-finding G-group mapping, research baseline, watchlist uniqueness and `NOT_RUN` runtime status. Does not assign gameplay PASS.
+- `-Action fixtures`: read-only inventory of configured world directories, `level.dat`, region file presence and exact PRIMARY/RESET timestamp pairing. An ungenerated RESET world is **not** automatically corrupt; a `PATHS_PAIRED_CLIENT_UNVERIFIED` pair is **not** client-ready proof. No NBT data is modified and no game is launched.
+- `tests/validate-cycle1.ps1`: one offline check for catalog + ledger, optionally the local pair inventory when config exists. Does not call doctor again.
+- `06_docs/audits/visual_ab_calibration_protocol_v1_ru.md`: Russian G00 calibration instructions, including graphics differences, camera and manual acceptance gates.
+
+**Expected next local step:** update the detached test worktree to the latest branch head after checking that `git status --short` is empty; then run the combined smoke test and `-Action fixtures -SaveReport` once. Review outputs before opening either game. The user-specific `config.local.json` under the ignored `tools/reports/local` directory should not be committed.
+
 ## Next gates
 
-1. Run catalog smoke and doctor in Windows PowerShell 7.
-2. Confirm Git status and real in-game initialization for both paired worlds, without changing the worlds automatically.
-3. Decompose G-groups into stable state/camera IDs with version-specific tested setup steps.
+1. Run combined Cycle 1 smoke + fixture inventory on Windows PowerShell 7 (new additions not yet runtime-tested).
+2. Calibrate G00 in clients and verify each selected PRIMARY/RESET world without modifying existing worlds automatically.
+3. Decompose G-groups into stable state/camera IDs; verify version-specific setup commands in both games.
 4. Implement session control and evidence capture in Cycle 2.
