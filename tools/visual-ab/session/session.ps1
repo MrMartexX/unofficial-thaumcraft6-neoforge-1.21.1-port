@@ -40,15 +40,23 @@ function Write-AtomicJson([string]$Destination, [object]$Value) {
     $temp = Join-Path $parent (".tc6-ab-" + [guid]::NewGuid().ToString("N") + ".tmp")
     $json = $Value | ConvertTo-Json -Depth 30
     [System.IO.File]::WriteAllText($temp, $json + "`n", [System.Text.UTF8Encoding]::new($false))
+    $backup = Join-Path $parent (".tc6-ab-" + [guid]::NewGuid().ToString("N") + ".bak")
+    $committed = $false
     try {
         if (Test-Path -LiteralPath $Destination -PathType Leaf) {
-            [System.IO.File]::Replace($temp, $Destination, $null)
+            # Windows requires a non-empty backup path for File.Replace; keep
+            # the previous state until the replacement has succeeded.
+            [System.IO.File]::Replace($temp, $Destination, $backup)
         } else {
             [System.IO.File]::Move($temp, $Destination)
         }
+        $committed = $true
     } finally {
         if (Test-Path -LiteralPath $temp -PathType Leaf) {
-            Remove-Item -LiteralPath $temp -Force
+            Remove-Item -LiteralPath $temp -Force -ErrorAction SilentlyContinue
+        }
+        if ($committed -and (Test-Path -LiteralPath $backup -PathType Leaf)) {
+            Remove-Item -LiteralPath $backup -Force -ErrorAction SilentlyContinue
         }
     }
 }
