@@ -25,8 +25,16 @@ try {
     $runPath = [string]$created.runPath
 
     $selectionRaw = & pwsh -NoProfile -File $cli -Action select -RunPath $runPath -SceneId "G07.V0GUI-seal.PICKUP_ADVANCED.FRONT" -Side legacy
-    if ($LASTEXITCODE -ne 0 -or ($selectionRaw | ConvertFrom-Json).status -ne "SCENE_SELECTED") {
-        throw "Scene selection failed"
+    $selectionExitCode = $LASTEXITCODE
+    $selectionText = @($selectionRaw) -join "`n"
+    $selectionParsed = $null
+    try {
+        $selectionParsed = $selectionText | ConvertFrom-Json -ErrorAction Stop
+    } catch {
+        throw "Scene selection returned invalid JSON (exit=$selectionExitCode): $selectionText"
+    }
+    if ($selectionExitCode -ne 0 -or $selectionParsed.status -ne "SCENE_SELECTED") {
+        throw "Scene selection failed: exit=$selectionExitCode; raw=$selectionText"
     }
 
     $firstRaw = & pwsh -NoProfile -File $cli -Action capture -RunPath $runPath -FilePath $sourceImage
