@@ -61,6 +61,10 @@ function Read-Run([string]$Directory) {
         throw 'Unsupported session schema/catalog'
     }
     $manifestPath = Join-Path $resolved 'media.json'
+    if ((Test-Path -LiteralPath $manifestPath -PathType Leaf) -and
+        ((Get-Item -LiteralPath $manifestPath).Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        throw 'Media manifest symlink is not accepted'
+    }
     $manifest = if (Test-Path -LiteralPath $manifestPath -PathType Leaf) {
         Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
     } else {
@@ -219,6 +223,9 @@ switch ($Action) {
                 } elseif ($entry.kind -eq 'video') {
                     if (-not (Test-Path -LiteralPath ([string]$entry.sourcePathLocal) -PathType Leaf)) { throw 'Missing external media' }
                     $source = [string]$entry.sourcePathLocal
+                    if ((Get-Item -LiteralPath $source).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+                        throw 'External video symlink rejected'
+                    }
                 } else { throw 'Unknown kind' }
                 $actual = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()
                 if ($actual -cne [string]$entry.sha256) { throw 'Hash mismatch' }
