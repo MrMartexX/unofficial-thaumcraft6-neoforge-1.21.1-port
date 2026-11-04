@@ -204,10 +204,13 @@ switch ($Action) {
         [pscustomobject]@{ status = 'VIDEO_INDEXED_UNVERIFIED'; mediaId = $id; sha256 = $hash; observation = 'NOT_RUN' } | ConvertTo-Json -Compress
     }
     'status' {
+        $safeVideoIds = @($run.manifest.entries | Where-Object { $_.kind -eq 'video' } |
+            ForEach-Object { [pscustomobject]@{ id = [string]$_.id; sceneId = [string]$_.sceneId; side = [string]$_.side } })
         [pscustomobject]@{
             schema = 'tc6-visual-ab-media-status/1'; runId = $run.session.runId
             logsCaptured = @($run.manifest.entries | Where-Object { $_.kind -eq 'log' }).Count
             videosIndexed = @($run.manifest.entries | Where-Object { $_.kind -eq 'video' }).Count
+            videoIdsForPlanning = @($safeVideoIds)
             pendingPrivacyReview = @($run.manifest.entries | Where-Object { $_.privacyReview -eq 'REVIEW_REQUIRED' }).Count
             observation = 'NOT_RUN'
             statement = 'Media capture/indexing is not gameplay or source association verification.'
