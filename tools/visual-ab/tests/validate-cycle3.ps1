@@ -34,8 +34,8 @@ try {
     }
     $html = Get-Content -LiteralPath $comparison.htmlPath -Raw -Encoding UTF8
     if ($html -notmatch 'data:image/png;base64,' -or $html -notmatch 'UNALIGNED_FRAMES' -or
-        $html -notmatch 'Difference Image' -or $html -notmatch 'overlayMode' -or
-        $html -notmatch 'wipeDivider' -or $html -notmatch 'updateOverlay') {
+        $html -notmatch 'Difference Image' -or $html -notmatch 'opacityText' -or
+        $html -notmatch 'updateOverlay' -or $html -match 'wipeDivider') {
         throw 'Missing viewer media, overlay controls or mismatch guard'
     }
 
