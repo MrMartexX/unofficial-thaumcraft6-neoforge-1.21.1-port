@@ -54,7 +54,7 @@ try {
     $status = (& pwsh -NoProfile -File $environmentCli -Action status -RunPath $run) | ConvertFrom-Json
     $verify = (& pwsh -NoProfile -File $environmentCli -Action verify -RunPath $run -ConfigPath $configPath) | ConvertFrom-Json
     if ($LASTEXITCODE -ne 0 -or $status.snapshotCount -ne 1 -or
-        $verify.status -ne 'DISK_FINGERPRINTS_UNCHANGED_CLIENT_UNVERIFIED' -or @($verify.driftFields).Count -ne 0) {
+        $verify.status -ne 'SELECTED_DISK_METADATA_UNCHANGED_CLIENT_UNVERIFIED' -or @($verify.driftFields).Count -ne 0) {
         throw 'Environment snapshot status/fingerprint verification failed'
     }
     $environment = Get-Content -LiteralPath (Join-Path $run 'environment.json') -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -63,7 +63,7 @@ try {
     }
     [IO.File]::AppendAllText((Join-Path $modernDir 'options.txt'), "maxFps:75`n")
     $drift = (& pwsh -NoProfile -File $environmentCli -Action verify -RunPath $run -ConfigPath $configPath) | ConvertFrom-Json
-    if ($LASTEXITCODE -ne 0 -or $drift.status -ne 'DISK_FINGERPRINT_DRIFT' -or
+    if ($LASTEXITCODE -ne 0 -or $drift.status -ne 'SELECTED_DISK_METADATA_DRIFT' -or
         @($drift.driftFields) -cnotcontains 'modern/optionsSha256') { throw 'Modified synthetic graphics options were not detected' }
 
     $videoLegacy = Join-Path $scratch 'fake-legacy.mp4'
