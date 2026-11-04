@@ -68,7 +68,7 @@ pwsh -NoProfile -File D:\TC6_AB_Cycle1\tools\visual-ab\tests\validate-cycle1.ps1
 - `tests/validate-cycle1.ps1`: one offline check for catalog + ledger, optionally the local pair inventory when config exists. Does not call doctor again.
 - `06_docs/audits/visual_ab_calibration_protocol_v1_ru.md`: Russian G00 calibration instructions, including graphics differences, camera and manual acceptance gates.
 
-**Expected next local step:** update the detached test worktree to the latest branch head after checking that `git status --short` is empty; then run the combined smoke test and `-Action fixtures -SaveReport` once. Review outputs before opening either game. The user-specific `config.local.json` under the ignored `tools/reports/local` directory should not be committed.
+**Host verification completed:** on 2026-11-04 the user ran the combined smoke test successfully and produced `fixtures-20261104-184538.json`. Four world directories passed file-presence checks, forming exactly two candidate pairs (PRIMARY and `RESET_20261103_213123_465257`). All still have `clientVerification=NOT_RUN`. The user-specific `config.local.json` under the ignored `tools/reports/local` directory should not be committed.
 
 ## Next gates
 
@@ -76,3 +76,7 @@ pwsh -NoProfile -File D:\TC6_AB_Cycle1\tools\visual-ab\tests\validate-cycle1.ps1
 2. Calibrate G00 in clients and verify each selected PRIMARY/RESET world without modifying existing worlds automatically.
 3. Decompose G-groups into stable state/camera IDs; verify version-specific setup commands in both games.
 4. Implement session control and evidence capture in Cycle 2.
+
+## First client pass staged
+
+See `06_docs/audits/visual_ab_first_client_runbook_v1_ru.md`: validated directory-pair choice, locked/unlocked research ordering, G00 calibration gate, safe Exchange/Seals pilot instructions and explicit distinction between the Harness Git SHA and the independently built modern port runtime SHA. **Do not begin bulk G01-G12 capture before Cycle 2 evidence collection is ready.**
