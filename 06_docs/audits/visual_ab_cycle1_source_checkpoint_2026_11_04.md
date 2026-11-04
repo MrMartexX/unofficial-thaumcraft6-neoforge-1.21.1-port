@@ -28,8 +28,19 @@ This slice adds non-mutating host diagnostics, machine contracts, and an importe
 - [x] No findings silently unmapped in the imported 37-row register.
 - [x] Environment-config template defined without credentials or hardcoded local paths.
 - [x] Read-only preflight implementation prepared.
-- [ ] PowerShell 7 smoke test executed on Windows.
-- [ ] Actual local fixture/world readiness verified.
+- [x] Initial PowerShell 7 catalog and Environment Doctor executed on Windows 10/11 (PowerShell 7.6.9; 0 errors, 4 graphic warnings; detached runtime SHA ee48907e).
+- [ ] New combined ledger/fixtures smoke test executed on Windows.
+- [ ] Candidate local fixture pair paths inspected and selected worlds actually initialized/verified in client; existing Doctor confirmed directory existence only.
 - [ ] Detailed state-level catalog prepared and every setup command verified in both clients.
 
 Cycle 1 remains **IN_PROGRESS** until the three unchecked gates close.
+
+## Incremental source-only additions
+
+- `catalog/v0-finding-ledger.json`: preserved all 37 finding records with legacy/modern source anchors and 6 watchlist records; W-02 is explicitly unmapped, rather than lost.
+- `ab.ps1 -Action findings`: checks one-to-many group assignments and provenance. No client observation status changes.
+- `ab.ps1 -Action fixtures -SaveReport`: read-only PRIMARY/RESET pairing and level.dat/region presence. No NBT parse, client launch or data mutation.
+- `tests/validate-cycle1.ps1`: one combined offline smoke for the above.
+- `visual_ab_calibration_protocol_v1_ru.md`: G00 profile and client camera verification instructions. No automatic edits to options.txt.
+
+Latest Doctor report on the user host: `doctor-20261104-183251.json`, with 0 errors and four expected graphics WARNs. The report is local and ignored by Git, not part of this commit. New additions await a single Windows execution after updating the test worktree.
