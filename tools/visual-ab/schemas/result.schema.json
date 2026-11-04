@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TC6 Visual A/B Observation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "runId",
+    "sceneId",
+    "researchBaselineSha",
+    "runtimeTargetSha",
+    "findingIds",
+    "evidence",
+    "observation",
+    "processing",
+    "review",
+    "notes"
+  ],
+  "properties": {
+    "schema": {
+      "const": "tc6-visual-ab-result/1"
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sceneId": {
+      "type": "string",
+      "pattern": "^G(0[0-9]|1[0-2])\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$"
+    },
+    "researchBaselineSha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "runtimeTargetSha": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "findingIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "legacy",
+        "modern"
+      ],
+      "properties": {
+        "legacy": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "modern": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        }
+      }
+    },
+    "observation": {
+      "enum": [
+        "PASS",
+        "SOURCE_GAP_CONFIRMED_IN_CLIENT",
+        "INCONCLUSIVE",
+        "NOT_RUN",
+        "BLOCKED_BY_UNPORTED_FEATURE"
+      ]
+    },
+    "processing": {
+      "enum": [
+        "PENDING",
+        "CAPTURED",
+        "VALIDATED",
+        "INVALID"
+      ]
+    },
+    "review": {
+      "enum": [
+        "NOT_REVIEWED",
+        "REVIEW_REQUIRED",
+        "REVIEWED"
+      ]
+    },
+    "notes": {
+      "type": "string"
+    },
+    "reviewer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "environmentIds": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "kind"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "pattern": "(^[A-Za-z]:|^/|\\.\\.)"
+          }
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "kind": {
+          "enum": [
+            "screenshot",
+            "video",
+            "log",
+            "metadata"
+          ]
+        },
+        "capturedUtc": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}
