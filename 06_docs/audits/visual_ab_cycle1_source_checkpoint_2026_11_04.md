@@ -29,8 +29,9 @@ This slice adds non-mutating host diagnostics, machine contracts, and an importe
 - [x] Environment-config template defined without credentials or hardcoded local paths.
 - [x] Read-only preflight implementation prepared.
 - [x] Initial PowerShell 7 catalog and Environment Doctor executed on Windows 10/11 (PowerShell 7.6.9; 0 errors, 4 graphic warnings; detached runtime SHA ee48907e).
-- [ ] New combined ledger/fixtures smoke test executed on Windows.
-- [ ] Candidate local fixture pair paths inspected and selected worlds actually initialized/verified in client; existing Doctor confirmed directory existence only.
+- [x] New combined ledger/fixtures smoke test executed on Windows; 13 groups, 37 findings, 6 watchlist, 4 world directories and 2 candidate pairs passed.
+- [x] Candidate local fixture paths inspected: PRIMARY and RESET_20261103_213123_465257; all four have level.dat and region files.
+- [ ] Selected paired worlds actually loaded and verified in clients; structure alone is insufficient.
 - [ ] Detailed state-level catalog prepared and every setup command verified in both clients.
 
 Cycle 1 remains **IN_PROGRESS** until the three unchecked gates close.
@@ -44,3 +45,9 @@ Cycle 1 remains **IN_PROGRESS** until the three unchecked gates close.
 - `visual_ab_calibration_protocol_v1_ru.md`: G00 profile and client camera verification instructions. No automatic edits to options.txt.
 
 Latest Doctor report on the user host: `doctor-20261104-183251.json`, with 0 errors and four expected graphics WARNs. The report is local and ignored by Git, not part of this commit. New additions await a single Windows execution after updating the test worktree.
+
+## Windows fixture confirmation and staged pilot
+
+The user supplied the actual PowerShell 7.6.9 outputs for `validate-cycle1.ps1` and `-Action fixtures -SaveReport`; both succeeded. `fixtures-20261104-184538.json` lists two candidate pairs and no warnings. It records **clientVerification=NOT_RUN** for all four worlds. The local report is not committed.
+
+`visual_ab_first_client_runbook_v1_ru.md` now stages G00 + pilot with the corrected RESET pair, immutable initial-book capture before research unlock, and an explicit check that the modern runtime SHA belongs to the **original development checkout**, not the isolated Harness worktree. First client validation and state-level source-to-client recipe confirmation remain open gates.
