@@ -86,3 +86,23 @@ pwsh -NoProfile -File $ab -Action verify -RunPath $run
 ## Next gate
 
 Once the synthetic test passes, proceed with an isolated limited F2 smoke on G00 or a deliberately chosen safe scene; then implement continuous-session UI, capture-count completeness, video timestamps and comparison reporting. Only then schedule full G00–G12 client passes.
+
+## Interactive controller and completeness (incremental Cycle 2)
+
+A Russian console menu is available at `tools/visual-ab/session/controller.ps1`:
+
+```powershell
+pwsh -NoProfile -File D:\TC6_AB_Cycle1\tools\visual-ab\session\controller.ps1
+```
+
+The menu can create/resume a run, display the five source-guided pilot scenes, select client side and scene ID, run the bounded F2 watcher, manually import a PNG, add a note, inspect expected screenshot counts and verify all stored SHA-256 hashes. The controller never launches Minecraft or changes game saves.
+
+New headless session actions:
+
+- `-Action note -RunPath ... -NoteText "text"`: add a timestamped note bound to the active scene and side.
+- `-Action completeness -RunPath ...`: counts screenshot records for the active scene on both sides. It reports `IMAGE_COUNTS_INCOMPLETE`, `IMAGE_COUNTS_MET_OTHER_MEDIA_PENDING` or `IMAGE_COUNTS_MET_REVIEW_PENDING`. These are **metadata-only** results; videos/logs are not yet registered and gameplay status stays `NOT_RUN`.
+- `-Action completeness -RunPath ... -SceneId Gxx.FINDING.STATE.VIEW`: check a specific catalogued state without changing the active scene.
+
+`tests/validate-controller-contract.ps1` uses the PowerShell parser to check controller syntax without starting its interactive loop. It is included in the single `tests/validate-offline.ps1` suite.
+
+**Current validation:** the user has confirmed `validate-cycle2-core.ps1` passes on Windows after the atomic-write repair (capture, duplicate avoidance, restart recovery and corruption detection). The newer menu/notes/completeness extension awaits the next combined Windows offline run. No live F2 client A/B test has yet been completed.
