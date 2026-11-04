@@ -46,6 +46,16 @@ try {
         throw 'Incomplete source-derived scenario was incorrectly marked finished'
     }
 
+    # The real-world G00 transport smoke has 0 required F2s but still lacks logs.
+    $null = & pwsh -NoProfile -File $sessionCli -Action select -RunPath $run -SceneId 'G00.W-05.BASELINE.OVERVIEW' -Side modern
+    if ($LASTEXITCODE -ne 0) { throw 'Cannot select the log-dependent G00 source card' }
+    $g00Report = (& pwsh -NoProfile -File $reportCli -Action build -RunPath $run) | ConvertFrom-Json
+    if ($LASTEXITCODE -ne 0) { throw 'Cannot build G00 pending-media report' }
+    $g00Data = Get-Content -LiteralPath $g00Report.jsonPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    $g00 = @($g00Data.sceneResults | Where-Object { $_.sceneId -eq 'G00.W-05.BASELINE.OVERVIEW' })
+    if ($g00.Count -ne 1 -or $g00[0].processing -ne 'PENDING_OTHER_MEDIA' -or
+        $g00[0].observation -ne 'NOT_RUN') { throw 'G00 log requirement was incorrectly considered complete' }
+
     $export = (& pwsh -NoProfile -File $reportCli -Action export -RunPath $run) | ConvertFrom-Json
     if ($LASTEXITCODE -ne 0 -or $export.status -ne 'EXPORT_VERIFIED') { throw 'Export failed' }
     $verified = (& pwsh -NoProfile -File $reportCli -Action verify-archive -ArchivePath $export.path) | ConvertFrom-Json
