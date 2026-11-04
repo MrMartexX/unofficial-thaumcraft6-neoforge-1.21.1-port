@@ -25,6 +25,19 @@ if ($ledger.watchlistCount -ne 6 -or @($ledger.unmappedWatchlistIds).Count -ne 1
 }
 Write-Host "PASS: 13 source groups, 37 preserved findings, 6 watchlist entries; W-02 explicitly unmapped"
 
+$sceneOutput = & pwsh -NoProfile -File $cli -Action scenes
+if ($LASTEXITCODE -ne 0) { throw "Source-derived scene candidate CLI failed" }
+$sceneResult = $sceneOutput | ConvertFrom-Json
+if ($sceneResult.status -ne "SOURCE_SCENE_CANDIDATES_VALID" -or
+    $sceneResult.runtimeState -ne "NOT_RUN" -or
+    $sceneResult.sceneCandidateCount -ne 48 -or
+    $sceneResult.pilotRecipeDrafts -ne 5 -or
+    $sceneResult.coveredSourceFindingCount -ne 37) {
+    throw "Scene candidate catalog integrity failed or misrepresented in-game verification"
+}
+Write-Host "PASS: 48 source-derived scene candidates (5 guided drafts), all 37 findings covered, no client claims"
+
+
 if (Test-Path -LiteralPath $ConfigPath -PathType Leaf) {
     $fixtureOutput = & pwsh -NoProfile -File $cli -Action fixtures -ConfigPath $ConfigPath
     if ($LASTEXITCODE -ne 0) { throw "Fixture inspection CLI failed" }
