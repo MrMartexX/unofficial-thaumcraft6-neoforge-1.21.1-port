@@ -11,6 +11,8 @@ $core = Join-Path $PSScriptRoot "session.ps1"
 $comparisonTool = Join-Path $PSScriptRoot "../comparison/compare.ps1"
 $reportTool = Join-Path $PSScriptRoot "../reporting/report.ps1"
 $mediaTool = Join-Path $PSScriptRoot "../media/media.ps1"
+$environmentTool = Join-Path $PSScriptRoot "../environment/inspect.ps1"
+$videoTool = Join-Path $PSScriptRoot "../video/plan.ps1"
 $catalogPath = Join-Path $PSScriptRoot "../catalog/v0-state-candidates.json"
 if (-not (Test-Path -LiteralPath $core -PathType Leaf)) { throw "Missing session.ps1" }
 $catalog = Get-Content -LiteralPath $catalogPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -108,6 +110,8 @@ while ($true) {
     Write-Host "L  Снять локальную копию latest.log (не входит в ZIP)"
     Write-Host "V  Зарегистрировать внешний видеофайл (без копирования)"
     Write-Host "M  Состояние и SHA-256 логов/видео"
+    Write-Host "E  Снимок и сверка условий обоих клиентов (без их запуска)"
+    Write-Host "T  План сегментов двух видео (ручные смещения, без нарезки)"
     Write-Host "S  Показать состояние сессии"
     Write-Host "0  Выход"
     $choice = (Read-Host "Выбери действие").Trim().ToUpperInvariant()
@@ -277,8 +281,60 @@ while ($true) {
                     Write-Host ("Логи: " + $status.logsCaptured + "; видео: " + $status.videosIndexed)
                     Write-Host ("Ожидают проверки приватности: " + $status.pendingPrivacyReview)
                     Write-Host ("SHA-256 корректны: " + $verification.valid + "; ошибки: " + $verification.invalid)
+                    foreach ($entry in @($status.videoIdsForPlanning)) {
+                        Write-Host ("Видео для плана: " + $entry.id + " / " + $entry.side + " / " + $entry.sceneId)
+                    }
                     foreach ($issue in @($verification.issues)) { Write-Warning ($issue.id + ": " + $issue.issue) }
                     Write-Host "Это локальный учёт файлов; игровой результат остаётся NOT_RUN."
+                }
+            }
+            "E" {
+                if (-not (Need-Run)) { break }
+                $mode = (Read-Host "Окружение: C = снять, V = проверить изменения на диске, Enter = состояние").Trim().ToUpperInvariant()
+                $action = switch ($mode) { 'C' { 'capture' }; 'V' { 'verify' }; default { 'status' } }
+                $argsList = @("-Action", $action, "-RunPath", $script:activeRun)
+                if ($ConfigPath) { $argsList += @("-ConfigPath", $ConfigPath) }
+                $result = Invoke-Cycle3 $environmentTool $argsList
+                if ($null -ne $result) {
+                    Write-Host ("Окружение: " + $result.status) -ForegroundColor Green
+                    if ($null -ne $result.PSObject.Properties['rawMismatchKeys']) {
+                        Write-Host ("Разные сырые параметры: " + (@($result.rawMismatchKeys) -join ', '))
+                    }
+                    if ($null -ne $result.PSObject.Properties['driftFields']) {
+                        Write-Host ("Изменения после снимка: " + (@($result.driftFields) -join ', '))
+                    }
+                    Write-Host "Сравнение файлов не подтверждает Java, камеру и игровую калибровку."
+                }
+            }
+            "T" {
+                if (-not (Need-Run)) { break }
+                $mode = (Read-Host "Видео: P = новый план, V = проверить хеши, Enter = состояние").Trim().ToUpperInvariant()
+                if ($mode -eq 'P') {
+                    Write-Host "Посмотри ID файлов через M. Нужны видео ОДНОЙ сцены: legacy и modern." -ForegroundColor Yellow
+                    $leftId = Read-Host 'ID видео legacy'
+                    $rightId = Read-Host 'ID видео modern'
+                    $leftTime = Read-Host 'Начало legacy, секунды (например 5.25)'
+                    $rightTime = Read-Host 'Начало modern, секунды (например 7.25)'
+                    $duration = Read-Host 'Длительность общего отрезка, секунды (например 10)'
+                    if (-not $leftId -or -not $rightId -or -not $leftTime -or -not $rightTime -or -not $duration) {
+                        Write-Warning 'Все поля плана обязательны'; break
+                    }
+                    $argsList = @('-Action', 'plan', '-RunPath', $script:activeRun,
+                        '-LegacyVideoId', $leftId, '-ModernVideoId', $rightId,
+                        '-LegacyStartSeconds', $leftTime, '-ModernStartSeconds', $rightTime,
+                        '-DurationSeconds', $duration)
+                } else {
+                    $action = if ($mode -eq 'V') { 'verify' } else { 'status' }
+                    $argsList = @('-Action', $action, '-RunPath', $script:activeRun)
+                }
+                $result = Invoke-Cycle3 $videoTool $argsList
+                if ($null -ne $result) {
+                    Write-Host ("Видео: " + $result.status) -ForegroundColor Green
+                    if ($null -ne $result.PSObject.Properties['planId']) { Write-Host ("План: " + $result.planId) }
+                    if ($null -ne $result.PSObject.Properties['invalid']) {
+                        Write-Host ("Хеши: корректно " + $result.valid + ", ошибки " + $result.invalid)
+                    }
+                    Write-Host "Нарезка и синхронизация камеры не выполнены. Игровой результат: NOT_RUN."
                 }
             }
             "S" {
