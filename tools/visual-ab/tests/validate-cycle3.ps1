@@ -34,7 +34,10 @@ try {
     }
     $html = Get-Content -LiteralPath $comparison.htmlPath -Raw -Encoding UTF8
     if ($html -notmatch 'data:image/png;base64,' -or $html -notmatch 'UNALIGNED_FRAMES' -or
-        $html -notmatch 'Difference Image') { throw 'Missing viewer media or mismatch guard' }
+        $html -notmatch 'Difference Image' -or $html -notmatch 'overlayMode' -or
+        $html -notmatch 'wipeDivider' -or $html -notmatch 'updateOverlay') {
+        throw 'Missing viewer media, overlay controls or mismatch guard'
+    }
 
     $report = (& pwsh -NoProfile -File $reportCli -Action build -RunPath $run) | ConvertFrom-Json
     if ($LASTEXITCODE -ne 0 -or $report.status -ne 'REPORT_CREATED' -or $report.observation -ne 'NOT_RUN') {
