@@ -1,0 +1,1432 @@
+{
+  "schema": "tc6-visual-ab-finding-ledger/1",
+  "catalogVersion": "v0-import-2026-11-04",
+  "source": {
+    "sourceRegisterSchema": "visual-v0-consolidated-finding-register/1",
+    "sourceRegisterHead": "66d239663355bd433f960b48540ae6fd8d3f1603",
+    "researchBaselineSha": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+    "sourceRegisterPath": "06_docs/audits/generated/visual_v0_consolidated_finding_register_2026_11_04.json"
+  },
+  "scope": "SOURCE_ONLY_NO_CLIENT_CLAIMS",
+  "findings": [
+    {
+      "id": "PV-01",
+      "title": "hole",
+      "domain": "client_visual",
+      "priority": "P0",
+      "classification": "source_path_gap",
+      "legacyContract": "End-shader face quads when neighbor is opaque and not Hole; client boundary sparkles",
+      "modernContract": "Invisible block model, no explicit Hole BER in checked registry, 0.3/tick vanilla portal particles",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileHoleRenderer.java",
+          "start_line": 34,
+          "end_line": 58
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/misc/TileHole.java",
+          "start_line": 98,
+          "end_line": 126
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/blocks/misc/TCHoleBlock.java",
+          "start_line": 42,
+          "end_line": 43
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/misc/TCHoleBlockEntity.java",
+          "start_line": 36,
+          "end_line": 49
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java",
+          "start_line": 13,
+          "end_line": 29
+        }
+      ],
+      "sourceReport": "visual_v0_portal_mirror_rift_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G01"
+      ],
+      "mappedGroupIds": [
+        "G01"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [
+        "S01"
+      ],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "PV-02",
+      "title": "mirror_and_mirror_essentia",
+      "domain": "client_visual",
+      "priority": "P0",
+      "classification": "source_path_gap",
+      "legacyContract": "Linked and squared player distance <1024 triggers 16-plane tunnel + translucent overlay in all six facings; unlinked/far shows plain pane",
+      "modernContract": "Facing-only static baked models; no linked-state dynamic BER path in inspected registry; link and BE update logic exists",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileMirrorRenderer.java",
+          "start_line": 38,
+          "end_line": 116
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileMirrorRenderer.java",
+          "start_line": 525,
+          "end_line": 592
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCMirrorBlock.java",
+          "start_line": 122,
+          "end_line": 135
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCMirrorBlockEntity.java",
+          "start_line": 114,
+          "end_line": 138
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCMirrorBlockEntity.java",
+          "start_line": 330,
+          "end_line": 345
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCMirrorEssentiaBlockEntity.java",
+          "start_line": 96,
+          "end_line": 122
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java",
+          "start_line": 13,
+          "end_line": 29
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/mirror.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/mirror_essentia.json"
+        }
+      ],
+      "sourceReport": "visual_v0_portal_mirror_rift_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G01"
+      ],
+      "mappedGroupIds": [
+        "G01"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [
+        "S02"
+      ],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "PV-03",
+      "title": "void_siphon",
+      "domain": "client_visual",
+      "priority": "P0",
+      "classification": "source_path_gap",
+      "legacyContract": "Enabled-state End-shader rendering with six-face groups at y=0.875 and y=0.3125",
+      "modernContract": "Redstone-enabled model with same baked model for enabled=true and false, no BER, block event can spawn 12 portal particles when rift drained",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileVoidSiphonRenderer.java",
+          "start_line": 34,
+          "end_line": 83
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCVoidSiphonBlock.java",
+          "start_line": 122,
+          "end_line": 129
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/blocks/devices/TCVoidSiphonBlock.java",
+          "start_line": 148,
+          "end_line": 149
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCVoidSiphonBlockEntity.java",
+          "start_line": 96,
+          "end_line": 114
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCVoidSiphonBlockEntity.java",
+          "start_line": 189,
+          "end_line": 205
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java",
+          "start_line": 13,
+          "end_line": 29
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/void_siphon.json"
+        }
+      ],
+      "sourceReport": "visual_v0_portal_mirror_rift_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G01"
+      ],
+      "mappedGroupIds": [
+        "G01"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [
+        "S03"
+      ],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "PV-04",
+      "title": "flux_rift",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "render_algorithm_difference",
+      "legacyContract": "Four-pass six-sided polycone with variable glow radius, stability wobble, goggles first-pass depth exception and shader",
+      "modernContract": "Registered single-pass emissive translucent fixed-purple ribbons from seeded points with portal particles for unstable/collapse",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/RenderFluxRift.java",
+          "start_line": 47,
+          "end_line": 112
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/EntityFluxRift.java",
+          "start_line": 408,
+          "end_line": 438
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCFluxRiftRenderer.java",
+          "start_line": 21,
+          "end_line": 71
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFluxRiftEntity.java",
+          "start_line": 46,
+          "end_line": 54
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFluxRiftEntity.java",
+          "start_line": 554,
+          "end_line": 588
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCFluxRiftEntity.java",
+          "start_line": 367,
+          "end_line": 385
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java",
+          "start_line": 17,
+          "end_line": 22
+        }
+      ],
+      "sourceReport": "visual_v0_portal_mirror_rift_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G03"
+      ],
+      "mappedGroupIds": [
+        "G03"
+      ],
+      "sourceConfidence": "HIGH_SOURCE_ALGORITHM_DIFFERENCE",
+      "originalAuditScenes": [
+        "S04"
+      ],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "GM-01",
+      "title": "hole_footprint",
+      "domain": "gameplay_cross_domain",
+      "priority": "P0",
+      "classification": "source_logic_difference",
+      "legacyContract": "At start, expand up to eight surrounding holes in 3x3 plane perpendicular to direction then add next longitudinal hole",
+      "modernContract": "At start, only one longitudinal hole, no eight surrounding cells",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/misc/TileHole.java",
+          "start_line": 51,
+          "end_line": 81
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/misc/TCHoleBlockEntity.java",
+          "start_line": 52,
+          "end_line": 55
+        }
+      ],
+      "sourceReport": "visual_v0_portal_mirror_rift_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G01"
+      ],
+      "mappedGroupIds": [
+        "G01"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [
+        "S05"
+      ],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0FX-01",
+      "title": "Arcane Bore mining beam",
+      "domain": "client_visual",
+      "priority": "P0",
+      "classification": "source_gap_high_confidence",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/entity/construct/RenderArcaneBore.java",
+          "anchor": "if (bore.clientDigging ...), beam1.png and beam quads"
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/construct/EntityArcaneBore.java",
+          "anchor": "PacketFXBoreDig on mine start"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCArcaneBoreRenderer.java",
+          "anchor": "render() draws model only"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCArcaneBoreEntity.java",
+          "anchor": "server digTarget, levelEvent 2001 on break"
+        }
+      ],
+      "sourceReport": "visual_v0_client_fx_animation_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G02"
+      ],
+      "mappedGroupIds": [
+        "G02"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0FX-02",
+      "title": "Taint bottle impact",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "source_recipe_substitution_confirmed",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/entities/projectile/EntityBottleTaint.java",
+          "anchor": "100 taintsplosionFX + bottleTaintBreak on byte 3"
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java",
+          "anchor": "bottleTaintBreak adds 8 ITEM_CRACK and splash sound"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCBottleTaintEntity.java",
+          "anchor": "24 ITEM + 24 MYCELIUM, no direct break sound in handler"
+        }
+      ],
+      "sourceReport": "visual_v0_client_fx_animation_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G08"
+      ],
+      "mappedGroupIds": [
+        "G08"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0FX-03",
+      "title": "Nitor first core",
+      "domain": "client_visual",
+      "priority": "P2",
+      "classification": "timing_phase_shift_confirmed",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/tiles/misc/TileNitor.java",
+          "anchor": "count++ % 10 == 0"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/misc/TCNitorBlockEntity.java",
+          "anchor": "pre-increment count"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/fx/TCNitorClientEffects.java",
+          "anchor": "count % 10 == 0"
+        }
+      ],
+      "sourceReport": "visual_v0_client_fx_animation_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G08"
+      ],
+      "mappedGroupIds": [
+        "G08"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0FX-04",
+      "title": "Taint seed shape/motion",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "foundation_approximation",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/models/entity/ModelTaintSeed.java",
+          "anchor": "dynamic ModelRendererTaintSeed tentacle segments"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCTaintSeedRenderer.java",
+          "anchor": "simple box geometry and sine-based sway"
+        }
+      ],
+      "sourceReport": "visual_v0_client_fx_animation_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G08"
+      ],
+      "mappedGroupIds": [
+        "G08"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0FX-05",
+      "title": "General beams/arcs",
+      "domain": "client_visual",
+      "priority": "P2",
+      "classification": "caller_level_review_required",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java",
+          "anchor": "beamCont, beamBore, arcLightning, arcBolt"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java",
+          "anchor": "different dispatcher API"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/fx/TCWispClientEffects.java",
+          "anchor": "dedicated Wisp zap bolt"
+        }
+      ],
+      "sourceReport": "visual_v0_client_fx_animation_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G08"
+      ],
+      "mappedGroupIds": [
+        "G08"
+      ],
+      "sourceConfidence": "REVIEW",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0FX-06",
+      "title": "Wisp zap",
+      "domain": "client_visual",
+      "priority": "P2",
+      "classification": "dedicated_path_found",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common/lib/network/fx/PacketFXWispZap.java",
+          "anchor": "aspect-colored FXBolt width 0.6"
+        },
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/beams/FXBolt.java",
+          "anchor": "3-tick life"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/fx/TCWispClientEffects.java",
+          "anchor": "aspect-color ZapBolt width 0.6 and 3 ticks"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/entities/TCWispEntity.java",
+          "anchor": "TCEntityFXNetwork.sendWispZap"
+        }
+      ],
+      "sourceReport": "visual_v0_client_fx_animation_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G08"
+      ],
+      "mappedGroupIds": [
+        "G08"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0FX-07",
+      "title": "Infusion essentia stream",
+      "domain": "client_visual",
+      "priority": "P2",
+      "classification": "dedicated_animated_path_found",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/other/FXEssentiaStream.java",
+          "anchor": "keyed streams, tapering and droplets"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/fx/TCInfusionClientEffects.java",
+          "anchor": "EssentiaStream keyed packet cache, 8-sided textured ribbon"
+        }
+      ],
+      "sourceReport": "visual_v0_client_fx_animation_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G08"
+      ],
+      "mappedGroupIds": [
+        "G08"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0FX-08",
+      "title": "Generic essentia trail API",
+      "domain": "client_visual",
+      "priority": "P2",
+      "classification": "same_name_different_algorithm",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/fx/FXDispatcher.java",
+          "anchor": "essentiaTrailFx creates FXEssentiaStream"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/lib/fx/TCFXDispatcher.java",
+          "anchor": "essentiaTrailFx samples straight line and generic particles"
+        }
+      ],
+      "sourceReport": "visual_v0_client_fx_animation_semantic_diff_2026_11_03.md",
+      "reportedClientScenes": [
+        "G08"
+      ],
+      "mappedGroupIds": [
+        "G08"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0ER-focusmine",
+      "title": "focusmine",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "invisible_renderer_replaces_legacy_geometry",
+      "legacyContract": "textured_ModelGrappler_and_colored_pulsation",
+      "modernContract": "TCInvisibleEntityRenderer assignment",
+      "legacyEvidence": [
+        {
+          "path": "RenderFocusMine.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_dynamic_renderer_census_2026_11_03.md",
+      "reportedClientScenes": [
+        "G04"
+      ],
+      "mappedGroupIds": [
+        "G04"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0ER-golem_dart",
+      "title": "golem_dart",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "invisible_renderer_replaces_legacy_geometry",
+      "legacyContract": "textured_3D_arrow_geometry",
+      "modernContract": "TCInvisibleEntityRenderer assignment",
+      "legacyEvidence": [
+        {
+          "path": "RenderDart.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_dynamic_renderer_census_2026_11_03.md",
+      "reportedClientScenes": [
+        "G04"
+      ],
+      "mappedGroupIds": [
+        "G04"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0ER-grapple",
+      "title": "grapple",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "invisible_renderer_replaces_legacy_geometry",
+      "legacyContract": "ModelGrappler_plus_dynamic_rope_polycone",
+      "modernContract": "TCInvisibleEntityRenderer assignment",
+      "legacyEvidence": [
+        {
+          "path": "RenderGrapple.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_dynamic_renderer_census_2026_11_03.md",
+      "reportedClientScenes": [
+        "G04"
+      ],
+      "mappedGroupIds": [
+        "G04"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0ER-mind_spider",
+      "title": "mind_spider",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "invisible_renderer_replaces_legacy_geometry",
+      "legacyContract": "translucent_scaled_spider_model_with_viewer_gate",
+      "modernContract": "TCInvisibleEntityRenderer assignment",
+      "legacyEvidence": [
+        {
+          "path": "RenderMindSpider.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_dynamic_renderer_census_2026_11_03.md",
+      "reportedClientScenes": [
+        "G04"
+      ],
+      "mappedGroupIds": [
+        "G04"
+      ],
+      "sourceConfidence": "HIGH_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "MUV-001",
+      "title": "Ancient straight/corner stairs inconsistent texture",
+      "domain": "model_material_or_armor",
+      "priority": "P1",
+      "classification": "active_model_texture_substitution",
+      "legacyContract": "thaumcraft:block/ancient_tile",
+      "modernContract": "thaumcraft:block/ancient_stone_1",
+      "sourceReport": "visual_v0_model_geometry_uv_material_checkpoint_2026_11_04.md",
+      "reportedClientScenes": [
+        "G06"
+      ],
+      "mappedGroupIds": [
+        "G06"
+      ],
+      "sourceConfidence": "HIGH_ACTIVE_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "MUV-002",
+      "title": "Arcane straight/corner stairs inconsistent top/side",
+      "domain": "model_material_or_armor",
+      "priority": "P1",
+      "classification": "active_model_texture_substitution",
+      "legacyContract": "top:stone_2;side:stone_3",
+      "modernContract": "top/side:stone_1",
+      "sourceReport": "visual_v0_model_geometry_uv_material_checkpoint_2026_11_04.md",
+      "reportedClientScenes": [
+        "G06"
+      ],
+      "mappedGroupIds": [
+        "G06"
+      ],
+      "sourceConfidence": "HIGH_ACTIVE_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "MUV-003",
+      "title": "Custom Fortress/Knight/Leader/Robe armor rigs absent in inspected port",
+      "domain": "model_material_or_armor",
+      "priority": "P1",
+      "classification": "legacy_geometry_uv_not_integrated",
+      "legacyContract": "4 custom ModelRenderer classes, 210 addBox source sites, 128x64 atlas",
+      "modernContract": "ArmorItem+texture layers, no matching custom humanoid armor model hook",
+      "sourceReport": "visual_v0_model_geometry_uv_material_checkpoint_2026_11_04.md",
+      "reportedClientScenes": [
+        "G05"
+      ],
+      "mappedGroupIds": [
+        "G05"
+      ],
+      "sourceConfidence": "HIGH_INSPECTED_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "MUV-004",
+      "title": "Scribing tools handheld→generated parent",
+      "domain": "model_material_or_armor",
+      "priority": "P2",
+      "classification": "display_parent_difference",
+      "legacyContract": "item/handheld",
+      "modernContract": "minecraft:item/generated",
+      "sourceReport": "visual_v0_model_geometry_uv_material_checkpoint_2026_11_04.md",
+      "reportedClientScenes": [
+        "G11"
+      ],
+      "mappedGroupIds": [
+        "G11"
+      ],
+      "sourceConfidence": "REVIEW_OR_ORPHAN",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "MUV-005",
+      "title": "bucket_pure icon custom path→vanilla water bucket",
+      "domain": "model_material_or_armor",
+      "priority": "P2",
+      "classification": "asset_reference_substitution_original_png_missing",
+      "legacyContract": "thaumcraft:items/bucket_pure",
+      "modernContract": "minecraft:item/water_bucket",
+      "sourceReport": "visual_v0_model_geometry_uv_material_checkpoint_2026_11_04.md",
+      "reportedClientScenes": [
+        "G11"
+      ],
+      "mappedGroupIds": [
+        "G11"
+      ],
+      "sourceConfidence": "REVIEW_OR_ORPHAN",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "MUV-006",
+      "title": "Redstone Relay vanilla texture mapping",
+      "domain": "model_material_or_armor",
+      "priority": "P2",
+      "classification": "ORPHAN_UNREGISTERED_REQUIRES_BLOCK_DECISION",
+      "legacyContract": "stone_slab_top",
+      "modernContract": "smooth_stone",
+      "sourceReport": "visual_v0_model_geometry_uv_material_checkpoint_2026_11_04.md",
+      "reportedClientScenes": [
+        "G12"
+      ],
+      "mappedGroupIds": [
+        "G12"
+      ],
+      "sourceConfidence": "REVIEW_OR_ORPHAN",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "MUV-007",
+      "title": "Empty block model changed to barrier",
+      "domain": "model_material_or_armor",
+      "priority": "P2",
+      "classification": "ORPHAN_UNREGISTERED_HOLE_INVISIBLE",
+      "legacyContract": "zero-volume legacy element",
+      "modernContract": "cube_all barrier",
+      "sourceReport": "visual_v0_model_geometry_uv_material_checkpoint_2026_11_04.md",
+      "reportedClientScenes": [
+        "G12"
+      ],
+      "mappedGroupIds": [
+        "G12"
+      ],
+      "sourceConfidence": "REVIEW_OR_ORPHAN",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "MUV-008",
+      "title": "Generic crystal.mtl Ka/Kd coefficient",
+      "domain": "model_material_or_armor",
+      "priority": "P2",
+      "classification": "mtl_numeric_change_per_aspect_override",
+      "legacyContract": "0.588 0.588 0.588",
+      "modernContract": "1 1 1",
+      "sourceReport": "visual_v0_model_geometry_uv_material_checkpoint_2026_11_04.md",
+      "reportedClientScenes": [
+        "G11"
+      ],
+      "mappedGroupIds": [
+        "G11"
+      ],
+      "sourceConfidence": "REVIEW_OR_ORPHAN",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0GUI-spa",
+      "title": "GuiSpa",
+      "domain": "ui_functionality_cross_domain",
+      "priority": "TRIAGE",
+      "classification": "explicit_deferred",
+      "legacyContract": "Legacy GUI exists",
+      "modernContract": "Block class comment says full GUI is intentionally separate from automation slice",
+      "sourceReport": "visual_v0_gui_fx_hud_census_2026_11_03.md",
+      "reportedClientScenes": [
+        "G07"
+      ],
+      "mappedGroupIds": [
+        "G07"
+      ],
+      "sourceConfidence": "EXPLICIT_DEFERRAL",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0GUI-potion_sprayer",
+      "title": "GuiPotionSprayer",
+      "domain": "ui_functionality_cross_domain",
+      "priority": "TRIAGE",
+      "classification": "no_corresponding_registered_menu_or_screen",
+      "legacyContract": "Legacy GUI exists",
+      "modernContract": "block item interactions exist; UI equivalence not established",
+      "sourceReport": "visual_v0_gui_fx_hud_census_2026_11_03.md",
+      "reportedClientScenes": [
+        "G07"
+      ],
+      "mappedGroupIds": [
+        "G07"
+      ],
+      "sourceConfidence": "SOURCE_REGISTRY_ABSENCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0GUI-logistics",
+      "title": "GuiLogistics",
+      "domain": "ui_functionality_cross_domain",
+      "priority": "TRIAGE",
+      "classification": "no_corresponding_registered_menu_or_screen",
+      "legacyContract": "Legacy GUI exists",
+      "modernContract": "no_corresponding_registered_menu_or_screen",
+      "sourceReport": "visual_v0_gui_fx_hud_census_2026_11_03.md",
+      "reportedClientScenes": [
+        "G07"
+      ],
+      "mappedGroupIds": [
+        "G07"
+      ],
+      "sourceConfidence": "SOURCE_REGISTRY_ABSENCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0GUI-seal",
+      "title": "dynamic seal UI via ISeal.returnGui",
+      "domain": "ui_functionality_cross_domain",
+      "priority": "TRIAGE",
+      "classification": "chat_actionbar_feedback_only",
+      "legacyContract": "Legacy GUI exists",
+      "modernContract": "chat_actionbar_feedback_only",
+      "sourceReport": "visual_v0_gui_fx_hud_census_2026_11_03.md",
+      "reportedClientScenes": [
+        "G07"
+      ],
+      "mappedGroupIds": [
+        "G07"
+      ],
+      "sourceConfidence": "SOURCE_REGISTRY_ABSENCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0-MCH-01",
+      "title": "dioptra",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "inspected_legacy_dynamic_render_path_not_reproduced",
+      "legacyContract": "Original uses a 12×12 quad mesh sampled from 13×13 grid_amt, additive tint and oscillating perimeter; current BE computes/synchronizes 169-byte grid, but enabled/disabled baked models have no grid render path.",
+      "modernContract": "Original uses a 12×12 quad mesh sampled from 13×13 grid_amt, additive tint and oscillating perimeter; current BE computes/synchronizes 169-byte grid, but enabled/disabled baked models have no grid render path.",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileDioptraRenderer.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCDioptraBlockEntity.java"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/dioptra.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/dioptra.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md",
+      "reportedClientScenes": [
+        "G09"
+      ],
+      "mappedGroupIds": [
+        "G09"
+      ],
+      "sourceConfidence": "HIGH_INSPECTED_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0-MCH-02",
+      "title": "focal_manipulator",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "inspected_legacy_dynamic_render_path_not_reproduced",
+      "legacyContract": "Original floats and spins focus slot item, orbiting colored crystal items and additive billboards with two rays each",
+      "modernContract": "Original floats and spins focus slot item, orbiting colored crystal items and additive billboards with two rays each. Current wand_workbench baked model and GUI implement workstation/UI, but no corresponding BER; BE has crystalCosts map and no explicit BE update packet/tag overrides in inspected class.",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileFocalManipulatorRenderer.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCFocalManipulatorBlockEntity.java"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/wand_workbench.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/wand_workbench.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md",
+      "reportedClientScenes": [
+        "G09"
+      ],
+      "mappedGroupIds": [
+        "G09"
+      ],
+      "sourceConfidence": "HIGH_INSPECTED_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0-MCH-03",
+      "title": "hungry_chest",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "inspected_legacy_dynamic_render_path_not_reproduced",
+      "legacyContract": "Original ModelChest with chesthungry.png, opening lid animation (prevLidAngle/lidAngle)",
+      "modernContract": "Original ModelChest with chesthungry.png, opening lid animation (prevLidAngle/lidAngle). Current baked model is one 14×14×14 oak_planks-textured cuboid; block RenderShape.MODEL and no BER, no lid state in BE. Open/close sound and storage exist separately.",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileHungryChestRenderer.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/devices/TCHungryChestBlockEntity.java"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/hungry_chest.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/hungry_chest.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md",
+      "reportedClientScenes": [
+        "G09"
+      ],
+      "mappedGroupIds": [
+        "G09"
+      ],
+      "sourceConfidence": "HIGH_INSPECTED_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0-MCH-04",
+      "title": "tube_oneway",
+      "domain": "client_visual",
+      "priority": "P2",
+      "classification": "inspected_legacy_dynamic_render_path_not_reproduced",
+      "legacyContract": "Original TESR draws blue-tinted ModelTubeValve rod only when matching neighboring transport exists, oriented by tube facing",
+      "modernContract": "Original TESR draws blue-tinted ModelTubeValve rod only when matching neighboring transport exists, oriented by tube facing. Current multipart tube_side/tube_core geometry has connection arms but no data-driven rod; TCTubeValveRenderer is only bound to TUBE_VALVE, a distinct BE type.",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileTubeOnewayRenderer.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/blockentity/TCLegacyTubeBlockEntity.java"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/tube_oneway.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/tube_core.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md",
+      "reportedClientScenes": [
+        "G09"
+      ],
+      "mappedGroupIds": [
+        "G09"
+      ],
+      "sourceConfidence": "HIGH_INSPECTED_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0-MCH-05",
+      "title": "tube_buffer",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "inspected_legacy_dynamic_render_path_not_reproduced",
+      "legacyContract": "Original TESR renders red/blue valve rods for each connected, open, choked side (two choke modes)",
+      "modernContract": "Original TESR renders red/blue valve rods for each connected, open, choked side (two choke modes). Current BE persists openSides/chokedSides and multipart baked model represents arms/central body only; no TUBE_BUFFER BER. VALVE BER does not cover buffer type.",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileTubeBufferRenderer.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/essentia/transport/blockentity/TCLegacyTubeBlockEntity.java"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/tube_buffer.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/tube_buffer_core.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md",
+      "reportedClientScenes": [
+        "G09"
+      ],
+      "mappedGroupIds": [
+        "G09"
+      ],
+      "sourceConfidence": "HIGH_INSPECTED_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0-MCH-06",
+      "title": "alembic",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "inspected_legacy_dynamic_render_path_not_reproduced",
+      "legacyContract": "Original TESR draws a face-facing aspect label/tag when filtered, plus ModelBoreBase nozzle for neighboring compatible transport outputs",
+      "modernContract": "Original TESR draws a face-facing aspect label/tag when filtered, plus ModelBoreBase nozzle for neighboring compatible transport outputs. Current BE persists and syncs aspectFilter/labelFacing; block renders a static model and no ALEMBIC BER, so state-specific overlay and nozzle not represented by inspected resource path.",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileAlembicRenderer.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCAlembicBlockEntity.java"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/alembic.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/alembic_normal.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md",
+      "reportedClientScenes": [
+        "G09"
+      ],
+      "mappedGroupIds": [
+        "G09"
+      ],
+      "sourceConfidence": "HIGH_INSPECTED_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0-MCH-07",
+      "title": "centrifuge",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "inspected_legacy_dynamic_render_path_not_reproduced",
+      "legacyContract": "Original ModelCentrifuge renders spinny bit rotated by cf.rotation. Modern clientTick updates rotation/rotationSpeed and block wires client ticker, but baked 6-element static centrifuge model and no CENTRIFUGE BER cannot consume rotation.",
+      "modernContract": "Original ModelCentrifuge renders spinny bit rotated by cf.rotation. Modern clientTick updates rotation/rotationSpeed and block wires client ticker, but baked 6-element static centrifuge model and no CENTRIFUGE BER cannot consume rotation.",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TileCentrifugeRenderer.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/essentia/TCCentrifugeBlockEntity.java"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/centrifuge.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/centrifuge.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md",
+      "reportedClientScenes": [
+        "G09"
+      ],
+      "mappedGroupIds": [
+        "G09"
+      ],
+      "sourceConfidence": "HIGH_INSPECTED_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "V0-MCH-08",
+      "title": "pattern_crafter",
+      "domain": "client_visual",
+      "priority": "P1",
+      "classification": "inspected_legacy_dynamic_render_path_not_reproduced",
+      "legacyContract": "Original TESR draws 10-frame mode atlas indexed by pc.type and two 3D textured gears rotated by pc.rot. Modern BE syncs pattern type and block interaction displays text message, but baked static model and no PATTERN_CRAFTER BER do not render the per-mode icon/gears.",
+      "modernContract": "Original TESR draws 10-frame mode atlas indexed by pc.type and two 3D textured gears rotated by pc.rot. Modern BE syncs pattern type and block interaction displays text message, but baked static model and no PATTERN_CRAFTER BER do not render the per-mode icon/gears.",
+      "legacyEvidence": [
+        {
+          "path": "02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/client/renderers/tile/TilePatternCrafterRenderer.java"
+        }
+      ],
+      "portEvidence": [
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/common/tiles/crafting/TCPatternCrafterBlockEntity.java"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/blockstates/pattern_crafter.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/resources/assets/thaumcraft/models/block/pattern_crafter.json"
+        },
+        {
+          "path": "05_neoforge_port/src/main/java/thaumcraft/client/renderer/TCBlockEntityRenderers.java"
+        }
+      ],
+      "sourceReport": "visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md",
+      "reportedClientScenes": [
+        "G09"
+      ],
+      "mappedGroupIds": [
+        "G09"
+      ],
+      "sourceConfidence": "HIGH_INSPECTED_SOURCE",
+      "originalAuditScenes": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "fixture": "NOT_VERIFIED",
+        "client": "NOT_RUN"
+      }
+    }
+  ],
+  "watchlist": [
+    {
+      "id": "W-01",
+      "domain": "world_blocks",
+      "priority": "HIGH_REVIEW",
+      "description": "17 banner world block IDs missing exact modern block registrations; item textures/placeholders not enough",
+      "sourceReport": null,
+      "mappedGroupIds": [
+        "G12"
+      ],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "W-02",
+      "domain": "dynamic_tile",
+      "priority": "SOURCE_CLASSIFIED_RUNTIME_OPEN",
+      "description": "Eight original machine TESR families each have source-inspected visual render-path differences (7 P1, 1 P2) documented as V0-MCH-01..08; G09 live client A/B still NOT_RUN.",
+      "sourceReport": "visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md",
+      "mappedGroupIds": [],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "W-03",
+      "domain": "hud",
+      "priority": "REVIEW",
+      "description": "Casting-wand, wand-trade, focus radial, seal-area overlays not found in inspected central hook; need full-client search/runtime",
+      "sourceReport": null,
+      "mappedGroupIds": [
+        "G07"
+      ],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "W-04",
+      "domain": "animation",
+      "priority": "REVIEW",
+      "description": "CTM compatibility and animated metadata actual playback; 7 research JPG->PNG background pixel fidelity",
+      "sourceReport": null,
+      "mappedGroupIds": [
+        "G00",
+        "G10"
+      ],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "W-05",
+      "domain": "portability",
+      "priority": "REVIEW",
+      "description": "51/52 orphan blockstates use legacy Forge syntax, 1 active hole blockstate also old marker; resource reload log required",
+      "sourceReport": null,
+      "mappedGroupIds": [
+        "G00"
+      ],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "client": "NOT_RUN"
+      }
+    },
+    {
+      "id": "W-06",
+      "domain": "compatibility",
+      "priority": "REVIEW",
+      "description": "33 nonexact legacy block IDs; 25 nonexact legacy item IDs; do not equate rename/split with missing behavior",
+      "sourceReport": null,
+      "mappedGroupIds": [
+        "G12"
+      ],
+      "verification": {
+        "source": "SOURCE_REPORTED",
+        "client": "NOT_RUN"
+      }
+    }
+  ],
+  "unmappedWatchlistIds": [
+    "W-02"
+  ],
+  "researchMasterImport": {
+    "pr": 10,
+    "head": "a1f39e81cd83ef349b4cf7b4a45d6766942a06a9",
+    "status": "PENDING_SEPARATE_MAPPING",
+    "note": "D/H/N/F master record IDs beyond this consolidated V0 register are not claimed to be covered by this ledger."
+  }
+}
