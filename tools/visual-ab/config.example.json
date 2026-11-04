@@ -1,0 +1,28 @@
+{
+  "schema": "tc6-visual-ab-host-config/1",
+  "repositoryRoot": "REPLACE_WITH_LOCAL_REPOSITORY_PATH",
+  "fixtureRelativeRoot": "07_Test_Instance_and_Comparisons/paired_flat_worlds",
+  "expectedResearchBaselineSha": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5",
+  "profiles": {
+    "legacy": {
+      "gameDirectory": "REPLACE_WITH_LEGACY_GAME_DIRECTORY",
+      "minecraft": "1.12.2",
+      "expectedMods": [
+        "Thaumcraft-1.12.2-6.1.BETA26.jar",
+        "Baubles-*.jar",
+        "jei_1.12.2-*.jar"
+      ],
+      "worldNamePattern": "TC6_PARITY_FLAT_1_12_2*"
+    },
+    "modern": {
+      "gameDirectory": "REPLACE_WITH_MODERN_GAME_DIRECTORY",
+      "minecraft": "1.21.1",
+      "expectedMods": [
+        "curios-neoforge-*.jar",
+        "jei-1.21.1-neoforge-*.jar",
+        "terrablender-*.jar"
+      ],
+      "worldNamePattern": "TC6_PARITY_FLAT_1_21_1*"
+    }
+  }
+}
