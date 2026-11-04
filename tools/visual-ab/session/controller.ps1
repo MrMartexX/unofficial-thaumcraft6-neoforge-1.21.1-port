@@ -155,7 +155,13 @@ while ($true) {
                 $path = Read-Host "Полный путь к существующему F2 PNG"
                 if ($path) {
                     $response = Invoke-Core @("-Action", "capture", "-RunPath", $script:activeRun, "-FilePath", $path)
-                    if ($null -ne $response) { Write-Host ($response.status + ": " + $response.relativePath) }
+                    if ($null -ne $response) {
+                        if ($response.status -eq "CAPTURED") {
+                            Write-Host ("CAPTURED: " + $response.relativePath) -ForegroundColor Green
+                        } else {
+                            Write-Host ([string]$response.status)
+                        }
+                    }
                 }
             }
             "7" {
