@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Thaumcraft Visual A/B session evidence record",
+  "type": "object",
+  "required": [
+    "schema",
+    "runId",
+    "catalogVersion",
+    "researchBaselineSha",
+    "runtimeTargetSha",
+    "runtimeTargetVerification",
+    "calibrationStatus",
+    "createdUtc",
+    "updatedUtc",
+    "selection",
+    "evidence",
+    "observation",
+    "review"
+  ],
+  "properties": {
+    "schema": {
+      "const": "tc6-visual-ab-session/1"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^RUN_[0-9]{8}T[0-9]{6}Z_[0-9a-f]{8}$"
+    },
+    "catalogVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "researchBaselineSha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "runtimeTargetSha": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        }
+      ]
+    },
+    "runtimeTargetVerification": {
+      "enum": [
+        "NOT_VERIFIED",
+        "SOURCE_ONLY",
+        "BUILD_CONFIRMED"
+      ]
+    },
+    "worldPairKey": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "calibrationStatus": {
+      "enum": [
+        "CALIBRATION_REQUIRED",
+        "CALIBRATED",
+        "BLOCKED"
+      ]
+    },
+    "createdUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "selection": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "sceneId",
+            "side",
+            "selectedUtc"
+          ],
+          "properties": {
+            "sceneId": {
+              "type": "string"
+            },
+            "side": {
+              "enum": [
+                "legacy",
+                "modern"
+              ]
+            },
+            "selectedUtc": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "observation": {
+      "enum": [
+        "NOT_RUN",
+        "INCONCLUSIVE",
+        "PASS",
+        "SOURCE_GAP_CONFIRMED_IN_CLIENT",
+        "BLOCKED_BY_UNPORTED_FEATURE"
+      ]
+    },
+    "review": {
+      "enum": [
+        "NOT_REVIEWED",
+        "REVIEW_REQUIRED",
+        "REVIEWED"
+      ]
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": [
+        "id",
+        "sceneId",
+        "side",
+        "relativePath",
+        "sourceFileName",
+        "importedUtc",
+        "acquisitionMethod",
+        "sizeBytes",
+        "sha256",
+        "integrity",
+        "review",
+        "observation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "sceneId": {
+          "type": "string"
+        },
+        "side": {
+          "enum": [
+            "legacy",
+            "modern"
+          ]
+        },
+        "relativePath": {
+          "type": "string",
+          "pattern": "^evidence/(legacy|modern)/[^/]+/IMG_[^/]+\\.png$"
+        },
+        "sourceFileName": {
+          "type": "string"
+        },
+        "sourceFileLastWriteUtc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "importedUtc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "acquisitionMethod": {
+          "enum": [
+            "MANUAL_IMPORT",
+            "WATCHED_NEW_FILE"
+          ]
+        },
+        "sizeBytes": {
+          "type": "integer",
+          "minimum": 8
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "integrity": {
+          "enum": [
+            "VALIDATED",
+            "INVALID",
+            "PENDING"
+          ]
+        },
+        "review": {
+          "enum": [
+            "NOT_REVIEWED",
+            "REVIEW_REQUIRED",
+            "REVIEWED"
+          ]
+        },
+        "observation": {
+          "enum": [
+            "NOT_RUN",
+            "INCONCLUSIVE",
+            "PASS",
+            "SOURCE_GAP_CONFIRMED_IN_CLIENT",
+            "BLOCKED_BY_UNPORTED_FEATURE"
+          ]
+        }
+      }
+    }
+  }
+}
