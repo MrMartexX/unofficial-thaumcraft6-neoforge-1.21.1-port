@@ -67,10 +67,27 @@ try {
         throw "Evidence checksum state unexpectedly changed"
     }
 
+    $completenessRaw = & pwsh -NoProfile -File $cli -Action completeness -RunPath $runPath
+    if ($LASTEXITCODE -ne 0) { throw "Completeness check failed" }
+    $completeness = $completenessRaw | ConvertFrom-Json
+    if ($completeness.requiredScreenshotsPerSide -ne 2 -or $completeness.legacyScreenshots -ne 1 -or
+        $completeness.modernScreenshots -ne 1 -or $completeness.processing -ne "IMAGE_COUNTS_INCOMPLETE" -or
+        $completeness.observation -ne "NOT_RUN") {
+        throw "Incomplete A/B evidence was incorrectly marked complete"
+    }
+
+    $noteRaw = & pwsh -NoProfile -File $cli -Action note -RunPath $runPath -NoteText "Synthetic review note, no client observation"
+    if ($LASTEXITCODE -ne 0) { throw "Note persistence failed" }
+    $noteResult = $noteRaw | ConvertFrom-Json
+    if ($noteResult.status -ne "NOTE_SAVED" -or $noteResult.side -ne "modern") {
+        throw "Note was not associated with the selected side"
+    }
+
     $statusRaw = & pwsh -NoProfile -File $cli -Action status -RunPath $runPath
     if ($LASTEXITCODE -ne 0) { throw "Status reload failed" }
     $status = $statusRaw | ConvertFrom-Json
-    if ($status.evidenceCount -ne 2 -or $status.observation -ne "NOT_RUN" -or $status.review -ne "NOT_REVIEWED") {
+    if ($status.evidenceCount -ne 2 -or $status.noteCount -ne 1 -or
+        $status.observation -ne "NOT_RUN" -or $status.review -ne "NOT_REVIEWED") {
         throw "Session did not persist or produced a false gameplay verdict"
     }
     # Deliberately damage a tool-owned copy and ensure verify refuses to report integrity success.
@@ -87,7 +104,7 @@ try {
         throw "Original screenshot was modified"
     }
     Write-Host "PASS: session start/select, legacy/modern evidence, SHA256, no duplicate, stale F2 ignored"
-    Write-Host "PASS: fresh-process status recovery, 2 intact evidence files before simulated corruption"
+    Write-Host "PASS: session recovery, scoped notes and honest incomplete-evidence status"
     Write-Host "PASS: one corrupted tool-owned copy detected; original screenshot unchanged; no gameplay PASS"
 } finally {
     if (Test-Path -LiteralPath $testRoot -PathType Container) {
