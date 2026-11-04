@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/MrMartexX/unofficial-thaumcraft6-neoforge-1.21.1-port/blob/main/tools/visual-ab/schemas/catalog.schema.json",
+  "title": "TC6 Visual A/B Scene Catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "catalogVersion",
+    "source",
+    "scope",
+    "findingIds",
+    "groups"
+  ],
+  "properties": {
+    "schema": {
+      "const": "tc6-visual-ab-scene-catalog/1"
+    },
+    "catalogVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "repo",
+        "researchBaselineSha",
+        "findingsPrHead"
+      ],
+      "additionalProperties": true
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "classification",
+        "findingCount",
+        "groupCount"
+      ],
+      "additionalProperties": true
+    },
+    "findingIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "researchFindingIds",
+          "prerequisites",
+          "requiredObservations",
+          "sourceAcceptanceNote",
+          "preparation",
+          "stateCatalogStatus",
+          "captureStatus"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^G(0[0-9]|1[0-2])$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "researchFindingIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "prerequisites": {
+            "type": "string"
+          },
+          "requiredObservations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceAcceptanceNote": {
+            "type": "string"
+          },
+          "preparation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "legacy",
+              "modern"
+            ],
+            "properties": {
+              "legacy": {
+                "enum": [
+                  "UNVERIFIED",
+                  "AUTO",
+                  "GUIDED",
+                  "MANUAL",
+                  "UNAVAILABLE"
+                ]
+              },
+              "modern": {
+                "enum": [
+                  "UNVERIFIED",
+                  "AUTO",
+                  "GUIDED",
+                  "MANUAL",
+                  "UNAVAILABLE"
+                ]
+              }
+            }
+          },
+          "stateCatalogStatus": {
+            "enum": [
+              "NEEDS_DECOMPOSITION",
+              "READY",
+              "DEFERRED"
+            ]
+          },
+          "captureStatus": {
+            "enum": [
+              "NOT_RUN",
+              "IN_PROGRESS",
+              "PARTIAL",
+              "COMPLETE"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
