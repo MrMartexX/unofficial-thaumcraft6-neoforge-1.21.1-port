@@ -8,6 +8,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $core = Join-Path $PSScriptRoot "session.ps1"
+$comparisonTool = Join-Path $PSScriptRoot "../comparison/compare.ps1"
+$reportTool = Join-Path $PSScriptRoot "../reporting/report.ps1"
 $catalogPath = Join-Path $PSScriptRoot "../catalog/v0-state-candidates.json"
 if (-not (Test-Path -LiteralPath $core -PathType Leaf)) { throw "Missing session.ps1" }
 $catalog = Get-Content -LiteralPath $catalogPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -29,6 +31,16 @@ function Invoke-Core([string[]]$Arguments) {
         Write-Warning "Unexpected controller response: $text"
         return $null
     }
+}
+
+function Invoke-Cycle3([string]$Script, [string[]]$Arguments) {
+    $raw = & pwsh -NoProfile -File $Script @Arguments
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "Cycle 3 action failed (exit code $LASTEXITCODE)"
+        return $null
+    }
+    try { return (@($raw) -join "`n" | ConvertFrom-Json -ErrorAction Stop) }
+    catch { Write-Warning "Unexpected Cycle 3 response: $(@($raw) -join ' ')"; return $null }
 }
 
 function Need-Run {
@@ -89,6 +101,9 @@ while ($true) {
     Write-Host "7  Добавить заметку к сцене"
     Write-Host "8  Показать полноту доказательств сцены"
     Write-Host "9  Проверить SHA-256 всех снимков"
+    Write-Host "C  A/B просмотр выбранной сцены (HTML)"
+    Write-Host "R  Сформировать отчёт и проверенный ZIP"
+    Write-Host "I  Проверить и при желании импортировать ZIP"
     Write-Host "S  Показать состояние сессии"
     Write-Host "0  Выход"
     $choice = (Read-Host "Выбери действие").Trim().ToUpperInvariant()
@@ -189,6 +204,38 @@ while ($true) {
                 if ($null -ne $response) {
                     Write-Host ("Контрольные суммы: корректно " + $response.valid + ", повреждено/отсутствует " + $response.invalid)
                     foreach ($issue in @($response.issues)) { Write-Warning ($issue.id + ": " + $issue.issue) }
+                }
+            }
+            "C" {
+                if (-not (Need-Run)) { break }
+                $scene = Read-Host "SceneId (Enter = активная сцена)"
+                $argsList = @("-RunPath", $script:activeRun)
+                if ($scene) { $argsList += @("-SceneId", $scene) }
+                $result = Invoke-Cycle3 $comparisonTool $argsList
+                if ($null -ne $result -and $result.status -eq "REVIEW_VIEWER_CREATED") {
+                    Write-Host ("HTML: " + $result.htmlPath) -ForegroundColor Green
+                    Write-Host "Difference рассчитывается только в браузере; это не игровой PASS."
+                }
+            }
+            "R" {
+                if (-not (Need-Run)) { break }
+                $result = Invoke-Cycle3 $reportTool @("-Action", "export", "-RunPath", $script:activeRun)
+                if ($null -ne $result -and $result.status -eq "EXPORT_VERIFIED") {
+                    Write-Host ("Архив: " + $result.path) -ForegroundColor Green
+                    Write-Host ("SHA-256: " + $result.sha256)
+                    Write-Host "Логи, видео и частные заметки не включены. Игровой результат: NOT_RUN."
+                }
+            }
+            "I" {
+                $package = Read-Host "Полный путь к ZIP-пакету"
+                if (-not $package) { break }
+                $result = Invoke-Cycle3 $reportTool @("-Action", "verify-archive", "-ArchivePath", $package)
+                if ($null -eq $result -or $result.status -ne "ARCHIVE_VERIFIED") { break }
+                Write-Host ("ZIP проверен: " + $result.files + " файлов; SHA-256: " + $result.sha256) -ForegroundColor Green
+                $target = Read-Host "Каталог для импорта (Enter = только проверить)"
+                if ($target) {
+                    $importResult = Invoke-Cycle3 $reportTool @("-Action", "import", "-ArchivePath", $package, "-ImportRoot", $target)
+                    if ($null -ne $importResult) { Write-Host ("Импорт: " + $importResult.status + "; " + $importResult.path) -ForegroundColor Green }
                 }
             }
             "S" {
