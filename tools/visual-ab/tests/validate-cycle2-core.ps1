@@ -65,11 +65,22 @@ try {
     if ($status.evidenceCount -ne 2 -or $status.observation -ne "NOT_RUN" -or $status.review -ne "NOT_REVIEWED") {
         throw "Session did not persist or produced a false gameplay verdict"
     }
+    # Deliberately damage a tool-owned copy and ensure verify refuses to report integrity success.
+    $copiedLegacy = Join-Path $runPath ([string]$first.relativePath)
+    [System.IO.File]::WriteAllBytes($copiedLegacy, [byte[]](1, 2, 3, 4))
+    $damagedRaw = & pwsh -NoProfile -File $cli -Action verify -RunPath $runPath
+    if ($LASTEXITCODE -ne 0) { throw "Corruption verification process failed" }
+    $damaged = $damagedRaw | ConvertFrom-Json
+    if ($damaged.valid -ne 1 -or $damaged.invalid -ne 1 -or
+        @($damaged.issues | Where-Object { $_.issue -eq "HASH_MISMATCH" }).Count -ne 1) {
+        throw "Corrupted evidence was not detected"
+    }
     if ((Get-FileHash -LiteralPath $sourceImage -Algorithm SHA256).Hash -ne $sourceHash) {
         throw "Original screenshot was modified"
     }
     Write-Host "PASS: session start/select, legacy/modern evidence, SHA256, no duplicate, stale F2 ignored"
-    Write-Host "PASS: fresh-process status recovery, 2 intact evidence files, no gameplay PASS"
+    Write-Host "PASS: fresh-process status recovery, 2 intact evidence files before simulated corruption"
+    Write-Host "PASS: one corrupted tool-owned copy detected; original screenshot unchanged; no gameplay PASS"
 } finally {
     if (Test-Path -LiteralPath $testRoot -PathType Container) {
         Remove-Item -LiteralPath $testRoot -Recurse -Force
