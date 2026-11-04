@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("doctor", "catalog")]
+    [ValidateSet("doctor", "catalog", "findings", "fixtures")]
     [string]$Action = "doctor",
     [string]$ConfigPath,
     [string]$CatalogPath,
@@ -67,6 +67,57 @@ $catalogStatus = Test-Catalog $catalog
 
 if ($Action -eq "catalog") {
     $catalogStatus | ConvertTo-Json -Depth 4
+    exit 0
+}
+
+if ($Action -eq "findings") {
+    $ledgerPath = Join-Path $PSScriptRoot "catalog/v0-finding-ledger.json"
+    $ledger = Read-JsonFile $ledgerPath
+    if ($ledger.schema -ne "tc6-visual-ab-finding-ledger/1") { throw "Unsupported finding ledger schema" }
+    if ($ledger.source.researchBaselineSha -ne $catalog.source.researchBaselineSha) {
+        throw "Finding ledger research baseline differs from group catalog"
+    }
+    $sourceIds = @($catalog.findingIds)
+    $findings = @($ledger.findings)
+    if ($findings.Count -ne 37) { throw "Expected 37 source findings" }
+    if (@($findings | ForEach-Object { $_.id } | Select-Object -Unique).Count -ne 37) {
+        throw "Duplicate source finding IDs in ledger"
+    }
+    foreach ($finding in $findings) {
+        if ($sourceIds -cnotcontains [string]$finding.id) { throw "Unexpected ledger finding $($finding.id)" }
+        if ($finding.verification.client -ne "NOT_RUN") { throw "Source ledger contains client verification claim" }
+        $assigned = @($catalog.groups | Where-Object { @($_.researchFindingIds) -ccontains [string]$finding.id } | ForEach-Object { $_.id } | Sort-Object)
+        $inLedger = @($finding.mappedGroupIds | Sort-Object)
+        if (($assigned -join ",") -cne ($inLedger -join ",")) {
+            throw "Finding group mismatch for $($finding.id)"
+        }
+        if ($assigned.Count -eq 0) { throw "Unmapped source finding $($finding.id)" }
+    }
+    $watch = @($ledger.watchlist)
+    if ($watch.Count -ne 6) { throw "Expected 6 watchlist entries" }
+    if (@($watch | ForEach-Object { $_.id } | Select-Object -Unique).Count -ne 6) {
+        throw "Duplicate watchlist IDs"
+    }
+    $unmapped = @($watch | Where-Object { @($_.mappedGroupIds).Count -eq 0 } | ForEach-Object { $_.id } | Sort-Object)
+    $declaredUnmapped = @($ledger.unmappedWatchlistIds | Sort-Object)
+    if (($unmapped -join ",") -cne ($declaredUnmapped -join ",")) {
+        throw "Unmapped watchlist IDs do not match ledger declaration"
+    }
+    [pscustomobject][ordered]@{
+        schema = "tc6-visual-ab-ledger-check/1"
+        findingCount = $findings.Count
+        watchlistCount = $watch.Count
+        unmappedWatchlistIds = $unmapped
+        status = "SOURCE_LEDGER_VALID"
+        runtimeState = "NOT_RUN"
+        masterResearchImport = $ledger.researchMasterImport.status
+    } | ConvertTo-Json -Depth 6
+    exit 0
+}
+
+if ($Action -eq "fixtures") {
+    $inspector = Join-Path $PSScriptRoot "preflight/inspect-fixtures.ps1"
+    & $inspector -ConfigPath $ConfigPath -SaveReport:$SaveReport
     exit 0
 }
 
