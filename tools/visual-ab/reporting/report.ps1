@@ -178,9 +178,10 @@ function Verify-Archive([string]$Path) {
         foreach ($line in @($checksumText -split "`n")) {
             if (-not $line.Trim()) { continue }
             if ($line -notmatch '^([0-9a-f]{64})  ([a-zA-Z0-9_./-]+)\r?$') { throw "Invalid checksum record" }
-            $name = $Matches[2]; Assert-Relative $name
+            $checksum = $Matches[1]; $name = $Matches[2]
+            Assert-Relative $name
             if ($expected.ContainsKey($name)) { throw "Duplicate checksum entry: $name" }
-            $expected[$name] = $Matches[1]
+            $expected[$name] = $checksum
         }
         if (-not $expected.ContainsKey('results.json') -or -not $expected.ContainsKey('report.md')) {
             throw 'Required report files are missing from checksums'
