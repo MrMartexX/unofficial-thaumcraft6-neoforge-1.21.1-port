@@ -15,7 +15,7 @@ foreach ($target in $targets) {
     $tokens = $null
     $parseErrors = $null
     [void][System.Management.Automation.Language.Parser]::ParseFile($target, [ref]$tokens, [ref]$parseErrors)
-    if (@($parseErrors).Count -gt 0) {
+    if (@($parseErrors | Where-Object { $null -ne $_ }).Count -gt 0) {
         $messages = @($parseErrors | ForEach-Object { $_.Message + " at " + $_.Extent.StartLineNumber })
         throw "PowerShell syntax errors in $target : $($messages -join '; ')"
     }
