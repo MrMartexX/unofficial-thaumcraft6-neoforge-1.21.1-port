@@ -93,8 +93,15 @@ if (-not (Test-Path -LiteralPath $repo -PathType Container)) {
         $head = @(& git -C $repo rev-parse HEAD 2>$null)
         $branch = @(& git -C $repo branch --show-current 2>$null)
         $dirty = @(& git -C $repo status --porcelain 2>$null)
+        $gitBranch = "(detached HEAD)"
+        if ($branch.Count -gt 0) {
+            $branchValue = [string]$branch[0]
+            if (-not [string]::IsNullOrWhiteSpace($branchValue)) {
+                $gitBranch = $branchValue
+            }
+        }
         if ($LASTEXITCODE -eq 0 -and $head.Count -gt 0) {
-            Add-Check "git-head" "OK" "HEAD=$($head[0]); branch=$($branch[0]); dirtyEntries=$($dirty.Count)"
+            Add-Check "git-head" "OK" "HEAD=$($head[0]); branch=$gitBranch; dirtyEntries=$($dirty.Count)"
         } else {
             Add-Check "git-head" "WARN" "Git metadata could not be read"
         }
