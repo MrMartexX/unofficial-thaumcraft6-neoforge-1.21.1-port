@@ -60,7 +60,7 @@ function Verify-External([object]$Record) {
     $item = Get-Item -LiteralPath $path
     if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { return $false }
     if ($item.Extension.ToLowerInvariant() -notin @('.mp4', '.mkv', '.mov', '.webm')) { return $false }
-    return (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -ceq [string]$Record.sha256
+    return ((Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -ceq [string]$Record.sha256)
 }
 
 function Save-Atomic([object]$Object) {
@@ -118,6 +118,7 @@ switch ($Action) {
                 schema = 'tc6-visual-ab-video-plans/1'; runId = $session.runId; plans = @()
             }
         }
+        if (@($plans.plans).Count -ge 256) { throw 'Maximum of 256 video plans reached' }
         $id = 'VPLAN_' + [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ') + '_' + [guid]::NewGuid().ToString('N').Substring(0, 8)
         $record = [pscustomobject][ordered]@{
             id = $id
