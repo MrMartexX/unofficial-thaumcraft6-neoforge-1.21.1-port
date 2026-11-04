@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
-    [ValidateSet("start", "select", "capture", "watch", "status", "verify")]
+    [ValidateSet("start", "select", "capture", "watch", "status", "verify", "note", "completeness")]
     [string]$Action,
     [string]$ResultsRoot,
     [string]$RunPath,
@@ -12,6 +12,7 @@ param(
     [string]$ConfigPath,
     [string]$RuntimeTargetSha,
     [string]$PairKey,
+    [string]$NoteText,
     [ValidateRange(1, 3600)][int]$MaxSeconds = 90,
     [ValidateRange(1, 1000)][int]$MaxFiles = 1
 )
@@ -213,6 +214,7 @@ if ($Action -eq "start") {
         updatedUtc = [DateTime]::UtcNow.ToString("o")
         selection = $null
         evidence = @()
+        notes = @()
         observation = "NOT_RUN"
         review = "NOT_REVIEWED"
     }
@@ -244,6 +246,60 @@ switch ($Action) {
         if (-not $FilePath) { throw "FilePath is required for manual capture import" }
         Import-Png $sessionInfo $FilePath "MANUAL_IMPORT" | ConvertTo-Json -Compress -Depth 5
     }
+    "note" {
+        if ($null -eq $state.selection) { throw "Select a scene/side before adding a note" }
+        if ([string]::IsNullOrWhiteSpace($NoteText)) { throw "NoteText cannot be empty" }
+        if ($NoteText.Length -gt 4000) { throw "NoteText exceeds 4000 characters; use an attached report" }
+        $record = [pscustomobject][ordered]@{
+            id = "NOTE_" + [guid]::NewGuid().ToString("N").Substring(0, 12)
+            sceneId = $state.selection.sceneId
+            side = $state.selection.side
+            createdUtc = [DateTime]::UtcNow.ToString("o")
+            text = $NoteText
+            review = "NOT_REVIEWED"
+        }
+        $previous = @()
+        if ($null -ne $state.PSObject.Properties["notes"]) { $previous = @($state.notes) }
+        $state | Add-Member -NotePropertyName notes -NotePropertyValue (@($previous) + @($record)) -Force
+        $state.updatedUtc = [DateTime]::UtcNow.ToString("o")
+        Write-AtomicJson $sessionInfo.statePath $state
+        [pscustomobject]@{
+            status = "NOTE_SAVED"; noteId = $record.id; sceneId = $record.sceneId; side = $record.side
+            observation = "NOT_RUN"
+        } | ConvertTo-Json -Compress -Depth 5
+    }
+    "completeness" {
+        $selectedId = $SceneId
+        if (-not $selectedId -and $null -ne $state.selection) { $selectedId = [string]$state.selection.sceneId }
+        Assert-Scene $selectedId
+        $sceneDefinition = @($candidateCatalog.scenes | Where-Object { $_.id -ceq $selectedId })[0]
+        $perSideRequired = [int]$sceneDefinition.capture.screenshots
+        $legacyCount = @($state.evidence | Where-Object { $_.sceneId -ceq $selectedId -and $_.side -eq "legacy" }).Count
+        $modernCount = @($state.evidence | Where-Object { $_.sceneId -ceq $selectedId -and $_.side -eq "modern" }).Count
+        $imageCountsMet = ($legacyCount -ge $perSideRequired -and $modernCount -ge $perSideRequired)
+        $pendingMedia = [bool]($sceneDefinition.capture.video -or $sceneDefinition.capture.logs)
+        $processing = if (-not $imageCountsMet) {
+            "IMAGE_COUNTS_INCOMPLETE"
+        } elseif ($pendingMedia) {
+            "IMAGE_COUNTS_MET_OTHER_MEDIA_PENDING"
+        } else {
+            "IMAGE_COUNTS_MET_REVIEW_PENDING"
+        }
+        [pscustomobject][ordered]@{
+            schema = "tc6-visual-ab-completeness/1"
+            sceneId = $selectedId
+            requiredScreenshotsPerSide = $perSideRequired
+            legacyScreenshots = $legacyCount
+            modernScreenshots = $modernCount
+            videoRequirementPending = [bool]$sceneDefinition.capture.video
+            logRequirementPending = [bool]$sceneDefinition.capture.logs
+            processing = $processing
+            processingCountsVerified = $false
+            observation = "NOT_RUN"
+            review = "NOT_REVIEWED"
+            statement = "Metadata counts only. Run verify separately for SHA-256 and human review for gameplay."
+        } | ConvertTo-Json -Compress -Depth 6
+    }
     "status" {
         [pscustomobject][ordered]@{
             schema = "tc6-visual-ab-session-status/1"
@@ -252,6 +308,7 @@ switch ($Action) {
             activeSceneId = if ($null -ne $state.selection) { $state.selection.sceneId } else { $null }
             activeSide = if ($null -ne $state.selection) { $state.selection.side } else { $null }
             evidenceCount = @($state.evidence).Count
+            noteCount = if ($null -ne $state.PSObject.Properties["notes"]) { @($state.notes).Count } else { 0 }
             calibrationStatus = $state.calibrationStatus
             runtimeTargetSha = $state.runtimeTargetSha
             observation = $state.observation
