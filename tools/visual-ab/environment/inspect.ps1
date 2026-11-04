@@ -110,6 +110,7 @@ function Get-ClientInventory([string]$Side, [object]$Profile) {
         side = $Side
         configuredMinecraftVersion = [string]$Profile.minecraft
         configuredVersionEvidence = 'CONFIG_ONLY_NOT_RUNNING_CLIENT'
+        gameDirectoryPathSha256 = (Get-Sha256Text ([IO.Path]::GetFullPath($game)))
         optionsState = $optionsState
         optionsSha256 = $optionsSha
         rawOptions = [pscustomobject]$options
@@ -199,6 +200,7 @@ switch ($Action) {
                 snapshots = @()
             }
         }
+        if (@($manifest.snapshots).Count -ge 100) { throw 'Maximum of 100 environment snapshots reached' }
         $manifest.snapshots = @($manifest.snapshots) + @($snapshot)
         Write-Atomic (Join-Path $run.root 'environment.json') $manifest
         [pscustomobject]@{
@@ -235,12 +237,12 @@ switch ($Action) {
         foreach ($side in @('legacy', 'modern')) {
             $fresh = Get-ClientInventory $side $config.profiles.$side
             $recorded = $last.$side
-            foreach ($key in @('optionsSha256', 'modFilenamesSha256', 'resourcePackNamesSha256', 'shaderPackNamesSha256')) {
+            foreach ($key in @('gameDirectoryPathSha256', 'optionsSha256', 'modFilenamesSha256', 'resourcePackNamesSha256', 'shaderPackNamesSha256')) {
                 if ([string]$fresh.$key -cne [string]$recorded.$key) { $drift.Add("$side/$key") }
             }
         }
         [pscustomobject]@{
-            status = if ($drift.Count -eq 0) { 'DISK_FINGERPRINTS_UNCHANGED_CLIENT_UNVERIFIED' } else { 'DISK_FINGERPRINT_DRIFT' }
+            status = if ($drift.Count -eq 0) { 'SELECTED_DISK_METADATA_UNCHANGED_CLIENT_UNVERIFIED' } else { 'SELECTED_DISK_METADATA_DRIFT' }
             snapshotId = $last.id
             driftFields = @($drift.ToArray())
             calibration = 'CALIBRATION_REQUIRED'
