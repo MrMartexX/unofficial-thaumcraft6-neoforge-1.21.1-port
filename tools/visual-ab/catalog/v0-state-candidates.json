@@ -1,0 +1,1883 @@
+{
+  "schema": "tc6-visual-ab-scene-candidates/1",
+  "version": "v0-state-candidates-20261104",
+  "source": {
+    "groupCatalogVersion": "v0-import-2026-11-04",
+    "findingRegisterSha": "66d239663355bd433f960b48540ae6fd8d3f1603",
+    "researchBaselineSha": "72eaac17a1e1c0c51b27cb151ef7f244944c89d5"
+  },
+  "status": "SOURCE_DERIVED_RECIPE_INCOMPLETE_CLIENT_NOT_RUN",
+  "sessionGroups": {
+    "A": [
+      "G00",
+      "G10",
+      "G11",
+      "G12"
+    ],
+    "B": [
+      "G05",
+      "G06",
+      "G09"
+    ],
+    "C": [
+      "G01",
+      "G02",
+      "G03",
+      "G04",
+      "G08"
+    ],
+    "D": [
+      "G07"
+    ]
+  },
+  "description": "43 broad source candidates plus 5 explicitly guided draft states. These are not live-executable full state recipes; never substitute them for client evidence.",
+  "scenes": [
+    {
+      "id": "G00.W-04.BASELINE.OVERVIEW",
+      "groupId": "G00",
+      "findingIds": [
+        "W-04"
+      ],
+      "title": "CTM compatibility and animated metadata actual playback; 7 research JPG->PNG background pixel fidelity (baseline candidate)",
+      "sourceKind": "WATCHLIST",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Client environment and resource reload",
+      "prerequisites": "Clean 1.21.1 NeoForge with current port at exact commit; record mod list, Java, shaders/CTM, resource-pack order, resolution, FOV and gamma; F3+T resource reload.",
+      "requiredObservations": [
+        "client latest.log and reload warnings",
+        "manifest of mod/resource-pack versions"
+      ],
+      "capture": {
+        "screenshots": 0,
+        "video": false,
+        "logs": true
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G00.W-05.BASELINE.OVERVIEW",
+      "groupId": "G00",
+      "findingIds": [
+        "W-05"
+      ],
+      "title": "51/52 orphan blockstates use legacy Forge syntax, 1 active hole blockstate also old marker; resource reload log required (baseline candidate)",
+      "sourceKind": "WATCHLIST",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Client environment and resource reload",
+      "prerequisites": "Clean 1.21.1 NeoForge with current port at exact commit; record mod list, Java, shaders/CTM, resource-pack order, resolution, FOV and gamma; F3+T resource reload.",
+      "requiredObservations": [
+        "client latest.log and reload warnings",
+        "manifest of mod/resource-pack versions"
+      ],
+      "capture": {
+        "screenshots": 0,
+        "video": false,
+        "logs": true
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G01.PV-01.BASELINE.OVERVIEW",
+      "groupId": "G01",
+      "findingIds": [
+        "PV-01"
+      ],
+      "title": "hole (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Portal and device shaders",
+      "prerequisites": "Side-by-side recreated scenes in legacy 1.12.2 and modern 1.21.1 at matched positions, time, light and viewing angle.",
+      "requiredObservations": [
+        "Hole open faces/sparkles from all four sides",
+        "Mirror and Essentia Mirror linked near/linked far/unlinked",
+        "Siphon redstone off/on at both shader heights",
+        "Hole initial tunnel 3x3 footprint"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G01.PV-02.BASELINE.OVERVIEW",
+      "groupId": "G01",
+      "findingIds": [
+        "PV-02"
+      ],
+      "title": "mirror_and_mirror_essentia (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Portal and device shaders",
+      "prerequisites": "Side-by-side recreated scenes in legacy 1.12.2 and modern 1.21.1 at matched positions, time, light and viewing angle.",
+      "requiredObservations": [
+        "Hole open faces/sparkles from all four sides",
+        "Mirror and Essentia Mirror linked near/linked far/unlinked",
+        "Siphon redstone off/on at both shader heights",
+        "Hole initial tunnel 3x3 footprint"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G01.PV-03.BASELINE.OVERVIEW",
+      "groupId": "G01",
+      "findingIds": [
+        "PV-03"
+      ],
+      "title": "void_siphon (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Portal and device shaders",
+      "prerequisites": "Side-by-side recreated scenes in legacy 1.12.2 and modern 1.21.1 at matched positions, time, light and viewing angle.",
+      "requiredObservations": [
+        "Hole open faces/sparkles from all four sides",
+        "Mirror and Essentia Mirror linked near/linked far/unlinked",
+        "Siphon redstone off/on at both shader heights",
+        "Hole initial tunnel 3x3 footprint"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G01.GM-01.BASELINE.OVERVIEW",
+      "groupId": "G01",
+      "findingIds": [
+        "GM-01"
+      ],
+      "title": "hole_footprint (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Portal and device shaders",
+      "prerequisites": "Side-by-side recreated scenes in legacy 1.12.2 and modern 1.21.1 at matched positions, time, light and viewing angle.",
+      "requiredObservations": [
+        "Hole open faces/sparkles from all four sides",
+        "Mirror and Essentia Mirror linked near/linked far/unlinked",
+        "Siphon redstone off/on at both shader heights",
+        "Hole initial tunnel 3x3 footprint"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G02.V0FX-01.BASELINE.OVERVIEW",
+      "groupId": "G02",
+      "findingIds": [
+        "V0FX-01"
+      ],
+      "title": "Arcane Bore mining beam (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Arcane Bore mining beam",
+      "prerequisites": "Place operational Arcane Bore with mineable target and active digging sequence.",
+      "requiredObservations": [
+        "first mining tick, mid-beam, end beam",
+        "beam color/width/endpoints and break FX"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G03.PV-04.BASELINE.OVERVIEW",
+      "groupId": "G03",
+      "findingIds": [
+        "PV-04"
+      ],
+      "title": "flux_rift (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Flux Rift depth and motion",
+      "prerequisites": "Two stable rifts matched in size/stability, record goggles on/off and unstable/steady animation.",
+      "requiredObservations": [
+        "4 angle views",
+        "5–10s video of wobble, glow, depth and transparency"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G04.V0ER-focusmine.BASELINE.OVERVIEW",
+      "groupId": "G04",
+      "findingIds": [
+        "V0ER-focusmine"
+      ],
+      "title": "focusmine (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Four invisible-entity geometry gaps",
+      "prerequisites": "Use approved test harness or known-valid registry IDs to trigger focusmine, golem_dart, grapple and mind_spider; do not invent summon commands.",
+      "requiredObservations": [
+        "focusmine color/pulse, dart 3D mesh, grapple head and moving rope",
+        "mind_spider translucent model from eligible/ineligible viewers"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G04.V0ER-golem_dart.BASELINE.OVERVIEW",
+      "groupId": "G04",
+      "findingIds": [
+        "V0ER-golem_dart"
+      ],
+      "title": "golem_dart (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Four invisible-entity geometry gaps",
+      "prerequisites": "Use approved test harness or known-valid registry IDs to trigger focusmine, golem_dart, grapple and mind_spider; do not invent summon commands.",
+      "requiredObservations": [
+        "focusmine color/pulse, dart 3D mesh, grapple head and moving rope",
+        "mind_spider translucent model from eligible/ineligible viewers"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G04.V0ER-grapple.BASELINE.OVERVIEW",
+      "groupId": "G04",
+      "findingIds": [
+        "V0ER-grapple"
+      ],
+      "title": "grapple (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Four invisible-entity geometry gaps",
+      "prerequisites": "Use approved test harness or known-valid registry IDs to trigger focusmine, golem_dart, grapple and mind_spider; do not invent summon commands.",
+      "requiredObservations": [
+        "focusmine color/pulse, dart 3D mesh, grapple head and moving rope",
+        "mind_spider translucent model from eligible/ineligible viewers"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G04.V0ER-mind_spider.BASELINE.OVERVIEW",
+      "groupId": "G04",
+      "findingIds": [
+        "V0ER-mind_spider"
+      ],
+      "title": "mind_spider (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Four invisible-entity geometry gaps",
+      "prerequisites": "Use approved test harness or known-valid registry IDs to trigger focusmine, golem_dart, grapple and mind_spider; do not invent summon commands.",
+      "requiredObservations": [
+        "focusmine color/pulse, dart 3D mesh, grapple head and moving rope",
+        "mind_spider translucent model from eligible/ineligible viewers"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G05.MUV-003.BASELINE.OVERVIEW",
+      "groupId": "G05",
+      "findingIds": [
+        "MUV-003"
+      ],
+      "title": "Custom Fortress/Knight/Leader/Robe armor rigs absent in inspected port (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Special armor silhouettes and UV",
+      "prerequisites": "Same player skin/FOV, compare 1.0/0.5 piece sets; test mask variants, goggles states, crouch/walk/idle.",
+      "requiredObservations": [
+        "Fortress, Cultist Plate/Knight, Cultist Leader, Cultist Robe and Void Robe front/back/side",
+        "UV distortion and 128x64 atlas mapping video"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G06.MUV-001.BASELINE.OVERVIEW",
+      "groupId": "G06",
+      "findingIds": [
+        "MUV-001"
+      ],
+      "title": "Ancient straight/corner stairs inconsistent texture (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Stairs geometry and face-texture continuity",
+      "prerequisites": "Build straight, inner and outer rotations for ancient and arcane stairs in matching light.",
+      "requiredObservations": [
+        "same-frame adjacent stairs and inventory models",
+        "top/side/bottom image details"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G06.MUV-002.BASELINE.OVERVIEW",
+      "groupId": "G06",
+      "findingIds": [
+        "MUV-002"
+      ],
+      "title": "Arcane straight/corner stairs inconsistent top/side (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Stairs geometry and face-texture continuity",
+      "prerequisites": "Build straight, inner and outer rotations for ancient and arcane stairs in matching light.",
+      "requiredObservations": [
+        "same-frame adjacent stairs and inventory models",
+        "top/side/bottom image details"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G07.V0GUI-spa.BASELINE.OVERVIEW",
+      "groupId": "G07",
+      "findingIds": [
+        "V0GUI-spa"
+      ],
+      "title": "GuiSpa (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "GUI and HUD interaction sweep",
+      "prerequisites": "Prepare Arcane Spa, Potion Sprayer, Logistics, Golem Seal and compatible casting/focus gear.",
+      "requiredObservations": [
+        "right-click and server-authoritative interaction outcomes",
+        "HUD both hands, multiple GUI scales, focus radial selector, seal area"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G07.V0GUI-potion_sprayer.BASELINE.OVERVIEW",
+      "groupId": "G07",
+      "findingIds": [
+        "V0GUI-potion_sprayer"
+      ],
+      "title": "GuiPotionSprayer (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "GUI and HUD interaction sweep",
+      "prerequisites": "Prepare Arcane Spa, Potion Sprayer, Logistics, Golem Seal and compatible casting/focus gear.",
+      "requiredObservations": [
+        "right-click and server-authoritative interaction outcomes",
+        "HUD both hands, multiple GUI scales, focus radial selector, seal area"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G07.V0GUI-logistics.BASELINE.OVERVIEW",
+      "groupId": "G07",
+      "findingIds": [
+        "V0GUI-logistics"
+      ],
+      "title": "GuiLogistics (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "GUI and HUD interaction sweep",
+      "prerequisites": "Prepare Arcane Spa, Potion Sprayer, Logistics, Golem Seal and compatible casting/focus gear.",
+      "requiredObservations": [
+        "right-click and server-authoritative interaction outcomes",
+        "HUD both hands, multiple GUI scales, focus radial selector, seal area"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G07.V0GUI-seal.BASELINE.OVERVIEW",
+      "groupId": "G07",
+      "findingIds": [
+        "V0GUI-seal"
+      ],
+      "title": "dynamic seal UI via ISeal.returnGui (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "GUI and HUD interaction sweep",
+      "prerequisites": "Prepare Arcane Spa, Potion Sprayer, Logistics, Golem Seal and compatible casting/focus gear.",
+      "requiredObservations": [
+        "right-click and server-authoritative interaction outcomes",
+        "HUD both hands, multiple GUI scales, focus radial selector, seal area"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G07.W-03.BASELINE.OVERVIEW",
+      "groupId": "G07",
+      "findingIds": [
+        "W-03"
+      ],
+      "title": "Casting-wand, wand-trade, focus radial, seal-area overlays not found in inspected central hook; need full-client search/runtime (baseline candidate)",
+      "sourceKind": "WATCHLIST",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "GUI and HUD interaction sweep",
+      "prerequisites": "Prepare Arcane Spa, Potion Sprayer, Logistics, Golem Seal and compatible casting/focus gear.",
+      "requiredObservations": [
+        "right-click and server-authoritative interaction outcomes",
+        "HUD both hands, multiple GUI scales, focus radial selector, seal area"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G08.V0FX-02.BASELINE.OVERVIEW",
+      "groupId": "G08",
+      "findingIds": [
+        "V0FX-02"
+      ],
+      "title": "Taint bottle impact (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "FX burst and per-tick cadence",
+      "prerequisites": "Use consistent random seed where controllable; capture first 20 Nitor ticks and Taint Bottle/Seed impacts.",
+      "requiredObservations": [
+        "Taint 100 burst legacy vs modern counts/sounds",
+        "Nitor core first-frame delay",
+        "Taint Seed geometry",
+        "wand beam/arc, Wisp zap and infusion/generic essentia streams"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G08.V0FX-03.BASELINE.OVERVIEW",
+      "groupId": "G08",
+      "findingIds": [
+        "V0FX-03"
+      ],
+      "title": "Nitor first core (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "FX burst and per-tick cadence",
+      "prerequisites": "Use consistent random seed where controllable; capture first 20 Nitor ticks and Taint Bottle/Seed impacts.",
+      "requiredObservations": [
+        "Taint 100 burst legacy vs modern counts/sounds",
+        "Nitor core first-frame delay",
+        "Taint Seed geometry",
+        "wand beam/arc, Wisp zap and infusion/generic essentia streams"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G08.V0FX-04.BASELINE.OVERVIEW",
+      "groupId": "G08",
+      "findingIds": [
+        "V0FX-04"
+      ],
+      "title": "Taint seed shape/motion (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "FX burst and per-tick cadence",
+      "prerequisites": "Use consistent random seed where controllable; capture first 20 Nitor ticks and Taint Bottle/Seed impacts.",
+      "requiredObservations": [
+        "Taint 100 burst legacy vs modern counts/sounds",
+        "Nitor core first-frame delay",
+        "Taint Seed geometry",
+        "wand beam/arc, Wisp zap and infusion/generic essentia streams"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G08.V0FX-05.BASELINE.OVERVIEW",
+      "groupId": "G08",
+      "findingIds": [
+        "V0FX-05"
+      ],
+      "title": "General beams/arcs (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "FX burst and per-tick cadence",
+      "prerequisites": "Use consistent random seed where controllable; capture first 20 Nitor ticks and Taint Bottle/Seed impacts.",
+      "requiredObservations": [
+        "Taint 100 burst legacy vs modern counts/sounds",
+        "Nitor core first-frame delay",
+        "Taint Seed geometry",
+        "wand beam/arc, Wisp zap and infusion/generic essentia streams"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G08.V0FX-06.BASELINE.OVERVIEW",
+      "groupId": "G08",
+      "findingIds": [
+        "V0FX-06"
+      ],
+      "title": "Wisp zap (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "FX burst and per-tick cadence",
+      "prerequisites": "Use consistent random seed where controllable; capture first 20 Nitor ticks and Taint Bottle/Seed impacts.",
+      "requiredObservations": [
+        "Taint 100 burst legacy vs modern counts/sounds",
+        "Nitor core first-frame delay",
+        "Taint Seed geometry",
+        "wand beam/arc, Wisp zap and infusion/generic essentia streams"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G08.V0FX-07.BASELINE.OVERVIEW",
+      "groupId": "G08",
+      "findingIds": [
+        "V0FX-07"
+      ],
+      "title": "Infusion essentia stream (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "FX burst and per-tick cadence",
+      "prerequisites": "Use consistent random seed where controllable; capture first 20 Nitor ticks and Taint Bottle/Seed impacts.",
+      "requiredObservations": [
+        "Taint 100 burst legacy vs modern counts/sounds",
+        "Nitor core first-frame delay",
+        "Taint Seed geometry",
+        "wand beam/arc, Wisp zap and infusion/generic essentia streams"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G08.V0FX-08.BASELINE.OVERVIEW",
+      "groupId": "G08",
+      "findingIds": [
+        "V0FX-08"
+      ],
+      "title": "Generic essentia trail API (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "FX burst and per-tick cadence",
+      "prerequisites": "Use consistent random seed where controllable; capture first 20 Nitor ticks and Taint Bottle/Seed impacts.",
+      "requiredObservations": [
+        "Taint 100 burst legacy vs modern counts/sounds",
+        "Nitor core first-frame delay",
+        "Taint Seed geometry",
+        "wand beam/arc, Wisp zap and infusion/generic essentia streams"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G09.V0-MCH-01.BASELINE.OVERVIEW",
+      "groupId": "G09",
+      "findingIds": [
+        "V0-MCH-01"
+      ],
+      "title": "dioptra (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Remaining dynamic tile animations",
+      "prerequisites": "Empty/active/full and rotation states for Hungry Chest, Centrifuge, Dioptra, Focal Manipulator, Alembic, One-way/Buffer Tubes, Pattern Crafter, Recharge Pedestal.",
+      "requiredObservations": [
+        "Dioptra: vis/flux 13x13 mesh and top/side glows",
+        "Focal Manipulator: focus and aspect crystal orbit FX",
+        "Hungry Chest: custom texture/silhouette/lid",
+        "One-way and Buffer tubes: connected directional rods, choke colors",
+        "Alembic: filter label and dynamic nozzle",
+        "Centrifuge: rotor start/stop",
+        "Pattern Crafter: ten mode icons and two rotating gears"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G09.V0-MCH-02.BASELINE.OVERVIEW",
+      "groupId": "G09",
+      "findingIds": [
+        "V0-MCH-02"
+      ],
+      "title": "focal_manipulator (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Remaining dynamic tile animations",
+      "prerequisites": "Empty/active/full and rotation states for Hungry Chest, Centrifuge, Dioptra, Focal Manipulator, Alembic, One-way/Buffer Tubes, Pattern Crafter, Recharge Pedestal.",
+      "requiredObservations": [
+        "Dioptra: vis/flux 13x13 mesh and top/side glows",
+        "Focal Manipulator: focus and aspect crystal orbit FX",
+        "Hungry Chest: custom texture/silhouette/lid",
+        "One-way and Buffer tubes: connected directional rods, choke colors",
+        "Alembic: filter label and dynamic nozzle",
+        "Centrifuge: rotor start/stop",
+        "Pattern Crafter: ten mode icons and two rotating gears"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G09.V0-MCH-03.BASELINE.OVERVIEW",
+      "groupId": "G09",
+      "findingIds": [
+        "V0-MCH-03"
+      ],
+      "title": "hungry_chest (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Remaining dynamic tile animations",
+      "prerequisites": "Empty/active/full and rotation states for Hungry Chest, Centrifuge, Dioptra, Focal Manipulator, Alembic, One-way/Buffer Tubes, Pattern Crafter, Recharge Pedestal.",
+      "requiredObservations": [
+        "Dioptra: vis/flux 13x13 mesh and top/side glows",
+        "Focal Manipulator: focus and aspect crystal orbit FX",
+        "Hungry Chest: custom texture/silhouette/lid",
+        "One-way and Buffer tubes: connected directional rods, choke colors",
+        "Alembic: filter label and dynamic nozzle",
+        "Centrifuge: rotor start/stop",
+        "Pattern Crafter: ten mode icons and two rotating gears"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G09.V0-MCH-04.BASELINE.OVERVIEW",
+      "groupId": "G09",
+      "findingIds": [
+        "V0-MCH-04"
+      ],
+      "title": "tube_oneway (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Remaining dynamic tile animations",
+      "prerequisites": "Empty/active/full and rotation states for Hungry Chest, Centrifuge, Dioptra, Focal Manipulator, Alembic, One-way/Buffer Tubes, Pattern Crafter, Recharge Pedestal.",
+      "requiredObservations": [
+        "Dioptra: vis/flux 13x13 mesh and top/side glows",
+        "Focal Manipulator: focus and aspect crystal orbit FX",
+        "Hungry Chest: custom texture/silhouette/lid",
+        "One-way and Buffer tubes: connected directional rods, choke colors",
+        "Alembic: filter label and dynamic nozzle",
+        "Centrifuge: rotor start/stop",
+        "Pattern Crafter: ten mode icons and two rotating gears"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G09.V0-MCH-05.BASELINE.OVERVIEW",
+      "groupId": "G09",
+      "findingIds": [
+        "V0-MCH-05"
+      ],
+      "title": "tube_buffer (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Remaining dynamic tile animations",
+      "prerequisites": "Empty/active/full and rotation states for Hungry Chest, Centrifuge, Dioptra, Focal Manipulator, Alembic, One-way/Buffer Tubes, Pattern Crafter, Recharge Pedestal.",
+      "requiredObservations": [
+        "Dioptra: vis/flux 13x13 mesh and top/side glows",
+        "Focal Manipulator: focus and aspect crystal orbit FX",
+        "Hungry Chest: custom texture/silhouette/lid",
+        "One-way and Buffer tubes: connected directional rods, choke colors",
+        "Alembic: filter label and dynamic nozzle",
+        "Centrifuge: rotor start/stop",
+        "Pattern Crafter: ten mode icons and two rotating gears"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G09.V0-MCH-06.BASELINE.OVERVIEW",
+      "groupId": "G09",
+      "findingIds": [
+        "V0-MCH-06"
+      ],
+      "title": "alembic (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Remaining dynamic tile animations",
+      "prerequisites": "Empty/active/full and rotation states for Hungry Chest, Centrifuge, Dioptra, Focal Manipulator, Alembic, One-way/Buffer Tubes, Pattern Crafter, Recharge Pedestal.",
+      "requiredObservations": [
+        "Dioptra: vis/flux 13x13 mesh and top/side glows",
+        "Focal Manipulator: focus and aspect crystal orbit FX",
+        "Hungry Chest: custom texture/silhouette/lid",
+        "One-way and Buffer tubes: connected directional rods, choke colors",
+        "Alembic: filter label and dynamic nozzle",
+        "Centrifuge: rotor start/stop",
+        "Pattern Crafter: ten mode icons and two rotating gears"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G09.V0-MCH-07.BASELINE.OVERVIEW",
+      "groupId": "G09",
+      "findingIds": [
+        "V0-MCH-07"
+      ],
+      "title": "centrifuge (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Remaining dynamic tile animations",
+      "prerequisites": "Empty/active/full and rotation states for Hungry Chest, Centrifuge, Dioptra, Focal Manipulator, Alembic, One-way/Buffer Tubes, Pattern Crafter, Recharge Pedestal.",
+      "requiredObservations": [
+        "Dioptra: vis/flux 13x13 mesh and top/side glows",
+        "Focal Manipulator: focus and aspect crystal orbit FX",
+        "Hungry Chest: custom texture/silhouette/lid",
+        "One-way and Buffer tubes: connected directional rods, choke colors",
+        "Alembic: filter label and dynamic nozzle",
+        "Centrifuge: rotor start/stop",
+        "Pattern Crafter: ten mode icons and two rotating gears"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G09.V0-MCH-08.BASELINE.OVERVIEW",
+      "groupId": "G09",
+      "findingIds": [
+        "V0-MCH-08"
+      ],
+      "title": "pattern_crafter (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Remaining dynamic tile animations",
+      "prerequisites": "Empty/active/full and rotation states for Hungry Chest, Centrifuge, Dioptra, Focal Manipulator, Alembic, One-way/Buffer Tubes, Pattern Crafter, Recharge Pedestal.",
+      "requiredObservations": [
+        "Dioptra: vis/flux 13x13 mesh and top/side glows",
+        "Focal Manipulator: focus and aspect crystal orbit FX",
+        "Hungry Chest: custom texture/silhouette/lid",
+        "One-way and Buffer tubes: connected directional rods, choke colors",
+        "Alembic: filter label and dynamic nozzle",
+        "Centrifuge: rotor start/stop",
+        "Pattern Crafter: ten mode icons and two rotating gears"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": true,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G10.W-04.BASELINE.OVERVIEW",
+      "groupId": "G10",
+      "findingIds": [
+        "W-04"
+      ],
+      "title": "CTM compatibility and animated metadata actual playback; 7 research JPG->PNG background pixel fidelity (baseline candidate)",
+      "sourceKind": "WATCHLIST",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Texture metadata / Thaumonomicon backgrounds",
+      "prerequisites": "Compare seven research pages with JPEG original vs modern PNG and animated seals; optionally CTM-enabled client only if supported.",
+      "requiredObservations": [
+        "seven aligned 1024x1024 backgrounds",
+        "11 seal sprite sequences and tile joins",
+        "CTM vanilla vs enabled A/B"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G11.MUV-004.BASELINE.OVERVIEW",
+      "groupId": "G11",
+      "findingIds": [
+        "MUV-004"
+      ],
+      "title": "Scribing tools handheld→generated parent (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Item display and OBJ material smoke",
+      "prerequisites": "Compare held, item-frame and inventory displays plus crystals and OBJ machinery under matched lighting.",
+      "requiredObservations": [
+        "Scribing tools pose; pure bucket icon",
+        "Thaumometer screen translucency and pane order",
+        "six crystals, Workbench Charger, Golem Builder, Thaumatorium"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G11.MUV-005.BASELINE.OVERVIEW",
+      "groupId": "G11",
+      "findingIds": [
+        "MUV-005"
+      ],
+      "title": "bucket_pure icon custom path→vanilla water bucket (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Item display and OBJ material smoke",
+      "prerequisites": "Compare held, item-frame and inventory displays plus crystals and OBJ machinery under matched lighting.",
+      "requiredObservations": [
+        "Scribing tools pose; pure bucket icon",
+        "Thaumometer screen translucency and pane order",
+        "six crystals, Workbench Charger, Golem Builder, Thaumatorium"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G11.MUV-008.BASELINE.OVERVIEW",
+      "groupId": "G11",
+      "findingIds": [
+        "MUV-008"
+      ],
+      "title": "Generic crystal.mtl Ka/Kd coefficient (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Item display and OBJ material smoke",
+      "prerequisites": "Compare held, item-frame and inventory displays plus crystals and OBJ machinery under matched lighting.",
+      "requiredObservations": [
+        "Scribing tools pose; pure bucket icon",
+        "Thaumometer screen translucency and pane order",
+        "six crystals, Workbench Charger, Golem Builder, Thaumatorium"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G12.W-01.BASELINE.OVERVIEW",
+      "groupId": "G12",
+      "findingIds": [
+        "W-01"
+      ],
+      "title": "17 banner world block IDs missing exact modern block registrations; item textures/placeholders not enough (baseline candidate)",
+      "sourceKind": "WATCHLIST",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Registry orphans and world banners",
+      "prerequisites": "Use original world screenshot and current block/item registry dumps; test banners only if corresponding modern world blocks exist.",
+      "requiredObservations": [
+        "17 original banner place/render identity",
+        "double-slab 6 model states and old-save policy",
+        "relay/empty/helper block reachability and resource-load error state"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G12.MUV-006.BASELINE.OVERVIEW",
+      "groupId": "G12",
+      "findingIds": [
+        "MUV-006"
+      ],
+      "title": "Redstone Relay vanilla texture mapping (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Registry orphans and world banners",
+      "prerequisites": "Use original world screenshot and current block/item registry dumps; test banners only if corresponding modern world blocks exist.",
+      "requiredObservations": [
+        "17 original banner place/render identity",
+        "double-slab 6 model states and old-save policy",
+        "relay/empty/helper block reachability and resource-load error state"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G12.MUV-007.BASELINE.OVERVIEW",
+      "groupId": "G12",
+      "findingIds": [
+        "MUV-007"
+      ],
+      "title": "Empty block model changed to barrier (baseline candidate)",
+      "sourceKind": "FINDING",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Registry orphans and world banners",
+      "prerequisites": "Use original world screenshot and current block/item registry dumps; test banners only if corresponding modern world blocks exist.",
+      "requiredObservations": [
+        "17 original banner place/render identity",
+        "double-slab 6 model states and old-save policy",
+        "relay/empty/helper block reachability and resource-load error state"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G12.W-06.BASELINE.OVERVIEW",
+      "groupId": "G12",
+      "findingIds": [
+        "W-06"
+      ],
+      "title": "33 nonexact legacy block IDs; 25 nonexact legacy item IDs; do not equate rename/split with missing behavior (baseline candidate)",
+      "sourceKind": "WATCHLIST",
+      "state": "BASELINE",
+      "view": "OVERVIEW",
+      "objective": "Registry orphans and world banners",
+      "prerequisites": "Use original world screenshot and current block/item registry dumps; test banners only if corresponding modern world blocks exist.",
+      "requiredObservations": [
+        "17 original banner place/render identity",
+        "double-slab 6 model states and old-save policy",
+        "relay/empty/helper block reachability and resource-load error state"
+      ],
+      "capture": {
+        "screenshots": 1,
+        "video": false,
+        "logs": false
+      },
+      "setup": {
+        "legacy": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "MANUAL_RECIPE_REQUIRED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "CANDIDATE_NEEDS_DECOMPOSITION",
+      "clientVerification": "NOT_RUN",
+      "note": "Source-derived candidate; not a verified in-game setup instruction or gameplay PASS."
+    },
+    {
+      "id": "G00.W-05.STARTUP.LOG",
+      "groupId": "G00",
+      "findingIds": [
+        "W-05"
+      ],
+      "title": "Modern resource loader startup diagnostics",
+      "state": "STARTUP",
+      "view": "LOG",
+      "objective": "Record latest.log and active model/resource warnings for both clients.",
+      "capture": {
+        "screenshots": 0,
+        "video": false,
+        "logs": true
+      },
+      "steps": [
+        "Confirm Minecraft/loader/Java/mod list and record a fresh startup log; the original baseline is not the port runtime SHA.",
+        "Do not classify absence of loader errors as gameplay PASS."
+      ],
+      "sourceKind": "FINDING_OR_WATCHLIST",
+      "prerequisites": "Clean 1.21.1 NeoForge with current port at exact commit; record mod list, Java, shaders/CTM, resource-pack order, resolution, FOV and gamma; F3+T resource reload.",
+      "setup": {
+        "legacy": {
+          "status": "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "PILOT_RECIPE_DRAFT",
+      "clientVerification": "NOT_RUN",
+      "note": "Steps are based on existing paired-world instructions or source audit; must be confirmed in each game."
+    },
+    {
+      "id": "G00.W-04.RELOAD.LOG",
+      "groupId": "G00",
+      "findingIds": [
+        "W-04"
+      ],
+      "title": "Resource reload smoke",
+      "state": "RELOAD",
+      "view": "LOG",
+      "objective": "Compare reload warnings and metadata playback after F3+T.",
+      "capture": {
+        "screenshots": 0,
+        "video": false,
+        "logs": true
+      },
+      "steps": [
+        "Open each client with identical resource-pack settings; save pre-reload log.",
+        "Use F3+T in each client, then record any warnings and save post-reload log."
+      ],
+      "sourceKind": "FINDING_OR_WATCHLIST",
+      "prerequisites": "Clean 1.21.1 NeoForge with current port at exact commit; record mod list, Java, shaders/CTM, resource-pack order, resolution, FOV and gamma; F3+T resource reload.",
+      "setup": {
+        "legacy": {
+          "status": "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "PILOT_RECIPE_DRAFT",
+      "clientVerification": "NOT_RUN",
+      "note": "Steps are based on existing paired-world instructions or source audit; must be confirmed in each game."
+    },
+    {
+      "id": "G07.V0GUI-seal.PICKUP_ADVANCED.FRONT",
+      "groupId": "G07",
+      "findingIds": [
+        "V0GUI-seal"
+      ],
+      "title": "Pickup Advanced seal GUI opening",
+      "state": "PICKUP_ADVANCED",
+      "view": "FRONT",
+      "objective": "Check opening, tabs, saved filter/color versus source legacy contract.",
+      "capture": {
+        "screenshots": 2,
+        "video": false,
+        "logs": false
+      },
+      "steps": [
+        "Use the paired RESET-world green Seals station after initial fresh-research capture and tc_parity:unlock.",
+        "Place Pickup Advanced on a stone top face, hold Golemancer's Bell; use right click without Shift on the same face.",
+        "Record GUI tabs, parameters, filters, then close/reopen. Shift+right click removes the seal; do not use for GUI."
+      ],
+      "sourceKind": "FINDING_OR_WATCHLIST",
+      "prerequisites": "Prepare Arcane Spa, Potion Sprayer, Logistics, Golem Seal and compatible casting/focus gear.",
+      "setup": {
+        "legacy": {
+          "status": "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "PILOT_RECIPE_DRAFT",
+      "clientVerification": "NOT_RUN",
+      "note": "Steps are based on existing paired-world instructions or source audit; must be confirmed in each game."
+    },
+    {
+      "id": "G06.MUV-001.ANCIENT_STRAIGHT.FRONT",
+      "groupId": "G06",
+      "findingIds": [
+        "MUV-001"
+      ],
+      "title": "Ancient stairs straight/neighbor texture join",
+      "state": "ANCIENT_STRAIGHT",
+      "view": "FRONT",
+      "objective": "Compare UV and seam continuity with same lighting/camera.",
+      "capture": {
+        "screenshots": 2,
+        "video": false,
+        "logs": false
+      },
+      "steps": [
+        "Not prepared in existing stations; create in a safe extra copy or approved separate area.",
+        "Place matching Ancient stair straight and corner variants, verify exact block IDs separately for both versions."
+      ],
+      "sourceKind": "FINDING_OR_WATCHLIST",
+      "prerequisites": "Build straight, inner and outer rotations for ancient and arcane stairs in matching light.",
+      "setup": {
+        "legacy": {
+          "status": "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "PILOT_RECIPE_DRAFT",
+      "clientVerification": "NOT_RUN",
+      "note": "Steps are based on existing paired-world instructions or source audit; must be confirmed in each game."
+    },
+    {
+      "id": "G06.MUV-002.ARCANE_STRAIGHT.FRONT",
+      "groupId": "G06",
+      "findingIds": [
+        "MUV-002"
+      ],
+      "title": "Arcane stairs top and side texture join",
+      "state": "ARCANE_STRAIGHT",
+      "view": "FRONT",
+      "objective": "Compare top/side model texture selection and joins.",
+      "capture": {
+        "screenshots": 2,
+        "video": false,
+        "logs": false
+      },
+      "steps": [
+        "Not prepared in existing stations; create in a safe extra copy or approved separate area.",
+        "Place equivalent Arcane stair rotation sets; document exact game registry IDs before creating commands."
+      ],
+      "sourceKind": "FINDING_OR_WATCHLIST",
+      "prerequisites": "Build straight, inner and outer rotations for ancient and arcane stairs in matching light.",
+      "setup": {
+        "legacy": {
+          "status": "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED",
+          "verifiedInClient": false,
+          "commands": []
+        },
+        "modern": {
+          "status": "GUIDED_SOURCE_DOCUMENTED_CLIENT_UNVERIFIED",
+          "verifiedInClient": false,
+          "commands": []
+        }
+      },
+      "stateStatus": "PILOT_RECIPE_DRAFT",
+      "clientVerification": "NOT_RUN",
+      "note": "Steps are based on existing paired-world instructions or source audit; must be confirmed in each game."
+    }
+  ]
+}
