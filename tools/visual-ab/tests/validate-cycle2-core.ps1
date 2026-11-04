@@ -40,7 +40,8 @@ try {
     }
 
     $watchRaw = & pwsh -NoProfile -File $cli -Action watch -RunPath $runPath -ScreenshotsDirectory $sourceDir -MaxSeconds 1 -MaxFiles 1
-    if ($LASTEXITCODE -ne 0 -or ($watchRaw | ConvertFrom-Json).registeredCount -ne 0) {
+    $watchSummary = @($watchRaw | Select-Object -Last 1)[0] | ConvertFrom-Json
+    if ($LASTEXITCODE -ne 0 -or $watchSummary.registeredCount -ne 0 -or $watchSummary.status -ne "WATCH_TIMEOUT") {
         throw "Watcher incorrectly imported a screenshot that existed before activation"
     }
 
