@@ -212,7 +212,7 @@ if ($Action -eq "start") {
     [pscustomobject]@{
         status = "SESSION_CREATED"; runId = $runId; runPath = $runDir
         catalogVersion = $state.catalogVersion; observation = "NOT_RUN"
-    } | ConvertTo-Json -Depth 6
+    } | ConvertTo-Json -Compress -Depth 6
     exit 0
 }
 
@@ -230,11 +230,11 @@ switch ($Action) {
         [pscustomobject]@{
             status = "SCENE_SELECTED"; sceneId = $SceneId; side = $Side
             observation = "NOT_RUN"
-        } | ConvertTo-Json -Depth 5
+        } | ConvertTo-Json -Compress -Depth 5
     }
     "capture" {
         if (-not $FilePath) { throw "FilePath is required for manual capture import" }
-        Import-Png $sessionInfo $FilePath "MANUAL_IMPORT" | ConvertTo-Json -Depth 5
+        Import-Png $sessionInfo $FilePath "MANUAL_IMPORT" | ConvertTo-Json -Compress -Depth 5
     }
     "status" {
         [pscustomobject][ordered]@{
@@ -248,10 +248,10 @@ switch ($Action) {
             runtimeTargetSha = $state.runtimeTargetSha
             observation = $state.observation
             review = $state.review
-        } | ConvertTo-Json -Depth 6
+        } | ConvertTo-Json -Compress -Depth 6
     }
     "verify" {
-        Inspect-Evidence $sessionInfo | ConvertTo-Json -Depth 8
+        Inspect-Evidence $sessionInfo | ConvertTo-Json -Compress -Depth 8
     }
     "watch" {
         if ($null -eq $state.selection) { throw "Select a scene/side before watching screenshots" }
@@ -308,6 +308,6 @@ switch ($Action) {
             registeredCount = $imported
             requestedCount = $MaxFiles
             observation = "NOT_RUN"
-        } | ConvertTo-Json -Depth 5
+        } | ConvertTo-Json -Compress -Depth 5
     }
 }
