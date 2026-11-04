@@ -10,6 +10,7 @@ $ErrorActionPreference = "Stop"
 $core = Join-Path $PSScriptRoot "session.ps1"
 $comparisonTool = Join-Path $PSScriptRoot "../comparison/compare.ps1"
 $reportTool = Join-Path $PSScriptRoot "../reporting/report.ps1"
+$mediaTool = Join-Path $PSScriptRoot "../media/media.ps1"
 $catalogPath = Join-Path $PSScriptRoot "../catalog/v0-state-candidates.json"
 if (-not (Test-Path -LiteralPath $core -PathType Leaf)) { throw "Missing session.ps1" }
 $catalog = Get-Content -LiteralPath $catalogPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -73,8 +74,8 @@ function Show-SceneInstructions([string]$Id) {
     Write-Host ("Цель: " + $item.objective)
     Write-Host ("Статус подготовки: " + $item.stateStatus)
     Write-Host ("Ожидается F2 на каждую сторону: " + $item.capture.screenshots)
-    if ($item.capture.video) { Write-Host "Дополнительно требуется видео (не автоматизировано в этом цикле)." }
-    if ($item.capture.logs) { Write-Host "Дополнительно требуется лог (не автоматизировано в этом цикле)." }
+    if ($item.capture.video) { Write-Host "Дополнительно требуется видео: можно индексировать внешний файл (V), без анализа содержимого." }
+    if ($item.capture.logs) { Write-Host "Дополнительно требуется лог: можно сохранить локальную копию (L), требуется проверка приватности." }
     if ($null -ne $item.PSObject.Properties["steps"]) {
         $i = 1
         foreach ($step in @($item.steps)) {
@@ -104,6 +105,9 @@ while ($true) {
     Write-Host "C  A/B просмотр выбранной сцены (HTML)"
     Write-Host "R  Сформировать отчёт и проверенный ZIP"
     Write-Host "I  Проверить и при желании импортировать ZIP"
+    Write-Host "L  Снять локальную копию latest.log (не входит в ZIP)"
+    Write-Host "V  Зарегистрировать внешний видеофайл (без копирования)"
+    Write-Host "M  Состояние и SHA-256 логов/видео"
     Write-Host "S  Показать состояние сессии"
     Write-Host "0  Выход"
     $choice = (Read-Host "Выбери действие").Trim().ToUpperInvariant()
@@ -236,6 +240,45 @@ while ($true) {
                 if ($target) {
                     $importResult = Invoke-Cycle3 $reportTool @("-Action", "import", "-ArchivePath", $package, "-ImportRoot", $target)
                     if ($null -ne $importResult) { Write-Host ("Импорт: " + $importResult.status + "; " + $importResult.path) -ForegroundColor Green }
+                }
+            }
+            "L" {
+                if (-not (Need-Run)) { break }
+                $path = Read-Host "Полный путь к .log (Enter = latest.log из локального конфига)"
+                $argsList = @("-Action", "snapshot-log", "-RunPath", $script:activeRun)
+                if ($path) { $argsList += @("-LogPath", $path) }
+                if ($ConfigPath) { $argsList += @("-ConfigPath", $ConfigPath) }
+                $result = Invoke-Cycle3 $mediaTool $argsList
+                if ($null -ne $result) {
+                    Write-Host ("Лог: " + $result.status) -ForegroundColor Green
+                    if ($null -ne $result.PSObject.Properties['sha256']) { Write-Host ("SHA-256: " + $result.sha256) }
+                    if ($null -ne $result.PSObject.Properties['privacyFlags'] -and @($result.privacyFlags).Count -gt 0) {
+                        Write-Host ("Сигналы приватности: " + (@($result.privacyFlags) -join ", "))
+                    }
+                    Write-Host "Ручная проверка приватности обязательна. В ZIP лог не включён."
+                }
+            }
+            "V" {
+                if (-not (Need-Run)) { break }
+                $path = Read-Host "Полный путь к существующему MP4/MKV/WebM/MOV"
+                if (-not $path) { break }
+                $result = Invoke-Cycle3 $mediaTool @("-Action", "index-video", "-RunPath", $script:activeRun, "-VideoPath", $path)
+                if ($null -ne $result) {
+                    Write-Host ("Видео: " + $result.status) -ForegroundColor Green
+                    if ($null -ne $result.PSObject.Properties['sha256']) { Write-Host ("SHA-256: " + $result.sha256) }
+                    Write-Host "Видео не скопировано и не декодировано; привязка к сцене требует проверки."
+                }
+            }
+            "M" {
+                if (-not (Need-Run)) { break }
+                $status = Invoke-Cycle3 $mediaTool @("-Action", "status", "-RunPath", $script:activeRun)
+                $verification = Invoke-Cycle3 $mediaTool @("-Action", "verify", "-RunPath", $script:activeRun)
+                if ($null -ne $status -and $null -ne $verification) {
+                    Write-Host ("Логи: " + $status.logsCaptured + "; видео: " + $status.videosIndexed)
+                    Write-Host ("Ожидают проверки приватности: " + $status.pendingPrivacyReview)
+                    Write-Host ("SHA-256 корректны: " + $verification.valid + "; ошибки: " + $verification.invalid)
+                    foreach ($issue in @($verification.issues)) { Write-Warning ($issue.id + ": " + $issue.issue) }
+                    Write-Host "Это локальный учёт файлов; игровой результат остаётся NOT_RUN."
                 }
             }
             "S" {
