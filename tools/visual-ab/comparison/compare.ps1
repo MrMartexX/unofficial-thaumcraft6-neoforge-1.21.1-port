@@ -71,7 +71,8 @@ body{font:15px system-ui,Arial,sans-serif;background:#151820;color:#f0f0f0;margi
 h1{font-size:22px}p{color:#c9ced9}.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .panel{background:#222733;padding:12px;border-radius:8px;min-width:0}.panel img{display:block;max-width:100%;height:auto}
 .overlay{position:relative;width:100%;overflow:hidden}.overlay img{width:100%;height:auto}
-.overlay img:last-child{position:absolute;inset:0;opacity:.5}
+.overlay #overlayModern{position:absolute;inset:0;opacity:.5}
+.wipe-divider{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#ffd166;box-shadow:0 0 0 1px #171717;pointer-events:none;display:none}
 canvas{max-width:100%;height:auto;background:#080808}label{display:inline-flex;align-items:center;gap:12px}
 button{padding:8px 14px}#warning{color:#ffcf83}code{word-break:break-all}
 </style></head><body>
@@ -79,8 +80,12 @@ button{padding:8px 14px}#warning{color:#ffcf83}code{word-break:break-all}
 <p>Run: <code>__RUN__</code> · Scene: <code>__SCENE__</code></p>
 <p id="warning">Предварительное сравнение. Автоматическая разница пикселей не устанавливает игровой PASS; состояние калибровки и подготовки проверяется отдельно.</p>
 <h2>Side-by-side</h2><div class="pair"><div class="panel">Minecraft 1.12.2<img id="legacy" src="__LEGACY__" alt="Legacy"></div><div class="panel">Minecraft 1.21.1<img id="modern" src="__MODERN__" alt="Modern"></div></div>
-<h2>Overlay</h2><p><label>Прозрачность порта <input id="opacity" type="range" min="0" max="100" value="50"> <output id="opacityText">50%</output></label></p>
-<div class="panel"><div class="overlay"><img id="overlayLegacy" src="__LEGACY__" alt="Legacy overlay"><img id="overlayModern" src="__MODERN__" alt="Modern overlay"></div></div>
+<h2>Overlay</h2>
+<p><label>Режим <select id="overlayMode"><option value="blend">Прозрачность</option><option value="wipe">Разделитель (wipe)</option></select></label></p>
+<p><label>Положение <input id="opacity" type="range" min="0" max="100" value="50"> <output id="opacityText">50%</output></label></p>
+<p id="overlayState">Наложение: 50% порта поверх оригинала.</p>
+<div class="panel"><div class="overlay"><img id="overlayLegacy" src="__LEGACY__" alt="Legacy overlay"><img id="overlayModern" src="__MODERN__" alt="Modern overlay"><div id="wipeDivider" class="wipe-divider" aria-hidden="true"></div></div></div>
+<p>Если изображения почти одинаковы, прозрачность может выглядеть неизменной. В режиме «Разделитель» движется жёлтая линия, а слева от неё показывается порт.</p>
 <h2>Difference Image</h2><p>Изображение вычисляется в браузере только для кадров одинакового разрешения. Выравнивание камеры этим инструментом не выполняется.</p>
 <p><label>Порог канала (0–255): <input id="threshold" type="range" min="0" max="255" value="32"><output id="thresholdText">32</output></label></p>
 <p id="metric">Загрузка кадров…</p><canvas id="diff"></canvas>
@@ -89,8 +94,20 @@ button{padding:8px 14px}#warning{color:#ffcf83}code{word-break:break-all}
 "use strict";
 const legacy=document.getElementById('legacy'),modern=document.getElementById('modern');
 const opacity=document.getElementById('opacity'),threshold=document.getElementById('threshold');
+const overlayMode=document.getElementById('overlayMode'),overlayModern=document.getElementById('overlayModern');
+const wipeDivider=document.getElementById('wipeDivider'),overlayState=document.getElementById('overlayState');
 const canvas=document.getElementById('diff'),metric=document.getElementById('metric'),download=document.getElementById('download');
-opacity.addEventListener('input',()=>{document.getElementById('overlayModern').style.opacity=opacity.value/100;document.getElementById('opacityText').textContent=opacity.value+'%'});
+function updateOverlay(){
+  const percent=Number(opacity.value),wipe=overlayMode.value==='wipe';
+  document.getElementById('opacityText').textContent=String(percent)+'%';
+  overlayModern.style.opacity=wipe?'1':String(percent/100);
+  overlayModern.style.clipPath=wipe?'inset(0 '+(100-percent)+'% 0 0)':'none';
+  wipeDivider.style.display=wipe?'block':'none';wipeDivider.style.left=percent+'%';
+  overlayState.textContent=wipe?('Разделитель: слева '+percent+'% порта, справа оригинал.'):
+    ('Наложение: '+percent+'% порта поверх оригинала.');
+}
+opacity.addEventListener('input',updateOverlay);overlayMode.addEventListener('change',updateOverlay);
+updateOverlay();
 let pixelsA=null,pixelsB=null;
 function loadPixels(img,w,h){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(img,0,0);return x.getImageData(0,0,w,h).data}
 function renderDiff(){
