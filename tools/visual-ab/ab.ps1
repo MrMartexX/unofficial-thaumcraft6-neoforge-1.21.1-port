@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("doctor", "catalog", "findings", "fixtures")]
+    [ValidateSet("doctor", "catalog", "findings", "scenes", "fixtures")]
     [string]$Action = "doctor",
     [string]$ConfigPath,
     [string]$CatalogPath,
@@ -112,6 +112,56 @@ if ($Action -eq "findings") {
         runtimeState = "NOT_RUN"
         masterResearchImport = $ledger.researchMasterImport.status
     } | ConvertTo-Json -Depth 6
+    exit 0
+}
+
+if ($Action -eq "scenes") {
+    $candidatePath = Join-Path $PSScriptRoot "catalog/v0-state-candidates.json"
+    $candidateCatalog = Read-JsonFile $candidatePath
+    if ($candidateCatalog.schema -ne "tc6-visual-ab-scene-candidates/1") {
+        throw "Unsupported state candidate schema"
+    }
+    if ($candidateCatalog.source.researchBaselineSha -ne $catalog.source.researchBaselineSha) {
+        throw "State candidate research baseline mismatch"
+    }
+    $scenes = @($candidateCatalog.scenes)
+    $sceneIds = @($scenes | ForEach-Object { $_.id })
+    if ($scenes.Count -lt 43 -or @($sceneIds | Select-Object -Unique).Count -ne $scenes.Count) {
+        throw "Missing candidate scenes or duplicate state IDs"
+    }
+    $groupIds = @($catalog.groups | ForEach-Object { $_.id })
+    $mappedFindings = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($scene in $scenes) {
+        if ($groupIds -cnotcontains [string]$scene.groupId) { throw "Unknown scene group $($scene.id)" }
+        if ($scene.clientVerification -ne "NOT_RUN") { throw "Scene claims unverified client success: $($scene.id)" }
+        if ($scene.id -cnotlike "$($scene.groupId).*") { throw "Scene ID/group mismatch: $($scene.id)" }
+        if (@($scene.findingIds).Count -lt 1) { throw "Scene lacks finding linkage: $($scene.id)" }
+        $group = @($catalog.groups | Where-Object { $_.id -eq $scene.groupId })[0]
+        foreach ($fid in @($scene.findingIds)) {
+            if (@($group.researchFindingIds) -cnotcontains [string]$fid) {
+                throw "Finding not assigned to scene group: $($scene.id) / $fid"
+            }
+            [void]$mappedFindings.Add([string]$fid)
+        }
+        foreach ($side in @("legacy", "modern")) {
+            if ($scene.setup.$side.verifiedInClient -ne $false) {
+                throw "Scene setup falsely marked verified: $($scene.id)"
+            }
+        }
+    }
+    foreach ($fid in @($catalog.findingIds)) {
+        if (-not $mappedFindings.Contains([string]$fid)) { throw "Source finding missing candidate scene: $fid" }
+    }
+    $pilotScenes = @($scenes | Where-Object { $_.stateStatus -eq "PILOT_RECIPE_DRAFT" }).Count
+    [pscustomobject][ordered]@{
+        schema = "tc6-visual-ab-state-candidate-check/1"
+        sceneCandidateCount = $scenes.Count
+        pilotRecipeDrafts = $pilotScenes
+        coveredSourceFindingCount = $catalog.findingIds.Count
+        status = "SOURCE_SCENE_CANDIDATES_VALID"
+        runtimeState = "NOT_RUN"
+        warning = "Source-derived scene candidates are not verified setup recipes or completed A/B tests."
+    } | ConvertTo-Json -Depth 5
     exit 0
 }
 
