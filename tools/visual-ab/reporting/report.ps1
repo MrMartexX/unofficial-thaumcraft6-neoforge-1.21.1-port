@@ -77,9 +77,26 @@ function Get-MediaRecords([object]$Run) {
     return $records
 }
 
+function Get-PrivateRecordCount([object]$Run, [string]$FileName, [string]$Schema, [string]$FieldName, [int]$Limit) {
+    $path = Join-Path $Run.root $FileName
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { return 0 }
+    if ((Get-Item -LiteralPath $path).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+        throw 'Private manifest reparse point rejected'
+    }
+    $data = Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($data.schema -ne $Schema -or $data.runId -cne $Run.data.runId) {
+        throw 'Private manifest identity mismatch'
+    }
+    $items = @($data.$FieldName)
+    if ($items.Count -gt $Limit) { throw 'Private manifest entry limit exceeded' }
+    return $items.Count
+}
+
 function Get-ReportData([object]$Run) {
     $session = $Run.data
     $mediaRecords = @(Get-MediaRecords $Run)
+    $environmentCount = Get-PrivateRecordCount $Run 'environment.json' 'tc6-visual-ab-environment/1' 'snapshots' 100
+    $videoPlanCount = Get-PrivateRecordCount $Run 'video-plans.json' 'tc6-visual-ab-video-plans/1' 'plans' 256
     $sceneIds = @($session.evidence | ForEach-Object { $_.sceneId }) + @($session.notes | ForEach-Object { $_.sceneId })
     $sceneIds += @($mediaRecords | ForEach-Object { $_.sceneId })
     if ($null -ne $session.selection) { $sceneIds += [string]$session.selection.sceneId }
@@ -151,6 +168,17 @@ function Get-ReportData([object]$Run) {
             mediaContentReviewed = $false
             exportedMediaFiles = 0
         }
+        environment = [pscustomobject][ordered]@{
+            snapshotCount = $environmentCount
+            clientVerification = 'NOT_RUN'
+            calibration = 'CALIBRATION_REQUIRED'
+            rawOptionsExcludedFromExport = $true
+        }
+        videoPlans = [pscustomobject][ordered]@{
+            count = $videoPlanCount
+            alignmentVerification = 'NOT_RUN'
+            videoContentsExcludedFromExport = $true
+        }
         integrity = if ($allValid) { 'VALIDATED' } else { 'INVALID' }
         observation = 'NOT_RUN'
         review = 'NOT_REVIEWED'
@@ -182,6 +210,7 @@ function Build-Report([object]$Run) {
     $lines.Add('Evidence integrity: `' + $data.integrity + '`. SHA-256 is checked for every listed image.')
     $lines.Add('Full game preparation, logs/video, visual alignment and human review remain separate gates.')
     $lines.Add('Local log snapshots: ' + $data.media.logCopiesRecorded + '; external videos indexed: ' + $data.media.externalVideosIndexed + '. Neither was exported or reviewed.')
+    $lines.Add('Read-only environment snapshots: ' + $data.environment.snapshotCount + '; unverified video segment plans: ' + $data.videoPlans.count + '. Raw options and timings remain local.')
     $lines.Add('Notes omitted from export by default: ' + $data.notesOmittedForPrivacy + '.')
     [IO.File]::WriteAllText($jsonPath, ($data | ConvertTo-Json -Depth 25) + "`n", [Text.UTF8Encoding]::new($false))
     [IO.File]::WriteAllText($mdPath, ($lines -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
@@ -239,6 +268,12 @@ function Verify-Archive([string]$Path) {
         if ($result.catalogVersion -ne $script:catalog.version -or $result.integrity -ne 'VALIDATED' -or
             $result.observation -ne 'NOT_RUN' -or $result.review -ne 'NOT_REVIEWED') {
             throw 'Archive claims an unsupported catalog, integrity or review state'
+        }
+        if (($null -ne $result.PSObject.Properties['environment'] -and
+                ($result.environment.clientVerification -ne 'NOT_RUN' -or $result.environment.calibration -ne 'CALIBRATION_REQUIRED')) -or
+            ($null -ne $result.PSObject.Properties['videoPlans'] -and
+                $result.videoPlans.alignmentVerification -ne 'NOT_RUN')) {
+            throw 'Archive falsely claims client calibration or video alignment'
         }
         $knownSceneIds = @($script:catalog.scenes | ForEach-Object { $_.id })
         foreach ($scene in @($result.sceneResults)) {
