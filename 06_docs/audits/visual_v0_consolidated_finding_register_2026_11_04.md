@@ -5,8 +5,8 @@
 ## Decision summary
 
 - The static **inventory** for original block/item declarations, original PNG/metadata and matching model assets is complete **for the specifically enumerated source trees**. The source-level **render semantic audit** has found concrete divergences and left a documented follow-up queue; it is not an exhaustive proof that all renderer methods behave identically.
-- **4 P0 visual high-confidence source gaps**, **10 P1 visual source-level gaps or algorithm/shape differences**, **1 separate P0 gameplay/cross-domain discrepancy**, **4 UI functionality/visual families with no equivalent registered menu**. These are risk-priority classifications. **None of these cases has a 1.12.2-vs-1.21.1 in-game A/B evidence bundle yet.**
-- Source provenance is unified in the companion JSON with original report, legacy/current path anchors where available, confidence, runtime status, grouped scene and disposition. The register includes **29 rows** across P0/P1/P2/UI triage, including several *positive or review-only* P2 cases; **do not interpret all 29 as defects**.
+- **4 P0 visual high-confidence source gaps**, **17 P1 visual source-level gaps or algorithm/shape differences**, **1 separate P0 gameplay/cross-domain discrepancy**, **4 UI functionality/visual families with no equivalent registered menu**. These are risk-priority classifications. **None of these cases has a 1.12.2-vs-1.21.1 in-game A/B evidence bundle yet.**
+- Source provenance is unified in the companion JSON with original report, legacy/current path anchors where available, confidence, runtime status, grouped scene and disposition. The register includes **37 rows** across P0/P1/P2/UI triage, including several *positive or review-only* P2 cases; **do not interpret all 37 as defects**.
 - Do not start full rendering rework or merge this PR before grouped client comparison and feature-level approval. Fixes should be separate targeted implementation PRs.
 
 ## Inventory closure at pinned SHA
@@ -32,7 +32,7 @@
 
 These paths are confirmed distinct in pinned source. They are *not* claims about observed client frames.
 
-## P1 visual work: 10 cases
+## P1 visual work: 17 cases
 
 | IDs | Domain | Source-level distinction | Client gate |
 | --- | --- | --- | --- |
@@ -46,15 +46,26 @@ These paths are confirmed distinct in pinned source. They are *not* claims about
 | MUV-001 | Ancient stairs | Straight uses `ancient_stone_1`, corner variants preserve original `ancient_tile` | G06 |
 | MUV-002 | Arcane stairs | Straight top/side switched to `_1`, corners retain original `_2`/`_3` faces | G06 |
 | MUV-003 | Special armor | Four original 128×64 custom-model rigs (210 `.addBox` call sites) not found attached to current ArmorItem client hooks | G05 |
+| V0-MCH-01 | Machine TESR: Dioptra | dynamic grid unrendered (see detailed source diff) | G09 |
+| V0-MCH-02 | Machine TESR: Focal Manipulator | focus and orbit fx unrendered (see detailed source diff) | G09 |
+| V0-MCH-03 | Machine TESR: Hungry Chest | custom chest silhouette and lid missing (see detailed source diff) | G09 |
+| V0-MCH-05 | Machine TESR: Tube Buffer | choke red blue rods missing (see detailed source diff) | G09 |
+| V0-MCH-06 | Machine TESR: Alembic | aspect label and dynamic nozzle missing (see detailed source diff) | G09 |
+| V0-MCH-07 | Machine TESR: Centrifuge | rotation computed but not drawn (see detailed source diff) | G09 |
+| V0-MCH-08 | Machine TESR: Pattern Crafter | mode icon and rotating gears missing (see detailed source diff) | G09 |
 
 The four `V0ER-*` P1 labels are a consolidation prioritisation, not newly observed game bugs. Preserve original model motion, tint, visibility rules and texture UV, not merely generic substitute particles.
+
+## P2 source-level machine detail
+
+- **V0-MCH-04 / Tube One-way:** legacy connected-side blue rod has no render path in inspected current one-way tube models or BER registrations. Medium visual priority, client G09 acceptance still pending.
 
 ## Cross-domain and deferred features (not silently part of the visual fix)
 
 - **GM-01 / P0 gameplay:** Hole initially fills surrounding perpendicular 3×3 plane in original; modern progression is longitudinal only. This affects visible footprint but fixing the actual block-propagation algorithm needs its own gameplay review and regression tests.
 - **17 original world banner block IDs:** not present as exact registered modern world block paths despite preserved orphan assets. Verify alternate representations, placement/saves and variants; do not classify the preserved textures as a completed banner port.
 - **Four legacy GUI families:** Arcane Spa (explicitly deferred GUI), Potion Sprayer, Logistics and configurable Golem Seal (modern action-bar/status text only) are not equivalent registered menus. Source review establishes routes, not all device-server semantics.
-- **Source-only dynamic tile review:** Hungry Chest lid, Centrifuge rotor, Dioptra grid, Focal Manipulator crystals, Alembic labels/nozzle, Tube rods, Pattern Crafter overlay and Recharge Pedestal transform. Recharge already uses **shared** Infusion Pedestal BER, so a new BER is not inherently needed.
+- **Eight TESR machine visual source gaps classified:** V0-MCH-01..08 (7 P1, 1 P2), including Hungry Chest special mesh/lid, Centrifuge rotor, Dioptra height grid, Focal crystals, Alembic label/nozzle, Tube rods and Pattern Crafter modes/gears. Runtime validation remains G09. Recharge Pedestal continues to use a **shared** Infusion Pedestal BER, so its source registration is not missing.
 - **HUD review:** casting-wand/trade display, focus radial choice and seal-area overlay lack direct counterparts in inspected central event paths. Search alternative hooks and compare actual user interaction before claiming global absence.
 - **Model/asset watchlist:** Scribing Tools handheld parent, Pure Bucket icon substitution, generic crystal MTL numeric color, Redstone Relay old unregistered ID, `empty` orphan model; CTM integration and seven Thaumonomicon research backgrounds; legacy `hole.json` Forge marker.
 
@@ -81,7 +92,7 @@ The four `V0ER-*` P1 labels are a consolidation prioritisation, not newly observ
 | G06 | Stairs geometry and face-texture continuity | MUV-001, MUV-002 |
 | G07 | GUI and HUD interaction sweep | V0GUI-spa, V0GUI-potion_sprayer, V0GUI-logistics, V0GUI-seal, W-03 |
 | G08 | FX burst and per-tick cadence | V0FX-02, V0FX-03, V0FX-04, V0FX-05, V0FX-06, V0FX-07, V0FX-08 |
-| G09 | Remaining dynamic tile animations | W-02 |
+| G09 | Eight classified machine TESR gaps and animations | V0-MCH-01..08, W-02 (runtime open) |
 | G10 | Texture metadata / Thaumonomicon backgrounds | W-04 |
 | G11 | Item display and OBJ material smoke | MUV-004, MUV-005, MUV-008 |
 | G12 | Registry orphans and world banners | W-01, MUV-006, MUV-007, W-06 |
@@ -115,7 +126,8 @@ All reports are from draft PR #11, pinned to the same `main` source commit. This
 - [`visual_v0_portal_mirror_rift_semantic_diff_2026_11_03.md`](./visual_v0_portal_mirror_rift_semantic_diff_2026_11_03.md) (PV-01–04 and GM-01).
 - [`visual_v0_texture_fingerprint_animation_checkpoint_2026_11_03.md`](./visual_v0_texture_fingerprint_animation_checkpoint_2026_11_03.md) (855 original texture hashes and metadata).
 - [`visual_v0_model_geometry_uv_material_checkpoint_2026_11_04.md`](./visual_v0_model_geometry_uv_material_checkpoint_2026_11_04.md) (274 JSON pairs, 27 OBJ, 6 MTL and armor UV).
+- [`visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md`](./visual_v0_legacy_machine_tesr_semantic_diff_2026_11_04.md) (eight machine TESR family source-level differences and state-based G09 acceptance).
 
-**Companion machine register:** `06_docs/audits/generated/visual_v0_consolidated_finding_register_2026_11_04.json`. Contains the complete 29-row triage, evidence anchors, explicit counterexamples and 13 grouped client-scene contracts.
+**Companion machine register:** `06_docs/audits/generated/visual_v0_consolidated_finding_register_2026_11_04.json`. Contains the complete 37-row triage, evidence anchors, explicit counterexamples and 13 grouped client-scene contracts.
 
-**Verification performed for this checkpoint:** read and cross-reconciled all 12 PR narrative reports, reviewed five structured evidence JSON datasets, rechecked exact source `main` SHA and PR draft state. No Minecraft client, local PowerShell, Gradle or automated gameplay tests were run. No gameplay/client files modified.
+**Verification performed for this checkpoint:** read and cross-reconciled all 12 PR narrative reports, reviewed five structured evidence JSON datasets and the eight-record machine TESR delta, rechecked exact source `main` SHA and PR draft state. No Minecraft client, local PowerShell, Gradle or automated gameplay tests were run. No gameplay/client files modified.
