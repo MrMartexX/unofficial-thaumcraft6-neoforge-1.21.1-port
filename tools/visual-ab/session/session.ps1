@@ -288,6 +288,10 @@ switch ($Action) {
                     $latest = Get-Item -LiteralPath $candidate.FullName -ErrorAction Stop
                     if ($latest.Length -ne $sizeBefore) { continue }
                     $freshSession = Read-Session $sessionInfo.path
+                    if ($freshSession.state.selection.sceneId -cne $state.selection.sceneId -or
+                        $freshSession.state.selection.side -cne $state.selection.side) {
+                        throw "Active scene or side changed while watcher was running; capture aborted to avoid misattribution"
+                    }
                     $result = Import-Png $freshSession $candidate.FullName "WATCHED_NEW_FILE"
                     [void]$known.Add($candidate.Name)
                     if ($result.status -eq "CAPTURED") { $imported++ }
