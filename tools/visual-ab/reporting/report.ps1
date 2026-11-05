@@ -92,6 +92,39 @@ function Get-PrivateRecordCount([object]$Run, [string]$FileName, [string]$Schema
     return $items.Count
 }
 
+function Get-ValidatedRenderCount([object]$Run) {
+    $path = Join-Path $Run.root 'video-renders.json'
+    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { return 0 }
+    if ((Get-Item -LiteralPath $path).Attributes -band [IO.FileAttributes]::ReparsePoint) {
+        throw 'Render manifest reparse point rejected'
+    }
+    $doc = Get-Content -LiteralPath $path -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($doc.schema -cne 'tc6-visual-ab-video-renders/1' -or $doc.runId -cne $Run.data.runId -or
+        @($doc.entries).Count -gt 128) { throw 'Invalid render manifest identity or limit' }
+    $seen = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($record in @($doc.entries)) {
+        if ([string]$record.id -cnotmatch '^VREND_[A-Za-z0-9_]+\z' -or
+            [string]$record.planId -cnotmatch '^VPLAN_[A-Za-z0-9_]+\z' -or
+            [string]$record.previewId -cnotmatch '^VPREV_[A-Za-z0-9_]+\z' -or
+            -not $seen.Add([string]$record.previewId) -or
+            $record.status -cne 'ENCODED_UNREVIEWED' -or
+            $record.frameReview -cne 'NOT_RUN' -or $record.gameplayObservation -cne 'NOT_RUN') {
+            throw 'Invalid or duplicate render record'
+        }
+        foreach ($side in @('legacy', 'modern')) {
+            $relative = 'clips/' + $record.planId + '/' + $record.previewId + '/' + $side + '.mp4'
+            if ($record.$side.relativePath -cne $relative -or
+                [string]$record.$side.sha256 -cnotmatch '^[0-9a-f]{64}\z') {
+                throw 'Invalid render clip manifest path/hash'
+            }
+            $file = Assert-RegularFile $Run.root $relative
+            if ((Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLowerInvariant() -cne
+                [string]$record.$side.sha256) { throw 'Encoded clip hash changed; report refused' }
+        }
+    }
+    return @($doc.entries).Count
+}
+
 function Get-ReportData([object]$Run) {
     $session = $Run.data
     $mediaRecords = @(Get-MediaRecords $Run)
@@ -99,6 +132,7 @@ function Get-ReportData([object]$Run) {
     $videoPlanCount = Get-PrivateRecordCount $Run 'video-plans.json' 'tc6-visual-ab-video-plans/1' 'plans' 256
     $probeCount = Get-PrivateRecordCount $Run 'video-probes.json' 'tc6-visual-ab-video-probes/1' 'entries' 128
     $previewCount = Get-PrivateRecordCount $Run 'video-previews.json' 'tc6-visual-ab-video-previews/1' 'entries' 128
+    $renderCount = Get-ValidatedRenderCount $Run
     $sceneIds = @($session.evidence | ForEach-Object { $_.sceneId }) + @($session.notes | ForEach-Object { $_.sceneId })
     $sceneIds += @($mediaRecords | ForEach-Object { $_.sceneId })
     if ($null -ne $session.selection) { $sceneIds += [string]$session.selection.sceneId }
@@ -180,7 +214,9 @@ function Get-ReportData([object]$Run) {
             count = $videoPlanCount
             ffprobeMetadataRecords = $probeCount
             ffmpegArgumentPreviews = $previewCount
-            ffmpegExecuted = $false
+            renderedClipPairs = $renderCount
+            ffmpegExecuted = ($renderCount -gt 0)
+            renderedClipsReviewed = $false
             alignmentVerification = 'NOT_RUN'
             videoContentsExcludedFromExport = $true
         }
@@ -217,6 +253,7 @@ function Build-Report([object]$Run) {
     $lines.Add('Local log snapshots: ' + $data.media.logCopiesRecorded + '; external videos indexed: ' + $data.media.externalVideosIndexed + '. Neither was exported or reviewed.')
     $lines.Add('Read-only environment snapshots: ' + $data.environment.snapshotCount + '; unverified video segment plans: ' + $data.videoPlans.count + '. Raw options and timings remain local.')
     $lines.Add('ffprobe metadata records: ' + $data.videoPlans.ffprobeMetadataRecords + '; ffmpeg arguments previews (no encoding): ' + $data.videoPlans.ffmpegArgumentPreviews + '.')
+    $lines.Add('Encoded clip pairs: ' + $data.videoPlans.renderedClipPairs + '. All remain unreviewed, excluded from ZIP, and cannot imply a gameplay PASS.')
     $lines.Add('Notes omitted from export by default: ' + $data.notesOmittedForPrivacy + '.')
     [IO.File]::WriteAllText($jsonPath, ($data | ConvertTo-Json -Depth 25) + "`n", [Text.UTF8Encoding]::new($false))
     [IO.File]::WriteAllText($mdPath, ($lines -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
@@ -279,7 +316,11 @@ function Verify-Archive([string]$Path) {
                 ($result.environment.clientVerification -ne 'NOT_RUN' -or $result.environment.calibration -ne 'CALIBRATION_REQUIRED')) -or
             ($null -ne $result.PSObject.Properties['videoPlans'] -and
                 ($result.videoPlans.alignmentVerification -ne 'NOT_RUN' -or
-                 ($null -ne $result.videoPlans.PSObject.Properties['ffmpegExecuted'] -and $result.videoPlans.ffmpegExecuted -ne $false)))) {
+                 ($null -ne $result.videoPlans.PSObject.Properties['renderedClipsReviewed'] -and
+                  $result.videoPlans.renderedClipsReviewed -ne $false) -or
+                 ($result.videoPlans.ffmpegExecuted -eq $true -and
+                  ($null -eq $result.videoPlans.PSObject.Properties['renderedClipPairs'] -or
+                   [int]$result.videoPlans.renderedClipPairs -lt 1))))) {
             throw 'Archive falsely claims client calibration or video alignment'
         }
         $knownSceneIds = @($script:catalog.scenes | ForEach-Object { $_.id })
