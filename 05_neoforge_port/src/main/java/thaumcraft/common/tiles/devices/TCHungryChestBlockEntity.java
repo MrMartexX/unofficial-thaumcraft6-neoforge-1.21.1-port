@@ -15,11 +15,14 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ContainerOpenersCounter;
+import net.minecraft.world.level.block.entity.ChestLidController;
+import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.common.registry.TCBlockEntities;
 
-public class TCHungryChestBlockEntity extends RandomizableContainerBlockEntity {
+public class TCHungryChestBlockEntity extends RandomizableContainerBlockEntity implements LidBlockEntity {
+    private final ChestLidController lidController = new ChestLidController();
     private NonNullList<ItemStack> items = NonNullList.withSize(27, ItemStack.EMPTY);
     private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
         @Override
@@ -92,9 +95,25 @@ public class TCHungryChestBlockEntity extends RandomizableContainerBlockEntity {
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, TCHungryChestBlockEntity entity) {
-        if (!entity.remove) {
+        if (level.isClientSide) {
+            entity.lidController.tickLid();
+        } else if (!entity.remove) {
             entity.openersCounter.recheckOpeners(level, pos, state);
         }
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int value) {
+        if (id == 1) {
+            lidController.shouldBeOpen(value > 0);
+            return true;
+        }
+        return super.triggerEvent(id, value);
+    }
+
+    @Override
+    public float getOpenNess(float partialTick) {
+        return lidController.getOpenness(partialTick);
     }
 
     public ItemStack insertItem(ItemStack stack) {

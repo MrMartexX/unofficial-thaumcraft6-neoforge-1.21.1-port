@@ -177,12 +177,15 @@ public class TCThaumatoriumBlockEntity extends BlockEntity implements WorldlyCon
     }
 
     public ItemStack displayRecipeOutput() {
+        return displayRecipeOutput(level == null ? 0 : level.getGameTime());
+    }
+
+    public ItemStack displayRecipeOutput(long displayTicks) {
         if (level == null || selectedRecipes.isEmpty()) {
             return ItemStack.EMPTY;
         }
-        int index = currentCraft >= 0 && currentCraft < selectedRecipes.size()
-                ? currentCraft
-                : (int) ((level.getGameTime() / 20L) % selectedRecipes.size());
+        // The legacy display cycles independently of the recipe the machine is crafting.
+        int index = (int) Math.floorMod(displayTicks / 20L, selectedRecipes.size());
         return recipeById(selectedRecipes.get(index))
                 .map(holder -> holder.value().result())
                 .orElse(ItemStack.EMPTY);

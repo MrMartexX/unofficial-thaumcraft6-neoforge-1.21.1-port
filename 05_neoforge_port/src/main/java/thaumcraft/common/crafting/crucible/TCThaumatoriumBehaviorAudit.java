@@ -84,6 +84,7 @@ public final class TCThaumatoriumBehaviorAudit {
     private static Report run(MinecraftServer server) {
         ArrayList<Check> checks = new ArrayList<>();
         ServerLevel level = server.overworld();
+        checkDisplayCycling(level, checks);
         BlockPos origin = new BlockPos(384, level.getMinBuildHeight() + 18, 384);
         clearArea(level, origin, 8);
 
@@ -287,6 +288,37 @@ public final class TCThaumatoriumBehaviorAudit {
         TCPlayerKnowledgeStore.set(player, new TCPlayerKnowledge(), false);
         clearArea(level, origin, 8);
         return new Report(List.copyOf(checks));
+    }
+
+    private static void checkDisplayCycling(ServerLevel level, List<Check> checks) {
+        var recipes = level.getRecipeManager().getAllRecipesFor(TCRecipes.CRUCIBLE_TYPE.get()).stream()
+                .filter(holder -> !holder.value().result().isEmpty())
+                .sorted(java.util.Comparator.comparing(holder -> holder.id().toString())).toList();
+        var fixture = new TCThaumatoriumBlockEntity(BlockPos.ZERO, TCBlocks.THAUMATORIUM.get().defaultBlockState());
+        fixture.setLevel(level);
+        checks.add(check("thaumatorium_empty_display_is_empty", fixture.displayRecipeOutput(20).isEmpty(), "No selected recipes"));
+        if (recipes.size() < 2) {
+            checks.add(check("thaumatorium_display_fixture_has_two_recipes", false, "Loaded recipes=" + recipes.size()));
+            return;
+        }
+        var data = new net.minecraft.nbt.CompoundTag();
+        var selected = new net.minecraft.nbt.ListTag();
+        selected.add(net.minecraft.nbt.StringTag.valueOf(recipes.get(0).id().toString()));
+        selected.add(net.minecraft.nbt.StringTag.valueOf(recipes.get(1).id().toString()));
+        data.put("SelectedRecipes", selected);
+        data.putInt("CurrentCraft", 0);
+        data.putInt("MaxRecipes", 3);
+        fixture.loadWithComponents(data, level.registryAccess());
+        var before = fixture.saveWithoutMetadata(level.registryAccess());
+        boolean matches = true;
+        for (long tick : new long[] {0, 19, 20, 39, 40, 59, 60}) {
+            var expected = recipes.get((int) (tick / 20 % 2)).value().result();
+            matches &= ItemStack.matches(fixture.displayRecipeOutput(tick), expected);
+        }
+        checks.add(check("thaumatorium_display_cycles_even_during_active_craft", matches,
+                "20-tick camera-clock slots, CurrentCraft remains 0"));
+        checks.add(check("thaumatorium_display_never_mutates_machine_state",
+                before.equals(fixture.saveWithoutMetadata(level.registryAccess())), "Saved state unchanged after display lookups"));
     }
 
     private static Optional<RecipeHolder<TCCrucibleRecipe>> recipe(ServerLevel level, ResourceLocation id) {

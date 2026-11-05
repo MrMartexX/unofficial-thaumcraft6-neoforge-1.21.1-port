@@ -8,5 +8,6 @@ Start with:
 2. `legacy_fx_engine.md`
 3. `thaumometer_visual_parity_audit.md`
 4. `fx_scanning_render_parity_status.md`
+5. [External-port model adoption and measured boundaries](../migration/external_ports_adoption.md)
 
 `fx_preview/` contains visual preview artifacts used by FX parity work.

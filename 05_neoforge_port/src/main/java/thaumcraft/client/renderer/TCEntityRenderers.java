@@ -22,7 +22,7 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.ARCANE_BORE.get(), TCArcaneBoreRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FALLING_TAINT.get(), TCFallingTaintRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINT_SEED.get(), TCTaintSeedRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.TAINT_SEED_PRIME.get(), TCTaintSeedRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.TAINT_SEED_PRIME.get(), context -> new TCTaintSeedRenderer(context, 0.6F));
         event.registerEntityRenderer(TCEntityTypes.THAUM_SLIME.get(), TCThaumicSlimeRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINT_CRAWLER.get(), TCTaintCrawlerRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.TAINTACLE.get(), context -> new TCTaintacleRenderer<>(context, 10, 0.6F));

@@ -21,7 +21,9 @@ final class TCThaumatoriumRenderer implements BlockEntityRenderer<TCThaumatorium
 
     @Override
     public void render(TCThaumatoriumBlockEntity thaumatorium, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-        ItemStack display = thaumatorium.displayRecipeOutput();
+        var camera = net.minecraft.client.Minecraft.getInstance().getCameraEntity();
+        ItemStack display = camera == null ? thaumatorium.displayRecipeOutput()
+                : thaumatorium.displayRecipeOutput(camera.tickCount);
         if (display.isEmpty()) {
             return;
         }
@@ -43,5 +45,10 @@ final class TCThaumatoriumRenderer implements BlockEntityRenderer<TCThaumatorium
             case NORTH -> 180.0F;
             default -> 0.0F;
         };
+    }
+
+    @Override
+    public net.minecraft.world.phys.AABB getRenderBoundingBox(TCThaumatoriumBlockEntity blockEntity) {
+        return new net.minecraft.world.phys.AABB(blockEntity.getBlockPos()).inflate(0.1).expandTowards(0, 1, 0);
     }
 }

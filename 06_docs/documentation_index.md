@@ -14,6 +14,7 @@ This is the navigation map for `06_docs/`. It records where documents live after
 | Scope, gates and risk rules | `migration/migration_matrix.md` |
 | Roadmap order | `migration/porting_order.md` |
 | Main migration guide | `migration/NeoForge_legacy_migration_guide.md` |
+| External port adoption, protected systems and first-batch evidence | [External port adoption](migration/external_ports_adoption.md) |
 | Ready flat worlds, test-station map and safe reset | [Paired comparison worlds](../07_Test_Instance_and_Comparisons/paired_flat_worlds/README.md) |
 
 ## Root Files

@@ -18,6 +18,11 @@ final class TCTaintCrawlerRenderer extends MobRenderer<TCTaintCrawlerEntity, Sil
     }
 
     @Override
+    protected float getFlipDegrees(TCTaintCrawlerEntity entity) {
+        return 180.0F;
+    }
+
+    @Override
     public ResourceLocation getTextureLocation(TCTaintCrawlerEntity entity) {
         return TEXTURE;
     }

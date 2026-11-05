@@ -1,29 +1,29 @@
 package thaumcraft.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.SpiderModel;
-import net.minecraft.client.model.geom.ModelLayers;
+
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import thaumcraft.Thaumcraft;
 import thaumcraft.common.entities.TCEldritchCrabEntity;
 
-final class TCEldritchCrabRenderer extends MobRenderer<TCEldritchCrabEntity, SpiderModel<TCEldritchCrabEntity>> {
-    private static final ResourceLocation TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/entity/crab.png");
+/** Port of TCEldritchCrabRenderer: the crab model drawn at 0.8 scale. */
+public class TCEldritchCrabRenderer extends MobRenderer<TCEldritchCrabEntity, TCEldritchCrabModel> {
+    private static final ResourceLocation SKIN = ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/entity/crab.png");
 
-    TCEldritchCrabRenderer(EntityRendererProvider.Context context) {
-        super(context, new SpiderModel<>(context.bakeLayer(ModelLayers.SPIDER)), 0.35F);
+    public TCEldritchCrabRenderer(EntityRendererProvider.Context ctx) {
+        super(ctx, new TCEldritchCrabModel(), 0.5f);
     }
 
     @Override
     public ResourceLocation getTextureLocation(TCEldritchCrabEntity entity) {
-        return TEXTURE;
+        return SKIN;
     }
 
     @Override
-    protected void scale(TCEldritchCrabEntity entity, PoseStack poseStack, float partialTickTime) {
-        poseStack.scale(0.55F, 0.45F, 0.55F);
+    protected void scale(TCEldritchCrabEntity entity, PoseStack pose, float partialTick) {
+        pose.scale(0.8f, 0.8f, 0.8f);
+        super.scale(entity, pose, partialTick);
     }
 }
