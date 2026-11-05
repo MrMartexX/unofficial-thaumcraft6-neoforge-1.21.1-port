@@ -97,6 +97,8 @@ function Get-ReportData([object]$Run) {
     $mediaRecords = @(Get-MediaRecords $Run)
     $environmentCount = Get-PrivateRecordCount $Run 'environment.json' 'tc6-visual-ab-environment/1' 'snapshots' 100
     $videoPlanCount = Get-PrivateRecordCount $Run 'video-plans.json' 'tc6-visual-ab-video-plans/1' 'plans' 256
+    $probeCount = Get-PrivateRecordCount $Run 'video-probes.json' 'tc6-visual-ab-video-probes/1' 'entries' 128
+    $previewCount = Get-PrivateRecordCount $Run 'video-previews.json' 'tc6-visual-ab-video-previews/1' 'entries' 128
     $sceneIds = @($session.evidence | ForEach-Object { $_.sceneId }) + @($session.notes | ForEach-Object { $_.sceneId })
     $sceneIds += @($mediaRecords | ForEach-Object { $_.sceneId })
     if ($null -ne $session.selection) { $sceneIds += [string]$session.selection.sceneId }
@@ -176,6 +178,9 @@ function Get-ReportData([object]$Run) {
         }
         videoPlans = [pscustomobject][ordered]@{
             count = $videoPlanCount
+            ffprobeMetadataRecords = $probeCount
+            ffmpegArgumentPreviews = $previewCount
+            ffmpegExecuted = $false
             alignmentVerification = 'NOT_RUN'
             videoContentsExcludedFromExport = $true
         }
@@ -211,6 +216,7 @@ function Build-Report([object]$Run) {
     $lines.Add('Full game preparation, logs/video, visual alignment and human review remain separate gates.')
     $lines.Add('Local log snapshots: ' + $data.media.logCopiesRecorded + '; external videos indexed: ' + $data.media.externalVideosIndexed + '. Neither was exported or reviewed.')
     $lines.Add('Read-only environment snapshots: ' + $data.environment.snapshotCount + '; unverified video segment plans: ' + $data.videoPlans.count + '. Raw options and timings remain local.')
+    $lines.Add('ffprobe metadata records: ' + $data.videoPlans.ffprobeMetadataRecords + '; ffmpeg arguments previews (no encoding): ' + $data.videoPlans.ffmpegArgumentPreviews + '.')
     $lines.Add('Notes omitted from export by default: ' + $data.notesOmittedForPrivacy + '.')
     [IO.File]::WriteAllText($jsonPath, ($data | ConvertTo-Json -Depth 25) + "`n", [Text.UTF8Encoding]::new($false))
     [IO.File]::WriteAllText($mdPath, ($lines -join "`n") + "`n", [Text.UTF8Encoding]::new($false))
@@ -272,7 +278,8 @@ function Verify-Archive([string]$Path) {
         if (($null -ne $result.PSObject.Properties['environment'] -and
                 ($result.environment.clientVerification -ne 'NOT_RUN' -or $result.environment.calibration -ne 'CALIBRATION_REQUIRED')) -or
             ($null -ne $result.PSObject.Properties['videoPlans'] -and
-                $result.videoPlans.alignmentVerification -ne 'NOT_RUN')) {
+                ($result.videoPlans.alignmentVerification -ne 'NOT_RUN' -or
+                 ($null -ne $result.videoPlans.PSObject.Properties['ffmpegExecuted'] -and $result.videoPlans.ffmpegExecuted -ne $false)))) {
             throw 'Archive falsely claims client calibration or video alignment'
         }
         $knownSceneIds = @($script:catalog.scenes | ForEach-Object { $_.id })
