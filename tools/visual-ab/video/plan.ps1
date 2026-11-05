@@ -147,10 +147,14 @@ switch ($Action) {
         } | ConvertTo-Json -Compress -Depth 5
     }
     'status' {
+        $safePlans = if ($null -eq $plans) { @() } else {
+            @($plans.plans | ForEach-Object { [pscustomobject]@{ id = [string]$_.id; sceneId = [string]$_.sceneId } })
+        }
         [pscustomobject]@{
             status = if ($null -eq $plans) { 'NO_VIDEO_PLANS' } else { 'VIDEO_PLANS_UNVERIFIED' }
             runId = $session.runId
             count = if ($null -eq $plans) { 0 } else { @($plans.plans).Count }
+            planIdsForProbe = @($safePlans)
             observation = 'NOT_RUN'
         } | ConvertTo-Json -Compress
     }
