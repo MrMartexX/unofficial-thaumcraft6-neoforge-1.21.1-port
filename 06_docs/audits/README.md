@@ -2,6 +2,10 @@
 
 This folder is for audit summaries that are useful after the original local run is gone.
 
+Visual parity: start with the [research index](visual_parity_research_index.md),
+then the [preserved consolidated investigation](thaumcraft6_visual_parity_research_master_2026_11_03.md).
+It is a pinned historical investigation, not a current all-systems PASS report.
+
 Latest cross-subsystem review: [main changes from July 25 through October 31, 2026](main_review_2026_10_31.md), including fresh verification, confirmed defects and the next repair batches.
 
 Use it for:

@@ -14,6 +14,7 @@ This is the navigation map for `06_docs/`. It records where documents live after
 | Scope, gates and risk rules | `migration/migration_matrix.md` |
 | Roadmap order | `migration/porting_order.md` |
 | Main migration guide | `migration/NeoForge_legacy_migration_guide.md` |
+| Consolidated visual-parity investigation and related branch evidence | [Visual parity research index](audits/visual_parity_research_index.md) |
 
 ## Root Files
 
