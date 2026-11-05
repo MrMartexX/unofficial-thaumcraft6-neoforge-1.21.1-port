@@ -14,6 +14,7 @@ $mediaTool = Join-Path $PSScriptRoot "../media/media.ps1"
 $environmentTool = Join-Path $PSScriptRoot "../environment/inspect.ps1"
 $videoTool = Join-Path $PSScriptRoot "../video/plan.ps1"
 $videoProbeTool = Join-Path $PSScriptRoot "../video/probe.ps1"
+$videoRenderTool = Join-Path $PSScriptRoot "../video/render.ps1"
 $catalogPath = Join-Path $PSScriptRoot "../catalog/v0-state-candidates.json"
 if (-not (Test-Path -LiteralPath $core -PathType Leaf)) { throw "Missing session.ps1" }
 $catalog = Get-Content -LiteralPath $catalogPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -114,6 +115,7 @@ while ($true) {
     Write-Host "E  Снимок и сверка условий обоих клиентов (без их запуска)"
     Write-Host "T  План сегментов двух видео (ручные смещения, без нарезки)"
     Write-Host "B  ffprobe и предпросмотр безопасных аргументов ffmpeg"
+    Write-Host "F  Нарезка двух видео через ffmpeg (только по явному подтверждению)"
     Write-Host "S  Показать состояние сессии"
     Write-Host "0  Выход"
     $choice = (Read-Host "Выбери действие").Trim().ToUpperInvariant()
@@ -367,6 +369,38 @@ while ($true) {
                         Write-Host ("Сверка источников: " + $result.valid + " корректно, " + $result.invalid + " ошибок")
                     }
                     Write-Host 'Команды не выполнялись, видео не обрезалось. Совпадение кадров НЕ подтверждено.'
+                }
+            }
+            "F" {
+                if (-not (Need-Run)) { break }
+                $mode = (Read-Host 'Клипы: R = нарезать, V = проверить SHA-256, Enter = состояние').Trim().ToUpperInvariant()
+                $action = switch ($mode) { 'R' { 'render' }; 'V' { 'verify' }; default { 'status' } }
+                $argsList = @('-Action', $action, '-RunPath', $script:activeRun)
+                if ($action -eq 'render') {
+                    $preview = Read-Host 'PreviewId (из пункта B, режим P)'
+                    if (-not $preview) { Write-Warning 'Нужен PreviewId'; break }
+                    Write-Host 'Будут созданы два новых MP4 в текущем RUN. Это перекодирование без проверки визуального совпадения.' -ForegroundColor Yellow
+                    $approval = Read-Host 'Для запуска ffmpeg напиши RENDER (Enter = отмена)'
+                    if ($approval -cne 'RENDER') { Write-Host 'Нарезка отменена'; break }
+                    $argsList += @('-PreviewId', $preview)
+                    $ffmpeg = Read-Host 'Путь к ffmpeg.exe (Enter = ffmpeg из PATH)'
+                    if ($ffmpeg) { $argsList += @('-FfmpegPath', $ffmpeg) }
+                }
+                $result = Invoke-Cycle3 $videoRenderTool $argsList
+                if ($null -ne $result) {
+                    Write-Host ('Клипы: ' + $result.status) -ForegroundColor Green
+                    if ($null -ne $result.PSObject.Properties['legacyPath']) {
+                        Write-Host ('Legacy: ' + $result.legacyPath)
+                        Write-Host ('Modern: ' + $result.modernPath)
+                    }
+                    if ($null -ne $result.PSObject.Properties['successfulPairs']) {
+                        Write-Host ('Успешно закодированных пар: ' + $result.successfulPairs)
+                    }
+                    if ($null -ne $result.PSObject.Properties['invalid']) {
+                        Write-Host ('SHA-256: корректно ' + $result.valid + '; ошибки ' + $result.invalid)
+                    }
+                    Write-Host 'Исходные видео не перезаписываются. Клипы не включаются в ZIP и требуют ручной проверки.'
+                    Write-Host 'Синхронизация камеры и игровой результат: NOT_RUN.'
                 }
             }
             "S" {
