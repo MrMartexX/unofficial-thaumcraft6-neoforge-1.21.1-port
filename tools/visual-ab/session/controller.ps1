@@ -13,6 +13,7 @@ $reportTool = Join-Path $PSScriptRoot "../reporting/report.ps1"
 $mediaTool = Join-Path $PSScriptRoot "../media/media.ps1"
 $environmentTool = Join-Path $PSScriptRoot "../environment/inspect.ps1"
 $videoTool = Join-Path $PSScriptRoot "../video/plan.ps1"
+$videoProbeTool = Join-Path $PSScriptRoot "../video/probe.ps1"
 $catalogPath = Join-Path $PSScriptRoot "../catalog/v0-state-candidates.json"
 if (-not (Test-Path -LiteralPath $core -PathType Leaf)) { throw "Missing session.ps1" }
 $catalog = Get-Content -LiteralPath $catalogPath -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -112,6 +113,7 @@ while ($true) {
     Write-Host "M  Состояние и SHA-256 логов/видео"
     Write-Host "E  Снимок и сверка условий обоих клиентов (без их запуска)"
     Write-Host "T  План сегментов двух видео (ручные смещения, без нарезки)"
+    Write-Host "B  ffprobe и предпросмотр безопасных аргументов ffmpeg"
     Write-Host "S  Показать состояние сессии"
     Write-Host "0  Выход"
     $choice = (Read-Host "Выбери действие").Trim().ToUpperInvariant()
@@ -331,10 +333,40 @@ while ($true) {
                 if ($null -ne $result) {
                     Write-Host ("Видео: " + $result.status) -ForegroundColor Green
                     if ($null -ne $result.PSObject.Properties['planId']) { Write-Host ("План: " + $result.planId) }
+                    if ($null -ne $result.PSObject.Properties['planIdsForProbe']) {
+                        foreach ($entry in @($result.planIdsForProbe)) {
+                            Write-Host ("План для ffprobe: " + $entry.id + " / " + $entry.sceneId)
+                        }
+                    }
                     if ($null -ne $result.PSObject.Properties['invalid']) {
                         Write-Host ("Хеши: корректно " + $result.valid + ", ошибки " + $result.invalid)
                     }
                     Write-Host "Нарезка и синхронизация камеры не выполнены. Игровой результат: NOT_RUN."
+                }
+            }
+            "B" {
+                if (-not (Need-Run)) { break }
+                $mode = (Read-Host "ffprobe: I = проверить видео, P = предпросмотр команд, V = перепроверить SHA, Enter = состояние").Trim().ToUpperInvariant()
+                $action = switch ($mode) { 'I' { 'inspect' }; 'P' { 'preview' }; 'V' { 'verify' }; default { 'status' } }
+                $argsList = @('-Action', $action, '-RunPath', $script:activeRun)
+                if ($action -in @('inspect', 'preview')) {
+                    $id = Read-Host 'PlanId (получить через пункт T, режим состояния)'
+                    if (-not $id) { Write-Warning 'Нужен PlanId'; break }
+                    $argsList += @('-PlanId', $id)
+                    if ($action -eq 'inspect') {
+                        $toolPath = Read-Host 'Путь к ffprobe.exe (Enter = ffprobe из PATH)'
+                        if ($toolPath) { $argsList += @('-FfprobePath', $toolPath) }
+                    }
+                }
+                $result = Invoke-Cycle3 $videoProbeTool $argsList
+                if ($null -ne $result) {
+                    Write-Host ("ffprobe/ffmpeg: " + $result.status) -ForegroundColor Green
+                    if ($null -ne $result.PSObject.Properties['probeId']) { Write-Host ("Probe: " + $result.probeId) }
+                    if ($null -ne $result.PSObject.Properties['previewId']) { Write-Host ("Preview: " + $result.previewId) }
+                    if ($null -ne $result.PSObject.Properties['invalid']) {
+                        Write-Host ("Сверка источников: " + $result.valid + " корректно, " + $result.invalid + " ошибок")
+                    }
+                    Write-Host 'Команды не выполнялись, видео не обрезалось. Совпадение кадров НЕ подтверждено.'
                 }
             }
             "S" {
