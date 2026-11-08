@@ -449,6 +449,10 @@ public final class TCBlocks {
 
     public static final Supplier<Block> LEVITATOR = BLOCKS.register("levitator", () -> new thaumcraft.common.blocks.devices.TCLevitatorBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(3.0F).sound(SoundType.STONE).noOcclusion()));
 
+    public static final Supplier<Block> REDSTONE_RELAY = BLOCKS.register("redstone_relay", () -> new thaumcraft.common.blocks.devices.TCRedstoneRelayBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.REPEATER).strength(0.0F).sound(SoundType.WOOD).noOcclusion()));
+
+    public static final Supplier<Block> BRAIN_BOX = BLOCKS.register("brain_box", () -> new thaumcraft.common.blocks.devices.TCBrainBoxBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(1.0F, 10.0F).sound(SoundType.METAL).noOcclusion()));
+
 
 
     public static final Supplier<Block> GOLEM_BUILDER = BLOCKS.register("golem_builder", () -> golemBuilderBlock());

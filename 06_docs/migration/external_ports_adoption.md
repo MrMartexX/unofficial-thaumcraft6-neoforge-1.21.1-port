@@ -206,3 +206,20 @@ and a dynamically allocated port, then shut down normally.
 - **Forbidden Knowledge Warp Swirl & New Research Popup (`TCThaumonomiconBrowserScreen`, `TCThaumonomiconEntryScreen`, `TCThaumonomiconResearchView`, `TCThaumonomiconService`, `TCThaumonomiconCodec`)**:
   - Added `hasWarp` to `TCThaumonomiconResearchView` and rendered the animated purple forbidden swirl (`drawForbidden`, `textures/misc/auranodes.png` row 5 frames `160..191`, additive blend, color `0.33F, 0.0F, 0.44F, 0.9F`) behind Warp-granting research nodes in the browser and in `TCThaumonomiconEntryScreen.renderWarpWarning`.
   - Added the 3-second `tc.research.popup` toast at `(10, 34)` when starting an unlockable research in `TCThaumonomiconBrowserScreen`.
+
+## Batch 2 (Device GUIs & Focal Manipulator Screen) Implementation (Verified 2026-11-08)
+
+- **Research Toast (`TCResearchToast`, `ResearchToastHandler`)**: Authentic parchment toast (`hud.png` UV 0, 224, 160, 32) displaying completed research icon, category, and scaled localized title with `TCSounds.LEARN`.
+- **Arcane Spa GUI (`TCSpaMenu`, `TCSpaScreen`, `TCArcaneSpaBlock`, `TCArcaneSpaBlockEntity`)**: 1:1 legacy `gui_spa.png`, animated fluid level tank with tooltips, bath salts slot at (65, 31), mix toggle button, and client/server sync data slots.
+- **Potion Sprayer GUI (`TCPotionSprayerMenu`, `TCPotionSprayerScreen`, `TCPotionSprayerBlock`, `TCPotionSprayerBlockEntity`)**: 1:1 legacy `gui_potion_sprayer.png`, potion bottle slot (56, 64), animated color-tinted charges fluid tube, aspect progress bars, and aspect badges.
+- **Golem Logistics GUI (`TCLogisticsMenu`, `TCLogisticsScreen`, `TCLogisticsNetwork`, `TCLogisticsPayloads`, `ItemGolemBell`)**: 81-slot scrollable inventory browser, search bar, item count spinner, provision request payload communicating with `GolemHelper.requestProvisioning`.
+- **Focal Manipulator Visual Graph Editor (`TCFocalManipulatorScreen`)**: 1:1 legacy node graph editor with collapsible left parts drawer, central draggable panning graph canvas with bezier/branch lines and 90-degree rotated element badges, right complexity/XP/Vis/crystal stat requirements, interactive setting spinners (+/-), focus name input, and craft confirmation button.
+
+## Batch 3 (Specialized Mechanics & Legacy Devices / Items) Implementation (Verified 2026-11-08)
+
+- **Celestial Observation (`ItemCelestialNotes`, `TCScanSky`, `CardCelestial`)**: Restored 13 subvariants (`sun`, `stars_1..4`, `moon_1..8`), aqua tooltips, scanning success handling consuming 1 paper and verifying scribing tools, daily research tracking (`CEL_<day>_...`), and `CardCelestial` theorycrafting card consuming notes for inspiration and temporary warp.
+- **Creative Flux Sponge (`ItemCreativeFluxSponge`)**: Right-click drains 500 flux from 81 chunks (9x9 area), shift-right-click purges all `TCFluxRiftEntity` within 32 blocks, with authentic sound `TCSounds.CRAFTSTART` and chat feedback.
+- **Redstone Relay (`TCRedstoneRelayBlock`, `TCRedstoneRelayBlockEntity`)**: Horizontal directional 2-pixel slab device with `ENABLED` and `FACING` properties, front/back dial right-click adjustment for `in` threshold (1..15) and `out` strength (1..15) with `TCSounds.KEY`, and directional signal pass-through.
+- **Mnemonic Matrix / Brain Box (`TCBrainBoxBlock`)**: Attachable box on `thaumatorium`, `thaumatorium_top`, or `golem_builder`, dropping as item on detach, expanding automation capacity.
+- **Golem Minds & Modules (`mind_clockwork`, `mind_biothaumic`, `module_vision`, `module_aggression`, `seal_provide`)**: Registered missing items, item models, creative tab integration, and localization.
+- **Parity Index**: Increased overall legacy parity index to 97.27%.

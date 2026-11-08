@@ -67,6 +67,9 @@ public final class TCBlockEntities {
     public static final Supplier<BlockEntityType<thaumcraft.common.tiles.devices.TCLevitatorBlockEntity>> LEVITATOR =
             BLOCK_ENTITY_TYPES.register("levitator", () ->
                     BlockEntityType.Builder.of(thaumcraft.common.tiles.devices.TCLevitatorBlockEntity::new, TCBlocks.LEVITATOR.get()).build(null));
+    public static final java.util.function.Supplier<net.minecraft.world.level.block.entity.BlockEntityType<thaumcraft.common.tiles.devices.TCRedstoneRelayBlockEntity>> REDSTONE_RELAY =
+            BLOCK_ENTITY_TYPES.register("redstone_relay", () ->
+                    net.minecraft.world.level.block.entity.BlockEntityType.Builder.of(thaumcraft.common.tiles.devices.TCRedstoneRelayBlockEntity::new, TCBlocks.REDSTONE_RELAY.get()).build(null));
     public static final Supplier<BlockEntityType<TCResearchTableBlockEntity>> RESEARCH_TABLE =
             BLOCK_ENTITY_TYPES.register("research_table", () ->
                     BlockEntityType.Builder.of(TCResearchTableBlockEntity::new, TCBlocks.RESEARCH_TABLE.get()).build(null));

@@ -611,6 +611,14 @@ public final class TCItems {
     public static final Supplier<Item> JAR_LABEL = ITEMS.register("jar_label", () -> new TCJarLabelItem(false));
 
     public static final Supplier<Item> GOLEM_PLACER = ITEMS.register("golem", () -> new ItemGolemPlacer(new Item.Properties().stacksTo(1)));
+    public static final Supplier<Item> GOLEM_PLACER_ALIAS = ITEMS.register("golem_placer", () -> new ItemGolemPlacer(new Item.Properties().stacksTo(1)));
+    public static final Supplier<Item> CELESTIAL_NOTES = ITEMS.register("celestial_notes", () -> new thaumcraft.common.items.curios.ItemCelestialNotes(new Item.Properties()));
+    public static final Supplier<Item> CREATIVE_FLUX_SPONGE = ITEMS.register("creative_flux_sponge", () -> new thaumcraft.common.items.misc.ItemCreativeFluxSponge(new Item.Properties()));
+    public static final Supplier<Item> MIND_CLOCKWORK = simpleItem("mind_clockwork");
+    public static final Supplier<Item> MIND_BIOTHAUMIC = simpleItem("mind_biothaumic");
+    public static final Supplier<Item> MODULE_VISION = simpleItem("module_vision");
+    public static final Supplier<Item> MODULE_AGGRESSION = simpleItem("module_aggression");
+    public static final Supplier<Item> SEAL_PROVIDE = ITEMS.register("seal_provide", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:provider"));
 
     public static final Supplier<Item> GOLEM_BELL = ITEMS.register("golem_bell", () -> new ItemGolemBell(new Item.Properties().stacksTo(1)));
 
@@ -847,6 +855,8 @@ public final class TCItems {
     public static final Supplier<BlockItem> DIOPTRA = blockItem("dioptra", TCBlocks.DIOPTRA);
 
     public static final Supplier<BlockItem> LEVITATOR = blockItem("levitator", TCBlocks.LEVITATOR);
+    public static final Supplier<BlockItem> REDSTONE_RELAY = blockItem("redstone_relay", TCBlocks.REDSTONE_RELAY);
+    public static final Supplier<BlockItem> BRAIN_BOX = blockItem("brain_box", TCBlocks.BRAIN_BOX);
 
     public static final Supplier<Item> BAUBLE_AMULET = ITEMS.register("bauble_amulet", () -> new Item(new Item.Properties().stacksTo(1)));
     public static final Supplier<Item> VIS_AMULET = ITEMS.register("vis_amulet", ItemAmuletVis::new);

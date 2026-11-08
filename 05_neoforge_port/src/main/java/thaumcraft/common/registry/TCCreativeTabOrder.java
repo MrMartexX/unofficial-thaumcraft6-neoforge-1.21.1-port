@@ -363,6 +363,10 @@ public final class TCCreativeTabOrder {
 
         acceptVisible(output, TCItems.LEVITATOR.get());
 
+        acceptVisible(output, TCItems.REDSTONE_RELAY.get());
+
+        acceptVisible(output, TCItems.BRAIN_BOX.get());
+
 
 
         acceptVisible(output, TCItems.INLAY.get());
@@ -694,6 +698,14 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.SEAL_BUTCHER.get());
 
         acceptVisible(output, TCItems.SEAL_HARVEST.get());
+        acceptVisible(output, TCItems.SEAL_PROVIDE.get());
+        acceptVisible(output, TCItems.GOLEM_PLACER.get());
+        acceptVisible(output, TCItems.MIND_CLOCKWORK.get());
+        acceptVisible(output, TCItems.MIND_BIOTHAUMIC.get());
+        acceptVisible(output, TCItems.MODULE_VISION.get());
+        acceptVisible(output, TCItems.MODULE_AGGRESSION.get());
+        acceptVisible(output, TCItems.CELESTIAL_NOTES.get());
+        acceptVisible(output, TCItems.CREATIVE_FLUX_SPONGE.get());
 
 
 
