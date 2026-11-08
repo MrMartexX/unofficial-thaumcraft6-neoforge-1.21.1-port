@@ -86,7 +86,7 @@ public class TCLootBagItem extends Item {
     private static record WeightedEntry(java.util.function.Supplier<ItemStack> supplier, int weight) {
     }
 
-    private static ItemStack generateLoot(Level level, Tier tier) {
+    public static ItemStack generateLoot(Level level, Tier tier) {
         RandomSource rand = level.random;
 
         // Legacy: chance to roll gear for uncommon and rare

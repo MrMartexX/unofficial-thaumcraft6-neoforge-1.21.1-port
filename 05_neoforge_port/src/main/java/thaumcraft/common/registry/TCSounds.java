@@ -115,6 +115,13 @@ public final class TCSounds {
             0.5F, 1.0F, CRYSTAL, CRYSTAL, CRYSTAL, CRYSTAL, CRYSTAL
     );
 
+    public static final Supplier<SoundEvent> URNBREAK = SOUND_EVENTS.register("urnbreak", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "urnbreak")));
+
+    public static final DeferredSoundType URN_SOUND_TYPE = new DeferredSoundType(
+            0.5F, 1.5F, URNBREAK, URNBREAK, URNBREAK, URNBREAK, URNBREAK
+    );
+
     private TCSounds() {
     }
 }

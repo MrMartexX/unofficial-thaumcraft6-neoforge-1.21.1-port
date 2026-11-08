@@ -94,6 +94,12 @@ import thaumcraft.common.blocks.crafting.TCInfusionModifierBlock;
 
 import thaumcraft.common.blocks.crafting.TCInfusionPedestalBlock;
 import thaumcraft.common.blocks.basic.TCPavingStoneBlock;
+import thaumcraft.common.blocks.basic.TCStoneBlock;
+import thaumcraft.common.blocks.basic.TCWoodBlock;
+import thaumcraft.common.blocks.world.TCLootBlock;
+import thaumcraft.common.blocks.world.ore.TCOreBlock;
+import thaumcraft.common.items.curios.TCLootBagItem;
+import net.minecraft.util.valueproviders.UniformInt;
 import thaumcraft.common.blocks.devices.TCRechargePedestalBlock;
 
 import thaumcraft.common.blocks.crafting.TCInfusionPillarBlock;
@@ -155,11 +161,11 @@ public final class TCBlocks {
 
 
 
-    public static final Supplier<Block> ORE_AMBER = BLOCKS.register("ore_amber", () -> stoneBlock(1.5F, 5.0F));
+    public static final Supplier<Block> ORE_AMBER = BLOCKS.register("ore_amber", () -> oreBlock(1.5F, 5.0F, 1, 4));
 
-    public static final Supplier<Block> ORE_CINNABAR = BLOCKS.register("ore_cinnabar", () -> stoneBlock(2.0F, 5.0F));
+    public static final Supplier<Block> ORE_CINNABAR = BLOCKS.register("ore_cinnabar", () -> oreBlock(2.0F, 5.0F, 1, 3));
 
-    public static final Supplier<Block> ORE_QUARTZ = BLOCKS.register("ore_quartz", () -> stoneBlock(3.0F, 5.0F));
+    public static final Supplier<Block> ORE_QUARTZ = BLOCKS.register("ore_quartz", () -> oreBlock(3.0F, 5.0F, 2, 5));
 
     public static final Supplier<Block> DEEPSLATE_AMBER_ORE = BLOCKS.register("deepslate_amber_ore", () -> deepslateBlock(3.0F, 5.0F));
 
@@ -421,17 +427,17 @@ public final class TCBlocks {
 
     public static final Supplier<Block> PAVING_STONE_BARRIER = BLOCKS.register("paving_stone_barrier", () -> pavingStoneBlock(TCPavingStoneBlock.Kind.BARRIER, 2.0F, 10.0F));
 
-    public static final Supplier<Block> LOOT_CRATE_COMMON = BLOCKS.register("loot_crate_common", () -> woodBlock());
+    public static final Supplier<Block> LOOT_CRATE_COMMON = BLOCKS.register("loot_crate_common", () -> lootCrateBlock(TCLootBagItem.Tier.COMMON));
 
-    public static final Supplier<Block> LOOT_CRATE_UNCOMMON = BLOCKS.register("loot_crate_uncommon", () -> woodBlock());
+    public static final Supplier<Block> LOOT_CRATE_UNCOMMON = BLOCKS.register("loot_crate_uncommon", () -> lootCrateBlock(TCLootBagItem.Tier.UNCOMMON));
 
-    public static final Supplier<Block> LOOT_CRATE_RARE = BLOCKS.register("loot_crate_rare", () -> woodBlock());
+    public static final Supplier<Block> LOOT_CRATE_RARE = BLOCKS.register("loot_crate_rare", () -> lootCrateBlock(TCLootBagItem.Tier.RARE));
 
-    public static final Supplier<Block> LOOT_URN_COMMON = BLOCKS.register("loot_urn_common", () -> stoneBlock(1.5F, 5.0F));
+    public static final Supplier<Block> LOOT_URN_COMMON = BLOCKS.register("loot_urn_common", () -> lootUrnBlock(TCLootBagItem.Tier.COMMON));
 
-    public static final Supplier<Block> LOOT_URN_UNCOMMON = BLOCKS.register("loot_urn_uncommon", () -> stoneBlock(1.5F, 5.0F));
+    public static final Supplier<Block> LOOT_URN_UNCOMMON = BLOCKS.register("loot_urn_uncommon", () -> lootUrnBlock(TCLootBagItem.Tier.UNCOMMON));
 
-    public static final Supplier<Block> LOOT_URN_RARE = BLOCKS.register("loot_urn_rare", () -> stoneBlock(1.5F, 5.0F));
+    public static final Supplier<Block> LOOT_URN_RARE = BLOCKS.register("loot_urn_rare", () -> lootUrnBlock(TCLootBagItem.Tier.RARE));
 
     public static final Supplier<Block> VIS_GENERATOR = BLOCKS.register("vis_generator", () -> new TCVisGeneratorBlock());
     public static final Supplier<Block> VIS_BATTERY = BLOCKS.register("vis_battery", () -> new TCVisBatteryBlock());
@@ -633,13 +639,29 @@ public final class TCBlocks {
 
 
     private static Block stoneBlock(float strength, float resistance) {
-
-        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
-
+        return new TCStoneBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                 .strength(strength, resistance)
-
                 .requiresCorrectToolForDrops());
+    }
 
+    private static Block oreBlock(float strength, float resistance, int minXp, int maxXp) {
+        return new TCOreBlock(UniformInt.of(minXp, maxXp), BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(strength, resistance)
+                .requiresCorrectToolForDrops());
+    }
+
+    private static Block lootCrateBlock(TCLootBagItem.Tier tier) {
+        return new TCLootBlock(TCLootBlock.Variant.CRATE, tier, BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
+                .strength(0.15F, 0.0F)
+                .sound(SoundType.WOOD)
+                .noOcclusion());
+    }
+
+    private static Block lootUrnBlock(TCLootBagItem.Tier tier) {
+        return new TCLootBlock(TCLootBlock.Variant.URN, tier, BlockBehaviour.Properties.ofFullCopy(Blocks.TERRACOTTA)
+                .strength(0.15F, 0.0F)
+                .sound(TCSounds.URN_SOUND_TYPE)
+                .noOcclusion());
     }
 
 
@@ -657,11 +679,8 @@ public final class TCBlocks {
     }
 
     private static Block woodBlock() {
-
-        return new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
-
+        return new TCWoodBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS)
                 .strength(2.0F, 2.0F));
-
     }
 
 
