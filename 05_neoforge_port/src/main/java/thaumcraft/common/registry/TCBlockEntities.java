@@ -22,6 +22,7 @@ import thaumcraft.common.tiles.crafting.TCCrucibleBlockEntity;
 import thaumcraft.common.tiles.crafting.TCGolemBuilderBlockEntity;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
 import thaumcraft.common.tiles.crafting.TCInfusionPedestalBlockEntity;
+import thaumcraft.common.tiles.devices.TCRechargePedestalBlockEntity;
 import thaumcraft.common.tiles.crafting.TCFocalManipulatorBlockEntity;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 import thaumcraft.common.tiles.essentia.TCSmelterBlockEntity;
@@ -142,7 +143,11 @@ public final class TCBlockEntities {
                             TCBlocks.ELDRITCH_PEDESTAL.get(),
                             TCBlocks.PEDESTAL_ARCANE.get(),
                             TCBlocks.PEDESTAL_ANCIENT.get(),
-                            TCBlocks.PEDESTAL_ELDRITCH.get(),
+                            TCBlocks.PEDESTAL_ELDRITCH.get()).build(null));
+    public static final Supplier<BlockEntityType<TCRechargePedestalBlockEntity>> RECHARGE_PEDESTAL =
+            BLOCK_ENTITY_TYPES.register("recharge_pedestal", () ->
+                    BlockEntityType.Builder.of(
+                            TCRechargePedestalBlockEntity::new,
                             TCBlocks.RECHARGE_PEDESTAL.get()).build(null));
     public static final Supplier<BlockEntityType<TCStabilizerBlockEntity>> STABILIZER =
             BLOCK_ENTITY_TYPES.register("stabilizer", () ->

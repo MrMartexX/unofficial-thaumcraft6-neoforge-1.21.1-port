@@ -198,6 +198,28 @@ public final class TCFXDispatcher {
         drawLegacyFXWithDelay(level, data, x, y, z, motionX, motionY, motionZ, delay);
     }
 
+    public static void visSparkle(
+            Level level,
+            double x,
+            double y,
+            double z,
+            double targetX,
+            double targetY,
+            double targetZ,
+            int color
+    ) {
+        if (!level.isClientSide()) {
+            return;
+        }
+        float r = ((color >> 16) & 0xFF) / 255.0F;
+        float g = ((color >> 8) & 0xFF) / 255.0F;
+        float b = (color & 0xFF) / 255.0F;
+        double mx = (targetX - x) * 0.1D;
+        double my = (targetY - y) * 0.1D;
+        double mz = (targetZ - z) * 0.1D;
+        drawSimpleSparkle(level, x, y, z, mx, my, mz, 0.4F, r, g, b, 0, 0.9F, 0.0F, 8);
+    }
+
     public static void drawAlumentum(
             Level level,
             double x,
@@ -735,6 +757,8 @@ public final class TCFXDispatcher {
 
         drawLegacyFXWithDelay(level, data, x, y, z, motionX, motionY, motionZ, delay);
     }
+
+
 
     public static void drawShimmerleafMote(Level level, BlockPos pos, RandomSource random) {
         if (!level.isClientSide() || random.nextInt(3) != 0) {

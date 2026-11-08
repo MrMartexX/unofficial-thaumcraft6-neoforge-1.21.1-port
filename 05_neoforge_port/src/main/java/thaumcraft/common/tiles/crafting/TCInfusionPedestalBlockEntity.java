@@ -25,11 +25,15 @@ import thaumcraft.common.crafting.infusion.TCInfusionSurroundingsInvalidator;
 import thaumcraft.common.tiles.devices.TCStabilizerBlockEntity;
 
 public class TCInfusionPedestalBlockEntity extends BlockEntity {
-    private static final int SLOT = 0;
-    private final NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
+    protected static final int SLOT = 0;
+    protected final NonNullList<ItemStack> items = NonNullList.withSize(1, ItemStack.EMPTY);
 
     public TCInfusionPedestalBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.INFUSION_PEDESTAL.get(), pos, state);
+    }
+
+    protected TCInfusionPedestalBlockEntity(net.minecraft.world.level.block.entity.BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     public ItemStack getStoredStack() {
@@ -109,7 +113,7 @@ public class TCInfusionPedestalBlockEntity extends BlockEntity {
         return null;
     }
 
-    private void markChangedAndSync() {
+    protected void markChangedAndSync() {
         setChanged();
         if (level != null && !level.isClientSide) {
             TCInfusionSurroundingsInvalidator.requestNearby(level, worldPosition);

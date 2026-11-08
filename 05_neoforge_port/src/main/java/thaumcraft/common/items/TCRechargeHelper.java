@@ -29,6 +29,9 @@ public final class TCRechargeHelper {
                 || stack.getItem() == TCItems.VERDANT_HEART_SUSTAIN.get()) {
             return 200;
         }
+        if (stack.getItem() == TCItems.VIS_AMULET.get()) {
+            return 250;
+        }
         return 0;
     }
 

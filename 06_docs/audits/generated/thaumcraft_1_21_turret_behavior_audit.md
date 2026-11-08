@@ -11,6 +11,7 @@
 | `turret_dispenser_auto_reload` | **PASS** | Pulls arrows from DispenserBlockEntity below turret when ammo empty |
 | `turret_activator_rail_shutdown` | **PASS** | Powered activator rail shuts off turret AI (setNoAi=true) |
 | `turret_dismantle_and_death_drops` | **PASS** | Dismantle clears entity, drops ammo and placer item |
+| `turret_owned_pet_filter` | **PASS** | Animal category cannot bypass same-owner protection; explicit friendly targeting remains effective |
 | `turret_owner_team_safety` | **PASS** | Turret never targets its owner even when targetPlayer is true |
 
 **Overall Result:** ALL TESTS PASSED

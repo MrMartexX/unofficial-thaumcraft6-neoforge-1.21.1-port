@@ -93,6 +93,8 @@ import thaumcraft.common.blocks.crafting.TCInfusionMatrixBlock;
 import thaumcraft.common.blocks.crafting.TCInfusionModifierBlock;
 
 import thaumcraft.common.blocks.crafting.TCInfusionPedestalBlock;
+import thaumcraft.common.blocks.basic.TCPavingStoneBlock;
+import thaumcraft.common.blocks.devices.TCRechargePedestalBlock;
 
 import thaumcraft.common.blocks.crafting.TCInfusionPillarBlock;
 
@@ -413,11 +415,11 @@ public final class TCBlocks {
 
     public static final Supplier<Block> PEDESTAL_ELDRITCH = BLOCKS.register("pedestal_eldritch", () -> infusionPedestalBlock(15.0F, 1000.0F));
 
-    public static final Supplier<Block> RECHARGE_PEDESTAL = BLOCKS.register("recharge_pedestal", () -> infusionPedestalBlock(2.0F, 10.0F));
+    public static final Supplier<Block> RECHARGE_PEDESTAL = BLOCKS.register("recharge_pedestal", () -> rechargePedestalBlock(2.0F, 10.0F));
 
-    public static final Supplier<Block> PAVING_STONE_TRAVEL = BLOCKS.register("paving_stone_travel", () -> stoneBlock(2.0F, 10.0F));
+    public static final Supplier<Block> PAVING_STONE_TRAVEL = BLOCKS.register("paving_stone_travel", () -> pavingStoneBlock(TCPavingStoneBlock.Kind.TRAVEL, 2.0F, 10.0F));
 
-    public static final Supplier<Block> PAVING_STONE_BARRIER = BLOCKS.register("paving_stone_barrier", () -> stoneBlock(2.0F, 10.0F));
+    public static final Supplier<Block> PAVING_STONE_BARRIER = BLOCKS.register("paving_stone_barrier", () -> pavingStoneBlock(TCPavingStoneBlock.Kind.BARRIER, 2.0F, 10.0F));
 
     public static final Supplier<Block> LOOT_CRATE_COMMON = BLOCKS.register("loot_crate_common", () -> woodBlock());
 
@@ -1114,6 +1116,20 @@ public final class TCBlocks {
 
                 .noOcclusion());
 
+    }
+
+    private static Block rechargePedestalBlock(float strength, float resistance) {
+        return new TCRechargePedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(strength, resistance)
+                .requiresCorrectToolForDrops()
+                .noOcclusion());
+    }
+
+    private static Block pavingStoneBlock(TCPavingStoneBlock.Kind kind, float strength, float resistance) {
+        return new TCPavingStoneBlock(kind, BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(strength, resistance)
+                .requiresCorrectToolForDrops()
+                .noOcclusion());
     }
 
 
