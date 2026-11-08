@@ -16,6 +16,7 @@ public final class TCKnowledgeClientCache {
     private static Map<String, Integer> observationRaw = Map.of();
     private static Map<String, Integer> theoryRaw = Map.of();
     private static long snapshotVersion;
+    private static boolean initialized;
     private static final Queue<TCKnowledgeGainPayload> knowledgeGainQueue = new ConcurrentLinkedQueue<>();
 
     private TCKnowledgeClientCache() {
@@ -29,7 +30,15 @@ public final class TCKnowledgeClientCache {
                 keys.add(normalized);
             }
         }
+        if (initialized && net.neoforged.fml.loading.FMLEnvironment.dist.isClient()) {
+            java.util.TreeSet<String> newlyCompleted = new java.util.TreeSet<>(keys);
+            newlyCompleted.removeAll(completedResearch);
+            if (!newlyCompleted.isEmpty()) {
+                thaumcraft.client.gui.ResearchToastHandler.onResearchCompleted(newlyCompleted);
+            }
+        }
         completedResearch = Set.copyOf(keys);
+        initialized = true;
 
         TreeMap<String, Integer> stages = new TreeMap<>();
         for (Map.Entry<String, Integer> entry : payload.researchStages().entrySet()) {
@@ -118,6 +127,7 @@ public final class TCKnowledgeClientCache {
         observationRaw = Map.of();
         theoryRaw = Map.of();
         knowledgeGainQueue.clear();
+        initialized = false;
         snapshotVersion++;
     }
 

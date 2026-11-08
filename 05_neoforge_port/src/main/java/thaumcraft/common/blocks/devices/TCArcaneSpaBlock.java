@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import org.jetbrains.annotations.Nullable;
@@ -90,9 +91,13 @@ public final class TCArcaneSpaBlock extends Block implements EntityBlock {
         if (!(level.getBlockEntity(pos) instanceof TCArcaneSpaBlockEntity spa)) {
             return InteractionResult.PASS;
         }
-        if (!level.isClientSide) {
-            spa.toggleMix();
-            level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.35F, spa.mix() ? 1.2F : 0.8F);
+        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+            if (!player.isShiftKeyDown()) {
+                serverPlayer.openMenu(spa, buffer -> buffer.writeBlockPos(pos));
+            } else {
+                spa.toggleMix();
+                level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.35F, spa.mix() ? 1.2F : 0.8F);
+            }
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }

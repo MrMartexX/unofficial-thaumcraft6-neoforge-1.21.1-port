@@ -21,7 +21,12 @@ import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.phys.AABB;
+import thaumcraft.common.menu.TCPotionSprayerMenu;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +42,7 @@ import thaumcraft.common.registry.TCBlockEntities;
  * Absorbs essentia via attached tubes to build up to 8 charges from an inserted potion.
  * Discharges aerosolized potion effect in facing direction upon activation.
  */
-public class TCPotionSprayerBlockEntity extends BlockEntity implements TCEssentiaTransport {
+public class TCPotionSprayerBlockEntity extends BlockEntity implements TCEssentiaTransport, MenuProvider {
     public static final int MAX_CHARGES = 8;
 
     private ItemStack potionItem = ItemStack.EMPTY;
@@ -198,6 +203,40 @@ public class TCPotionSprayerBlockEntity extends BlockEntity implements TCEssenti
 
     public int getCharges() {
         return charges;
+    }
+
+    public ItemStackHandler getItemHandler() {
+        return itemHandler;
+    }
+
+    public Map<String, Integer> getRequiredAspects() {
+        return java.util.Collections.unmodifiableMap(requiredAspects);
+    }
+
+    public Map<String, Integer> getProgressAspects() {
+        return java.util.Collections.unmodifiableMap(progressAspects);
+    }
+
+    public int getColor() {
+        if (potionItem.isEmpty()) {
+            return 0x385DC6;
+        }
+        return potionItem.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).getColor();
+    }
+
+    public boolean stillValid(net.minecraft.world.entity.player.Player player) {
+        return net.minecraft.world.Container.stillValidBlockEntity(this, player);
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable("tile.potion_sprayer.name");
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int containerId, Inventory inventory, net.minecraft.world.entity.player.Player player) {
+        return new TCPotionSprayerMenu(containerId, inventory, this);
     }
 
     public void setChargesForTesting(int charges) {

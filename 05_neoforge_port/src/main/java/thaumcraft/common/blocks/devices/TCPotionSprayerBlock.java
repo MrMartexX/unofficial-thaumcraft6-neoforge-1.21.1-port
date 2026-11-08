@@ -87,33 +87,51 @@ public class TCPotionSprayerBlock extends Block implements EntityBlock {
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
                                               Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (level.getBlockEntity(pos) instanceof TCPotionSprayerBlockEntity sprayer) {
+            if (!player.isShiftKeyDown()) {
+                if (!level.isClientSide && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                    serverPlayer.openMenu(sprayer, buffer -> buffer.writeBlockPos(pos));
+                }
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            }
+            // Sneak click allows quick inserting/extracting in-world
             if (!level.isClientSide) {
                 ItemStack stored = sprayer.getPotionItem();
                 boolean isPotion = stack.has(net.minecraft.core.component.DataComponents.POTION_CONTENTS);
-
                 if (!stored.isEmpty() && stack.isEmpty()) {
-                    // Extract stored potion
                     player.setItemInHand(hand, stored.copy());
                     sprayer.setPotionItem(ItemStack.EMPTY);
                     level.playSound(null, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.BLOCKS, 0.4F, 1.0F);
                     return ItemInteractionResult.SUCCESS;
                 } else if (isPotion) {
-                    // Insert or swap potion
                     ItemStack toInsert = stack.split(1);
                     if (!stored.isEmpty()) {
                         Containers.dropItemStack(level, player.getX(), player.getY(), player.getZ(), stored);
                     }
                     sprayer.setPotionItem(toInsert);
                     level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 0.4F, 1.0F);
-                    player.displayClientMessage(Component.translatable("tc.potion_sprayer.charges", sprayer.getCharges()), true);
                     return ItemInteractionResult.SUCCESS;
-                } else {
-                    player.displayClientMessage(Component.translatable("tc.potion_sprayer.charges", sprayer.getCharges()), true);
                 }
             }
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected net.minecraft.world.InteractionResult useWithoutItem(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            Player player,
+            BlockHitResult hitResult
+    ) {
+        if (level.getBlockEntity(pos) instanceof TCPotionSprayerBlockEntity sprayer) {
+            if (!level.isClientSide && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                serverPlayer.openMenu(sprayer, buffer -> buffer.writeBlockPos(pos));
+            }
+            return net.minecraft.world.InteractionResult.sidedSuccess(level.isClientSide);
+        }
+        return net.minecraft.world.InteractionResult.PASS;
     }
 
     @Override

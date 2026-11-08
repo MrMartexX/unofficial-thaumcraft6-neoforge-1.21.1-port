@@ -11,7 +11,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import thaumcraft.common.menu.TCLogisticsMenu;
 import thaumcraft.api.golems.ISealDisplayer;
 import thaumcraft.api.golems.seals.ISealEntity;
 import thaumcraft.api.golems.seals.SealPos;
@@ -48,6 +50,9 @@ public class ItemGolemBell extends Item implements ISealDisplayer {
                     SealHandler.openSealGui(player, seal);
                 }
                 return InteractionResult.SUCCESS;
+            } else if (player instanceof ServerPlayer serverPlayer) {
+                TCLogisticsMenu.open(serverPlayer, pos, face);
+                return InteractionResult.SUCCESS;
             }
         } else {
             level.playSound(player, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.6F, 1.0F);
@@ -58,6 +63,10 @@ public class ItemGolemBell extends Item implements ISealDisplayer {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         player.swing(hand);
+        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+            TCLogisticsMenu.open(serverPlayer, null, null);
+            return InteractionResultHolder.success(player.getItemInHand(hand));
+        }
         if (level.isClientSide) {
             level.playSound(player, player.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.6F, 1.1F);
         }

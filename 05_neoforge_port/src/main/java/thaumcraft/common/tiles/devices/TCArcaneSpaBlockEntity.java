@@ -11,7 +11,12 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import thaumcraft.common.menu.TCSpaMenu;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -32,7 +37,17 @@ import thaumcraft.common.registry.TCFluids;
 import thaumcraft.common.registry.TCItems;
 
 /** Server-owned Arcane Spa behavior based on legacy {@code TileSpa}. */
-public final class TCArcaneSpaBlockEntity extends BlockEntity implements WorldlyContainer {
+public final class TCArcaneSpaBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
+    @Override
+    public Component getDisplayName() {
+        return Component.translatable("block.thaumcraft.spa");
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
+        return new TCSpaMenu(containerId, inventory, this);
+    }
     public static final int SLOT_BATH_SALTS = 0;
     public static final int SLOT_COUNT = 1;
     public static final int TANK_CAPACITY_MB = 5000;

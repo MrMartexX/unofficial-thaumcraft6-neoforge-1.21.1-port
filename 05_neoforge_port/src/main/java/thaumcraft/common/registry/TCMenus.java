@@ -50,6 +50,12 @@ public final class TCMenus {
             MENUS.register("focus_pouch", () -> IMenuTypeExtension.create(TCFocusPouchMenu::new));
     public static final Supplier<MenuType<TCTurretBasicMenu>> TURRET_BASIC =
             MENUS.register("turret_basic", () -> IMenuTypeExtension.create(TCTurretBasicMenu::new));
+    public static final Supplier<MenuType<thaumcraft.common.menu.TCLogisticsMenu>> LOGISTICS =
+            MENUS.register("logistics", () -> IMenuTypeExtension.create(thaumcraft.common.menu.TCLogisticsMenu::new));
+    public static final Supplier<MenuType<thaumcraft.common.menu.TCPotionSprayerMenu>> POTION_SPRAYER =
+            MENUS.register("potion_sprayer", () -> IMenuTypeExtension.create(thaumcraft.common.menu.TCPotionSprayerMenu::new));
+    public static final Supplier<MenuType<thaumcraft.common.menu.TCSpaMenu>> SPA =
+            MENUS.register("spa", () -> IMenuTypeExtension.create(thaumcraft.common.menu.TCSpaMenu::new));
     public static final Supplier<MenuType<TCTurretAdvancedMenu>> TURRET_ADVANCED =
             MENUS.register("turret_advanced", () -> IMenuTypeExtension.create(TCTurretAdvancedMenu::new));
 
