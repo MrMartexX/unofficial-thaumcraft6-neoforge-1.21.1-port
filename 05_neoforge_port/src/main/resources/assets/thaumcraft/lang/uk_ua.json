@@ -1352,5 +1352,8 @@
   "item.thaumcraft.crimson_praetor_chest": "Кираса Багряного претора",
   "item.thaumcraft.crimson_praetor_legs": "Поножі Багряного претора",
   "tc.levitator": "Дальність встановлено на %s блоків (Вартість: %s Віс)",
-  "tc.corepick.found": "Виявлено руду на відстані %s блоків!"
+  "tc.corepick.found": "Виявлено руду на відстані %s блоків!",
+  "key.categories.thaumcraft": "Thaumcraft",
+  "key.thaumcraft.change_focus": "Зміна фокусу фокусувача",
+  "key.thaumcraft.misc_toggle": "Додатковий перемикач фокусувача"
 }

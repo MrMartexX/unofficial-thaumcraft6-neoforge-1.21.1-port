@@ -1572,5 +1572,8 @@
   "enchantment.infusion.swift": "Swift",
   "enchantment.infusion.agile": "Agile",
   "enchantment.infusion.infested": "Infested",
-  "enchantment.infusion.lamplight": "Lamplight"
+  "enchantment.infusion.lamplight": "Lamplight",
+  "key.categories.thaumcraft": "Thaumcraft",
+  "key.thaumcraft.change_focus": "Change Caster Focus",
+  "key.thaumcraft.misc_toggle": "Misc Caster Toggle"
 }

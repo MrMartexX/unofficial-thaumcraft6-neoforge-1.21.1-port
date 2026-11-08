@@ -12,6 +12,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
+import thaumcraft.client.TCKeyMappings;
 import thaumcraft.client.TCItemProperties;
 import thaumcraft.client.TCClientExtensions;
 import thaumcraft.client.gui.TCClientTooltipComponents;
@@ -140,6 +141,7 @@ public final class Thaumcraft {
         modEventBus.addListener(TCEntityTypes::onEntityAttributeCreation);
         modEventBus.addListener(TCEntitySpawnRules::onRegisterSpawnPlacements);
         if (FMLEnvironment.dist == Dist.CLIENT) {
+            TCKeyMappings.register(modEventBus);
             TCClientTooltipComponents.register(modEventBus);
             TCMenuScreens.register(modEventBus);
             TCBlockEntityRenderers.register(modEventBus);
