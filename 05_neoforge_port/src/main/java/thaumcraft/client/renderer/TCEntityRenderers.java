@@ -31,12 +31,12 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.TAINT_SWARM.get(), TCInvisibleEntityRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.WISP.get(), TCWispRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FIREBAT.get(), TCFirebatRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.SPELLBAT.get(), TCFirebatRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.SPELLBAT.get(), TCSpellbatRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.FOCUS_PROJECTILE.get(), TCInvisibleEntityRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.FOCUSMINE.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.FOCUSMINE.get(), TCFocusmineRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.GOLEM_DART.get(), TCGolemDartRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.GOLEM.get(), TCGolemRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.GRAPPLE.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.GRAPPLE.get(), TCGrappleRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.PECH.get(), TCPechRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.BRAINY_ZOMBIE.get(), TCBrainyZombieRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.GIANT_BRAINY_ZOMBIE.get(), TCBrainyZombieRenderer::new);
@@ -50,7 +50,7 @@ public final class TCEntityRenderers {
         event.registerEntityRenderer(TCEntityTypes.CULTIST_KNIGHT.get(), TCCultistRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.CULTIST_CLERIC.get(), TCCultistRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.CULTIST_LEADER.get(), TCCultistLeaderRenderer::new);
-        event.registerEntityRenderer(TCEntityTypes.MIND_SPIDER.get(), TCInvisibleEntityRenderer::new);
+        event.registerEntityRenderer(TCEntityTypes.MIND_SPIDER.get(), TCMindSpiderRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.ELDRITCH_GUARDIAN.get(), TCEldritchGuardianRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.ELDRITCH_CRAB.get(), TCEldritchCrabRenderer::new);
         event.registerEntityRenderer(TCEntityTypes.INHABITED_ZOMBIE.get(), TCInhabitedZombieRenderer::new);

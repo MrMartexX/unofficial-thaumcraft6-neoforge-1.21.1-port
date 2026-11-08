@@ -269,12 +269,14 @@ public final class TCEntitySpawnPolicyAudit {
         }
 
         String pechTag = resourceText("data/thaumcraft/tags/worldgen/biome/legacy_magical_spawn_biomes.json");
+        String magicalForestBiome = resourceText("data/thaumcraft/worldgen/biome/magical_forest.json");
         checks.add(check("pech_legacy_magical_biome_tag_resource_exists",
                 !pechTag.isBlank()
-                        && pechTag.contains("\"thaumcraft:magical_forest\"")
+                        && !magicalForestBiome.isBlank()
+                        && magicalForestBiome.contains("\"thaumcraft:pech\"")
                         && pechTag.contains("\"thaumcraft:eerie\"")
                         && pechTag.contains("\"required\": false"),
-                "tag intentionally contains only optional Thaumcraft magical biomes until biome subsystem is ported"));
+                "magical_forest has direct pech spawner and legacy_magical_spawn_biomes gates eerie without duplicate registration"));
     }
 
     private static void addPlacementRegistrationChecks(ArrayList<Check> checks) {
@@ -302,6 +304,24 @@ public final class TCEntitySpawnPolicyAudit {
                         && SpawnPlacements.getHeightmapType(TCEntityTypes.PECH.get()) == TCEntitySpawnRules.PECH_HEIGHTMAP_TYPE,
                 "placement=" + SpawnPlacements.getPlacementType(TCEntityTypes.PECH.get())
                         + ", heightmap=" + SpawnPlacements.getHeightmapType(TCEntityTypes.PECH.get())));
+        checks.add(check("giant_brainy_zombie_spawn_placement_registered",
+                SpawnPlacements.hasPlacement(TCEntityTypes.GIANT_BRAINY_ZOMBIE.get())
+                        && SpawnPlacements.getPlacementType(TCEntityTypes.GIANT_BRAINY_ZOMBIE.get()) == SpawnPlacementTypes.ON_GROUND
+                        && SpawnPlacements.getHeightmapType(TCEntityTypes.GIANT_BRAINY_ZOMBIE.get()) == TCEntitySpawnRules.GIANT_BRAINY_ZOMBIE_HEIGHTMAP_TYPE,
+                "placement=" + SpawnPlacements.getPlacementType(TCEntityTypes.GIANT_BRAINY_ZOMBIE.get())
+                        + ", heightmap=" + SpawnPlacements.getHeightmapType(TCEntityTypes.GIANT_BRAINY_ZOMBIE.get())));
+        checks.add(check("eldritch_guardian_spawn_placement_registered",
+                SpawnPlacements.hasPlacement(TCEntityTypes.ELDRITCH_GUARDIAN.get())
+                        && SpawnPlacements.getPlacementType(TCEntityTypes.ELDRITCH_GUARDIAN.get()) == SpawnPlacementTypes.ON_GROUND
+                        && SpawnPlacements.getHeightmapType(TCEntityTypes.ELDRITCH_GUARDIAN.get()) == TCEntitySpawnRules.ELDRITCH_GUARDIAN_HEIGHTMAP_TYPE,
+                "placement=" + SpawnPlacements.getPlacementType(TCEntityTypes.ELDRITCH_GUARDIAN.get())
+                        + ", heightmap=" + SpawnPlacements.getHeightmapType(TCEntityTypes.ELDRITCH_GUARDIAN.get())));
+        checks.add(check("inhabited_zombie_spawn_placement_registered",
+                SpawnPlacements.hasPlacement(TCEntityTypes.INHABITED_ZOMBIE.get())
+                        && SpawnPlacements.getPlacementType(TCEntityTypes.INHABITED_ZOMBIE.get()) == SpawnPlacementTypes.ON_GROUND
+                        && SpawnPlacements.getHeightmapType(TCEntityTypes.INHABITED_ZOMBIE.get()) == TCEntitySpawnRules.INHABITED_ZOMBIE_HEIGHTMAP_TYPE,
+                "placement=" + SpawnPlacements.getPlacementType(TCEntityTypes.INHABITED_ZOMBIE.get())
+                        + ", heightmap=" + SpawnPlacements.getHeightmapType(TCEntityTypes.INHABITED_ZOMBIE.get())));
     }
 
     private static void addPredicateChecks(ServerLevel level, BlockPos origin, MinecraftServer server, ArrayList<Check> checks) {

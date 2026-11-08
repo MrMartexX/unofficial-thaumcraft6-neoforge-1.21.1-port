@@ -11,5 +11,8 @@
     "particle": "thaumcraft:block/golembuilder",
     "texture": "thaumcraft:block/golembuilder"
   },
-  "mtl_override": "thaumcraft:models/block/golembuilder.mtl"
+  "mtl_override": "thaumcraft:models/block/golembuilder.mtl",
+  "visibility": {
+    "press": false
+  }
 }

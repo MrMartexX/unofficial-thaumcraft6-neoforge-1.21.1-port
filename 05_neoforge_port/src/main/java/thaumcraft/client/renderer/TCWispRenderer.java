@@ -30,6 +30,8 @@ final class TCWispRenderer extends EntityRenderer<TCWispEntity> {
             return;
         }
 
+        RenderSystem.enableDepthTest();
+        RenderSystem.depthFunc(org.lwjgl.opengl.GL11.GL_LEQUAL);
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
         RenderSystem.depthMask(false);

@@ -27,6 +27,7 @@ import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thaumcraft.Thaumcraft;
+import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.items.components.TCAspectStackComponent;
 import thaumcraft.common.items.components.TCLegacyItemComponent;
@@ -504,6 +505,11 @@ public final class TCResearchManager {
         }
 
         TCPlayerKnowledge knowledge = TCPlayerKnowledgeStore.get(player);
+        for (Aspect aspect : Aspect.aspects.values()) {
+            if (aspect != null && aspect.getTag() != null && !aspect.getTag().isBlank()) {
+                knowledge.addResearch("!" + aspect.getTag());
+            }
+        }
         int newlyCompleted = 0;
         markAllLegacyPageFlagsForKnownDependencies(knowledge);
         for (TCResearchEntryDefinition entry : activeData.entries().values()) {

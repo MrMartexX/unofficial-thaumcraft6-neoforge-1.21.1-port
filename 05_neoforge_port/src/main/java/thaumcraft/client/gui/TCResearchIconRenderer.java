@@ -2,7 +2,6 @@ package thaumcraft.client.gui;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.math.Axis;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -137,8 +136,9 @@ public final class TCResearchIconRenderer {
 
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 5.0F);
-        // Legacy rotates 90 degrees around the negative Z axis.
-        graphics.pose().mulPose(Axis.ZP.rotationDegrees(-90.0F));
+        // Legacy GuiFocalManipulator.drawPart rotated -90 degrees around Z only to cancel out
+        // UtilsFX.renderQuadCentered's +90 degree UV mapping. GuiGraphics.blit uses upright UVs,
+        // so no extra Z rotation should be applied here.
         if (definition.kind() == TCFocusElementDefinition.Kind.EFFECT
                 || definition.kind() == TCFocusElementDefinition.Kind.MEDIUM) {
             ResourceLocation backing = ResourceLocation.fromNamespaceAndPath(

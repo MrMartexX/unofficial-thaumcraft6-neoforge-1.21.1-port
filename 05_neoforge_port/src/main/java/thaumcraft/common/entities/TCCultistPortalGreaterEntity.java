@@ -154,6 +154,11 @@ public class TCCultistPortalGreaterEntity extends Monster {
     }
 
     @Override
+    protected boolean shouldDespawnInPeaceful() {
+        return false;
+    }
+
+    @Override
     public boolean isPushable() {
         return false;
     }

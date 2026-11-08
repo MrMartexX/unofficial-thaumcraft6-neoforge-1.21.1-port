@@ -108,6 +108,7 @@ public class TCCultistPortalLesserEntity extends Monster {
                 getZ() + random.nextFloat() - random.nextFloat()
         );
         cultist.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(cultist.blockPosition()), MobSpawnType.MOB_SUMMONED, null);
+        cultist.setLegacyHome(blockPosition(), 32);
         serverLevel.addFreshEntity(cultist);
         cultist.spawnExplosionParticle();
         cultist.playSound(TCSounds.WANDFAIL.get(), 1.0F, 1.0F);
@@ -119,6 +120,11 @@ public class TCCultistPortalLesserEntity extends Monster {
 
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
+    protected boolean shouldDespawnInPeaceful() {
         return false;
     }
 

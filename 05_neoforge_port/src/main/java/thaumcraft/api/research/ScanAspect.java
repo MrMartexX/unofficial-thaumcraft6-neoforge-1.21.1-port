@@ -9,7 +9,7 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectHelper;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.research.TCKnowledgeType;
-import thaumcraft.common.research.TCPlayerKnowledgeStore;
+import thaumcraft.common.research.TCResearchManager;
 
 public class ScanAspect implements IScanThing {
     private final String research;
@@ -32,11 +32,9 @@ public class ScanAspect implements IScanThing {
             return;
         }
 
-        TCPlayerKnowledgeStore.mutate(player, knowledge -> {
-            knowledge.addRaw(TCKnowledgeType.OBSERVATION, "AUROMANCY", 1);
-            knowledge.addRaw(TCKnowledgeType.OBSERVATION, "BASICS", 1);
-            knowledge.addRaw(TCKnowledgeType.OBSERVATION, "ALCHEMY", 1);
-        });
+        TCResearchManager.addKnowledgeRaw(player, TCKnowledgeType.OBSERVATION, "AUROMANCY", 1);
+        TCResearchManager.addKnowledgeRaw(player, TCKnowledgeType.OBSERVATION, "BASICS", 1);
+        TCResearchManager.addKnowledgeRaw(player, TCKnowledgeType.OBSERVATION, "ALCHEMY", 1);
     }
 
     @Override

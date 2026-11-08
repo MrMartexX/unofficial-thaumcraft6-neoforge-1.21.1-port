@@ -98,6 +98,12 @@ public final class TCEntitySpawnRules {
     public static final Heightmap.Types FIREBAT_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
     public static final SpawnPlacementType PECH_PLACEMENT_TYPE = SpawnPlacementTypes.ON_GROUND;
     public static final Heightmap.Types PECH_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
+    public static final SpawnPlacementType ELDRITCH_GUARDIAN_PLACEMENT_TYPE = SpawnPlacementTypes.ON_GROUND;
+    public static final Heightmap.Types ELDRITCH_GUARDIAN_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
+    public static final SpawnPlacementType INHABITED_ZOMBIE_PLACEMENT_TYPE = SpawnPlacementTypes.ON_GROUND;
+    public static final Heightmap.Types INHABITED_ZOMBIE_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
+    public static final SpawnPlacementType GIANT_BRAINY_ZOMBIE_PLACEMENT_TYPE = SpawnPlacementTypes.ON_GROUND;
+    public static final Heightmap.Types GIANT_BRAINY_ZOMBIE_HEIGHTMAP_TYPE = Heightmap.Types.MOTION_BLOCKING_NO_LEAVES;
 
     private TCEntitySpawnRules() {
     }
@@ -118,6 +124,13 @@ public final class TCEntitySpawnRules {
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
         event.register(
+                TCEntityTypes.GIANT_BRAINY_ZOMBIE.get(),
+                GIANT_BRAINY_ZOMBIE_PLACEMENT_TYPE,
+                GIANT_BRAINY_ZOMBIE_HEIGHTMAP_TYPE,
+                (type, level, spawnType, pos, random) -> TCBrainyZombieEntity.checkBrainyZombieSpawnRules(TCEntityTypes.BRAINY_ZOMBIE.get(), level, spawnType, pos, random),
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+        event.register(
                 TCEntityTypes.FIREBAT.get(),
                 FIREBAT_PLACEMENT_TYPE,
                 FIREBAT_HEIGHTMAP_TYPE,
@@ -129,6 +142,35 @@ public final class TCEntitySpawnRules {
                 PECH_PLACEMENT_TYPE,
                 PECH_HEIGHTMAP_TYPE,
                 TCPechEntity::checkPechSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+        event.register(
+                TCEntityTypes.ELDRITCH_GUARDIAN.get(),
+                ELDRITCH_GUARDIAN_PLACEMENT_TYPE,
+                ELDRITCH_GUARDIAN_HEIGHTMAP_TYPE,
+                (type, level, spawnType, pos, random) -> {
+                    if (level instanceof net.minecraft.world.level.Level l && l.getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL) {
+                        return false;
+                    }
+                    net.minecraft.world.phys.AABB checkBox = new net.minecraft.world.phys.AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1.0D, pos.getY() + 1.0D, pos.getZ() + 1.0D)
+                            .inflate(32.0D, 16.0D, 32.0D);
+                    return level.getEntitiesOfClass(TCEldritchGuardianEntity.class, checkBox).isEmpty()
+                            && level.getBlockState(pos.below()).isValidSpawn(level, pos.below(), type);
+                },
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+        event.register(
+                TCEntityTypes.INHABITED_ZOMBIE.get(),
+                INHABITED_ZOMBIE_PLACEMENT_TYPE,
+                INHABITED_ZOMBIE_HEIGHTMAP_TYPE,
+                (type, level, spawnType, pos, random) -> {
+                    if (!net.minecraft.world.entity.monster.Monster.checkMonsterSpawnRules(type, level, spawnType, pos, random)) {
+                        return false;
+                    }
+                    net.minecraft.world.phys.AABB checkBox = new net.minecraft.world.phys.AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1.0D, pos.getY() + 1.0D, pos.getZ() + 1.0D)
+                            .inflate(32.0D, 16.0D, 32.0D);
+                    return level.getEntitiesOfClass(TCInhabitedZombieEntity.class, checkBox).isEmpty();
+                },
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
         Thaumcraft.LOGGER.debug("Registered Thaumcraft natural spawn placement policies.");

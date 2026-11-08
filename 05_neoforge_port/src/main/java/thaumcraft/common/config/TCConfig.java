@@ -62,6 +62,30 @@ public final class TCConfig {
             .comment("Legacy Thaumcraft CONFIG_WORLD.allowSpawnPech. Controls Pech natural spawns in magical biomes; the 1.21 tag intentionally contains only Thaumcraft magical biomes until that biome subsystem is ported.")
             .define("allowSpawnPech", true);
 
+    public static final ModConfigSpec.IntValue ORE_DENSITY = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.oreDensity: percentage scaling for worldgen ore attempt counts (default 100).")
+            .defineInRange("oreDensity", 100, 1, 1000);
+
+    public static final ModConfigSpec.BooleanValue GENERATE_CINNABAR = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.generateCinnabar: generates cinnabar ore in the world.")
+            .define("generateCinnabar", true);
+
+    public static final ModConfigSpec.BooleanValue GENERATE_AMBER = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.generateAmber: generates amber ore in the world.")
+            .define("generateAmber", true);
+
+    public static final ModConfigSpec.BooleanValue GENERATE_QUARTZ = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.generateQuartz: generates quartz ore in the world.")
+            .define("generateQuartz", true);
+
+    public static final ModConfigSpec.BooleanValue GENERATE_CRYSTALS = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.generateCrystals: generates elemental crystal clusters in the world.")
+            .define("generateCrystals", true);
+
+    public static final ModConfigSpec.BooleanValue GENERATE_TREES = BUILDER
+            .comment("Legacy Thaumcraft CONFIG_WORLD.generateTrees: generates Greatwood and Silverwood trees in the world.")
+            .define("generateTrees", true);
+
     public static final ModConfigSpec.BooleanValue SHOW_GOLEM_EMOTES = BUILDER
             .comment("Legacy showGolemEmotes: show golem task, follow, stay and rank emotes.")
             .define("showGolemEmotes", true);

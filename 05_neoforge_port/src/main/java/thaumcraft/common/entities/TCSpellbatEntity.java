@@ -31,6 +31,8 @@ import thaumcraft.common.registry.TCEntityTypes;
 public class TCSpellbatEntity extends TCFirebatEntity {
     private static final EntityDataAccessor<Boolean> FRIENDLY =
             SynchedEntityData.defineId(TCSpellbatEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> COLOR =
+            SynchedEntityData.defineId(TCSpellbatEntity.class, EntityDataSerializers.INT);
 
     private UUID ownerUuid = null;
     private LivingEntity owner = null;
@@ -43,18 +45,24 @@ public class TCSpellbatEntity extends TCFirebatEntity {
     }
 
     public TCSpellbatEntity(Level level, LivingEntity owner, boolean friendly, String remainingNodes, float power) {
+        this(level, owner, friendly, remainingNodes, power, 0xFFFFFF);
+    }
+
+    public TCSpellbatEntity(Level level, LivingEntity owner, boolean friendly, String remainingNodes, float power, int color) {
         super(TCEntityTypes.SPELLBAT.get(), level);
         this.owner = owner;
         this.ownerUuid = owner != null ? owner.getUUID() : null;
         this.remainingNodes = remainingNodes != null ? remainingNodes : "";
         this.power = power;
         setFriendly(friendly);
+        setColor(color);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(FRIENDLY, false);
+        builder.define(COLOR, 0xFFFFFF);
     }
 
     public boolean isFriendly() {
@@ -63,6 +71,14 @@ public class TCSpellbatEntity extends TCFirebatEntity {
 
     public void setFriendly(boolean friendly) {
         entityData.set(FRIENDLY, friendly);
+    }
+
+    public int getColor() {
+        return entityData.get(COLOR);
+    }
+
+    public void setColor(int color) {
+        entityData.set(COLOR, color);
     }
 
     public LivingEntity getOwner() {
@@ -143,6 +159,7 @@ public class TCSpellbatEntity extends TCFirebatEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("friendly", isFriendly());
+        tag.putInt("color", getColor());
         if (ownerUuid != null) {
             tag.putUUID("owner_uuid", ownerUuid);
         }
@@ -154,6 +171,9 @@ public class TCSpellbatEntity extends TCFirebatEntity {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         setFriendly(tag.getBoolean("friendly"));
+        if (tag.contains("color")) {
+            setColor(tag.getInt("color"));
+        }
         if (tag.hasUUID("owner_uuid")) {
             ownerUuid = tag.getUUID("owner_uuid");
         }

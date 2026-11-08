@@ -130,6 +130,7 @@ final class TCThaumonomiconCodec {
         writeList(buffer, research.flags(), MAX_RESEARCH_FLAGS, "research flags", TCThaumonomiconCodec::writeEnum);
         buffer.writeVarInt(research.currentStage());
         buffer.writeVarInt(research.totalStages());
+        buffer.writeBoolean(research.hasWarp());
         writeList(
                 buffer,
                 research.recipeSearch(),
@@ -160,6 +161,7 @@ final class TCThaumonomiconCodec {
                 ),
                 buffer.readVarInt(),
                 buffer.readVarInt(),
+                buffer.readBoolean(),
                 readList(
                         buffer,
                         MAX_RECIPE_SEARCH_RESULTS,

@@ -83,6 +83,7 @@ final class TCThaumonomiconService {
                 .sorted()
                 .toList();
         TCResearchStatus status = TCResearchManager.getResearchStatus(knowledge, entry.key());
+        boolean hasWarp = entry.stages().stream().anyMatch(stage -> stage.warp() > 0);
         return new TCThaumonomiconResearchView(
                 entry.key(),
                 entry.name(),
@@ -98,6 +99,7 @@ final class TCThaumonomiconService {
                 flags,
                 knowledge.getResearchStage(entry.key()),
                 entry.stages().size(),
+                hasWarp,
                 recipeSearch(status, player, entry.key())
         );
     }

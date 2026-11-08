@@ -236,6 +236,11 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             }
             return super.mouseClicked(mouseX, mouseY, button);
         }
+        if (sideInsert != SideInsert.NONE && button == 1) {
+            sideInsert = SideInsert.NONE;
+            playPage();
+            return true;
+        }
         if (button != 0) {
             return super.mouseClicked(mouseX, mouseY, button);
         }
@@ -304,27 +309,83 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             playPage();
             return true;
         }
-        if ((keyCode == GLFW.GLFW_KEY_LEFT
+        if (keyCode == GLFW.GLFW_KEY_LEFT
                 || keyCode == GLFW.GLFW_KEY_UP
-                || keyCode == GLFW.GLFW_KEY_PAGE_UP)
-                && activeRecipePages.isEmpty()
-                && sideInsert == SideInsert.NONE
-                && spread > 0) {
-            spread--;
-            playPageTurn();
-            return true;
+                || keyCode == GLFW.GLFW_KEY_PAGE_UP) {
+            if (sideInsert == SideInsert.ASPECTS && aspectPage > 0) {
+                aspectPage--;
+                playPageTurn();
+                return true;
+            }
+            if (!activeRecipePages.isEmpty() && activeRecipeIndex > 0) {
+                activeRecipeIndex--;
+                playPageTurn();
+                return true;
+            }
+            if (activeRecipePages.isEmpty() && sideInsert == SideInsert.NONE && spread > 0) {
+                spread--;
+                playPageTurn();
+                return true;
+            }
         }
-        if ((keyCode == GLFW.GLFW_KEY_RIGHT
+        if (keyCode == GLFW.GLFW_KEY_RIGHT
                 || keyCode == GLFW.GLFW_KEY_DOWN
-                || keyCode == GLFW.GLFW_KEY_PAGE_DOWN)
-                && activeRecipePages.isEmpty()
-                && sideInsert == SideInsert.NONE
-                && spread < maxSpread()) {
-            spread++;
-            playPageTurn();
-            return true;
+                || keyCode == GLFW.GLFW_KEY_PAGE_DOWN) {
+            if (sideInsert == SideInsert.ASPECTS && aspectPage < maxAspectPage()) {
+                aspectPage++;
+                playPageTurn();
+                return true;
+            }
+            if (!activeRecipePages.isEmpty() && activeRecipeIndex < activeRecipePages.size() - 1) {
+                activeRecipeIndex++;
+                playPageTurn();
+                return true;
+            }
+            if (activeRecipePages.isEmpty() && sideInsert == SideInsert.NONE && spread < maxSpread()) {
+                spread++;
+                playPageTurn();
+                return true;
+            }
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        if (scrollY > 0.0D) {
+            if (sideInsert == SideInsert.ASPECTS && aspectPage > 0) {
+                aspectPage--;
+                playPageTurn();
+                return true;
+            }
+            if (!activeRecipePages.isEmpty() && activeRecipeIndex > 0) {
+                activeRecipeIndex--;
+                playPageTurn();
+                return true;
+            }
+            if (activeRecipePages.isEmpty() && sideInsert == SideInsert.NONE && spread > 0) {
+                spread--;
+                playPageTurn();
+                return true;
+            }
+        } else if (scrollY < 0.0D) {
+            if (sideInsert == SideInsert.ASPECTS && aspectPage < maxAspectPage()) {
+                aspectPage++;
+                playPageTurn();
+                return true;
+            }
+            if (!activeRecipePages.isEmpty() && activeRecipeIndex < activeRecipePages.size() - 1) {
+                activeRecipeIndex++;
+                playPageTurn();
+                return true;
+            }
+            if (activeRecipePages.isEmpty() && sideInsert == SideInsert.NONE && spread < maxSpread()) {
+                spread++;
+                playPageTurn();
+                return true;
+            }
+        }
+        return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
     @Override
@@ -1086,12 +1147,8 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         int iconX = x - 57;
         int iconY = y + 154;
         graphics.pose().pushPose();
-        graphics.pose().translate(iconX + 10.0F, iconY + 10.0F, 30.0F);
-        float scale = 0.42F + (float) Math.sin(System.currentTimeMillis() / 220.0D) * 0.04F;
-        graphics.pose().scale(scale, scale, 1.0F);
-        graphics.setColor(0.9F, 0.0F, 0.44F, 0.9F);
-        blit(graphics, AURA_NODES, -16, -16, 160, 0, 32, 32, 2048, 2048);
-        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        graphics.pose().translate(0.0F, 0.0F, 30.0F);
+        TCThaumonomiconBrowserScreen.drawForbidden(graphics, iconX + 10.0D, iconY + 1.0D);
         graphics.pose().popPose();
         Component level = Component.translatable("tc.forbidden.level." + warp);
         graphics.drawString(font, level, iconX - font.width(level) / 2 + 10, iconY - 3, 0xFFAA999F, false);
@@ -1123,12 +1180,18 @@ public final class TCThaumonomiconEntryScreen extends Screen {
         }
         int x = recipePageX();
         int y = recipePageY();
-        if (inside(mouseX, mouseY, x + 40, y + 232, 14, 14) && aspectPage > 0) {
+        int bx = bookX();
+        int by = bookY();
+        boolean leftArrow = inside(mouseX, mouseY, x + 38, y + 228, 18, 16)
+                || inside(mouseX, mouseY, bx + 38, by + 192, 14, 14);
+        if (leftArrow && aspectPage > 0) {
             aspectPage--;
             playPage();
             return true;
         }
-        if (inside(mouseX, mouseY, x + 204, y + 232, 14, 14) && aspectPage < maxAspectPage()) {
+        boolean rightArrow = inside(mouseX, mouseY, x + 202, y + 228, 18, 16)
+                || inside(mouseX, mouseY, bx + 205, by + 192, 14, 14);
+        if (rightArrow && aspectPage < maxAspectPage()) {
             aspectPage++;
             playPage();
             return true;
@@ -1167,9 +1230,13 @@ public final class TCThaumonomiconEntryScreen extends Screen {
                 graphics.setColor(1.0F, 1.0F, 1.0F, 0.35F);
                 drawFullTexture(graphics, ASPECT_BACK, x - 2, rowY - 2, 32, 32);
                 graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+                hoveredUiTooltip = List.of(
+                        Component.literal(aspect.getName()).withStyle(ChatFormatting.AQUA),
+                        Component.literal(aspect.getLocalizedDescription()).withStyle(ChatFormatting.GRAY)
+                );
             }
             drawAspectIcon(graphics, aspect, x + 2, rowY + 2, 24);
-            drawCenteredSmall(graphics, Component.translatable("tc.aspect." + aspect.getTag()), x + 16, rowY + 29, 0xFF505050);
+            drawCenteredSmall(graphics, Component.literal(aspect.getName()), x + 16, rowY + 29, 0xFF505050);
             Aspect[] components = aspect.getComponents();
             if (components == null || components.length < 2) {
                 graphics.drawString(font, Component.translatable("tc.aspect.primal"), x + 54, rowY + 12, 0xFF777777, false);
@@ -1181,20 +1248,28 @@ public final class TCThaumonomiconEntryScreen extends Screen {
             renderAspectComponent(graphics, components[1], x + 102, rowY + 4, mouseX, mouseY);
         }
         if (aspectPage > 0) {
-            blitScaled(graphics, BROWSER, x - 20, y + 208, 0, 184, 12, 8, legacyBob());
+            blitScaled(graphics, BOOK, x - 20, y + 208, 0, 184, 12, 8, legacyBob());
         }
         if (aspectPage < maxAspectPage()) {
-            blitScaled(graphics, BROWSER, x + 144, y + 208, 12, 184, 12, 8, legacyBob());
+            blitScaled(graphics, BOOK, x + 144, y + 208, 12, 184, 12, 8, legacyBob());
         }
     }
 
     private void renderAspectComponent(GuiGraphics graphics, Aspect aspect, int x, int y, int mouseX, int mouseY) {
-        boolean known = TCKnowledgeClientCache.hasResearch("!" + aspect.getTag());
+        boolean known = hasKnownAspect(aspect);
         if (known) {
             drawAspectIcon(graphics, aspect, x, y, 20);
-            drawCenteredSmall(graphics, Component.translatable("tc.aspect." + aspect.getTag()), x + 10, y + 25, 0xFF505050);
+            drawCenteredSmall(graphics, Component.literal(aspect.getName()), x + 12, y + 25, 0xFF505050);
+            if (inside(mouseX, mouseY, x, y, 20, 20)) {
+                hoveredUiTooltip = List.of(
+                        Component.literal(aspect.getName()).withStyle(ChatFormatting.AQUA),
+                        Component.literal(aspect.getLocalizedDescription()).withStyle(ChatFormatting.GRAY)
+                );
+            }
         } else {
+            graphics.setColor(0.8F, 0.8F, 0.8F, 1.0F);
             drawFullTexture(graphics, UNKNOWN, x, y, 20, 20);
+            graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
@@ -1340,9 +1415,19 @@ public final class TCThaumonomiconEntryScreen extends Screen {
 
     private List<Aspect> knownAspects() {
         return Aspect.aspects.values().stream()
-                .filter(aspect -> TCKnowledgeClientCache.hasResearch("!" + aspect.getTag()))
-                .sorted(Comparator.comparing(aspect -> Component.translatable("tc.aspect." + aspect.getTag()).getString()))
+                .filter(TCThaumonomiconEntryScreen::hasKnownAspect)
+                .sorted(Comparator.comparing(Aspect::getName, String.CASE_INSENSITIVE_ORDER))
                 .toList();
+    }
+
+    private static boolean hasKnownAspect(Aspect aspect) {
+        if (aspect == null || aspect.getTag() == null || aspect.getTag().isBlank()) {
+            return false;
+        }
+        String tag = aspect.getTag();
+        return TCKnowledgeClientCache.hasResearch("!" + tag)
+                || TCKnowledgeClientCache.hasResearch("!" + tag.toLowerCase(Locale.ROOT))
+                || TCKnowledgeClientCache.hasResearch("!" + tag.toUpperCase(Locale.ROOT));
     }
 
     private int maxAspectPage() {
@@ -1394,18 +1479,23 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private boolean handleRecipePageClick(double mouseX, double mouseY) {
         int x = bookX();
         int y = bookY();
+        int rx = recipePageX();
+        int ry = recipePageY();
         if (inside(mouseX, mouseY, x + 118, y + 190, 20, 12)) {
             goBackRecipePage();
             playPage();
             return true;
         }
-        if (inside(mouseX, mouseY, x + 38, y + 192, 14, 14) && activeRecipeIndex > 0) {
+        boolean leftArrow = inside(mouseX, mouseY, x + 38, y + 192, 14, 14)
+                || inside(mouseX, mouseY, rx + 38, ry + 228, 18, 16);
+        if (leftArrow && activeRecipeIndex > 0) {
             activeRecipeIndex--;
             playPageTurn();
             return true;
         }
-        if (inside(mouseX, mouseY, x + 205, y + 192, 14, 14)
-                && activeRecipeIndex < activeRecipePages.size() - 1) {
+        boolean rightArrow = inside(mouseX, mouseY, x + 205, y + 192, 14, 14)
+                || inside(mouseX, mouseY, rx + 202, ry + 228, 18, 16);
+        if (rightArrow && activeRecipeIndex < activeRecipePages.size() - 1) {
             activeRecipeIndex++;
             playPageTurn();
             return true;

@@ -17,6 +17,7 @@ public record TCThaumonomiconResearchView(
         List<TCResearchFlag> flags,
         int currentStage,
         int totalStages,
+        boolean hasWarp,
         List<TCThaumonomiconRecipeSearchView> recipeSearch
 ) {
     public TCThaumonomiconResearchView {

@@ -1,5 +1,6 @@
 package thaumcraft.client.gui;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -35,6 +37,8 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/gui/gui_research_browser.png");
     private static final ResourceLocation UNKNOWN =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/aspects/_unknown.png");
+    private static final ResourceLocation AURA_NODES =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/misc/auranodes.png");
 
     private static final int VIEWPORT_MARGIN = 16;
     private static final int GRID_SIZE = 24;
@@ -52,6 +56,8 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
 
     private static String selectedCategory = "";
     private static boolean searching;
+    private static long popupUntilMillis;
+    private static String popupMessage = "";
     private static final Map<String, Double> LAST_PAN_X = new HashMap<>();
     private static final Map<String, Double> LAST_PAN_Y = new HashMap<>();
 
@@ -133,10 +139,12 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         renderSearchButton(graphics, mouseX, mouseY);
         renderSearch(graphics, index, mouseX, mouseY, partialTick);
         renderLegacyTooltip(graphics, mouseX, mouseY);
+        renderResearchPopup(graphics);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        popupUntilMillis = 0L;
         if (button != 0) {
             return super.mouseClicked(mouseX, mouseY, button);
         }
@@ -378,6 +386,9 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         graphics.pose().pushPose();
         graphics.pose().translate(centerX, centerY, 20.0D);
         graphics.pose().scale((float) (1.0D / zoom), (float) (1.0D / zoom), 1.0F);
+        if (entry.hasWarp()) {
+            drawForbidden(graphics, 0.0D, 0.0D);
+        }
         graphics.setColor(brightness, brightness, brightness, 1.0F);
 
         int frameU = entry.meta().contains("HEX") ? 112 : entry.meta().contains("ROUND") ? 144 : 80;
@@ -395,6 +406,24 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         }
         renderResearchIcon(graphics, entry, -8, -8);
         graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        graphics.pose().popPose();
+    }
+
+    public static void drawForbidden(GuiGraphics graphics, double centerX, double centerY) {
+        Minecraft mc = Minecraft.getInstance();
+        int ticks = mc.player != null ? mc.player.tickCount : (int) (System.currentTimeMillis() / 50L);
+        int frame = ticks & 31;
+        int u = frame * 64;
+        int v = 5 * 64;
+
+        graphics.pose().pushPose();
+        graphics.pose().translate(centerX, centerY, 0.0D);
+        RenderSystem.enableBlend();
+        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        graphics.setColor(0.33F, 0.0F, 0.44F, 0.9F);
+        graphics.blit(AURA_NODES, -45, -45, 90, 90, u, v, 64, 64, 2048, 2048);
+        graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.defaultBlendFunc();
         graphics.pose().popPose();
     }
 
@@ -525,6 +554,21 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
             return;
         }
         renderResearchTooltip(graphics, hoveredResearch, mouseX, mouseY);
+    }
+
+    private void renderResearchPopup(GuiGraphics graphics) {
+        if (popupUntilMillis <= System.currentTimeMillis() || popupMessage == null || popupMessage.isBlank()) {
+            return;
+        }
+        TCLegacyTooltipRenderer.render(
+                graphics,
+                font,
+                List.of(TCLegacyTooltipRenderer.Line.normal(popupMessage, 0xFFFFFFFF)),
+                10,
+                34,
+                width,
+                height
+        );
     }
 
     private void renderResearchTooltip(
@@ -822,6 +866,13 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
                 ? TCThaumonomiconActionPayload.START_RESEARCH
                 : TCThaumonomiconActionPayload.ACKNOWLEDGE_ENTRY;
         if (research.status() != TCResearchStatus.UNKNOWN || research.unlockable()) {
+            if (action == TCThaumonomiconActionPayload.START_RESEARCH) {
+                popupUntilMillis = System.currentTimeMillis() + 3000L;
+                popupMessage = Component.translatable(
+                        "tc.research.popup",
+                        Component.translatable(research.name())
+                ).getString();
+            }
             pendingResearch = research.key();
             pendingRecipeTarget = recipeTarget;
             PacketDistributor.sendToServer(new TCThaumonomiconActionPayload(
