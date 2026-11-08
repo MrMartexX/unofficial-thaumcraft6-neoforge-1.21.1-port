@@ -29,6 +29,7 @@ public final class TCClientExtensions {
                 TCFluids.LIQUID_DEATH_TYPE.get());
         event.registerFluidType(new LegacyFluidExtension(WATER_STILL, WATER_FLOW, WATER_OVERLAY, 2013252778),
                 TCFluids.PURIFYING_FLUID_TYPE.get());
+        thaumcraft.client.renderer.gear.TCArmorClientExtensions.register(event);
     }
 
     private record LegacyFluidExtension(

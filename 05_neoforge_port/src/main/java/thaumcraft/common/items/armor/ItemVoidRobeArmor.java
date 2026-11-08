@@ -53,4 +53,12 @@ public class ItemVoidRobeArmor extends ArmorItem implements IVisDiscountGear, IR
     public int getWarp(ItemStack stack, Player player) {
         return 3;
     }
+
+    @Override
+    public net.minecraft.resources.ResourceLocation getArmorTexture(ItemStack stack, Entity entity, net.minecraft.world.entity.EquipmentSlot slot, net.minecraft.world.item.ArmorMaterial.Layer layer, boolean innerModel) {
+        if (layer != null && layer.dyeable()) {
+            return net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(thaumcraft.Thaumcraft.MODID, "textures/entity/armor/void_robe_armor_overlay.png");
+        }
+        return net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(thaumcraft.Thaumcraft.MODID, "textures/entity/armor/void_robe_armor.png");
+    }
 }

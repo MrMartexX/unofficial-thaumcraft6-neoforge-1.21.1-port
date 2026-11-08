@@ -68,6 +68,11 @@ public class ItemFortressArmor extends ArmorItem implements IVisDiscountGear, IG
     }
 
     @Override
+    public ResourceLocation getArmorTexture(ItemStack stack, net.minecraft.world.entity.Entity entity, net.minecraft.world.entity.EquipmentSlot slot, net.minecraft.world.item.ArmorMaterial.Layer layer, boolean innerModel) {
+        return ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/entity/armor/fortress_armor.png");
+    }
+
+    @Override
     public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
         ItemAttributeModifiers base = super.getDefaultAttributeModifiers(stack);
         if (getType() == Type.HELMET && getMask(stack) >= 0) {

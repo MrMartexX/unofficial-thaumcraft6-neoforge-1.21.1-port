@@ -12,6 +12,7 @@ public final class TCEntityRenderers {
 
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(TCEntityRenderers::onRegisterRenderers);
+        modEventBus.addListener(thaumcraft.client.renderer.gear.TCModelLayers::register);
     }
 
     private static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {

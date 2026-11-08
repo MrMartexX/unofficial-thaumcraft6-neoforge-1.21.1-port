@@ -1,13 +1,17 @@
 package thaumcraft.common.items.armor;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.level.Level;
+import thaumcraft.Thaumcraft;
 import thaumcraft.api.items.IGoggles;
 import thaumcraft.api.items.IRevealer;
 import thaumcraft.api.items.IVisDiscountGear;
@@ -38,9 +42,14 @@ public class ItemGoggles extends ArmorItem implements IVisDiscountGear, IReveale
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
         if (!level.isClientSide() && entity instanceof ServerPlayer player
-                && player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).is(this)
+                && player.getItemBySlot(EquipmentSlot.HEAD).is(this)
                 && player.tickCount % 20 == 0) {
             TCAuraNetwork.sendAuraToPlayer(player, player.blockPosition());
         }
+    }
+
+    @Override
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+        return ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "textures/entity/armor/goggles.png");
     }
 }
