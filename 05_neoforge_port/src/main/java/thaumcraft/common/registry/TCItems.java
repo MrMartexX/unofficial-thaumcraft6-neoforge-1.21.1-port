@@ -91,6 +91,8 @@ import thaumcraft.common.items.TCWardedJarBlockItem;
 import thaumcraft.common.items.armor.ItemGoggles;
 
 import thaumcraft.common.items.armor.ItemRobeArmor;
+import thaumcraft.common.items.curios.TCBaubleItem;
+import thaumcraft.common.items.misc.TCResourceItem;
 
 import thaumcraft.common.items.armor.ItemThaumiumArmor;
 
@@ -412,13 +414,13 @@ public final class TCItems {
 
 
 
-    public static final Supplier<Item> AMBER = ITEMS.register("amber", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> AMBER = ITEMS.register("amber", () -> new TCResourceItem(Rarity.UNCOMMON));
 
-    public static final Supplier<Item> QUICKSILVER = ITEMS.register("quicksilver", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> QUICKSILVER = ITEMS.register("quicksilver", () -> new TCResourceItem(Rarity.COMMON));
 
     public static final Supplier<Item> QUICKSILVER_NUGGET = simpleItem("quicksilver_nugget");
 
-    public static final Supplier<Item> FABRIC = ITEMS.register("fabric", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> FABRIC = ITEMS.register("fabric", () -> new TCResourceItem(Rarity.COMMON));
 
     public static final Supplier<Item> THAUMIUM_INGOT = simpleItem("thaumium_ingot");
 
@@ -858,14 +860,14 @@ public final class TCItems {
     public static final Supplier<BlockItem> REDSTONE_RELAY = blockItem("redstone_relay", TCBlocks.REDSTONE_RELAY);
     public static final Supplier<BlockItem> BRAIN_BOX = blockItem("brain_box", TCBlocks.BRAIN_BOX);
 
-    public static final Supplier<Item> BAUBLE_AMULET = ITEMS.register("bauble_amulet", () -> new Item(new Item.Properties().stacksTo(1)));
+    public static final Supplier<Item> BAUBLE_AMULET = ITEMS.register("bauble_amulet", () -> new TCBaubleItem(TCBaubleItem.Type.AMULET, Rarity.COMMON, 0));
     public static final Supplier<Item> VIS_AMULET = ITEMS.register("vis_amulet", ItemAmuletVis::new);
-    public static final Supplier<Item> BAUBLE_AMULET_FANCY = ITEMS.register("bauble_amulet_fancy", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
-    public static final Supplier<Item> BAUBLE_GIRDLE = ITEMS.register("bauble_girdle", () -> new Item(new Item.Properties().stacksTo(1)));
-    public static final Supplier<Item> BAUBLE_GIRDLE_FANCY = ITEMS.register("bauble_girdle_fancy", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
-    public static final Supplier<Item> BAUBLE_RING = ITEMS.register("bauble_ring", () -> new Item(new Item.Properties().stacksTo(1)));
-    public static final Supplier<Item> BAUBLE_CHARM = ITEMS.register("bauble_charm", () -> new Item(new Item.Properties().stacksTo(1)));
-    public static final Supplier<Item> BAUBLE_RING_FANCY = ITEMS.register("bauble_ring_fancy", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
+    public static final Supplier<Item> BAUBLE_AMULET_FANCY = ITEMS.register("bauble_amulet_fancy", () -> new TCBaubleItem(TCBaubleItem.Type.AMULET, Rarity.UNCOMMON, 0));
+    public static final Supplier<Item> BAUBLE_GIRDLE = ITEMS.register("bauble_girdle", () -> new TCBaubleItem(TCBaubleItem.Type.BELT, Rarity.COMMON, 0));
+    public static final Supplier<Item> BAUBLE_GIRDLE_FANCY = ITEMS.register("bauble_girdle_fancy", () -> new TCBaubleItem(TCBaubleItem.Type.BELT, Rarity.UNCOMMON, 0));
+    public static final Supplier<Item> BAUBLE_RING = ITEMS.register("bauble_ring", () -> new TCBaubleItem(TCBaubleItem.Type.RING, Rarity.COMMON, 0));
+    public static final Supplier<Item> BAUBLE_CHARM = ITEMS.register("bauble_charm", () -> new TCBaubleItem(TCBaubleItem.Type.CHARM, Rarity.COMMON, 0));
+    public static final Supplier<Item> BAUBLE_RING_FANCY = ITEMS.register("bauble_ring_fancy", () -> new TCBaubleItem(TCBaubleItem.Type.RING, Rarity.UNCOMMON, 0));
     public static final Supplier<Item> RING_APPRENTICE = ITEMS.register("ring_apprentice", () -> new ItemVisDiscountGear(5, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
     public static final Supplier<Item> CURIOSITY_BAND = ITEMS.register("curiosity_band", ItemCuriosityBand::new);
     public static final Supplier<Item> BRASS_BRACE = simpleItem("brass_brace");
@@ -1131,6 +1133,10 @@ public final class TCItems {
             case "quicksilver_nugget" -> legacyItem("nugget", "quicksilver", 5);
 
             case "mindclockwork_advanced" -> legacyItem("mind", "advanced", 1);
+            case "mind_clockwork" -> legacyItem("mind", "clockwork", 0);
+            case "mind_biothaumic" -> legacyItem("mind", "biothaumic", 1);
+            case "module_vision" -> legacyItem("module", "vision", 0);
+            case "module_aggression" -> legacyItem("module", "aggression", 1);
 
             case "chunk_chicken" -> legacyItem("chunk", "chicken", 1);
 
@@ -1278,11 +1284,11 @@ public final class TCItems {
 
     // Catalog bridge placeholder output items. These keep Thaumonomicon recipe pages on thaumcraft:* outputs
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ACTIVATORRAIL = ITEMS.register("activatorrail", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ACTIVATORRAIL = ITEMS.register("activatorrail", () -> legacyItem("rail", "activator", 0));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ANCIENTPEDESTAL = ITEMS.register("ancientpedestal", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ANCIENTPEDESTAL = blockItem("ancientpedestal", TCBlocks.ANCIENT_PEDESTAL);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANEPEDESTAL = ITEMS.register("arcanepedestal", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ARCANEPEDESTAL = blockItem("arcanepedestal", TCBlocks.ARCANE_PEDESTAL);
 
     public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBLACK = ITEMS.register("bannerblack", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("black").get(), new Item.Properties()));
 
@@ -1318,19 +1324,19 @@ public final class TCItems {
 
     public static final Supplier<Item> BANNER_CRIMSON_CULT = ITEMS.register("banner_crimson_cult", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNER_CRIMSON_CULT.get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ELDRITCHPEDESTAL = ITEMS.register("eldritchpedestal", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ELDRITCHPEDESTAL = blockItem("eldritchpedestal", TCBlocks.ELDRITCH_PEDESTAL);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_PAVEBARRIER = ITEMS.register("pavebarrier", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_PAVEBARRIER = blockItem("pavebarrier", TCBlocks.PAVING_STONE_BARRIER);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_PAVETRAVEL = ITEMS.register("pavetravel", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_PAVETRAVEL = blockItem("pavetravel", TCBlocks.PAVING_STONE_TRAVEL);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_RECHARGEPEDESTAL = ITEMS.register("rechargepedestal", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_RECHARGEPEDESTAL = blockItem("rechargepedestal", TCBlocks.RECHARGE_PEDESTAL);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_REDSTONEINLAY = ITEMS.register("redstoneinlay", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_REDSTONEINLAY = blockItem("redstoneinlay", TCBlocks.INLAY);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ADVALCHEMYCONSTRUCT = ITEMS.register("advalchemyconstruct", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ADVALCHEMYCONSTRUCT = blockItem("advalchemyconstruct", TCBlocks.METAL_ALCHEMICAL_ADVANCED);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ALCHEMICALCONSTRUCT = ITEMS.register("alchemicalconstruct", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ALCHEMICALCONSTRUCT = blockItem("alchemicalconstruct", TCBlocks.METAL_ALCHEMICAL);
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_CENTRIFUGE = CENTRIFUGE;
 
@@ -1342,7 +1348,7 @@ public final class TCItems {
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_HUNGRYCHEST = blockItem("hungrychest", TCBlocks.HUNGRY_CHEST);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_JARVOID = ITEMS.register("jarvoid", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_JARVOID = blockItem("jarvoid", TCBlocks.JAR_VOID);
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_LEVITATOR = LEVITATOR;
 
@@ -1350,13 +1356,13 @@ public final class TCItems {
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_MATRIXMOTION = MATRIX_SPEED;
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_MNEMONICMATRIX = ITEMS.register("mnemonicmatrix", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_MNEMONICMATRIX = blockItem("mnemonicmatrix", TCBlocks.MATRIX_COST);
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_PATTERNCRAFTER = blockItem("patterncrafter", TCBlocks.PATTERN_CRAFTER);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_REDSTONERELAY = ITEMS.register("redstonerelay", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_REDSTONERELAY = blockItem("redstonerelay", TCBlocks.REDSTONE_RELAY);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_RESONATOR = ITEMS.register("resonator", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_RESONATOR = ITEMS.register("resonator", () -> legacyItem("resonator", "vis", 0));
 
 public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_STABILIZER = STABILIZER;
 
@@ -1369,7 +1375,7 @@ public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_STABILIZER = STABILI
     public static final Supplier<Item> ADVANCEDCROSSBOW = ITEMS.register("advancedcrossbow", () -> new thaumcraft.common.entities.construct.ItemTurretPlacer(true, new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ADVANCEDCROSSBOW = ADVANCEDCROSSBOW;
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANEEAR = ITEMS.register("arcaneear", () -> new Item(new Item.Properties()));
+    public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ARCANEEAR = blockItem("arcaneear", TCBlocks.ARCANE_EAR);
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ARCANESPA = SPA;
 
@@ -1377,7 +1383,7 @@ public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_STABILIZER = STABILI
     public static final Supplier<Item> TURRET_PLACER = ITEMS.register("turret_placer", () -> new thaumcraft.common.entities.construct.ItemTurretPlacer(false, new Item.Properties()));
     public static final Supplier<Item> CATALOG_PLACEHOLDER_AUTOMATEDCROSSBOW = AUTOMATEDCROSSBOW;
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_FOCUSPOUCH = ITEMS.register("focuspouch", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_FOCUSPOUCH = ITEMS.register("focuspouch", ItemFocusPouch::new);
 
     public static final Supplier<Item> CATALOG_PLACEHOLDER_GRAPPLEGUN = ITEMS.register("grapplegun", () -> new thaumcraft.common.items.tools.TCGrappleGunItem(new Item.Properties()));
 
@@ -1385,21 +1391,21 @@ public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_STABILIZER = STABILI
 
     public static final Supplier<Item> CATALOG_PLACEHOLDER_GRAPPLEGUNTIP = simpleItem("grappleguntip");
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_MINDCLOCKWORK = ITEMS.register("mindclockwork", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_MINDCLOCKWORK = ITEMS.register("mindclockwork", () -> legacyItem("mind", "clockwork", 0));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_MODAGGRESSION = ITEMS.register("modaggression", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_MODAGGRESSION = ITEMS.register("modaggression", () -> legacyItem("module", "aggression", 1));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_MODVISION = ITEMS.register("modvision", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_MODVISION = ITEMS.register("modvision", () -> legacyItem("module", "vision", 0));
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_POTIONSPRAYER = blockItem("potionsprayer", TCBlocks.POTION_SPRAYER);
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBEBOOTS = ITEMS.register("robeboots", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBEBOOTS = ITEMS.register("robeboots", () -> new ItemRobeArmor(ArmorItem.Type.BOOTS));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBECHEST = ITEMS.register("robechest", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBECHEST = ITEMS.register("robechest", () -> new ItemRobeArmor(ArmorItem.Type.CHESTPLATE));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBELEGS = ITEMS.register("robelegs", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_ROBELEGS = ITEMS.register("robelegs", () -> new ItemRobeArmor(ArmorItem.Type.LEGGINGS));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_SEALBLANK = ITEMS.register("sealblank", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_SEALBLANK = ITEMS.register("sealblank", () -> new ItemSealPlacer(new Item.Properties(), "thaumcraft:blank"));
 
     public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_ESSENTIASMELTERTHAUMIUM = SMELTER_THAUMIUM;
 
