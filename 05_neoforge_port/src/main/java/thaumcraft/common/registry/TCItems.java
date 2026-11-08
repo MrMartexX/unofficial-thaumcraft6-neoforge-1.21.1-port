@@ -388,6 +388,8 @@ public final class TCItems {
 
     public static final Supplier<BlockItem> VISHROOM = blockItem("vishroom", TCBlocks.VISHROOM);
 
+    public static final Supplier<BlockItem> GRASS_AMBIENT = blockItem("grass_ambient", TCBlocks.GRASS_AMBIENT);
+
     public static final Supplier<BlockItem> PLANK_GREATWOOD = blockItem("plank_greatwood", TCBlocks.PLANK_GREATWOOD);
 
     public static final Supplier<BlockItem> PLANK_SILVERWOOD = blockItem("plank_silverwood", TCBlocks.PLANK_SILVERWOOD);
@@ -1272,37 +1274,39 @@ public final class TCItems {
 
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ARCANEPEDESTAL = ITEMS.register("arcanepedestal", () -> new Item(new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBLACK = ITEMS.register("bannerblack", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBLACK = ITEMS.register("bannerblack", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("black").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBLUE = ITEMS.register("bannerblue", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBLUE = ITEMS.register("bannerblue", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("blue").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBROWN = ITEMS.register("bannerbrown", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERBROWN = ITEMS.register("bannerbrown", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("brown").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERCYAN = ITEMS.register("bannercyan", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERCYAN = ITEMS.register("bannercyan", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("cyan").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERGRAY = ITEMS.register("bannergray", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERGRAY = ITEMS.register("bannergray", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("gray").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERGREEN = ITEMS.register("bannergreen", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERGREEN = ITEMS.register("bannergreen", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("green").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERLIGHTBLUE = ITEMS.register("bannerlightblue", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERLIGHTBLUE = ITEMS.register("bannerlightblue", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("lightblue").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERLIME = ITEMS.register("bannerlime", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERLIME = ITEMS.register("bannerlime", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("lime").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERMAGENTA = ITEMS.register("bannermagenta", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERMAGENTA = ITEMS.register("bannermagenta", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("magenta").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERORANGE = ITEMS.register("bannerorange", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERORANGE = ITEMS.register("bannerorange", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("orange").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERPINK = ITEMS.register("bannerpink", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERPINK = ITEMS.register("bannerpink", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("pink").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERPURPLE = ITEMS.register("bannerpurple", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERPURPLE = ITEMS.register("bannerpurple", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("purple").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERRED = ITEMS.register("bannerred", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERRED = ITEMS.register("bannerred", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("red").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERSILVER = ITEMS.register("bannersilver", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERSILVER = ITEMS.register("bannersilver", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("silver").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERWHITE = ITEMS.register("bannerwhite", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERWHITE = ITEMS.register("bannerwhite", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("white").get(), new Item.Properties()));
 
-    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERYELLOW = ITEMS.register("banneryellow", () -> new Item(new Item.Properties()));
+    public static final Supplier<Item> CATALOG_PLACEHOLDER_BANNERYELLOW = ITEMS.register("banneryellow", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNERS.get("yellow").get(), new Item.Properties()));
+
+    public static final Supplier<Item> BANNER_CRIMSON_CULT = ITEMS.register("banner_crimson_cult", () -> new thaumcraft.common.blocks.basic.TCBannerBlockItem((thaumcraft.common.blocks.basic.TCBannerBlock) TCBlocks.BANNER_CRIMSON_CULT.get(), new Item.Properties()));
 
     public static final Supplier<Item> CATALOG_PLACEHOLDER_ELDRITCHPEDESTAL = ITEMS.register("eldritchpedestal", () -> new Item(new Item.Properties()));
 

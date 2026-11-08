@@ -68,6 +68,11 @@ public final class TCWardedJarBlockEntity extends BlockEntity implements TCAspec
         return blocked;
     }
 
+    public void setBlocked(boolean value) {
+        blocked = value;
+        markChangedAndSync();
+    }
+
     public Direction labelFacing() {
         return labelFacing;
     }

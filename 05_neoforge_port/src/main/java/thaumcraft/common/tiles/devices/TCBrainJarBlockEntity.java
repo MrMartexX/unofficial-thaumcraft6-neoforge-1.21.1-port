@@ -29,6 +29,42 @@ public final class TCBrainJarBlockEntity extends BlockEntity {
 
     private int xp;
     private int eatDelay;
+    public float rota = 0.0f;
+    public float rotb = 0.0f;
+    private float targetYaw = 0.0f;
+
+    public static void clientTick(Level level, BlockPos pos, BlockState state, TCBrainJarBlockEntity jar) {
+        jar.rotb = jar.rota;
+        net.minecraft.world.entity.player.Player player =
+                level.getNearestPlayer(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 6.0D, false);
+        if (player != null) {
+            double dx = player.getX() - (pos.getX() + 0.5D);
+            double dz = player.getZ() - (pos.getZ() + 0.5D);
+            jar.targetYaw = (float) Math.atan2(dz, dx);
+        } else {
+            jar.targetYaw += 0.01F;
+        }
+
+        while (jar.rota >= (float) Math.PI) {
+            jar.rota -= (float) (Math.PI * 2);
+        }
+        while (jar.rota < -(float) Math.PI) {
+            jar.rota += (float) (Math.PI * 2);
+        }
+        while (jar.targetYaw >= (float) Math.PI) {
+            jar.targetYaw -= (float) (Math.PI * 2);
+        }
+        while (jar.targetYaw < -(float) Math.PI) {
+            jar.targetYaw += (float) (Math.PI * 2);
+        }
+
+        float diff;
+        for (diff = jar.targetYaw - jar.rota; diff >= (float) Math.PI; diff -= (float) (Math.PI * 2)) {}
+        while (diff < -(float) Math.PI) {
+            diff += (float) (Math.PI * 2);
+        }
+        jar.rota += diff * 0.04F;
+    }
 
     public TCBrainJarBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.JAR_BRAIN.get(), pos, state);

@@ -49,11 +49,16 @@ public final class TCBrainJarBlock extends Block implements EntityBlock {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide || type != TCBlockEntities.JAR_BRAIN.get()) {
+        if (type != TCBlockEntities.JAR_BRAIN.get()) {
             return null;
         }
-        return (tickerLevel, pos, tickerState, blockEntity) ->
+        return (tickerLevel, pos, tickerState, blockEntity) -> {
+            if (tickerLevel.isClientSide) {
+                TCBrainJarBlockEntity.clientTick(tickerLevel, pos, tickerState, (TCBrainJarBlockEntity) blockEntity);
+            } else {
                 TCBrainJarBlockEntity.serverTick(tickerLevel, pos, tickerState, (TCBrainJarBlockEntity) blockEntity);
+            }
+        };
     }
 
     @Override

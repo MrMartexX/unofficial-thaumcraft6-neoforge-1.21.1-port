@@ -109,6 +109,7 @@ public final class TCColorHandlers {
         ItemColor silverwoodLeavesItem = (stack, tintIndex) -> WHITE;
 
         event.register(greatwoodLeavesItem, TCBlocks.LEAVES_GREATWOOD.get());
+        event.register((stack, tintIndex) -> 0x7CBD6B, TCBlocks.GRASS_AMBIENT.get());
         event.register(silverwoodLeavesItem, TCBlocks.LEAVES_SILVERWOOD.get());
 
         event.register((stack, tintIndex) -> AIR, TCBlocks.CRYSTAL_AER.get());
@@ -151,6 +152,27 @@ public final class TCColorHandlers {
                 TCBlocks.CANDLE_SILVER.get(),
                 TCBlocks.CANDLE_WHITE.get(),
                 TCBlocks.CANDLE_YELLOW.get());
+        ItemColor bannerColor = (stack, tintIndex) -> {
+            if (!(Block.byItem(stack.getItem()) instanceof thaumcraft.common.blocks.basic.TCBannerBlock banner)
+                    || banner.dye() == null) {
+                return 0xFFFFFFFF;
+            }
+            if (tintIndex == 1) {
+                return 0xFF000000 | banner.dye().getTextureDiffuseColor();
+            }
+            if (tintIndex == 2) {
+                Aspect aspect = TCEssentiaItemHelper.filterAspect(stack);
+                return aspect == null
+                        ? 0xFF000000 | banner.dye().getTextureDiffuseColor()
+                        : 0xFF000000 | (aspect.getColor() & 0xFFFFFF);
+            }
+            return 0xFFFFFFFF;
+        };
+        TCBlocks.BANNERS.forEach((name, block) -> {
+            if (!name.equals("crimson_cult")) {
+                event.register(bannerColor, block.get());
+            }
+        });
         ItemColor aspectVariantColor = TCColorHandlers::aspectVariantColor;
         for (var entry : TCItems.ITEMS.getEntries()) {
             Item item = entry.get();

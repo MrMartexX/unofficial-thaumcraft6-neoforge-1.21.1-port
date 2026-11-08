@@ -33,6 +33,7 @@ import thaumcraft.common.items.TCEssentiaItemHelper;
 import thaumcraft.common.items.TCPhialItem;
 import thaumcraft.common.items.TCWardedJarBlockItem;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCSounds;
 import thaumcraft.common.tiles.essentia.TCWardedJarBlockEntity;
 
@@ -131,6 +132,17 @@ public final class TCWardedJarBlock extends Block implements EntityBlock, ILabel
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
 
+        if (stack.is(TCItems.BRASS_BRACE.get()) && !jar.isBlocked()) {
+            if (!level.isClientSide) {
+                jar.setBlocked(true);
+                if (!player.getAbilities().instabuild) {
+                    stack.shrink(1);
+                }
+                level.playSound(null, pos, TCSounds.KEY.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        }
+
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
@@ -197,6 +209,9 @@ public final class TCWardedJarBlock extends Block implements EntityBlock, ILabel
     protected List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {
         BlockEntity blockEntity = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (blockEntity instanceof TCWardedJarBlockEntity jar) {
+            if (jar.isBlocked()) {
+                return List.of(TCWardedJarBlockItem.stackFromJar(jar), new ItemStack(TCItems.BRASS_BRACE.get()));
+            }
             return List.of(TCWardedJarBlockItem.stackFromJar(jar));
         }
         return super.getDrops(state, params);

@@ -251,6 +251,12 @@ public final class TCBlockEntities {
                             (pos, state) -> new TCLegacySmelterEndpointBlockEntity(TCBlockEntities.SMELTER_VOID.get(), pos, state, TCLegacySmelterEndpoint.VOID),
                             TCBlocks.SMELTER_VOID.get()).build(null));
 
+    public static final Supplier<BlockEntityType<thaumcraft.common.tiles.misc.TCBannerBlockEntity>> BANNER =
+            BLOCK_ENTITY_TYPES.register("banner", () ->
+                    BlockEntityType.Builder.of(thaumcraft.common.tiles.misc.TCBannerBlockEntity::new,
+                            TCBlocks.BANNERS.values().stream().map(Supplier::get).toArray(net.minecraft.world.level.block.Block[]::new))
+                            .build(null));
+
     public static final Supplier<BlockEntityType<thaumcraft.common.tiles.misc.TCHoleBlockEntity>> HOLE =
             BLOCK_ENTITY_TYPES.register("hole", () ->
                     BlockEntityType.Builder.of(thaumcraft.common.tiles.misc.TCHoleBlockEntity::new, TCBlocks.HOLE.get()).build(null));

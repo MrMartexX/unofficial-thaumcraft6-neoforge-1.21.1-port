@@ -72,13 +72,23 @@ public class TCPatternCrafterBlock extends Block implements EntityBlock {
 
     @Nullable
     @Override
-    @SuppressWarnings("unchecked")
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide || type != TCBlockEntities.PATTERN_CRAFTER.get()) {
+        if (type != TCBlockEntities.PATTERN_CRAFTER.get()) {
             return null;
+        }
+        if (level.isClientSide) {
+            return (tickerLevel, pos, tickerState, blockEntity) ->
+                    TCPatternCrafterBlockEntity.clientTick(tickerLevel, pos, tickerState, (TCPatternCrafterBlockEntity) blockEntity);
         }
         return (tickerLevel, pos, tickerState, blockEntity) ->
                 TCPatternCrafterBlockEntity.serverTick(tickerLevel, pos, tickerState, (TCPatternCrafterBlockEntity) blockEntity);
+    }
+
+    @Override
+    protected boolean triggerEvent(BlockState state, Level level, BlockPos pos, int id, int param) {
+        super.triggerEvent(state, level, pos, id, param);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        return blockEntity != null && blockEntity.triggerEvent(id, param);
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.neoforged.neoforge.common.util.DeferredSoundType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
 
@@ -17,6 +18,8 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "page")));
     public static final Supplier<SoundEvent> JAR = SOUND_EVENTS.register("jar", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "jar")));
+    public static final Supplier<SoundEvent> CRYSTAL = SOUND_EVENTS.register("crystal", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "crystal")));
     public static final Supplier<SoundEvent> ZAP = SOUND_EVENTS.register("zap", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "zap")));
     public static final Supplier<SoundEvent> KEY = SOUND_EVENTS.register("key", () ->
@@ -29,6 +32,8 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pump")));
     public static final Supplier<SoundEvent> CREAK = SOUND_EVENTS.register("creak", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "creak")));
+    public static final Supplier<SoundEvent> CLACK = SOUND_EVENTS.register("clack", () ->
+            SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "clack")));
     public static final Supplier<SoundEvent> PAGETURN = SOUND_EVENTS.register("pageturn", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "pageturn")));
     public static final Supplier<SoundEvent> LEARN = SOUND_EVENTS.register("learn", () ->
@@ -105,6 +110,10 @@ public final class TCSounds {
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "runicshieldeffect")));
     public static final Supplier<SoundEvent> RUNIC_SHIELD_CHARGE = SOUND_EVENTS.register("runicshieldcharge", () ->
             SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "runicshieldcharge")));
+
+    public static final DeferredSoundType CRYSTAL_SOUND_TYPE = new DeferredSoundType(
+            0.5F, 1.0F, CRYSTAL, CRYSTAL, CRYSTAL, CRYSTAL, CRYSTAL
+    );
 
     private TCSounds() {
     }

@@ -1,7 +1,5 @@
 package thaumcraft.common.tiles.crafting;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.common.blocks.crafting.TCPatternCrafterBlock;
 import thaumcraft.common.registry.TCBlockEntities;
+import thaumcraft.common.registry.TCSounds;
 
 /**
  * TC6 Pattern Crafter tile entity.
@@ -40,15 +39,61 @@ public class TCPatternCrafterBlockEntity extends BlockEntity {
     private byte type = 0;
     private float power = 0.0F;
     private int count = 0;
+    private float rot = 0.0F;
+    private float rp = 0.0F;
+    private int rotTicks = 0;
 
     public TCPatternCrafterBlockEntity(BlockPos pos, BlockState state) {
         super(TCBlockEntities.PATTERN_CRAFTER.get(), pos, state);
+    }
+
+    public static void clientTick(Level level, BlockPos pos, BlockState state, TCPatternCrafterBlockEntity crafter) {
+        if (level.isClientSide) {
+            crafter.tickClient(level, pos);
+        }
     }
 
     public static void serverTick(Level level, BlockPos pos, BlockState state, TCPatternCrafterBlockEntity crafter) {
         if (!level.isClientSide) {
             crafter.tickServer(state);
         }
+    }
+
+    private void tickClient(Level level, BlockPos pos) {
+        if (rotTicks > 0) {
+            rotTicks--;
+            if (rotTicks % Math.floor(Math.max(1.0F, rp)) == 0.0) {
+                level.playLocalSound(
+                        pos.getX() + 0.5D,
+                        pos.getY() + 0.5D,
+                        pos.getZ() + 0.5D,
+                        TCSounds.CLACK.get(),
+                        SoundSource.BLOCKS,
+                        0.2F,
+                        1.7F,
+                        false
+                );
+            }
+            rp++;
+        } else {
+            rp *= 0.8F;
+        }
+        rot += rp;
+    }
+
+    @Override
+    public boolean triggerEvent(int id, int param) {
+        if (id == 1) {
+            if (level != null && level.isClientSide) {
+                rotTicks = 10;
+            }
+            return true;
+        }
+        return super.triggerEvent(id, param);
+    }
+
+    public float getClientRot() {
+        return rot;
     }
 
     private void tickServer(BlockState state) {
@@ -105,6 +150,7 @@ public class TCPatternCrafterBlockEntity extends BlockEntity {
                     }
                     power -= 1.0F;
                     setChanged();
+                    level.blockEvent(worldPosition, getBlockState().getBlock(), 1, 0);
                     level.playSound(null, worldPosition, SoundEvents.DISPENSER_DISPENSE, SoundSource.BLOCKS, 0.25F, 1.2F);
                     break;
                 } else if (!extracted.isEmpty()) {

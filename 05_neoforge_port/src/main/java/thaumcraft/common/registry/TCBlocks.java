@@ -568,6 +568,40 @@ public final class TCBlocks {
     public static final Supplier<Block> SLAB_GREATWOOD = BLOCKS.register("slab_greatwood", () -> woodSlabBlock(1.2F, 2.0F));
 
     public static final Supplier<Block> SLAB_SILVERWOOD = BLOCKS.register("slab_silverwood", () -> woodSlabBlock(1.0F, 2.0F));
+    /** Banner blocks keyed by legacy colour name (banner_<name>); Crimson Cult is {@link #BANNER_CRIMSON_CULT}. */
+    public static final java.util.Map<String, Supplier<Block>> BANNERS = new java.util.LinkedHashMap<>();
+    public static final Supplier<Block> BANNER_CRIMSON_CULT = registerBanner("crimson_cult", null);
+
+    static {
+        registerBanner("black", net.minecraft.world.item.DyeColor.BLACK);
+        registerBanner("blue", net.minecraft.world.item.DyeColor.BLUE);
+        registerBanner("brown", net.minecraft.world.item.DyeColor.BROWN);
+        registerBanner("cyan", net.minecraft.world.item.DyeColor.CYAN);
+        registerBanner("gray", net.minecraft.world.item.DyeColor.GRAY);
+        registerBanner("green", net.minecraft.world.item.DyeColor.GREEN);
+        registerBanner("lightblue", net.minecraft.world.item.DyeColor.LIGHT_BLUE);
+        registerBanner("lime", net.minecraft.world.item.DyeColor.LIME);
+        registerBanner("magenta", net.minecraft.world.item.DyeColor.MAGENTA);
+        registerBanner("orange", net.minecraft.world.item.DyeColor.ORANGE);
+        registerBanner("pink", net.minecraft.world.item.DyeColor.PINK);
+        registerBanner("purple", net.minecraft.world.item.DyeColor.PURPLE);
+        registerBanner("red", net.minecraft.world.item.DyeColor.RED);
+        registerBanner("silver", net.minecraft.world.item.DyeColor.LIGHT_GRAY);
+        registerBanner("white", net.minecraft.world.item.DyeColor.WHITE);
+        registerBanner("yellow", net.minecraft.world.item.DyeColor.YELLOW);
+    }
+
+    private static Supplier<Block> registerBanner(String name, net.minecraft.world.item.DyeColor dye) {
+        Supplier<Block> block = BLOCKS.register("banner_" + name, () -> new thaumcraft.common.blocks.basic.TCBannerBlock(
+                BlockBehaviour.Properties.of()
+                        .strength(1.0F)
+                        .sound(SoundType.WOOD)
+                        .noOcclusion()
+                        .noCollission(), dye));
+        BANNERS.put(name, block);
+        return block;
+    }
+
     public static final Supplier<Block> HOLE = BLOCKS.register("hole", () -> new thaumcraft.common.blocks.misc.TCHoleBlock(
             net.minecraft.world.level.block.state.BlockBehaviour.Properties.of()
                     .strength(-1.0F, 3600000.0F)
@@ -1403,12 +1437,11 @@ public final class TCBlocks {
                 aspect,
                 shardItem,
                 BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
+                        .sound(TCSounds.CRYSTAL_SOUND_TYPE)
                         .strength(0.25F, 0.0F)
                         .noOcclusion()
                         .noCollission()
                         .randomTicks()
-                        .hasPostProcess((state, reader, pos) -> true)
-                        .emissiveRendering((state, reader, pos) -> true)
                         .lightLevel(state -> 1)
         );
     }

@@ -184,6 +184,8 @@ public final class TCCreativeTabOrder {
 
         acceptVisible(output, TCItems.CANDLE_WHITE.get());
 
+        TCBlocks.BANNERS.forEach((name, block) -> acceptVisible(output, block.get()));
+
 
 
         acceptVisible(output, TCItems.METAL_BRASS.get());
