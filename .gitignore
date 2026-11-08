@@ -22,3 +22,11 @@ stop
 *_audit.txt
 *_audit.csv
 *_runtime_audit.txt
+/07_Test_Instance_and_Comparisons/01_Classic Thaumcraft 1.12.2 Forge/minecraft-instance/logs/*.gz
+/07_Test_Instance_and_Comparisons/01_Classic Thaumcraft 1.12.2 Forge/minecraft-instance/logs/debug*
+/07_Test_Instance_and_Comparisons/01_Classic Thaumcraft 1.12.2 Forge/minecraft-instance/config/
+/07_Test_Instance_and_Comparisons/01_Classic Thaumcraft 1.12.2 Forge/minecraft-instance/mods/jei*
+/07_Test_Instance_and_Comparisons/01_Classic Thaumcraft 1.12.2 Forge/minecraft-instance/options.txt
+/07_Test_Instance_and_Comparisons/01_Classic Thaumcraft 1.12.2 Forge/minecraft-instance/usercache.json
+/07_Test_Instance_and_Comparisons/01_Classic Thaumcraft 1.12.2 Forge/minecraft-instance/usernamecache.json
+/.gradle_old*/

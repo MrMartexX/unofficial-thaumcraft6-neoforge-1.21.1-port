@@ -1,80 +1,15 @@
 {
   "type": "thaumcraft:legacy_flowers",
   "config": {
+    "tries": 64,
+    "xz_spread": 7,
+    "y_spread": 3,
     "feature": {
       "feature": {
         "type": "minecraft:simple_block",
         "config": {
           "to_place": {
-            "type": "minecraft:weighted_state_provider",
-            "entries": [
-              {
-                "data": {
-                  "Name": "minecraft:dandelion"
-                },
-                "weight": 20
-              },
-              {
-                "data": {
-                  "Name": "minecraft:poppy"
-                },
-                "weight": 10
-              },
-              {
-                "data": {
-                  "Name": "minecraft:allium"
-                },
-                "weight": 2
-              },
-              {
-                "data": {
-                  "Name": "minecraft:azure_bluet"
-                },
-                "weight": 4
-              },
-              {
-                "data": {
-                  "Name": "minecraft:red_tulip"
-                },
-                "weight": 2
-              },
-              {
-                "data": {
-                  "Name": "minecraft:orange_tulip"
-                },
-                "weight": 2
-              },
-              {
-                "data": {
-                  "Name": "minecraft:white_tulip"
-                },
-                "weight": 2
-              },
-              {
-                "data": {
-                  "Name": "minecraft:pink_tulip"
-                },
-                "weight": 2
-              },
-              {
-                "data": {
-                  "Name": "minecraft:oxeye_daisy"
-                },
-                "weight": 4
-              },
-              {
-                "data": {
-                  "Name": "minecraft:cornflower"
-                },
-                "weight": 4
-              },
-              {
-                "data": {
-                  "Name": "minecraft:lily_of_the_valley"
-                },
-                "weight": 2
-              }
-            ]
+            "type": "thaumcraft:legacy_flower_provider"
           }
         }
       },
@@ -87,9 +22,6 @@
           }
         }
       ]
-    },
-    "tries": 64,
-    "xz_spread": 7,
-    "y_spread": 3
+    }
   }
 }

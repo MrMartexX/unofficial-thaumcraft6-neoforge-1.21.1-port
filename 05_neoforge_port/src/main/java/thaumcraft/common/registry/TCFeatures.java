@@ -3,6 +3,8 @@ package thaumcraft.common.registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thaumcraft.Thaumcraft;
@@ -11,14 +13,28 @@ import thaumcraft.common.world.features.TCCrystalClusterFeature;
 import thaumcraft.common.world.features.TCCultistPortalFeature;
 import thaumcraft.common.world.features.TCGreatwoodTreeFeature;
 import thaumcraft.common.world.features.TCMoundFeature;
+import thaumcraft.common.world.features.TCLegacyFlowerProvider;
 import thaumcraft.common.world.features.TCLegacyPatchFeature;
 import thaumcraft.common.world.features.TCSurfaceAmberFeature;
 import thaumcraft.common.world.features.TCSilverwoodTreeFeature;
+import thaumcraft.common.world.placement.TCOreDensityPlacement;
 
 /** NeoForge worldgen feature registrations used by Thaumcraft datapack features. */
 public final class TCFeatures {
     public static final DeferredRegister<Feature<?>> FEATURES =
             DeferredRegister.create(Registries.FEATURE, Thaumcraft.MODID);
+
+    public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIERS =
+            DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, Thaumcraft.MODID);
+
+    public static final DeferredRegister<BlockStateProviderType<?>> BLOCK_STATE_PROVIDER_TYPES =
+            DeferredRegister.create(Registries.BLOCK_STATE_PROVIDER_TYPE, Thaumcraft.MODID);
+
+    public static final DeferredHolder<BlockStateProviderType<?>, BlockStateProviderType<TCLegacyFlowerProvider>> LEGACY_FLOWER_PROVIDER =
+            BLOCK_STATE_PROVIDER_TYPES.register("legacy_flower_provider", () -> new BlockStateProviderType<>(TCLegacyFlowerProvider.CODEC));
+
+    public static final DeferredHolder<PlacementModifierType<?>, PlacementModifierType<TCOreDensityPlacement>> ORE_DENSITY_COUNT =
+            PLACEMENT_MODIFIERS.register("ore_density_count", () -> () -> TCOreDensityPlacement.CODEC);
 
     public static final DeferredHolder<Feature<?>, TCCrystalClusterFeature> CRYSTAL_CLUSTER =
             FEATURES.register("crystal_cluster",

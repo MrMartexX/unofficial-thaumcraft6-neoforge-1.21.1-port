@@ -44,6 +44,10 @@ public final class TCWorldgenAudit {
         List<String> rows = new ArrayList<>();
         try {
             ServerLevel level = server.overworld();
+            String runId = System.getProperty("tc.worldgenAuditRunId", "untracked");
+            String manifestHash = System.getProperty("tc.worldgenAuditManifest", "untracked");
+            rows.add("Run ID: `" + runId + "`");
+            rows.add("Manifest Fingerprint: `" + manifestHash + "`");
             rows.add("Seed: `" + level.getSeed() + "`; world: `" + world.getFileName() + "`\n");
             check(rows, "uniform-cube replacement removed", samplingChecks());
             check(rows, "night light gate: 9 of 13 rolls", lightChecks());
@@ -149,24 +153,66 @@ public final class TCWorldgenAudit {
                 level.setBlock(new BlockPos(x, y, z), y == ground ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.AIR.defaultBlockState(), 2);
         }
         BlockPos origin = new BlockPos(528, ground + 1, 528);
-        int[] totals = new int[2];
-        for (int mode = 0; mode < 2; mode++) {
+        int[] totals = new int[3];
+        for (int mode = 0; mode < 3; mode++) {
             for (int seed = 0; seed < 30; seed++) {
                 for (int x = 520; x <= 536; x++) for (int z = 520; z <= 536; z++)
                     for (int y = ground + 1; y <= ground + 4; y++)
                         level.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState(), 2);
                 RandomSource random = RandomSource.create(seed + 61222121);
-                for (int n = 0; n < (mode == 0 ? 10 : 6); n++) {
+                for (int n = 0; n < (mode == 1 ? 6 : 10); n++) {
                     if (mode == 0) configured.place(level, generator, random, origin);
-                    else oldPatch.place(config, level, generator, random, origin);
+                    else if (mode == 1) oldPatch.place(config, level, generator, random, origin);
+                    else place1122ReferenceFlowerPatch(level, random, origin);
                 }
                 for (int x = 520; x <= 536; x++) for (int z = 520; z <= 536; z++)
                     if (level.getBlockState(new BlockPos(x, ground + 1, z)).is(net.minecraft.tags.BlockTags.SMALL_FLOWERS)) totals[mode]++;
             }
         }
-        check(rows, "real flower anchor regression: old surface patches are denser", totals[0] > 0 && totals[1] > totals[0] * 4);
+        check(rows, "real flower anchor regression: matches 1.12.2 WorldGenFlowers and old surface patches are denser",
+                totals[0] > 0 && totals[0] == totals[2] && totals[1] > totals[0] * 4);
         rows.add("  Controlled flat plots (30 seeds, same central X/Z; NOT natural biome density): new=" + totals[0]
-                + "/30, previous surface-anchored=" + totals[1] + "/30; groundY=" + ground + ".");
+                + "/30, legacy1122=" + totals[2] + "/30, previous surface-anchored=" + totals[1] + "/30; groundY=" + ground + ".");
+    }
+
+    private static final net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise INDEPENDENT_1122_GRASS_COLOR_NOISE =
+            new net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise(
+                    new net.minecraft.world.level.levelgen.WorldgenRandom(new net.minecraft.world.level.levelgen.LegacyRandomSource(2345L)),
+                    List.of(0));
+
+    private static final BlockState[] INDEPENDENT_1122_FLOWER_STATES = {
+            Blocks.DANDELION.defaultBlockState(),
+            Blocks.POPPY.defaultBlockState(),
+            Blocks.BLUE_ORCHID.defaultBlockState(),
+            Blocks.ALLIUM.defaultBlockState(),
+            Blocks.AZURE_BLUET.defaultBlockState(),
+            Blocks.RED_TULIP.defaultBlockState(),
+            Blocks.ORANGE_TULIP.defaultBlockState(),
+            Blocks.WHITE_TULIP.defaultBlockState(),
+            Blocks.PINK_TULIP.defaultBlockState(),
+            Blocks.OXEYE_DAISY.defaultBlockState()
+    };
+
+    private static BlockState independent1122PickFlower(BlockPos pos) {
+        double d0 = net.minecraft.util.Mth.clamp(
+                (1.0D + INDEPENDENT_1122_GRASS_COLOR_NOISE.getValue(pos.getX() / 48.0D, pos.getZ() / 48.0D, false)) / 2.0D,
+                0.0D, 0.9999D);
+        return INDEPENDENT_1122_FLOWER_STATES[(int) (d0 * INDEPENDENT_1122_FLOWER_STATES.length)];
+    }
+
+    private static void place1122ReferenceFlowerPatch(ServerLevel level, RandomSource random, BlockPos surfaceOrigin) {
+        BlockPos patchOrigin = surfaceOrigin.atY(random.nextInt(Math.max(1, surfaceOrigin.getY() + 32)));
+        BlockState flower = independent1122PickFlower(patchOrigin);
+        for (int i = 0; i < 64; i++) {
+            BlockPos probe = patchOrigin.offset(
+                    random.nextInt(8) - random.nextInt(8),
+                    random.nextInt(4) - random.nextInt(4),
+                    random.nextInt(8) - random.nextInt(8)
+            );
+            if (!level.isOutsideBuildHeight(probe) && level.isEmptyBlock(probe) && flower.canSurvive(level, probe)) {
+                level.setBlock(probe, flower, 2);
+            }
+        }
     }
 
     private static void naturalMound(ServerLevel level, List<String> rows, int x, int z, int index) {

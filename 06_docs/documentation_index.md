@@ -1,6 +1,6 @@
 # Documentation Index
 
-Last updated: 2026-11-03
+Last updated: 2026-11-05
 
 This is the navigation map for `06_docs/`. It records where documents live after the docs-folder restructuring.
 
@@ -8,6 +8,7 @@ This is the navigation map for `06_docs/`. It records where documents live after
 
 | Purpose | Document |
 |---|---|
+| A/B hold, retained branches and archive recovery | [Repository branch cleanup](audits/repository_cleanup_2026_11_05.md) |
 | Active task queue and guardrails | `CURRENT_TASK.md` |
 | Current repository state | `current_port_status.md` |
 | Repository layout | `repo_map.md` |

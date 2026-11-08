@@ -1,6 +1,7 @@
 """Read-only source/data contracts and a generated inventory. Does not certify in-game visual parity."""
 import argparse
 import csv
+import datetime
 import hashlib
 import json
 import math
@@ -35,7 +36,7 @@ def expected_calls(placed):
     for modifier in placed['placement']:
         if modifier['type'] in {'minecraft:noise_based_count', 'minecraft:noise_threshold_count', 'minecraft:count_on_every_layer', 'minecraft:carving_mask'}:
             raise ValueError(f"Position/terrain dependent multiplicity: {modifier['type']}")
-        if modifier['type'] == 'minecraft:count':
+        if modifier['type'] in {'minecraft:count', 'thaumcraft:ore_density_count'}:
             mean *= mean_count(modifier['count'])
         if modifier['type'] == 'minecraft:rarity_filter':
             mean /= modifier['chance']
@@ -56,7 +57,10 @@ def strings(value):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, default=ROOT / 'tools/reports/local/worldgen-20261103/contracts')
+    parser.add_argument('--run-id', type=str, default=None)
     args = parser.parse_args()
+    if not args.run_id:
+        args.run_id = f"wg-audit-{datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%d%H%M%S')}"
     args.output.mkdir(parents=True, exist_ok=True)
     checks = []
 
@@ -171,20 +175,44 @@ def main():
         writer.writerows(biome_rows)
     manifest = {}
     inputs = all_files + sorted(modifiers.glob('*.json')) + sorted((JAVA / 'common/world').rglob('*.java'))
-    inputs += [JAVA / 'client/world/TCMagicalForestAmbientClient.java', RES / 'data/thaumcraft/structures/ancient_mound.bin']
+    inputs += [
+        JAVA / 'client/world/TCMagicalForestAmbientClient.java',
+        JAVA / 'common/config/TCConfig.java',
+        JAVA / 'common/registry/TCFeatures.java',
+        JAVA / 'common/audit/parity/TCWorldgenGate11AuditExporter.java',
+        RES / 'data/thaumcraft/structures/ancient_mound.bin',
+        ROOT / 'tools/audits/worldgen/audit_worldgen.py',
+        ROOT / 'tools/audits/worldgen/test-worldgen-evidence.ps1',
+        ROOT / 'tools/audits/worldgen/generate_legacy_flower_reference.java',
+        ROOT / 'tools/fixtures/prepare_worldgen_audit.py',
+        ROOT / 'tools/reports/local/worldgen-20261103/legacy_flower_grid_reference.json'
+    ]
     legacy = ROOT / '02_existing_decompiled_repo/Thaumcraft-6-Source-Code-master/src/main/java/thaumcraft/common'
     inputs += [legacy / 'world/ThaumcraftWorldGenerator.java', legacy / 'world/biomes/BiomeGenMagicalForest.java',
                legacy / 'world/biomes/BiomeHandler.java', legacy / 'world/objects/WorldGenMound.java',
                legacy / 'world/objects/WorldGenCustomFlowers.java', legacy / 'blocks/world/BlockGrassAmbient.java']
-    for p in inputs:
+    for p in sorted(set(inputs)):
         manifest[p.relative_to(ROOT).as_posix()] = hashlib.sha256(p.read_bytes()).hexdigest()
+
+    canonical_bytes = json.dumps(manifest, sort_keys=True, separators=(',', ':')).encode('utf-8')
+    manifest_fingerprint = hashlib.sha256(canonical_bytes).hexdigest()
+
+    # Track git HEAD commit hash for full audit code traceability
+    git_head = None
+    try:
+        import subprocess
+        git_head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+    except Exception:
+        pass
+
     report = {'allPass': all(x['pass'] for x in checks), 'passed': sum(x['pass'] for x in checks), 'checks': checks,
-              'features': rows, 'sha256': manifest,
+              'features': rows, 'sha256': manifest, 'manifest_fingerprint': manifest_fingerprint, 'run_id': args.run_id,
+              'git_head': git_head,
               'flower_flat_plane_math': {'surfaceY': 64, 'legacy_expected_valid_probes_before_collisions': 10 * 64 / 96,
                                          'old_modern_surface_anchored_expected_valid_probes': 6 * 64 / 4,
                                          'note': 'Analytic height-only model, NOT measured flowers per natural chunk.'}}
     (args.output / 'contracts.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
-    print(f"Worldgen contracts: {report['passed']}/{len(checks)}; allPass={report['allPass']}")
+    print(f"Worldgen contracts: {report['passed']}/{len(checks)}; allPass={report['allPass']}; run_id={args.run_id}; fingerprint={manifest_fingerprint[:12]}")
     for row in checks:
         if not row['pass']:
             print('FAIL', row['name'], row['evidence'])

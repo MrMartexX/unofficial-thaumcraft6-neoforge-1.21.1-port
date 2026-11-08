@@ -49,6 +49,7 @@ import thaumcraft.common.tiles.devices.TCBrainJarBehaviorAuditExporter;
 import thaumcraft.common.tiles.devices.TCStandaloneDeviceBlockerAuditExporter;
 import thaumcraft.common.runtime.TCMinimalGameTestFixtureExporter;
 import thaumcraft.common.audit.parity.TCUnifiedParityRuntimeAuditExporter;
+import thaumcraft.common.audit.parity.TCWorldgenGate11AuditExporter;
 import thaumcraft.common.essentia.transport.TCEssentiaCapabilities;
 import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.capabilities.TCMachineCapabilities;
@@ -121,6 +122,8 @@ public final class Thaumcraft {
         TCFluids.FLUIDS.register(modEventBus);
         TCBlocks.BLOCKS.register(modEventBus);
         TCFeatures.FEATURES.register(modEventBus);
+        TCFeatures.PLACEMENT_MODIFIERS.register(modEventBus);
+        TCFeatures.BLOCK_STATE_PROVIDER_TYPES.register(modEventBus);
         TCStructures.STRUCTURE_TYPES.register(modEventBus);
         TCStructures.STRUCTURE_PIECES.register(modEventBus);
         TCBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
@@ -164,6 +167,7 @@ public final class Thaumcraft {
         modContainer.registerConfig(ModConfig.Type.COMMON, TCConfig.SPEC);
         NeoForge.EVENT_BUS.addListener(TCAspectAssignments::onAddReloadListeners);
         NeoForge.EVENT_BUS.addListener(thaumcraft.common.world.TCWorldgenAudit::onServerStarted);
+        NeoForge.EVENT_BUS.addListener(TCWorldgenGate11AuditExporter::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TCFuelEvents::onFuelBurnTime);
         NeoForge.EVENT_BUS.addListener(TCLiquidDeathEvents::onLivingDrops);
         NeoForge.EVENT_BUS.addListener(TCResearchManager::onAddReloadListeners);

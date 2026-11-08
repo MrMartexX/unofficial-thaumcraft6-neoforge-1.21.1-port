@@ -11,6 +11,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import thaumcraft.common.config.TCConfig;
 import thaumcraft.common.registry.TCBiomes;
 import thaumcraft.common.world.trees.TCGreatwoodTreeGenerator;
 
@@ -22,6 +23,9 @@ public final class TCGreatwoodTreeFeature extends Feature<NoneFeatureConfigurati
 
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        if (TCConfig.SPEC.isLoaded() && !TCConfig.GENERATE_TREES.get()) {
+            return false;
+        }
         WorldGenLevel level = context.level();
         BlockPos origin = context.origin();
         if (origin.getY() < level.getLevel().getSeaLevel() || !level.getFluidState(origin).isEmpty()) {

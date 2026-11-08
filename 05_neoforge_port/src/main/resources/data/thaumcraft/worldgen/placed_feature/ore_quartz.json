@@ -2,7 +2,8 @@
   "feature": "thaumcraft:ore_quartz",
   "placement": [
     {
-      "type": "minecraft:count",
+      "type": "thaumcraft:ore_density_count",
+      "ore": "quartz",
       "count": 18
     },
     {

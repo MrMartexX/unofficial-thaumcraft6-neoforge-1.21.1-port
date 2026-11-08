@@ -4,6 +4,7 @@ import java.util.Optional;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.ReplaceBlockFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.ReplaceBlockConfiguration;
+import thaumcraft.common.config.TCConfig;
 
 /** Legacy amber: first-air surface Y minus nextInt(25), one replacement attempt. */
 public final class TCSurfaceAmberFeature extends ReplaceBlockFeature {
@@ -11,6 +12,9 @@ public final class TCSurfaceAmberFeature extends ReplaceBlockFeature {
 
     @Override
     public boolean place(FeaturePlaceContext<ReplaceBlockConfiguration> context) {
+        if (TCConfig.SPEC.isLoaded() && !TCConfig.GENERATE_AMBER.get()) {
+            return false;
+        }
         return super.place(new FeaturePlaceContext<>(Optional.empty(), context.level(), context.chunkGenerator(),
                 context.random(), context.origin().below(context.random().nextInt(25)), context.config()));
     }

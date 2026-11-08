@@ -2,7 +2,8 @@
   "feature": "thaumcraft:ore_amber",
   "placement": [
     {
-      "type": "minecraft:count",
+      "type": "thaumcraft:ore_density_count",
+      "ore": "amber",
       "count": 20
     },
     {

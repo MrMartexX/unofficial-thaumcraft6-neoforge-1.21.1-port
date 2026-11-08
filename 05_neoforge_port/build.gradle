@@ -112,6 +112,19 @@ neoForge {
                 systemProperty 'tc.worldgenAudit', providers.gradleProperty('tcWorldgenAudit').get()
                 systemProperty 'tc.worldgenAuditPath', providers.gradleProperty('tcWorldgenAuditPath').getOrElse('worldgen-audit.md')
             }
+            if (providers.gradleProperty('tcWorldgenGate11Audit').isPresent()) {
+                systemProperty 'tc.worldgenGate11Audit', providers.gradleProperty('tcWorldgenGate11Audit').get()
+                systemProperty 'tc.worldgenGate11AuditPath', providers.gradleProperty('tcWorldgenGate11AuditPath').getOrElse('worldgen-gate11-audit.md')
+            }
+            if (providers.gradleProperty('tcWorldgenAuditRunId').isPresent()) {
+                systemProperty 'tc.worldgenAuditRunId', providers.gradleProperty('tcWorldgenAuditRunId').get()
+            }
+            if (providers.gradleProperty('tcWorldgenAuditManifest').isPresent()) {
+                systemProperty 'tc.worldgenAuditManifest', providers.gradleProperty('tcWorldgenAuditManifest').get()
+            }
+            if (providers.gradleProperty('tcLegacyFlowerGridReference').isPresent()) {
+                systemProperty 'tc.legacyFlowerGridReference', providers.gradleProperty('tcLegacyFlowerGridReference').get()
+            }
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             def aspectDumpEnabled = providers.gradleProperty('tcAspectDump').orNull ?: System.getProperty('tc.aspectDump')
             def aspectDumpPath = providers.gradleProperty('tcAspectDumpPath').orNull ?: System.getProperty('tc.aspectDumpPath')

@@ -1,6 +1,6 @@
 # Current task
 
-Last updated: 2026-11-03
+Last updated: 2026-11-04
 
 ## Current branch
 
@@ -11,10 +11,10 @@ individual contract audits pass.
 ## Current focus
 
 - Worldgen remediation and evidence: see [the November 3 generation audit](audits/worldgen_2026_11_03.md).
-  Mounds use persisted chunk-clipped plans, forest motes use a client-transmitted
-  heightmap, and vegetation/ore/crystal attempt budgets have explicit legacy checks.
-  Gate 11 is NOT closed: natural-density statistics, exact biome-dictionary
-  translation, portal lifecycle, profiling and cross-mod/visual acceptance remain.
+  Mounds use persisted chunk-clipped plans (`maxStructureRadius=2`), forest motes use a client-transmitted
+  heightmap, vegetation/ore/crystal attempt budgets, TCConfig ore density/enable flags, and 2D Simplex Noise flower selection via TCLegacyFlowerProvider matching an independent 1.12.2 reference have explicit legacy checks.
+  `BiomeDictionary` aspect weights (`39/39` direct `1.000` match against the 65-biome 1.12.2 bytecode export), natural lesser portal proximity activation/wave cadence/budget, measured 1.12.2 natural flower density, bounded profiling, and `SpawnPlacements` (`37/37`) are verified by `TCWorldgenGate11AuditExporter` (`32/32` on seeds `61222121` and `-987654321`).
+  Open boundaries remaining: legacy `retrogen` / dimension & biome blacklists, cross-mod compatibility, the 23 Mojang-merged 1.12.2 sub-biomes, and live 1.12.2 visual comparison.
   Do not silently regenerate existing player chunks or claim old ghost starts were repaired.
 
 - Seal world display was missing despite working menus/cache. The focused
@@ -133,7 +133,7 @@ individual contract audits pass.
    - Flux/Bore/Thaumatorium blocker audit: `11/11`.
    - Flux Rift consequence audit: `21/21`.
    - Wisp behavior/render contract audit: `11/11`.
-   - Entity spawn policy audit: `34/34`.
+   - Entity spawn policy audit: `37/37`.
    - Alchemy automation device audit: `11/11`.
    - Brain-in-a-Jar behavior audit: `10/10`.
    - Warp behavior audit: `9/9`.
