@@ -59,13 +59,13 @@ public final class TCWarpNetwork {
             TCWarpSyncPayload payload,
             net.neoforged.neoforge.network.handling.IPayloadContext context
     ) {
-        TCWarpClientCache.accept(payload);
+        context.enqueueWork(() -> TCWarpClientCache.accept(payload));
     }
 
     private static void handleWarpMessage(
             TCWarpMessagePayload payload,
             net.neoforged.neoforge.network.handling.IPayloadContext context
     ) {
-        TCWarpClientCache.accept(payload);
+        context.enqueueWork(() -> TCWarpClientCache.accept(payload));
     }
 }

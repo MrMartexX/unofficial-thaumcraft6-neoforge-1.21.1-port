@@ -8,8 +8,11 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
 
 public final class TCKnowledgeClientCache {
+    private static volatile Consumer<Set<String>> researchCompletedSink = keys -> {
+    };
     private static Set<String> completedResearch = Set.of();
     private static Map<String, Integer> researchStages = Map.of();
     private static Map<String, Set<String>> researchFlags = Map.of();
@@ -22,6 +25,11 @@ public final class TCKnowledgeClientCache {
     private TCKnowledgeClientCache() {
     }
 
+    public static void setResearchCompletedSink(Consumer<Set<String>> sink) {
+        researchCompletedSink = sink == null ? keys -> {
+        } : sink;
+    }
+
     public static void accept(TCKnowledgeSyncPayload payload) {
         TreeSet<String> keys = new TreeSet<>();
         for (String key : payload.completedResearchKeys()) {
@@ -30,11 +38,11 @@ public final class TCKnowledgeClientCache {
                 keys.add(normalized);
             }
         }
-        if (initialized && net.neoforged.fml.loading.FMLEnvironment.dist.isClient()) {
+        if (initialized) {
             java.util.TreeSet<String> newlyCompleted = new java.util.TreeSet<>(keys);
             newlyCompleted.removeAll(completedResearch);
             if (!newlyCompleted.isEmpty()) {
-                thaumcraft.client.gui.ResearchToastHandler.onResearchCompleted(newlyCompleted);
+                researchCompletedSink.accept(newlyCompleted);
             }
         }
         completedResearch = Set.copyOf(keys);

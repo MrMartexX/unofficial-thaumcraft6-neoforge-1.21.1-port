@@ -2,11 +2,22 @@ package thaumcraft.common.warp;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 public final class TCPlayerWarpStore {
     private static final String ROOT_KEY = "ThaumcraftWarp";
 
     private TCPlayerWarpStore() {
+    }
+
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        if (!(event.getEntity() instanceof ServerPlayer cloned) || !(event.getOriginal() instanceof ServerPlayer original)) {
+            return;
+        }
+        CompoundTag oldData = original.getPersistentData();
+        if (oldData.contains(ROOT_KEY)) {
+            cloned.getPersistentData().put(ROOT_KEY, oldData.getCompound(ROOT_KEY).copy());
+        }
     }
 
     public static TCPlayerWarp get(ServerPlayer player) {

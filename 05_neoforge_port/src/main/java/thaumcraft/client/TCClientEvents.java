@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import thaumcraft.Thaumcraft;
@@ -26,6 +27,10 @@ public final class TCClientEvents {
         TCFXDispatcher.setClientSink(TCLegacyParticleEngine::addEffect);
         TCEntityFXNetwork.setWispZapSink(TCWispClientEffects::accept);
         thaumcraft.common.items.casters.TCExchangeBamf.setClientSink(thaumcraft.client.fx.TCExchangeClientEffects::accept);
+        thaumcraft.common.items.tools.ItemThaumometer.setUseEffectSink(TCThaumometerClientEffects::onUse);
+        TCKnowledgeClientCache.setResearchCompletedSink(thaumcraft.client.gui.ResearchToastHandler::onResearchCompleted);
+        thaumcraft.common.tiles.misc.TCNitorBlockEntity.setClientTickSink(thaumcraft.client.fx.TCNitorClientEffects::tick);
+        TCEntityFXNetwork.setFocusZapSink(TCWispClientEffects::acceptFocusZap);
     }
 
     private TCClientEvents() {
@@ -37,18 +42,31 @@ public final class TCClientEvents {
     }
 
     @SubscribeEvent
+    public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        clearClientCaches();
+    }
+
+    private static void clearClientCaches() {
+        thaumcraft.common.golems.seals.SealHandler.sealEntities.clear();
+        TCLegacyParticleEngine.clear();
+        TCKnowledgeClientCache.clear();
+        TCWarpClientCache.clear();
+        TCAuraClientCache.clear();
+        TCThaumonomiconClientCache.clear();
+        TCResearchTableClientCache.clear();
+        TCInfusionClientFXCache.clear();
+        TCInfusionClientEffects.clear();
+        TCWispClientEffects.clear();
+        TCThaumometerClientEffects.clear();
+        thaumcraft.client.gui.TCKnowledgeGainHud.clear();
+        thaumcraft.client.gui.TCThaumonomiconBrowserScreen.clearSessionState();
+        thaumcraft.client.gui.TCThaumonomiconEntryScreen.clearSessionState();
+    }
+
+    @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Pre event) {
         if (Minecraft.getInstance().level == null) {
-            thaumcraft.common.golems.seals.SealHandler.sealEntities.clear();
-            TCLegacyParticleEngine.clear();
-            TCKnowledgeClientCache.clear();
-            TCWarpClientCache.clear();
-            TCAuraClientCache.clear();
-            TCThaumonomiconClientCache.clear();
-            TCResearchTableClientCache.clear();
-            TCInfusionClientFXCache.clear();
-            TCInfusionClientEffects.clear();
-            TCWispClientEffects.clear();
+            clearClientCaches();
             return;
         }
 

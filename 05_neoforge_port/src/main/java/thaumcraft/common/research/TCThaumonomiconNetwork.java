@@ -192,15 +192,15 @@ public final class TCThaumonomiconNetwork {
     }
 
     private static void handleIndex(TCThaumonomiconIndexPayload payload, IPayloadContext context) {
-        TCThaumonomiconClientCache.accept(payload);
+        context.enqueueWork(() -> TCThaumonomiconClientCache.accept(payload));
     }
 
     private static void handleEntry(TCThaumonomiconEntryPayload payload, IPayloadContext context) {
-        TCThaumonomiconClientCache.accept(payload);
+        context.enqueueWork(() -> TCThaumonomiconClientCache.accept(payload));
     }
 
     private static void handleDrilldown(TCThaumonomiconDrilldownPayload payload, IPayloadContext context) {
-        TCThaumonomiconClientCache.accept(payload);
+        context.enqueueWork(() -> TCThaumonomiconClientCache.accept(payload));
     }
 
     record ActionResult(boolean accepted, String resultKey, boolean refreshIndex) {

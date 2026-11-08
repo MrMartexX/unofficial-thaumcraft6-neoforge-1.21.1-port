@@ -62,6 +62,11 @@ public final class TCThaumometerClientEffects {
     private static LivingEntity thaumTarget;
     private static float tagScale;
 
+    public static void clear() {
+        thaumTarget = null;
+        tagScale = 0.0F;
+    }
+
     private TCThaumometerClientEffects() {
     }
 

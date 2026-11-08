@@ -57,6 +57,10 @@ public final class TCTaintHelper {
         }
     }
 
+    public static void clearAll() {
+        TAINT_SEEDS.clear();
+    }
+
     public static boolean isNearTaintSeed(LevelReader reader, BlockPos pos) {
         if (!(reader instanceof Level level)) {
             return false;

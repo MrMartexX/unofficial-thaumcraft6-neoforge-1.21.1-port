@@ -80,6 +80,14 @@ public final class TCBaubleEvents {
     private static final Map<UUID, Integer> LAST_CHARGE = new HashMap<>();
     private static final Map<UUID, Long> NEXT_CYCLE = new HashMap<>();
 
+    public static void clearAll() {
+        CLOUD_RING_AIRBORNE_JUMPS.clear();
+        RUNIC_INFO.clear();
+        LAST_MAX_CHARGE.clear();
+        LAST_CHARGE.clear();
+        NEXT_CYCLE.clear();
+    }
+
     private TCBaubleEvents() {
     }
 

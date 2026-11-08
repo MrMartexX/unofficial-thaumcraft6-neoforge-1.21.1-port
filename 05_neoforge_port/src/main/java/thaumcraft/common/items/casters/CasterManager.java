@@ -123,6 +123,16 @@ public final class CasterManager {
         }
     }
 
+    public static void clearCooldown(UUID playerId) {
+        if (playerId != null) {
+            COOLDOWNS.remove(playerId);
+        }
+    }
+
+    public static void clearAllCooldowns() {
+        COOLDOWNS.clear();
+    }
+
     public static float getAuraPool(ItemCaster caster, ItemStack stack, Player player) {
         if (caster == null || player == null || !(player.level() instanceof ServerLevel serverLevel)) {
             return 0.0F;

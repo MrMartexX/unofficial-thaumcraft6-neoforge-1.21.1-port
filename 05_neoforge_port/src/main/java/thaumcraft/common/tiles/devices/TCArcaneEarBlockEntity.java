@@ -48,6 +48,12 @@ public class TCArcaneEarBlockEntity extends BlockEntity {
         LOADED_EARS.remove(this);
     }
 
+    @Override
+    public void onChunkUnloaded() {
+        super.onChunkUnloaded();
+        LOADED_EARS.remove(this);
+    }
+
     public byte getNote() {
         return this.note;
     }

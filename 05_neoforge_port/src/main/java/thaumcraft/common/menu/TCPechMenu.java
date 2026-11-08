@@ -70,7 +70,7 @@ public final class TCPechMenu extends AbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(Player player, int id) {
-        if (id != 0 || pech == null || player.level().isClientSide) {
+        if (id != 0 || pech == null || player.level().isClientSide || !stillValid(player)) {
             return false;
         }
         boolean generated = generateContents(player);

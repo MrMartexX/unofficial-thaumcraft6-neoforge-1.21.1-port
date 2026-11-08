@@ -77,6 +77,15 @@ public final class TCThaumonomiconBrowserScreen extends Screen {
         super(Component.translatable("item.thaumcraft.thaumonomicon"));
     }
 
+    public static void clearSessionState() {
+        selectedCategory = "";
+        searching = false;
+        popupUntilMillis = 0L;
+        popupMessage = "";
+        LAST_PAN_X.clear();
+        LAST_PAN_Y.clear();
+    }
+
     @Override
     protected void init() {
         ensureSelectedCategory();

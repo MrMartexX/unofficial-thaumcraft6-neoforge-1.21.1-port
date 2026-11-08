@@ -2,6 +2,7 @@ package thaumcraft.common.audit.parity;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import thaumcraft.Thaumcraft;
 
@@ -26,7 +27,7 @@ public final class TCUnifiedParityRuntimeAuditExporter {
                     output,
                     report.passed(),
                     report.passed() + report.failed(),
-                    String.format("%.1f", report.percent())
+                    String.format(Locale.ROOT, "%.1f", report.percent())
             );
             if (report.failed() > 0) {
                 throw new IllegalStateException("Parity runtime audit failed with " + report.failed() + " failures!");

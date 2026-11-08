@@ -3,6 +3,8 @@ package thaumcraft.common.audit.parity;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -101,7 +103,7 @@ public final class TCUnifiedParityRuntimeAudit {
         lines.add(categoryRow("Worldgen, Biomes & Structures", report.worldgenChecks()));
         lines.add("");
         lines.add("### Overall: " + report.passed() + " / " + report.checks().size()
-                + " checks passed (" + String.format("%.1f", report.percent()) + "%).");
+                + " checks passed (" + String.format(Locale.ROOT, "%.1f", report.percent()) + "%).");
         lines.add("");
         lines.add("## Detailed Audit Checks");
         lines.add("");
@@ -186,6 +188,25 @@ public final class TCUnifiedParityRuntimeAudit {
             checks.add(new Check("Machinery", "centrifuge_process_delay_contract",
                     accepted && split,
                     "Centrifuge implements 39-tick process delay and aspect splitting"));
+
+            ServerPlayer menuPlayer = FakePlayerFactory.getMinecraft(level);
+            var builder = new thaumcraft.common.tiles.crafting.TCGolemBuilderBlockEntity(pos, TCBlocks.GOLEM_BUILDER.get().defaultBlockState());
+            var clientBuilderMenu = new thaumcraft.common.menu.TCGolemBuilderMenu(0, menuPlayer.getInventory());
+            var serverBuilderData = builder.dataAccessForTesting();
+            long[] testMasks = { -1L, 0x1234_89AB_CDEF_5678L };
+            boolean builderRoundTripOk = serverBuilderData.getCount() == 6;
+            for (long mask : testMasks) {
+                builder.setGolemForTesting(mask);
+                for (int slotIdx = 0; slotIdx < serverBuilderData.getCount(); slotIdx++) {
+                    clientBuilderMenu.setData(slotIdx, (short) serverBuilderData.get(slotIdx));
+                }
+                if (clientBuilderMenu.getGolemProps() != mask) {
+                    builderRoundTripOk = false;
+                }
+            }
+            checks.add(new Check("Machinery", "golem_builder_64bit_container_data_round_trip",
+                    builderRoundTripOk,
+                    "TCGolemBuilderMenu round-trips full 64-bit golem properties across 16-bit signed ContainerData slots"));
         }
         return checks;
     }
@@ -375,6 +396,49 @@ public final class TCUnifiedParityRuntimeAudit {
         checks.add(new Check("Research", "discovery_marker_got_thaumonomicon",
                 TCResearchDiscoveryEvents.GOT_THAUMONOMICON != null,
                 "Discovery marker !gotthaumonomicon triggers on opening the Thaumonomicon"));
+        if (player != null) {
+            ServerLevel level = player.serverLevel();
+            ServerPlayer orig = FakePlayerFactory.get(level, new com.mojang.authlib.GameProfile(
+                    UUID.fromString("00000000-0000-4000-8000-00000000a001"), "TCCloneSrc"));
+            ServerPlayer cloned = FakePlayerFactory.get(level, new com.mojang.authlib.GameProfile(
+                    UUID.fromString("00000000-0000-4000-8000-00000000a002"), "TCCloneDst"));
+            boolean cloneOk = false;
+            try {
+                orig.getPersistentData().remove("ThaumcraftKnowledge");
+                orig.getPersistentData().remove("ThaumcraftWarp");
+                cloned.getPersistentData().remove("ThaumcraftKnowledge");
+                cloned.getPersistentData().remove("ThaumcraftWarp");
+
+                TCPlayerKnowledgeStore.mutate(orig, k -> {
+                    k.addResearch("!tc_audit_clone");
+                    k.addRaw(thaumcraft.common.research.TCKnowledgeType.THEORY, "BASICS", 25);
+                }, false);
+                var warp = new thaumcraft.common.warp.TCPlayerWarp();
+                warp.set(thaumcraft.common.warp.TCWarpType.PERMANENT, 4);
+                warp.set(thaumcraft.common.warp.TCWarpType.NORMAL, 2);
+                warp.set(thaumcraft.common.warp.TCWarpType.TEMPORARY, 1);
+                thaumcraft.common.warp.TCPlayerWarpStore.set(orig, warp);
+
+                net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(
+                        new net.neoforged.neoforge.event.entity.player.PlayerEvent.Clone(cloned, orig, true));
+
+                var clonedKnowledge = TCPlayerKnowledgeStore.get(cloned);
+                var clonedWarp = thaumcraft.common.warp.TCPlayerWarpStore.get(cloned);
+                cloneOk = clonedKnowledge.isResearchKnown("!tc_audit_clone")
+                        && clonedKnowledge.getRaw(thaumcraft.common.research.TCKnowledgeType.THEORY, "BASICS") == 25
+                        && clonedWarp.get(thaumcraft.common.warp.TCWarpType.PERMANENT) == 4
+                        && clonedWarp.get(thaumcraft.common.warp.TCWarpType.NORMAL) == 2
+                        && clonedWarp.get(thaumcraft.common.warp.TCWarpType.TEMPORARY) == 1;
+            } finally {
+                orig.getPersistentData().remove("ThaumcraftKnowledge");
+                orig.getPersistentData().remove("ThaumcraftWarp");
+                cloned.getPersistentData().remove("ThaumcraftKnowledge");
+                cloned.getPersistentData().remove("ThaumcraftWarp");
+            }
+            checks.add(new Check("Research", "player_knowledge_warp_clone_persistence",
+                    cloneOk,
+                    "PlayerEvent.Clone preserves ThaumcraftKnowledge and ThaumcraftWarp across player death/dimension transitions"));
+        }
         return checks;
     }
 

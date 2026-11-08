@@ -37,7 +37,7 @@ public class TCTurretAdvancedMenu extends TCTurretBasicMenu {
     @Override
     public boolean clickMenuButton(Player player, int buttonId) {
         TCTurretCrossbowAdvancedEntity adv = getAdvancedTurret();
-        if (adv == null) {
+        if (adv == null || player == null || !stillValid(player)) {
             return false;
         }
         return switch (buttonId) {

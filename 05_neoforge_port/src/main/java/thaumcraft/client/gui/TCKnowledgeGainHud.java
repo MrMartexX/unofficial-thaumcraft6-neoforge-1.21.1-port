@@ -58,6 +58,12 @@ public final class TCKnowledgeGainHud {
     private static float kgFade = 0.0F;
     private static int lastClientTick = Integer.MIN_VALUE;
 
+    public static void clear() {
+        KNOWLEDGE_GAIN_TRACKERS.clear();
+        kgFade = 0.0F;
+        lastClientTick = Integer.MIN_VALUE;
+    }
+
     private TCKnowledgeGainHud() {
     }
 

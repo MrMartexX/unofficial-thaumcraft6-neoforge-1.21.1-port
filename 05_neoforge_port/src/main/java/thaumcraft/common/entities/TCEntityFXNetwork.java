@@ -12,9 +12,16 @@ public final class TCEntityFXNetwork {
         void accept(TCWispZapPayload payload);
     }
 
+    @FunctionalInterface
+    public interface FocusZapSink {
+        void accept(thaumcraft.common.items.casters.TCFocusZapPayload payload);
+    }
+
     public static final double LEGACY_WISP_ZAP_RANGE_SQR = 32.0D * 32.0D;
     private static final String NETWORK_VERSION = "1";
     private static WispZapSink wispZapSink = payload -> {
+    };
+    private static FocusZapSink focusZapSink = payload -> {
     };
 
     private TCEntityFXNetwork() {
@@ -22,6 +29,11 @@ public final class TCEntityFXNetwork {
 
     public static void setWispZapSink(WispZapSink sink) {
         wispZapSink = sink == null ? payload -> {
+        } : sink;
+    }
+
+    public static void setFocusZapSink(FocusZapSink sink) {
+        focusZapSink = sink == null ? payload -> {
         } : sink;
     }
 
@@ -36,13 +48,12 @@ public final class TCEntityFXNetwork {
                 .playToClient(
                         TCWispZapPayload.TYPE,
                         TCWispZapPayload.STREAM_CODEC,
-                        (payload, context) -> wispZapSink.accept(payload)
+                        (payload, context) -> context.enqueueWork(() -> wispZapSink.accept(payload))
                 )
                 .playToClient(
                         thaumcraft.common.items.casters.TCFocusZapPayload.TYPE,
                         thaumcraft.common.items.casters.TCFocusZapPayload.STREAM_CODEC,
-                        (payload, context) -> {
-                        }
+                        (payload, context) -> context.enqueueWork(() -> focusZapSink.accept(payload))
                 );
     }
 

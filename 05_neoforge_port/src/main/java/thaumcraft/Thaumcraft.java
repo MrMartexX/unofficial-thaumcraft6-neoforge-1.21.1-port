@@ -186,9 +186,26 @@ public final class Thaumcraft {
         NeoForge.EVENT_BUS.addListener(TCKnowledgeNetwork::onPlayerLoggedIn);
         NeoForge.EVENT_BUS.addListener(TCKnowledgeNetwork::onPlayerRespawn);
         NeoForge.EVENT_BUS.addListener(TCKnowledgeNetwork::onPlayerChangedDimension);
+        NeoForge.EVENT_BUS.addListener(thaumcraft.common.research.TCPlayerKnowledgeStore::onPlayerClone);
         NeoForge.EVENT_BUS.addListener(TCWarpNetwork::onPlayerLoggedIn);
         NeoForge.EVENT_BUS.addListener(TCWarpNetwork::onPlayerRespawn);
         NeoForge.EVENT_BUS.addListener(TCWarpNetwork::onPlayerChangedDimension);
+        NeoForge.EVENT_BUS.addListener(thaumcraft.common.warp.TCPlayerWarpStore::onPlayerClone);
+        NeoForge.EVENT_BUS.addListener(TCResearchTableNetwork::onPlayerLoggedOut);
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent e) -> {
+            if (e.getEntity() != null) {
+                thaumcraft.common.items.casters.CasterManager.clearCooldown(e.getEntity().getUUID());
+            }
+        });
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerStoppedEvent e) -> {
+            thaumcraft.common.blocks.world.taint.TCTaintHelper.clearAll();
+            thaumcraft.common.entities.TCFocusCloudEntity.clearCooldowns();
+            thaumcraft.common.items.casters.CasterManager.clearAllCooldowns();
+            TCResearchTableNetwork.clearAllAntiSpam();
+            thaumcraft.common.items.tools.TCToolEvents.clearAll();
+            thaumcraft.common.items.curios.TCBaubleEvents.clearAll();
+            thaumcraft.common.tiles.devices.TCArcaneEarBlockEntity.LOADED_EARS.clear();
+        });
         NeoForge.EVENT_BUS.addListener(TCWarpEvents::onServerTick);
         NeoForge.EVENT_BUS.addListener(TCWarpEvents::onFinishUsingItem);
         NeoForge.EVENT_BUS.addListener(TCResearchRequirementAuditCommands::onRegisterCommands);

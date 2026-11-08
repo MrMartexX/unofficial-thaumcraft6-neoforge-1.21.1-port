@@ -129,7 +129,7 @@ public class TCFocalManipulatorMenu extends AbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(Player player, int id) {
-        if (id == 0 && blockEntity != null && player instanceof ServerPlayer serverPlayer) {
+        if (id == 0 && blockEntity != null && player instanceof ServerPlayer serverPlayer && stillValid(serverPlayer)) {
             boolean started = blockEntity.startCraft(serverPlayer);
             refreshData();
             broadcastChanges();

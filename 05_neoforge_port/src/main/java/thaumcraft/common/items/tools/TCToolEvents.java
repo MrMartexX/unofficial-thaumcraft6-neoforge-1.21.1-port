@@ -37,6 +37,10 @@ public final class TCToolEvents {
         LAST_FACE_CLICKED.remove(event.getEntity().getUUID());
     }
 
+    public static void clearAll() {
+        LAST_FACE_CLICKED.clear();
+    }
+
     public static boolean isHarvesting() {
         return HARVESTING.get();
     }

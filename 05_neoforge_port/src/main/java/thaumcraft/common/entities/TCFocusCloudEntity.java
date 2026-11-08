@@ -231,6 +231,10 @@ public class TCFocusCloudEntity extends Entity {
         COOLDOWN_MAP.clear();
     }
 
+    public static void clearCooldowns() {
+        COOLDOWN_MAP.clear();
+    }
+
     public static int cooldownSizeForValidation() {
         return COOLDOWN_MAP.size();
     }

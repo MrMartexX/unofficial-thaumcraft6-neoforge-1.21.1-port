@@ -117,6 +117,10 @@ public final class TCThaumonomiconEntryScreen extends Screen {
     private long knowledgeSnapshotVersion;
     private int thaumonomiconRevision;
 
+    public static void clearSessionState() {
+        aspectPage = 0;
+    }
+
     public TCThaumonomiconEntryScreen(TCThaumonomiconEntryView entry) {
         this(entry, null, 0);
     }

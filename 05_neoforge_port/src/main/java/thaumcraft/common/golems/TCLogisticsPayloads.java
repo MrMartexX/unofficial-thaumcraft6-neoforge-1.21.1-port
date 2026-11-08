@@ -36,7 +36,9 @@ public final class TCLogisticsPayloads {
                     Direction side = null;
                     if (buffer.readBoolean()) {
                         pos = buffer.readBlockPos();
-                        side = Direction.values()[buffer.readByte()];
+                        byte rawSide = buffer.readByte();
+                        Direction[] dirs = Direction.values();
+                        side = (rawSide >= 0 && rawSide < dirs.length) ? dirs[rawSide] : null;
                     }
                     ItemStack stack = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
                     int count = buffer.readInt();

@@ -133,7 +133,7 @@ public final class TCSpaMenu extends AbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(Player player, int button) {
-        if (button == 1 && blockEntity != null) {
+        if (button == 1 && blockEntity != null && stillValid(player)) {
             blockEntity.toggleMix();
             return true;
         }

@@ -10,6 +10,16 @@ import thaumcraft.common.tiles.crafting.TCResearchTableBlockEntity;
 public final class TCResearchTableNetwork {
     private static final String NETWORK_VERSION = "1";
 
+    public static void onPlayerLoggedOut(net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() != null) {
+            TCResearchTableActions.clearAntiSpam(event.getEntity().getUUID());
+        }
+    }
+
+    public static void clearAllAntiSpam() {
+        TCResearchTableActions.clearAllAntiSpam();
+    }
+
     private TCResearchTableNetwork() {
     }
 
@@ -62,10 +72,10 @@ public final class TCResearchTableNetwork {
     }
 
     private static void handleSync(TCResearchTableSyncPayload payload, IPayloadContext context) {
-        TCResearchTableClientCache.accept(payload);
+        context.enqueueWork(() -> TCResearchTableClientCache.accept(payload));
     }
 
     private static void handleActionResult(TCResearchTableActionResultPayload payload, IPayloadContext context) {
-        TCResearchTableClientCache.accept(payload);
+        context.enqueueWork(() -> TCResearchTableClientCache.accept(payload));
     }
 }

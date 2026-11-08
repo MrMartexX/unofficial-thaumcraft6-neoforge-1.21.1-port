@@ -48,6 +48,16 @@ final class TCResearchTableActions {
         TCResearchTableNetwork.sendActionResult(player, table, payload.actionId(), result.accepted(), result.key());
     }
 
+    static void clearAntiSpam(UUID playerId) {
+        if (playerId != null) {
+            ANTI_SPAM.remove(playerId);
+        }
+    }
+
+    static void clearAllAntiSpam() {
+        ANTI_SPAM.clear();
+    }
+
     private static ActionResult startTheory(ServerPlayer player, TCResearchTableBlockEntity table, List<String> selectedAidKeys) {
         if (table.getTheoryData() != null) {
             return ActionResult.rejected("theory_exists");

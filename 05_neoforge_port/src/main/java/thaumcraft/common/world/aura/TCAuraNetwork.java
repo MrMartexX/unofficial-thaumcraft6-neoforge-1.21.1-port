@@ -28,6 +28,6 @@ public final class TCAuraNetwork {
     }
 
     private static void handleAuraSync(TCAuraSyncPayload payload, net.neoforged.neoforge.network.handling.IPayloadContext context) {
-        TCAuraClientCache.accept(payload);
+        context.enqueueWork(() -> TCAuraClientCache.accept(payload));
     }
 }

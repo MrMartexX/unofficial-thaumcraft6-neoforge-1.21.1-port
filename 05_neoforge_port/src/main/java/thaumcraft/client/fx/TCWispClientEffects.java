@@ -25,6 +25,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.common.entities.TCWispEntity;
 import thaumcraft.common.entities.TCWispZapPayload;
+import thaumcraft.common.items.casters.TCFocusZapPayload;
 
 public final class TCWispClientEffects {
     private static final ResourceLocation ESSENTIA_TEXTURE =
@@ -32,6 +33,24 @@ public final class TCWispClientEffects {
     private static final List<ZapBolt> ZAPS = new ArrayList<>();
 
     private TCWispClientEffects() {
+    }
+
+    public static void acceptFocusZap(TCFocusZapPayload payload) {
+        Minecraft minecraft = Minecraft.getInstance();
+        Level level = minecraft.level;
+        if (level == null || payload == null) {
+            return;
+        }
+        int color = payload.color();
+        float red = ((color >> 16) & 0xFF) / 255.0F;
+        float green = ((color >> 8) & 0xFF) / 255.0F;
+        float blue = (color & 0xFF) / 255.0F;
+        float width = payload.width() > 0.0F ? payload.width() : 0.6F;
+        ZAPS.add(new ZapBolt(
+                new Vec3(payload.x1(), payload.y1(), payload.z1()),
+                new Vec3(payload.x2(), payload.y2(), payload.z2()),
+                red, green, blue, width, level.random.nextLong()
+        ));
     }
 
     public static void accept(TCWispZapPayload payload) {

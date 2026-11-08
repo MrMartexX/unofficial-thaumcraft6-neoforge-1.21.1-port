@@ -31,13 +31,34 @@ public final class TCLogisticsNetwork {
     private static void handleRequest(TCLogisticsPayloads.Request message, IPayloadContext context) {
         context.enqueueWork(() -> {
             if (!(context.player() instanceof ServerPlayer player)
-                    || !(player.containerMenu instanceof TCLogisticsMenu)
+                    || !(player.containerMenu instanceof TCLogisticsMenu menu)
+                    || !menu.stillValid(player)
                     || message.stack().isEmpty()) {
                 return;
             }
 
-            Level world = player.level();
             int remaining = message.count();
+            if (remaining <= 0 || remaining > 6400) {
+                return;
+            }
+
+            if (!java.util.Objects.equals(message.pos(), menu.getTargetPos())
+                    || message.side() != menu.getTargetSide()) {
+                return;
+            }
+
+            Level world = player.level();
+            if (message.pos() != null) {
+                if (message.side() == null
+                        || !world.isLoaded(message.pos())
+                        || player.distanceToSqr(
+                                message.pos().getX() + 0.5D,
+                                message.pos().getY() + 0.5D,
+                                message.pos().getZ() + 0.5D) > 64.0D) {
+                    return;
+                }
+            }
+
             int iterations = 0;
             while (remaining > 0 && iterations < 100) {
                 ItemStack stack = message.stack().copy();

@@ -53,27 +53,40 @@ public class TCGolemBuilderBlockEntity extends BlockEntity implements Container,
             return switch (index) {
                 case 0 -> cost;
                 case 1 -> maxCost;
-                case 2 -> (int) (golem & 0xFFFFFFFFL);
-                case 3 -> (int) ((golem >>> 32) & 0xFFFFFFFFL);
+                case 2 -> (int) (golem & 0xFFFFL);
+                case 3 -> (int) ((golem >>> 16) & 0xFFFFL);
+                case 4 -> (int) ((golem >>> 32) & 0xFFFFL);
+                case 5 -> (int) ((golem >>> 48) & 0xFFFFL);
                 default -> 0;
             };
         }
 
         @Override
         public void set(int index, int value) {
+            long slice = ((long) value) & 0xFFFFL;
             switch (index) {
                 case 0 -> cost = value;
                 case 1 -> maxCost = value;
-                case 2 -> golem = (golem & 0xFFFFFFFF00000000L) | (value & 0xFFFFFFFFL);
-                case 3 -> golem = (golem & 0x00000000FFFFFFFFL) | (((long) value) << 32);
+                case 2 -> golem = (golem & 0xFFFFFFFFFFFF0000L) | slice;
+                case 3 -> golem = (golem & 0xFFFFFFFF0000FFFFL) | (slice << 16);
+                case 4 -> golem = (golem & 0xFFFF0000FFFFFFFFL) | (slice << 32);
+                case 5 -> golem = (golem & 0x0000FFFFFFFFFFFFL) | (slice << 48);
             }
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return 6;
         }
     };
+
+    public ContainerData dataAccessForTesting() {
+        return dataAccess;
+    }
+
+    public void setGolemForTesting(long golem) {
+        this.golem = golem;
+    }
 
     public TCGolemBuilderBlockEntity(BlockPos pos, BlockState blockState) {
         super(TCBlockEntities.GOLEM_BUILDER.get(), pos, blockState);

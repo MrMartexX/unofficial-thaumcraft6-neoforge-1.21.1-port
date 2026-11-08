@@ -59,13 +59,13 @@ public final class TCKnowledgeNetwork {
             TCKnowledgeSyncPayload payload,
             net.neoforged.neoforge.network.handling.IPayloadContext context
     ) {
-        TCKnowledgeClientCache.accept(payload);
+        context.enqueueWork(() -> TCKnowledgeClientCache.accept(payload));
     }
 
     private static void handleKnowledgeGain(
             TCKnowledgeGainPayload payload,
             net.neoforged.neoforge.network.handling.IPayloadContext context
     ) {
-        TCKnowledgeClientCache.accept(payload);
+        context.enqueueWork(() -> TCKnowledgeClientCache.accept(payload));
     }
 }

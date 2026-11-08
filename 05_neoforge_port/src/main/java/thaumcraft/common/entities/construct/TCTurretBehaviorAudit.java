@@ -99,10 +99,10 @@ public final class TCTurretBehaviorAudit {
             // 5. Advanced menu target filters
             TCTurretAdvancedMenu advMenu = new TCTurretAdvancedMenu(2, dummyPlayer.getInventory(), adv);
             boolean initialMob = adv.getTargetMob();
-            advMenu.clickMenuButton(null, 1); // toggle animal
-            advMenu.clickMenuButton(null, 2); // toggle mob
-            advMenu.clickMenuButton(null, 3); // toggle player
-            advMenu.clickMenuButton(null, 4); // toggle friendly
+            advMenu.clickMenuButton(dummyPlayer, 1); // toggle animal
+            advMenu.clickMenuButton(dummyPlayer, 2); // toggle mob
+            advMenu.clickMenuButton(dummyPlayer, 3); // toggle player
+            advMenu.clickMenuButton(dummyPlayer, 4); // toggle friendly
             boolean toggledOk = adv.getTargetAnimal() && !adv.getTargetMob() && adv.getTargetPlayer() && adv.getTargetFriendly();
             adv.setTargetMob(true); // reset
             rows.add(new Row(

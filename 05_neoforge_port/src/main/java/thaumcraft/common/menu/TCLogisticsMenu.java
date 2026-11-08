@@ -146,7 +146,7 @@ public final class TCLogisticsMenu extends AbstractContainerMenu {
                         ItemStack stack = handler.getStackInSlot(slot).copy();
                         if (!stack.isEmpty() && provide.matchesFilter(stack)) {
                             String name = stack.getHoverName().getString();
-                            if (searchText.isEmpty() || name.toLowerCase().contains(searchText.toLowerCase())) {
+                            if (searchText.isEmpty() || name.toLowerCase(java.util.Locale.ROOT).contains(searchText.toLowerCase(java.util.Locale.ROOT))) {
                                 String key = name + "_" + stack.getItem().getDescriptionId();
                                 if (ti.containsKey(key)) {
                                     stack.grow(ti.get(key).getCount());
@@ -183,6 +183,9 @@ public final class TCLogisticsMenu extends AbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(Player player, int button) {
+        if (!stillValid(player)) {
+            return false;
+        }
         if (button == 22) {
             refreshItemList(true);
             return true;
@@ -214,7 +217,9 @@ public final class TCLogisticsMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        return player.isAlive() && (targetPos == null || player.distanceToSqr(targetPos.getX(), targetPos.getY(), targetPos.getZ()) <= 64.0D);
+        return player.isAlive() && (targetPos == null
+                || (player.level().isLoaded(targetPos)
+                        && player.distanceToSqr(targetPos.getX() + 0.5D, targetPos.getY() + 0.5D, targetPos.getZ() + 0.5D) <= 64.0D));
     }
 
     @Override
@@ -231,7 +236,9 @@ public final class TCLogisticsMenu extends AbstractContainerMenu {
 
     private static Direction readTargetSide(RegistryFriendlyByteBuf buffer) {
         if (buffer != null && buffer.isReadable()) {
-            return Direction.values()[buffer.readByte()];
+            byte raw = buffer.readByte();
+            Direction[] dirs = Direction.values();
+            return (raw >= 0 && raw < dirs.length) ? dirs[raw] : null;
         }
         return null;
     }

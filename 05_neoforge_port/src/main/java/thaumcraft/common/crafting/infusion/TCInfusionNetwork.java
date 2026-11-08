@@ -20,12 +20,12 @@ public final class TCInfusionNetwork {
         registrar.playToClient(
                 TCInfusionSourcePayload.TYPE,
                 TCInfusionSourcePayload.STREAM_CODEC,
-                (payload, context) -> TCInfusionClientFXCache.accept(payload)
+                (payload, context) -> context.enqueueWork(() -> TCInfusionClientFXCache.accept(payload))
         );
         registrar.playToClient(
                 TCInfusionEssentiaSourcePayload.TYPE,
                 TCInfusionEssentiaSourcePayload.STREAM_CODEC,
-                (payload, context) -> TCInfusionClientFXCache.accept(payload)
+                (payload, context) -> context.enqueueWork(() -> TCInfusionClientFXCache.accept(payload))
         );
     }
 

@@ -19,7 +19,7 @@ public class TCGolemBuilderMenu extends AbstractContainerMenu {
     private final TCGolemBuilderBlockEntity blockEntity;
 
     public TCGolemBuilderMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, new SimpleContainer(1), new SimpleContainerData(4));
+        this(containerId, playerInventory, new SimpleContainer(1), new SimpleContainerData(6));
     }
 
     public TCGolemBuilderMenu(int containerId, Inventory playerInventory, Container container, ContainerData data) {
@@ -29,7 +29,7 @@ public class TCGolemBuilderMenu extends AbstractContainerMenu {
         this.blockEntity = container instanceof TCGolemBuilderBlockEntity be ? be : null;
 
         checkContainerSize(container, 1);
-        checkContainerDataCount(data, 4);
+        checkContainerDataCount(data, 6);
 
         // Output Slot 0
         this.addSlot(new Slot(container, 0, 160, 104) {
@@ -56,7 +56,7 @@ public class TCGolemBuilderMenu extends AbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(Player player, int id) {
-        if (id >= 0 && blockEntity != null) {
+        if (id >= 0 && blockEntity != null && stillValid(player)) {
             // Button 0 or positive long encoded index
             long props = getGolemProps();
             return blockEntity.startCraft(props, player);
@@ -73,9 +73,11 @@ public class TCGolemBuilderMenu extends AbstractContainerMenu {
     }
 
     public long getGolemProps() {
-        long low = ((long) data.get(2)) & 0xFFFFFFFFL;
-        long high = ((long) data.get(3)) & 0xFFFFFFFFL;
-        return (high << 32) | low;
+        long p0 = ((long) data.get(2)) & 0xFFFFL;
+        long p1 = ((long) data.get(3)) & 0xFFFFL;
+        long p2 = ((long) data.get(4)) & 0xFFFFL;
+        long p3 = ((long) data.get(5)) & 0xFFFFL;
+        return p0 | (p1 << 16) | (p2 << 32) | (p3 << 48);
     }
 
     @Override
