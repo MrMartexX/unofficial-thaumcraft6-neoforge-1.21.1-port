@@ -88,6 +88,8 @@ public final class TCItemEquipmentBehaviorAudit {
         checks.add(checkSanityCheckerRecipe(server));
         checks.add(checkEquipmentHelperBridge(player));
         checks.addAll(checkMagicalJewelry(player));
+        checks.addAll(checkVoidAndElementalTools(player));
+        checks.addAll(checkFortressAndConsumables(player));
 
         return new Report(List.copyOf(checks));
     }
@@ -351,6 +353,118 @@ public final class TCItemEquipmentBehaviorAudit {
             absorption.setBaseValue(oldBase);
             player.setAbsorptionAmount(oldAmount);
         }
+
+        return checks;
+    }
+
+
+    private static List<Check> checkVoidAndElementalTools(ServerPlayer player) {
+        ArrayList<Check> checks = new ArrayList<>();
+        Item voidPick = TCItems.VOID_PICK.get();
+        checks.add(new Check(
+                "void_pickaxe_contract",
+                voidPick instanceof thaumcraft.common.items.tools.ItemVoidPickaxe vp
+                        && vp.getWarp(new ItemStack(voidPick), player) == 1,
+                "tier=VOID, warp=1"
+        ));
+        Item voidSword = TCItems.VOID_SWORD.get();
+        checks.add(new Check(
+                "void_sword_contract",
+                voidSword instanceof thaumcraft.common.items.tools.ItemVoidSword vs
+                        && vs.getWarp(new ItemStack(voidSword), player) == 1,
+                "tier=VOID, warp=1"
+        ));
+
+        Item elecAxe = TCItems.ELEMENTAL_AXE.get();
+        ItemStack elecAxeStack = new ItemStack(elecAxe);
+        checks.add(new Check(
+                "elemental_axe_contract",
+                elecAxe instanceof thaumcraft.common.items.tools.ItemElementalAxe ea
+                        && ea.getUseAnimation(elecAxeStack) == UseAnim.BOW
+                        && thaumcraft.common.items.tools.TCEnumInfusionEnchantment.getInfusionEnchantmentLevel(elecAxeStack, thaumcraft.common.items.tools.TCEnumInfusionEnchantment.BURROWING) == 1
+                        && thaumcraft.common.items.tools.TCEnumInfusionEnchantment.getInfusionEnchantmentLevel(elecAxeStack, thaumcraft.common.items.tools.TCEnumInfusionEnchantment.COLLECTOR) == 1,
+                "anim=BOW, burrowing=1, collector=1"
+        ));
+
+        Item elecPick = TCItems.ELEMENTAL_PICK.get();
+        ItemStack elecPickStack = new ItemStack(elecPick);
+        checks.add(new Check(
+                "elemental_pickaxe_contract",
+                elecPick instanceof thaumcraft.common.items.tools.ItemElementalPickaxe
+                        && thaumcraft.common.items.tools.TCEnumInfusionEnchantment.getInfusionEnchantmentLevel(elecPickStack, thaumcraft.common.items.tools.TCEnumInfusionEnchantment.REFINING) == 1
+                        && thaumcraft.common.items.tools.TCEnumInfusionEnchantment.getInfusionEnchantmentLevel(elecPickStack, thaumcraft.common.items.tools.TCEnumInfusionEnchantment.SOUNDING) == 2,
+                "refining=1, sounding=2"
+        ));
+
+        Item elecSword = TCItems.ELEMENTAL_SWORD.get();
+        ItemStack elecSwordStack = new ItemStack(elecSword);
+        checks.add(new Check(
+                "elemental_sword_contract",
+                elecSword instanceof thaumcraft.common.items.tools.ItemElementalSword es
+                        && es.getUseAnimation(elecSwordStack) == UseAnim.BLOCK
+                        && thaumcraft.common.items.tools.TCEnumInfusionEnchantment.getInfusionEnchantmentLevel(elecSwordStack, thaumcraft.common.items.tools.TCEnumInfusionEnchantment.ARCING) == 2,
+                "anim=BLOCK, arcing=2"
+        ));
+
+        Item elecShovel = TCItems.ELEMENTAL_SHOVEL.get();
+        ItemStack elecShovelStack = new ItemStack(elecShovel);
+        checks.add(new Check(
+                "elemental_shovel_contract",
+                elecShovel instanceof thaumcraft.api.items.IArchitect
+                        && thaumcraft.common.items.tools.TCEnumInfusionEnchantment.getInfusionEnchantmentLevel(elecShovelStack, thaumcraft.common.items.tools.TCEnumInfusionEnchantment.DESTRUCTIVE) == 1,
+                "architect=true, destructive=1"
+        ));
+
+        Item primalCrusher = TCItems.PRIMAL_CRUSHER.get();
+        ItemStack primalStack = new ItemStack(primalCrusher);
+        checks.add(new Check(
+                "primal_crusher_contract",
+                primalCrusher instanceof thaumcraft.common.items.tools.ItemPrimalCrusher pc
+                        && pc.getWarp(primalStack, player) == 2
+                        && thaumcraft.common.items.tools.TCEnumInfusionEnchantment.getInfusionEnchantmentLevel(primalStack, thaumcraft.common.items.tools.TCEnumInfusionEnchantment.DESTRUCTIVE) == 1
+                        && thaumcraft.common.items.tools.TCEnumInfusionEnchantment.getInfusionEnchantmentLevel(primalStack, thaumcraft.common.items.tools.TCEnumInfusionEnchantment.REFINING) == 1,
+                "warp=2, destructive=1, refining=1"
+        ));
+
+        return checks;
+    }
+
+    private static List<Check> checkFortressAndConsumables(ServerPlayer player) {
+        ArrayList<Check> checks = new ArrayList<>();
+        ItemStack baseHelm = new ItemStack(TCItems.THAUMIUM_FORTRESS_HELM.get());
+        ItemStack gogglesHelm = new ItemStack(TCItems.THAUMIUM_FORTRESS_HELM_GOGGLES.get());
+        checks.add(new Check(
+                "fortress_helm_goggles_contract",
+                !thaumcraft.common.items.armor.ItemFortressArmor.hasGoggles(baseHelm)
+                        && thaumcraft.common.items.armor.ItemFortressArmor.hasGoggles(gogglesHelm),
+                "baseGoggles=false, variantGoggles=true"
+        ));
+
+        ItemStack maskedHelm = baseHelm.copy();
+        maskedHelm.set(TCDataComponents.FORTRESS_MASK.get(), 1);
+        checks.add(new Check(
+                "fortress_helm_mask_component_contract",
+                thaumcraft.common.items.armor.ItemFortressArmor.getMask(maskedHelm) == 1,
+                "mask=1"
+        ));
+
+        Item beefChunk = TCItems.CHUNK_BEEF.get();
+        ItemStack chunkStack = new ItemStack(beefChunk);
+        var beefFood = beefChunk.getFoodProperties(chunkStack, player);
+        checks.add(new Check(
+                "edible_chunk_contract",
+                beefFood != null && beefFood.nutrition() == 1,
+                "chunk nutrition=" + (beefFood == null ? 0 : beefFood.nutrition())
+        ));
+
+        Item treat = TCItems.TRIPLE_MEAT_TREAT.get();
+        ItemStack treatStack = new ItemStack(treat);
+        var treatFood = treat.getFoodProperties(treatStack, player);
+        checks.add(new Check(
+                "triple_meat_treat_contract",
+                treatFood != null && treatFood.nutrition() == 6,
+                "treat nutrition=" + (treatFood == null ? 0 : treatFood.nutrition())
+        ));
 
         return checks;
     }

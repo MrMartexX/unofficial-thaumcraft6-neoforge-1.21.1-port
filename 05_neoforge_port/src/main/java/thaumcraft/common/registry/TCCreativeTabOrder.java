@@ -526,6 +526,7 @@ public final class TCCreativeTabOrder {
         acceptVisible(output, TCItems.CLUSTER_LEAD.get());
 
         acceptVisible(output, TCItems.CLUSTER_CINNABAR.get());
+        acceptVisible(output, TCItems.CLUSTER_QUARTZ.get());
 
 
 

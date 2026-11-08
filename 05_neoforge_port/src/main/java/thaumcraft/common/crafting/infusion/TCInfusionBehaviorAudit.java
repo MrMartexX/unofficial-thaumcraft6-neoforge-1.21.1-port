@@ -25,6 +25,7 @@ import thaumcraft.common.blocks.crafting.TCInfusionMatrixBlock;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.registry.TCBlocks;
+import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCRecipes;
 import thaumcraft.common.tiles.crafting.TCInfusionMatrixBlockEntity;
@@ -90,6 +91,51 @@ public final class TCInfusionBehaviorAudit {
                 "infusion_recipes_loaded",
                 infusionRecipes.size() >= 30,
                 "loaded=" + infusionRecipes.size()
+        ));
+
+        // Catalyst Upgrade infusion recipe contract
+        Optional<RecipeHolder<TCInfusionRecipe>> goggleUpgradeHolder = infusionRecipes.stream()
+                .filter(holder -> holder.id().getPath().contains("helmgoggles"))
+                .findFirst();
+        boolean upgradeRecipeValid = false;
+        if (goggleUpgradeHolder.isPresent() && goggleUpgradeHolder.get().value() instanceof TCCatalystUpgradeInfusionRecipe upgradeRecipe) {
+            ItemStack testHelm = new ItemStack(TCItems.THAUMIUM_FORTRESS_HELM.get());
+            testHelm.set(TCDataComponents.FORTRESS_MASK.get(), 1);
+            ItemStack out = upgradeRecipe.resolveResult(testHelm);
+            upgradeRecipeValid = out.is(TCItems.THAUMIUM_FORTRESS_HELM_GOGGLES.get())
+                    && thaumcraft.common.items.armor.ItemFortressArmor.getMask(out) == 1;
+        }
+        checks.add(new Check(
+                "catalyst_upgrade_infusion_recipe_contract",
+                upgradeRecipeValid,
+                "helmgoggles upgrade preserves mask component"
+        ));
+
+        // Runic Augment infusion recipe contract
+        Optional<RecipeHolder<TCInfusionRecipe>> runicHolder = infusionRecipes.stream()
+                .filter(holder -> holder.id().getPath().contains("runic_armor"))
+                .findFirst();
+        boolean runicValid = false;
+        if (runicHolder.isPresent() && runicHolder.get().value() instanceof TCRunicAugmentInfusionRecipe runicRecipe) {
+            ItemStack chest = new ItemStack(TCItems.THAUMIUM_CHEST.get());
+            ItemStack runicOut = runicRecipe.resolveResult(chest);
+            runicValid = runicRecipe.matchesCatalyst(chest)
+                    && runicOut.getOrDefault(TCDataComponents.RUNIC_CHARGE.get(), 0) == 1;
+        }
+        checks.add(new Check(
+                "runic_augment_infusion_recipe_contract",
+                runicValid,
+                "runic_armor recipe scales runic charge from 0 to 1"
+        ));
+
+        // Infusion enchantment recipes contract
+        long ieCount = infusionRecipes.stream()
+                .filter(holder -> holder.value() instanceof TCInfusionEnchantmentRecipe)
+                .count();
+        checks.add(new Check(
+                "infusion_enchantment_recipes_contract",
+                ieCount >= 8,
+                "loaded ie recipes=" + ieCount
         ));
 
         Optional<RecipeHolder<TCInfusionRecipe>> cloudRingHolder = infusionRecipes.stream()

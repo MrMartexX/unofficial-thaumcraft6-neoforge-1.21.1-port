@@ -9,6 +9,7 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.common.items.components.TCAspectStackComponent;
 import thaumcraft.common.items.components.TCCasterFocusComponent;
 import thaumcraft.common.items.components.TCFocusPackageComponent;
+import thaumcraft.common.items.components.TCInfusionEnchantmentsComponent;
 import thaumcraft.common.items.components.TCLegacyItemComponent;
 import thaumcraft.common.items.components.TCMirrorLinkComponent;
 import thaumcraft.common.items.components.TCStoredEnchantComponent;
@@ -29,6 +30,9 @@ public final class TCDataComponents {
     public static final Supplier<DataComponentType<Boolean>> FORTRESS_GOGGLES = DATA_COMPONENT_TYPES.register("fortress_goggles", () -> DataComponentType.<Boolean>builder().persistent(com.mojang.serialization.Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
     public static final Supplier<DataComponentType<Integer>> FORTRESS_MASK = DATA_COMPONENT_TYPES.register("fortress_mask", () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
     public static final Supplier<DataComponentType<Integer>> RUNIC_CHARGE = DATA_COMPONENT_TYPES.register("runic_charge", () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
+    public static final Supplier<DataComponentType<TCInfusionEnchantmentsComponent>> INFUSION_ENCHANTS = DATA_COMPONENT_TYPES.register("infusion_enchants", () -> DataComponentType.<TCInfusionEnchantmentsComponent>builder().persistent(TCInfusionEnchantmentsComponent.CODEC).networkSynchronized(TCInfusionEnchantmentsComponent.STREAM_CODEC).build());
+    public static final Supplier<DataComponentType<Integer>> ITEM_WARP = DATA_COMPONENT_TYPES.register("item_warp", () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
+    public static final Supplier<DataComponentType<Integer>> ARCHITECT_ORIENTATION = DATA_COMPONENT_TYPES.register("architect_orientation", () -> DataComponentType.<Integer>builder().persistent(com.mojang.serialization.Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT).build());
 
     private TCDataComponents() {
     }

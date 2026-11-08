@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "REFINING",
+  "instability": 3,
+  "components": [
+    {
+      "item": "thaumcraft:salis_mundus"
+    },
+    {
+      "item": "thaumcraft:quicksilver"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "order",
+      "amount": 10
+    },
+    {
+      "aspect": "metal",
+      "amount": 10
+    }
+  ]
+}

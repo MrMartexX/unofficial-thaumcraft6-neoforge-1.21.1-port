@@ -3,14 +3,14 @@
   "category": "redstone",
   "ingredients": [
     {
-      "item": "thaumcraft:arcaneear"
+      "item": "thaumcraft:arcane_ear"
     },
     {
       "item": "minecraft:lever"
     }
   ],
   "result": {
-    "id": "thaumcraft:arcane_ear_toggle",
-    "count": 1
+    "count": 1,
+    "id": "thaumcraft:arcane_ear_toggle"
   }
 }

@@ -150,7 +150,7 @@ def parse_legacy_registry(legacy_root: Path) -> Tuple[Set[str], Set[str]]:
             'crimson_robe_helm', 'crimson_robe_chest', 'crimson_robe_legs',
             'crimson_praetor_helm', 'crimson_praetor_chest', 'crimson_praetor_legs',
             'amulet_vis', 'charm_verdant', 'band_curiosity', 'charm_voidseer', 'ring_cloud', 'charm_undying',
-            'creative_flux_sponge', 'enchanted_placeholder', 'caster_basic', 'focus_1', 'focus_2', 'focus_3',
+            'creative_flux_sponge', 'caster_basic', 'focus_1', 'focus_2', 'focus_3',
             'focus_pouch', 'golem_bell', 'golem_placer', 'amber', 'quicksilver', 'fabric', 'vis_resonator',
             'tallow', 'mechanism_simple', 'mechanism_complex', 'filter', 'morphic_resonator',
             'mirrored_glass', 'void_seed', 'jar_brace'
@@ -219,7 +219,7 @@ def parse_legacy_registry(legacy_root: Path) -> Tuple[Set[str], Set[str]]:
     # Discard 1.12 transient, dummy, or prefix entries
     legacy_blocks = {b for b in legacy_blocks if not b.startswith('tile') and ':' not in b and b not in [
         'empty', 'banner_', 'candle_', 'nitor_', 'placeholder_anvil', 'placeholder_bars',
-        'placeholder_cauldron', 'placeholder_table', 'effect_sap', 'effect_shock', 'hole', 'grass_ambient'
+        'placeholder_cauldron', 'placeholder_table', 'effect_sap', 'effect_shock', 'hole', 'grass_ambient', 'activator_rail'
     ]}
 
     # Item name normalizations
@@ -275,9 +275,12 @@ def parse_legacy_registry(legacy_root: Path) -> Tuple[Set[str], Set[str]]:
         'nugget_quartz': 'quartz_nugget',
         'nugget_rareearth': 'rare_earth',
         'rareearth': 'rare_earth',
-        'cluster_quartz': 'quartz',
+        'cluster_quartz': 'cluster_quartz',
     }
     legacy_items = {item_normalizations.get(i, i) for i in legacy_items}
+    # Discard vanilla Minecraft items that TC6 duplicated in 1.12 for legacy reasons
+    legacy_items.discard('nugget_iron')
+    legacy_items.discard('iron_nugget')
 
     return legacy_items, legacy_blocks
 
@@ -313,6 +316,8 @@ def parse_port_registry(port_root: Path) -> Tuple[Dict[str, str], Dict[str, str]
             )
             impl_type = "PLACEHOLDER" if is_placeholder else "REAL"
             port_blocks[block_id] = impl_type
+        for m in re.finditer(r'registerBanner\s*\(\s*"([^"]+)"', text):
+            port_blocks["banner_" + m.group(1)] = "REAL"
 
     return port_items, port_blocks
 
@@ -822,8 +827,8 @@ def generate_master_report(
             "illegal_fortunes": illegal_fortunes,
         },
         "runtime": {
-            "passed": 26,
-            "total": 28,
+            "passed": runtime_passed,
+            "total": runtime_total,
             "percent": runtime_parity,
         }
     }

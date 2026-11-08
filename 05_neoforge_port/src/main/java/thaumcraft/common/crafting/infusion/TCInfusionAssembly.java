@@ -73,18 +73,18 @@ public final class TCInfusionAssembly {
             return TCInfusionValidationResult.failed("missing_catalyst");
         }
         ItemStack singleCatalyst = catalyst.copyWithCount(1);
-        if (!recipe.catalyst().test(singleCatalyst)) {
+        if (!recipe.matchesCatalyst(singleCatalyst)) {
             return TCInfusionValidationResult.failed("catalyst_mismatch");
         }
-        if (!TCInfusionRecipeMatcher.hasRequiredAspects(recipe, aspects)) {
+        if (!TCInfusionRecipeMatcher.hasRequiredAspects(recipe, singleCatalyst, aspects)) {
             return TCInfusionValidationResult.failed("missing_aspects");
         }
-        if (!TCInfusionRecipeMatcher.hasRequiredComponents(recipe, components)) {
+        if (!TCInfusionRecipeMatcher.hasRequiredComponents(recipe, singleCatalyst, components)) {
             return TCInfusionValidationResult.failed("component_mismatch");
         }
         return TCInfusionValidationResult.valid(
-                TCInfusionRecipeMatcher.removeRequiredAspects(recipe, aspects),
-                recipe.components().size(),
+                TCInfusionRecipeMatcher.removeRequiredAspects(recipe, singleCatalyst, aspects),
+                recipe.resolveComponents(singleCatalyst).size(),
                 components.size()
         );
     }

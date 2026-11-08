@@ -11,8 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -22,6 +20,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -42,6 +43,9 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.common.integration.curios.TCCuriosCompat;
 import thaumcraft.common.items.TCRechargeHelper;
+import thaumcraft.common.items.armor.ItemFortressArmor;
+import thaumcraft.common.items.equipment.TCEquipmentHelper;
+import thaumcraft.common.items.tools.TCEnumInfusionEnchantment;
 import thaumcraft.common.registry.TCDataComponents;
 import thaumcraft.common.registry.TCItems;
 import thaumcraft.common.registry.TCMobEffects;
@@ -59,6 +63,8 @@ import thaumcraft.common.research.TCResearchManager;
  * - Verdant Heart (Base, Life, Sustain): condition curing, health regen, air & food sustenance
  * - Runic Shielding: calculate runic charge across armor + curios, absorption health pool,
  *   aura vis recharge, break cooldown & tooltips.
+ * - Fortress Armor: mask combat triggers and 2+ piece set bonus.
+ * - Infusion Enchantments & Warping tooltips.
  */
 @EventBusSubscriber(modid = Thaumcraft.MODID)
 public final class TCBaubleEvents {
@@ -73,6 +79,10 @@ public final class TCBaubleEvents {
     private static final float SHIELD_COST = 1.0F;
     private static final ResourceLocation RUNIC_ABSORPTION_LIMIT =
             ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "runic_absorption_limit");
+    private static final ResourceLocation FORTRESS_SET_ARMOR =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "fortress_set_armor");
+    private static final ResourceLocation FORTRESS_SET_TOUGHNESS =
+            ResourceLocation.fromNamespaceAndPath(Thaumcraft.MODID, "fortress_set_toughness");
 
     private static final Set<UUID> CLOUD_RING_AIRBORNE_JUMPS = new HashSet<>();
     private static final Map<UUID, Integer> RUNIC_INFO = new HashMap<>();
@@ -94,6 +104,7 @@ public final class TCBaubleEvents {
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         updateRunicAbsorptionLimit(event.getEntity(), 0);
+        updateFortressSetBonus(event.getEntity(), false);
         UUID uuid = event.getEntity().getUUID();
         CLOUD_RING_AIRBORNE_JUMPS.remove(uuid);
         RUNIC_INFO.remove(uuid);
@@ -128,6 +139,15 @@ public final class TCBaubleEvents {
 
         // 3. Runic Shielding
         handleRunicShielding(player);
+
+        // 4. Fortress armor set bonus (2+ pieces = +1 armor, +1 toughness)
+        int fortressPieces = 0;
+        for (ItemStack piece : player.getArmorSlots()) {
+            if (piece.getItem() instanceof ItemFortressArmor) {
+                fortressPieces++;
+            }
+        }
+        updateFortressSetBonus(player, fortressPieces >= 2);
     }
 
     @SubscribeEvent
@@ -178,6 +198,20 @@ public final class TCBaubleEvents {
         int charge = getRunicCharge(event.getItemStack());
         if (charge > 0) {
             event.getToolTip().add(Component.translatable("item.runic.charge").append(" +" + charge).withStyle(ChatFormatting.GOLD));
+        }
+
+        int warp = TCEquipmentHelper.getStackWarp(event.getItemStack(), event.getEntity());
+        if (warp > 0) {
+            event.getToolTip().add(Component.translatable("item.warping").append(" " + warp).withStyle(ChatFormatting.DARK_PURPLE));
+        }
+
+        for (TCEnumInfusionEnchantment ench : TCEnumInfusionEnchantment.getInfusionEnchantments(event.getItemStack())) {
+            int lvl = TCEnumInfusionEnchantment.getInfusionEnchantmentLevel(event.getItemStack(), ench);
+            var comp = Component.translatable("enchantment.infusion." + ench.name());
+            if (ench.maxLevel > 1) {
+                comp = comp.append(" ").append(Component.translatable("enchantment.level." + lvl));
+            }
+            event.getToolTip().add(comp.withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -301,6 +335,29 @@ public final class TCBaubleEvents {
         player.setAbsorptionAmount(Math.min(player.getAbsorptionAmount(), player.getMaxAbsorption()));
     }
 
+    public static void updateFortressSetBonus(Player player, boolean active) {
+        var armorAttr = player.getAttribute(Attributes.ARMOR);
+        var toughAttr = player.getAttribute(Attributes.ARMOR_TOUGHNESS);
+        if (armorAttr != null) {
+            var prev = armorAttr.getModifier(FORTRESS_SET_ARMOR);
+            if (active && prev == null) {
+                armorAttr.addOrUpdateTransientModifier(new AttributeModifier(
+                        FORTRESS_SET_ARMOR, 1.0D, AttributeModifier.Operation.ADD_VALUE));
+            } else if (!active && prev != null) {
+                armorAttr.removeModifier(FORTRESS_SET_ARMOR);
+            }
+        }
+        if (toughAttr != null) {
+            var prev = toughAttr.getModifier(FORTRESS_SET_TOUGHNESS);
+            if (active && prev == null) {
+                toughAttr.addOrUpdateTransientModifier(new AttributeModifier(
+                        FORTRESS_SET_TOUGHNESS, 1.0D, AttributeModifier.Operation.ADD_VALUE));
+            } else if (!active && prev != null) {
+                toughAttr.removeModifier(FORTRESS_SET_TOUGHNESS);
+            }
+        }
+    }
+
     public static int getRunicCharge(ItemStack stack) {
         if (stack == null || stack.isEmpty()) {
             return 0;
@@ -356,7 +413,7 @@ public final class TCBaubleEvents {
         } else {
             int fortressPieces = 0;
             for (ItemStack armor : player.getArmorSlots()) {
-                if (armor.getItem() instanceof thaumcraft.common.items.armor.ItemFortressArmor) {
+                if (armor.getItem() instanceof ItemFortressArmor) {
                     fortressPieces++;
                 }
             }
@@ -368,6 +425,31 @@ public final class TCBaubleEvents {
                 } else if (event.getSource().is(DamageTypeTags.WITCH_RESISTANT_TO) || event.getSource().is(DamageTypeTags.BYPASSES_ARMOR)) {
                     damage *= (1.0F - 0.03F * fortressPieces);
                     event.setNewDamage(damage);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingDamagePost(LivingDamageEvent.Post event) {
+        // Fortress mask 1 (Angry Ghost): wither retaliation
+        if (event.getEntity() instanceof Player victim) {
+            ItemStack helm = victim.getItemBySlot(EquipmentSlot.HEAD);
+            if (helm.getItem() instanceof ItemFortressArmor && ItemFortressArmor.getMask(helm) == 1) {
+                if (event.getSource().getEntity() instanceof LivingEntity attacker) {
+                    if (victim.getRandom().nextFloat() < event.getNewDamage() / 10.0F) {
+                        attacker.addEffect(new MobEffectInstance(MobEffects.WITHER, 80));
+                    }
+                }
+            }
+        }
+
+        // Fortress mask 2 (Sipping Fiend): lifesteal
+        if (event.getSource().getEntity() instanceof Player attacker) {
+            ItemStack helm = attacker.getItemBySlot(EquipmentSlot.HEAD);
+            if (helm.getItem() instanceof ItemFortressArmor && ItemFortressArmor.getMask(helm) == 2) {
+                if (attacker.getRandom().nextFloat() < event.getNewDamage() / 12.0F) {
+                    attacker.heal(1.0F);
                 }
             }
         }

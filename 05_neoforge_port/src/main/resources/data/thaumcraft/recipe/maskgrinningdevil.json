@@ -1,5 +1,5 @@
 {
-  "type": "thaumcraft:infusion",
+  "type": "thaumcraft:catalyst_upgrade_infusion",
   "research": "FORTRESSMASK",
   "instability": 8,
   "catalyst": {
@@ -40,7 +40,10 @@
     }
   ],
   "result": {
-    "id": "thaumcraft:mask_grinning_devil",
-    "count": 1
+    "id": "thaumcraft:thaumium_fortress_helm",
+    "count": 1,
+    "components": {
+      "thaumcraft:fortress_mask": 0
+    }
   }
 }

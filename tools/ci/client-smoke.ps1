@@ -39,7 +39,9 @@ try {
     }
 } finally {
     $env:JAVA_TOOL_OPTIONS = $oldOptions
-    if ($null -ne $process -and -not $process.HasExited) { $process.Kill($true); $process.WaitForExit(10000) | Out-Null }
+    if ($null -ne $process -and -not $process.HasExited) {
+        try { & taskkill.exe /PID $process.Id /T /F | Out-Null } catch { try { $process.Kill() } catch {} }
+    }
     $stdout = if (Test-Path -LiteralPath $stdoutPath) { Get-Content -LiteralPath $stdoutPath -Raw } else { '' }
     $stderr = if (Test-Path -LiteralPath $stderrPath) { Get-Content -LiteralPath $stderrPath -Raw } else { '' }
     [IO.File]::WriteAllText($combinedPath, $stdout + "`n[STDERR]`n" + $stderr)

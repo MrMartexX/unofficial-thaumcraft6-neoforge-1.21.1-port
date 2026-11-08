@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "ESSENCE",
+  "instability": 3,
+  "components": [
+    {
+      "item": "thaumcraft:salis_mundus"
+    },
+    {
+      "item": "thaumcraft:phial"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "water",
+      "amount": 10
+    },
+    {
+      "aspect": "magic",
+      "amount": 10
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "thaumcraft:jar_label_essence"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thaumcraft:jar_label"
+  }
+}

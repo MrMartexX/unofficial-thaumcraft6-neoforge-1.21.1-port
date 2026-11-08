@@ -1,12 +1,13 @@
 package thaumcraft.common.items.tools;
 
+import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +16,8 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import thaumcraft.common.items.components.TCInfusionEnchantmentsComponent;
+import thaumcraft.common.registry.TCDataComponents;
 
 public class ItemElementalPickaxe extends PickaxeItem {
     public ItemElementalPickaxe() {
@@ -23,7 +26,24 @@ public class ItemElementalPickaxe extends PickaxeItem {
                 new Item.Properties()
                         .rarity(Rarity.RARE)
                         .attributes(PickaxeItem.createAttributes(TCToolTiers.ELEMENTAL, 1.0F, -2.8F))
+                        .component(
+                                TCDataComponents.INFUSION_ENCHANTS.get(),
+                                new TCInfusionEnchantmentsComponent(Map.of(
+                                        TCEnumInfusionEnchantment.REFINING, 1,
+                                        TCEnumInfusionEnchantment.SOUNDING, 2
+                                ))
+                        )
         );
+    }
+
+    @Override
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (!target.level().isClientSide()) {
+            if (!(target instanceof Player) || (attacker.getServer() != null && attacker.getServer().isPvpAllowed())) {
+                target.igniteForSeconds(2.0F);
+            }
+        }
+        return super.hurtEnemy(stack, target, attacker);
     }
 
     @Override

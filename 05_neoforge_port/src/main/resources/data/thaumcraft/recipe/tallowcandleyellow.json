@@ -4,7 +4,7 @@
   "group": "thaumcraft_tallow_candle_dye",
   "ingredients": [
     {
-      "tag": "thaumcraft:candle_whites"
+      "tag": "thaumcraft:tallow_candles"
     },
     {
       "item": "minecraft:yellow_dye"

@@ -43,7 +43,7 @@ public final class TCInfusionRecipeMatcher {
                 continue;
             }
 
-            int score = recipeScore(recipe);
+            int score = recipeScore(recipe, catalyst);
             if (score > highestScore) {
                 highestScore = score;
                 best = holder;
@@ -72,7 +72,7 @@ public final class TCInfusionRecipeMatcher {
                     || !matchesInputs(recipe, catalyst, components)) {
                 continue;
             }
-            int score = recipeScore(recipe);
+            int score = recipeScore(recipe, catalyst);
             if (score > highestScore) {
                 highestScore = score;
                 best = holder;
@@ -85,26 +85,30 @@ public final class TCInfusionRecipeMatcher {
         if (recipe == null || catalyst == null || catalyst.isEmpty()) {
             return false;
         }
-        return recipe.catalyst().test(catalyst.copyWithCount(1)) && hasRequiredComponents(recipe, components);
+        ItemStack singleCatalyst = catalyst.copyWithCount(1);
+        return recipe.matchesCatalyst(singleCatalyst) && hasRequiredComponents(recipe, singleCatalyst, components);
     }
 
     public static boolean matches(TCInfusionRecipe recipe, AspectList aspects, ItemStack catalyst, List<ItemStack> components) {
         if (recipe == null || aspects == null || catalyst == null || catalyst.isEmpty()) {
             return false;
         }
-        ItemStack singleCatalyst = catalyst.copy();
-        singleCatalyst.setCount(1);
-        if (!recipe.catalyst().test(singleCatalyst)) {
+        ItemStack singleCatalyst = catalyst.copyWithCount(1);
+        if (!recipe.matchesCatalyst(singleCatalyst)) {
             return false;
         }
-        return hasRequiredAspects(recipe, aspects) && hasRequiredComponents(recipe, components);
+        return hasRequiredAspects(recipe, singleCatalyst, aspects) && hasRequiredComponents(recipe, singleCatalyst, components);
     }
 
     public static boolean hasRequiredAspects(TCInfusionRecipe recipe, AspectList aspects) {
+        return hasRequiredAspects(recipe, ItemStack.EMPTY, aspects);
+    }
+
+    public static boolean hasRequiredAspects(TCInfusionRecipe recipe, ItemStack catalyst, AspectList aspects) {
         if (recipe == null || aspects == null) {
             return false;
         }
-        for (TCCrucibleAspectCost cost : recipe.aspectCosts()) {
+        for (TCCrucibleAspectCost cost : recipe.resolveAspectCosts(catalyst)) {
             if (aspects.getAmount(cost.resolvedAspect()) < cost.amount()) {
                 return false;
             }
@@ -113,21 +117,29 @@ public final class TCInfusionRecipeMatcher {
     }
 
     public static AspectList removeRequiredAspects(TCInfusionRecipe recipe, AspectList aspects) {
+        return removeRequiredAspects(recipe, ItemStack.EMPTY, aspects);
+    }
+
+    public static AspectList removeRequiredAspects(TCInfusionRecipe recipe, ItemStack catalyst, AspectList aspects) {
         AspectList remaining = aspects == null ? new AspectList() : aspects.copy();
         if (recipe == null) {
             return remaining;
         }
-        for (TCCrucibleAspectCost cost : recipe.aspectCosts()) {
+        for (TCCrucibleAspectCost cost : recipe.resolveAspectCosts(catalyst)) {
             remaining.remove(cost.resolvedAspect(), cost.amount());
         }
         return remaining;
     }
 
     public static boolean hasRequiredComponents(TCInfusionRecipe recipe, List<ItemStack> components) {
+        return hasRequiredComponents(recipe, ItemStack.EMPTY, components);
+    }
+
+    public static boolean hasRequiredComponents(TCInfusionRecipe recipe, ItemStack catalyst, List<ItemStack> components) {
         if (recipe == null) {
             return false;
         }
-        List<Ingredient> required = recipe.components();
+        List<Ingredient> required = recipe.resolveComponents(catalyst);
         if (required.isEmpty()) {
             return true;
         }
@@ -147,9 +159,13 @@ public final class TCInfusionRecipeMatcher {
     }
 
     public static int recipeAspectCost(TCInfusionRecipe recipe) {
+        return recipeAspectCost(recipe, ItemStack.EMPTY);
+    }
+
+    public static int recipeAspectCost(TCInfusionRecipe recipe, ItemStack catalyst) {
         int total = 0;
         if (recipe != null) {
-            for (TCCrucibleAspectCost cost : recipe.aspectCosts()) {
+            for (TCCrucibleAspectCost cost : recipe.resolveAspectCosts(catalyst)) {
                 total += cost.amount();
             }
         }
@@ -157,9 +173,13 @@ public final class TCInfusionRecipeMatcher {
     }
 
     public static int recipeScore(TCInfusionRecipe recipe) {
+        return recipeScore(recipe, ItemStack.EMPTY);
+    }
+
+    public static int recipeScore(TCInfusionRecipe recipe, ItemStack catalyst) {
         if (recipe == null) {
             return -1;
         }
-        return recipeAspectCost(recipe) * 100 + recipe.components().size();
+        return recipeAspectCost(recipe, catalyst) * 100 + recipe.resolveComponents(catalyst).size();
     }
 }

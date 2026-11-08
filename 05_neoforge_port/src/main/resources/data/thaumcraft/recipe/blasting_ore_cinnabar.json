@@ -2,7 +2,7 @@
   "type": "minecraft:blasting",
   "category": "misc",
   "ingredient": {
-    "item": "thaumcraft:ore_cinnabar"
+    "tag": "c:ores/cinnabar"
   },
   "result": {
     "id": "thaumcraft:quicksilver",

@@ -5,6 +5,7 @@
     "#c:ingots/copper",
     "#c:ingots/gold",
     "#c:ingots/iron",
-    "#c:ingots/thaumium"
+    "#c:ingots/thaumium",
+    "#c:ingots/void"
   ]
 }

@@ -109,11 +109,12 @@ public record TCInfusionCraftingPlan(
         List<PedestalComponent> supplied = suppliedPedestals == null ? List.of() : suppliedPedestals.stream()
                 .filter(component -> component != null && !component.stack().isEmpty())
                 .toList();
-        if (supplied.size() != recipe.components().size()) {
+        List<Ingredient> required = recipe.resolveComponents(catalyst);
+        if (supplied.size() != required.size()) {
             return BuildResult.failed("component_count_mismatch");
         }
 
-        int[] assignment = assignComponents(recipe.components(), supplied);
+        int[] assignment = assignComponents(required, supplied);
         if (assignment == null) {
             return BuildResult.failed("component_pedestal_mapping_failed");
         }
@@ -129,12 +130,12 @@ public record TCInfusionCraftingPlan(
         return BuildResult.valid(new TCInfusionCraftingPlan(
                 recipeId,
                 recipe.getResearch(),
-                recipe.instability(),
+                recipe.resolveInstability(catalyst),
                 catalyst.copyWithCount(1),
                 List.copyOf(matchedComponents),
                 List.copyOf(matchedPositions),
-                requiredAspects(recipe, structure.costMultiplier()),
-                recipe.result(),
+                requiredAspects(recipe, catalyst, structure.costMultiplier()),
+                recipe.resolveResult(catalyst),
                 playerName,
                 structure.cycleTime(),
                 structure.cycleDelay(),
@@ -317,9 +318,9 @@ public record TCInfusionCraftingPlan(
         return false;
     }
 
-    private static AspectList requiredAspects(TCInfusionRecipe recipe, float costMultiplier) {
+    private static AspectList requiredAspects(TCInfusionRecipe recipe, ItemStack catalyst, float costMultiplier) {
         AspectList aspects = new AspectList();
-        for (TCCrucibleAspectCost cost : recipe.aspectCosts()) {
+        for (TCCrucibleAspectCost cost : recipe.resolveAspectCosts(catalyst)) {
             int adjusted = (int) (cost.amount() * Math.max(0.5F, costMultiplier));
             if (adjusted > 0) {
                 aspects.add(cost.resolvedAspect(), adjusted);

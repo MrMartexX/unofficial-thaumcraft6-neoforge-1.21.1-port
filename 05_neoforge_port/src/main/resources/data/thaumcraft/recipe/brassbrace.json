@@ -1,7 +1,14 @@
 {
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
-  "ingredients": [{"item":"thaumcraft:brass_ingot"},{"item":"minecraft:string"}],
+  "ingredients": [
+    {
+      "tag": "c:ingots/brass"
+    },
+    {
+      "item": "minecraft:string"
+    }
+  ],
   "result": {
     "count": 1,
     "id": "thaumcraft:brass_brace"

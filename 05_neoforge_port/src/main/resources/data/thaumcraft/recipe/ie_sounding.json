@@ -1,0 +1,24 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "SOUNDING",
+  "instability": 1,
+  "components": [
+    {
+      "item": "thaumcraft:salis_mundus"
+    },
+    {
+      "item": "minecraft:note_block"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "air",
+      "amount": 5
+    },
+    {
+      "aspect": "senses",
+      "amount": 5
+    }
+  ]
+}

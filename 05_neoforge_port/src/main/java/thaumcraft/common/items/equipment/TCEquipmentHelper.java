@@ -3,11 +3,14 @@ package thaumcraft.common.items.equipment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import thaumcraft.api.items.IGoggles;
 import thaumcraft.api.items.IRevealer;
 import thaumcraft.api.items.IWarpingGear;
+import thaumcraft.common.registry.TCDataComponents;
 
 public final class TCEquipmentHelper {
     private static final List<ExtraEquipmentStackProvider> EXTRA_EQUIPMENT_STACK_PROVIDERS = new CopyOnWriteArrayList<>();
@@ -91,12 +94,26 @@ public final class TCEquipmentHelper {
         return false;
     }
 
+    public static int getStackWarp(ItemStack stack, Player player) {
+        if (stack == null || stack.isEmpty()) {
+            return 0;
+        }
+        int total = 0;
+        if (stack.getItem() instanceof IWarpingGear warpingGear) {
+            total += Math.max(0, warpingGear.getWarp(stack, player));
+        }
+        total += stack.getOrDefault(TCDataComponents.ITEM_WARP.get(), 0);
+        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+        if (customData != null && customData.contains("TC.WARP")) {
+            total += Math.max(0, customData.copyTag().getByte("TC.WARP"));
+        }
+        return total;
+    }
+
     public static int getWarp(Player player) {
         int total = 0;
         for (ItemStack stack : getVisibleEquipmentStacks(player)) {
-            if (!stack.isEmpty() && stack.getItem() instanceof IWarpingGear warpingGear) {
-                total += Math.max(0, warpingGear.getWarp(stack, player));
-            }
+            total += getStackWarp(stack, player);
         }
         return total;
     }

@@ -1,5 +1,5 @@
 {
-  "type": "thaumcraft:arcane_shaped",
+  "type": "thaumcraft:arcane_shaped_void_jar",
   "research": "WARDEDJARS",
   "vis": 50,
   "crystals": [
@@ -17,7 +17,7 @@
     }
   },
   "result": {
-    "id": "thaumcraft:jar_void",
-    "count": 1
+    "count": 1,
+    "id": "thaumcraft:jar_void"
   }
 }

@@ -1,8 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
-  "key": { "V": { "item": "thaumcraft:void_plate" } },
-  "pattern": ["VVV","V V","V V"],
+  "group": "thaumcraft:void_armor",
+  "key": {
+    "V": {
+      "tag": "c:plates/void"
+    }
+  },
+  "pattern": [
+    "VVV",
+    "V V",
+    "V V"
+  ],
   "result": {
     "count": 1,
     "id": "thaumcraft:void_legs"

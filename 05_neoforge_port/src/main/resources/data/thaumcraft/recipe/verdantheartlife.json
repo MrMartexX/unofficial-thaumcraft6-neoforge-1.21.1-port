@@ -1,5 +1,5 @@
 {
-  "type": "thaumcraft:infusion",
+  "type": "thaumcraft:catalyst_upgrade_infusion",
   "research": "VERDANTCHARMS",
   "instability": 5,
   "catalyst": {

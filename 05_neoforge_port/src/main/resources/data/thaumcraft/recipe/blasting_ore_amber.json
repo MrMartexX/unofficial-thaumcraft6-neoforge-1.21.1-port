@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": {
+    "tag": "c:ores/amber"
+  },
+  "result": {
+    "id": "thaumcraft:amber",
+    "count": 1
+  },
+  "experience": 0.7,
+  "cookingtime": 100
+}

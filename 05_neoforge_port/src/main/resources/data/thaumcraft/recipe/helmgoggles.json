@@ -1,5 +1,5 @@
 {
-  "type": "thaumcraft:infusion",
+  "type": "thaumcraft:catalyst_upgrade_infusion",
   "research": "FORTRESSMASK",
   "instability": 5,
   "catalyst": {

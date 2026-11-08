@@ -15,7 +15,7 @@ import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
 import thaumcraft.common.registry.TCRecipes;
 
-public final class TCShapedArcaneRecipe extends TCArcaneRecipe {
+public class TCShapedArcaneRecipe extends TCArcaneRecipe {
     private final ShapedRecipePattern pattern;
 
     public TCShapedArcaneRecipe(

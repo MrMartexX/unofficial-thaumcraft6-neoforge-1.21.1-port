@@ -19,17 +19,17 @@ import net.minecraft.world.level.Level;
 import thaumcraft.common.crafting.crucible.TCCrucibleAspectCost;
 import thaumcraft.common.registry.TCRecipes;
 
-public final class TCInfusionRecipe implements Recipe<CraftingInput> {
-    private static final int MAX_ASPECTS = 64;
-    private static final int MAX_COMPONENTS = 64;
+public class TCInfusionRecipe implements Recipe<CraftingInput> {
+    public static final int MAX_ASPECTS = 64;
+    public static final int MAX_COMPONENTS = 64;
 
-    private final String group;
-    private final String research;
-    private final int instability;
-    private final Ingredient catalyst;
-    private final List<Ingredient> components;
-    private final List<TCCrucibleAspectCost> aspectCosts;
-    private final ItemStack result;
+    protected final String group;
+    protected final String research;
+    protected final int instability;
+    protected final Ingredient catalyst;
+    protected final List<Ingredient> components;
+    protected final List<TCCrucibleAspectCost> aspectCosts;
+    protected final ItemStack result;
 
     public TCInfusionRecipe(
             String group,
@@ -39,6 +39,19 @@ public final class TCInfusionRecipe implements Recipe<CraftingInput> {
             List<Ingredient> components,
             List<TCCrucibleAspectCost> aspectCosts,
             ItemStack result
+    ) {
+        this(group, research, instability, catalyst, components, aspectCosts, result, false);
+    }
+
+    protected TCInfusionRecipe(
+            String group,
+            String research,
+            int instability,
+            Ingredient catalyst,
+            List<Ingredient> components,
+            List<TCCrucibleAspectCost> aspectCosts,
+            ItemStack result,
+            boolean dynamic
     ) {
         this.group = group == null ? "" : group.trim();
         this.research = research == null ? "" : research.trim();
@@ -50,7 +63,7 @@ public final class TCInfusionRecipe implements Recipe<CraftingInput> {
         }
         this.instability = instability;
         this.catalyst = catalyst == null ? Ingredient.EMPTY : catalyst;
-        if (this.catalyst.isEmpty()) {
+        if (!dynamic && this.catalyst.isEmpty()) {
             throw new IllegalArgumentException("Infusion recipe catalyst cannot be empty");
         }
         this.components = List.copyOf(components == null ? List.of() : components);
@@ -64,9 +77,32 @@ public final class TCInfusionRecipe implements Recipe<CraftingInput> {
         }
         this.aspectCosts = List.copyOf(aspectCosts == null ? List.of() : aspectCosts);
         this.result = result == null ? ItemStack.EMPTY : result.copy();
-        if (this.result.isEmpty()) {
+        if (!dynamic && this.result.isEmpty()) {
             throw new IllegalArgumentException("Infusion recipe result cannot be empty");
         }
+    }
+
+    public boolean matchesCatalyst(ItemStack centralItem) {
+        if (centralItem == null || centralItem.isEmpty()) {
+            return false;
+        }
+        return catalyst.test(centralItem);
+    }
+
+    public List<Ingredient> resolveComponents(ItemStack centralItem) {
+        return components;
+    }
+
+    public int resolveInstability(ItemStack centralItem) {
+        return instability;
+    }
+
+    public List<TCCrucibleAspectCost> resolveAspectCosts(ItemStack centralItem) {
+        return aspectCosts;
+    }
+
+    public ItemStack resolveResult(ItemStack centralItem) {
+        return result.copy();
     }
 
     @Override
@@ -92,7 +128,9 @@ public final class TCInfusionRecipe implements Recipe<CraftingInput> {
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> ingredients = NonNullList.create();
-        ingredients.add(catalyst);
+        if (catalyst != null && !catalyst.isEmpty()) {
+            ingredients.add(catalyst);
+        }
         ingredients.addAll(components);
         return ingredients;
     }

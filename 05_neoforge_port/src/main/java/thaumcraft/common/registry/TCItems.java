@@ -15,6 +15,15 @@ import thaumcraft.common.items.tools.ItemElementalHoe;
 import thaumcraft.common.items.tools.ItemPrimalCrusher;
 
 import thaumcraft.common.items.tools.ItemCrimsonBlade;
+import thaumcraft.common.items.tools.ItemVoidAxe;
+import thaumcraft.common.items.tools.ItemVoidHoe;
+import thaumcraft.common.items.tools.ItemVoidPickaxe;
+import thaumcraft.common.items.tools.ItemVoidShovel;
+import thaumcraft.common.items.tools.ItemVoidSword;
+import thaumcraft.common.items.consumables.ItemEdibleChunk;
+import thaumcraft.common.items.consumables.ItemTripleMeatTreat;
+import thaumcraft.api.aspects.Aspect;
+import net.minecraft.world.item.ItemStack;
 
 import thaumcraft.common.items.armor.ItemFortressArmor;
 
@@ -476,6 +485,8 @@ public final class TCItems {
 
     public static final Supplier<Item> CLUSTER_CINNABAR = simpleItem("cluster_cinnabar");
 
+    public static final Supplier<Item> CLUSTER_QUARTZ = simpleItem("cluster_quartz");
+
     public static final Supplier<Item> MECHANISM_SIMPLE = simpleItem("mechanism_simple");
 
     public static final Supplier<Item> MECHANISM_COMPLEX = simpleItem("mechanism_complex");
@@ -488,17 +499,17 @@ public final class TCItems {
 
     public static final Supplier<Item> ALUMENTUM = simpleItem("alumentum");
 
-    public static final Supplier<Item> CHUNK_CHICKEN = simpleItem("chunk_chicken");
+    public static final Supplier<Item> CHUNK_CHICKEN = ITEMS.register("chunk_chicken", () -> new ItemEdibleChunk());
 
-    public static final Supplier<Item> CHUNK_BEEF = simpleItem("chunk_beef");
+    public static final Supplier<Item> CHUNK_BEEF = ITEMS.register("chunk_beef", () -> new ItemEdibleChunk());
 
-    public static final Supplier<Item> CHUNK_PORK = simpleItem("chunk_pork");
+    public static final Supplier<Item> CHUNK_PORK = ITEMS.register("chunk_pork", () -> new ItemEdibleChunk());
 
-    public static final Supplier<Item> CHUNK_FISH = simpleItem("chunk_fish");
+    public static final Supplier<Item> CHUNK_FISH = ITEMS.register("chunk_fish", () -> new ItemEdibleChunk());
 
-    public static final Supplier<Item> CHUNK_RABBIT = simpleItem("chunk_rabbit");
+    public static final Supplier<Item> CHUNK_RABBIT = ITEMS.register("chunk_rabbit", () -> new ItemEdibleChunk());
 
-    public static final Supplier<Item> CHUNK_MUTTON = simpleItem("chunk_mutton");
+    public static final Supplier<Item> CHUNK_MUTTON = ITEMS.register("chunk_mutton", () -> new ItemEdibleChunk());
 
     public static final Supplier<Item> BATH_SALTS = ITEMS.register("bath_salts", ItemBathSalts::new);
 
@@ -674,7 +685,7 @@ public final class TCItems {
 
     public static final Supplier<Item> THAUMIUM_FORTRESS_HELM = ITEMS.register("thaumium_fortress_helm", () -> new ItemFortressArmor(ArmorItem.Type.HELMET));
 
-    public static final Supplier<Item> THAUMIUM_FORTRESS_HELM_GOGGLES = ITEMS.register("thaumium_fortress_helm_goggles", () -> new ItemFortressArmor(ArmorItem.Type.HELMET));
+    public static final Supplier<Item> THAUMIUM_FORTRESS_HELM_GOGGLES = ITEMS.register("thaumium_fortress_helm_goggles", () -> new ItemFortressArmor(ArmorItem.Type.HELMET, true));
 
     public static final Supplier<Item> THAUMIUM_FORTRESS_CHEST = ITEMS.register("thaumium_fortress_chest", () -> new ItemFortressArmor(ArmorItem.Type.CHESTPLATE));
 
@@ -689,7 +700,7 @@ public final class TCItems {
     public static final Supplier<Item> VERDANT_HEART = ITEMS.register("verdant_heart", () -> new ItemVerdantHeart(ItemVerdantHeart.Type.BASE));
     public static final Supplier<Item> VERDANT_HEART_LIFE = ITEMS.register("verdant_heart_life", () -> new ItemVerdantHeart(ItemVerdantHeart.Type.LIFE));
     public static final Supplier<Item> VERDANT_HEART_SUSTAIN = ITEMS.register("verdant_heart_sustain", () -> new ItemVerdantHeart(ItemVerdantHeart.Type.SUSTAIN));
-    public static final Supplier<Item> TRIPLE_MEAT_TREAT = simpleItem("triple_meat_treat");
+    public static final Supplier<Item> TRIPLE_MEAT_TREAT = ITEMS.register("triple_meat_treat", ItemTripleMeatTreat::new);
 
     public static final Supplier<Item> MASK_GRINNING_DEVIL = simpleItem("mask_grinning_devil");
 
@@ -882,15 +893,15 @@ public final class TCItems {
 
     public static final Supplier<Item> VOID_INGOT = simpleItem("void_ingot");
 
-    public static final Supplier<Item> VOID_AXE = simpleItem("void_axe");
+    public static final Supplier<Item> VOID_AXE = ITEMS.register("void_axe", ItemVoidAxe::new);
 
-    public static final Supplier<Item> VOID_HOE = simpleItem("void_hoe");
+    public static final Supplier<Item> VOID_HOE = ITEMS.register("void_hoe", ItemVoidHoe::new);
 
-    public static final Supplier<Item> VOID_PICK = simpleItem("void_pick");
+    public static final Supplier<Item> VOID_PICK = ITEMS.register("void_pick", ItemVoidPickaxe::new);
 
-    public static final Supplier<Item> VOID_SHOVEL = simpleItem("void_shovel");
+    public static final Supplier<Item> VOID_SHOVEL = ITEMS.register("void_shovel", ItemVoidShovel::new);
 
-    public static final Supplier<Item> VOID_SWORD = simpleItem("void_sword");
+    public static final Supplier<Item> VOID_SWORD = ITEMS.register("void_sword", ItemVoidSword::new);
 
     public static final Supplier<Item> VOID_HELM = ITEMS.register("void_helm", () -> new ItemVoidArmor(ArmorItem.Type.HELMET));
 
@@ -1433,4 +1444,51 @@ public static final Supplier<BlockItem> CATALOG_PLACEHOLDER_STABILIZER = STABILI
 
     }
 
+
+    public static ItemStack getCrystalItem(Aspect aspect) {
+        if (aspect == null) {
+            return ItemStack.EMPTY;
+        }
+        String tag = aspect.getTag().toLowerCase(java.util.Locale.ROOT);
+        return switch (tag) {
+            case "aer" -> new ItemStack(CRYSTAL_ESSENCE_AER.get());
+            case "terra" -> new ItemStack(CRYSTAL_ESSENCE_TERRA.get());
+            case "ignis" -> new ItemStack(CRYSTAL_ESSENCE_IGNIS.get());
+            case "aqua" -> new ItemStack(CRYSTAL_ESSENCE_AQUA.get());
+            case "ordo" -> new ItemStack(CRYSTAL_ESSENCE_ORDO.get());
+            case "perditio" -> new ItemStack(CRYSTAL_ESSENCE_PERDITIO.get());
+            case "vacuos" -> new ItemStack(CRYSTAL_ESSENCE_VACUOS.get());
+            case "lux" -> new ItemStack(CRYSTAL_ESSENCE_LUX.get());
+            case "motus" -> new ItemStack(CRYSTAL_ESSENCE_MOTUS.get());
+            case "gelum" -> new ItemStack(CRYSTAL_ESSENCE_GELUM.get());
+            case "vitreus" -> new ItemStack(CRYSTAL_ESSENCE_VITREUS.get());
+            case "metallum" -> new ItemStack(CRYSTAL_ESSENCE_METALLUM.get());
+            case "victus" -> new ItemStack(CRYSTAL_ESSENCE_VICTUS.get());
+            case "mortuus" -> new ItemStack(CRYSTAL_ESSENCE_MORTUUS.get());
+            case "potentia" -> new ItemStack(CRYSTAL_ESSENCE_POTENTIA.get());
+            case "permutatio" -> new ItemStack(CRYSTAL_ESSENCE_PERMUTATIO.get());
+            case "praecantatio" -> new ItemStack(CRYSTAL_ESSENCE_PRAECANTATIO.get());
+            case "auram" -> new ItemStack(CRYSTAL_ESSENCE_AURAM.get());
+            case "alkimia" -> new ItemStack(CRYSTAL_ESSENCE_ALKIMIA.get());
+            case "vitium" -> new ItemStack(CRYSTAL_ESSENCE_VITIUM.get());
+            case "tenebrae" -> new ItemStack(CRYSTAL_ESSENCE_TENEBRAE.get());
+            case "alienis" -> new ItemStack(CRYSTAL_ESSENCE_ALIENIS.get());
+            case "volatus" -> new ItemStack(CRYSTAL_ESSENCE_VOLATUS.get());
+            case "herba" -> new ItemStack(CRYSTAL_ESSENCE_HERBA.get());
+            case "instrumentum" -> new ItemStack(CRYSTAL_ESSENCE_INSTRUMENTUM.get());
+            case "fabrico" -> new ItemStack(CRYSTAL_ESSENCE_FABRICO.get());
+            case "machina" -> new ItemStack(CRYSTAL_ESSENCE_MACHINA.get());
+            case "vinculum" -> new ItemStack(CRYSTAL_ESSENCE_VINCULUM.get());
+            case "spiritus" -> new ItemStack(CRYSTAL_ESSENCE_SPIRITUS.get());
+            case "cognitio" -> new ItemStack(CRYSTAL_ESSENCE_COGNITIO.get());
+            case "sensus" -> new ItemStack(CRYSTAL_ESSENCE_SENSUS.get());
+            case "aversio" -> new ItemStack(CRYSTAL_ESSENCE_AVERSIO.get());
+            case "praemunio" -> new ItemStack(CRYSTAL_ESSENCE_PRAEMUNIO.get());
+            case "desiderium" -> new ItemStack(CRYSTAL_ESSENCE_DESIDERIUM.get());
+            case "exanimis" -> new ItemStack(CRYSTAL_ESSENCE_EXANIMIS.get());
+            case "bestia" -> new ItemStack(CRYSTAL_ESSENCE_BESTIA.get());
+            case "humanus" -> new ItemStack(CRYSTAL_ESSENCE_HUMANUS.get());
+            default -> ItemStack.EMPTY;
+        };
+    }
 }

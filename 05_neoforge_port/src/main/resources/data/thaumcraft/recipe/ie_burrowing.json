@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "BURROWING",
+  "instability": 3,
+  "components": [
+    {
+      "item": "thaumcraft:salis_mundus"
+    },
+    {
+      "item": "minecraft:iron_pickaxe"
+    },
+    {
+      "item": "minecraft:piston"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "earth",
+      "amount": 10
+    },
+    {
+      "aspect": "motion",
+      "amount": 10
+    }
+  ]
+}

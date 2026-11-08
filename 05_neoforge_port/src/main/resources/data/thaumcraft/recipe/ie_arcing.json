@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "ARCING",
+  "instability": 2,
+  "components": [
+    {
+      "item": "thaumcraft:salis_mundus"
+    },
+    {
+      "item": "minecraft:feather"
+    },
+    {
+      "item": "minecraft:iron_sword"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "air",
+      "amount": 10
+    },
+    {
+      "aspect": "aversion",
+      "amount": 10
+    }
+  ]
+}

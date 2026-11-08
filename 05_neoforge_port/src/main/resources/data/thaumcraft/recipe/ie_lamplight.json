@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "LAMPLIGHT",
+  "instability": 1,
+  "components": [
+    {
+      "item": "thaumcraft:salis_mundus"
+    },
+    {
+      "item": "minecraft:torch"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "fire",
+      "amount": 10
+    },
+    {
+      "aspect": "light",
+      "amount": 10
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "type": "thaumcraft:infusion",
+  "type": "thaumcraft:catalyst_upgrade_infusion",
   "research": "FORTRESSMASK",
   "instability": 8,
   "catalyst": {
@@ -19,7 +19,7 @@
       "item": "minecraft:ghast_tear"
     },
     {
-      "item": "minecraft:milk_bucket"
+      "item": "minecraft:spider_eye"
     },
     {
       "tag": "c:plates/iron"
@@ -27,7 +27,7 @@
   ],
   "aspects": [
     {
-      "aspect": "undead",
+      "aspect": "desire",
       "amount": 80
     },
     {
@@ -40,7 +40,10 @@
     }
   ],
   "result": {
-    "id": "thaumcraft:mask_sipping_fiend",
-    "count": 1
+    "id": "thaumcraft:thaumium_fortress_helm",
+    "count": 1,
+    "components": {
+      "thaumcraft:fortress_mask": 2
+    }
   }
 }

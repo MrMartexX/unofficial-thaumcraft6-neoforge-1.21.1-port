@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "thaumcraft:flesh_block",
     "thaumcraft:leaves_greatwood",
     "thaumcraft:leaves_silverwood"
   ]

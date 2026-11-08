@@ -1,0 +1,27 @@
+{
+  "type": "thaumcraft:infusion_enchantment",
+  "research": "INFUSIONENCHANTMENT",
+  "enchantment": "DESTRUCTIVE",
+  "instability": 4,
+  "components": [
+    {
+      "item": "thaumcraft:salis_mundus"
+    },
+    {
+      "item": "minecraft:tnt"
+    },
+    {
+      "item": "minecraft:flint"
+    }
+  ],
+  "aspects": [
+    {
+      "aspect": "earth",
+      "amount": 10
+    },
+    {
+      "aspect": "entropy",
+      "amount": 10
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 package thaumcraft.common.items.tools;
 
+import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
@@ -14,6 +15,8 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thaumcraft.api.items.IWarpingGear;
+import thaumcraft.common.items.components.TCInfusionEnchantmentsComponent;
+import thaumcraft.common.registry.TCDataComponents;
 
 public class ItemPrimalCrusher extends DiggerItem implements IWarpingGear {
     public ItemPrimalCrusher() {
@@ -23,6 +26,13 @@ public class ItemPrimalCrusher extends DiggerItem implements IWarpingGear {
                 new Item.Properties()
                         .rarity(Rarity.EPIC)
                         .attributes(PickaxeItem.createAttributes(TCToolTiers.PRIMALVOID, 3.5F, -2.8F))
+                        .component(
+                                TCDataComponents.INFUSION_ENCHANTS.get(),
+                                new TCInfusionEnchantmentsComponent(Map.of(
+                                        TCEnumInfusionEnchantment.DESTRUCTIVE, 1,
+                                        TCEnumInfusionEnchantment.REFINING, 1
+                                ))
+                        )
         );
     }
 
